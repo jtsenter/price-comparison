@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-16T08:57:28.821147+00:00",
+  "last_updated": "2026-05-16T08:58:50.415230+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -617,20 +617,645 @@
       "cheaper_store": "coles",
       "saving_per_item": 2.5,
       "alternatives": []
+    },
+    {
+      "list_item": "Capsicum Green",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 2.23
+        },
+        {
+          "date": "2024-12-19",
+          "price": 1.73
+        },
+        {
+          "date": "2025-02-28",
+          "price": 1.73
+        },
+        {
+          "date": "2025-03-27",
+          "price": 1.98
+        },
+        {
+          "date": "2025-04-05",
+          "price": 2.23
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Capsicum Green",
+        "price": 1.98,
+        "unit_price": 1.98,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/135156/woolworths-capsicum-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135156.jpg"
+      },
+      "coles": {
+        "name": "Coles Capsicum Green Loose | approx. 220g",
+        "price": 1.96,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7214862.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.02,
+      "alternatives": []
+    },
+    {
+      "list_item": "Capsicum Yellow",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 2.73
+        },
+        {
+          "date": "2024-12-09",
+          "price": 2.73
+        },
+        {
+          "date": "2024-12-19",
+          "price": 2.48
+        },
+        {
+          "date": "2025-06-21",
+          "price": 1.73
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Capsicum Yellow",
+        "price": 2.23,
+        "unit_price": 2.23,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/135324/capsicum-yellow",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135324.jpg"
+      },
+      "coles": {
+        "name": "Coles Yellow Capsicum | approx. 220g",
+        "price": 2.4,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-yellow-capsicum-approx.-220g-7215355",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7215355.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.17,
+      "alternatives": []
+    },
+    {
+      "list_item": "Cavendish Bananas",
+      "trip_count": 19,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 0.81
+        },
+        {
+          "date": "2025-01-29",
+          "price": 0.48
+        },
+        {
+          "date": "2025-02-02",
+          "price": 0.86
+        },
+        {
+          "date": "2025-02-28",
+          "price": 0.93
+        },
+        {
+          "date": "2025-03-11",
+          "price": 0.93
+        },
+        {
+          "date": "2025-03-17",
+          "price": 0.93
+        },
+        {
+          "date": "2025-04-05",
+          "price": 0.93
+        },
+        {
+          "date": "2025-04-14",
+          "price": 0.93
+        },
+        {
+          "date": "2025-04-25",
+          "price": 0.93
+        },
+        {
+          "date": "2025-05-04",
+          "price": 0.93
+        },
+        {
+          "date": "2025-05-12",
+          "price": 0.93
+        },
+        {
+          "date": "2025-05-22",
+          "price": 0.93
+        },
+        {
+          "date": "2025-05-29",
+          "price": 0.93
+        },
+        {
+          "date": "2025-06-06",
+          "price": 0.93
+        },
+        {
+          "date": "2025-06-13",
+          "price": 0.88
+        },
+        {
+          "date": "2025-06-21",
+          "price": 0.88
+        },
+        {
+          "date": "2025-07-03",
+          "price": 0.88
+        },
+        {
+          "date": "2025-07-10",
+          "price": 0.88
+        },
+        {
+          "date": "2025-07-26",
+          "price": 0.88
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Cavendish Bananas",
+        "price": 0.72,
+        "unit_price": 0.72,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/133211/cavendish-bananas",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/133211.jpg"
+      },
+      "coles": {
+        "name": "Coles Bananas | approx. 170g",
+        "price": 0.77,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-bananas-approx.-170g-409499",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F409499.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.05,
+      "alternatives": []
+    },
+    {
+      "list_item": "Driscoll's Raspberries Punnet",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 4.9
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 4.0
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Driscoll's Raspberries Punnet",
+        "price": 3.7,
+        "unit_price": 29.6,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/165262/driscoll-s-raspberries-punnet",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/165262.jpg"
+      },
+      "coles": {
+        "name": "Yoplait Berry Punnet Yoghurt Strawberry Mixed Berries | 12 Pack",
+        "price": 8.5,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/yoplait-berry-punnet-yoghurt-strawberry-mixed-berries-12-pack-8877195",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8877195.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.8,
+      "alternatives": []
+    },
+    {
+      "list_item": "Fresh Broccoli",
+      "trip_count": 16,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 1.62
+        },
+        {
+          "date": "2024-11-20",
+          "price": 2.48
+        },
+        {
+          "date": "2024-12-09",
+          "price": 1.62
+        },
+        {
+          "date": "2025-02-02",
+          "price": 1.62
+        },
+        {
+          "date": "2025-03-27",
+          "price": 1.58
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.15
+        },
+        {
+          "date": "2025-04-25",
+          "price": 2.28
+        },
+        {
+          "date": "2025-05-04",
+          "price": 1.62
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.95
+        },
+        {
+          "date": "2025-05-22",
+          "price": 1.95
+        },
+        {
+          "date": "2025-05-29",
+          "price": 2.28
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.48
+        },
+        {
+          "date": "2025-06-13",
+          "price": 2.61
+        },
+        {
+          "date": "2025-06-21",
+          "price": 1.29
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.27
+        },
+        {
+          "date": "2025-07-26",
+          "price": 1.95
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Fresh Broccoli",
+        "price": 1.95,
+        "unit_price": 1.95,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/134681/fresh-broccoli",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/134681.jpg"
+      },
+      "coles": {
+        "name": "Coles Broccoli Medium | approx. 340g",
+        "price": 1.7,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-broccoli-medium-approx.-340g-407755",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F407755.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.25,
+      "alternatives": []
+    },
+    {
+      "list_item": "Fresh Cauliflower Half",
+      "trip_count": 17,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 2.25
+        },
+        {
+          "date": "2024-11-20",
+          "price": 1.95
+        },
+        {
+          "date": "2024-12-09",
+          "price": 1.5
+        },
+        {
+          "date": "2025-01-29",
+          "price": 2.45
+        },
+        {
+          "date": "2025-02-28",
+          "price": 2.95
+        },
+        {
+          "date": "2025-03-11",
+          "price": 2.95
+        },
+        {
+          "date": "2025-03-17",
+          "price": 1.95
+        },
+        {
+          "date": "2025-03-27",
+          "price": 1.75
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.45
+        },
+        {
+          "date": "2025-04-25",
+          "price": 1.95
+        },
+        {
+          "date": "2025-05-04",
+          "price": 2.75
+        },
+        {
+          "date": "2025-05-12",
+          "price": 2.75
+        },
+        {
+          "date": "2025-05-29",
+          "price": 1.95
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.75
+        },
+        {
+          "date": "2025-07-03",
+          "price": 3.95
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.95
+        },
+        {
+          "date": "2025-07-26",
+          "price": 1.75
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Fresh Cauliflower Half",
+        "price": 2.75,
+        "unit_price": 2.75,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/135568/fresh-cauliflower-half",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135568.jpg"
+      },
+      "coles": {
+        "name": "Coles Cauliflower Half | 1 each",
+        "price": 2.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-cauliflower-half-1-each-4601320",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4601320.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.75,
+      "alternatives": []
+    },
+    {
+      "list_item": "Hass Avocado",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 2.5
+        },
+        {
+          "date": "2024-11-12",
+          "price": 2.5
+        },
+        {
+          "date": "2024-11-20",
+          "price": 2.9
+        },
+        {
+          "date": "2024-12-02",
+          "price": 2.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 2.9
+        },
+        {
+          "date": "2024-12-19",
+          "price": 2.9
+        },
+        {
+          "date": "2025-01-29",
+          "price": 3.5
+        },
+        {
+          "date": "2025-02-02",
+          "price": 3.5
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Hass Avocado",
+        "price": 2.5,
+        "unit_price": 2.5,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/120080/hass-avocado",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120080.jpg"
+      },
+      "coles": {
+        "name": "Coles Hass Avocados | 1 Each",
+        "price": 2.2,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-hass-avocados-1-each-5900530",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5900530.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.3,
+      "alternatives": []
+    },
+    {
+      "list_item": "Hedy's Fresh Quiche Lorraine Chilled Meal",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 10.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 10.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 10.5
+        },
+        {
+          "date": "2025-07-26",
+          "price": 14.5
+        }
+      ],
+      "category": "Other",
+      "woolworths": {
+        "name": "Hedy's Fresh Quiche Lorraine Chilled Meal",
+        "price": 14.5,
+        "unit_price": 1.32,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/162880/hedy-s-fresh-quiche-lorraine-chilled-meal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/162880.jpg"
+      },
+      "coles": {
+        "name": "Hedys Quiche Lorraine | 1.1kg",
+        "price": 14.5,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/hedys-quiche-lorraine-1.1kg-7388070",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7388070.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Hedy's Fresh Quiche Spinach & Feta Chilled Meal",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 10.5
+        },
+        {
+          "date": "2025-05-29",
+          "price": 14.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 14.5
+        },
+        {
+          "date": "2025-07-03",
+          "price": 14.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Hedy's Fresh Quiche Spinach & Feta Chilled Meal",
+        "price": 14.5,
+        "unit_price": 1.32,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/669044/hedy-s-fresh-quiche-spinach-feta-chilled-meal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/669044.jpg"
+      },
+      "coles": {
+        "name": "Hedys Quiche Spinach Parmesan | 1.1kg",
+        "price": 14.5,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/hedys-quiche-spinach-parmesan-1.1kg-2904648",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2904648.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Helga's Wholemeal Bread With Grains",
+      "trip_count": 12,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 5.0
+        },
+        {
+          "date": "2024-11-12",
+          "price": 5.0
+        },
+        {
+          "date": "2024-12-02",
+          "price": 5.0
+        },
+        {
+          "date": "2025-02-02",
+          "price": 5.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 5.0
+        },
+        {
+          "date": "2025-04-05",
+          "price": 5.0
+        },
+        {
+          "date": "2025-04-25",
+          "price": 5.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.0
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.0
+        },
+        {
+          "date": "2025-06-21",
+          "price": 5.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 5.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 5.0
+        }
+      ],
+      "category": "Bread & Bakery",
+      "woolworths": null,
+      "coles": {
+        "name": "Helga's Traditional Wholemeal Bread | 750g",
+        "price": 5.2,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/helga's-traditional-wholemeal-bread-750g-5969435",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5969435.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 57.25,
-    "total_coles": 93.3,
+    "total_woolworths": 102.08,
+    "total_coles": 147.03,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 36.05,
-    "items_compared": 10,
+    "total_saving": 44.95,
+    "items_compared": 20,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 10,
+    "done": 20,
     "total": 86
   }
 }
