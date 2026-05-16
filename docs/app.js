@@ -220,35 +220,44 @@ function renderPage(data) {
   if (daysSince(data.last_updated) > 5) $('staleBanner').classList.add('visible');
 
   const s = data.summary;
-  const winnerEl = $('winnerText');
+  const wwCard    = $('wwCard');
+  const colesCard = $('colesCard');
   const wwTotalEl = $('wwTotal');
 
+  // Reset card classes
+  wwCard.className    = 'store-card';
+  colesCard.className = 'store-card';
+
   if (!s.ww_data_available) {
-    winnerEl.textContent = 'Woolworths prices unavailable — showing Coles only';
-    winnerEl.className = 'banner-winner equal';
-    wwTotalEl.textContent = '—';
-    wwTotalEl.className = 'amount dim';
-    $('savingAmount').textContent = '—';
+    wwTotalEl.innerHTML = '<span class="unavailable">Blocked by<br>Woolworths ⚠</span>';
+    $('wwBadge').innerHTML = '<span class="blocked-note">Their site blocks automated price checks</span>';
+    $('colesTotal').textContent = fmt(s.total_coles);
+    $('colesBadge').innerHTML = '<span class="winner-badge only">Only available</span>';
+    $('savingInfo').textContent = '';
   } else if (s.cheaper_store === 'woolworths') {
-    winnerEl.textContent = `Woolworths is cheaper by ${fmt(s.total_saving)}`;
-    winnerEl.className = 'banner-winner ww';
+    wwCard.classList.add('winner-ww');
+    wwTotalEl.textContent = fmt(s.total_woolworths);
+    $('colesTotal').textContent = fmt(s.total_coles);
+    $('wwBadge').innerHTML    = '<span class="winner-badge ww">✓ Cheaper</span>';
+    $('colesBadge').innerHTML = '';
+    $('savingInfo').innerHTML = `<span class="saving-chip">You save ${fmt(s.total_saving)}</span>`;
   } else if (s.cheaper_store === 'coles') {
-    winnerEl.textContent = `Coles is cheaper by ${fmt(s.total_saving)}`;
-    winnerEl.className = 'banner-winner coles';
+    colesCard.classList.add('winner-coles');
+    wwTotalEl.textContent = fmt(s.total_woolworths);
+    $('colesTotal').textContent = fmt(s.total_coles);
+    $('colesBadge').innerHTML = '<span class="winner-badge coles">✓ Cheaper</span>';
+    $('wwBadge').innerHTML    = '';
+    $('savingInfo').innerHTML = `<span class="saving-chip">You save ${fmt(s.total_saving)}</span>`;
   } else {
-    winnerEl.textContent = 'Both stores cost the same';
-    winnerEl.className = 'banner-winner equal';
+    wwTotalEl.textContent = fmt(s.total_woolworths);
+    $('colesTotal').textContent = fmt(s.total_coles);
+    $('wwBadge').innerHTML = $('colesBadge').innerHTML = '';
+    $('savingInfo').textContent = 'Same price at both stores';
   }
 
-  if (s.ww_data_available) wwTotalEl.textContent = fmt(s.total_woolworths);
-  $('colesTotal').textContent = fmt(s.total_coles);
-  if (s.ww_data_available) {
-    $('savingAmount').textContent = fmt(s.total_saving);
-    $('savingAmount').className = `amount ${s.cheaper_store === 'equal' ? '' : 'ww'}`;
-  }
   $('lastUpdated').textContent =
-    `Last updated: ${formatDate(data.last_updated)} · ${s.items_compared} items`;
-  $('banner').style.display = 'flex';
+    `Updated ${formatDate(data.last_updated)} · ${s.items_compared} items`;
+  $('banner').style.display = 'block';
 
   // Table
   const tbody = $('tableBody');
@@ -410,8 +419,14 @@ async function showNameChangesNotice() {
   if (!changes || Object.keys(changes).length === 0) return;
   const notice = $('nameChangesNotice');
   if (!notice) return;
-  const count = Object.keys(changes).length;
-  notice.innerHTML = `ℹ️ <strong>${count} possible product name change${count > 1 ? 's' : ''} detected</strong> — some items may have been renamed. <a href="data/name_changes_detected.json" target="_blank">Review →</a>`;
+  const keys = Object.keys(changes);
+  const chips = keys.map(k => `<span class="nc-item">${k}</span>`).join('');
+  notice.innerHTML = `
+    <div class="nc-header">
+      <strong>⚠ ${keys.length} item name${keys.length > 1 ? 's' : ''} may have changed</strong>
+      <button class="nc-dismiss" onclick="this.closest('.name-changes-notice').classList.remove('visible')">Dismiss</button>
+    </div>
+    <div class="nc-items">${chips}</div>`;
   notice.classList.add('visible');
 }
 
