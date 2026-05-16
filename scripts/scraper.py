@@ -20,6 +20,9 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "docs", "data")
 FLAG_PATH = os.path.join(DATA_DIR, "name_changes_detected.json")
 EXCEL_PATH = os.path.join(os.path.dirname(__file__), "..", "shopping_list.xlsx")
 
+# Only log verbose debug for the first WW item
+_ww_debug_done = False
+
 
 # ---------------------------------------------------------------------------
 # Price parsing
@@ -50,22 +53,178 @@ def resolve_url(href: str, base: str) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Woolworths scraping — uses internal API called from within browser session
+# Woolworths — try __NEXT_DATA__ SSR first, then internal API, then DOM
 # ---------------------------------------------------------------------------
+
+def _parse_ww_products(product_list: list) -> list[dict]:
+    """Parse Woolworths product objects (same shape from API and __NEXT_DATA__)."""
+    results = []
+    for p in product_list:
+        stockcode = p.get("Stockcode")
+        url_name = p.get("UrlFriendlyName", "")
+        name = p.get("Name", "")
+        price = p.get("Price")
+        cup_price = p.get("CupPrice")
+        cup_string = p.get("CupString", "")
+
+        if not name or price is None:
+            continue
+
+        product_url = (
+            f"{WOOLWORTHS_BASE}/shop/productdetails/{stockcode}/{url_name}"
+            if stockcode else ""
+        )
+        _, unit = parse_unit_price(cup_string)
+
+        results.append({
+            "name": name,
+            "price": float(price),
+            "unit_price": float(cup_price) if cup_price is not None else None,
+            "unit": unit,
+            "url": product_url,
+        })
+
+        if len(results) >= MAX_RESULTS:
+            break
+
+    return results
+
+
+def _extract_from_next_data(next_data: dict) -> list[dict]:
+    """Navigate __NEXT_DATA__ to find Woolworths product list."""
+    page_props = next_data.get("props", {}).get("pageProps", {})
+
+    # Common Next.js paths Woolworths uses
+    candidate_paths = [
+        lambda p: p.get("searchProducts", {}).get("Products", []),
+        lambda p: p.get("initialData", {}).get("Products", []),
+        lambda p: p.get("products", {}).get("Products", []),
+        lambda p: p.get("searchResult", {}).get("Products", []),
+    ]
+
+    for path_fn in candidate_paths:
+        try:
+            bundles = path_fn(page_props)
+            if bundles:
+                all_products = []
+                for bundle in bundles:
+                    items = bundle.get("Products", []) if isinstance(bundle, dict) else []
+                    all_products.extend(items)
+                if all_products:
+                    return _parse_ww_products(all_products)
+        except Exception:
+            continue
+
+    return []
+
+
+WW_DOM_EXTRACT_JS = """
+() => {
+    const selectors = [
+        '[data-testid="product-tile"]',
+        'article.shelfProductTile',
+        'section.shelfProductTile',
+        'article[class*="ProductTile"]',
+        'div[class*="product-tile"]',
+    ];
+    let tiles = [];
+    for (const sel of selectors) {
+        tiles = Array.from(document.querySelectorAll(sel));
+        if (tiles.length > 0) break;
+    }
+
+    return tiles.slice(0, 5).map(tile => {
+        const nameSelectors = [
+            '[data-testid="product-title"]',
+            '[class*="product-title"]',
+            '[class*="ProductTitle"]',
+            'h2', 'h3',
+        ];
+        let name = '';
+        for (const s of nameSelectors) {
+            const el = tile.querySelector(s);
+            if (el?.textContent?.trim()) { name = el.textContent.trim(); break; }
+        }
+
+        const priceSelectors = [
+            '[data-testid="price"]',
+            '[class*="Price"][class*="current"i]',
+            '[class*="price-dollars"]',
+            '[class*="product-price"]:not([class*="unit"]):not([class*="per"])',
+        ];
+        let priceText = '';
+        for (const s of priceSelectors) {
+            const el = tile.querySelector(s);
+            if (el?.textContent?.match(/\\$/)) { priceText = el.textContent.trim(); break; }
+        }
+
+        const unitSelectors = [
+            '[data-testid="product-unit-price"]',
+            '[class*="unit-price"]',
+            '[class*="unitPrice"]',
+            '[class*="cup-price"]',
+            '[class*="pricePerUnit"]',
+        ];
+        let unitPriceText = '';
+        for (const s of unitSelectors) {
+            const el = tile.querySelector(s);
+            if (el?.textContent?.trim()) { unitPriceText = el.textContent.trim(); break; }
+        }
+
+        const linkEl = tile.querySelector('a[href*="productdetails"], a[href*="/product/"], a[href]');
+
+        return {
+            name,
+            price_text: priceText,
+            unit_price_text: unitPriceText,
+            url: linkEl?.getAttribute('href') || '',
+        };
+    }).filter(p => p.name);
+}
+"""
+
 
 async def delay():
     await asyncio.sleep(random.uniform(1.5, 3.5))
 
 
 async def search_woolworths(page, query: str) -> list[dict]:
+    global _ww_debug_done
     url = f"{WOOLWORTHS_BASE}/shop/search/products?searchTerm={quote(query)}"
     try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+        await page.goto(url, wait_until="load", timeout=30000)
         await page.wait_for_timeout(2000)
 
-        # Call the internal JSON API from within the live browser session
-        # so that session cookies and headers are automatically included.
-        data = await page.evaluate(
+        current_url = page.url
+        title = await page.title()
+
+        if not _ww_debug_done:
+            print(f"  [WW DEBUG] Landed URL: {current_url}")
+            print(f"  [WW DEBUG] Page title: {title}")
+            _ww_debug_done = True
+
+        # ── Strategy 1: extract from embedded __NEXT_DATA__ ──────────────────
+        next_data = await page.evaluate("""
+            () => {
+                const el = document.getElementById('__NEXT_DATA__');
+                if (!el) return null;
+                try { return JSON.parse(el.textContent); } catch(e) { return null; }
+            }
+        """)
+
+        if next_data:
+            products = _extract_from_next_data(next_data)
+            if products:
+                return products
+            page_props_keys = list(
+                next_data.get("props", {}).get("pageProps", {}).keys()
+            )
+            print(f"  [WW] __NEXT_DATA__ found but no products. pageProps keys: {page_props_keys[:8]}")
+        else:
+            print(f"  [WW] No __NEXT_DATA__ on page")
+
+        # ── Strategy 2: internal JSON API via browser fetch ───────────────────
+        result = await page.evaluate(
             """
             async (query) => {
                 try {
@@ -81,56 +240,49 @@ async def search_woolworths(page, query: str) -> list[dict]:
                             credentials: 'include'
                         }
                     );
-                    if (!r.ok) return null;
-                    return await r.json();
+                    if (!r.ok) return { error: 'http_' + r.status };
+                    const data = await r.json();
+                    return { data };
                 } catch(e) {
-                    return null;
+                    return { error: e.toString() };
                 }
             }
             """,
             query,
         )
 
-        if not data:
-            print(f"  [WW] API returned null for '{query}'")
-            return []
-
-        products = []
-        for bundle in (data.get("Products") or []):
-            for p in (bundle.get("Products") or []):
-                stockcode = p.get("Stockcode")
-                url_name = p.get("UrlFriendlyName", "")
-                name = p.get("Name", "")
-                price = p.get("Price")
-                cup_price = p.get("CupPrice")
-                cup_string = p.get("CupString", "")
-
-                if not name or price is None:
-                    continue
-
-                product_url = (
-                    f"{WOOLWORTHS_BASE}/shop/productdetails/{stockcode}/{url_name}"
-                    if stockcode else ""
-                )
-                _, unit = parse_unit_price(cup_string)
-
-                products.append({
-                    "name": name,
-                    "price": float(price),
-                    "unit_price": float(cup_price) if cup_price is not None else None,
-                    "unit": unit,
-                    "url": product_url,
-                })
-
+        if result and result.get("error"):
+            print(f"  [WW] API error: {result['error']}")
+        elif result and result.get("data"):
+            products = []
+            for bundle in (result["data"].get("Products") or []):
+                products.extend(_parse_ww_products(bundle.get("Products") or []))
                 if len(products) >= MAX_RESULTS:
                     break
-            if len(products) >= MAX_RESULTS:
-                break
+            if products:
+                return products
 
-        return products
+        # ── Strategy 3: DOM scraping ──────────────────────────────────────────
+        raw = await page.evaluate(WW_DOM_EXTRACT_JS)
+        if raw:
+            results = []
+            for r in raw:
+                price = parse_price(r["price_text"])
+                unit_price, unit = parse_unit_price(r["unit_price_text"])
+                results.append({
+                    "name": r["name"],
+                    "price": price,
+                    "unit_price": unit_price,
+                    "unit": unit,
+                    "url": resolve_url(r["url"], WOOLWORTHS_BASE),
+                })
+            if any(r["price"] for r in results):
+                return results
+
+        return []
 
     except Exception as e:
-        print(f"  [WW] Error searching '{query}': {e}")
+        print(f"  [WW] Exception searching '{query}': {e}")
         return []
 
 
@@ -234,7 +386,6 @@ async def search_coles(page, query: str) -> list[dict]:
 # ---------------------------------------------------------------------------
 
 def find_alternatives(all_results: list[dict], matched: dict | None, max_alts: int = 3) -> list[dict]:
-    """From full search results, find products cheaper per unit than the matched one."""
     if not matched or matched.get("unit_price") is None:
         return []
     best_unit = matched["unit_price"]
@@ -308,7 +459,6 @@ async def scrape(trigger: str = "scheduled"):
                 print(f"  Not found on either store")
                 continue
 
-            # Determine cheaper store
             ww_price = ww_match["price"] if ww_match else None
             coles_price = coles_match["price"] if coles_match else None
 
@@ -325,12 +475,10 @@ async def scrape(trigger: str = "scheduled"):
                     cheaper_store = "equal"
                     saving = 0.0
 
-            # Alternatives: find cheaper per-unit from combined results
             all_for_item = ww_results + coles_results
             best_match = ww_match if (ww_match and ww_match.get("unit_price")) else coles_match
             alternatives = find_alternatives(all_for_item, best_match)
 
-            # Add retailer label to alternatives
             for alt in alternatives:
                 if not alt.get("retailer"):
                     alt["retailer"] = "woolworths" if WOOLWORTHS_BASE in alt.get("url", "") else "coles"
@@ -347,7 +495,6 @@ async def scrape(trigger: str = "scheduled"):
 
         await browser.close()
 
-    # Totals
     ww_total = sum(
         r["woolworths"]["price"]
         for r in items_output
