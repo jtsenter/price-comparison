@@ -1001,10 +1001,8 @@ function sortItems(items) {
       case 'trips':    av = a.trip_count || 0; bv = b.trip_count || 0; break;
       case 'units':    av = getUnits(a.list_item); bv = getUnits(b.list_item); break;
       case 'priority': {
-        const pa = priorities[a.list_item] || 'monthly';
-        const pb = priorities[b.list_item] || 'monthly';
-        av = PRIORITY_ORDER[pa] ?? 99;
-        bv = PRIORITY_ORDER[pb] ?? 99;
+        av = PRIORITY_ORDER[getPriority(a.list_item)] ?? 99;
+        bv = PRIORITY_ORDER[getPriority(b.list_item)] ?? 99;
         break;
       }
       case 'pct': {
@@ -1252,6 +1250,9 @@ function renderPage(data) {
       pctHtml = `<span class="${cheaper === 'woolworths' ? 'pct-ww' : 'pct-coles'}">${pct}%</span>`;
     }
 
+    // Units cell (declared before unitsSaving so it's in scope)
+    const units = getUnits(item.list_item);
+
     const unitsSaving = item.saving_per_item > 0 ? item.saving_per_item * units : 0;
     const savingHtml = unitsSaving > 0
       ? `<span class="saving-cell">${fmt(unitsSaving)}</span>` : '';
@@ -1272,8 +1273,6 @@ function renderPage(data) {
       <option value="archive"${itemPriority === 'archive' ? ' selected' : ''}>Archive</option>
     </select></td>`;
 
-    // Units cell
-    const units = getUnits(item.list_item);
     const unitsCell = `<td class="units-cell">
       <div class="units-ctrl">
         <button class="units-dec" data-item="${safeKey}">−</button>
@@ -1570,9 +1569,9 @@ async function addItemsToShoppingList(newItems) {
 
     const today = new Date().toISOString().split('T')[0];
 
-    // Add 4 trips per new item (meets min_trips=4 threshold in scraper)
+    // Add 2 trips per new item (meets min_trips=2 threshold in scraper)
     for (const itemName of newItems) {
-      for (let t = 0; t < 4; t++) {
+      for (let t = 0; t < 2; t++) {
         const row = Array(Math.max(header.length, 3)).fill('');
         if (itemIdx >= 0)  row[itemIdx]  = itemName;
         if (dateIdx >= 0)  row[dateIdx]  = today;
