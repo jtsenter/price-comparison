@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-16T10:21:27.759088+00:00",
+  "last_updated": "2026-05-16T10:45:13.426900+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2918,9 +2918,16 @@
         "url": "https://www.woolworths.com.au/shop/productdetails/169438/truss-tomatoes",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/169438.jpg"
       },
-      "coles": null,
-      "cheaper_store": "woolworths",
-      "saving_per_item": null,
+      "coles": {
+        "name": "Coles Tomatoes Greenhouse Truss | approx. 130g",
+        "price": 1.1,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-tomatoes-greenhouse-truss-approx.-130g-4628676",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4628676.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.15,
       "alternatives": []
     },
     {
@@ -5104,10 +5111,10 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 443.51,
-    "total_coles": 525.09,
+    "total_coles": 526.19,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 81.58,
+    "total_saving": 82.68,
     "items_compared": 86,
     "items_not_found": 0
   }
