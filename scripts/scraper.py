@@ -343,7 +343,8 @@ async def scrape(trigger: str = "scheduled", single_item: str = ""):
 
     async with async_playwright() as pw:
         browser = await pw.chromium.launch(
-            headless=False,
+            headless=True,
+            channel="chrome",
             args=["--no-sandbox", "--disable-blink-features=AutomationControlled", "--disable-dev-shm-usage"],
         )
         context = await browser.new_context(
