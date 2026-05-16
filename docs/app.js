@@ -67,15 +67,52 @@ function updateImportBadge() {
   badge.style.display = count > 0 ? 'inline-flex' : 'none';
 }
 
+// ── Unit quantity overrides ──────────────────────────────────────────────────
+
+function loadUnitOverrides() {
+  try { return JSON.parse(localStorage.getItem('pw_units_v1') || '{}'); } catch { return {}; }
+}
+function saveUnitOverrides(obj) {
+  localStorage.setItem('pw_units_v1', JSON.stringify(obj));
+}
+
+// ── Item analysis data (loaded from data/item_analysis.json) ─────────────────
+
+let _itemAnalysis = {};
+
+async function loadItemAnalysis() {
+  try {
+    const res = await fetch(`data/item_analysis.json?t=${Date.now()}`);
+    if (res.ok) _itemAnalysis = await res.json();
+  } catch {}
+}
+
+function getAnalysisData(itemName) {
+  return _itemAnalysis[itemName] || {};
+}
+
+function getPriority(itemName) {
+  const p = loadPriorities()[itemName];
+  if (p) return p;
+  return getAnalysisData(itemName).priority || 'monthly';
+}
+
+function getUnits(itemName) {
+  const ov = loadUnitOverrides()[itemName];
+  if (ov != null) return ov;
+  return getAnalysisData(itemName).avg_qty ?? 1;
+}
+
 // ── Filter state ─────────────────────────────────────────────────────────────
 
 let _activePriority = 'all';
 let _showHotOnly = false;
 let _storeFilter = 'all';
+let _showPricesOnly = false;
 
 // ── Column order & widths ────────────────────────────────────────────────────
 
-const DEFAULT_COL_ORDER = ['name', 'priority', 'ww', 'coles', 'cheaper', 'pct', 'saving', 'trips'];
+const DEFAULT_COL_ORDER = ['name', 'priority', 'ww', 'coles', 'cheaper', 'pct', 'saving', 'units', 'trips'];
 
 let _colOrder = (() => {
   try {
@@ -104,6 +141,7 @@ function colHeadHtml(col) {
     case 'saving':  return `<th data-col="saving" class="sortable">You Save <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     case 'trips':    return `<th data-col="trips" class="sortable center-th">Trips <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     case 'priority': return `<th data-col="priority" class="sortable center-th">Priority <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'units':    return `<th data-col="units" class="sortable center-th">Units <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     default: return '';
   }
 }
@@ -435,17 +473,15 @@ function openPriceHistoryModal(item) {
         if (_lastData) renderPage(_lastData);
       });
 
-      row.querySelector('.price-diff-btn').addEventListener('click', () => {
-        const pending = loadPending();
-        pending.push({
-          price: entry.price,
-          date: entry.date || new Date().toISOString(),
-          from_item: item.list_item,
-          added_at: new Date().toISOString(),
-        });
-        savePending(pending);
-        updateImportBadge();
-        // Also exclude this price from the current item
+      row.querySelector('.price-diff-btn').addEventListener('click', async () => {
+        const newName = window.prompt(
+          `This ${fmt(entry.price)} entry belongs to a different item.\nWhat is its name?`,
+          ''
+        );
+        if (!newName?.trim()) return;
+        const trimmed = newName.trim();
+
+        // Exclude this price from the current item
         const ex = loadExclusions();
         const list = ex[item.list_item] || [];
         const priceNum = Number(key);
@@ -453,6 +489,26 @@ function openPriceHistoryModal(item) {
           ex[item.list_item] = [...list, priceNum];
           saveExclusions(ex);
         }
+
+        // Try to add the new item to the shopping list and trigger scrape
+        const s = loadSettings();
+        if (s.user && s.repo && s.token) {
+          await addItemsToShoppingList([trimmed]);
+        } else {
+          // Save to pending list for later
+          const pending = loadPending();
+          pending.push({
+            name: trimmed,
+            price: entry.price,
+            date: entry.date || new Date().toISOString(),
+            from_item: item.list_item,
+            added_at: new Date().toISOString(),
+          });
+          savePending(pending);
+          updateImportBadge();
+          alert(`"${trimmed}" saved to pending items. Configure GitHub settings to add it to your list.`);
+        }
+
         openPriceHistoryModal(item);
         if (_lastData) renderPage(_lastData);
       });
@@ -514,22 +570,34 @@ function initPriorityFilter() {
 // ── Banner stats (priority-aware) ────────────────────────────────────────────
 
 function computeBannerStats(items) {
-  const priorities = loadPriorities();
   const filtered = items.filter(item => {
-    const p = priorities[item.list_item] || 'monthly';
+    const p = getPriority(item.list_item);
     if (_activePriority !== 'archive' && p === 'archive') return false;
     if (_activePriority !== 'all' && _activePriority !== 'archive' && p !== _activePriority) return false;
     return true;
   });
-  const ww_total = filtered.reduce((s, i) => s + (i.woolworths?.price ?? 0), 0);
-  const co_total = filtered.reduce((s, i) => s + (i.coles?.price ?? 0), 0);
   const ww_avail = filtered.some(i => i.woolworths?.price != null);
-  let cheaper_store, total_saving;
-  if (!ww_avail) { cheaper_store = 'coles_only'; total_saving = 0; }
-  else if (co_total === 0) { cheaper_store = 'ww_only'; total_saving = 0; }
-  else if (ww_total < co_total) { cheaper_store = 'woolworths'; total_saving = co_total - ww_total; }
-  else if (co_total < ww_total) { cheaper_store = 'coles'; total_saving = ww_total - co_total; }
-  else { cheaper_store = 'equal'; total_saving = 0; }
+  // Totals weighted by units
+  const ww_total = filtered.reduce((s, i) => {
+    const u = getUnits(i.list_item);
+    return s + (i.woolworths?.price ?? 0) * u;
+  }, 0);
+  const co_total = filtered.reduce((s, i) => {
+    const u = getUnits(i.list_item);
+    return s + (i.coles?.price ?? 0) * u;
+  }, 0);
+  // Saving = sum of (price_diff * units) for items where both prices exist
+  const total_saving = filtered.reduce((s, i) => {
+    const ww = i.woolworths?.price, co = i.coles?.price, u = getUnits(i.list_item);
+    if (ww != null && co != null) return s + Math.abs(ww - co) * u;
+    return s;
+  }, 0);
+  let cheaper_store;
+  if (!ww_avail) cheaper_store = 'coles_only';
+  else if (co_total === 0) cheaper_store = 'ww_only';
+  else if (ww_total < co_total) cheaper_store = 'woolworths';
+  else if (co_total < ww_total) cheaper_store = 'coles';
+  else cheaper_store = 'equal';
   return {
     total_woolworths: Math.round(ww_total * 100) / 100,
     total_coles: Math.round(co_total * 100) / 100,
@@ -898,10 +966,9 @@ const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
 function sortItems(items) {
   const { col, dir } = sortState;
   const mul = dir === 'asc' ? 1 : -1;
-  const priorities = loadPriorities();
 
   let filtered = items.filter(item => {
-    const p = priorities[item.list_item] || 'monthly';
+    const p = getPriority(item.list_item);
     // Always hide archived items unless archive view is active
     if (_activePriority !== 'archive' && p === 'archive') return false;
     // Priority pill filter
@@ -913,6 +980,8 @@ function sortItems(items) {
       if (_storeFilter === 'woolworths' && item.cheaper_store !== 'woolworths') return false;
       if (_storeFilter === 'coles' && item.cheaper_store !== 'coles') return false;
     }
+    // Prices-only filter
+    if (_showPricesOnly && !item.woolworths?.price && !item.coles?.price) return false;
     return true;
   });
 
@@ -930,6 +999,7 @@ function sortItems(items) {
       case 'cheaper':  av = a.cheaper_store ?? 'zzz'; bv = b.cheaper_store ?? 'zzz'; break;
       case 'saving':   av = a.saving_per_item ?? -Infinity; bv = b.saving_per_item ?? -Infinity; break;
       case 'trips':    av = a.trip_count || 0; bv = b.trip_count || 0; break;
+      case 'units':    av = getUnits(a.list_item); bv = getUnits(b.list_item); break;
       case 'priority': {
         const pa = priorities[a.list_item] || 'monthly';
         const pb = priorities[b.list_item] || 'monthly';
@@ -1013,7 +1083,8 @@ function renderPage(data) {
 
   if (daysSince(data.last_updated) > 5) $('staleBanner').classList.add('visible');
 
-  const s = _activePriority !== 'all' ? computeBannerStats(data.items) : data.summary;
+  // Always compute banner stats client-side so savings are units-weighted
+  const s = computeBannerStats(data.items);
   const wwCard    = $('wwCard');
   const colesCard = $('colesCard');
   const wwTotalEl = $('wwTotal');
@@ -1056,13 +1127,45 @@ function renderPage(data) {
 
   _lastData = data;
 
-  buildCategoryTabs(data.items);
+  // Merge not-found items into the full display list (no prices for either store)
+  const notFoundAsItems = (data.not_found_items || []).map(name => ({
+    list_item: name,
+    woolworths: null,
+    coles: null,
+    cheaper_store: null,
+    saving_per_item: null,
+    trip_count: 0,
+    price_history: [],
+    category: '',
+  }));
+  const allDisplayItems = [...data.items, ...notFoundAsItems];
+
+  buildCategoryTabs(allDisplayItems);
+
+  // Prices-only toggle button
+  let toggleBtn = $('pricesOnlyBtn');
+  if (!toggleBtn) {
+    toggleBtn = document.createElement('button');
+    toggleBtn.id = 'pricesOnlyBtn';
+    toggleBtn.className = 'btn btn-ghost prices-only-btn';
+    toggleBtn.addEventListener('click', () => {
+      _showPricesOnly = !_showPricesOnly;
+      toggleBtn.classList.toggle('active', _showPricesOnly);
+      toggleBtn.textContent = _showPricesOnly ? 'Showing: prices only' : 'Show: prices only';
+      if (_lastData) renderPage(_lastData);
+    });
+    const tabs = $('categoryTabs');
+    tabs?.parentNode?.insertBefore(toggleBtn, tabs);
+  }
+  toggleBtn.textContent = _showPricesOnly ? 'Showing: prices only' : 'Show: prices only';
+  toggleBtn.classList.toggle('active', _showPricesOnly);
+
   renderTableHead();
 
   const tbody = $('tableBody');
   tbody.innerHTML = '';
 
-  const sorted = sortItems(data.items);
+  const sorted = sortItems(allDisplayItems);
   updateSortHeaders();
 
   const overrides = loadOverrides();
@@ -1149,8 +1252,9 @@ function renderPage(data) {
       pctHtml = `<span class="${cheaper === 'woolworths' ? 'pct-ww' : 'pct-coles'}">${pct}%</span>`;
     }
 
-    const savingHtml = item.saving_per_item > 0
-      ? `<span class="saving-cell">${fmt(item.saving_per_item)}</span>` : '';
+    const unitsSaving = item.saving_per_item > 0 ? item.saving_per_item * units : 0;
+    const savingHtml = unitsSaving > 0
+      ? `<span class="saving-cell">${fmt(unitsSaving)}</span>` : '';
 
     const tripsHtml = item.trip_count != null ? `<span class="trips-cell">${item.trip_count}</span>` : '';
 
@@ -1159,9 +1263,8 @@ function renderPage(data) {
     const wwClass  = cheaper === 'woolworths' ? 'cell-ww' : '';
     const coClass  = cheaper === 'coles'      ? 'cell-coles' : '';
 
-    // Priority cell
-    const priorities = loadPriorities();
-    const itemPriority = priorities[item.list_item] || 'monthly';
+    // Priority cell (uses analysis data as fallback)
+    const itemPriority = getPriority(item.list_item);
     const priorityCell = `<td class="priority-cell"><select class="priority-select" data-item="${safeKey}">
       <option value="weekly"${itemPriority === 'weekly' ? ' selected' : ''}>Weekly</option>
       <option value="monthly"${itemPriority === 'monthly' ? ' selected' : ''}>Monthly</option>
@@ -1169,10 +1272,21 @@ function renderPage(data) {
       <option value="archive"${itemPriority === 'archive' ? ' selected' : ''}>Archive</option>
     </select></td>`;
 
+    // Units cell
+    const units = getUnits(item.list_item);
+    const unitsCell = `<td class="units-cell">
+      <div class="units-ctrl">
+        <button class="units-dec" data-item="${safeKey}">−</button>
+        <span class="units-val">${units}</span>
+        <button class="units-inc" data-item="${safeKey}">+</button>
+      </div>
+    </td>`;
+
     // Build cell map keyed by col id
     const tdMap = {
       name:     `<td class="item-name">${itemCell}</td>`,
       priority: priorityCell,
+      units:    unitsCell,
       ww:       `<td class="price-cell ${wwClass}">${wwCellContent}</td>`,
       coles:    `<td class="price-cell ${coClass}">${coCellContent}</td>`,
       cheaper:  `<td class="cheaper-cell">${badgeHtml}</td>`,
@@ -1190,6 +1304,7 @@ function renderPage(data) {
     const footMap = {
       name:     `<td>Total basket</td>`,
       priority: `<td></td>`,
+      units:    `<td></td>`,
       ww:       `<td id="footWW">${s.ww_data_available ? fmt(s.total_woolworths) : '—'}</td>`,
       coles:    `<td id="footColes">${fmt(s.total_coles)}</td>`,
       cheaper:  `<td></td>`,
@@ -1202,10 +1317,8 @@ function renderPage(data) {
 
   $('tableContainer').style.display = 'block';
 
-  if (data.not_found_items?.length > 0) {
-    $('notFoundList').innerHTML = data.not_found_items.map(n => `<li>${n}</li>`).join('');
-    $('notFoundSection').style.display = 'block';
-  }
+  // Not-found items are now shown in the main table — hide the old separate section
+  $('notFoundSection').style.display = 'none';
 
   // Signal sticky header to re-sync next scroll
   _stickyNeedsSync = true;
@@ -1526,6 +1639,8 @@ async function boot() {
   const refreshBtn = $('refreshBtn');
   if (refreshBtn) refreshBtn.addEventListener('click', triggerRefresh);
 
+  // Load analysis data first so priorities/units are ready before render
+  await loadItemAnalysis();
   const data = await loadData();
   const isAlt = location.pathname.endsWith('alternatives.html');
 
@@ -1538,6 +1653,19 @@ async function boot() {
     const tbody = $('tableBody');
     if (tbody) {
       tbody.addEventListener('click', (e) => {
+        // Units increment/decrement
+        const incBtn = e.target.closest('.units-inc, .units-dec');
+        if (incBtn) {
+          const itemName = incBtn.dataset.item;
+          const delta = incBtn.classList.contains('units-inc') ? 0.5 : -0.5;
+          const ov = loadUnitOverrides();
+          const cur = getUnits(itemName);
+          ov[itemName] = Math.max(0.5, Math.round((cur + delta) * 2) / 2);
+          saveUnitOverrides(ov);
+          if (_lastData) renderPage(_lastData);
+          return;
+        }
+
         const refreshBtn = e.target.closest('.item-refresh-btn');
         if (refreshBtn) {
           const ov = loadOverrides()[refreshBtn.dataset.item] || {};

@@ -550,12 +550,12 @@ tr:hover .price-bar-manage { opacity: 1; }
 .price-link:hover { color: var(--ww); text-decoration: underline; }
 .no-data { color: var(--text-soft); font-size: 13px; }
 
-/* Symmetric price highlighting */
-.cell-ww .price-main  { color: var(--ww); font-weight: 800; }
-.cell-coles .price-main { color: var(--coles); font-weight: 800; }
+/* Symmetric price highlighting — both green when cheapest */
+.cell-ww .price-main,
+.cell-coles .price-main { color: var(--ww); font-weight: 800; }
 
-.cell-ww    { background: rgba(0,132,61,0.04); }
-.cell-coles { background: rgba(204,0,0,0.04); }
+.cell-ww,
+.cell-coles { background: rgba(0,132,61,0.04); }
 
 /* Search link for missing items */
 .search-link { font-size: 11px; color: var(--text-soft); text-decoration: none; }
@@ -575,7 +575,7 @@ tr:hover .price-bar-manage { opacity: 1; }
   text-transform: uppercase;
 }
 .cheaper-badge.ww    { background: var(--ww-light); color: var(--ww); border: 1px solid var(--ww-mid); }
-.cheaper-badge.coles { background: var(--coles-light); color: var(--coles); border: 1px solid var(--coles-mid); }
+.cheaper-badge.coles { background: var(--ww-light); color: var(--ww); border: 1px solid var(--ww-mid); }
 .cheaper-badge.equal { background: var(--bg); color: var(--text-mid); border: 1px solid var(--border); }
 .cheaper-badge.na    { background: var(--bg); color: var(--text-soft); border: 1px solid var(--border); font-style: italic; }
 
@@ -823,6 +823,48 @@ th.sort-active { color: var(--text); }
 .upload-preview-list li:last-child { border-bottom: none; }
 .upload-preview-list li.new-item { color: var(--ww); font-weight: 600; }
 .upload-preview-list li.new-item::before { content: '+ '; }
+
+/* ── Prices-only toggle button ───────────────────────────────── */
+.prices-only-btn {
+  font-size: 12px;
+  padding: 4px 12px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+}
+.prices-only-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* ── Units column ─────────────────────────────────────────────── */
+.units-cell { text-align: center; white-space: nowrap; }
+.units-ctrl {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.units-dec, .units-inc {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-mid);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0;
+  transition: background .12s;
+}
+.units-dec:hover, .units-inc:hover { background: var(--bg); color: var(--text); }
+.units-val {
+  min-width: 28px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
 
 /* ── Priority filter bar ─────────────────────────────────────── */
 .priority-filter {

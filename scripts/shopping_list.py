@@ -22,7 +22,9 @@ FUZZY_THRESHOLD = 85
 def clean_name(name: str) -> str:
     if not isinstance(name, str):
         return ""
-    name = name.strip().replace(" NULL", "").replace("NULL", "").strip()
+    # Normalize non-breaking spaces and other whitespace variants
+    name = name.replace("\xa0", " ").strip()
+    name = name.replace(" NULL", "").replace("NULL", "").strip()
     return KNOWN_NAME_CHANGES.get(name, name)
 
 
@@ -41,7 +43,7 @@ def detect_fuzzy_changes(items: list[str], flag_path: str) -> dict:
     return flagged
 
 
-def get_purchase_history(excel_path: str, min_trips: int = 4) -> dict:
+def get_purchase_history(excel_path: str, min_trips: int = 2) -> dict:
     """
     Returns {item_name: {trip_count, price_history: [{date, price}]}}
     for items bought in at least min_trips distinct shopping dates.
@@ -73,7 +75,7 @@ def get_purchase_history(excel_path: str, min_trips: int = 4) -> dict:
     return result
 
 
-def get_active_shopping_list(excel_path: str, min_trips: int = 4) -> list[str]:
+def get_active_shopping_list(excel_path: str, min_trips: int = 2) -> list[str]:
     return sorted(get_purchase_history(excel_path, min_trips).keys())
 
 

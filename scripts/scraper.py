@@ -243,9 +243,23 @@ COLES_EXTRACT_JS = """
         }
 
         let unitPriceText = '';
-        for (const s of ['[class*="unit-price"]','[class*="price__per"]','[class*="pricePerUnit"]','[data-testid*="unit"]']) {
+        for (const s of [
+            '[class*="CupPrice"]','[class*="cup-price"]','[class*="cupPrice"]',
+            '[class*="price_cup"]','[class*="UnitPrice"]','[class*="unit-price"]',
+            '[class*="price__per"]','[class*="pricePerUnit"]',
+            '[data-testid*="cup"]','[data-testid*="unit"]',
+        ]) {
             const el = tile.querySelector(s);
             if (el?.textContent?.trim()) { unitPriceText = el.textContent.trim(); break; }
+        }
+        // Fallback: scan all small text nodes in the tile for "per" or "/" price patterns
+        if (!unitPriceText) {
+            for (const el of tile.querySelectorAll('span,div,p')) {
+                const t = el.textContent?.trim() || '';
+                if (t.length < 30 && /\$[\d.]+\s*(\/|per\s*)\s*[\d.]*\s*\w+/i.test(t)) {
+                    unitPriceText = t; break;
+                }
+            }
         }
 
         const linkEl = tile.querySelector('a[href*="/product"]');
@@ -305,7 +319,12 @@ COLES_PRODUCT_PAGE_JS = """
         if (el?.textContent?.match(/\\$/)) { priceText = el.textContent.trim(); break; }
     }
     let unitPriceText = '';
-    for (const s of ['[class*="unit-price"]','[class*="price__per"]','[class*="pricePerUnit"]','[data-testid*="unit"]']) {
+    for (const s of [
+        '[class*="CupPrice"]','[class*="cup-price"]','[class*="cupPrice"]',
+        '[class*="price_cup"]','[class*="UnitPrice"]','[class*="unit-price"]',
+        '[class*="price__per"]','[class*="pricePerUnit"]',
+        '[data-testid*="cup"]','[data-testid*="unit"]',
+    ]) {
         const el = document.querySelector(s);
         if (el?.textContent?.trim()) { unitPriceText = el.textContent.trim(); break; }
     }
