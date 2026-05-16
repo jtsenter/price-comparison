@@ -20,29 +20,27 @@ permissions:
 
 jobs:
   scrape:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     timeout-minutes: 60
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-          cache: 'pip'
-
       - name: Install dependencies
+        shell: bash
         run: pip install -r requirements.txt
 
       - name: Install Playwright browsers
+        shell: bash
         run: playwright install chromium --with-deps
 
       - name: Run scraper
+        shell: bash
         run: python scripts/scraper.py "${{ github.event.inputs.trigger || 'scheduled' }}" "${{ github.event.inputs.item || '' }}"
 
       - name: Commit and push results
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
