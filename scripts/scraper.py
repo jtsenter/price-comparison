@@ -450,8 +450,9 @@ async def scrape(trigger: str = "scheduled", single_item: str = ""):
         print(f"Patched '{single_item}' into existing data ({len(all_items)} total items).")
     else:
         output = _build_output(items_output, not_found, trigger)
+        s = output["summary"]
         print(f"\nDone. {len(items_output)} items compared, {len(not_found)} not found.")
-        print(f"Woolworths total: ${ww_total:.2f} | Coles total: ${coles_total:.2f}")
+        print(f"Woolworths total: ${s['total_woolworths']:.2f} | Coles total: ${s['total_coles']:.2f}")
 
     with open(latest_path, "w") as f:
         json.dump(output, f, indent=2)
