@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-16T08:58:50.415230+00:00",
+  "last_updated": "2026-05-16T09:00:11.146068+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1242,20 +1242,600 @@
       "cheaper_store": "coles",
       "saving_per_item": null,
       "alternatives": []
+    },
+    {
+      "list_item": "Kale Fresh Bunch",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2025-01-29",
+          "price": 3.9
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.9
+        },
+        {
+          "date": "2025-04-05",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.9
+        },
+        {
+          "date": "2025-05-04",
+          "price": 3.9
+        },
+        {
+          "date": "2025-06-13",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.9
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Kale Fresh Bunch",
+        "price": 4.6,
+        "unit_price": 4.6,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/380338/kale-fresh-bunch",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/380338.jpg"
+      },
+      "coles": {
+        "name": "Coles Kale Bunch Green | 1 Each",
+        "price": 4.5,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-kale-bunch-green-1-each-8696598",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8696598.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.1,
+      "alternatives": []
+    },
+    {
+      "list_item": "Katoomba Ingredients Red Lentils",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-03-17",
+          "price": 3.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 4.0
+        },
+        {
+          "date": "2025-04-25",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 4.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Katoomba Ingredients Red Lentils",
+        "price": 4.0,
+        "unit_price": 0.4,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/753947/katoomba-ingredients-red-lentils",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/753947.jpg"
+      },
+      "coles": {
+        "name": "Katoomba Red Lentils | 1kg",
+        "price": 3.6,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/katoomba-red-lentils-1kg-4683608",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4683608.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.4,
+      "alternatives": []
+    },
+    {
+      "list_item": "Kiwi Fruit Green",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-04-25",
+          "price": 0.95
+        },
+        {
+          "date": "2025-05-29",
+          "price": 0.9
+        },
+        {
+          "date": "2025-06-13",
+          "price": 0.95
+        },
+        {
+          "date": "2025-07-03",
+          "price": 0.95
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Kiwi Fruit Green",
+        "price": 1.02,
+        "unit_price": 1.02,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/139238/kiwi-fruit-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139238.jpg"
+      },
+      "coles": {
+        "name": "Coles Green Kiwifruit | 1 Each",
+        "price": 1.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-green-kiwifruit-1-each-4425883",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4425883.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.02,
+      "alternatives": [
+        {
+          "name": "Woolworths Kiwifruit Green Kids",
+          "price": 3.5,
+          "unit_price": 0.7,
+          "unit": "1EA",
+          "url": "https://www.woolworths.com.au/shop/productdetails/648994/woolworths-kiwifruit-green-kids",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/648994.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Lebanese Cucumbers",
+      "trip_count": 16,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 1.06
+        },
+        {
+          "date": "2024-12-19",
+          "price": 1.06
+        },
+        {
+          "date": "2025-01-29",
+          "price": 1.42
+        },
+        {
+          "date": "2025-02-02",
+          "price": 1.24
+        },
+        {
+          "date": "2025-02-28",
+          "price": 1.24
+        },
+        {
+          "date": "2025-03-11",
+          "price": 1.24
+        },
+        {
+          "date": "2025-03-27",
+          "price": 1.24
+        },
+        {
+          "date": "2025-05-04",
+          "price": 1.24
+        },
+        {
+          "date": "2025-05-12",
+          "price": 0.88
+        },
+        {
+          "date": "2025-05-22",
+          "price": 1.24
+        },
+        {
+          "date": "2025-05-29",
+          "price": 0.88
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.42
+        },
+        {
+          "date": "2025-06-13",
+          "price": 1.6
+        },
+        {
+          "date": "2025-06-21",
+          "price": 1.78
+        },
+        {
+          "date": "2025-07-03",
+          "price": 1.6
+        },
+        {
+          "date": "2025-07-26",
+          "price": 1.78
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Lebanese Cucumbers",
+        "price": 1.42,
+        "unit_price": 1.42,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/137130/lebanese-cucumbers",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/137130.jpg"
+      },
+      "coles": {
+        "name": "Coles Lebanese Cucumbers | approx. 160g",
+        "price": 1.58,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-lebanese-cucumbers-approx.-160g-4575208",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4575208.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.16,
+      "alternatives": []
+    },
+    {
+      "list_item": "Lurpak Butter Spreadable",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 7.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 8.2
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.2
+        },
+        {
+          "date": "2025-07-10",
+          "price": 8.2
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Lurpak Butter Spreadable",
+        "price": 8.3,
+        "unit_price": 2.08,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/87702/lurpak-butter-spreadable",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087702.jpg"
+      },
+      "coles": {
+        "name": "Lurpak Butter Spreadable Slightly Salted | 400g",
+        "price": 8.3,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/lurpak-butter-spreadable-slightly-salted-400g-5376659",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5376659.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Lurpak Plant Based Spreadable",
+          "price": 8.2,
+          "unit_price": 2.05,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/6026771/lurpak-plant-based-spreadable",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6026771.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Macro Organic Black Bean No Added Salt",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 1.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.5
+        },
+        {
+          "date": "2025-05-04",
+          "price": 1.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 1.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.5
+        },
+        {
+          "date": "2025-07-26",
+          "price": 1.5
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Macro Organic Black Bean No Added Salt",
+        "price": 1.5,
+        "unit_price": 3.57,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/663584/macro-organic-black-bean-no-added-salt",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/663584.jpg"
+      },
+      "coles": {
+        "name": "Edgell Organic Black Beans No Added Salt | 400g",
+        "price": 2.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/edgell-organic-black-beans-no-added-salt-400g-5071232",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5071232.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.5,
+      "alternatives": []
+    },
+    {
+      "list_item": "Macro Organic Natural Pumpkin Kernels",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 5.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 5.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 5.0
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Macro Organic Natural Pumpkin Kernels",
+        "price": 5.7,
+        "unit_price": 22.8,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/133300/macro-organic-natural-pumpkin-kernels",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/133300.jpg"
+      },
+      "coles": {
+        "name": "Coles Organic Pumpkin Kent | approx. 800g",
+        "price": 6.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-organic-pumpkin-kent-approx.-800g-3119043",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3119043.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.3,
+      "alternatives": []
+    },
+    {
+      "list_item": "Mainland Extra Tasty Cheese Block",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 11.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 11.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 11.0
+        },
+        {
+          "date": "2025-05-29",
+          "price": 9.8
+        },
+        {
+          "date": "2025-07-10",
+          "price": 9.8
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Mainland Extra Tasty Cheese Block",
+        "price": 11.0,
+        "unit_price": 22.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/807870/mainland-extra-tasty-cheese-block",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/807870.jpg"
+      },
+      "coles": {
+        "name": "Mainland Extra Tasty Cheese Block | 250g",
+        "price": 7.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/mainland-extra-tasty-cheese-block-250g-3274148",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3274148.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 4.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Mon Ami French Camembert Cheese",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 7.2
+        },
+        {
+          "date": "2025-05-04",
+          "price": 6.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 7.2
+        },
+        {
+          "date": "2025-06-06",
+          "price": 7.2
+        },
+        {
+          "date": "2025-07-10",
+          "price": 7.2
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Mon Ami French Camembert Cheese",
+        "price": 7.2,
+        "unit_price": 36.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/751148/mon-ami-french-camembert-cheese",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/751148.jpg"
+      },
+      "coles": {
+        "name": "Emborg French Camembert | 200g",
+        "price": 7.2,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/emborg-french-camembert-200g-4360529",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4360529.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Mon Ami French Le Fromager Double Cream Brie",
+          "price": 8.9,
+          "unit_price": 29.67,
+          "unit": "1KG",
+          "url": "https://www.woolworths.com.au/shop/productdetails/319652/mon-ami-french-le-fromager-double-cream-brie",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/319652.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Mushrooms Cups Loose",
+      "trip_count": 14,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 12.9
+        },
+        {
+          "date": "2024-11-12",
+          "price": 10.9
+        },
+        {
+          "date": "2024-11-20",
+          "price": 12.9
+        },
+        {
+          "date": "2025-01-29",
+          "price": 12.9
+        },
+        {
+          "date": "2025-02-02",
+          "price": 11.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 12.9
+        },
+        {
+          "date": "2025-03-27",
+          "price": 12.9
+        },
+        {
+          "date": "2025-04-25",
+          "price": 12.9
+        },
+        {
+          "date": "2025-05-04",
+          "price": 12.9
+        },
+        {
+          "date": "2025-05-12",
+          "price": 10.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 12.9
+        },
+        {
+          "date": "2025-06-06",
+          "price": 12.9
+        },
+        {
+          "date": "2025-06-13",
+          "price": 11.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 11.5
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Mushrooms Cups Loose",
+        "price": 12.5,
+        "unit_price": 12.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/143109/mushrooms-cups-loose",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/143109.jpg"
+      },
+      "coles": {
+        "name": "Coles Mushrooms Cup | 200g",
+        "price": 4.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-mushrooms-cup-200g-4829860",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4829860.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 8.5,
+      "alternatives": [
+        {
+          "name": "Mushrooms Flat Large Loose",
+          "price": 11.5,
+          "unit_price": 11.5,
+          "unit": "1KG",
+          "url": "https://www.woolworths.com.au/shop/productdetails/145028/mushrooms-flat-large-loose",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/145028.jpg",
+          "retailer": "woolworths"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 102.08,
-    "total_coles": 147.03,
+    "total_woolworths": 159.32,
+    "total_coles": 192.21,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 44.95,
-    "items_compared": 20,
+    "total_saving": 32.89,
+    "items_compared": 30,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 20,
+    "done": 30,
     "total": 86
   }
 }
