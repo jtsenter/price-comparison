@@ -219,12 +219,18 @@ function renderPage(data) {
     const co = item.coles;
     const cheaper = item.cheaper_store;
 
+    const wwPriceVal = ww?.url
+      ? `<a href="${ww.url}" target="_blank" class="price-link">${fmt(ww.price)}</a>`
+      : fmt(ww?.price);
     const wwCell = ww
-      ? `<div class="price-main">${fmt(ww.price)}</div><div class="price-unit">${fmtUnit(ww.unit_price, ww.unit)}</div>`
+      ? `<div class="price-main">${wwPriceVal}</div><div class="price-unit">${fmtUnit(ww.unit_price, ww.unit)}</div>`
       : '<span style="color:var(--gray-400)">Not found</span>';
 
+    const coPriceVal = co?.url
+      ? `<a href="${co.url}" target="_blank" class="price-link">${fmt(co.price)}</a>`
+      : fmt(co?.price);
     const coCell = co
-      ? `<div class="price-main">${fmt(co.price)}</div><div class="price-unit">${fmtUnit(co.unit_price, co.unit)}</div>`
+      ? `<div class="price-main">${coPriceVal}</div><div class="price-unit">${fmtUnit(co.unit_price, co.unit)}</div>`
       : '<span style="color:var(--gray-400)">Not found</span>';
 
     let badgeHtml = '';
