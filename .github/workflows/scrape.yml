@@ -38,7 +38,7 @@ jobs:
         run: '& $env:PYTHON -m pip install -r requirements.txt'
 
       - name: Install Playwright browsers
-        run: '& $env:PYTHON -m playwright install chromium --with-deps'
+        run: '& $env:PYTHON -m playwright install chromium chromium-headless-shell'
 
       - name: Run scraper
         run: '& $env:PYTHON scripts/scraper.py "${{ github.event.inputs.trigger || ''scheduled'' }}" "${{ github.event.inputs.item || '''' }}"'
