@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-16T09:00:11.146068+00:00",
+  "last_updated": "2026-05-16T09:01:48.791547+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1822,20 +1822,537 @@
           "retailer": "woolworths"
         }
       ]
+    },
+    {
+      "list_item": "Philadelphia Original Cream Cheese Portions Snacks",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 4.0
+        },
+        {
+          "date": "2025-05-22",
+          "price": 4.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.0
+        },
+        {
+          "date": "2025-06-21",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 4.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Philadelphia Original Cream Cheese Portions Snacks",
+        "price": 4.0,
+        "unit_price": 26.67,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/221027/philadelphia-original-cream-cheese-portions-snacks",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/221027.jpg"
+      },
+      "coles": {
+        "name": "Philadelphia Portions Cream Cheese Original Spread | 150g",
+        "price": 4.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/philadelphia-portions-cream-cheese-original-spread-150g-5432035",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5432035.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Pringles Sour Cream & Onion Potato Chips",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 2.75
+        },
+        {
+          "date": "2025-03-27",
+          "price": 5.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Pringles Sour Cream & Onion Potato Chips",
+        "price": 5.5,
+        "unit_price": 4.1,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/479502/pringles-sour-cream-onion-potato-chips",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/479502.jpg"
+      },
+      "coles": {
+        "name": "Pringles Potato Chips Sour Cream & Onion | 134g",
+        "price": 4.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-134g-2784058",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2784058.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.5,
+      "alternatives": []
+    },
+    {
+      "list_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 3.0
+        },
+        {
+          "date": "2024-11-20",
+          "price": 3.0
+        },
+        {
+          "date": "2024-12-19",
+          "price": 3.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 1.8
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.0
+        },
+        {
+          "date": "2025-05-04",
+          "price": 1.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 2.0
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Schweppes Lemon Lime Bitters Soft Drink Mixer Bottle",
+        "price": 1.8,
+        "unit_price": 1.64,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/634290/schweppes-lemon-lime-bitters-soft-drink-mixer-bottle",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634290.jpg"
+      },
+      "coles": {
+        "name": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle | 1.1L",
+        "price": 1.8,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/schweppes-lemon-lime-bitters-soft-drink-classic-mixers-bottle-1.1l-3014839",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3014839.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Schweppes Lemon Lime Natural Mineral Water Bottle",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 1.8
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.8
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.8
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": null,
+      "coles": {
+        "name": "Schweppes Mineral Water Infused Lemon Lime | 1.1L",
+        "price": 1.8,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/schweppes-mineral-water-infused-lemon-lime-1.1l-1056554",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1056554.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Schweppes Orange Mango Natural Mineral Water Bottle",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 3.0
+        },
+        {
+          "date": "2025-02-28",
+          "price": 1.8
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.8
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.8
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.8
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Schweppes Orange Mango Natural Mineral Water Bottle",
+        "price": 1.8,
+        "unit_price": 1.64,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/634284/schweppes-orange-mango-natural-mineral-water-bottle",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634284.jpg"
+      },
+      "coles": {
+        "name": "Schweppes Orange Mango Natural Mineral Water Bottle | 1.1L",
+        "price": 1.8,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/schweppes-orange-mango-natural-mineral-water-bottle-1.1l-3014930",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3014930.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Snickers Milk Chocolate Party Share Bag 20 Pieces",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 6.5
+        },
+        {
+          "date": "2024-12-02",
+          "price": 6.5
+        },
+        {
+          "date": "2025-02-28",
+          "price": 6.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 7.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 7.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 7.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Snickers Milk Chocolate Party Share Bag",
+        "price": 8.0,
+        "unit_price": 2.67,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/206888/snickers-milk-chocolate-party-share-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/206888.jpg"
+      },
+      "coles": {
+        "name": "Snickers Chocolate Party Share Bag 20 Pieces | 300g",
+        "price": 8.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/snickers-chocolate-party-share-bag-20-pieces-300g-5369981",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5369981.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Strawberries Punnet",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 4.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 5.9
+        },
+        {
+          "date": "2025-07-26",
+          "price": 5.5
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Strawberries Punnet",
+        "price": 5.5,
+        "unit_price": 22.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/144607/strawberries-punnet",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144607.jpg"
+      },
+      "coles": {
+        "name": "Yoplait Berry Punnet Yoghurt Strawberry Mixed Berries | 12 Pack",
+        "price": 8.5,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/yoplait-berry-punnet-yoghurt-strawberry-mixed-berries-12-pack-8877195",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8877195.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Strike Blue Toilet Cleaner Cistern Blocks",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 2.0
+        },
+        {
+          "date": "2025-02-02",
+          "price": 2.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 2.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 2.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Strike Blue Toilet Cleaner Cistern Blocks",
+        "price": 2.0,
+        "unit_price": 1.0,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/248546/strike-blue-toilet-cleaner-cistern-blocks",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/248546.jpg"
+      },
+      "coles": {
+        "name": "Harpic Foaming Blue Block Toilet Cleaner 2 Pack | 114g",
+        "price": 4.5,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/harpic-foaming-blue-block-toilet-cleaner-2-pack-114g-5159210",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5159210.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.5,
+      "alternatives": []
+    },
+    {
+      "list_item": "Strike Paper Towels Embossed 2 Ply",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 2.2
+        },
+        {
+          "date": "2025-03-11",
+          "price": 2.2
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.2
+        },
+        {
+          "date": "2025-05-12",
+          "price": 2.2
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.2
+        },
+        {
+          "date": "2025-07-10",
+          "price": 2.2
+        }
+      ],
+      "category": "Household",
+      "woolworths": {
+        "name": "Strike 2 Ply Paper Towel 2 Ply",
+        "price": 2.2,
+        "unit_price": 1.38,
+        "unit": "100SS",
+        "url": "https://www.woolworths.com.au/shop/productdetails/171164/strike-2-ply-paper-towel-2-ply",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/171164.jpg"
+      },
+      "coles": {
+        "name": "Coles Simply 2-ply Paper Towel | 2 Pack",
+        "price": 2.2,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-simply-2-ply-paper-towel-2-pack-9161472",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9161472.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Sweet Potato Gold",
+      "trip_count": 13,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 2.21
+        },
+        {
+          "date": "2025-01-29",
+          "price": 1.96
+        },
+        {
+          "date": "2025-02-02",
+          "price": 1.96
+        },
+        {
+          "date": "2025-02-28",
+          "price": 1.56
+        },
+        {
+          "date": "2025-03-11",
+          "price": 1.96
+        },
+        {
+          "date": "2025-03-17",
+          "price": 1.96
+        },
+        {
+          "date": "2025-03-27",
+          "price": 1.96
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.96
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.96
+        },
+        {
+          "date": "2025-05-22",
+          "price": 1.96
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.96
+        },
+        {
+          "date": "2025-06-21",
+          "price": 1.96
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.96
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Sweet Potato Gold",
+        "price": 1.56,
+        "unit_price": 1.56,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/147071/sweet-potato-gold",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147071.jpg"
+      },
+      "coles": {
+        "name": "Coles Potatoes Sweet Gold | approx. 500g",
+        "price": 2.55,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-potatoes-sweet-gold-approx.-500g-4199503",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4199503.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.99,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 159.32,
-    "total_coles": 192.21,
+    "total_woolworths": 191.68,
+    "total_coles": 231.36,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 32.89,
-    "items_compared": 30,
+    "total_saving": 39.68,
+    "items_compared": 40,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 30,
+    "done": 40,
     "total": 86
   }
 }
