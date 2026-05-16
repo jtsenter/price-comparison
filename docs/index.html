@@ -71,6 +71,9 @@
     </div>
   </div>
 
+  <!-- Category filter tabs -->
+  <div id="categoryTabs" class="category-tabs"></div>
+
   <div id="loading" class="loading-message">
     <div class="loading-spinner"></div>
     Loading price data…
@@ -85,7 +88,9 @@
             <th data-col="ww" class="sortable"><span class="store-chip ww sm">W</span> Woolworths <span class="sort-arrow"></span></th>
             <th data-col="coles" class="sortable"><span class="store-chip coles sm">C</span> Coles <span class="sort-arrow"></span></th>
             <th data-col="cheaper" class="sortable center-th">Best Price <span class="sort-arrow"></span></th>
+            <th data-col="pct" class="sortable center-th">% Cheaper <span class="sort-arrow"></span></th>
             <th data-col="saving" class="sortable">You Save <span class="sort-arrow"></span></th>
+            <th data-col="trips" class="sortable center-th">Trips <span class="sort-arrow"></span></th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
@@ -95,7 +100,9 @@
             <td id="footWW"></td>
             <td id="footColes"></td>
             <td></td>
+            <td></td>
             <td id="footSaving"></td>
+            <td></td>
           </tr>
         </tfoot>
       </table>
@@ -135,6 +142,48 @@
     </div>
   </div>
 </div>
+
+<!-- Edit name/URL modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <button class="modal-close" id="editModalClose">✕</button>
+    <h2>Edit Item</h2>
+    <p>Override the display name or store URLs for this item. Changes are saved in your browser.</p>
+    <div class="form-group">
+      <label>Display Name</label>
+      <input type="text" id="editDisplayName" placeholder="e.g. Milk 2L" />
+    </div>
+    <div class="form-group">
+      <label>Woolworths URL</label>
+      <input type="text" id="editWwUrl" placeholder="https://www.woolworths.com.au/…" />
+    </div>
+    <div class="form-group">
+      <label>Coles URL</label>
+      <input type="text" id="editColesUrl" placeholder="https://www.coles.com.au/…" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="editReset">Reset overrides</button>
+      <button class="btn btn-ghost" id="editCancel">Cancel</button>
+      <button class="btn btn-primary" id="editSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Price History modal -->
+<div class="modal-overlay" id="priceHistoryModal">
+  <div class="modal modal-wide">
+    <button class="modal-close" id="priceHistoryClose">✕</button>
+    <h2 id="priceHistoryTitle">Price History</h2>
+    <div id="priceHistoryList" class="price-history-list"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="priceHistoryReset">Reset exclusions</button>
+      <button class="btn btn-ghost" id="priceHistoryClose2">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Fixed tooltip for price bar (outside .table-wrap so it's never clipped) -->
+<div id="priceTooltip" class="price-tooltip-fixed" style="display:none"></div>
 
 <script src="app.js"></script>
 </body>
