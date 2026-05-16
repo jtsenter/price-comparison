@@ -273,6 +273,58 @@ async function loadNameChanges() {
   } catch { return null; }
 }
 
+// ── Sort state ───────────────────────────────────────────────────────────────
+
+let sortState = { col: 'trips', dir: 'desc' };
+let _lastData = null;
+
+function sortItems(items) {
+  const { col, dir } = sortState;
+  const mul = dir === 'asc' ? 1 : -1;
+  return [...items].sort((a, b) => {
+    let av, bv;
+    switch (col) {
+      case 'name':    av = a.list_item.toLowerCase(); bv = b.list_item.toLowerCase(); break;
+      case 'ww':      av = a.woolworths?.price ?? Infinity; bv = b.woolworths?.price ?? Infinity; break;
+      case 'coles':   av = a.coles?.price ?? Infinity; bv = b.coles?.price ?? Infinity; break;
+      case 'cheaper': av = a.cheaper_store ?? 'zzz'; bv = b.cheaper_store ?? 'zzz'; break;
+      case 'saving':  av = a.saving_per_item ?? -Infinity; bv = b.saving_per_item ?? -Infinity; break;
+      default:        av = b.trip_count || 0; bv = a.trip_count || 0; return av - bv;
+    }
+    if (av < bv) return -1 * mul;
+    if (av > bv) return  1 * mul;
+    return 0;
+  });
+}
+
+function updateSortHeaders() {
+  document.querySelectorAll('#tableHead th[data-col]').forEach(th => {
+    const arrow = th.querySelector('.sort-arrow');
+    if (th.dataset.col === sortState.col) {
+      th.classList.add('sort-active');
+      arrow.textContent = sortState.dir === 'asc' ? ' ↑' : ' ↓';
+    } else {
+      th.classList.remove('sort-active');
+      arrow.textContent = '';
+    }
+  });
+}
+
+function initSortHeaders() {
+  document.querySelectorAll('#tableHead th[data-col]').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.dataset.col;
+      if (sortState.col === col) {
+        sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
+      } else {
+        sortState.col = col;
+        sortState.dir = col === 'name' ? 'asc' : 'desc';
+      }
+      if (_lastData) renderPage(_lastData);
+    });
+  });
+}
+
 // ── Index page rendering ─────────────────────────────────────────────────────
 
 function renderPage(data) {
@@ -328,12 +380,14 @@ function renderPage(data) {
     : `Updated ${formatDate(data.last_updated)} · ${s.items_compared} items`;
   $('banner').style.display = 'block';
 
+  _lastData = data;
+
   // Table
   const tbody = $('tableBody');
   tbody.innerHTML = '';
 
-  // Sort by trip_count descending so most-bought items appear first
-  const sorted = [...data.items].sort((a, b) => (b.trip_count || 0) - (a.trip_count || 0));
+  const sorted = sortItems(data.items);
+  updateSortHeaders();
 
   sorted.forEach((item) => {
     const ww = item.woolworths;
@@ -506,6 +560,7 @@ async function showNameChangesNotice() {
 
 async function boot() {
   initSettingsModal();
+  initSortHeaders();
   const refreshBtn = $('refreshBtn');
   if (refreshBtn) refreshBtn.addEventListener('click', triggerRefresh);
 

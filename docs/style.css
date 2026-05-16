@@ -621,6 +621,12 @@ tr:hover .item-refresh-btn { display: flex; }
 }
 .modal-close:hover { background: var(--border); }
 
+/* ── Sortable column headers ─────────────────────────────────── */
+th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+th.sortable:hover { background: var(--border); }
+th.sort-active { color: var(--accent); }
+.sort-arrow { font-style: normal; font-size: 12px; opacity: 0.8; }
+
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 700px) {
   .header-inner { padding: 0 14px; }

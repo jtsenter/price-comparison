@@ -79,13 +79,13 @@
   <div id="tableContainer" style="display:none">
     <div class="table-wrap">
       <table>
-        <thead>
+        <thead id="tableHead">
           <tr>
-            <th>Item</th>
-            <th><span class="store-chip ww sm">W</span> Woolworths</th>
-            <th><span class="store-chip coles sm">C</span> Coles</th>
-            <th class="center-th">Best Price</th>
-            <th>You Save</th>
+            <th data-col="name" class="sortable">Item <span class="sort-arrow"></span></th>
+            <th data-col="ww" class="sortable"><span class="store-chip ww sm">W</span> Woolworths <span class="sort-arrow"></span></th>
+            <th data-col="coles" class="sortable"><span class="store-chip coles sm">C</span> Coles <span class="sort-arrow"></span></th>
+            <th data-col="cheaper" class="sortable center-th">Best Price <span class="sort-arrow"></span></th>
+            <th data-col="saving" class="sortable">You Save <span class="sort-arrow"></span></th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
