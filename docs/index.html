@@ -3,54 +3,78 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Price Comparison — Woolworths vs Coles</title>
+  <title>PriceWatch — Woolworths vs Coles</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <header>
-  <div class="header-left">
-    <span class="logo">🛒 <span>Price</span>Watch</span>
-    <nav>
-      <a href="index.html" class="active">Shopping List</a>
-      <a href="alternatives.html">Cheaper Alternatives</a>
-    </nav>
-  </div>
-  <div class="header-right">
-    <button class="btn btn-ghost" id="settingsBtn">⚙ Settings</button>
-    <button class="btn btn-primary" id="refreshBtn">↻ Refresh Now</button>
+  <div class="header-inner">
+    <div class="header-left">
+      <a href="index.html" class="brand">
+        <span class="store-chip ww">W</span>
+        <span class="store-chip coles">C</span>
+        <span class="brand-name">PriceWatch</span>
+      </a>
+      <nav>
+        <a href="index.html" class="active">My Shopping List</a>
+        <a href="alternatives.html">Best Deals</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-ghost" id="settingsBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Auto-update Setup
+      </button>
+      <button class="btn btn-primary" id="refreshBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Update Prices
+      </button>
+    </div>
   </div>
 </header>
 
 <main>
   <div class="stale-banner" id="staleBanner">
-    ⚠️ Price data is more than 5 days old — the last automated refresh may have failed. Click <strong>Refresh Now</strong> to update.
+    ⚠️ Price data is more than 5 days old — click <strong>Update Prices</strong> to refresh.
   </div>
 
   <div class="name-changes-notice" id="nameChangesNotice"></div>
 
-  <div id="banner" class="banner" style="display:none">
-    <div>
-      <div class="banner-winner" id="winnerText"></div>
-      <div class="last-updated" id="lastUpdated"></div>
-    </div>
-    <div class="banner-totals">
-      <div class="store-total">
-        <div class="label">Woolworths</div>
-        <div class="amount ww" id="wwTotal">—</div>
+  <!-- Comparison banner -->
+  <div id="banner" class="comparison-banner" style="display:none">
+    <div class="store-cards">
+
+      <div class="store-card" id="wwCard">
+        <div class="store-card-top">
+          <span class="store-chip ww lg">W</span>
+          <span class="store-card-label">Woolworths</span>
+        </div>
+        <div class="store-card-total" id="wwTotal">—</div>
+        <div class="store-card-badge" id="wwBadge"></div>
       </div>
-      <div class="store-total">
-        <div class="label">vs Coles</div>
-        <div class="amount coles" id="colesTotal">—</div>
+
+      <div class="store-divider">
+        <div class="saving-info" id="savingInfo"></div>
+        <div class="last-updated" id="lastUpdated"></div>
       </div>
-      <div class="store-total">
-        <div class="label">You save</div>
-        <div class="amount" id="savingAmount">—</div>
+
+      <div class="store-card" id="colesCard">
+        <div class="store-card-top">
+          <span class="store-chip coles lg">C</span>
+          <span class="store-card-label">Coles</span>
+        </div>
+        <div class="store-card-total" id="colesTotal">—</div>
+        <div class="store-card-badge" id="colesBadge"></div>
       </div>
+
     </div>
   </div>
 
-  <div id="loading" class="loading-message">Loading price data…</div>
+  <div id="loading" class="loading-message">
+    <div class="loading-spinner"></div>
+    Loading price data…
+  </div>
 
   <div id="tableContainer" style="display:none">
     <div class="table-wrap">
@@ -58,16 +82,16 @@
         <thead>
           <tr>
             <th>Item</th>
-            <th>Woolworths</th>
-            <th>Coles</th>
-            <th style="text-align:center">Cheaper</th>
-            <th>Saving</th>
+            <th><span class="store-chip ww sm">W</span> Woolworths</th>
+            <th><span class="store-chip coles sm">C</span> Coles</th>
+            <th class="center-th">Best Price</th>
+            <th>You Save</th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
         <tfoot>
           <tr class="tfoot-row">
-            <td>Total</td>
+            <td>Total basket</td>
             <td id="footWW"></td>
             <td id="footColes"></td>
             <td></td>
@@ -88,26 +112,26 @@
 <div class="modal-overlay" id="settingsModal">
   <div class="modal">
     <button class="modal-close" id="modalClose">✕</button>
-    <h2>⚙ Settings</h2>
+    <h2>Auto-update Setup</h2>
     <p>
-      Enter your GitHub details to enable the <strong>Refresh Now</strong> button.
-      Your token is stored only in this browser — it is never sent anywhere except GitHub's API.
+      Enter your GitHub details so the <strong>Update Prices</strong> button can trigger a fresh scrape.
+      Your token is saved only in this browser and is never sent anywhere except GitHub.
     </p>
     <div class="form-group">
       <label>GitHub Username</label>
-      <input type="text" id="ghUser" placeholder="your-username" />
+      <input type="text" id="ghUser" placeholder="e.g. jtsenter" />
     </div>
     <div class="form-group">
       <label>Repository Name</label>
       <input type="text" id="ghRepo" placeholder="price-comparison" />
     </div>
     <div class="form-group">
-      <label>Personal Access Token (needs <code>actions:write</code>)</label>
+      <label>Personal Access Token <span class="label-hint">(needs <code>actions:write</code> scope)</span></label>
       <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxx" />
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="modalCancel">Cancel</button>
-      <button class="btn btn-primary" id="modalSave">Save</button>
+      <button class="btn btn-primary" id="modalSave">Save Settings</button>
     </div>
   </div>
 </div>
