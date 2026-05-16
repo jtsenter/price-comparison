@@ -35,12 +35,45 @@ function saveExclusions(obj) {
   localStorage.setItem('pw_exclusions_v1', JSON.stringify(obj));
 }
 
+// ── Column order & widths ────────────────────────────────────────────────────
+
+const DEFAULT_COL_ORDER = ['name', 'ww', 'coles', 'cheaper', 'pct', 'saving', 'trips'];
+
+let _colOrder = (() => {
+  try {
+    const saved = JSON.parse(localStorage.getItem('pw_col_order'));
+    if (Array.isArray(saved) && saved.length === DEFAULT_COL_ORDER.length) return saved;
+  } catch {}
+  return [...DEFAULT_COL_ORDER];
+})();
+
+let _colWidths = (() => {
+  try { return JSON.parse(localStorage.getItem('pw_col_widths')) || {}; } catch { return {}; }
+})();
+
+function saveColOrder() { localStorage.setItem('pw_col_order', JSON.stringify(_colOrder)); }
+function saveColWidths() { localStorage.setItem('pw_col_widths', JSON.stringify(_colWidths)); }
+
+// Column header HTML (function so store-chips render fresh each time)
+function colHeadHtml(col) {
+  const r = '.col-resize-handle';
+  switch (col) {
+    case 'name':    return `<th data-col="name" class="sortable">Item <span class="sort-arrow"></span><div class="${r.slice(1)}"></div></th>`;
+    case 'ww':      return `<th data-col="ww" class="sortable"><span class="store-chip ww sm">W</span> Woolworths <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'coles':   return `<th data-col="coles" class="sortable"><span class="store-chip coles sm">C</span> Coles <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'cheaper': return `<th data-col="cheaper" class="sortable center-th">Best Price <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'pct':     return `<th data-col="pct" class="sortable center-th">% Cheaper <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'saving':  return `<th data-col="saving" class="sortable">You Save <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'trips':   return `<th data-col="trips" class="sortable center-th">Trips <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    default: return '';
+  }
+}
+
 // ── Price history bar ────────────────────────────────────────────────────────
 
 function buildPriceBar(itemName, priceHistory, currentPrice) {
   if (!priceHistory?.length || currentPrice == null) return '';
 
-  // Filter out excluded prices
   const exclusions = loadExclusions();
   const excluded = new Set((exclusions[itemName] || []).map(p => Number(p).toFixed(2)));
   const prices = priceHistory
@@ -54,7 +87,6 @@ function buildPriceBar(itemName, priceHistory, currentPrice) {
 
   const pos = Math.max(0, Math.min(100, ((currentPrice - minP) / (maxP - minP)) * 100));
 
-  // Build price distribution map
   const counts = {};
   prices.forEach(p => { const k = p.toFixed(2); counts[k] = (counts[k] || 0) + 1; });
   const total = prices.length;
@@ -71,9 +103,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice) {
   lines.push('');
   lines.push(cheaperPct > 0
     ? `Now cheaper than ${cheaperPct}% of past prices ✓`
-    : cheaperPct === 0
-      ? `Now at the highest past price ⚠`
-      : `Now at all-time low ✓`
+    : `Now at all-time low ✓`
   );
 
   const tooltip = lines.join('\n');
@@ -113,13 +143,9 @@ function initTooltip() {
     const tipW = tip.offsetWidth;
     let top = e.clientY - tipH - margin;
     let left = e.clientX - tipW / 2;
-
-    // Flip below cursor if near top of viewport
     if (top < 8) top = e.clientY + margin;
-    // Keep within horizontal bounds
     if (left < 8) left = 8;
     if (left + tipW > window.innerWidth - 8) left = window.innerWidth - tipW - 8;
-
     tip.style.top = `${top}px`;
     tip.style.left = `${left}px`;
   });
@@ -139,8 +165,7 @@ async function triggerItemRefresh(itemName, btn) {
     return;
   }
 
-  btn.disabled = true;
-  btn.classList.add('spinning');
+  if (btn) { btn.disabled = true; btn.classList.add('spinning'); }
 
   try {
     const res = await fetch(
@@ -153,17 +178,15 @@ async function triggerItemRefresh(itemName, btn) {
     );
 
     if (res.status === 204) {
-      pollItemRefresh(s, btn, itemName);
+      if (btn) pollItemRefresh(s, btn, itemName);
     } else {
       const err = await res.json().catch(() => ({}));
       alert(`Error ${res.status}: ${err.message || 'Could not trigger refresh'}`);
-      btn.disabled = false;
-      btn.classList.remove('spinning');
+      if (btn) { btn.disabled = false; btn.classList.remove('spinning'); }
     }
   } catch (e) {
     alert(`Network error: ${e.message}`);
-    btn.disabled = false;
-    btn.classList.remove('spinning');
+    if (btn) { btn.disabled = false; btn.classList.remove('spinning'); }
   }
 }
 
@@ -171,8 +194,7 @@ async function pollItemRefresh(s, btn, itemName) {
   let attempts = 0;
   const poll = async () => {
     if (++attempts > 30) {
-      btn.classList.remove('spinning');
-      btn.disabled = false;
+      if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
       return;
     }
     try {
@@ -183,8 +205,7 @@ async function pollItemRefresh(s, btn, itemName) {
       const data = await res.json();
       const run = data.workflow_runs?.[0];
       if (run?.status === 'completed') {
-        btn.classList.remove('spinning');
-        btn.disabled = false;
+        if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
         if (run.conclusion === 'success') {
           const newData = await loadData();
           if (newData) renderPage(newData);
@@ -240,16 +261,13 @@ function initSettingsModal() {
 
 // ── Edit name/URL modal ──────────────────────────────────────────────────────
 
-let _editingItem = null; // stores list_item string of item being edited
+let _editingItem = null;
 
 function initEditModal() {
   const modal = $('editModal');
   if (!modal) return;
 
-  const close = () => {
-    modal.classList.remove('open');
-    _editingItem = null;
-  };
+  const close = () => { modal.classList.remove('open'); _editingItem = null; };
 
   $('editModalClose').addEventListener('click', close);
   $('editCancel').addEventListener('click', close);
@@ -258,24 +276,41 @@ function initEditModal() {
   $('editSave').addEventListener('click', () => {
     if (!_editingItem) return;
     const overrides = loadOverrides();
-    overrides[_editingItem] = {
+    const prevOv = overrides[_editingItem.list_item] || {};
+    const newWwUrl   = $('editWwUrl').value.trim()   || undefined;
+    const newCoUrl   = $('editColesUrl').value.trim() || undefined;
+    const urlChanged = newWwUrl !== (prevOv.wwUrl || _editingItem.woolworths?.url || '')
+                    || newCoUrl !== (prevOv.colesUrl || _editingItem.coles?.url || '');
+
+    overrides[_editingItem.list_item] = {
       displayName: $('editDisplayName').value.trim() || undefined,
-      wwUrl:       $('editWwUrl').value.trim()       || undefined,
-      colesUrl:    $('editColesUrl').value.trim()    || undefined,
+      wwUrl:   newWwUrl,
+      colesUrl: newCoUrl,
     };
-    // Remove key if all fields blank
-    if (!overrides[_editingItem].displayName && !overrides[_editingItem].wwUrl && !overrides[_editingItem].colesUrl) {
-      delete overrides[_editingItem];
+    if (!overrides[_editingItem.list_item].displayName
+      && !overrides[_editingItem.list_item].wwUrl
+      && !overrides[_editingItem.list_item].colesUrl) {
+      delete overrides[_editingItem.list_item];
     }
     saveOverrides(overrides);
+    const item = _editingItem;
     close();
     if (_lastData) renderPage(_lastData);
+
+    // If a URL was added/changed and GitHub is configured, trigger a scrape
+    if (urlChanged && (newWwUrl || newCoUrl)) {
+      const s = loadSettings();
+      if (s.user && s.repo && s.token) {
+        triggerItemRefresh(item.list_item, null);
+        alert(`Scrape triggered for "${item.list_item}" with the new URL.`);
+      }
+    }
   });
 
   $('editReset').addEventListener('click', () => {
     if (!_editingItem) return;
     const overrides = loadOverrides();
-    delete overrides[_editingItem];
+    delete overrides[_editingItem.list_item];
     saveOverrides(overrides);
     close();
     if (_lastData) renderPage(_lastData);
@@ -283,7 +318,7 @@ function initEditModal() {
 }
 
 function openEditModal(item) {
-  _editingItem = item.list_item;
+  _editingItem = item;
   const overrides = loadOverrides();
   const ov = overrides[item.list_item] || {};
   $('editDisplayName').value = ov.displayName || '';
@@ -300,10 +335,7 @@ function initPriceHistoryModal() {
   const modal = $('priceHistoryModal');
   if (!modal) return;
 
-  const close = () => {
-    modal.classList.remove('open');
-    _historyItem = null;
-  };
+  const close = () => { modal.classList.remove('open'); _historyItem = null; };
 
   $('priceHistoryClose').addEventListener('click', close);
   $('priceHistoryClose2').addEventListener('click', close);
@@ -352,7 +384,7 @@ function openPriceHistoryModal(item) {
           ex[item.list_item] = [...list, priceNum];
         }
         saveExclusions(ex);
-        openPriceHistoryModal(item); // re-render modal
+        openPriceHistoryModal(item);
         if (_lastData) renderPage(_lastData);
       });
       listEl.appendChild(row);
@@ -370,20 +402,244 @@ function buildCategoryTabs(items) {
   const container = $('categoryTabs');
   if (!container) return;
 
-  const categories = ['All', ...new Set(
-    items.map(i => i.category).filter(Boolean).sort()
-  )];
+  const seen = new Set();
+  const cats = ['All'];
+  items.forEach(i => {
+    const c = (i.category || '').trim();
+    if (c && !seen.has(c)) { seen.add(c); cats.push(c); }
+  });
+  cats.sort((a, b) => a === 'All' ? -1 : b === 'All' ? 1 : a.localeCompare(b));
 
-  container.innerHTML = categories.map(cat => `
-    <button class="category-tab${cat === _activeCategory ? ' active' : ''}" data-cat="${cat}">${cat}</button>
-  `).join('');
-
-  container.querySelectorAll('.category-tab').forEach(btn => {
+  container.innerHTML = '';
+  cats.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = `category-tab${cat === _activeCategory ? ' active' : ''}`;
+    btn.textContent = cat;
     btn.addEventListener('click', () => {
-      _activeCategory = btn.dataset.cat;
+      _activeCategory = cat;
+      if (_lastData) renderPage(_lastData);
+    });
+    container.appendChild(btn);
+  });
+}
+
+// ── Sticky ghost header ──────────────────────────────────────────────────────
+
+let _stickyGhost = null;
+let _stickyGhostTable = null;
+let _stickyNeedsSync = false;
+
+function initStickyHeader() {
+  const ghost = document.createElement('div');
+  ghost.className = 'sticky-header-ghost';
+  ghost.style.display = 'none';
+  document.body.appendChild(ghost);
+
+  const ghostTable = document.createElement('table');
+  ghost.appendChild(ghostTable);
+
+  _stickyGhost = ghost;
+  _stickyGhostTable = ghostTable;
+
+  window.addEventListener('scroll', onStickyScroll, { passive: true });
+  window.addEventListener('resize', () => {
+    _stickyNeedsSync = true;
+    if (_stickyGhost.style.display !== 'none') syncStickyNow();
+  }, { passive: true });
+
+  // Sync horizontal scroll from table-wrap
+  document.querySelector('.table-wrap')?.addEventListener('scroll', (e) => {
+    if (_stickyGhostTable) _stickyGhostTable.style.marginLeft = `-${e.target.scrollLeft}px`;
+  }, { passive: true });
+}
+
+function syncStickyNow() {
+  if (!_stickyGhost || !_stickyGhostTable) return;
+
+  const realThead = document.querySelector('#tableHead');
+  const tableWrap = document.querySelector('.table-wrap');
+  if (!realThead || !tableWrap) return;
+
+  // Clone thead, removing resize handles from ghost (they'd interfere)
+  while (_stickyGhostTable.firstChild) _stickyGhostTable.removeChild(_stickyGhostTable.firstChild);
+  const cloned = realThead.cloneNode(true);
+  cloned.querySelectorAll('.col-resize-handle').forEach(h => h.remove());
+  _stickyGhostTable.appendChild(cloned);
+
+  // Sync widths
+  const realThs = realThead.querySelectorAll('th');
+  const ghostThs = cloned.querySelectorAll('th');
+  realThs.forEach((th, i) => {
+    if (!ghostThs[i]) return;
+    const w = th.getBoundingClientRect().width;
+    ghostThs[i].style.width = w + 'px';
+    ghostThs[i].style.minWidth = w + 'px';
+    ghostThs[i].style.maxWidth = w + 'px';
+  });
+
+  // Position ghost over the table-wrap
+  const wrapRect = tableWrap.getBoundingClientRect();
+  _stickyGhost.style.left = wrapRect.left + 'px';
+  _stickyGhost.style.width = wrapRect.width + 'px';
+
+  const realTable = realThead.closest('table');
+  if (realTable) _stickyGhostTable.style.width = realTable.getBoundingClientRect().width + 'px';
+
+  _stickyGhostTable.style.marginLeft = `-${tableWrap.scrollLeft}px`;
+
+  // Attach sort + update sort arrow state
+  updateSortHeaders(cloned);
+  cloned.querySelectorAll('th[data-col]').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.dataset.col;
+      if (sortState.col === col) {
+        sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
+      } else {
+        sortState.col = col;
+        sortState.dir = col === 'name' ? 'asc' : 'desc';
+      }
       if (_lastData) renderPage(_lastData);
     });
   });
+
+  _stickyNeedsSync = false;
+}
+
+function onStickyScroll() {
+  if (!_stickyGhost) return;
+  const realThead = document.querySelector('#tableHead');
+  if (!realThead) { _stickyGhost.style.display = 'none'; return; }
+
+  const rect = realThead.getBoundingClientRect();
+  const HEADER_H = 60;
+
+  if (rect.bottom < HEADER_H) {
+    if (_stickyNeedsSync) syncStickyNow();
+    _stickyGhost.style.display = 'block';
+    _stickyGhost.style.top = HEADER_H + 'px';
+  } else {
+    _stickyGhost.style.display = 'none';
+  }
+}
+
+// ── Column drag/reorder ──────────────────────────────────────────────────────
+
+let _dragSrcCol = null;
+
+function initColumnDrag() {
+  const thead = document.querySelector('#tableHead');
+  if (!thead) return;
+
+  thead.querySelectorAll('th[data-col]').forEach(th => {
+    th.draggable = true;
+
+    th.addEventListener('dragstart', (e) => {
+      if (e.target.classList.contains('col-resize-handle')) { e.preventDefault(); return; }
+      _dragSrcCol = th.dataset.col;
+      th.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', th.dataset.col);
+    });
+
+    th.addEventListener('dragend', () => {
+      th.classList.remove('dragging');
+      thead.querySelectorAll('th').forEach(t => t.classList.remove('drag-over'));
+      _dragSrcCol = null;
+    });
+
+    th.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (!_dragSrcCol || _dragSrcCol === th.dataset.col) return;
+      e.dataTransfer.dropEffect = 'move';
+      thead.querySelectorAll('th').forEach(t => t.classList.remove('drag-over'));
+      th.classList.add('drag-over');
+    });
+
+    th.addEventListener('dragleave', () => th.classList.remove('drag-over'));
+
+    th.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const targetCol = th.dataset.col;
+      if (!_dragSrcCol || _dragSrcCol === targetCol) return;
+      const srcIdx = _colOrder.indexOf(_dragSrcCol);
+      const tgtIdx = _colOrder.indexOf(targetCol);
+      if (srcIdx !== -1 && tgtIdx !== -1) {
+        _colOrder.splice(srcIdx, 1);
+        _colOrder.splice(tgtIdx, 0, _dragSrcCol);
+        saveColOrder();
+        if (_lastData) renderPage(_lastData);
+      }
+    });
+  });
+}
+
+// ── Column resize ────────────────────────────────────────────────────────────
+
+function initColumnResize() {
+  const thead = document.querySelector('#tableHead');
+  if (!thead) return;
+
+  thead.querySelectorAll('.col-resize-handle').forEach(handle => {
+    const th = handle.closest('th');
+    if (!th) return;
+
+    handle.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const startX = e.clientX;
+      const startW = th.getBoundingClientRect().width;
+      handle.classList.add('resizing');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+
+      const colIdx = [...thead.querySelectorAll('th')].indexOf(th);
+
+      function onMove(e) {
+        const newW = Math.max(60, startW + e.clientX - startX);
+        th.style.width = newW + 'px';
+        th.style.minWidth = newW + 'px';
+        document.querySelectorAll(`#tableBody tr td:nth-child(${colIdx + 1})`).forEach(td => {
+          td.style.width = newW + 'px';
+          td.style.minWidth = newW + 'px';
+          td.style.maxWidth = newW + 'px';
+        });
+      }
+
+      function onUp() {
+        handle.classList.remove('resizing');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        const col = th.dataset.col;
+        if (col) { _colWidths[col] = th.getBoundingClientRect().width; saveColWidths(); }
+        _stickyNeedsSync = true;
+        if (_stickyGhost?.style.display !== 'none') syncStickyNow();
+      }
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
+}
+
+// ── Render table head (dynamic, respects _colOrder) ─────────────────────────
+
+function renderTableHead() {
+  const thead = $('tableHead');
+  if (!thead) return;
+  thead.innerHTML = `<tr>${_colOrder.map(colHeadHtml).join('')}</tr>`;
+
+  // Apply stored column widths
+  thead.querySelectorAll('th[data-col]').forEach(th => {
+    const w = _colWidths[th.dataset.col];
+    if (w) { th.style.width = w + 'px'; th.style.minWidth = w + 'px'; }
+  });
+
+  initSortHeaders();
+  initColumnDrag();
+  initColumnResize();
 }
 
 // ── Refresh / GitHub Actions trigger ─────────────────────────────────────────
@@ -393,7 +649,7 @@ let refreshCooldown = false;
 async function triggerRefresh() {
   const s = loadSettings();
   if (!s.user || !s.repo || !s.token) {
-    alert('Please configure your GitHub settings first (⚙ Settings button).');
+    alert('Please configure your GitHub settings first (⚙ Auto-update Setup button).');
     return;
   }
   if (refreshCooldown) return;
@@ -495,10 +751,10 @@ function sortItems(items) {
   const { col, dir } = sortState;
   const mul = dir === 'asc' ? 1 : -1;
 
-  // Filter by category first
+  // Filter by category (trim to handle whitespace edge cases)
   let filtered = _activeCategory === 'All'
     ? items
-    : items.filter(i => i.category === _activeCategory);
+    : items.filter(i => (i.category || '').trim() === _activeCategory);
 
   return [...filtered].sort((a, b) => {
     let av, bv;
@@ -516,7 +772,7 @@ function sortItems(items) {
         bv = (wwB != null && coB != null) ? Math.abs(wwB - coB) / Math.max(wwB, coB) : -Infinity;
         break;
       }
-      default:        av = a.trip_count || 0; bv = b.trip_count || 0; break;
+      default: av = a.trip_count || 0; bv = b.trip_count || 0; break;
     }
     if (av < bv) return -1 * mul;
     if (av > bv) return  1 * mul;
@@ -524,9 +780,12 @@ function sortItems(items) {
   });
 }
 
-function updateSortHeaders() {
-  document.querySelectorAll('#tableHead th[data-col]').forEach(th => {
+function updateSortHeaders(thead) {
+  const container = thead || document.querySelector('#tableHead');
+  if (!container) return;
+  container.querySelectorAll('th[data-col]').forEach(th => {
     const arrow = th.querySelector('.sort-arrow');
+    if (!arrow) return;
     if (th.dataset.col === sortState.col) {
       th.classList.add('sort-active');
       arrow.textContent = sortState.dir === 'asc' ? ' ↑' : ' ↓';
@@ -539,7 +798,8 @@ function updateSortHeaders() {
 
 function initSortHeaders() {
   document.querySelectorAll('#tableHead th[data-col]').forEach(th => {
-    th.addEventListener('click', () => {
+    th.addEventListener('click', (e) => {
+      if (e.target.classList.contains('col-resize-handle')) return;
       const col = th.dataset.col;
       if (sortState.col === col) {
         sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
@@ -560,9 +820,12 @@ function isHotDeal(item) {
   const prices = history.map(h => h.price).filter(p => p > 0);
   if (prices.length < 3) return false;
   const mean = prices.reduce((s, p) => s + p, 0) / prices.length;
-  const current = item.coles?.price ?? item.woolworths?.price;
+  // Use cheapest available price for comparison
+  const ww = item.woolworths?.price;
+  const co = item.coles?.price;
+  const current = item.cheaper_store === 'woolworths' ? ww : (item.cheaper_store === 'coles' ? co : (co ?? ww));
   if (current == null) return false;
-  return current < mean * 0.9; // more than 10% below average
+  return current < mean * 0.9;
 }
 
 // ── Index page rendering ─────────────────────────────────────────────────────
@@ -572,7 +835,7 @@ function renderPage(data) {
 
   if (!data?.items) {
     $('loading').style.display = 'block';
-    $('loading').textContent = 'No price data yet. Click Refresh Now to fetch prices.';
+    $('loading').textContent = 'No price data yet. Click Update Prices to fetch prices.';
     return;
   }
 
@@ -583,7 +846,6 @@ function renderPage(data) {
   const colesCard = $('colesCard');
   const wwTotalEl = $('wwTotal');
 
-  // Reset card classes
   wwCard.className    = 'store-card';
   colesCard.className = 'store-card';
 
@@ -622,10 +884,9 @@ function renderPage(data) {
 
   _lastData = data;
 
-  // Category tabs
   buildCategoryTabs(data.items);
+  renderTableHead();
 
-  // Table
   const tbody = $('tableBody');
   tbody.innerHTML = '';
 
@@ -640,109 +901,120 @@ function renderPage(data) {
     const cheaper = item.cheaper_store;
     const ov = overrides[item.list_item] || {};
 
-    // Apply URL overrides
-    const wwUrl   = ov.wwUrl   || ww?.url   || null;
-    const coUrl   = ov.colesUrl || co?.url  || null;
-
-    // Display name (with override support)
+    const wwUrl  = ov.wwUrl    || ww?.url  || null;
+    const coUrl  = ov.colesUrl || co?.url  || null;
     const displayName = ov.displayName || item.list_item;
 
-    // Product image (prefer Coles, fall back to WW)
     const imgSrc = co?.image_url || ww?.image_url || '';
     const imgHtml = imgSrc
       ? `<img class="item-img" src="${imgSrc}" alt="" loading="lazy" onerror="this.style.display='none'" />`
       : '<div class="item-img-placeholder"></div>';
 
-    // Hot deal badge
-    const hotBadge = isHotDeal(item) ? `<span class="hot-badge" title="Current price is 10%+ below historical average">🔥</span>` : '';
-
-    // Pencil edit button
     const safeKey = item.list_item.replace(/"/g, '&quot;');
     const editBtn = `<button class="item-edit-btn" data-edit-item="${safeKey}" title="Edit name/URL">✎</button>`;
 
-    // Price history bar
-    const currentRef = co?.price ?? ww?.price;
+    // Price bar uses cheaper store's price as reference (or fallback)
+    const currentRef = cheaper === 'woolworths' ? ww?.price : (cheaper === 'coles' ? co?.price : (co?.price ?? ww?.price));
     const bar = buildPriceBar(item.list_item, item.price_history, currentRef);
 
     const itemCell = `
       <div class="item-row">
         ${imgHtml}
         <div class="item-info">
-          <div class="item-title-row">${displayName}${editBtn}${hotBadge}</div>
+          <div class="item-title-row">${displayName}${editBtn}</div>
           ${bar}
         </div>
       </div>`;
 
+    // Hot deal: fire goes on the cheaper store's price cell
+    const hotDeal = isHotDeal(item);
+    const hotBadge = `<span class="hot-badge" title="Current price is 10%+ below historical average">🔥</span>`;
+
     // WW price cell
-    let wwCell;
+    let wwCellContent;
     if (ww) {
       const wwPriceVal = wwUrl
         ? `<a href="${wwUrl}" target="_blank" class="price-link">${fmt(ww.price)}</a>`
         : fmt(ww.price);
-      wwCell = `<div class="price-main">${wwPriceVal}</div><div class="price-unit">${fmtUnit(ww.unit_price, ww.unit)}</div>`;
+      const wwFire = hotDeal && (cheaper === 'woolworths' || (cheaper == null && ww && !co)) ? hotBadge : '';
+      wwCellContent = `<div class="price-main">${wwPriceVal}${wwFire}</div><div class="price-unit">${fmtUnit(ww.unit_price, ww.unit)}</div>`;
     } else {
       const searchUrl = `https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}`;
-      wwCell = `<a href="${searchUrl}" target="_blank" class="search-link">Find on WW →</a>`;
+      wwCellContent = `<a href="${searchUrl}" target="_blank" class="search-link">Find on WW →</a>`;
     }
 
     // Coles price cell
-    let coCell;
+    let coCellContent;
     if (co) {
       const coPriceVal = coUrl
         ? `<a href="${coUrl}" target="_blank" class="price-link">${fmt(co.price)}</a>`
         : fmt(co.price);
-      coCell = `<div class="price-main">${coPriceVal}</div><div class="price-unit">${fmtUnit(co.unit_price, co.unit)}</div>`;
+      const coFire = hotDeal && (cheaper === 'coles' || (cheaper == null && co && !ww)) ? hotBadge : '';
+      coCellContent = `<div class="price-main">${coPriceVal}${coFire}</div><div class="price-unit">${fmtUnit(co.unit_price, co.unit)}</div>`;
     } else {
       const searchUrl = `https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}`;
-      coCell = `<a href="${searchUrl}" target="_blank" class="search-link">Find on Coles →</a>`;
+      coCellContent = `<a href="${searchUrl}" target="_blank" class="search-link">Find on Coles →</a>`;
     }
 
-    // Best price badge
+    // Best Price — N/A when one store is missing
     let badgeHtml = '';
-    if (cheaper === 'woolworths') badgeHtml = '<span class="cheaper-badge ww">WW</span>';
-    else if (cheaper === 'coles') badgeHtml = '<span class="cheaper-badge coles">Coles</span>';
-    else if (cheaper === 'equal') badgeHtml = '<span class="cheaper-badge equal">Equal</span>';
+    if (!ww || !co) {
+      badgeHtml = '<span class="cheaper-badge na">N/A</span>';
+    } else if (cheaper === 'woolworths') {
+      badgeHtml = '<span class="cheaper-badge ww">WW</span>';
+    } else if (cheaper === 'coles') {
+      badgeHtml = '<span class="cheaper-badge coles">Coles</span>';
+    } else if (cheaper === 'equal') {
+      badgeHtml = '<span class="cheaper-badge equal">Equal</span>';
+    }
 
-    // % Cheaper column
+    // % Cheaper
     let pctHtml = '';
     const wwPrice = ww?.price;
     const coPrice = co?.price;
     if (wwPrice != null && coPrice != null && wwPrice !== coPrice) {
       const pct = Math.round(Math.abs(wwPrice - coPrice) / Math.max(wwPrice, coPrice) * 100);
-      const pctClass = cheaper === 'woolworths' ? 'pct-ww' : 'pct-coles';
-      pctHtml = `<span class="${pctClass}">${pct}%</span>`;
+      pctHtml = `<span class="${cheaper === 'woolworths' ? 'pct-ww' : 'pct-coles'}">${pct}%</span>`;
     }
 
-    // You Save
     const savingHtml = item.saving_per_item > 0
-      ? `<span class="saving-cell">${fmt(item.saving_per_item)}</span>`
-      : '';
+      ? `<span class="saving-cell">${fmt(item.saving_per_item)}</span>` : '';
 
-    // Trips cell
     const tripsHtml = item.trip_count != null ? `<span class="trips-cell">${item.trip_count}</span>` : '';
 
-    // Per-item refresh button
     const refreshBtn = `<button class="item-refresh-btn" data-item="${safeKey}" title="Refresh prices for this item">↻</button>`;
 
-    const wwClass = cheaper === 'woolworths' ? 'cell-ww' : '';
-    const coClass = cheaper === 'coles' ? 'cell-coles' : '';
+    const wwClass  = cheaper === 'woolworths' ? 'cell-ww' : '';
+    const coClass  = cheaper === 'coles'      ? 'cell-coles' : '';
 
-    tbody.insertAdjacentHTML('beforeend', `
-      <tr>
-        <td class="item-name">${itemCell}</td>
-        <td class="price-cell ${wwClass}">${wwCell}</td>
-        <td class="price-cell ${coClass}">${coCell}</td>
-        <td class="cheaper-cell">${badgeHtml}</td>
-        <td class="pct-cell">${pctHtml}</td>
-        <td><div class="saving-row">${savingHtml}${refreshBtn}</div></td>
-        <td class="trips-cell">${tripsHtml}</td>
-      </tr>`);
+    // Build cell map keyed by col id
+    const tdMap = {
+      name:    `<td class="item-name">${itemCell}</td>`,
+      ww:      `<td class="price-cell ${wwClass}">${wwCellContent}</td>`,
+      coles:   `<td class="price-cell ${coClass}">${coCellContent}</td>`,
+      cheaper: `<td class="cheaper-cell">${badgeHtml}</td>`,
+      pct:     `<td class="pct-cell">${pctHtml}</td>`,
+      saving:  `<td><div class="saving-row">${savingHtml}${refreshBtn}</div></td>`,
+      trips:   `<td class="trips-cell">${tripsHtml}</td>`,
+    };
+
+    tbody.insertAdjacentHTML('beforeend', `<tr>${_colOrder.map(col => tdMap[col] || '').join('')}</tr>`);
   });
 
-  $('footWW').textContent = s.ww_data_available ? fmt(s.total_woolworths) : '—';
-  $('footColes').textContent = fmt(s.total_coles);
-  $('footSaving').innerHTML = s.ww_data_available
-    ? `<span class="saving-cell">${fmt(s.total_saving)}</span>` : '';
+  // Tfoot — dynamic to match column order
+  const tfootRow = document.querySelector('tfoot tr');
+  if (tfootRow) {
+    const footMap = {
+      name:    `<td>Total basket</td>`,
+      ww:      `<td id="footWW">${s.ww_data_available ? fmt(s.total_woolworths) : '—'}</td>`,
+      coles:   `<td id="footColes">${fmt(s.total_coles)}</td>`,
+      cheaper: `<td></td>`,
+      pct:     `<td></td>`,
+      saving:  `<td id="footSaving">${s.ww_data_available ? `<span class="saving-cell">${fmt(s.total_saving)}</span>` : ''}</td>`,
+      trips:   `<td></td>`,
+    };
+    tfootRow.innerHTML = _colOrder.map(col => footMap[col] || '<td></td>').join('');
+  }
 
   $('tableContainer').style.display = 'block';
 
@@ -750,6 +1022,10 @@ function renderPage(data) {
     $('notFoundList').innerHTML = data.not_found_items.map(n => `<li>${n}</li>`).join('');
     $('notFoundSection').style.display = 'block';
   }
+
+  // Signal sticky header to re-sync next scroll
+  _stickyNeedsSync = true;
+  onStickyScroll(); // update immediately if already scrolled past thead
 }
 
 // ── Alternatives page rendering ───────────────────────────────────────────────
@@ -759,7 +1035,7 @@ function renderAlternatives(data) {
 
   if (!data?.items) {
     $('loading').style.display = 'block';
-    $('loading').textContent = 'No price data yet. Click Refresh Now to fetch prices.';
+    $('loading').textContent = 'No price data yet. Click Update Prices to fetch prices.';
     return;
   }
 
@@ -832,14 +1108,207 @@ async function showNameChangesNotice() {
   notice.classList.add('visible');
 }
 
+// ── Mass upload ───────────────────────────────────────────────────────────────
+
+let _uploadNewItems = [];
+
+function initUploadModal() {
+  const modal = $('uploadModal');
+  if (!modal) return;
+
+  const close = () => {
+    modal.classList.remove('open');
+    _uploadNewItems = [];
+    $('uploadPreview').style.display = 'none';
+    $('uploadConfirm').style.display = 'none';
+    const fi = $('uploadFile');
+    if (fi) fi.value = '';
+  };
+
+  $('importBtn')?.addEventListener('click', () => modal.classList.add('open'));
+  $('uploadModalClose').addEventListener('click', close);
+  $('uploadCancel').addEventListener('click', close);
+  modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+
+  const fileInput = $('uploadFile');
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files[0]) processUploadFile(e.target.files[0]);
+  });
+
+  const dropZone = $('uploadDropZone');
+  dropZone.addEventListener('click', () => fileInput.click());
+  dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-active'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-active'));
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-active');
+    if (e.dataTransfer.files[0]) processUploadFile(e.dataTransfer.files[0]);
+  });
+
+  $('uploadConfirm').addEventListener('click', async () => {
+    if (!_uploadNewItems.length) return;
+    const btn = $('uploadConfirm');
+    btn.disabled = true;
+    btn.textContent = 'Adding items…';
+    await addItemsToShoppingList(_uploadNewItems);
+    close();
+  });
+}
+
+async function processUploadFile(file) {
+  if (!window.XLSX) { alert('SheetJS not loaded — please reload the page.'); return; }
+
+  try {
+    const buffer = await file.arrayBuffer();
+    const wb = XLSX.read(buffer, { type: 'array' });
+
+    const sheetName = wb.SheetNames.includes('Data') ? 'Data' : wb.SheetNames[0];
+    const ws = wb.Sheets[sheetName];
+    const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+
+    if (!rows.length) { alert('No data found in the file.'); return; }
+
+    // Find "Item" column
+    const header = rows[0].map(h => String(h).trim().toLowerCase());
+    const itemCol = header.findIndex(h => h === 'item' || h === 'item name' || h === 'name');
+    if (itemCol === -1) {
+      alert('Could not find an "Item" column. Make sure your file has an "Item" header row.');
+      return;
+    }
+
+    const uploadedItems = [...new Set(
+      rows.slice(1).map(r => String(r[itemCol] || '').trim()).filter(Boolean)
+    )];
+
+    const existingNames = new Set((_lastData?.items || []).map(i => i.list_item.toLowerCase()));
+    const newItems = uploadedItems.filter(n => !existingNames.has(n.toLowerCase()));
+    const alreadyTracked = uploadedItems.filter(n => existingNames.has(n.toLowerCase()));
+
+    _uploadNewItems = newItems;
+
+    $('uploadPreviewTitle').textContent =
+      `${newItems.length} new item${newItems.length !== 1 ? 's' : ''} to add` +
+      (alreadyTracked.length ? `, ${alreadyTracked.length} already tracked` : '');
+
+    $('uploadPreviewList').innerHTML = [
+      ...newItems.map(n => `<li class="new-item">${n}</li>`),
+      ...alreadyTracked.map(n => `<li>${n} (already tracked)</li>`),
+    ].join('');
+
+    $('uploadPreview').style.display = 'block';
+
+    const confirmBtn = $('uploadConfirm');
+    if (newItems.length > 0) {
+      confirmBtn.style.display = 'inline-flex';
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = `Add ${newItems.length} Item${newItems.length !== 1 ? 's' : ''} & Scrape`;
+    } else {
+      confirmBtn.style.display = 'none';
+    }
+  } catch (err) {
+    alert(`Error reading file: ${err.message}`);
+  }
+}
+
+async function addItemsToShoppingList(newItems) {
+  if (!window.XLSX) { alert('SheetJS not loaded.'); return; }
+  const s = loadSettings();
+  if (!s.user || !s.repo || !s.token) {
+    alert('Please configure GitHub settings (Auto-update Setup) first.');
+    return;
+  }
+
+  try {
+    // Fetch current shopping_list.xlsx
+    const getRes = await fetch(
+      `https://api.github.com/repos/${s.user}/${s.repo}/contents/shopping_list.xlsx`,
+      { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
+    );
+    if (!getRes.ok) throw new Error(`GitHub ${getRes.status}: could not read shopping_list.xlsx`);
+    const { content, sha } = await getRes.json();
+
+    // Decode base64 → Uint8Array
+    const binaryStr = atob(content.replace(/\s/g, ''));
+    const bytes = new Uint8Array(binaryStr.length);
+    for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+
+    const wb = XLSX.read(bytes, { type: 'array' });
+    const sheetName = wb.SheetNames.includes('Data') ? 'Data' : wb.SheetNames[0];
+    const ws = wb.Sheets[sheetName];
+    const data = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+
+    if (!data.length) throw new Error('shopping_list.xlsx has no data');
+
+    const header = data[0];
+    const itemIdx  = header.findIndex(h => String(h).toLowerCase().includes('item'));
+    const dateIdx  = header.findIndex(h => String(h).toLowerCase().includes('date'));
+    const priceIdx = header.findIndex(h => String(h).toLowerCase().includes('price') || String(h).toLowerCase().includes('unit'));
+
+    const today = new Date().toISOString().split('T')[0];
+
+    // Add 4 trips per new item (meets min_trips=4 threshold in scraper)
+    for (const itemName of newItems) {
+      for (let t = 0; t < 4; t++) {
+        const row = Array(Math.max(header.length, 3)).fill('');
+        if (itemIdx >= 0)  row[itemIdx]  = itemName;
+        if (dateIdx >= 0)  row[dateIdx]  = today;
+        if (priceIdx >= 0) row[priceIdx] = 0;
+        data.push(row);
+      }
+    }
+
+    const newWs = XLSX.utils.aoa_to_sheet(data);
+    wb.Sheets[sheetName] = newWs;
+    const newContent = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
+
+    // Write back to GitHub
+    const putRes = await fetch(
+      `https://api.github.com/repos/${s.user}/${s.repo}/contents/shopping_list.xlsx`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${s.token}`,
+          Accept: 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: `Add ${newItems.length} item(s) via mass upload`,
+          content: newContent,
+          sha,
+        }),
+      }
+    );
+    if (!putRes.ok) throw new Error(`GitHub PUT ${putRes.status}: could not update shopping_list.xlsx`);
+
+    // Trigger scrape workflow
+    await fetch(
+      `https://api.github.com/repos/${s.user}/${s.repo}/actions/workflows/scrape.yml/dispatches`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${s.token}`,
+          Accept: 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ref: 'main' }),
+      }
+    );
+
+    alert(`✓ Added ${newItems.length} item(s) to your shopping list and triggered a price scrape!`);
+  } catch (err) {
+    alert(`Error: ${err.message}`);
+  }
+}
+
 // ── Boot ─────────────────────────────────────────────────────────────────────
 
 async function boot() {
   initSettingsModal();
   initEditModal();
   initPriceHistoryModal();
-  initSortHeaders();
   initTooltip();
+  initStickyHeader();
+  initUploadModal();
 
   const refreshBtn = $('refreshBtn');
   if (refreshBtn) refreshBtn.addEventListener('click', triggerRefresh);
@@ -856,13 +1325,11 @@ async function boot() {
     const tbody = $('tableBody');
     if (tbody) {
       tbody.addEventListener('click', (e) => {
-        // Per-item refresh
         const refreshBtn = e.target.closest('.item-refresh-btn');
         if (refreshBtn) {
           triggerItemRefresh(refreshBtn.dataset.item, refreshBtn);
           return;
         }
-        // Edit name/URL
         const editBtn = e.target.closest('.item-edit-btn');
         if (editBtn && _lastData) {
           const itemName = editBtn.dataset.editItem;
@@ -870,7 +1337,6 @@ async function boot() {
           if (item) openEditModal(item);
           return;
         }
-        // Price history / range manager
         const manageBtn = e.target.closest('.price-bar-manage');
         if (manageBtn && _lastData) {
           const itemName = manageBtn.dataset.manageItem;
