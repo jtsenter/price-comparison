@@ -184,8 +184,94 @@ tbody tr:hover { background: var(--gray-50); }
 
 td { padding: 11px 14px; vertical-align: middle; }
 
-.item-name { font-weight: 500; max-width: 280px; }
-.item-name a:hover { color: var(--green); }
+.item-name { font-weight: 500; max-width: 300px; }
+.item-name a { color: inherit; }
+.item-name a:hover { color: var(--green); text-decoration: underline; }
+
+/* Item row layout: image + info */
+.item-row { display: flex; align-items: flex-start; gap: 10px; }
+.item-img {
+  width: 44px; height: 44px;
+  object-fit: contain;
+  border-radius: 4px;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-100);
+  flex-shrink: 0;
+}
+.item-img-placeholder {
+  width: 44px; height: 44px;
+  flex-shrink: 0;
+}
+.item-info { flex: 1; min-width: 0; }
+.item-title-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; line-height: 1.4; }
+
+/* Trip count badge */
+.trip-count {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--gray-400);
+  background: var(--gray-100);
+  padding: 1px 6px;
+  border-radius: 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Price history bar */
+.price-bar-outer {
+  position: relative;
+  width: 130px;
+  margin-top: 8px;
+  padding-top: 6px;
+  cursor: default;
+}
+.price-bar {
+  height: 5px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #22c55e, #fbbf24, #ef4444);
+  position: relative;
+}
+.price-marker {
+  position: absolute;
+  top: -5px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2.5px solid #334155;
+  transform: translateX(-50%);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.price-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--gray-400);
+  margin-top: 3px;
+}
+.price-bar-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  z-index: 300;
+  pointer-events: none;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  white-space: nowrap;
+  min-width: 210px;
+}
+.price-bar-tooltip pre {
+  font-family: "SF Mono", "Consolas", "Menlo", monospace;
+  font-size: 11px;
+  line-height: 1.65;
+}
+.price-bar-outer:hover .price-bar-tooltip { display: block; }
+
+.no-data { color: var(--gray-400); font-size: 13px; }
 
 .price-cell { white-space: nowrap; }
 .price-main { font-weight: 600; font-size: 15px; }
