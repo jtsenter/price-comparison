@@ -27,7 +27,6 @@ def clean_name(name: str) -> str:
 
 
 def detect_fuzzy_changes(items: list[str], flag_path: str) -> dict:
-    """Find pairs of items that are likely the same product under different names."""
     flagged = {}
     for i, a in enumerate(items):
         for b in items[i + 1:]:
@@ -42,29 +41,47 @@ def detect_fuzzy_changes(items: list[str], flag_path: str) -> dict:
     return flagged
 
 
-def get_active_shopping_list(excel_path: str, min_trips: int = 4) -> list[str]:
+def get_purchase_history(excel_path: str, min_trips: int = 4) -> dict:
     """
-    Return items purchased in at least min_trips distinct shopping trips across all history.
-    Default min_trips=4 means 'more than 3 times'.
-    Items are sorted alphabetically.
+    Returns {item_name: {trip_count, price_history: [{date, price}]}}
+    for items bought in at least min_trips distinct shopping dates.
     """
     df = pd.read_excel(excel_path, sheet_name="Data")
     df["Item"] = df["Item"].apply(clean_name)
     df = df[df["Item"] != ""]
     df["Date"] = pd.to_datetime(df["Date"])
 
-    # Count how many distinct shopping trips each item appears in
     trip_counts = df.groupby("Item")["Date"].nunique()
     frequent = trip_counts[trip_counts >= min_trips].index
-    return sorted(frequent.tolist())
+    df_freq = df[df["Item"].isin(frequent)]
+
+    result = {}
+    for item, grp in df_freq.groupby("Item"):
+        grp_sorted = grp.sort_values("Date")
+        prices = []
+        for _, row in grp_sorted.iterrows():
+            val = row.get("Unit price")
+            if pd.notna(val) and float(val) > 0:
+                prices.append({
+                    "date": row["Date"].strftime("%Y-%m-%d"),
+                    "price": round(float(val), 2),
+                })
+        result[item] = {
+            "trip_count": int(trip_counts[item]),
+            "price_history": prices,
+        }
+    return result
+
+
+def get_active_shopping_list(excel_path: str, min_trips: int = 4) -> list[str]:
+    return sorted(get_purchase_history(excel_path, min_trips).keys())
 
 
 if __name__ == "__main__":
     import sys
-
     path = sys.argv[1] if len(sys.argv) > 1 else "shopping_list.xlsx"
     min_trips = int(sys.argv[2]) if len(sys.argv) > 2 else 4
-    items = get_active_shopping_list(path, min_trips=min_trips)
-    print(f"{len(items)} items purchased in {min_trips}+ trips:")
-    for item in items:
-        print(f"  - {item}")
+    history = get_purchase_history(path, min_trips)
+    print(f"{len(history)} items bought in {min_trips}+ trips:")
+    for item, data in sorted(history.items(), key=lambda x: -x[1]["trip_count"]):
+        print(f"  {data['trip_count']:3}×  {item}")
