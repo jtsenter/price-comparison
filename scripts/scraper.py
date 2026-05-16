@@ -50,76 +50,93 @@ def resolve_url(href: str, base: str) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Woolworths scraping
+# Woolworths scraping — uses internal API called from within browser session
 # ---------------------------------------------------------------------------
 
-WW_EXTRACT_JS = """
-() => {
-    const selectors = [
-        '[data-testid="product-tile"]',
-        'article.shelfProductTile',
-        'section.shelfProductTile',
-        'article[class*="ProductTile"]',
-        'div[class*="product-tile"]',
-    ];
-    let tiles = [];
-    for (const sel of selectors) {
-        tiles = Array.from(document.querySelectorAll(sel));
-        if (tiles.length > 0) break;
-    }
+async def delay():
+    await asyncio.sleep(random.uniform(1.5, 3.5))
 
-    return tiles.slice(0, 5).map(tile => {
-        const nameSelectors = [
-            '[data-testid="product-title"]',
-            '[class*="product-title"]',
-            '[class*="ProductTitle"]',
-            'h2', 'h3',
-        ];
-        let name = '';
-        for (const s of nameSelectors) {
-            const el = tile.querySelector(s);
-            if (el?.textContent?.trim()) { name = el.textContent.trim(); break; }
-        }
 
-        const priceSelectors = [
-            '[data-testid="price"]',
-            '[class*="Price"][class*="current"i]',
-            '[class*="price-dollars"]',
-            '[class*="product-price"]:not([class*="unit"]):not([class*="per"])',
-            '[class*="Price"]:first-of-type',
-        ];
-        let priceText = '';
-        for (const s of priceSelectors) {
-            const el = tile.querySelector(s);
-            if (el?.textContent?.match(/\$/)) { priceText = el.textContent.trim(); break; }
-        }
+async def search_woolworths(page, query: str) -> list[dict]:
+    url = f"{WOOLWORTHS_BASE}/shop/search/products?searchTerm={quote(query)}"
+    try:
+        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+        await page.wait_for_timeout(2000)
 
-        const unitSelectors = [
-            '[data-testid="product-unit-price"]',
-            '[class*="unit-price"]',
-            '[class*="unitPrice"]',
-            '[class*="UnitPrice"]',
-            '[class*="cup-price"]',
-            '[class*="CupPrice"]',
-            '[class*="pricePerUnit"]',
-        ];
-        let unitPriceText = '';
-        for (const s of unitSelectors) {
-            const el = tile.querySelector(s);
-            if (el?.textContent?.trim()) { unitPriceText = el.textContent.trim(); break; }
-        }
+        # Call the internal JSON API from within the live browser session
+        # so that session cookies and headers are automatically included.
+        data = await page.evaluate(
+            """
+            async (query) => {
+                try {
+                    const encoded = encodeURIComponent(query);
+                    const r = await fetch(
+                        '/apis/ui/Search/products?searchTerm=' + encoded +
+                        '&pageNumber=1&pageSize=5&sortType=TraderRelevance&isMobile=false&filters=%5B%5D',
+                        {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            credentials: 'include'
+                        }
+                    );
+                    if (!r.ok) return null;
+                    return await r.json();
+                } catch(e) {
+                    return null;
+                }
+            }
+            """,
+            query,
+        )
 
-        const linkEl = tile.querySelector('a[href*="productdetails"], a[href*="/product/"], a[href]');
+        if not data:
+            print(f"  [WW] API returned null for '{query}'")
+            return []
 
-        return {
-            name,
-            price_text: priceText,
-            unit_price_text: unitPriceText,
-            url: linkEl?.getAttribute('href') || '',
-        };
-    }).filter(p => p.name);
-}
-"""
+        products = []
+        for bundle in (data.get("Products") or []):
+            for p in (bundle.get("Products") or []):
+                stockcode = p.get("Stockcode")
+                url_name = p.get("UrlFriendlyName", "")
+                name = p.get("Name", "")
+                price = p.get("Price")
+                cup_price = p.get("CupPrice")
+                cup_string = p.get("CupString", "")
+
+                if not name or price is None:
+                    continue
+
+                product_url = (
+                    f"{WOOLWORTHS_BASE}/shop/productdetails/{stockcode}/{url_name}"
+                    if stockcode else ""
+                )
+                _, unit = parse_unit_price(cup_string)
+
+                products.append({
+                    "name": name,
+                    "price": float(price),
+                    "unit_price": float(cup_price) if cup_price is not None else None,
+                    "unit": unit,
+                    "url": product_url,
+                })
+
+                if len(products) >= MAX_RESULTS:
+                    break
+            if len(products) >= MAX_RESULTS:
+                break
+
+        return products
+
+    except Exception as e:
+        print(f"  [WW] Error searching '{query}': {e}")
+        return []
+
+
+# ---------------------------------------------------------------------------
+# Coles scraping
+# ---------------------------------------------------------------------------
 
 COLES_EXTRACT_JS = """
 () => {
@@ -159,7 +176,7 @@ COLES_EXTRACT_JS = """
         let priceText = '';
         for (const s of priceSelectors) {
             const el = tile.querySelector(s);
-            if (el?.textContent?.match(/\$/)) { priceText = el.textContent.trim(); break; }
+            if (el?.textContent?.match(/\\$/)) { priceText = el.textContent.trim(); break; }
         }
 
         const unitSelectors = [
@@ -185,35 +202,6 @@ COLES_EXTRACT_JS = """
     }).filter(p => p.name);
 }
 """
-
-
-async def delay():
-    await asyncio.sleep(random.uniform(1.5, 3.5))
-
-
-async def search_woolworths(page, query: str) -> list[dict]:
-    url = f"{WOOLWORTHS_BASE}/shop/search/products?searchTerm={quote(query)}"
-    try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
-        await page.wait_for_timeout(3000)
-        await page.evaluate("window.scrollBy(0, 300)")
-        await page.wait_for_timeout(1500)
-        raw = await page.evaluate(WW_EXTRACT_JS)
-        results = []
-        for r in raw:
-            price = parse_price(r["price_text"])
-            unit_price, unit = parse_unit_price(r["unit_price_text"])
-            results.append({
-                "name": r["name"],
-                "price": price,
-                "unit_price": unit_price,
-                "unit": unit,
-                "url": resolve_url(r["url"], WOOLWORTHS_BASE),
-            })
-        return results
-    except Exception as e:
-        print(f"  [WW] Error searching '{query}': {e}")
-        return []
 
 
 async def search_coles(page, query: str) -> list[dict]:
