@@ -192,8 +192,8 @@ async def search_woolworths(page, query: str) -> list[dict]:
     global _ww_debug_done
     url = f"{WOOLWORTHS_BASE}/shop/search/products?searchTerm={quote(query)}"
     try:
-        await page.goto(url, wait_until="load", timeout=30000)
-        await page.wait_for_timeout(2000)
+        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+        await page.wait_for_timeout(1000)
 
         current_url = page.url
         title = await page.title()
@@ -446,9 +446,11 @@ async def scrape(trigger: str = "scheduled"):
             print(f"[{i}/{total}] {item}")
             category = guess_category(item)
 
-            ww_results = await search_woolworths(ww_page, item)
-            await delay()
-            coles_results = await search_coles(coles_page, item)
+            # Search both stores in parallel — they use separate browser pages
+            ww_results, coles_results = await asyncio.gather(
+                search_woolworths(ww_page, item),
+                search_coles(coles_page, item),
+            )
             await delay()
 
             ww_match = ww_results[0] if ww_results else None
