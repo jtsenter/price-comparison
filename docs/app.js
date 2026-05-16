@@ -322,8 +322,10 @@ function renderPage(data) {
     $('savingInfo').textContent = 'Same price at both stores';
   }
 
-  $('lastUpdated').textContent =
-    `Updated ${formatDate(data.last_updated)} · ${s.items_compared} items`;
+  const prog = data.scrape_progress;
+  $('lastUpdated').textContent = prog
+    ? `Scraping… ${prog.done}/${prog.total} items done · refreshes every 10`
+    : `Updated ${formatDate(data.last_updated)} · ${s.items_compared} items`;
   $('banner').style.display = 'block';
 
   // Table

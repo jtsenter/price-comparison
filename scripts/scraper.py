@@ -3,6 +3,7 @@ import json
 import os
 import random
 import re
+import subprocess
 import sys
 from datetime import datetime, timezone
 from urllib.parse import quote
@@ -263,6 +264,65 @@ def find_alternatives(all_results: list[dict], matched: dict | None, max_alts: i
 
 
 # ---------------------------------------------------------------------------
+# Incremental push helpers
+# ---------------------------------------------------------------------------
+
+REPO_ROOT = os.path.join(os.path.dirname(__file__), "..")
+
+def _build_output(items: list, not_found: list, trigger: str, progress: dict | None = None) -> dict:
+    ww_total = sum(r["woolworths"]["price"] for r in items if r.get("woolworths") and r["woolworths"].get("price") is not None)
+    coles_total = sum(r["coles"]["price"] for r in items if r.get("coles") and r["coles"].get("price") is not None)
+    ww_available = ww_total > 0
+    if not ww_available:
+        cheaper = "coles_only"
+    elif coles_total == 0:
+        cheaper = "ww_only"
+    elif ww_total < coles_total:
+        cheaper = "woolworths"
+    elif coles_total < ww_total:
+        cheaper = "coles"
+    else:
+        cheaper = "equal"
+    out = {
+        "last_updated": datetime.now(timezone.utc).isoformat(),
+        "trigger": trigger,
+        "items": items,
+        "not_found_items": not_found,
+        "summary": {
+            "total_woolworths": round(ww_total, 2),
+            "total_coles": round(coles_total, 2),
+            "cheaper_store": cheaper,
+            "ww_data_available": ww_available,
+            "total_saving": round(abs(ww_total - coles_total), 2) if ww_available else 0,
+            "items_compared": len(items),
+            "items_not_found": len(not_found),
+        },
+    }
+    if progress:
+        out["scrape_progress"] = progress
+    return out
+
+
+def push_progress(items: list, not_found: list, done: int, total: int, trigger: str):
+    out = _build_output(items, not_found, trigger, progress={"done": done, "total": total})
+    os.makedirs(DATA_DIR, exist_ok=True)
+    with open(os.path.join(DATA_DIR, "latest.json"), "w") as f:
+        json.dump(out, f, indent=2)
+    try:
+        subprocess.run(["git", "config", "user.name", "github-actions[bot]"], cwd=REPO_ROOT, check=False, capture_output=True)
+        subprocess.run(["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"], cwd=REPO_ROOT, check=False, capture_output=True)
+        subprocess.run(["git", "add", "docs/data/"], cwd=REPO_ROOT, check=False, capture_output=True)
+        diff = subprocess.run(["git", "diff", "--staged", "--quiet"], cwd=REPO_ROOT)
+        if diff.returncode != 0:
+            subprocess.run(["git", "commit", "-m", f"progress: {done}/{total} items scraped"], cwd=REPO_ROOT, check=False, capture_output=True)
+            subprocess.run(["git", "pull", "--rebase", "origin", "main"], cwd=REPO_ROOT, check=False, capture_output=True)
+            subprocess.run(["git", "push"], cwd=REPO_ROOT, check=False, capture_output=True)
+            print(f"  → Pushed progress ({done}/{total})")
+    except Exception as e:
+        print(f"  → Progress push skipped: {e}")
+
+
+# ---------------------------------------------------------------------------
 # Main scrape loop
 # ---------------------------------------------------------------------------
 
@@ -362,55 +422,19 @@ async def scrape(trigger: str = "scheduled", single_item: str = ""):
                 "alternatives": alternatives,
             })
 
+            if not single_item and i % 10 == 0:
+                push_progress(items_output, not_found, i, total, trigger)
+
         await browser.close()
-
-    ww_total = sum(
-        r["woolworths"]["price"] for r in items_output
-        if r["woolworths"] and r["woolworths"].get("price") is not None
-    )
-    coles_total = sum(
-        r["coles"]["price"] for r in items_output
-        if r["coles"] and r["coles"].get("price") is not None
-    )
-    ww_available = ww_total > 0
-
-    if not ww_available:
-        cheaper_overall = "coles_only"
-    elif coles_total == 0:
-        cheaper_overall = "ww_only"
-    elif ww_total < coles_total:
-        cheaper_overall = "woolworths"
-    elif coles_total < ww_total:
-        cheaper_overall = "coles"
-    else:
-        cheaper_overall = "equal"
-
-    output = {
-        "last_updated": datetime.now(timezone.utc).isoformat(),
-        "trigger": trigger,
-        "items": items_output,
-        "not_found_items": not_found,
-        "summary": {
-            "total_woolworths": round(ww_total, 2),
-            "total_coles": round(coles_total, 2),
-            "cheaper_store": cheaper_overall,
-            "ww_data_available": ww_available,
-            "total_saving": round(abs(ww_total - coles_total), 2) if ww_available else 0,
-            "items_compared": len(items_output),
-            "items_not_found": len(not_found),
-        },
-    }
 
     os.makedirs(DATA_DIR, exist_ok=True)
     latest_path = os.path.join(DATA_DIR, "latest.json")
 
     if single_item:
-        # Patch mode: load existing data and replace only this item
         existing = {}
         if os.path.exists(latest_path):
             with open(latest_path) as f:
                 existing = json.load(f)
-
         all_items = existing.get("items", [])
         if items_output:
             replaced = False
@@ -421,58 +445,10 @@ async def scrape(trigger: str = "scheduled", single_item: str = ""):
                     break
             if not replaced:
                 all_items.append(items_output[0])
-        elif not_found:
-            # Item was not found — remove it from not_found list if it was there before
-            pass
-
-        # Recalculate totals from all items
-        ww_total = sum(r["woolworths"]["price"] for r in all_items if r.get("woolworths") and r["woolworths"].get("price") is not None)
-        coles_total = sum(r["coles"]["price"] for r in all_items if r.get("coles") and r["coles"].get("price") is not None)
-        ww_available = ww_total > 0
-
-        if not ww_available:
-            cheaper_overall = "coles_only"
-        elif coles_total == 0:
-            cheaper_overall = "ww_only"
-        elif ww_total < coles_total:
-            cheaper_overall = "woolworths"
-        elif coles_total < ww_total:
-            cheaper_overall = "coles"
-        else:
-            cheaper_overall = "equal"
-
-        output = {
-            "last_updated": datetime.now(timezone.utc).isoformat(),
-            "trigger": trigger,
-            "items": all_items,
-            "not_found_items": existing.get("not_found_items", []),
-            "summary": {
-                "total_woolworths": round(ww_total, 2),
-                "total_coles": round(coles_total, 2),
-                "cheaper_store": cheaper_overall,
-                "ww_data_available": ww_available,
-                "total_saving": round(abs(ww_total - coles_total), 2) if ww_available else 0,
-                "items_compared": len(all_items),
-                "items_not_found": len(existing.get("not_found_items", [])),
-            },
-        }
+        output = _build_output(all_items, existing.get("not_found_items", []), trigger)
         print(f"Patched '{single_item}' into existing data ({len(all_items)} total items).")
     else:
-        output = {
-            "last_updated": datetime.now(timezone.utc).isoformat(),
-            "trigger": trigger,
-            "items": items_output,
-            "not_found_items": not_found,
-            "summary": {
-                "total_woolworths": round(ww_total, 2),
-                "total_coles": round(coles_total, 2),
-                "cheaper_store": cheaper_overall,
-                "ww_data_available": ww_available,
-                "total_saving": round(abs(ww_total - coles_total), 2) if ww_available else 0,
-                "items_compared": len(items_output),
-                "items_not_found": len(not_found),
-            },
-        }
+        output = _build_output(items_output, not_found, trigger)
         print(f"\nDone. {len(items_output)} items compared, {len(not_found)} not found.")
         print(f"Woolworths total: ${ww_total:.2f} | Coles total: ${coles_total:.2f}")
 
