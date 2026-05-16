@@ -824,6 +824,144 @@ th.sort-active { color: var(--text); }
 .upload-preview-list li.new-item { color: var(--ww); font-weight: 600; }
 .upload-preview-list li.new-item::before { content: '+ '; }
 
+/* ── Priority filter bar ─────────────────────────────────────── */
+.priority-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 0 14px;
+  flex-wrap: wrap;
+}
+.priority-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.priority-pill {
+  padding: 4px 13px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-mid);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.priority-pill:hover { background: var(--bg); color: var(--text); }
+.priority-pill.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.priority-pill.fire-pill.active {
+  background: #c95000;
+  border-color: #c95000;
+  color: #fff;
+}
+.store-filter {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding-left: 6px;
+  border-left: 1px solid var(--border);
+}
+.store-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-mid);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.store-filter-btn.active {
+  background: var(--bg-alt);
+  border-color: var(--text-mid);
+  color: var(--text);
+}
+
+/* ── Priority column dropdown ────────────────────────────────── */
+.priority-select {
+  font-size: 11px;
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  max-width: 80px;
+}
+.priority-select:focus { outline: none; border-color: var(--accent); }
+td.priority-cell { text-align: center; }
+
+/* ── Import badge ─────────────────────────────────────────────── */
+.import-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: #c95000;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* ── Price history "different item" button ───────────────────── */
+.price-diff-btn {
+  font-size: 11px;
+  padding: 2px 7px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-soft);
+  cursor: pointer;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+.price-diff-btn:hover { background: var(--bg-alt); color: var(--text); }
+
+/* ── Heat chart off-range marker ─────────────────────────────── */
+.price-bar-outer { overflow: visible; }
+.price-bar { overflow: visible; }
+.price-marker.out-range {
+  background: var(--text-soft);
+  border-color: var(--text-soft);
+  opacity: 0.7;
+}
+
+/* ── Pending items section in upload modal ───────────────────── */
+.pending-list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--text-mid);
+  border-bottom: 1px solid var(--border);
+}
+.pending-list li:last-child { border-bottom: none; }
+.pending-price { font-weight: 600; color: var(--text); }
+.pending-remove-btn {
+  margin-left: auto;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--text-soft);
+  font-size: 12px;
+  padding: 2px 4px;
+}
+.pending-remove-btn:hover { color: var(--danger, #ef4444); }
+
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 700px) {
   .header-inner { padding: 0 14px; }

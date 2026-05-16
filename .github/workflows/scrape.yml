@@ -14,6 +14,14 @@ on:
         description: 'Single item to refresh (leave empty for full list)'
         required: false
         default: ''
+      ww_url:
+        description: 'Woolworths product URL for direct fetch (optional)'
+        required: false
+        default: ''
+      coles_url:
+        description: 'Coles product URL for direct fetch (optional)'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -41,7 +49,7 @@ jobs:
         run: '& $env:PYTHON -m playwright install chromium chromium-headless-shell'
 
       - name: Run scraper
-        run: '& $env:PYTHON scripts/scraper.py "${{ github.event.inputs.trigger || ''scheduled'' }}" "${{ github.event.inputs.item || '''' }}"'
+        run: '& $env:PYTHON scripts/scraper.py "${{ github.event.inputs.trigger || ''scheduled'' }}" "${{ github.event.inputs.item || '''' }}" "${{ github.event.inputs.ww_url || '''' }}" "${{ github.event.inputs.coles_url || '''' }}"'
 
       - name: Commit and push results
         run: |

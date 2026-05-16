@@ -35,9 +35,47 @@ function saveExclusions(obj) {
   localStorage.setItem('pw_exclusions_v1', JSON.stringify(obj));
 }
 
+// ── Priorities ───────────────────────────────────────────────────────────────
+
+function loadPriorities() {
+  try { return JSON.parse(localStorage.getItem('pw_priorities_v1') || '{}'); } catch { return {}; }
+}
+function savePriorities(obj) {
+  localStorage.setItem('pw_priorities_v1', JSON.stringify(obj));
+}
+
+// ── Pending items (from "different item" in price history) ───────────────────
+
+function loadPending() {
+  try { return JSON.parse(localStorage.getItem('pw_pending_items_v1') || '[]'); } catch { return []; }
+}
+function savePending(arr) {
+  localStorage.setItem('pw_pending_items_v1', JSON.stringify(arr));
+}
+
+function updateImportBadge() {
+  const btn = $('importBtn');
+  if (!btn) return;
+  let badge = btn.querySelector('.import-badge');
+  if (!badge) {
+    badge = document.createElement('span');
+    badge.className = 'import-badge';
+    btn.appendChild(badge);
+  }
+  const count = loadPending().length;
+  badge.textContent = count;
+  badge.style.display = count > 0 ? 'inline-flex' : 'none';
+}
+
+// ── Filter state ─────────────────────────────────────────────────────────────
+
+let _activePriority = 'all';
+let _showHotOnly = false;
+let _storeFilter = 'all';
+
 // ── Column order & widths ────────────────────────────────────────────────────
 
-const DEFAULT_COL_ORDER = ['name', 'ww', 'coles', 'cheaper', 'pct', 'saving', 'trips'];
+const DEFAULT_COL_ORDER = ['name', 'priority', 'ww', 'coles', 'cheaper', 'pct', 'saving', 'trips'];
 
 let _colOrder = (() => {
   try {
@@ -64,7 +102,8 @@ function colHeadHtml(col) {
     case 'cheaper': return `<th data-col="cheaper" class="sortable center-th">Best Price <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     case 'pct':     return `<th data-col="pct" class="sortable center-th">% Cheaper <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     case 'saving':  return `<th data-col="saving" class="sortable">You Save <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'trips':   return `<th data-col="trips" class="sortable center-th">Trips <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'trips':    return `<th data-col="trips" class="sortable center-th">Trips <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'priority': return `<th data-col="priority" class="sortable center-th">Priority <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     default: return '';
   }
 }
@@ -85,7 +124,9 @@ function buildPriceBar(itemName, priceHistory, currentPrice) {
   const maxP = Math.max(...prices);
   if (minP === maxP) return '';
 
-  const pos = Math.max(0, Math.min(100, ((currentPrice - minP) / (maxP - minP)) * 100));
+  const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
+  const pos = Math.max(0, Math.min(100, rawPos));
+  const outRange = rawPos < 0 || rawPos > 100;
 
   const counts = {};
   prices.forEach(p => { const k = p.toFixed(2); counts[k] = (counts[k] || 0) + 1; });
@@ -113,7 +154,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice) {
   return `
     <div class="price-bar-outer" data-tooltip="${safeTooltip}">
       <div class="price-bar">
-        <div class="price-marker" style="left:${pos.toFixed(1)}%"></div>
+        <div class="price-marker${outRange ? ' out-range' : ''}" style="left:${pos.toFixed(1)}%"></div>
       </div>
       <div class="price-bar-labels">
         <span>${fmt(minP)}</span>
@@ -158,7 +199,7 @@ function initTooltip() {
 
 // ── Per-item refresh ─────────────────────────────────────────────────────────
 
-async function triggerItemRefresh(itemName, btn) {
+async function triggerItemRefresh(itemName, btn, urlOverrides) {
   const s = loadSettings();
   if (!s.user || !s.repo || !s.token) {
     alert('Please configure Auto-update Setup first (button in the top-right).');
@@ -167,13 +208,17 @@ async function triggerItemRefresh(itemName, btn) {
 
   if (btn) { btn.disabled = true; btn.classList.add('spinning'); }
 
+  const inputs = { trigger: 'manual', item: itemName };
+  if (urlOverrides?.wwUrl) inputs.ww_url = urlOverrides.wwUrl;
+  if (urlOverrides?.colesUrl) inputs.coles_url = urlOverrides.colesUrl;
+
   try {
     const res = await fetch(
       `https://api.github.com/repos/${s.user}/${s.repo}/actions/workflows/scrape.yml/dispatches`,
       {
         method: 'POST',
         headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ref: 'main', inputs: { trigger: 'manual', item: itemName } }),
+        body: JSON.stringify({ ref: 'main', inputs }),
       }
     );
 
@@ -297,11 +342,11 @@ function initEditModal() {
     close();
     if (_lastData) renderPage(_lastData);
 
-    // If a URL was added/changed and GitHub is configured, trigger a scrape
+    // If a URL was added/changed and GitHub is configured, trigger a scrape using the new URLs
     if (urlChanged && (newWwUrl || newCoUrl)) {
       const s = loadSettings();
       if (s.user && s.repo && s.token) {
-        triggerItemRefresh(item.list_item, null);
+        triggerItemRefresh(item.list_item, null, { wwUrl: newWwUrl, colesUrl: newCoUrl });
         alert(`Scrape triggered for "${item.list_item}" with the new URL.`);
       }
     }
@@ -373,7 +418,9 @@ function openPriceHistoryModal(item) {
       row.innerHTML = `
         <span class="price-history-date">${entry.date || 'Unknown date'}</span>
         <span class="price-history-price">${fmt(entry.price)}</span>
-        <button class="price-exclude-btn" data-price="${key}">${isExcluded ? 'Include' : 'Exclude'}</button>`;
+        <button class="price-exclude-btn" data-price="${key}">${isExcluded ? 'Include' : 'Exclude'}</button>
+        <button class="price-diff-btn" data-price="${key}">Different item</button>`;
+
       row.querySelector('.price-exclude-btn').addEventListener('click', () => {
         const ex = loadExclusions();
         const list = ex[item.list_item] || [];
@@ -387,11 +434,110 @@ function openPriceHistoryModal(item) {
         openPriceHistoryModal(item);
         if (_lastData) renderPage(_lastData);
       });
+
+      row.querySelector('.price-diff-btn').addEventListener('click', () => {
+        const pending = loadPending();
+        pending.push({
+          price: entry.price,
+          date: entry.date || new Date().toISOString(),
+          from_item: item.list_item,
+          added_at: new Date().toISOString(),
+        });
+        savePending(pending);
+        updateImportBadge();
+        // Also exclude this price from the current item
+        const ex = loadExclusions();
+        const list = ex[item.list_item] || [];
+        const priceNum = Number(key);
+        if (!list.some(p => Number(p).toFixed(2) === key)) {
+          ex[item.list_item] = [...list, priceNum];
+          saveExclusions(ex);
+        }
+        openPriceHistoryModal(item);
+        if (_lastData) renderPage(_lastData);
+      });
+
       listEl.appendChild(row);
     });
   }
 
   $('priceHistoryModal').classList.add('open');
+}
+
+// ── Priority filter ──────────────────────────────────────────────────────────
+
+function initPriorityFilter() {
+  const container = $('priorityFilter');
+  if (!container) return;
+
+  container.querySelectorAll('.priority-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const p = btn.dataset.priority;
+      if (p) {
+        _activePriority = p;
+        _showHotOnly = false;
+        container.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        $('hotFilterBtn')?.classList.remove('active');
+        $('storeFilter').style.display = 'none';
+      } else {
+        // fire pill handled below
+      }
+      if (_lastData) renderPage(_lastData);
+    });
+  });
+
+  const hotBtn = $('hotFilterBtn');
+  if (hotBtn) {
+    hotBtn.addEventListener('click', () => {
+      _showHotOnly = !_showHotOnly;
+      hotBtn.classList.toggle('active', _showHotOnly);
+      $('storeFilter').style.display = _showHotOnly ? 'flex' : 'none';
+      if (!_showHotOnly) _storeFilter = 'all';
+      if (_lastData) renderPage(_lastData);
+    });
+  }
+
+  const storeFilter = $('storeFilter');
+  if (storeFilter) {
+    storeFilter.querySelectorAll('.store-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        _storeFilter = btn.dataset.store;
+        storeFilter.querySelectorAll('.store-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (_lastData) renderPage(_lastData);
+      });
+    });
+  }
+}
+
+// ── Banner stats (priority-aware) ────────────────────────────────────────────
+
+function computeBannerStats(items) {
+  const priorities = loadPriorities();
+  const filtered = items.filter(item => {
+    const p = priorities[item.list_item] || 'monthly';
+    if (_activePriority !== 'archive' && p === 'archive') return false;
+    if (_activePriority !== 'all' && _activePriority !== 'archive' && p !== _activePriority) return false;
+    return true;
+  });
+  const ww_total = filtered.reduce((s, i) => s + (i.woolworths?.price ?? 0), 0);
+  const co_total = filtered.reduce((s, i) => s + (i.coles?.price ?? 0), 0);
+  const ww_avail = filtered.some(i => i.woolworths?.price != null);
+  let cheaper_store, total_saving;
+  if (!ww_avail) { cheaper_store = 'coles_only'; total_saving = 0; }
+  else if (co_total === 0) { cheaper_store = 'ww_only'; total_saving = 0; }
+  else if (ww_total < co_total) { cheaper_store = 'woolworths'; total_saving = co_total - ww_total; }
+  else if (co_total < ww_total) { cheaper_store = 'coles'; total_saving = ww_total - co_total; }
+  else { cheaper_store = 'equal'; total_saving = 0; }
+  return {
+    total_woolworths: Math.round(ww_total * 100) / 100,
+    total_coles: Math.round(co_total * 100) / 100,
+    cheaper_store,
+    ww_data_available: ww_avail,
+    total_saving: Math.round(total_saving * 100) / 100,
+    items_compared: filtered.length,
+  };
 }
 
 // ── Category tabs ────────────────────────────────────────────────────────────
@@ -747,24 +893,50 @@ async function loadNameChanges() {
 let sortState = { col: 'trips', dir: 'desc' };
 let _lastData = null;
 
+const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
+
 function sortItems(items) {
   const { col, dir } = sortState;
   const mul = dir === 'asc' ? 1 : -1;
+  const priorities = loadPriorities();
 
-  // Filter by category (trim to handle whitespace edge cases)
-  let filtered = _activeCategory === 'All'
-    ? items
-    : items.filter(i => (i.category || '').trim() === _activeCategory);
+  let filtered = items.filter(item => {
+    const p = priorities[item.list_item] || 'monthly';
+    // Always hide archived items unless archive view is active
+    if (_activePriority !== 'archive' && p === 'archive') return false;
+    // Priority pill filter
+    if (_activePriority !== 'all' && _activePriority !== 'archive' && p !== _activePriority) return false;
+    // Hot deals filter
+    if (_showHotOnly && !isHotDeal(item)) return false;
+    // Store filter (only active when hot filter is on)
+    if (_showHotOnly && _storeFilter !== 'all') {
+      if (_storeFilter === 'woolworths' && item.cheaper_store !== 'woolworths') return false;
+      if (_storeFilter === 'coles' && item.cheaper_store !== 'coles') return false;
+    }
+    return true;
+  });
+
+  // Category filter
+  if (_activeCategory !== 'All') {
+    filtered = filtered.filter(i => (i.category || '').trim() === _activeCategory);
+  }
 
   return [...filtered].sort((a, b) => {
     let av, bv;
     switch (col) {
-      case 'name':    av = a.list_item.toLowerCase(); bv = b.list_item.toLowerCase(); break;
-      case 'ww':      av = a.woolworths?.price ?? Infinity; bv = b.woolworths?.price ?? Infinity; break;
-      case 'coles':   av = a.coles?.price ?? Infinity; bv = b.coles?.price ?? Infinity; break;
-      case 'cheaper': av = a.cheaper_store ?? 'zzz'; bv = b.cheaper_store ?? 'zzz'; break;
-      case 'saving':  av = a.saving_per_item ?? -Infinity; bv = b.saving_per_item ?? -Infinity; break;
-      case 'trips':   av = a.trip_count || 0; bv = b.trip_count || 0; break;
+      case 'name':     av = a.list_item.toLowerCase(); bv = b.list_item.toLowerCase(); break;
+      case 'ww':       av = a.woolworths?.price ?? Infinity; bv = b.woolworths?.price ?? Infinity; break;
+      case 'coles':    av = a.coles?.price ?? Infinity; bv = b.coles?.price ?? Infinity; break;
+      case 'cheaper':  av = a.cheaper_store ?? 'zzz'; bv = b.cheaper_store ?? 'zzz'; break;
+      case 'saving':   av = a.saving_per_item ?? -Infinity; bv = b.saving_per_item ?? -Infinity; break;
+      case 'trips':    av = a.trip_count || 0; bv = b.trip_count || 0; break;
+      case 'priority': {
+        const pa = priorities[a.list_item] || 'monthly';
+        const pb = priorities[b.list_item] || 'monthly';
+        av = PRIORITY_ORDER[pa] ?? 99;
+        bv = PRIORITY_ORDER[pb] ?? 99;
+        break;
+      }
       case 'pct': {
         const wwA = a.woolworths?.price; const coA = a.coles?.price;
         av = (wwA != null && coA != null) ? Math.abs(wwA - coA) / Math.max(wwA, coA) : -Infinity;
@@ -841,7 +1013,7 @@ function renderPage(data) {
 
   if (daysSince(data.last_updated) > 5) $('staleBanner').classList.add('visible');
 
-  const s = data.summary;
+  const s = _activePriority !== 'all' ? computeBannerStats(data.items) : data.summary;
   const wwCard    = $('wwCard');
   const colesCard = $('colesCard');
   const wwTotalEl = $('wwTotal');
@@ -987,15 +1159,26 @@ function renderPage(data) {
     const wwClass  = cheaper === 'woolworths' ? 'cell-ww' : '';
     const coClass  = cheaper === 'coles'      ? 'cell-coles' : '';
 
+    // Priority cell
+    const priorities = loadPriorities();
+    const itemPriority = priorities[item.list_item] || 'monthly';
+    const priorityCell = `<td class="priority-cell"><select class="priority-select" data-item="${safeKey}">
+      <option value="weekly"${itemPriority === 'weekly' ? ' selected' : ''}>Weekly</option>
+      <option value="monthly"${itemPriority === 'monthly' ? ' selected' : ''}>Monthly</option>
+      <option value="rare"${itemPriority === 'rare' ? ' selected' : ''}>Rare</option>
+      <option value="archive"${itemPriority === 'archive' ? ' selected' : ''}>Archive</option>
+    </select></td>`;
+
     // Build cell map keyed by col id
     const tdMap = {
-      name:    `<td class="item-name">${itemCell}</td>`,
-      ww:      `<td class="price-cell ${wwClass}">${wwCellContent}</td>`,
-      coles:   `<td class="price-cell ${coClass}">${coCellContent}</td>`,
-      cheaper: `<td class="cheaper-cell">${badgeHtml}</td>`,
-      pct:     `<td class="pct-cell">${pctHtml}</td>`,
-      saving:  `<td><div class="saving-row">${savingHtml}${refreshBtn}</div></td>`,
-      trips:   `<td class="trips-cell">${tripsHtml}</td>`,
+      name:     `<td class="item-name">${itemCell}</td>`,
+      priority: priorityCell,
+      ww:       `<td class="price-cell ${wwClass}">${wwCellContent}</td>`,
+      coles:    `<td class="price-cell ${coClass}">${coCellContent}</td>`,
+      cheaper:  `<td class="cheaper-cell">${badgeHtml}</td>`,
+      pct:      `<td class="pct-cell">${pctHtml}</td>`,
+      saving:   `<td><div class="saving-row">${savingHtml}${refreshBtn}</div></td>`,
+      trips:    `<td class="trips-cell">${tripsHtml}</td>`,
     };
 
     tbody.insertAdjacentHTML('beforeend', `<tr>${_colOrder.map(col => tdMap[col] || '').join('')}</tr>`);
@@ -1005,13 +1188,14 @@ function renderPage(data) {
   const tfootRow = document.querySelector('tfoot tr');
   if (tfootRow) {
     const footMap = {
-      name:    `<td>Total basket</td>`,
-      ww:      `<td id="footWW">${s.ww_data_available ? fmt(s.total_woolworths) : '—'}</td>`,
-      coles:   `<td id="footColes">${fmt(s.total_coles)}</td>`,
-      cheaper: `<td></td>`,
-      pct:     `<td></td>`,
-      saving:  `<td id="footSaving">${s.ww_data_available ? `<span class="saving-cell">${fmt(s.total_saving)}</span>` : ''}</td>`,
-      trips:   `<td></td>`,
+      name:     `<td>Total basket</td>`,
+      priority: `<td></td>`,
+      ww:       `<td id="footWW">${s.ww_data_available ? fmt(s.total_woolworths) : '—'}</td>`,
+      coles:    `<td id="footColes">${fmt(s.total_coles)}</td>`,
+      cheaper:  `<td></td>`,
+      pct:      `<td></td>`,
+      saving:   `<td id="footSaving">${s.ww_data_available ? `<span class="saving-cell">${fmt(s.total_saving)}</span>` : ''}</td>`,
+      trips:    `<td></td>`,
     };
     tfootRow.innerHTML = _colOrder.map(col => footMap[col] || '<td></td>').join('');
   }
@@ -1125,7 +1309,10 @@ function initUploadModal() {
     if (fi) fi.value = '';
   };
 
-  $('importBtn')?.addEventListener('click', () => modal.classList.add('open'));
+  $('importBtn')?.addEventListener('click', () => {
+    modal.classList.add('open');
+    renderPendingItems();
+  });
   $('uploadModalClose').addEventListener('click', close);
   $('uploadCancel').addEventListener('click', close);
   modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
@@ -1152,6 +1339,30 @@ function initUploadModal() {
     btn.textContent = 'Adding items…';
     await addItemsToShoppingList(_uploadNewItems);
     close();
+  });
+}
+
+function renderPendingItems() {
+  let section = $('pendingItemsSection');
+  if (!section) return;
+  const pending = loadPending();
+  if (!pending.length) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  const list = section.querySelector('.pending-list');
+  if (!list) return;
+  list.innerHTML = '';
+  pending.forEach((p, idx) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="pending-price">${fmt(p.price)}</span> from <em>${p.from_item}</em> on ${p.date?.split('T')[0] || '?'}
+      <button class="pending-remove-btn" data-idx="${idx}">✕</button>`;
+    li.querySelector('.pending-remove-btn').addEventListener('click', () => {
+      const arr = loadPending();
+      arr.splice(idx, 1);
+      savePending(arr);
+      updateImportBadge();
+      renderPendingItems();
+    });
+    list.appendChild(li);
   });
 }
 
@@ -1309,6 +1520,8 @@ async function boot() {
   initTooltip();
   initStickyHeader();
   initUploadModal();
+  initPriorityFilter();
+  updateImportBadge();
 
   const refreshBtn = $('refreshBtn');
   if (refreshBtn) refreshBtn.addEventListener('click', triggerRefresh);
@@ -1327,7 +1540,8 @@ async function boot() {
       tbody.addEventListener('click', (e) => {
         const refreshBtn = e.target.closest('.item-refresh-btn');
         if (refreshBtn) {
-          triggerItemRefresh(refreshBtn.dataset.item, refreshBtn);
+          const ov = loadOverrides()[refreshBtn.dataset.item] || {};
+          triggerItemRefresh(refreshBtn.dataset.item, refreshBtn, { wwUrl: ov.wwUrl, colesUrl: ov.colesUrl });
           return;
         }
         const editBtn = e.target.closest('.item-edit-btn');
@@ -1343,6 +1557,17 @@ async function boot() {
           const item = _lastData.items.find(i => i.list_item === itemName);
           if (item) openPriceHistoryModal(item);
           return;
+        }
+      });
+
+      // Priority dropdown changes
+      tbody.addEventListener('change', (e) => {
+        const sel = e.target.closest('.priority-select');
+        if (sel) {
+          const p = loadPriorities();
+          p[sel.dataset.item] = sel.value;
+          savePriorities(p);
+          if (_lastData) renderPage(_lastData);
         }
       });
     }

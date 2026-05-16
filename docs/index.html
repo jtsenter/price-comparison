@@ -76,6 +76,23 @@
     </div>
   </div>
 
+  <!-- Priority / filter bar -->
+  <div id="priorityFilter" class="priority-filter">
+    <div class="priority-pills">
+      <button class="priority-pill active" data-priority="all">All</button>
+      <button class="priority-pill" data-priority="weekly">Weekly</button>
+      <button class="priority-pill" data-priority="monthly">Monthly</button>
+      <button class="priority-pill" data-priority="rare">Rare</button>
+      <button class="priority-pill" data-priority="archive">Archive</button>
+      <button class="priority-pill fire-pill" id="hotFilterBtn">🔥 Hot Deals</button>
+    </div>
+    <div class="store-filter" id="storeFilter" style="display:none">
+      <button class="store-filter-btn active" data-store="all">All Stores</button>
+      <button class="store-filter-btn" data-store="woolworths"><span class="store-chip ww sm">W</span> WW</button>
+      <button class="store-filter-btn" data-store="coles"><span class="store-chip coles sm">C</span> Coles</button>
+    </div>
+  </div>
+
   <!-- Category filter tabs -->
   <div id="categoryTabs" class="category-tabs"></div>
 
@@ -197,6 +214,10 @@
       <div class="upload-icon">📂</div>
       <div>Drop .xlsx file here or <label class="upload-browse-label" for="uploadFile">browse</label></div>
       <input type="file" id="uploadFile" accept=".xlsx,.xls" style="display:none" />
+    </div>
+    <div id="pendingItemsSection" style="display:none">
+      <div class="upload-preview-title">Prices marked as "different item" — rename and add to your list:</div>
+      <ul class="pending-list upload-preview-list"></ul>
     </div>
     <div id="uploadPreview" style="display:none">
       <div class="upload-preview-title" id="uploadPreviewTitle"></div>

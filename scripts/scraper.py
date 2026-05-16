@@ -168,6 +168,48 @@ async def search_woolworths(page, query: str) -> list[dict]:
         return []
 
 
+async def fetch_ww_by_url(page, url: str) -> dict | None:
+    """Fetch a single WW product directly by URL (faster than search)."""
+    try:
+        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+        await page.wait_for_timeout(1500)
+        next_data = await page.evaluate("""
+            () => {
+                const el = document.getElementById('__NEXT_DATA__');
+                if (!el) return null;
+                try { return JSON.parse(el.textContent); } catch { return null; }
+            }
+        """)
+        if next_data:
+            pp = next_data.get("props", {}).get("pageProps", {})
+            product = pp.get("product") or pp.get("Product")
+            if product:
+                name = product.get("Name", "")
+                price = product.get("Price")
+                cup_price = product.get("CupPrice")
+                cup_string = product.get("CupString", "")
+                stockcode = product.get("Stockcode")
+                url_name = product.get("UrlFriendlyName", "")
+                if name and price is not None:
+                    _, unit = parse_unit_price(cup_string)
+                    product_url = (
+                        f"{WOOLWORTHS_BASE}/shop/productdetails/{stockcode}/{url_name}"
+                        if stockcode else url
+                    )
+                    return {
+                        "name": name,
+                        "price": float(price),
+                        "unit_price": float(cup_price) if cup_price is not None else None,
+                        "unit": unit,
+                        "url": product_url,
+                        "image_url": product.get("LargeImageFile") or product.get("MediumImageFile") or "",
+                    }
+        print(f"  [WW] __NEXT_DATA__ product not found for: {url}")
+    except Exception as e:
+        print(f"  [WW] Exception fetching URL {url}: {e}")
+    return None
+
+
 # ---------------------------------------------------------------------------
 # Coles
 # ---------------------------------------------------------------------------
@@ -250,6 +292,58 @@ async def search_coles(page, query: str) -> list[dict]:
         return []
 
 
+COLES_PRODUCT_PAGE_JS = """
+() => {
+    let name = '';
+    for (const s of ['h1[class*="product-title"]','h1[class*="heading"]','[data-testid="product-name"]','h1']) {
+        const el = document.querySelector(s);
+        if (el?.textContent?.trim()) { name = el.textContent.trim(); break; }
+    }
+    let priceText = '';
+    for (const s of ['[data-testid="product-pricing"]','[class*="price__value"]','[class*="product-price"]','[class*="Price"]']) {
+        const el = document.querySelector(s);
+        if (el?.textContent?.match(/\\$/)) { priceText = el.textContent.trim(); break; }
+    }
+    let unitPriceText = '';
+    for (const s of ['[class*="unit-price"]','[class*="price__per"]','[class*="pricePerUnit"]','[data-testid*="unit"]']) {
+        const el = document.querySelector(s);
+        if (el?.textContent?.trim()) { unitPriceText = el.textContent.trim(); break; }
+    }
+    let imageUrl = '';
+    const imgEl = document.querySelector('[class*="product-image"] img, img[alt][src*="coles"]');
+    if (imgEl) {
+        const src = imgEl.getAttribute('src') || imgEl.getAttribute('data-src') || '';
+        if (src && !src.startsWith('data:') && src.length > 20) imageUrl = src;
+    }
+    return { name, price_text: priceText, unit_price_text: unitPriceText, image_url: imageUrl };
+}
+"""
+
+
+async def fetch_coles_by_url(page, url: str) -> dict | None:
+    """Fetch a single Coles product directly by URL (faster than search)."""
+    try:
+        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
+        await page.wait_for_timeout(3000)
+        raw = await page.evaluate(COLES_PRODUCT_PAGE_JS)
+        name = raw.get("name", "")
+        price = parse_price(raw.get("price_text", ""))
+        unit_price, unit = parse_unit_price(raw.get("unit_price_text", ""))
+        if name and price:
+            return {
+                "name": name,
+                "price": price,
+                "unit_price": unit_price,
+                "unit": unit,
+                "url": url,
+                "image_url": raw.get("image_url", ""),
+            }
+        print(f"  [Coles] Could not extract product (name={name!r}, price={price}) from: {url}")
+    except Exception as e:
+        print(f"  [Coles] Exception fetching URL {url}: {e}")
+    return None
+
+
 # ---------------------------------------------------------------------------
 # Alternatives
 # ---------------------------------------------------------------------------
@@ -326,12 +420,12 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
 # Main scrape loop
 # ---------------------------------------------------------------------------
 
-async def scrape(trigger: str = "scheduled", single_item: str = ""):
+async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str = "", coles_url: str = ""):
     purchase_history = get_purchase_history(EXCEL_PATH)
 
     if single_item:
         shopping_list = [single_item]
-        print(f"Single-item refresh: {single_item}")
+        print(f"Single-item refresh: {single_item}" + (f" [WW URL]" if ww_url else "") + (f" [Coles URL]" if coles_url else ""))
     else:
         shopping_list = sorted(purchase_history.keys())
         print(f"Active shopping list: {len(shopping_list)} items")
@@ -340,6 +434,13 @@ async def scrape(trigger: str = "scheduled", single_item: str = ""):
 
     items_output = []
     not_found = []
+
+    # Load existing data for single-item partial updates (keep other store's data)
+    latest_path = os.path.join(DATA_DIR, "latest.json")
+    existing_data = {}
+    if single_item and (ww_url or coles_url) and os.path.exists(latest_path):
+        with open(latest_path) as f:
+            existing_data = json.load(f)
 
     async with async_playwright() as pw:
         browser = await pw.chromium.launch(
@@ -362,10 +463,16 @@ async def scrape(trigger: str = "scheduled", single_item: str = ""):
         ww_page = await context.new_page()
         coles_page = await context.new_page()
 
-        await ww_page.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=30000)
-        await delay()
-        await coles_page.goto(COLES_BASE, wait_until="domcontentloaded", timeout=30000)
-        await delay()
+        # Only visit homepages for stores we'll actually scrape (saves time for single-URL updates)
+        need_ww = not (single_item and coles_url and not ww_url)
+        need_coles = not (single_item and ww_url and not coles_url)
+
+        if need_ww:
+            await ww_page.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=30000)
+            await delay()
+        if need_coles:
+            await coles_page.goto(COLES_BASE, wait_until="domcontentloaded", timeout=30000)
+            await delay()
 
         total = len(shopping_list)
         for i, item in enumerate(shopping_list, 1):
@@ -373,15 +480,55 @@ async def scrape(trigger: str = "scheduled", single_item: str = ""):
             category = guess_category(item)
             history = purchase_history.get(item, {})
 
-            # Search both stores in parallel
-            ww_results, coles_results = await asyncio.gather(
-                search_woolworths(ww_page, item),
-                search_coles(coles_page, item),
-            )
-            await delay()
+            # Determine fetch strategy
+            if single_item and (ww_url or coles_url):
+                existing_item = next((ex for ex in existing_data.get("items", []) if ex["list_item"] == item), {})
 
-            ww_match = ww_results[0] if ww_results else None
-            coles_match = coles_results[0] if coles_results else None
+                if ww_url and not coles_url:
+                    # Fetch WW by URL only; keep existing Coles data
+                    print(f"  Fetching WW by URL: {ww_url}")
+                    ww_match = await fetch_ww_by_url(ww_page, ww_url)
+                    if not ww_match:
+                        print("  URL fetch failed, falling back to name search")
+                        res = await search_woolworths(ww_page, item)
+                        ww_match = res[0] if res else None
+                    coles_match = existing_item.get("coles")
+
+                elif coles_url and not ww_url:
+                    # Fetch Coles by URL only; keep existing WW data
+                    print(f"  Fetching Coles by URL: {coles_url}")
+                    coles_match = await fetch_coles_by_url(coles_page, coles_url)
+                    if not coles_match:
+                        print("  URL fetch failed, falling back to name search")
+                        res = await search_coles(coles_page, item)
+                        coles_match = res[0] if res else None
+                    ww_match = existing_item.get("woolworths")
+
+                else:
+                    # Both URLs provided
+                    print(f"  Fetching WW by URL: {ww_url}")
+                    ww_match = await fetch_ww_by_url(ww_page, ww_url)
+                    if not ww_match:
+                        res = await search_woolworths(ww_page, item)
+                        ww_match = res[0] if res else None
+                    print(f"  Fetching Coles by URL: {coles_url}")
+                    coles_match = await fetch_coles_by_url(coles_page, coles_url)
+                    if not coles_match:
+                        res = await search_coles(coles_page, item)
+                        coles_match = res[0] if res else None
+
+                ww_results = [ww_match] if ww_match else []
+                coles_results = [coles_match] if coles_match else []
+
+            else:
+                # Normal: search both stores by name in parallel
+                ww_results, coles_results = await asyncio.gather(
+                    search_woolworths(ww_page, item),
+                    search_coles(coles_page, item),
+                )
+                await delay()
+                ww_match = ww_results[0] if ww_results else None
+                coles_match = coles_results[0] if coles_results else None
 
             if not ww_match and not coles_match:
                 not_found.append(item)
@@ -463,4 +610,6 @@ async def scrape(trigger: str = "scheduled", single_item: str = ""):
 if __name__ == "__main__":
     trigger = sys.argv[1] if len(sys.argv) > 1 else "manual"
     single_item = sys.argv[2].strip() if len(sys.argv) > 2 else ""
-    asyncio.run(scrape(trigger, single_item=single_item))
+    ww_url = sys.argv[3].strip() if len(sys.argv) > 3 else ""
+    coles_url = sys.argv[4].strip() if len(sys.argv) > 4 else ""
+    asyncio.run(scrape(trigger, single_item=single_item, ww_url=ww_url, coles_url=coles_url))
