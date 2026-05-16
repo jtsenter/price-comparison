@@ -1,5 +1,4 @@
 import pandas as pd
-from datetime import datetime, timedelta
 from thefuzz import fuzz
 import json
 import os
@@ -13,7 +12,6 @@ KNOWN_NAME_CHANGES = {
     "Eat Later Hass Avocado": "Hass Avocado",
     "Hass Avocado": "Hass Avocado",
     "Radish Fresh": "Fresh Radish Bunch",
-    "Woolworths Natural Greek Style Yoghurt": "Woolworths Greek Style Yoghurt",
     "Woolworths Short Cut Bacon": "Woolworths Shortcut Bacon",
     "Corn Sweet": "Woolworths Corn Sweet",
 }
@@ -24,21 +22,17 @@ FUZZY_THRESHOLD = 85
 def clean_name(name: str) -> str:
     if not isinstance(name, str):
         return ""
-    name = name.strip()
-    # Strip trailing NULL artifacts
-    name = name.replace(" NULL", "").replace("NULL", "").strip()
+    name = name.strip().replace(" NULL", "").replace("NULL", "").strip()
     return KNOWN_NAME_CHANGES.get(name, name)
 
 
 def detect_fuzzy_changes(items: list[str], flag_path: str) -> dict:
-    """Find pairs of items that are likely the same product under different names."""
     flagged = {}
     for i, a in enumerate(items):
-        for b in items[i + 1 :]:
+        for b in items[i + 1:]:
             score = fuzz.token_sort_ratio(a, b)
             if score >= FUZZY_THRESHOLD and a != b:
-                key = f"{a} → {b}"
-                flagged[key] = score
+                flagged[f"{a} → {b}"] = score
     if flagged:
         with open(flag_path, "w") as f:
             json.dump(flagged, f, indent=2)
@@ -47,24 +41,47 @@ def detect_fuzzy_changes(items: list[str], flag_path: str) -> dict:
     return flagged
 
 
-def get_active_shopping_list(excel_path: str, days_window: int = 90) -> list[str]:
+def get_purchase_history(excel_path: str, min_trips: int = 4) -> dict:
+    """
+    Returns {item_name: {trip_count, price_history: [{date, price}]}}
+    for items bought in at least min_trips distinct shopping dates.
+    """
     df = pd.read_excel(excel_path, sheet_name="Data")
     df["Item"] = df["Item"].apply(clean_name)
     df = df[df["Item"] != ""]
     df["Date"] = pd.to_datetime(df["Date"])
 
-    cutoff = datetime.now() - timedelta(days=days_window)
-    recent = df[df["Date"] >= cutoff]
+    trip_counts = df.groupby("Item")["Date"].nunique()
+    frequent = trip_counts[trip_counts >= min_trips].index
+    df_freq = df[df["Item"].isin(frequent)]
 
-    active_items = sorted(recent["Item"].unique().tolist())
-    return active_items
+    result = {}
+    for item, grp in df_freq.groupby("Item"):
+        grp_sorted = grp.sort_values("Date")
+        prices = []
+        for _, row in grp_sorted.iterrows():
+            val = row.get("Unit price")
+            if pd.notna(val) and float(val) > 0:
+                prices.append({
+                    "date": row["Date"].strftime("%Y-%m-%d"),
+                    "price": round(float(val), 2),
+                })
+        result[item] = {
+            "trip_count": int(trip_counts[item]),
+            "price_history": prices,
+        }
+    return result
+
+
+def get_active_shopping_list(excel_path: str, min_trips: int = 4) -> list[str]:
+    return sorted(get_purchase_history(excel_path, min_trips).keys())
 
 
 if __name__ == "__main__":
     import sys
-
     path = sys.argv[1] if len(sys.argv) > 1 else "shopping_list.xlsx"
-    items = get_active_shopping_list(path)
-    print(f"{len(items)} active items:")
-    for item in items:
-        print(f"  - {item}")
+    min_trips = int(sys.argv[2]) if len(sys.argv) > 2 else 4
+    history = get_purchase_history(path, min_trips)
+    print(f"{len(history)} items bought in {min_trips}+ trips:")
+    for item, data in sorted(history.items(), key=lambda x: -x[1]["trip_count"]):
+        print(f"  {data['trip_count']:3}×  {item}")
