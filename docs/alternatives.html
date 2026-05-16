@@ -3,63 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cheaper Alternatives — Price Comparison</title>
+  <title>Best Deals — PriceWatch</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <header>
-  <div class="header-left">
-    <span class="logo">🛒 <span>Price</span>Watch</span>
-    <nav>
-      <a href="index.html">Shopping List</a>
-      <a href="alternatives.html" class="active">Cheaper Alternatives</a>
-    </nav>
-  </div>
-  <div class="header-right">
-    <button class="btn btn-ghost" id="settingsBtn">⚙ Settings</button>
-    <button class="btn btn-primary" id="refreshBtn">↻ Refresh Now</button>
+  <div class="header-inner">
+    <div class="header-left">
+      <a href="index.html" class="brand">
+        <span class="store-chip ww">W</span>
+        <span class="store-chip coles">C</span>
+        <span class="brand-name">PriceWatch</span>
+      </a>
+      <nav>
+        <a href="index.html">My Shopping List</a>
+        <a href="alternatives.html" class="active">Best Deals</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-ghost" id="settingsBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Auto-update Setup
+      </button>
+      <button class="btn btn-primary" id="refreshBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Update Prices
+      </button>
+    </div>
   </div>
 </header>
 
 <main>
-  <div id="loading" class="loading-message">Loading alternatives…</div>
+  <div id="loading" class="loading-message">
+    <div class="loading-spinner"></div>
+    Loading best deals…
+  </div>
 
-  <div id="altHeader" style="display:none; margin-bottom: 20px;">
-    <p style="color: var(--gray-600); font-size: 13px;" id="altSubtitle"></p>
+  <div id="altHeader" style="display:none; margin-bottom:20px;">
+    <h1 class="page-title">Best Deals</h1>
+    <p class="page-subtitle" id="altSubtitle"></p>
   </div>
 
   <div id="altGrid" class="alt-grid"></div>
 
-  <div id="noAlts" style="display:none; text-align:center; padding:60px 20px; color:var(--gray-400);">
-    No cheaper alternatives found — your matched products are already the best value.
+  <div id="noAlts" style="display:none" class="empty-state">
+    <div class="empty-icon">✓</div>
+    <div class="empty-title">Your list already has the best value</div>
+    <div class="empty-subtitle">No cheaper per-unit alternatives were found for any item.</div>
   </div>
 </main>
 
-<!-- Settings modal (same as index) -->
+<!-- Settings modal -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal">
     <button class="modal-close" id="modalClose">✕</button>
-    <h2>⚙ Settings</h2>
+    <h2>Auto-update Setup</h2>
     <p>
-      Enter your GitHub details to enable the <strong>Refresh Now</strong> button.
-      Your token is stored only in this browser — it is never sent anywhere except GitHub's API.
+      Enter your GitHub details so the <strong>Update Prices</strong> button can trigger a fresh scrape.
+      Your token is saved only in this browser and is never sent anywhere except GitHub.
     </p>
     <div class="form-group">
       <label>GitHub Username</label>
-      <input type="text" id="ghUser" placeholder="your-username" />
+      <input type="text" id="ghUser" placeholder="e.g. jtsenter" />
     </div>
     <div class="form-group">
       <label>Repository Name</label>
       <input type="text" id="ghRepo" placeholder="price-comparison" />
     </div>
     <div class="form-group">
-      <label>Personal Access Token (needs <code>actions:write</code>)</label>
+      <label>Personal Access Token <span class="label-hint">(needs <code>actions:write</code> scope)</span></label>
       <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxx" />
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="modalCancel">Cancel</button>
-      <button class="btn btn-primary" id="modalSave">Save</button>
+      <button class="btn btn-primary" id="modalSave">Save Settings</button>
     </div>
   </div>
 </div>
