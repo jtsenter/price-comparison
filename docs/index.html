@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Price Comparison — Woolworths vs Coles</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <span class="logo">🛒 <span>Price</span>Watch</span>
+    <nav>
+      <a href="index.html" class="active">Shopping List</a>
+      <a href="alternatives.html">Cheaper Alternatives</a>
+    </nav>
+  </div>
+  <div class="header-right">
+    <button class="btn btn-ghost" id="settingsBtn">⚙ Settings</button>
+    <button class="btn btn-primary" id="refreshBtn">↻ Refresh Now</button>
+  </div>
+</header>
+
+<main>
+  <div class="stale-banner" id="staleBanner">
+    ⚠️ Price data is more than 5 days old — the last automated refresh may have failed. Click <strong>Refresh Now</strong> to update.
+  </div>
+
+  <div class="name-changes-notice" id="nameChangesNotice"></div>
+
+  <div id="banner" class="banner" style="display:none">
+    <div>
+      <div class="banner-winner" id="winnerText"></div>
+      <div class="last-updated" id="lastUpdated"></div>
+    </div>
+    <div class="banner-totals">
+      <div class="store-total">
+        <div class="label">Woolworths</div>
+        <div class="amount ww" id="wwTotal">—</div>
+      </div>
+      <div class="store-total">
+        <div class="label">vs Coles</div>
+        <div class="amount coles" id="colesTotal">—</div>
+      </div>
+      <div class="store-total">
+        <div class="label">You save</div>
+        <div class="amount" id="savingAmount">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="loading" class="loading-message">Loading price data…</div>
+
+  <div id="tableContainer" style="display:none">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Woolworths</th>
+            <th>Coles</th>
+            <th style="text-align:center">Cheaper</th>
+            <th>Saving</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+        <tfoot>
+          <tr class="tfoot-row">
+            <td>Total</td>
+            <td id="footWW"></td>
+            <td id="footColes"></td>
+            <td></td>
+            <td id="footSaving"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <div id="notFoundSection" class="not-found-section" style="display:none">
+    <h3>Not found on either store</h3>
+    <ul class="not-found-list" id="notFoundList"></ul>
+  </div>
+</main>
+
+<!-- Settings modal -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <h2>⚙ Settings</h2>
+    <p>
+      Enter your GitHub details to enable the <strong>Refresh Now</strong> button.
+      Your token is stored only in this browser — it is never sent anywhere except GitHub's API.
+    </p>
+    <div class="form-group">
+      <label>GitHub Username</label>
+      <input type="text" id="ghUser" placeholder="your-username" />
+    </div>
+    <div class="form-group">
+      <label>Repository Name</label>
+      <input type="text" id="ghRepo" placeholder="price-comparison" />
+    </div>
+    <div class="form-group">
+      <label>Personal Access Token (needs <code>actions:write</code>)</label>
+      <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxx" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="modalCancel">Cancel</button>
+      <button class="btn btn-primary" id="modalSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

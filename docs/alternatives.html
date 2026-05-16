@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cheaper Alternatives — Price Comparison</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <span class="logo">🛒 <span>Price</span>Watch</span>
+    <nav>
+      <a href="index.html">Shopping List</a>
+      <a href="alternatives.html" class="active">Cheaper Alternatives</a>
+    </nav>
+  </div>
+  <div class="header-right">
+    <button class="btn btn-ghost" id="settingsBtn">⚙ Settings</button>
+    <button class="btn btn-primary" id="refreshBtn">↻ Refresh Now</button>
+  </div>
+</header>
+
+<main>
+  <div id="loading" class="loading-message">Loading alternatives…</div>
+
+  <div id="altHeader" style="display:none; margin-bottom: 20px;">
+    <p style="color: var(--gray-600); font-size: 13px;" id="altSubtitle"></p>
+  </div>
+
+  <div id="altGrid" class="alt-grid"></div>
+
+  <div id="noAlts" style="display:none; text-align:center; padding:60px 20px; color:var(--gray-400);">
+    No cheaper alternatives found — your matched products are already the best value.
+  </div>
+</main>
+
+<!-- Settings modal (same as index) -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <h2>⚙ Settings</h2>
+    <p>
+      Enter your GitHub details to enable the <strong>Refresh Now</strong> button.
+      Your token is stored only in this browser — it is never sent anywhere except GitHub's API.
+    </p>
+    <div class="form-group">
+      <label>GitHub Username</label>
+      <input type="text" id="ghUser" placeholder="your-username" />
+    </div>
+    <div class="form-group">
+      <label>Repository Name</label>
+      <input type="text" id="ghRepo" placeholder="price-comparison" />
+    </div>
+    <div class="form-group">
+      <label>Personal Access Token (needs <code>actions:write</code>)</label>
+      <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxx" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="modalCancel">Cancel</button>
+      <button class="btn btn-primary" id="modalSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
