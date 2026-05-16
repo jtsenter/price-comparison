@@ -2,6 +2,7 @@ name: Scrape Prices
 
 on:
   schedule:
+    # Mon and Thu at 8am AEST (22:00 UTC Sun/Wed)
     - cron: '0 22 * * 0,3'
   workflow_dispatch:
     inputs:
@@ -43,4 +44,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/data/
           git diff --staged --quiet || git commit -m "chore: update prices $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git pull --rebase origin main
           git push
