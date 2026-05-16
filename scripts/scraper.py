@@ -317,9 +317,9 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
             subprocess.run(["git", "commit", "-m", f"progress: {done}/{total} items scraped"], cwd=REPO_ROOT, check=False, capture_output=True)
             subprocess.run(["git", "pull", "--rebase", "origin", "main"], cwd=REPO_ROOT, check=False, capture_output=True)
             subprocess.run(["git", "push"], cwd=REPO_ROOT, check=False, capture_output=True)
-            print(f"  → Pushed progress ({done}/{total})")
+            print(f"  -> Pushed progress ({done}/{total})")
     except Exception as e:
-        print(f"  → Progress push skipped: {e}")
+        print(f"  -> Progress push skipped: {e}")
 
 
 # ---------------------------------------------------------------------------
