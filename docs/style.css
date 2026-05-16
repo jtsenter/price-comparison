@@ -190,6 +190,8 @@ td { padding: 11px 14px; vertical-align: middle; }
 .price-cell { white-space: nowrap; }
 .price-main { font-weight: 600; font-size: 15px; }
 .price-unit { font-size: 11px; color: var(--gray-400); }
+.price-link { color: inherit; text-decoration: none; }
+.price-link:hover { text-decoration: underline; color: var(--green); }
 
 .cheaper-cell { text-align: center; }
 .cheaper-badge {
