@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-17T02:27:09.348994+00:00",
+  "last_updated": "2026-05-17T02:28:45.778403+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2888,20 +2888,585 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "Hedy's Fresh Quiche Lorraine Chilled Meal",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 10.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 10.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 10.5
+        },
+        {
+          "date": "2025-07-26",
+          "price": 14.5
+        },
+        {
+          "date": "2026-02-07",
+          "price": 11.0
+        }
+      ],
+      "category": "Other",
+      "woolworths": {
+        "name": "Hedy's Fresh Quiche Lorraine Chilled Meal",
+        "price": 14.5,
+        "unit_price": 1.32,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/162880/hedy-s-fresh-quiche-lorraine-chilled-meal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/162880.jpg"
+      },
+      "coles": {
+        "name": "Hedys Quiche Lorraine | 1.1kg",
+        "price": 14.5,
+        "unit_price": 14.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/hedys-quiche-lorraine-1.1kg-7388070",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7388070.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Hedy's Fresh Quiche Spinach & Feta Chilled Meal",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 10.5
+        },
+        {
+          "date": "2025-05-29",
+          "price": 14.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 14.5
+        },
+        {
+          "date": "2025-07-03",
+          "price": 14.5
+        },
+        {
+          "date": "2026-02-11",
+          "price": 14.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Hedy's Fresh Quiche Spinach & Feta Chilled Meal",
+        "price": 14.5,
+        "unit_price": 1.32,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/669044/hedy-s-fresh-quiche-spinach-feta-chilled-meal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/669044.jpg"
+      },
+      "coles": {
+        "name": "Hedys Quiche Spinach Parmesan | 1.1kg",
+        "price": 14.5,
+        "unit_price": 14.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/hedys-quiche-spinach-parmesan-1.1kg-2904648",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2904648.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Helga's Wholemeal Bread With Grains",
+      "trip_count": 15,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 5.0
+        },
+        {
+          "date": "2024-11-12",
+          "price": 5.0
+        },
+        {
+          "date": "2024-12-02",
+          "price": 5.0
+        },
+        {
+          "date": "2025-02-02",
+          "price": 5.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 5.0
+        },
+        {
+          "date": "2025-04-05",
+          "price": 5.0
+        },
+        {
+          "date": "2025-04-25",
+          "price": 5.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.0
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.0
+        },
+        {
+          "date": "2025-06-21",
+          "price": 5.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 5.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 5.0
+        },
+        {
+          "date": "2026-04-13",
+          "price": 5.2
+        },
+        {
+          "date": "2026-04-21",
+          "price": 5.2
+        },
+        {
+          "date": "2026-04-29",
+          "price": 5.2
+        }
+      ],
+      "category": "Bread & Bakery",
+      "woolworths": null,
+      "coles": {
+        "name": "Helga's Traditional Wholemeal Bread | 750g",
+        "price": 5.2,
+        "unit_price": 5.2,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/helga's-traditional-wholemeal-bread-750g-5969435",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5969435.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Helga's Health Plus Protein Wholemeal | 700g",
+          "price": 4.9,
+          "unit_price": 0.7,
+          "unit": "100g | Was $5.90",
+          "url": "https://www.coles.com.au/product/helga's-health-plus-protein-wholemeal-700g-1089906",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1089906.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Helgas Mini Loaf Traditional Wholemeal | 360g",
+          "price": 4.3,
+          "unit_price": 4.3,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/helgas-mini-loaf-traditional-wholemeal-360g-3860887",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3860887.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Hellmann's Real Mayonnaise Squeeze",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-06-06",
+          "price": 8.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 8.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 8.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Hellmann's Real Mayonnaise Squeeze",
+        "price": 8.0,
+        "unit_price": 2.0,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/529030/hellmann-s-real-mayonnaise-squeeze",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/529030.jpg"
+      },
+      "coles": {
+        "name": "Hellmann's Squeeze Real Mayonnaise | 400g",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/hellmann's-squeeze-real-mayonnaise-400g-3025755",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3025755.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Ingham's Turkey Breast Shaved From The Deli",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2026-02-03",
+          "price": 30.0
+        },
+        {
+          "date": "2026-02-07",
+          "price": 27.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 30.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Ingham's Turkey Breast Shaved From The Deli",
+        "price": 30.0,
+        "unit_price": 30.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/27316/ingham-s-turkey-breast-shaved-from-the-deli",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/027316.jpg"
+      },
+      "coles": {
+        "name": "The Deli Shredded Turkey Breast | 150g",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/the-deli-shredded-turkey-breast-150g-1497469",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1497469.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 25.0,
+      "alternatives": [
+        {
+          "name": "Primo Sliced Turkey Breast | 80g",
+          "price": 3.95,
+          "unit_price": 3.95,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/primo-sliced-turkey-breast-80g-2814024",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2814024.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Don Deli Cuts Roast Turkey Shaved | 80g",
+          "price": 4.3,
+          "unit_price": 4.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/don-deli-cuts-roast-turkey-shaved-80g-8087578",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8087578.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "The Deli Shredded Turkey Breast | 150g",
+          "price": 5.0,
+          "unit_price": 5.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/the-deli-shredded-turkey-breast-150g-1497469",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1497469.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Jordans Simply Granola Crunchy Oat & Honey",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-22",
+          "price": 12.7
+        },
+        {
+          "date": "2025-06-06",
+          "price": 12.7
+        },
+        {
+          "date": "2025-07-10",
+          "price": 12.7
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Jordans Simply Granola Crunchy Oat & Honey",
+        "price": 12.7,
+        "unit_price": 0.85,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/147307/jordans-simply-granola-crunchy-oat-honey",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147307.jpg"
+      },
+      "coles": {
+        "name": "Jordans Simply Crunchy Oat Granola | 750g",
+        "price": 7.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/jordans-simply-crunchy-oat-granola-750g-2499255",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2499255.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 5.7,
+      "alternatives": []
+    },
+    {
+      "list_item": "Kale Fresh Bunch",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2025-01-29",
+          "price": 3.9
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.9
+        },
+        {
+          "date": "2025-04-05",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.9
+        },
+        {
+          "date": "2025-05-04",
+          "price": 3.9
+        },
+        {
+          "date": "2025-06-13",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.9
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.9
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Kale Fresh Bunch",
+        "price": 4.6,
+        "unit_price": 4.6,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/380338/kale-fresh-bunch",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/380338.jpg"
+      },
+      "coles": {
+        "name": "Coles Kale Bunch Green | 1 Each",
+        "price": 4.5,
+        "unit_price": 4.5,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-kale-bunch-green-1-each-8696598",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8696598.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.1,
+      "alternatives": [
+        {
+          "name": "Coles Kale Bunch Green | 1 Each",
+          "price": 4.5,
+          "unit_price": 4.5,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-kale-bunch-green-1-each-8696598",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8696598.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Katoomba Ingredients Red Lentils",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-03-17",
+          "price": 3.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 4.0
+        },
+        {
+          "date": "2025-04-25",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 4.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Katoomba Ingredients Red Lentils",
+        "price": 4.0,
+        "unit_price": 0.4,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/753947/katoomba-ingredients-red-lentils",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/753947.jpg"
+      },
+      "coles": {
+        "name": "Katoomba Red Lentils | 1kg",
+        "price": 3.6,
+        "unit_price": 3.6,
+        "unit": "1kg | Was $4.00",
+        "url": "https://www.coles.com.au/product/katoomba-red-lentils-1kg-4683608",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4683608.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.4,
+      "alternatives": []
+    },
+    {
+      "list_item": "Kinder Chocolate Sharepack",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 7.0
+        },
+        {
+          "date": "2025-05-04",
+          "price": 7.5
+        }
+      ],
+      "category": "Snacks & Confectionery",
+      "woolworths": {
+        "name": "Kinder Surprise Milk Chocolate Egg with Natoons Toy",
+        "price": 6.8,
+        "unit_price": 11.33,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/69021/kinder-surprise-milk-chocolate-egg-with-natoons-toy",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/069021.jpg"
+      },
+      "coles": {
+        "name": "Kinder Choc Little Ones Share Pack 16 Pack | 200g",
+        "price": 7.5,
+        "unit_price": 7.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/kinder-choc-little-ones-share-pack-16-pack-200g-2528761",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2528761.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.7,
+      "alternatives": [
+        {
+          "name": "Kinder Chocolate Treats",
+          "price": 5.5,
+          "unit_price": 2.75,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/839689/kinder-chocolate-treats",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/839689.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Kinder Chocolate Little Ones",
+          "price": 1.4,
+          "unit_price": 2.8,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/21197/kinder-chocolate-little-ones",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/021197.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Kinder Choc Little Ones Share Pack 16 Pack | 200g",
+          "price": 7.5,
+          "unit_price": 7.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/kinder-choc-little-ones-share-pack-16-pack-200g-2528761",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2528761.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "KitKat Gold Crush Block",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 4.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 5.0
+        }
+      ],
+      "category": "Snacks & Confectionery",
+      "woolworths": null,
+      "coles": {
+        "name": "KitKat Milk Chocolate Block | 160g",
+        "price": 3.5,
+        "unit_price": 2.19,
+        "unit": "100g | Was $7.50",
+        "url": "https://www.coles.com.au/product/kitkat-milk-chocolate-block-160g-5872479",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5872479.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "KitKat Cookie Dough Block Chocolate | 170g",
+          "price": 3.5,
+          "unit_price": 2.06,
+          "unit": "100g | Was $7.50",
+          "url": "https://www.coles.com.au/product/kitkat-cookie-dough-block-chocolate-170g-7524247",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7524247.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "KitKat Packed With Milo Milk Chocolate Block | 165g",
+          "price": 3.5,
+          "unit_price": 2.12,
+          "unit": "100g | Was $7.50",
+          "url": "https://www.coles.com.au/product/kitkat-packed-with-milo-milk-chocolate-block-165g-5389720",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5389720.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 217.25,
-    "total_coles": 434.51,
+    "total_woolworths": 312.35,
+    "total_coles": 507.81,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 217.26,
-    "items_compared": 50,
+    "total_saving": 195.46,
+    "items_compared": 60,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 50,
+    "done": 60,
     "total": 211
   }
 }
