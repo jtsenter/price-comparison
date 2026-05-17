@@ -122,6 +122,18 @@ let _colOrder = (() => {
   return [...DEFAULT_COL_ORDER];
 })();
 
+const DEFAULT_COL_WIDTHS = {
+  name:     340,
+  priority:  90,
+  ww:       110,
+  coles:    110,
+  cheaper:   90,
+  pct:       80,
+  saving:    95,
+  units:     80,
+  trips:     65,
+};
+
 let _colWidths = (() => {
   try { return JSON.parse(localStorage.getItem('pw_col_widths')) || {}; } catch { return {}; }
 })();
@@ -845,9 +857,9 @@ function renderTableHead() {
   if (!thead) return;
   thead.innerHTML = `<tr>${_colOrder.map(colHeadHtml).join('')}</tr>`;
 
-  // Apply stored column widths
+  // Apply stored column widths (fall back to defaults)
   thead.querySelectorAll('th[data-col]').forEach(th => {
-    const w = _colWidths[th.dataset.col];
+    const w = _colWidths[th.dataset.col] ?? DEFAULT_COL_WIDTHS[th.dataset.col];
     if (w) { th.style.width = w + 'px'; th.style.minWidth = w + 'px'; }
   });
 
@@ -1273,10 +1285,11 @@ function renderPage(data) {
       <option value="archive"${itemPriority === 'archive' ? ' selected' : ''}>Archive</option>
     </select></td>`;
 
+    const unitsDisplay = Number.isInteger(units) ? units : units.toFixed(1);
     const unitsCell = `<td class="units-cell">
       <div class="units-ctrl">
         <button class="units-dec" data-item="${safeKey}">−</button>
-        <span class="units-val">${units}</span>
+        <span class="units-val">${unitsDisplay}</span>
         <button class="units-inc" data-item="${safeKey}">+</button>
       </div>
     </td>`;
@@ -1656,10 +1669,10 @@ async function boot() {
         const incBtn = e.target.closest('.units-inc, .units-dec');
         if (incBtn) {
           const itemName = incBtn.dataset.item;
-          const delta = incBtn.classList.contains('units-inc') ? 0.5 : -0.5;
+          const delta = incBtn.classList.contains('units-inc') ? 1 : -1;
           const ov = loadUnitOverrides();
           const cur = getUnits(itemName);
-          ov[itemName] = Math.max(0.5, Math.round((cur + delta) * 2) / 2);
+          ov[itemName] = Math.max(1, Math.round(cur) + delta);
           saveUnitOverrides(ov);
           if (_lastData) renderPage(_lastData);
           return;
