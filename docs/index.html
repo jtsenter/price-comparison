@@ -19,8 +19,6 @@
       </a>
       <nav>
         <a href="index.html" class="active">My Shopping List</a>
-        <a href="alternatives.html">Best Deals</a>
-        <a href="review.html">⚠ Review</a>
         <a href="shopping-list.html" id="exportNavBtn">🛒 Shopping List</a>
       </nav>
     </div>
@@ -66,24 +64,24 @@
   <div class="bulk-divider"></div>
   <select class="bulk-select" id="bulkCategorySelect">
     <option value="">Set category…</option>
+    <option>Fruit &amp; Veg</option>
     <option>Dairy &amp; Eggs</option>
     <option>Meat &amp; Seafood</option>
-    <option>Fruit</option>
-    <option>Vegetables</option>
-    <option>Bread &amp; Bakery</option>
+    <option>Bakery</option>
+    <option>Frozen Foods</option>
     <option>Pantry</option>
-    <option>Snacks</option>
-    <option>Drinks</option>
-    <option>Frozen</option>
+    <option>Drinks &amp; Alcohol</option>
+    <option>Sweets</option>
+    <option>Personal Care</option>
     <option>Household</option>
-    <option>Other</option>
+    <option>Baby</option>
+    <option>Ready Meals</option>
   </select>
   <select class="bulk-select" id="bulkPrioritySelect">
     <option value="">Set priority…</option>
     <option value="weekly">Weekly</option>
     <option value="monthly">Monthly</option>
     <option value="rare">Rare</option>
-    <option value="archive">Archive</option>
   </select>
   <div class="bulk-divider"></div>
   <button class="bulk-btn danger" id="bulkArchiveBtn">Archive selected</button>
@@ -141,7 +139,6 @@
       <button class="priority-pill" data-priority="weekly">Weekly</button>
       <button class="priority-pill" data-priority="monthly">Monthly</button>
       <button class="priority-pill" data-priority="rare">Rare</button>
-      <button class="priority-pill" data-priority="archive">Archive</button>
       <button class="priority-pill fire-pill" id="hotFilterBtn">🔥 Hot Deals</button>
     </div>
     <div class="store-filter" id="storeFilter" style="display:none">

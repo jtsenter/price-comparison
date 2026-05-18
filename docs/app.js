@@ -86,8 +86,8 @@ function saveUnitOverrides(obj) {
 // ── Category overrides ───────────────────────────────────────────────────────
 
 const KNOWN_CATEGORIES = [
-  'Dairy & Eggs', 'Meat & Seafood', 'Fruit', 'Vegetables',
-  'Bread & Bakery', 'Pantry', 'Snacks', 'Drinks', 'Frozen', 'Household', 'Other',
+  'Fruit & Veg', 'Dairy & Eggs', 'Meat & Seafood', 'Bakery', 'Frozen Foods',
+  'Pantry', 'Drinks & Alcohol', 'Sweets', 'Personal Care', 'Household', 'Baby', 'Ready Meals',
 ];
 
 function loadCategoryOverrides() {
@@ -132,12 +132,19 @@ function getUnits(itemName) {
 // ── Category normalisation ────────────────────────────────────────────────────
 
 const CATEGORY_REMAP = {
+  // old scraper names → new names
+  'Fruit':                  'Fruit & Veg',
+  'Vegetables':             'Fruit & Veg',
+  'Bread & Bakery':         'Bakery',
+  'Frozen':                 'Frozen Foods',
+  'Snacks & Confectionery': 'Sweets',
+  'Snacks':                 'Sweets',
+  'Drinks':                 'Drinks & Alcohol',
+  'Health & Beauty':        'Personal Care',
+  // flatten sub-categories into parent
   'Spices & Herbs':         'Pantry',
   'Spreads & Dips':         'Pantry',
-  'Nuts & Seeds':           'Snacks',
-  'Snacks & Confectionery': 'Snacks',
-  'Health & Beauty':        'Household',
-  'Baby':                   'Household',
+  'Nuts & Seeds':           'Pantry',
 };
 
 function getCategory(item) {
@@ -286,8 +293,8 @@ function colHeadHtml(col) {
     case 'units':        return th('units', 'center-th', 'Qty');
     case 'category':     return th('category', '', 'Category');
     case 'last_scraped': return th('last_scraped', '', 'Last Scraped');
-    case 'ww_total':     return th('ww_total', '', 'WW Total');
-    case 'coles_total':  return th('coles_total', '', 'Coles Total');
+    case 'ww_total':     return th('ww_total', '', '<span class="store-chip ww sm">W</span> Total');
+    case 'coles_total':  return th('coles_total', '', '<span class="store-chip coles sm">C</span> Total');
     default: return '';
   }
 }
@@ -1031,6 +1038,30 @@ function initColumnResize() {
       document.addEventListener('mousemove', onMove);
       document.addEventListener('mouseup', onUp);
     });
+
+    // Double-click: auto-fit column to minimum content width
+    handle.addEventListener('dblclick', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const col = th.dataset.col;
+      if (!col) return;
+      const colIdx = [...thead.querySelectorAll('th')].indexOf(th);
+      // Remove explicit constraints so browser can measure natural width
+      th.style.width = '';
+      th.style.minWidth = '';
+      document.querySelectorAll(`#tableBody tr td:nth-child(${colIdx + 1})`).forEach(td => {
+        td.style.width = '';
+        td.style.minWidth = '';
+        td.style.maxWidth = '';
+      });
+      requestAnimationFrame(() => {
+        const measured = Math.max(40, Math.round(th.getBoundingClientRect().width));
+        _colWidths[col] = measured;
+        saveColWidths();
+        _stickyNeedsSync = true;
+        if (_stickyGhost?.style.display !== 'none') syncStickyNow();
+      });
+    });
   });
 }
 
@@ -1044,7 +1075,7 @@ function renderTableHead() {
   const thead = $('tableHead');
   if (!thead) return;
   const visibleCols = getVisibleCols();
-  thead.innerHTML = `<tr><th class="check-cell"><input type="checkbox" id="checkAll" title="Select all visible"></th>${visibleCols.map(colHeadHtml).join('')}</tr>`;
+  thead.innerHTML = `<tr><th class="check-cell"><input type="checkbox" id="checkAll" title="Select all visible"></th>${visibleCols.map(colHeadHtml).join('')}<th class="actions-th"></th></tr>`;
 
   // Apply stored column widths (fall back to defaults)
   thead.querySelectorAll('th[data-col]').forEach(th => {
@@ -1445,7 +1476,7 @@ function renderPage(data) {
       all:     { title: 'No items match', sub: 'Try clearing filters or adding items via Import.' },
     };
     const msg = emptyMessages[_activePriority] || emptyMessages.all;
-    tbody.innerHTML = `<tr><td colspan="${getVisibleCols().length + 1}"><div class="table-empty-state"><strong>${msg.title}</strong>${msg.sub}</div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="${getVisibleCols().length + 2}"><div class="table-empty-state"><strong>${msg.title}</strong>${msg.sub}</div></td></tr>`;
     $('tableContainer').style.display = 'block';
     return;
   }
@@ -1560,7 +1591,6 @@ function renderPage(data) {
       <option value="weekly"${itemPriority === 'weekly' ? ' selected' : ''}>Weekly</option>
       <option value="monthly"${itemPriority === 'monthly' ? ' selected' : ''}>Monthly</option>
       <option value="rare"${itemPriority === 'rare' ? ' selected' : ''}>Rare</option>
-      <option value="archive"${itemPriority === 'archive' ? ' selected' : ''}>Archive</option>
     </select></td>`;
 
     const unitsDisplay = Number.isInteger(units) ? units : units.toFixed(1);
@@ -1587,7 +1617,7 @@ function renderPage(data) {
       coles:        `<td class="price-cell ${coClass}">${coCellContent}</td>`,
       cheaper:      `<td class="cheaper-cell">${badgeHtml}</td>`,
       pct:          `<td class="pct-cell">${pctHtml}</td>`,
-      saving:       `<td><div class="saving-row">${savingHtml}${refreshBtn}</div></td>`,
+      saving:       `<td><div class="saving-row">${savingHtml}</div></td>`,
       trips:        `<td class="trips-cell">${tripsHtml}</td>`,
       category:     `<td style="font-size:12px;color:var(--text-mid)">${getCategory(item)}</td>`,
       last_scraped: `<td style="font-size:11px;color:var(--text-soft);white-space:nowrap">${scrapedDate}</td>`,
@@ -1601,7 +1631,7 @@ function renderPage(data) {
     const prevCo = _prevPrices[item.list_item]?.co;
     const priceChanged = (prevWw != null && prevWw !== ww?.price) || (prevCo != null && prevCo !== co?.price);
     const rowClass = isPending ? ' class="row-pending"' : (priceChanged ? ' class="row-flash"' : '');
-    tbody.insertAdjacentHTML('beforeend', `<tr${rowClass} data-item="${safeKey}"><td class="check-cell"><input type="checkbox" class="row-check" data-item="${safeKey}"${checked}></td>${getVisibleCols().map(col => tdMap[col] || '').join('')}</tr>`);
+    tbody.insertAdjacentHTML('beforeend', `<tr${rowClass} data-item="${safeKey}"><td class="check-cell"><input type="checkbox" class="row-check" data-item="${safeKey}"${checked}></td>${getVisibleCols().map(col => tdMap[col] || '').join('')}<td class="actions-cell">${refreshBtn}</td></tr>`);
 
     _prevPrices[item.list_item] = { ww: ww?.price, co: co?.price };
     if (priceChanged && _pendingRefreshItem === item.list_item) _pendingRefreshItem = null;
@@ -1625,7 +1655,7 @@ function renderPage(data) {
       ww_total:     `<td style="font-weight:700">${s.ww_data_available ? fmt(s.total_woolworths) : '—'}</td>`,
       coles_total:  `<td style="font-weight:700">${fmt(s.total_coles)}</td>`,
     };
-    tfootRow.innerHTML = getVisibleCols().map(col => footMap[col] || '<td></td>').join('');
+    tfootRow.innerHTML = getVisibleCols().map(col => footMap[col] || '<td></td>').join('') + '<td></td>';
   }
 
   $('tableContainer').style.display = 'block';
@@ -1646,68 +1676,6 @@ function renderPage(data) {
   // Signal sticky header to re-sync next scroll
   _stickyNeedsSync = true;
   onStickyScroll(); // update immediately if already scrolled past thead
-}
-
-// ── Alternatives page rendering ───────────────────────────────────────────────
-
-function renderAlternatives(data) {
-  $('loading').style.display = 'none';
-
-  if (!data?.items) {
-    $('loading').style.display = 'block';
-    $('loading').textContent = 'No price data yet. Click Update Prices to fetch prices.';
-    return;
-  }
-
-  $('altSubtitle').textContent =
-    `Last updated: ${formatDate(data.last_updated)} · cheaper per-unit alternatives for your list`;
-  $('altHeader').style.display = 'block';
-
-  const grid = $('altGrid');
-  grid.innerHTML = '';
-  let count = 0;
-
-  const sorted = [...data.items].sort((a, b) => {
-    const savA = a.alternatives?.length ? (a.woolworths?.unit_price || a.coles?.unit_price || 0) - a.alternatives[0].unit_price : 0;
-    const savB = b.alternatives?.length ? (b.woolworths?.unit_price || b.coles?.unit_price || 0) - b.alternatives[0].unit_price : 0;
-    return savB - savA;
-  });
-
-  sorted.forEach((item) => {
-    if (!item.alternatives?.length) return;
-    count++;
-    const bestMatch = item.woolworths || item.coles;
-
-    const rows = item.alternatives.map((alt) => {
-      const retailer = alt.retailer || (alt.url?.includes('woolworths') ? 'woolworths' : 'coles');
-      const storeLabel = retailer === 'woolworths' ? 'Woolworths' : 'Coles';
-      const storeClass = retailer === 'woolworths' ? 'ww' : 'coles';
-      return `
-        <div class="alt-row">
-          <div class="alt-row-left">
-            <div class="alt-row-name" title="${alt.name}">${alt.name}</div>
-            <div class="alt-row-store ${storeClass}">${storeLabel}</div>
-          </div>
-          <div class="alt-row-right">
-            <div class="alt-row-unit">${fmtUnit(alt.unit_price, alt.unit)}</div>
-            <div class="alt-row-price">${fmt(alt.price)}</div>
-            ${alt.url ? `<a class="alt-link" href="${alt.url}" target="_blank">View →</a>` : ''}
-          </div>
-        </div>`;
-    }).join('');
-
-    grid.insertAdjacentHTML('beforeend', `
-      <div class="alt-card">
-        <div class="alt-card-header">
-          <div class="your-item">Your item</div>
-          <div class="item-name">${item.list_item}</div>
-          <div class="item-price">${bestMatch ? `${fmt(bestMatch.price)} · ${fmtUnit(bestMatch.unit_price, bestMatch.unit)}` : ''}</div>
-        </div>
-        ${rows}
-      </div>`);
-  });
-
-  if (count === 0) $('noAlts').style.display = 'block';
 }
 
 // ── Name changes notice ───────────────────────────────────────────────────────
@@ -2193,11 +2161,8 @@ async function boot() {
   // Load analysis data first so priorities/units are ready before render
   await loadItemAnalysis();
   const data = await loadData();
-  const isAlt = location.pathname.endsWith('alternatives.html');
 
-  if (isAlt) {
-    renderAlternatives(data);
-  } else {
+  {
     renderPage(data);
     showNameChangesNotice();
 

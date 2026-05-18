@@ -10,39 +10,43 @@ CATEGORY_KEYWORDS = {
         "drumstick", "cutlet", "roast", "deli", "pepperoni", "scotch fillet",
         "porterhouse", "eye fillet", "chuck", "midloin",
     ],
-    "Fruit": [
+    "Fruit & Veg": [
         "banana", "apple", "mango", "strawberr", "blueberr", "raspberr",
         "avocado", "cherry", "cherries", "grape", "mandarin", "orange", "lemon",
         "lime", "kiwi", "passionfruit", "plum", "pomegranate", "watermelon",
         "date", "medjool",
-    ],
-    "Vegetables": [
         "broccoli", "cauliflower", "capsicum", "tomato", "cucumber", "zucchini",
         "mushroom", "onion", "carrot", "spinach", "kale", "asparagus", "celery",
         "pumpkin", "potato", "sweet potato", "corn", "beans", "lettuce", "cabbage",
         "radish", "eggplant", "broccolini", "spring onion", "eschallot", "beetroot",
     ],
-    "Bread & Bakery": [
+    "Bakery": [
         "bread", "wrap", "pizza base", "crispbread", "sourdough", "grain", "helga",
-        "salada",
+        "salada", "roll", "bun",
     ],
     "Pantry": [
         "pasta", "rice", "flour", "sugar", "oil", "olive oil", "sauce", "tomato paste",
         "lentil", "barley", "chickpea", "oat", "granola", "baked beans", "tuna",
         "coconut", "honey", "maple syrup", "mustard", "mayonnaise", "pesto", "salsa",
         "vinegar", "breadcrumbs", "stock cube", "couscous", "black bean", "cous cous",
+        "paprika", "cinnamon", "pepper", "garlic powder", "rosemary", "thyme",
+        "turmeric", "mixed herbs", "dill", "parsley", "citric acid", "bicarbonate",
+        "hoyt", "peanut butter", "biscoff", "hommus", "hummus", "cream cheese",
+        "philadelphia", "eggplant dip", "beetroot hommus", "obela", "wilma",
+        "walnut", "macadamia", "sunflower kernel", "pumpkin kernel", "almond", "nut",
     ],
-    "Snacks & Confectionery": [
+    "Sweets": [
         "chocolate", "chips", "biscuit", "cookie", "protein bar", "muesli bar",
         "wafer", "pringles", "snicker", "kitkat", "maltesers", "cadbury", "kinder",
-        "reese", "twisties", "chewing gum", "biscoff", "digestive", "hobnob",
+        "reese", "twisties", "chewing gum", "digestive", "hobnob",
         "balconi", "crinkle", "dutch company",
     ],
-    "Drinks": [
+    "Drinks & Alcohol": [
         "water", "coca-cola", "schweppes", "juice", "coffee", "tea", "wine",
-        "mineral water", "lemon lime", "sauvignon blanc",
+        "mineral water", "lemon lime", "sauvignon blanc", "beer", "cider",
+        "kombucha", "energy drink",
     ],
-    "Frozen": [
+    "Frozen Foods": [
         "frozen", "ice cream", "meat pies", "pizza", "ben & jerry", "bulla crunch",
         "ristorante",
     ],
@@ -54,22 +58,15 @@ CATEGORY_KEYWORDS = {
     ],
     "Baby": [
         "nappies", "formula", "baby food", "rafferty", "mum-mum", "aptamil",
-        "trainer cup", "little one",
+        "trainer cup", "little one", "munchkin",
     ],
-    "Health & Beauty": [
-        "toothbrush", "hand wash", "hand soap", "dettol", "palmolive",
+    "Personal Care": [
+        "toothbrush", "hand wash", "hand soap", "dettol", "palmolive", "toothpaste",
+        "shampoo", "conditioner", "deodorant", "sunscreen",
     ],
-    "Spreads & Dips": [
-        "peanut butter", "biscoff", "hommus", "hummus", "cream cheese", "philadelphia",
-        "eggplant dip", "beetroot hommus", "obela", "wilma",
-    ],
-    "Nuts & Seeds": [
-        "walnut", "macadamia", "sunflower kernel", "pumpkin kernel", "almond", "nut",
-    ],
-    "Spices & Herbs": [
-        "paprika", "cinnamon", "pepper", "garlic powder", "rosemary", "thyme",
-        "turmeric", "mixed herbs", "dill", "parsley", "citric acid", "bicarbonate",
-        "hoyt",
+    "Ready Meals": [
+        "meal kit", "ready meal", "instant noodle", "cup a soup", "continental cup",
+        "frozen meal", "microwave meal",
     ],
 }
 

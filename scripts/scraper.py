@@ -536,11 +536,43 @@ async def _scrape_single_item(
         ww_results = [ww_match] if ww_match else []
         coles_results = [coles_match] if coles_match else []
     else:
-        # Name-based search (normal scrape)
-        ww_results, coles_results = await asyncio.gather(
-            search_with_retry(search_woolworths, ww_page, item),
-            search_with_retry(search_coles, coles_page, item),
-        )
+        # Name-based search (normal scrape) — honour url_overrides.json if present
+        overrides_path = os.path.join(DATA_DIR, "url_overrides.json")
+        _url_ov: dict = {}
+        if os.path.exists(overrides_path):
+            try:
+                with open(overrides_path) as _f:
+                    _url_ov = json.load(_f)
+            except Exception:
+                pass
+        pinned_ww  = _url_ov.get(item, {}).get("ww_url", "")
+        pinned_co  = _url_ov.get(item, {}).get("coles_url", "")
+
+        if pinned_ww or pinned_co:
+            # Fetch by pinned URL(s), fall back to search for the unpinned store
+            if pinned_ww:
+                ww_match = await fetch_ww_by_url(ww_page, pinned_ww)
+                if not ww_match:
+                    res = await search_with_retry(search_woolworths, ww_page, item)
+                    ww_match = res[0] if res else None
+            else:
+                res = await search_with_retry(search_woolworths, ww_page, item)
+                ww_match = res[0] if res else None
+            if pinned_co:
+                coles_match = await fetch_coles_by_url(coles_page, pinned_co)
+                if not coles_match:
+                    res = await search_with_retry(search_coles, coles_page, item)
+                    coles_match = res[0] if res else None
+            else:
+                res = await search_with_retry(search_coles, coles_page, item)
+                coles_match = res[0] if res else None
+            ww_results   = [ww_match]    if ww_match    else []
+            coles_results = [coles_match] if coles_match else []
+        else:
+            ww_results, coles_results = await asyncio.gather(
+                search_with_retry(search_woolworths, ww_page, item),
+                search_with_retry(search_coles, coles_page, item),
+            )
         await delay()
 
     ww_match = ww_results[0] if ww_results else None

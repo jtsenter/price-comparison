@@ -66,9 +66,9 @@ header {
   box-shadow: var(--shadow-sm);
 }
 .header-inner {
-  max-width: 1140px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 20px;
   height: 60px;
   display: flex;
   align-items: center;
@@ -143,7 +143,7 @@ nav a.active { background: var(--bg); color: var(--text); font-weight: 600; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── Main ────────────────────────────────────────────────────── */
-main { max-width: 1140px; margin: 0 auto; padding: 24px 24px 60px; }
+main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
 
 /* ── Stale / warning banners ─────────────────────────────────── */
 .stale-banner {
@@ -427,19 +427,18 @@ table { width: max-content; min-width: 100%; border-collapse: collapse; }
 /* ── Column filter button (▾ in header) */
 .col-filter-btn {
   position: absolute;
-  right: 18px; top: 50%;
+  right: 20px; top: 50%;
   transform: translateY(-50%);
-  width: 16px; height: 16px;
+  width: 20px; height: 20px;
   border: none; background: none;
-  color: var(--text-soft); font-size: 10px;
+  color: var(--text-soft); font-size: 14px;
   cursor: pointer; padding: 0; line-height: 1;
-  border-radius: 3px; opacity: 0;
-  transition: opacity 0.15s, background 0.15s;
+  border-radius: 4px; opacity: 0.35;
+  transition: opacity 0.15s, background 0.15s, color 0.15s;
   z-index: 3;
 }
-th:hover .col-filter-btn,
-th.filter-active .col-filter-btn { opacity: 1; }
-th.filter-active .col-filter-btn { color: var(--ww); }
+th:hover .col-filter-btn { opacity: 0.7; }
+th.filter-active .col-filter-btn { opacity: 1; color: var(--ww); }
 .col-filter-btn:hover { background: var(--border); color: var(--text); opacity: 1; }
 
 /* ── Column filter dropdown */
@@ -684,7 +683,9 @@ tr:hover .price-bar-manage { opacity: 1; }
 .saving-cell { font-size: 13px; color: var(--green); font-weight: 700; }
 
 /* Per-item refresh button — always in DOM, opacity toggle */
-.saving-row { display: flex; align-items: center; gap: 8px; }
+.saving-row { display: flex; align-items: center; justify-content: flex-end; }
+.actions-th { width: 44px; min-width: 44px; padding: 0 !important; }
+.actions-cell { width: 44px; min-width: 44px; padding: 0 8px !important; text-align: center; }
 .item-refresh-btn {
   width: 26px; height: 26px;
   border: 1px solid var(--border);
