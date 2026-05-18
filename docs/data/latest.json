@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:46:47.648271+00:00",
+  "last_updated": "2026-05-18T21:46:55.295158+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12924,20 +12924,164 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "Woolworths Rolled Traditional Oats",
+      "last_scraped": "2026-05-18T21:46:51.205109+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-17",
+          "price": 1.7
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.6
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Rolled Traditional Oats",
+        "price": 1.6,
+        "unit_price": 0.21,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/321220/woolworths-rolled-traditional-oats",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/321220.jpg"
+      },
+      "coles": {
+        "name": "Coles Organic Rolled Oats | 500g",
+        "price": 3.0,
+        "unit_price": 3.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-organic-rolled-oats-500g-3970820",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3970820.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.4,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Salmon Tasmanian Atlantic Fillets Skin On",
+      "last_scraped": "2026-05-18T21:46:53.651220+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 34.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 36.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets",
+        "price": 38.0,
+        "unit_price": 38.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/95171/woolworths-fresh-tasmanian-atlantic-skin-on-salmon-fillets",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/095171.jpg"
+      },
+      "coles": {
+        "name": "Coles Tasmanian Salmon Portion Skin On | 200g",
+        "price": 10.0,
+        "unit_price": 10.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portion-skin-on-200g-6400861",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6400861.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 28.0,
+      "alternatives": [
+        {
+          "name": "Coles Tasmanian Salmon Portion Skin On | 200g",
+          "price": 10.0,
+          "unit_price": 10.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portion-skin-on-200g-6400861",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6400861.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Tasmanian Salmon Portions Skin On 4 Pack | 460g",
+          "price": 19.5,
+          "unit_price": 19.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portions-skin-on-4-pack-460g-1546564",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1546564.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Tasmanian Salmon Portions Skin Off 4 Pack | 460g",
+          "price": 21.5,
+          "unit_price": 21.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portions-skin-off-4-pack-460g-3613822",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3613822.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Thyme Leaves",
+      "last_scraped": "2026-05-18T21:46:55.283103+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-07-10",
+          "price": 2.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 2.0
+        }
+      ],
+      "category": "Spices & Herbs",
+      "woolworths": {
+        "name": "Woolworths Thyme Leaves",
+        "price": 2.0,
+        "unit_price": 1.67,
+        "unit": "10G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/251228/woolworths-thyme-leaves",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251228.jpg"
+      },
+      "coles": {
+        "name": "Coles Thyme Leaves | 18g",
+        "price": 2.0,
+        "unit_price": 2.0,
+        "unit": "10g",
+        "url": "https://www.coles.com.au/product/coles-thyme-leaves-18g-8983046",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8983046.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Hoyts Thyme | 15g",
+          "price": 1.6,
+          "unit_price": 1.6,
+          "unit": "10g",
+          "url": "https://www.coles.com.au/product/hoyts-thyme-15g-286901",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F286901.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 1302.7,
-    "total_coles": 1474.76,
+    "total_woolworths": 1344.3,
+    "total_coles": 1489.76,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 172.06,
-    "items_compared": 207,
+    "total_saving": 145.46,
+    "items_compared": 210,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 207,
+    "done": 210,
     "total": 211
   }
 }
