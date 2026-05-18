@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T06:42:30.805076+00:00",
+  "last_updated": "2026-05-18T06:43:22.364805+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8862,20 +8862,636 @@
           "retailer": "woolworths"
         }
       ]
+    },
+    {
+      "list_item": "Woolworths Basa Fillets Boneless With Skin Off",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 8.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 11.0
+        },
+        {
+          "date": "2025-05-04",
+          "price": 7.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 8.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 11.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 11.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 11.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": null,
+      "coles": {
+        "name": "Coles Basa Portions Skin Off 2 Pack | 260g",
+        "price": 5.4,
+        "unit_price": 20.77,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-basa-portions-skin-off-2-pack-260g-1567000",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1567000.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Kb's Basa Fillets | 1kg",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/kb's-basa-fillets-1kg-3984460",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3984460.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Kitchen Salmon Fillets So With Creamy Garlic & Herb Sauce 2 Pack | 300g",
+          "price": 12.5,
+          "unit_price": 12.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-kitchen-salmon-fillets-so-with-creamy-garlic-and-herb-sauce-2-pack-300g-1063039",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1063039.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles RSPCA Approved Whole Boneless Chicken With Asian BBQ Rub | 1kg",
+          "price": 13.0,
+          "unit_price": 13.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-rspca-approved-whole-boneless-chicken-with-asian-bbq-rub-1kg-7353870",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7353870.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Basmati Rice",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 4.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Basmati Rice",
+        "price": 4.0,
+        "unit_price": 0.4,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/694550/woolworths-basmati-rice",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/694550.jpg"
+      },
+      "coles": {
+        "name": "Coles Basmati Rice | 5kg",
+        "price": 18.0,
+        "unit_price": 18.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-basmati-rice-5kg-9540288",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9540288.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 14.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Beef & Lamb Meatballs",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 8.0
+        },
+        {
+          "date": "2024-11-12",
+          "price": 8.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Beef & Lamb Meatballs",
+        "price": 8.0,
+        "unit_price": 20.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/764264/woolworths-beef-lamb-meatballs",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/764264.jpg"
+      },
+      "coles": {
+        "name": "Coles Beef & Pork Meatballs | 560g",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-beef-and-pork-meatballs-560g-3569447",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3569447.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "V.I.P Dog Chunkers Meatballs Lamb | 1Kg",
+          "price": 6.5,
+          "unit_price": 6.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/v.i.p-dog-chunkers-meatballs-lamb-1kg-1649159",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1649159.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Beef & Pork Meatballs | 560g",
+          "price": 8.0,
+          "unit_price": 8.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-and-pork-meatballs-560g-3569447",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3569447.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Lamb Burgers With Rosemary And Garlic 4 Pack | 400g",
+          "price": 8.5,
+          "unit_price": 8.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-lamb-burgers-with-rosemary-and-garlic-4-pack-400g-5132541",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5132541.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Beef Chuck Steak Medium",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-07-10",
+          "price": 12.4
+        },
+        {
+          "date": "2026-02-23",
+          "price": 16.0
+        },
+        {
+          "date": "2026-04-21",
+          "price": 16.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Beef Chuck Steak Medium",
+        "price": 14.4,
+        "unit_price": 18.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/675632/woolworths-beef-chuck-steak-medium",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/675632.jpg"
+      },
+      "coles": {
+        "name": "Coles Beef Chuck Casserole Steak | 1kg",
+        "price": 20.0,
+        "unit_price": 20.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-beef-chuck-casserole-steak-1kg-1773726",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1773726.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 5.6,
+      "alternatives": [
+        {
+          "name": "Coles Beef Chuck Casserole Steak | 850g",
+          "price": 17.0,
+          "unit_price": 17.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-chuck-casserole-steak-850g-6332331",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6332331.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Beef Porterhouse Steak & Butter",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-12-09",
+          "price": 15.0
+        },
+        {
+          "date": "2025-02-02",
+          "price": 15.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 16.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 16.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 16.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 15.2
+        },
+        {
+          "date": "2026-03-10",
+          "price": 18.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 18.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 15.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Beef Porterhouse Steak & Butter",
+        "price": 18.0,
+        "unit_price": 45.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/243050/woolworths-beef-porterhouse-steak-butter",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/243050.jpg"
+      },
+      "coles": {
+        "name": "Coles No Added Hormone Beef Porterhouse Steak With Thyme And Pepper Bu ... 500g",
+        "price": 22.0,
+        "unit_price": 22.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-porterhouse-steak-with-thyme-and-pepper-butter-500g-3853699",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3853699.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.0,
+      "alternatives": [
+        {
+          "name": "Coles Pork Scotch Steak With Rosemary & Honey Butter | 280g",
+          "price": 8.0,
+          "unit_price": 8.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-pork-scotch-steak-with-rosemary-and-honey-butter-280g-5886429",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5886429.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles No Added Hormone Beef Quick Cook Porterhouse Steak | 180g",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-quick-cook-porterhouse-steak-180g-3293583",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3293583.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Beef Scotch Steak With Bearnaise Butter | 265g",
+          "price": 14.5,
+          "unit_price": 14.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-scotch-steak-with-bearnaise-butter-265g-6641427",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6641427.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Black Beans",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-04-02",
+          "price": 1.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.0
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Black Beans",
+        "price": 1.0,
+        "unit_price": 2.38,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/907377/woolworths-black-beans",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/907377.jpg"
+      },
+      "coles": {
+        "name": "Coles Black Beans | 420g",
+        "price": 1.0,
+        "unit_price": 1.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3812975.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Coles Black Beans | 420g",
+          "price": 1.0,
+          "unit_price": 1.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3812975.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Carmelina Black Beans | 400 GRAM",
+          "price": 1.9,
+          "unit_price": 1.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/carmelina-black-beans-400-gram-8855589",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8855589.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Woolworths Beef & Black Bean With Rice",
+          "price": 8.0,
+          "unit_price": 2.29,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/6038388/woolworths-beef-black-bean-with-rice",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6038388.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Broccolini Bunch",
+      "trip_count": 15,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 3.0
+        },
+        {
+          "date": "2024-11-20",
+          "price": 3.7
+        },
+        {
+          "date": "2025-03-11",
+          "price": 2.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.7
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.3
+        },
+        {
+          "date": "2025-04-25",
+          "price": 3.7
+        },
+        {
+          "date": "2025-05-22",
+          "price": 3.7
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.7
+        },
+        {
+          "date": "2025-06-21",
+          "price": 3.7
+        },
+        {
+          "date": "2025-07-03",
+          "price": 3.7
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.0
+        },
+        {
+          "date": "2026-04-13",
+          "price": 3.7
+        },
+        {
+          "date": "2026-04-29",
+          "price": 3.7
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.3
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Broccolini Bunch",
+        "price": 3.7,
+        "unit_price": 3.7,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/187314/woolworths-broccolini-bunch",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/187314.jpg"
+      },
+      "coles": {
+        "name": "Coles Family Broccolini | 1 each",
+        "price": 6.5,
+        "unit_price": 6.5,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-family-broccolini-1-each-4841775",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4841775.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.8,
+      "alternatives": [
+        {
+          "name": "Coles Kitchen Broccoli Florets | 150g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-kitchen-broccoli-florets-150g-2310971",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2310971.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Kitchen Carrot & Broccoli Florets | 150g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-kitchen-carrot-and-broccoli-florets-150g-2674650",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2674650.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Butternut Pumpkin Cut",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 2.03
+        },
+        {
+          "date": "2025-04-25",
+          "price": 2.45
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Butternut Pumpkin Cut",
+        "price": 3.51,
+        "unit_price": 3.51,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/147197/woolworths-butternut-pumpkin-cut",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147197.jpg"
+      },
+      "coles": {
+        "name": "Coles Organic Butternut Pumpkin Cut | approx. 800g",
+        "price": 5.2,
+        "unit_price": 6.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-organic-butternut-pumpkin-cut-approx.-800g-3119190",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3119190.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.69,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Capsicum Green",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2026-02-23",
+          "price": 2.23
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.23
+        },
+        {
+          "date": "2026-04-21",
+          "price": 2.73
+        },
+        {
+          "date": "2026-04-29",
+          "price": 2.73
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Capsicum Green",
+        "price": 1.98,
+        "unit_price": 1.98,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/135156/woolworths-capsicum-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135156.jpg"
+      },
+      "coles": {
+        "name": "Coles Organic Capsicum Red | 400g",
+        "price": 10.9,
+        "unit_price": 10.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-organic-capsicum-red-400g-3004041",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3004041.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 8.92,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Celery Heart",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 4.0
+        },
+        {
+          "date": "2025-06-13",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 4.0
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Celery Heart",
+        "price": 4.5,
+        "unit_price": 4.5,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/748851/woolworths-celery-heart",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/748851.jpg"
+      },
+      "coles": {
+        "name": "Coles Lettuce Cos Baby Hearts | 2 Pack",
+        "price": 3.9,
+        "unit_price": 3.9,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-lettuce-cos-baby-hearts-2-pack-4646485",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4646485.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.6,
+      "alternatives": [
+        {
+          "name": "Coles Lettuce Cos Baby Hearts | 2 Pack",
+          "price": 3.9,
+          "unit_price": 3.9,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-lettuce-cos-baby-hearts-2-pack-4646485",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4646485.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Celery Bunch | 1 Each",
+          "price": 4.2,
+          "unit_price": 4.2,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-celery-bunch-1-each-4845732",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4845732.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 968.55,
-    "total_coles": 1097.31,
+    "total_woolworths": 1027.64,
+    "total_coles": 1198.21,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 128.76,
-    "items_compared": 150,
+    "total_saving": 170.57,
+    "items_compared": 160,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 150,
+    "done": 160,
     "total": 211
   }
 }
