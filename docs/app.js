@@ -93,8 +93,10 @@ function getAnalysisData(itemName) {
 
 function getPriority(itemName) {
   const p = loadPriorities()[itemName];
-  if (p) return p;
-  return getAnalysisData(itemName).priority || 'monthly';
+  if (p) return p;  // explicit user override always wins
+  const d = getAnalysisData(itemName);
+  if ((d.trip_count || 0) > 10) return 'weekly';
+  return d.priority || 'monthly';
 }
 
 function getUnits(itemName) {
@@ -123,7 +125,7 @@ let _colOrder = (() => {
 })();
 
 const DEFAULT_COL_WIDTHS = {
-  name:     340,
+  name:     300,
   priority:  90,
   ww:       110,
   coles:    110,
@@ -146,14 +148,14 @@ function colHeadHtml(col) {
   const r = '.col-resize-handle';
   switch (col) {
     case 'name':    return `<th data-col="name" class="sortable">Item <span class="sort-arrow"></span><div class="${r.slice(1)}"></div></th>`;
-    case 'ww':      return `<th data-col="ww" class="sortable"><span class="store-chip ww sm">W</span> Woolworths <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'ww':      return `<th data-col="ww" class="sortable"><span class="store-chip ww sm">W</span> WW <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     case 'coles':   return `<th data-col="coles" class="sortable"><span class="store-chip coles sm">C</span> Coles <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'cheaper': return `<th data-col="cheaper" class="sortable center-th">Best Price <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'pct':     return `<th data-col="pct" class="sortable center-th">% Cheaper <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'saving':  return `<th data-col="saving" class="sortable">You Save <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'cheaper': return `<th data-col="cheaper" class="sortable center-th">Cheaper <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'pct':     return `<th data-col="pct" class="sortable center-th">% Off <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'saving':  return `<th data-col="saving" class="sortable">Savings <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     case 'trips':    return `<th data-col="trips" class="sortable center-th">Trips <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     case 'priority': return `<th data-col="priority" class="sortable center-th">Priority <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'units':    return `<th data-col="units" class="sortable center-th">Units <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'units':    return `<th data-col="units" class="sortable center-th">Qty <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     default: return '';
   }
 }
@@ -1137,6 +1139,28 @@ function renderPage(data) {
 
   _lastData = data;
 
+  // Auto-poll progress while scraping
+  if (data.scrape_progress) {
+    if (!window._progressPollTimer) {
+      window._progressPollTimer = setInterval(async () => {
+        const fresh = await loadData();
+        if (!fresh) return;
+        if (!fresh.scrape_progress) {
+          clearInterval(window._progressPollTimer);
+          window._progressPollTimer = null;
+        }
+        if (fresh.scrape_progress?.done !== _lastData?.scrape_progress?.done || !fresh.scrape_progress) {
+          renderPage(fresh);
+        }
+      }, 20000);
+    }
+  } else {
+    if (window._progressPollTimer) {
+      clearInterval(window._progressPollTimer);
+      window._progressPollTimer = null;
+    }
+  }
+
   // Merge not-found items into the full display list (no prices for either store)
   const notFoundAsItems = (data.not_found_items || []).map(name => ({
     list_item: name,
@@ -1206,7 +1230,7 @@ function renderPage(data) {
       <div class="item-row">
         ${imgHtml}
         <div class="item-info">
-          <div class="item-title-row">${displayName}${editBtn}</div>
+          <div class="item-title-row">${displayName}${discrepancyWarning}${editBtn}</div>
           ${bar}
         </div>
       </div>`;
@@ -1261,6 +1285,13 @@ function renderPage(data) {
       const pct = Math.round(Math.abs(wwPrice - coPrice) / Math.max(wwPrice, coPrice) * 100);
       pctHtml = `<span class="${cheaper === 'woolworths' ? 'pct-ww' : 'pct-coles'}">${pct}%</span>`;
     }
+
+    const priceDiffPct = (wwPrice != null && coPrice != null)
+      ? Math.abs(wwPrice - coPrice) / Math.max(wwPrice, coPrice)
+      : 0;
+    const discrepancyWarning = priceDiffPct > 0.31
+      ? `<span class="discrepancy-warn" title="Large price difference — double check the match is correct">⚠</span>`
+      : '';
 
     // Units cell (declared before unitsSaving so it's in scope)
     const units = getUnits(item.list_item);
@@ -1403,18 +1434,25 @@ function renderAlternatives(data) {
 
 async function showNameChangesNotice() {
   const changes = await loadNameChanges();
-  if (!changes || Object.keys(changes).length === 0) return;
-  const notice = $('nameChangesNotice');
-  if (!notice) return;
+  const notifBtn = $('notifBtn');
+  const notifBadge = $('notifBadge');
+  const notifItems = $('notifItems');
+  if (!notifBtn || !changes || Object.keys(changes).length === 0) return;
   const keys = Object.keys(changes);
-  const chips = keys.map(k => `<span class="nc-item">${k}</span>`).join('');
-  notice.innerHTML = `
-    <div class="nc-header">
-      <strong>⚠ ${keys.length} item name${keys.length > 1 ? 's' : ''} may have changed</strong>
-      <button class="nc-dismiss" onclick="this.closest('.name-changes-notice').classList.remove('visible')">Dismiss</button>
-    </div>
-    <div class="nc-items">${chips}</div>`;
-  notice.classList.add('visible');
+  notifBadge.textContent = keys.length;
+  notifBtn.style.display = 'inline-flex';
+  notifItems.innerHTML = keys.map(k => `<span class="notif-item">${k}</span>`).join('');
+
+  notifBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const dd = $('notifDropdown');
+    dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+  });
+  document.addEventListener('click', () => { $('notifDropdown').style.display = 'none'; });
+  $('notifDismissAll')?.addEventListener('click', () => {
+    notifBtn.style.display = 'none';
+    $('notifDropdown').style.display = 'none';
+  });
 }
 
 // ── Mass upload ───────────────────────────────────────────────────────────────

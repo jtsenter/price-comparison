@@ -27,6 +27,10 @@
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         Import Items
       </button>
+      <button class="btn btn-ghost btn-icon" id="notifBtn" style="display:none">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-badge" id="notifBadge"></span>
+      </button>
       <button class="btn btn-ghost" id="settingsBtn">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         Auto-update Setup
@@ -39,12 +43,18 @@
   </div>
 </header>
 
+<div class="notif-dropdown" id="notifDropdown" style="display:none">
+  <div class="notif-header">
+    <strong>Item name changes detected</strong>
+    <button class="notif-dismiss-all" id="notifDismissAll">Dismiss all</button>
+  </div>
+  <div class="notif-items" id="notifItems"></div>
+</div>
+
 <main>
   <div class="stale-banner" id="staleBanner">
     ⚠️ Price data is more than 5 days old — click <strong>Update Prices</strong> to refresh.
   </div>
-
-  <div class="name-changes-notice" id="nameChangesNotice"></div>
 
   <!-- Comparison banner -->
   <div id="banner" class="comparison-banner" style="display:none">
@@ -107,11 +117,11 @@
         <thead id="tableHead">
           <tr>
             <th data-col="name" class="sortable">Item <span class="sort-arrow"></span></th>
-            <th data-col="ww" class="sortable"><span class="store-chip ww sm">W</span> Woolworths <span class="sort-arrow"></span></th>
+            <th data-col="ww" class="sortable"><span class="store-chip ww sm">W</span> WW <span class="sort-arrow"></span></th>
             <th data-col="coles" class="sortable"><span class="store-chip coles sm">C</span> Coles <span class="sort-arrow"></span></th>
-            <th data-col="cheaper" class="sortable center-th">Best Price <span class="sort-arrow"></span></th>
-            <th data-col="pct" class="sortable center-th">% Cheaper <span class="sort-arrow"></span></th>
-            <th data-col="saving" class="sortable">You Save <span class="sort-arrow"></span></th>
+            <th data-col="cheaper" class="sortable center-th">Cheaper <span class="sort-arrow"></span></th>
+            <th data-col="pct" class="sortable center-th">% Off <span class="sort-arrow"></span></th>
+            <th data-col="saving" class="sortable">Savings <span class="sort-arrow"></span></th>
             <th data-col="trips" class="sortable center-th">Trips <span class="sort-arrow"></span></th>
           </tr>
         </thead>

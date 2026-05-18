@@ -106,15 +106,15 @@ def _extract_from_next_data(next_data: dict) -> list[dict]:
 
 
 async def delay():
-    await asyncio.sleep(random.uniform(1.5, 3.0))
+    await asyncio.sleep(random.uniform(0.3, 0.8))
 
 
 async def search_woolworths(page, query: str) -> list[dict]:
     global _ww_debug_done
     url = f"{WOOLWORTHS_BASE}/shop/search/products?searchTerm={quote(query)}"
     try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
-        await page.wait_for_timeout(1000)
+        await page.goto(url, wait_until="domcontentloaded", timeout=20000)
+        await page.wait_for_timeout(600)
 
         current_url = page.url
         title = await page.title()
@@ -171,8 +171,8 @@ async def search_woolworths(page, query: str) -> list[dict]:
 async def fetch_ww_by_url(page, url: str) -> dict | None:
     """Fetch a single WW product directly by URL (faster than search)."""
     try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
-        await page.wait_for_timeout(1500)
+        await page.goto(url, wait_until="domcontentloaded", timeout=20000)
+        await page.wait_for_timeout(800)
         next_data = await page.evaluate("""
             () => {
                 const el = document.getElementById('__NEXT_DATA__');
@@ -283,10 +283,10 @@ COLES_EXTRACT_JS = """
 async def search_coles(page, query: str) -> list[dict]:
     url = f"{COLES_BASE}/search?q={quote(query)}"
     try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
-        await page.wait_for_timeout(3000)
-        await page.evaluate("window.scrollBy(0, 300)")
+        await page.goto(url, wait_until="domcontentloaded", timeout=20000)
         await page.wait_for_timeout(1500)
+        await page.evaluate("window.scrollBy(0, 300)")
+        await page.wait_for_timeout(800)
         raw = await page.evaluate(COLES_EXTRACT_JS)
         results = []
         for r in raw:
@@ -342,8 +342,8 @@ COLES_PRODUCT_PAGE_JS = """
 async def fetch_coles_by_url(page, url: str) -> dict | None:
     """Fetch a single Coles product directly by URL (faster than search)."""
     try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=30000)
-        await page.wait_for_timeout(3000)
+        await page.goto(url, wait_until="domcontentloaded", timeout=20000)
+        await page.wait_for_timeout(1500)
         raw = await page.evaluate(COLES_PRODUCT_PAGE_JS)
         name = raw.get("name", "")
         price = parse_price(raw.get("price_text", ""))
@@ -487,10 +487,10 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         need_coles = not (single_item and ww_url and not coles_url)
 
         if need_ww:
-            await ww_page.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=30000)
+            await ww_page.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=20000)
             await delay()
         if need_coles:
-            await coles_page.goto(COLES_BASE, wait_until="domcontentloaded", timeout=30000)
+            await coles_page.goto(COLES_BASE, wait_until="domcontentloaded", timeout=20000)
             await delay()
 
         total = len(shopping_list)
