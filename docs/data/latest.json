@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T06:38:12.422553+00:00",
+  "last_updated": "2026-05-18T06:39:04.218371+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5775,20 +5775,491 @@
       "cheaper_store": "coles",
       "saving_per_item": 0.08,
       "alternatives": []
+    },
+    {
+      "list_item": "Reese's Peanut Butter Cups Miniatures Milk Chocolate",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-06-06",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Reese's Peanut Butter Cups Miniatures Milk Chocolate",
+        "price": 6.0,
+        "unit_price": 4.0,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/348306/reese-s-peanut-butter-cups-miniatures-milk-chocolate",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/348306.jpg"
+      },
+      "coles": {
+        "name": "Reese's Peanut Butter Cup Miniatures | 150g",
+        "price": 5.0,
+        "unit_price": 3.33,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/reese's-peanut-butter-cup-miniatures-150g-2137470",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2137470.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.0,
+      "alternatives": [
+        {
+          "name": "M&M's Peanut Milk Chocolate Snack & Share Bag | 180g",
+          "price": 3.5,
+          "unit_price": 1.94,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/mandm's-peanut-milk-chocolate-snack-and-share-bag-180g-5258947",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5258947.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Reese's Peanut Butter Cups Milk Chocolate 2 pack | 42g",
+          "price": 3.0,
+          "unit_price": 3.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/reese's-peanut-butter-cups-milk-chocolate-2-pack-42g-2137550",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2137550.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Reese's Miniature Peanut Butter Cups Milk Chocolate Candy 1.58 kg Bulk Pack",
+          "price": 47.95,
+          "unit_price": 3.03,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/1119946981/reese-s-miniature-peanut-butter-cups-milk-chocolate-candy-1-58-kg-bulk-pack",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/1119946981.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Rexona Men 48hr Deodorant Stick Sport Defence",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-02-03",
+          "price": 5.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.5
+        }
+      ],
+      "category": "Other",
+      "woolworths": {
+        "name": "Rexona Men 48hr Deodorant Stick Sport Defence",
+        "price": 4.9,
+        "unit_price": 9.42,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/841541/rexona-men-48hr-deodorant-stick-sport-defence",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/841541.jpg"
+      },
+      "coles": {
+        "name": "Rexona Men Deodorant 48hr Stick Sport Defence | 52g",
+        "price": 5.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/rexona-men-deodorant-48hr-stick-sport-defence-52g-8448304",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8448304.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.1,
+      "alternatives": []
+    },
+    {
+      "list_item": "Sam's Pantry Caramel Brownie Low Sugar Protein Bars",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-06-06",
+          "price": 4.3
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Sam's Pantry Caramel Brownie Low Sugar Protein Bars",
+        "price": 3.0,
+        "unit_price": 1.58,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/175803/sam-s-pantry-caramel-brownie-low-sugar-protein-bars",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/175803.jpg"
+      },
+      "coles": {
+        "name": "BSc High Protein Low Carb Bar Salted Caramel | 60g",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/bsc-high-protein-low-carb-bar-salted-caramel-60g-3125840",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3125840.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.0,
+      "alternatives": [
+        {
+          "name": "Red Tractor Protein Low Sugar Granola Apple Caramel | 450g",
+          "price": 6.5,
+          "unit_price": 1.44,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/red-tractor-protein-low-sugar-granola-apple-caramel-450g-4312843",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4312843.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Sam's Pantry Chocolate Brownie with Roasted Almonds Protein Bar",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 8.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 8.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 8.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 8.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.5
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Sam's Pantry Chocolate Brownie with Roasted Almonds Protein Bar",
+        "price": 8.5,
+        "unit_price": 1.86,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/212807/sam-s-pantry-chocolate-brownie-with-roasted-almonds-protein-bar",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/212807.jpg"
+      },
+      "coles": {
+        "name": "BC Snacks Dark Chocolate Almond High Protein Bar | 40g",
+        "price": 4.0,
+        "unit_price": 4.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/bc-snacks-dark-chocolate-almond-high-protein-bar-40g-1751224",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1751224.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 4.5,
+      "alternatives": []
+    },
+    {
+      "list_item": "Sam's Pantry Granola Pink Lady Apple & Cinnamon",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2026-03-10",
+          "price": 7.6
+        },
+        {
+          "date": "2026-04-02",
+          "price": 7.6
+        },
+        {
+          "date": "2026-05-06",
+          "price": 7.6
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Sam's Pantry Granola Pink Lady Apple & Cinnamon",
+        "price": 4.5,
+        "unit_price": 0.64,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/6054860/sam-s-pantry-granola-pink-lady-apple-cinnamon",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6054860.jpg"
+      },
+      "coles": {
+        "name": "Carman's Pink Lady Apple & Blueberry Granola | 450g",
+        "price": 8.9,
+        "unit_price": 8.9,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/carman's-pink-lady-apple-and-blueberry-granola-450g-3500382",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3500382.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.4,
+      "alternatives": []
+    },
+    {
+      "list_item": "Sam's Pantry Protein Bar Caramel Peanut With Roasted Almonds 12 Pack",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 7.8
+        },
+        {
+          "date": "2025-05-12",
+          "price": 7.8
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": null,
+      "coles": {
+        "name": "Nice & Natural Protein Nut Bars Salted Caramel With Superseeds 5 Pack | 165g",
+        "price": 6.5,
+        "unit_price": 6.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/nice-and-natural-protein-nut-bars-salted-caramel-with-superseeds-5-pack-165g-2795575",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2795575.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Nature Valley Protein Bar Salted Caramel Nut | 160g",
+          "price": 3.5,
+          "unit_price": 2.19,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/nature-valley-protein-bar-salted-caramel-nut-160g-1506264",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1506264.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Carman's Protein Bars Salted Caramel Nut Butter 5 Pack | 200g",
+          "price": 5.7,
+          "unit_price": 2.85,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/carman's-protein-bars-salted-caramel-nut-butter-5-pack-200g-3387869",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3387869.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 3.0
+        },
+        {
+          "date": "2024-11-20",
+          "price": 3.0
+        },
+        {
+          "date": "2024-12-19",
+          "price": 3.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 1.8
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.0
+        },
+        {
+          "date": "2025-05-04",
+          "price": 1.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 2.0
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Schweppes Lemon Lime Bitters Soft Drink Mixer Bottle",
+        "price": 1.8,
+        "unit_price": 1.64,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/634290/schweppes-lemon-lime-bitters-soft-drink-mixer-bottle",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634290.jpg"
+      },
+      "coles": {
+        "name": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle | 1.1L",
+        "price": 1.8,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/schweppes-lemon-lime-bitters-soft-drink-classic-mixers-bottle-1.1l-3014839",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3014839.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Schweppes Lemon Lime Natural Mineral Water Bottle",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 1.8
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.8
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.8
+        },
+        {
+          "date": "2026-03-10",
+          "price": 1.5
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": null,
+      "coles": {
+        "name": "Schweppes Mineral Water Infused Lemon Lime | 1.1L",
+        "price": 1.8,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/schweppes-mineral-water-infused-lemon-lime-1.1l-1056554",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1056554.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Schweppes Orange Mango Natural Mineral Water Bottle",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 3.0
+        },
+        {
+          "date": "2025-02-28",
+          "price": 1.8
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.8
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.8
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.8
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 1.5
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Schweppes Orange Mango Natural Mineral Water Bottle",
+        "price": 1.8,
+        "unit_price": 1.64,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/634284/schweppes-orange-mango-natural-mineral-water-bottle",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634284.jpg"
+      },
+      "coles": {
+        "name": "Schweppes Orange Mango Natural Mineral Water Bottle | 1.1L",
+        "price": 1.8,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/schweppes-orange-mango-natural-mineral-water-bottle-1.1l-3014930",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3014930.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Shine Dishwashing Tablets",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 13.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 13.3
+        }
+      ],
+      "category": "Household",
+      "woolworths": {
+        "name": "Shine Dishwashing Tablets",
+        "price": 4.0,
+        "unit_price": 0.13,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/183866/shine-dishwashing-tablets",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/183866.jpg"
+      },
+      "coles": {
+        "name": "Optix Titanium Pro Dishwashing Tablets | 80PACK",
+        "price": 19.0,
+        "unit_price": 19.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/optix-titanium-pro-dishwashing-tablets-80pack-8644619",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8644619.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 15.0,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 737.64,
-    "total_coles": 786.48,
+    "total_woolworths": 772.14,
+    "total_coles": 845.28,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 48.84,
-    "items_compared": 100,
+    "total_saving": 73.14,
+    "items_compared": 110,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 100,
+    "done": 110,
     "total": 211
   }
 }
