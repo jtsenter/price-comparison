@@ -137,6 +137,15 @@
   <!-- Category filter tabs -->
   <div id="categoryTabs" class="category-tabs"></div>
 
+  <!-- Scrape progress bar -->
+  <div id="scrapeProgressBar" class="scrape-progress-bar" style="display:none">
+    <span class="scrape-progress-label" id="scrapeProgressLabel">Scraping…</span>
+    <div class="scrape-progress-track">
+      <div class="scrape-progress-fill" id="scrapeProgressFill" style="width:0%"></div>
+    </div>
+    <span class="scrape-progress-pct" id="scrapeProgressPct">0%</span>
+  </div>
+
   <div id="loading" class="loading-message">
     <div class="loading-spinner"></div>
     Loading price data…

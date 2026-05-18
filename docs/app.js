@@ -178,13 +178,13 @@ let _colOrder = (() => {
 })();
 
 const DEFAULT_COL_WIDTHS = {
-  name:     300,
+  name:     340,
   priority:  90,
   ww:        85,
   coles:     85,
   cheaper:   90,
   pct:       80,
-  saving:    95,
+  saving:   110,
   units:     80,
   trips:     65,
 };
@@ -203,10 +203,10 @@ function colHeadHtml(col) {
     case 'name':    return `<th data-col="name" class="sortable">Item <span class="sort-arrow"></span><div class="${r.slice(1)}"></div></th>`;
     case 'ww':      return `<th data-col="ww" class="sortable"><span class="store-chip ww sm">W</span> WW <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     case 'coles':   return `<th data-col="coles" class="sortable"><span class="store-chip coles sm">C</span> Coles <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'cheaper': return `<th data-col="cheaper" class="sortable center-th">Cheaper <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'pct':     return `<th data-col="pct" class="sortable center-th">% Off <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'cheaper': return `<th data-col="cheaper" class="sortable center-th">Best <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'pct':     return `<th data-col="pct" class="sortable center-th">Diff <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     case 'saving':  return `<th data-col="saving" class="sortable">Savings <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'trips':    return `<th data-col="trips" class="sortable center-th">Trips <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'trips':    return `<th data-col="trips" class="sortable center-th">Buys <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     case 'priority': return `<th data-col="priority" class="sortable center-th">Priority <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     case 'units':    return `<th data-col="units" class="sortable center-th">Qty <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     default: return '';
@@ -341,31 +341,36 @@ async function triggerItemRefresh(itemName, btn, urlOverrides) {
 }
 
 async function pollItemRefresh(s, btn, itemName) {
+  const origWw = _lastData?.items?.find(i => i.list_item === itemName)?.woolworths?.price;
+  const origCo = _lastData?.items?.find(i => i.list_item === itemName)?.coles?.price;
+
+  _pendingRefreshItem = itemName;
+  if (_lastData) renderPage(_lastData);
+
   let attempts = 0;
   const poll = async () => {
-    if (++attempts > 30) {
+    if (++attempts > 60) {
+      _pendingRefreshItem = null;
       if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
+      if (_lastData) renderPage(_lastData);
       return;
     }
     try {
-      const res = await fetch(
-        `https://api.github.com/repos/${s.user}/${s.repo}/actions/workflows/scrape.yml/runs?per_page=1`,
-        { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
-      );
-      const data = await res.json();
-      const run = data.workflow_runs?.[0];
-      if (run?.status === 'completed') {
+      const res = await fetch(`data/latest.json?t=${Date.now()}`);
+      const fresh = await res.json();
+      const found = fresh?.items?.find(i => i.list_item === itemName);
+      const newWw = found?.woolworths?.price;
+      const newCo = found?.coles?.price;
+      if (newWw !== origWw || newCo !== origCo) {
+        _pendingRefreshItem = null;
         if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
-        if (run.conclusion === 'success') {
-          const newData = await loadData();
-          if (newData) renderPage(newData);
-        }
+        renderPage(fresh);
         return;
       }
     } catch (_) {}
-    setTimeout(poll, 10000);
+    setTimeout(poll, 5000);
   };
-  setTimeout(poll, 10000);
+  setTimeout(poll, 5000);
 }
 
 // ── LocalStorage settings ────────────────────────────────────────────────────
@@ -1082,6 +1087,8 @@ async function loadNameChanges() {
 
 let sortState = { col: 'trips', dir: 'desc' };
 let _lastData = null;
+let _prevPrices = {};
+let _pendingRefreshItem = null;
 
 const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
 
@@ -1225,14 +1232,14 @@ function renderPage(data) {
     $('colesTotal').textContent = fmt(s.total_coles);
     $('wwBadge').innerHTML    = '<span class="winner-badge ww">✓ Cheaper</span>';
     $('colesBadge').innerHTML = '';
-    $('savingInfo').innerHTML = `<span class="saving-chip">You save ${fmt(s.total_saving)}</span>`;
+    $('savingInfo').innerHTML = `<div class="saving-label">Basket saving</div><span class="saving-chip">${fmt(s.total_saving)}</span>`;
   } else if (s.cheaper_store === 'coles') {
     colesCard.classList.add('winner-coles');
     wwTotalEl.textContent = fmt(s.total_woolworths);
     $('colesTotal').textContent = fmt(s.total_coles);
     $('colesBadge').innerHTML = '<span class="winner-badge coles">✓ Cheaper</span>';
     $('wwBadge').innerHTML    = '';
-    $('savingInfo').innerHTML = `<span class="saving-chip">You save ${fmt(s.total_saving)}</span>`;
+    $('savingInfo').innerHTML = `<div class="saving-label">Basket saving</div><span class="saving-chip">${fmt(s.total_saving)}</span>`;
   } else {
     wwTotalEl.textContent = fmt(s.total_woolworths);
     $('colesTotal').textContent = fmt(s.total_coles);
@@ -1248,9 +1255,23 @@ function renderPage(data) {
     ? `${pricedBoth}/${totalNonArchived} priced · ${missingCount} missing`
     : `${totalNonArchived} items`;
   $('lastUpdated').textContent = prog
-    ? `Scraping… ${prog.done}/${prog.total} items done · updates every 7s · ${coverageText}`
+    ? `Updates every 7s · ${coverageText}`
     : `Updated ${formatDate(data.last_updated)} · ${coverageText}`;
   $('banner').style.display = 'block';
+
+  // Scrape progress bar
+  const progressBar = $('scrapeProgressBar');
+  if (progressBar) {
+    if (prog && prog.total > 0) {
+      const pct = Math.round((prog.done / prog.total) * 100);
+      progressBar.style.display = 'flex';
+      $('scrapeProgressLabel').textContent = `Scraping… ${prog.done}/${prog.total} items`;
+      $('scrapeProgressFill').style.width = `${pct}%`;
+      $('scrapeProgressPct').textContent = `${pct}%`;
+    } else {
+      progressBar.style.display = 'none';
+    }
+  }
 
   _lastData = data;
 
@@ -1316,6 +1337,20 @@ function renderPage(data) {
 
   const sorted = sortItems(allDisplayItems);
   updateSortHeaders();
+
+  if (!sorted.length) {
+    const emptyMessages = {
+      weekly:  { title: 'No weekly items', sub: 'Mark items as Weekly in the Priority column.' },
+      monthly: { title: 'No monthly items', sub: 'Mark items as Monthly in the Priority column.' },
+      rare:    { title: 'No rare items', sub: 'All items have been categorised.' },
+      archive: { title: 'Nothing archived', sub: 'Archive items you no longer need to compare.' },
+      all:     { title: 'No items match', sub: 'Try clearing filters or adding items via Import.' },
+    };
+    const msg = emptyMessages[_activePriority] || emptyMessages.all;
+    tbody.innerHTML = `<tr><td colspan="${_colOrder.length + 1}"><div class="table-empty-state"><strong>${msg.title}</strong>${msg.sub}</div></td></tr>`;
+    $('tableContainer').style.display = 'block';
+    return;
+  }
 
   const overrides = loadOverrides();
 
@@ -1453,7 +1488,15 @@ function renderPage(data) {
     };
 
     const checked = _checkedItems.has(item.list_item) ? ' checked' : '';
-    tbody.insertAdjacentHTML('beforeend', `<tr><td class="check-cell"><input type="checkbox" class="row-check" data-item="${safeKey}"${checked}></td>${_colOrder.map(col => tdMap[col] || '').join('')}</tr>`);
+    const isPending = _pendingRefreshItem === item.list_item;
+    const prevWw = _prevPrices[item.list_item]?.ww;
+    const prevCo = _prevPrices[item.list_item]?.co;
+    const priceChanged = (prevWw != null && prevWw !== ww?.price) || (prevCo != null && prevCo !== co?.price);
+    const rowClass = isPending ? ' class="row-pending"' : (priceChanged ? ' class="row-flash"' : '');
+    tbody.insertAdjacentHTML('beforeend', `<tr${rowClass} data-item="${safeKey}"><td class="check-cell"><input type="checkbox" class="row-check" data-item="${safeKey}"${checked}></td>${_colOrder.map(col => tdMap[col] || '').join('')}</tr>`);
+
+    _prevPrices[item.list_item] = { ww: ww?.price, co: co?.price };
+    if (priceChanged && _pendingRefreshItem === item.list_item) _pendingRefreshItem = null;
   });
 
   // Tfoot — dynamic to match column order

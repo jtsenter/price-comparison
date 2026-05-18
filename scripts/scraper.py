@@ -5,6 +5,7 @@ import random
 import re
 import subprocess
 import sys
+import threading
 from datetime import datetime, timezone
 from urllib.parse import quote
 
@@ -107,6 +108,17 @@ def _extract_from_next_data(next_data: dict) -> list[dict]:
 
 async def delay():
     await asyncio.sleep(random.uniform(0.3, 0.8))
+
+
+async def search_with_retry(search_fn, page, query, retries=1):
+    for attempt in range(retries + 1):
+        results = await search_fn(page, query)
+        if results:
+            return results
+        if attempt < retries:
+            print(f"    No results for '{query}', retrying in 30s…")
+            await asyncio.sleep(30)
+    return []
 
 
 async def search_woolworths(page, query: str) -> list[dict]:
@@ -437,9 +449,143 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
         print(f"  -> Progress push skipped: {e}")
 
 
+_push_thread_ref = [None]
+_push_lock = threading.Lock()
+
+def push_progress_bg(items, not_found, done, total, trigger):
+    """Non-blocking progress push — skips if a previous push is still running."""
+    with _push_lock:
+        if _push_thread_ref[0] and _push_thread_ref[0].is_alive():
+            print(f"  -> Push skipped (previous still running)")
+            return
+        snapshot = json.loads(json.dumps(items))
+        t = threading.Thread(
+            target=push_progress,
+            args=(snapshot, list(not_found), done, total, trigger),
+            daemon=True,
+        )
+        _push_thread_ref[0] = t
+        t.start()
+
+
 # ---------------------------------------------------------------------------
 # Main scrape loop
 # ---------------------------------------------------------------------------
+
+def should_skip_item(ex_data: dict | None, trigger: str) -> bool:
+    """Return True if item was recently scraped and can be skipped on scheduled runs."""
+    if trigger == "manual" or not ex_data:
+        return False
+    if ex_data.get("archived"):
+        return False
+    last_scraped = ex_data.get("last_scraped")
+    if not last_scraped:
+        return False
+    ww = ex_data.get("woolworths") or {}
+    co = ex_data.get("coles") or {}
+    if ww.get("price") is None or co.get("price") is None:
+        return False
+    if ex_data.get("_search_failed"):
+        return False
+    try:
+        age_days = (datetime.now(timezone.utc) - datetime.fromisoformat(last_scraped)).total_seconds() / 86400
+        return age_days < 4
+    except Exception:
+        return False
+
+
+CONCURRENCY = 2  # parallel items (1 page-pair each)
+
+
+async def _scrape_single_item(
+    item: str, purchase_history: dict, ww_page, coles_page,
+    ww_url: str, coles_url: str, existing_data: dict
+) -> tuple[dict | None, bool]:
+    """Scrape one item. Returns (result_dict | None, is_not_found)."""
+    category = guess_category(item)
+    history = purchase_history.get(item, {})
+    existing_item = next((ex for ex in existing_data.get("items", []) if ex["list_item"] == item), {})
+
+    if ww_url or coles_url:
+        # URL-based fetch (single-item refresh with explicit URLs)
+        if ww_url and not coles_url:
+            print(f"  Fetching WW by URL: {ww_url}")
+            ww_match = await fetch_ww_by_url(ww_page, ww_url)
+            if not ww_match:
+                res = await search_with_retry(search_woolworths, ww_page, item)
+                ww_match = res[0] if res else None
+            coles_match = existing_item.get("coles")
+        elif coles_url and not ww_url:
+            print(f"  Fetching Coles by URL: {coles_url}")
+            coles_match = await fetch_coles_by_url(coles_page, coles_url)
+            if not coles_match:
+                res = await search_with_retry(search_coles, coles_page, item)
+                coles_match = res[0] if res else None
+            ww_match = existing_item.get("woolworths")
+        else:
+            print(f"  Fetching WW by URL: {ww_url}")
+            ww_match = await fetch_ww_by_url(ww_page, ww_url)
+            if not ww_match:
+                res = await search_with_retry(search_woolworths, ww_page, item)
+                ww_match = res[0] if res else None
+            print(f"  Fetching Coles by URL: {coles_url}")
+            coles_match = await fetch_coles_by_url(coles_page, coles_url)
+            if not coles_match:
+                res = await search_with_retry(search_coles, coles_page, item)
+                coles_match = res[0] if res else None
+        ww_results = [ww_match] if ww_match else []
+        coles_results = [coles_match] if coles_match else []
+    else:
+        # Name-based search (normal scrape)
+        ww_results, coles_results = await asyncio.gather(
+            search_with_retry(search_woolworths, ww_page, item),
+            search_with_retry(search_coles, coles_page, item),
+        )
+        await delay()
+
+    ww_match = ww_results[0] if ww_results else None
+    coles_match = coles_results[0] if coles_results else None
+
+    if not ww_match and not coles_match:
+        return None, True
+
+    ww_price = ww_match["price"] if ww_match else None
+    coles_price = coles_match["price"] if coles_match else None
+
+    cheaper_store = None
+    saving = None
+    if ww_price is not None and coles_price is not None:
+        if ww_price < coles_price:
+            cheaper_store, saving = "woolworths", round(coles_price - ww_price, 2)
+        elif coles_price < ww_price:
+            cheaper_store, saving = "coles", round(ww_price - coles_price, 2)
+        else:
+            cheaper_store, saving = "equal", 0.0
+    elif coles_price is not None:
+        cheaper_store = "coles"
+    elif ww_price is not None:
+        cheaper_store = "woolworths"
+
+    all_for_item = ww_results + coles_results
+    best_match = ww_match if (ww_match and ww_match.get("unit_price")) else coles_match
+    alternatives = find_alternatives(all_for_item, best_match)
+    for alt in alternatives:
+        if not alt.get("retailer"):
+            alt["retailer"] = "woolworths" if WOOLWORTHS_BASE in alt.get("url", "") else "coles"
+
+    return {
+        "list_item": item,
+        "last_scraped": datetime.now(timezone.utc).isoformat(),
+        "trip_count": history.get("trip_count", 0),
+        "price_history": history.get("price_history", []),
+        "category": category,
+        "woolworths": ww_match,
+        "coles": coles_match,
+        "cheaper_store": cheaper_store,
+        "saving_per_item": saving,
+        "alternatives": alternatives,
+    }, False
+
 
 async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str = "", coles_url: str = ""):
     purchase_history = get_purchase_history(EXCEL_PATH)
@@ -448,27 +594,23 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         shopping_list = [single_item]
         print(f"Single-item refresh: {single_item}" + (f" [WW URL]" if ww_url else "") + (f" [Coles URL]" if coles_url else ""))
     else:
-        # Sort by priority: weekly (7+ trips) first, monthly (3+) second, then rest
         def _priority_key(name):
-            h = purchase_history.get(name, {})
-            trips = h.get("trip_count", 0)
-            if trips >= 7: return 0
-            if trips >= 3: return 1
-            return 2
+            trips = purchase_history.get(name, {}).get("trip_count", 0)
+            return 0 if trips >= 7 else (1 if trips >= 3 else 2)
         shopping_list = sorted(purchase_history.keys(), key=_priority_key)
         print(f"Active shopping list: {len(shopping_list)} items")
 
     detect_fuzzy_changes(shopping_list, FLAG_PATH)
 
-    items_output = []
-    not_found = []
-
-    # Load existing data for single-item partial updates (keep other store's data)
     latest_path = os.path.join(DATA_DIR, "latest.json")
     existing_data = {}
-    if single_item and (ww_url or coles_url) and os.path.exists(latest_path):
+    if os.path.exists(latest_path):
         with open(latest_path) as f:
             existing_data = json.load(f)
+    existing_map = {i["list_item"]: i for i in existing_data.get("items", [])}
+
+    items_output = []
+    not_found = []
 
     async with async_playwright() as pw:
         browser = await pw.chromium.launch(
@@ -488,123 +630,94 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
         )
 
-        ww_page = await context.new_page()
-        coles_page = await context.new_page()
-
-        # Only visit homepages for stores we'll actually scrape (saves time for single-URL updates)
-        need_ww = not (single_item and coles_url and not ww_url)
-        need_coles = not (single_item and ww_url and not coles_url)
-
-        if need_ww:
-            await ww_page.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=20000)
-            await delay()
-        if need_coles:
-            await coles_page.goto(COLES_BASE, wait_until="domcontentloaded", timeout=20000)
-            await delay()
-
-        total = len(shopping_list)
-        for i, item in enumerate(shopping_list, 1):
-            print(f"[{i}/{total}] {item}")
-            category = guess_category(item)
-            history = purchase_history.get(item, {})
-
-            # Determine fetch strategy
-            if single_item and (ww_url or coles_url):
-                existing_item = next((ex for ex in existing_data.get("items", []) if ex["list_item"] == item), {})
-
-                if ww_url and not coles_url:
-                    # Fetch WW by URL only; keep existing Coles data
-                    print(f"  Fetching WW by URL: {ww_url}")
-                    ww_match = await fetch_ww_by_url(ww_page, ww_url)
-                    if not ww_match:
-                        print("  URL fetch failed, falling back to name search")
-                        res = await search_woolworths(ww_page, item)
-                        ww_match = res[0] if res else None
-                    coles_match = existing_item.get("coles")
-
-                elif coles_url and not ww_url:
-                    # Fetch Coles by URL only; keep existing WW data
-                    print(f"  Fetching Coles by URL: {coles_url}")
-                    coles_match = await fetch_coles_by_url(coles_page, coles_url)
-                    if not coles_match:
-                        print("  URL fetch failed, falling back to name search")
-                        res = await search_coles(coles_page, item)
-                        coles_match = res[0] if res else None
-                    ww_match = existing_item.get("woolworths")
-
-                else:
-                    # Both URLs provided
-                    print(f"  Fetching WW by URL: {ww_url}")
-                    ww_match = await fetch_ww_by_url(ww_page, ww_url)
-                    if not ww_match:
-                        res = await search_woolworths(ww_page, item)
-                        ww_match = res[0] if res else None
-                    print(f"  Fetching Coles by URL: {coles_url}")
-                    coles_match = await fetch_coles_by_url(coles_page, coles_url)
-                    if not coles_match:
-                        res = await search_coles(coles_page, item)
-                        coles_match = res[0] if res else None
-
-                ww_results = [ww_match] if ww_match else []
-                coles_results = [coles_match] if coles_match else []
-
-            else:
-                # Normal: search both stores by name in parallel
-                ww_results, coles_results = await asyncio.gather(
-                    search_woolworths(ww_page, item),
-                    search_coles(coles_page, item),
-                )
+        if single_item:
+            # Single-item: one page-pair, sequential
+            ww_page = await context.new_page()
+            coles_page = await context.new_page()
+            need_ww = not (coles_url and not ww_url)
+            need_coles = not (ww_url and not coles_url)
+            if need_ww:
+                await ww_page.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=20000)
                 await delay()
-                ww_match = ww_results[0] if ww_results else None
-                coles_match = coles_results[0] if coles_results else None
+            if need_coles:
+                await coles_page.goto(COLES_BASE, wait_until="domcontentloaded", timeout=20000)
+                await delay()
 
-            if not ww_match and not coles_match:
-                not_found.append(item)
-                continue
+            result, is_nf = await _scrape_single_item(
+                single_item, purchase_history, ww_page, coles_page,
+                ww_url, coles_url, existing_data,
+            )
+            if result:
+                items_output.append(result)
+            else:
+                not_found.append(single_item)
 
-            ww_price = ww_match["price"] if ww_match else None
-            coles_price = coles_match["price"] if coles_match else None
-
-            cheaper_store = None
-            saving = None
-            if ww_price is not None and coles_price is not None:
-                if ww_price < coles_price:
-                    cheaper_store, saving = "woolworths", round(coles_price - ww_price, 2)
-                elif coles_price < ww_price:
-                    cheaper_store, saving = "coles", round(ww_price - coles_price, 2)
+        else:
+            # Full scrape: determine which items need re-scraping
+            fresh_items = []
+            to_scrape = []
+            for name in shopping_list:
+                ex = existing_map.get(name)
+                if should_skip_item(ex, trigger):
+                    # Carry forward existing data
+                    fresh_items.append(ex)
                 else:
-                    cheaper_store, saving = "equal", 0.0
-            elif coles_price is not None:
-                cheaper_store = "coles"
-            elif ww_price is not None:
-                cheaper_store = "woolworths"
+                    to_scrape.append(name)
 
-            all_for_item = ww_results + coles_results
-            best_match = ww_match if (ww_match and ww_match.get("unit_price")) else coles_match
-            alternatives = find_alternatives(all_for_item, best_match)
-            for alt in alternatives:
-                if not alt.get("retailer"):
-                    alt["retailer"] = "woolworths" if WOOLWORTHS_BASE in alt.get("url", "") else "coles"
+            items_output.extend(fresh_items)
+            total_all = len(shopping_list)
+            total_to_scrape = len(to_scrape)
+            skipped = len(fresh_items)
+            if skipped:
+                print(f"Skipping {skipped} recently-scraped items. Scraping {total_to_scrape} items.")
 
-            items_output.append({
-                "list_item": item,
-                "trip_count": history.get("trip_count", 0),
-                "price_history": history.get("price_history", []),
-                "category": category,
-                "woolworths": ww_match,
-                "coles": coles_match,
-                "cheaper_store": cheaper_store,
-                "saving_per_item": saving,
-                "alternatives": alternatives,
-            })
+            # Create page pools (CONCURRENCY page-pairs)
+            ww_pool: asyncio.Queue = asyncio.Queue()
+            co_pool: asyncio.Queue = asyncio.Queue()
+            for _ in range(CONCURRENCY):
+                p = await context.new_page()
+                await p.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=20000)
+                await ww_pool.put(p)
+                p = await context.new_page()
+                await p.goto(COLES_BASE, wait_until="domcontentloaded", timeout=20000)
+                await co_pool.put(p)
 
-            if not single_item and i % 3 == 0:
-                push_progress(items_output, not_found, i, total, trigger)
+            sem = asyncio.Semaphore(CONCURRENCY)
+            completed = [0]
+
+            async def scrape_one(name: str):
+                async with sem:
+                    ww_page = await ww_pool.get()
+                    co_page = await co_pool.get()
+                    try:
+                        idx = completed[0] + 1
+                        print(f"[{idx}/{total_to_scrape}] {name}")
+                        result, is_nf = await _scrape_single_item(
+                            name, purchase_history, ww_page, co_page, "", "", existing_data,
+                        )
+                        if result:
+                            items_output.append(result)
+                        else:
+                            not_found.append(name)
+                        completed[0] += 1
+                        if completed[0] % 3 == 0:
+                            push_progress_bg(
+                                items_output, not_found,
+                                len(items_output) + len(not_found) + skipped,
+                                total_all, trigger,
+                            )
+                    except Exception as e:
+                        print(f"  Error scraping {name}: {e}")
+                        completed[0] += 1
+                    finally:
+                        await ww_pool.put(ww_page)
+                        await co_pool.put(co_page)
+
+            await asyncio.gather(*[scrape_one(name) for name in to_scrape])
 
         await browser.close()
 
     os.makedirs(DATA_DIR, exist_ok=True)
-    latest_path = os.path.join(DATA_DIR, "latest.json")
 
     if single_item:
         existing = {}
