@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:36:41.224084+00:00",
+  "last_updated": "2026-05-18T21:36:50.979537+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4549,20 +4549,345 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Garlic Heads CLOVE",
+      "last_scraped": "2026-05-18T21:36:45.737843+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 3.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.5
+        }
+      ],
+      "category": "Other",
+      "woolworths": {
+        "name": "Woolworths Garlic Cloves",
+        "price": 2.9,
+        "unit_price": 41.43,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/253320/woolworths-garlic-cloves",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/253320.jpg"
+      },
+      "coles": {
+        "name": "Coles Deli Lemon & Garlic Sicilian Olives | 110g",
+        "price": 3.75,
+        "unit_price": 3.75,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-deli-lemon-and-garlic-sicilian-olives-110g-6484963",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6484963.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.85,
+      "alternatives": [
+        {
+          "name": "Coles Minced Garlic | 250g",
+          "price": 1.25,
+          "unit_price": 1.25,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-minced-garlic-250g-5493277",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5493277.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Minced Garlic | 500g",
+          "price": 2.3,
+          "unit_price": 2.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-minced-garlic-500g-3765423",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3765423.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Deli Lemon & Garlic Sicilian Olives | 110g",
+          "price": 3.75,
+          "unit_price": 3.75,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-deli-lemon-and-garlic-sicilian-olives-110g-6484963",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6484963.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Full Cream Milk",
+      "last_scraped": "2026-05-18T21:36:45.921845+00:00",
+      "trip_count": 10,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 1.55
+        },
+        {
+          "date": "2024-12-02",
+          "price": 1.55
+        },
+        {
+          "date": "2025-01-29",
+          "price": 1.55
+        },
+        {
+          "date": "2025-02-28",
+          "price": 1.55
+        },
+        {
+          "date": "2025-03-11",
+          "price": 1.55
+        },
+        {
+          "date": "2025-03-27",
+          "price": 1.55
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.55
+        },
+        {
+          "date": "2025-07-26",
+          "price": 1.55
+        },
+        {
+          "date": "2026-02-03",
+          "price": 1.65
+        },
+        {
+          "date": "2026-02-11",
+          "price": 1.65
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Full Cream Milk",
+        "price": 3.55,
+        "unit_price": 1.78,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/888137/woolworths-full-cream-milk",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/888137.jpg"
+      },
+      "coles": {
+        "name": "Coles Full Cream Milk | 600mL",
+        "price": 1.45,
+        "unit_price": 1.45,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/coles-full-cream-milk-600ml-6759482",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6759482.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 2.1,
+      "alternatives": [
+        {
+          "name": "Coles Full Cream Milk | 600mL",
+          "price": 1.45,
+          "unit_price": 1.45,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/coles-full-cream-milk-600ml-6759482",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6759482.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Greek Style Yoghurt",
+      "last_scraped": "2026-05-18T21:36:50.975873+00:00",
+      "trip_count": 33,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 4.2
+        },
+        {
+          "date": "2024-11-12",
+          "price": 4.2
+        },
+        {
+          "date": "2024-11-20",
+          "price": 4.2
+        },
+        {
+          "date": "2024-12-02",
+          "price": 4.2
+        },
+        {
+          "date": "2024-12-09",
+          "price": 4.2
+        },
+        {
+          "date": "2024-12-19",
+          "price": 4.2
+        },
+        {
+          "date": "2025-01-29",
+          "price": 4.2
+        },
+        {
+          "date": "2025-02-02",
+          "price": 8.0
+        },
+        {
+          "date": "2025-02-28",
+          "price": 8.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 8.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 8.0
+        },
+        {
+          "date": "2025-03-27",
+          "price": 8.0
+        },
+        {
+          "date": "2025-04-05",
+          "price": 8.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.0
+        },
+        {
+          "date": "2025-04-25",
+          "price": 8.0
+        },
+        {
+          "date": "2025-05-04",
+          "price": 8.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 8.0
+        },
+        {
+          "date": "2025-05-22",
+          "price": 8.0
+        },
+        {
+          "date": "2025-05-29",
+          "price": 8.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 8.0
+        },
+        {
+          "date": "2025-06-13",
+          "price": 8.0
+        },
+        {
+          "date": "2025-06-21",
+          "price": 8.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 8.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 8.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 8.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 8.0
+        },
+        {
+          "date": "2026-02-07",
+          "price": 3.8
+        },
+        {
+          "date": "2026-02-23",
+          "price": 3.8
+        },
+        {
+          "date": "2026-03-02",
+          "price": 3.8
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.8
+        },
+        {
+          "date": "2026-04-02",
+          "price": 3.8
+        },
+        {
+          "date": "2026-04-13",
+          "price": 3.8
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.8
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Greek Style Yoghurt",
+        "price": 8.0,
+        "unit_price": 0.4,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/249085/woolworths-greek-style-yoghurt",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/249085.jpg"
+      },
+      "coles": {
+        "name": "Coles Greek Style Natural Yoghurt | 1kg",
+        "price": 4.5,
+        "unit_price": 4.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-greek-style-natural-yoghurt-1kg-2273478",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2273478.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 3.5,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 217.59,
-    "total_coles": 263.13,
+    "total_woolworths": 232.04,
+    "total_coles": 272.83,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 45.54,
-    "items_compared": 51,
+    "total_saving": 40.79,
+    "items_compared": 54,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 51,
+    "done": 54,
     "total": 211
   }
 }
