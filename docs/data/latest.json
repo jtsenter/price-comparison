@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:34:09.712611+00:00",
+  "last_updated": "2026-05-18T21:34:17.658827+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1422,20 +1422,307 @@
           "retailer": "woolworths"
         }
       ]
+    },
+    {
+      "list_item": "Macro Organic Black Bean No Added Salt",
+      "last_scraped": "2026-05-18T21:34:13.569273+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 1.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.5
+        },
+        {
+          "date": "2025-05-04",
+          "price": 1.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 1.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.5
+        },
+        {
+          "date": "2025-07-26",
+          "price": 1.5
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Macro Organic Black Bean No Added Salt",
+        "price": 1.5,
+        "unit_price": 3.57,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/663584/macro-organic-black-bean-no-added-salt",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/663584.jpg"
+      },
+      "coles": {
+        "name": "Edgell Organic Black Beans No Added Salt | 400g",
+        "price": 2.0,
+        "unit_price": 5.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/edgell-organic-black-beans-no-added-salt-400g-5071232",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5071232.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.5,
+      "alternatives": [
+        {
+          "name": "Edgell Beans Red Kidney No Added Salt | 400g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/edgell-beans-red-kidney-no-added-salt-400g-6095939",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6095939.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Helga's Wholemeal Bread With Grains",
+      "last_scraped": "2026-05-18T21:34:13.844485+00:00",
+      "trip_count": 15,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 5.0
+        },
+        {
+          "date": "2024-11-12",
+          "price": 5.0
+        },
+        {
+          "date": "2024-12-02",
+          "price": 5.0
+        },
+        {
+          "date": "2025-02-02",
+          "price": 5.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 5.0
+        },
+        {
+          "date": "2025-04-05",
+          "price": 5.0
+        },
+        {
+          "date": "2025-04-25",
+          "price": 5.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.0
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.0
+        },
+        {
+          "date": "2025-06-21",
+          "price": 5.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 5.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 5.0
+        },
+        {
+          "date": "2026-04-13",
+          "price": 5.2
+        },
+        {
+          "date": "2026-04-21",
+          "price": 5.2
+        },
+        {
+          "date": "2026-04-29",
+          "price": 5.2
+        }
+      ],
+      "category": "Bread & Bakery",
+      "woolworths": null,
+      "coles": {
+        "name": "Helga's Traditional Wholemeal Bread | 750g",
+        "price": 5.2,
+        "unit_price": 5.2,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/helga's-traditional-wholemeal-bread-750g-5969435",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5969435.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Helga's Health Plus Protein Wholemeal | 700g",
+          "price": 4.9,
+          "unit_price": 0.7,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/helga's-health-plus-protein-wholemeal-700g-1089906",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1089906.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Helgas Mini Loaf Traditional Wholemeal | 360g",
+          "price": 4.3,
+          "unit_price": 4.3,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/helgas-mini-loaf-traditional-wholemeal-360g-3860887",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3860887.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Mushrooms Cups Loose",
+      "last_scraped": "2026-05-18T21:34:17.656926+00:00",
+      "trip_count": 17,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 12.9
+        },
+        {
+          "date": "2024-11-12",
+          "price": 10.9
+        },
+        {
+          "date": "2024-11-20",
+          "price": 12.9
+        },
+        {
+          "date": "2025-01-29",
+          "price": 12.9
+        },
+        {
+          "date": "2025-02-02",
+          "price": 11.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 12.9
+        },
+        {
+          "date": "2025-03-27",
+          "price": 12.9
+        },
+        {
+          "date": "2025-04-25",
+          "price": 12.9
+        },
+        {
+          "date": "2025-05-04",
+          "price": 12.9
+        },
+        {
+          "date": "2025-05-12",
+          "price": 10.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 12.9
+        },
+        {
+          "date": "2025-06-06",
+          "price": 12.9
+        },
+        {
+          "date": "2025-06-13",
+          "price": 11.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 11.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 11.5
+        },
+        {
+          "date": "2026-03-02",
+          "price": 12.9
+        },
+        {
+          "date": "2026-05-06",
+          "price": 12.9
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Mushrooms Cups Loose",
+        "price": 12.5,
+        "unit_price": 12.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/143109/mushrooms-cups-loose",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/143109.jpg"
+      },
+      "coles": {
+        "name": "Coles Cup Mushrooms | 500g",
+        "price": 7.0,
+        "unit_price": 7.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-cup-mushrooms-500g-4829838",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4829838.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 5.5,
+      "alternatives": [
+        {
+          "name": "Chef's World Straw Mushrooms Medium | 425g",
+          "price": 2.3,
+          "unit_price": 2.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/chef's-world-straw-mushrooms-medium-425g-6592762",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6592762.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Continental Cup A Soup Creamy Mushroom With Croutons 2 Pack | 50g",
+          "price": 2.8,
+          "unit_price": 2.8,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/continental-cup-a-soup-creamy-mushroom-with-croutons-2-pack-50g-9151424",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9151424.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Continental Cup A Soup Pepper Steak & Mushroom With Croutons Serves 2 | 52g",
+          "price": 2.8,
+          "unit_price": 2.8,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/continental-cup-a-soup-pepper-steak-and-mushroom-with-croutons-serves-2-52g-2286516",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2286516.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 58.38,
-    "total_coles": 65.1,
+    "total_woolworths": 72.38,
+    "total_coles": 79.3,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 6.72,
-    "items_compared": 15,
+    "total_saving": 6.92,
+    "items_compared": 18,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 15,
+    "done": 18,
     "total": 211
   }
 }
