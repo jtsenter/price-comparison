@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:39:26.292754+00:00",
+  "last_updated": "2026-05-18T21:39:35.402269+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6820,20 +6820,170 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "Hedy's Fresh Quiche Spinach & Feta Chilled Meal",
+      "last_scraped": "2026-05-18T21:39:29.991934+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 10.5
+        },
+        {
+          "date": "2025-05-29",
+          "price": 14.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 14.5
+        },
+        {
+          "date": "2025-07-03",
+          "price": 14.5
+        },
+        {
+          "date": "2026-02-11",
+          "price": 14.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Hedy's Fresh Quiche Spinach & Feta Chilled Meal",
+        "price": 14.5,
+        "unit_price": 1.32,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/669044/hedy-s-fresh-quiche-spinach-feta-chilled-meal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/669044.jpg"
+      },
+      "coles": {
+        "name": "Hedys Quiche Spinach Parmesan | 1.1kg",
+        "price": 14.5,
+        "unit_price": 14.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/hedys-quiche-spinach-parmesan-1.1kg-2904648",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2904648.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Hellmann's Real Mayonnaise Squeeze",
+      "last_scraped": "2026-05-18T21:39:33.713018+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-06-06",
+          "price": 8.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 8.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 8.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Hellmann's Real Mayonnaise Squeeze Bottle",
+        "price": 6.0,
+        "unit_price": 2.55,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/349106/hellmann-s-real-mayonnaise-squeeze-bottle",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/349106.jpg"
+      },
+      "coles": {
+        "name": "Hellmann's Squeeze Real Mayonnaise | 400g",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/hellmann's-squeeze-real-mayonnaise-400g-3025755",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3025755.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.0,
+      "alternatives": [
+        {
+          "name": "Hellmann's Real Mayonnaise Squeeze",
+          "price": 8.0,
+          "unit_price": 2.0,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/529030/hellmann-s-real-mayonnaise-squeeze",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/529030.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Hedy's Fresh Quiche Lorraine Chilled Meal",
+      "last_scraped": "2026-05-18T21:39:35.394898+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 10.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 10.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 10.5
+        },
+        {
+          "date": "2025-07-26",
+          "price": 14.5
+        },
+        {
+          "date": "2026-02-07",
+          "price": 11.0
+        }
+      ],
+      "category": "Other",
+      "woolworths": null,
+      "coles": {
+        "name": "Hedys Quiche Lorraine | 1.1kg",
+        "price": 14.5,
+        "unit_price": 14.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/hedys-quiche-lorraine-1.1kg-7388070",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7388070.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Temptation Frozen Petite Quiche Lorraine's 18 Pack | 300g",
+          "price": 7.5,
+          "unit_price": 7.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/temptation-frozen-petite-quiche-lorraine's-18-pack-300g-6941191",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6941191.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 416.5,
-    "total_coles": 668.29,
+    "total_woolworths": 437.0,
+    "total_coles": 705.29,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 251.79,
-    "items_compared": 87,
+    "total_saving": 268.29,
+    "items_compared": 90,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 87,
+    "done": 90,
     "total": 211
   }
 }
