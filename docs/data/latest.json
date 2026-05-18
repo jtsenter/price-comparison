@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T04:05:41.595038+00:00",
+  "last_updated": "2026-05-18T04:06:37.102052+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7702,20 +7702,544 @@
       "cheaper_store": "coles",
       "saving_per_item": 0.15,
       "alternatives": []
+    },
+    {
+      "list_item": "Twinings Honeybush, Orange & Mandarin",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 3.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.0
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Twinings Honeybush Orange & Mandarin",
+        "price": 2.7,
+        "unit_price": 0.27,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/659035/twinings-honeybush-orange-mandarin",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/659035.jpg"
+      },
+      "coles": {
+        "name": "Twinings Honeybush Orange Mandarin Tea Bags | 10 pack",
+        "price": 2.7,
+        "unit_price": 2.7,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/twinings-honeybush-orange-mandarin-tea-bags-10-pack-8067560",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8067560.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Twinings Orange & Cinnamon Tea Bags Tea",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-03-17",
+          "price": 3.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.5
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Twinings Orange & Cinnamon Tea Bags Tea",
+        "price": 2.7,
+        "unit_price": 0.27,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/791152/twinings-orange-cinnamon-tea-bags-tea",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/791152.jpg"
+      },
+      "coles": {
+        "name": "Twinings Infused Orange & Cinnamon Tea Bags | 10 pack",
+        "price": 2.7,
+        "unit_price": 2.7,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/twinings-infused-orange-and-cinnamon-tea-bags-10-pack-2006132",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2006132.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Twinings Pure Camomile Tea Bags Bags",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 3.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.0
+        }
+      ],
+      "category": "Drinks",
+      "woolworths": {
+        "name": "Twinings Pure Camomile Tea Bags Bags",
+        "price": 2.7,
+        "unit_price": 0.27,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/931157/twinings-pure-camomile-tea-bags-bags",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/931157.jpg"
+      },
+      "coles": {
+        "name": "Twining's Pure Camomile Infusions Tea Bags | 10 pack",
+        "price": 2.7,
+        "unit_price": 2.7,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/twining's-pure-camomile-infusions-tea-bags-10-pack-2469480",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2469480.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Twinings Pure Camomile Infusions Tea Bags 80 pack | 96g",
+          "price": 6.75,
+          "unit_price": 0.08,
+          "unit": "1ea | Was $13.50",
+          "url": "https://www.coles.com.au/product/twinings-pure-camomile-infusions-tea-bags-80-pack-96g-2471325",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2471325.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Twinings Pure Camomile Tea Bags",
+          "price": 13.5,
+          "unit_price": 0.17,
+          "unit": "1EA",
+          "url": "https://www.woolworths.com.au/shop/productdetails/888464/twinings-pure-camomile-tea-bags",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/888464.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Twinings Pure Peppermint Tea Bags Tea Bags",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 3.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.0
+        }
+      ],
+      "category": "Drinks",
+      "woolworths": {
+        "name": "Twinings Pure Peppermint Tea Bags",
+        "price": 13.5,
+        "unit_price": 0.17,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/888487/twinings-pure-peppermint-tea-bags",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/888487.jpg"
+      },
+      "coles": {
+        "name": "Twinings Pure Peppermint Infusions Tea Bags | 160g",
+        "price": 6.75,
+        "unit_price": 0.08,
+        "unit": "1ea | Was $13.50",
+        "url": "https://www.coles.com.au/product/twinings-pure-peppermint-infusions-tea-bags-160g-7488100",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7488100.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 6.75,
+      "alternatives": [
+        {
+          "name": "Twinings Pure Peppermint Infusions Tea Bags | 160g",
+          "price": 6.75,
+          "unit_price": 0.08,
+          "unit": "1ea | Was $13.50",
+          "url": "https://www.coles.com.au/product/twinings-pure-peppermint-infusions-tea-bags-160g-7488100",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7488100.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Vanish Napisan Stain Remover Powder",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 19.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 19.0
+        }
+      ],
+      "category": "Household",
+      "woolworths": {
+        "name": "Vanish Napisan Gold Crystal White Stain Remover Powder 3kg",
+        "price": 42.0,
+        "unit_price": 14.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/1112052589/vanish-napisan-gold-crystal-white-stain-remover-powder-3kg",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/1112052589.jpg"
+      },
+      "coles": {
+        "name": "Vanish Napisan Oxi Action Fabric Stain Remover Powder | 2kg",
+        "price": 19.0,
+        "unit_price": 19.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/vanish-napisan-oxi-action-fabric-stain-remover-powder-2kg-9506348",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9506348.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 23.0,
+      "alternatives": [
+        {
+          "name": "Vanish Napisan Gold Colours Stain Remover | 2kg",
+          "price": 16.0,
+          "unit_price": 8.0,
+          "unit": "1kg | Was $32.00",
+          "url": "https://www.coles.com.au/product/vanish-napisan-gold-colours-stain-remover-2kg-5061090",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5061090.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Vanish Napisan Stain Remover Powder",
+          "price": 19.0,
+          "unit_price": 9.5,
+          "unit": "1KG",
+          "url": "https://www.woolworths.com.au/shop/productdetails/192217/vanish-napisan-stain-remover-powder",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/192217.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Vanish Napisan White Stain Remover Remover Powder",
+          "price": 19.0,
+          "unit_price": 9.5,
+          "unit": "1KG",
+          "url": "https://www.woolworths.com.au/shop/productdetails/353185/vanish-napisan-white-stain-remover-remover-powder",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/353185.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Vevelle 2 Ply White Toilet Tissue",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 6.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 6.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 6.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 6.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 6.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 6.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Vevelle White 2 Ply Toilet Tissue",
+        "price": 6.0,
+        "unit_price": 0.19,
+        "unit": "100SS",
+        "url": "https://www.woolworths.com.au/shop/productdetails/171303/vevelle-white-2-ply-toilet-tissue",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/171303.jpg"
+      },
+      "coles": {
+        "name": "Coles Simply 2-ply White Toilet Paper | 18 Pack",
+        "price": 7.5,
+        "unit_price": 0.16,
+        "unit": "100ea | Was $9.00",
+        "url": "https://www.coles.com.au/product/coles-simply-2-ply-white-toilet-paper-18-pack-9152405",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9152405.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.5,
+      "alternatives": [
+        {
+          "name": "Coles Simply 2-ply White Toilet Paper | 18 Pack",
+          "price": 7.5,
+          "unit_price": 0.16,
+          "unit": "100ea | Was $9.00",
+          "url": "https://www.coles.com.au/product/coles-simply-2-ply-white-toilet-paper-18-pack-9152405",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9152405.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Vevelle White 2 Ply Toilet Tissue",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2026-02-03",
+          "price": 6.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 6.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 6.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 6.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Vevelle White 2 Ply Toilet Tissue",
+        "price": 6.0,
+        "unit_price": 0.19,
+        "unit": "100SS",
+        "url": "https://www.woolworths.com.au/shop/productdetails/171303/vevelle-white-2-ply-toilet-tissue",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/171303.jpg"
+      },
+      "coles": {
+        "name": "Coles Simply 2-ply White Toilet Paper | 18 Pack",
+        "price": 7.5,
+        "unit_price": 0.16,
+        "unit": "100ea | Was $9.00",
+        "url": "https://www.coles.com.au/product/coles-simply-2-ply-white-toilet-paper-18-pack-9152405",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9152405.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.5,
+      "alternatives": [
+        {
+          "name": "Coles Simply 2-ply White Toilet Paper | 18 Pack",
+          "price": 7.5,
+          "unit_price": 0.16,
+          "unit": "100ea | Was $9.00",
+          "url": "https://www.coles.com.au/product/coles-simply-2-ply-white-toilet-paper-18-pack-9152405",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9152405.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Weet-Bix Little Kids Breakfast Cereal",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2025-05-22",
+          "price": 3.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 5.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 5.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 4.0
+        }
+      ],
+      "category": "Other",
+      "woolworths": {
+        "name": "Weet-Bix Little Kids Breakfast Cereal",
+        "price": 5.0,
+        "unit_price": 1.25,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/142976/weet-bix-little-kids-breakfast-cereal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/142976.jpg"
+      },
+      "coles": {
+        "name": "Sanitarium Weet-bix Little Kids Essentials Breakfast Cereal | 400g",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/sanitarium-weet-bix-little-kids-essentials-breakfast-cereal-400g-4233292",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4233292.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "White Seedless Grapes Bag Approx. 900g",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 5.4
+        },
+        {
+          "date": "2026-02-07",
+          "price": 5.5
+        },
+        {
+          "date": "2026-02-11",
+          "price": 4.05
+        },
+        {
+          "date": "2026-04-02",
+          "price": 4.5
+        },
+        {
+          "date": "2026-04-29",
+          "price": 5.5
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "White Seedless Grapes Bag Approx. 900g",
+        "price": 5.5,
+        "unit_price": 5.5,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/138801/white-seedless-grapes-bag-approx-900g",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/138801.jpg"
+      },
+      "coles": {
+        "name": "Coles White Seedless Cotton Candy Grapes | 400g",
+        "price": 5.5,
+        "unit_price": 13.75,
+        "unit": "1kg | Was $8.50",
+        "url": "https://www.coles.com.au/product/coles-white-seedless-cotton-candy-grapes-400g-2051126",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2051126.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Coles Red Seedless Grapes | approx. 1kg",
+          "price": 5.0,
+          "unit_price": 5.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-red-seedless-grapes-approx.-1kg-8133562",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8133562.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths 100% Canadian Maple Syrup",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 6.6
+        },
+        {
+          "date": "2025-04-14",
+          "price": 6.6
+        },
+        {
+          "date": "2025-06-06",
+          "price": 6.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 6.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths 100% Canadian Maple Syrup",
+        "price": 6.0,
+        "unit_price": 2.4,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/298476/woolworths-100-canadian-maple-syrup",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/298476.jpg"
+      },
+      "coles": {
+        "name": "Coles Finest Pure Canadian Maple Syrup | 250mL",
+        "price": 6.0,
+        "unit_price": 6.0,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/coles-finest-pure-canadian-maple-syrup-250ml-1790270",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1790270.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Nature Valley Crunchy Canadian Maple Syrup 6 Twin Bars | 252g",
+          "price": 4.7,
+          "unit_price": 1.87,
+          "unit": "100g | Was $6.90",
+          "url": "https://www.coles.com.au/product/nature-valley-crunchy-canadian-maple-syrup-6-twin-bars-252g-3585057",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3585057.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 826.25,
-    "total_coles": 975.56,
+    "total_woolworths": 918.35,
+    "total_coles": 1040.91,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 149.31,
-    "items_compared": 130,
+    "total_saving": 122.56,
+    "items_compared": 140,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 130,
+    "done": 140,
     "total": 211
   }
 }
