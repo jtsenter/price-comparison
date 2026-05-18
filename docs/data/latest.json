@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:40:22.902495+00:00",
+  "last_updated": "2026-05-18T21:40:30.199047+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7845,20 +7845,225 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "Mon Ami French Camembert Cheese",
+      "last_scraped": "2026-05-18T21:40:25.644766+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 7.2
+        },
+        {
+          "date": "2025-05-04",
+          "price": 6.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 7.2
+        },
+        {
+          "date": "2025-06-06",
+          "price": 7.2
+        },
+        {
+          "date": "2025-07-10",
+          "price": 7.2
+        },
+        {
+          "date": "2026-02-23",
+          "price": 6.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Mon Ami French Camembert Cheese",
+        "price": 7.2,
+        "unit_price": 36.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/751148/mon-ami-french-camembert-cheese",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/751148.jpg"
+      },
+      "coles": {
+        "name": "Emborg French Camembert | 200g",
+        "price": 7.2,
+        "unit_price": 7.2,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/emborg-french-camembert-200g-4360529",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4360529.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "South Cape Camembert | 200g",
+          "price": 6.8,
+          "unit_price": 6.8,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/south-cape-camembert-200g-5269091",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5269091.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Emborg French Camembert | 200g",
+          "price": 7.2,
+          "unit_price": 7.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/emborg-french-camembert-200g-4360529",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4360529.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Jindi Dairy Cheese Camembert | 200g",
+          "price": 9.1,
+          "unit_price": 9.1,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/jindi-dairy-cheese-camembert-200g-6725811",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6725811.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Mutti Tomato Paste Double Concentrate",
+      "last_scraped": "2026-05-18T21:40:28.717024+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 2.1
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.1
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.4
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.4
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Mutti Tomato Paste Double Concentrate",
+        "price": 2.4,
+        "unit_price": 1.85,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/290303/mutti-tomato-paste-double-concentrate",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/290303.jpg"
+      },
+      "coles": {
+        "name": "Mutti Whole Peeled Tomatoes | 400g",
+        "price": 2.3,
+        "unit_price": 2.3,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/mutti-whole-peeled-tomatoes-400g-2612959",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2612959.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.1,
+      "alternatives": [
+        {
+          "name": "Mutti Polpa Tomatoes Finely Chopped | 210g",
+          "price": 1.5,
+          "unit_price": 1.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/mutti-polpa-tomatoes-finely-chopped-210g-6311116",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6311116.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Old El Paso Fajita Spice Mix Mexican Style",
+      "last_scraped": "2026-05-18T21:40:30.192328+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 3.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.7
+        }
+      ],
+      "category": "Other",
+      "woolworths": {
+        "name": "Old El Paso Fajita Spice Mix Mexican Style",
+        "price": 2.7,
+        "unit_price": 6.75,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/248679/old-el-paso-fajita-spice-mix-mexican-style",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/248679.jpg"
+      },
+      "coles": {
+        "name": "Old El Paso Fajita Spice Mix | 40g",
+        "price": 2.7,
+        "unit_price": 2.7,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/old-el-paso-fajita-spice-mix-40g-5066050",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5066050.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Old El Paso Mild Fajita Kit Mexican Style | 485g",
+          "price": 5.95,
+          "unit_price": 1.23,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/old-el-paso-mild-fajita-kit-mexican-style-485g-5030450",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5030450.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Old El Paso Fajita Spice Mix | 40g",
+          "price": 2.7,
+          "unit_price": 2.7,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/old-el-paso-fajita-spice-mix-40g-5066050",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5066050.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Old El Paso Spice Mix For Tacos Mild | 30g",
+          "price": 2.7,
+          "unit_price": 2.7,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/old-el-paso-spice-mix-for-tacos-mild-30g-291377",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F291377.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 539.12,
-    "total_coles": 774.84,
+    "total_woolworths": 551.42,
+    "total_coles": 787.04,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 235.72,
-    "items_compared": 105,
+    "total_saving": 235.62,
+    "items_compared": 108,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 105,
+    "done": 108,
     "total": 211
   }
 }
