@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T06:00:35.118174+00:00",
+  "last_updated": "2026-05-18T06:01:21.021571+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1454,22 +1454,354 @@
       "cheaper_store": "woolworths",
       "saving_per_item": null,
       "alternatives": []
+    },
+    {
+      "list_item": "Continental Classics Cup A Soup Italian Minestrone With Pasta",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-02-03",
+          "price": 2.8
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.4
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Continental Classics Cup A Soup Italian Minestrone With Pasta",
+        "price": 1.4,
+        "unit_price": 1.87,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/54157/continental-classics-cup-a-soup-italian-minestrone-with-pasta",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/054157.jpg"
+      },
+      "coles": {
+        "name": "Continental Cup A Soup Italian Minestrone Serves 2 | 75g",
+        "price": 2.8,
+        "unit_price": 2.8,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/continental-cup-a-soup-italian-minestrone-serves-2-75g-5342920",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5342920.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.4,
+      "alternatives": [
+        {
+          "name": "Heinz Classic Italian Minestrone Soup Can | 535g",
+          "price": 2.6,
+          "unit_price": 0.49,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/heinz-classic-italian-minestrone-soup-can-535g-8416239",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8416239.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Dettol Antibacterial Liquid Hand Wash Hand Soap Pump Aloe Vera",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 3.85
+        },
+        {
+          "date": "2025-05-04",
+          "price": 2.8
+        }
+      ],
+      "category": "Health & Beauty",
+      "woolworths": {
+        "name": "Dettol Antibacterial Liquid Hand Wash Soap Pump Aloe Vera",
+        "price": 2.8,
+        "unit_price": 1.12,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/228637/dettol-antibacterial-liquid-hand-wash-soap-pump-aloe-vera",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/228637.jpg"
+      },
+      "coles": {
+        "name": "Dettol Liquid Hand Wash Pump Aloe | 250mL",
+        "price": 2.8,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/dettol-liquid-hand-wash-pump-aloe-250ml-4580911",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4580911.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Dettol Antibacterial Liquid Hand Wash Pump Aloe Vera & Vitamin E",
+          "price": 4.5,
+          "unit_price": 0.9,
+          "unit": "100ML",
+          "url": "https://www.woolworths.com.au/shop/productdetails/267236/dettol-antibacterial-liquid-hand-wash-pump-aloe-vera-vitamin-e",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/267236.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Dettol Tru Clean Antibacterial Multipurpose Wipes Citrus",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 5.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 11.0
+        }
+      ],
+      "category": "Household",
+      "woolworths": {
+        "name": "Dettol Tru Clean Antibacterial Multipurpose Wipes Citrus",
+        "price": 5.5,
+        "unit_price": 0.06,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/219677/dettol-tru-clean-antibacterial-multipurpose-wipes-citrus",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/219677.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Dolmio Extra Bolognese Tomato Pasta Sauce",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-03-17",
+          "price": 2.3
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.3
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.75
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Dolmio Extra Bolognese Tomato Pasta Sauce",
+        "price": 4.6,
+        "unit_price": 0.92,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/758286/dolmio-extra-bolognese-tomato-pasta-sauce",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/758286.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Don Premium Real Diced Bacon",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-05",
+          "price": 5.7
+        },
+        {
+          "date": "2025-04-14",
+          "price": 5.7
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Don Premium Real Diced Bacon",
+        "price": 5.7,
+        "unit_price": 28.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/128269/don-premium-real-diced-bacon",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/128269.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Driscoll's Raspberries Punnet",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 4.9
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-07",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 4.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 4.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 4.5
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Driscoll's Raspberries Punnet",
+        "price": 3.7,
+        "unit_price": 29.6,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/165262/driscoll-s-raspberries-punnet",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/165262.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Ecostore Dish Liquid Ultrasensitive",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 3.35
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.8
+        }
+      ],
+      "category": "Household",
+      "woolworths": {
+        "name": "Ecostore Dish Liquid Ultrasensitive",
+        "price": 5.0,
+        "unit_price": 1.0,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/742382/ecostore-dish-liquid-ultrasensitive",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/742382.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Ecostore Ultra Sensitive Fragrance Free Laundry Liquid",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 5.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 11.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 5.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 7.7
+        },
+        {
+          "date": "2026-04-02",
+          "price": 7.7
+        },
+        {
+          "date": "2026-05-06",
+          "price": 11.0
+        }
+      ],
+      "category": "Household",
+      "woolworths": {
+        "name": "Ecostore Ultra Sensitive Fragrance Free Laundry Liquid",
+        "price": 5.5,
+        "unit_price": 5.5,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/757031/ecostore-ultra-sensitive-fragrance-free-laundry-liquid",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/757031.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Essentials Domestic Wipes Roll",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 4.8
+        },
+        {
+          "date": "2025-04-14",
+          "price": 4.8
+        }
+      ],
+      "category": "Household",
+      "woolworths": {
+        "name": "Essentials Wipes Domestic Wipes",
+        "price": 3.15,
+        "unit_price": 0.11,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/293058/essentials-wipes-domestic-wipes",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/293058.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Essentials Domestic Wipes Roll",
+          "price": 4.8,
+          "unit_price": 0.1,
+          "unit": "1EA",
+          "url": "https://www.woolworths.com.au/shop/productdetails/789683/essentials-domestic-wipes-roll",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/789683.jpg",
+          "retailer": "woolworths"
+        }
+      ]
     }
   ],
   "not_found_items": [
-    "Cadbury Fingers Milk Chocolate Biscuits"
+    "Cadbury Fingers Milk Chocolate Biscuits",
+    "Eat Now Hass Avocado"
   ],
   "summary": {
-    "total_woolworths": 145.37,
-    "total_coles": 91.7,
+    "total_woolworths": 182.72,
+    "total_coles": 97.3,
     "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 53.67,
-    "items_compared": 29,
-    "items_not_found": 1
+    "total_saving": 85.42,
+    "items_compared": 38,
+    "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 30,
+    "done": 40,
     "total": 211
   }
 }
