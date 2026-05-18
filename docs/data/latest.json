@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T06:09:36.171417+00:00",
+  "last_updated": "2026-05-18T06:10:19.210605+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6583,6 +6583,688 @@
       "cheaper_store": "woolworths",
       "saving_per_item": null,
       "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Cherry Tomatoes Punnet",
+      "trip_count": 21,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 3.0
+        },
+        {
+          "date": "2024-12-02",
+          "price": 3.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 3.0
+        },
+        {
+          "date": "2025-01-29",
+          "price": 3.0
+        },
+        {
+          "date": "2025-02-02",
+          "price": 3.0
+        },
+        {
+          "date": "2025-02-28",
+          "price": 2.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 3.2
+        },
+        {
+          "date": "2025-03-17",
+          "price": 3.2
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.2
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.2
+        },
+        {
+          "date": "2025-04-25",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.9
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 2.9
+        },
+        {
+          "date": "2026-02-23",
+          "price": 2.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 2.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 3.0
+        },
+        {
+          "date": "2026-04-21",
+          "price": 3.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.0
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Woolworths Cherry Tomatoes Punnet",
+        "price": 3.2,
+        "unit_price": 12.8,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/149620/woolworths-cherry-tomatoes-punnet",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/149620.jpg"
+      },
+      "coles": {
+        "name": "Mutti Cherry Tomatoes | 400g",
+        "price": 2.7,
+        "unit_price": 2.7,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/mutti-cherry-tomatoes-400g-2612948",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2612948.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.5,
+      "alternatives": [
+        {
+          "name": "Mutti Cherry Tomatoes | 400g",
+          "price": 2.7,
+          "unit_price": 2.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/mutti-cherry-tomatoes-400g-2612948",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2612948.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Cherry Tomatoes | 250g",
+          "price": 3.0,
+          "unit_price": 3.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-cherry-tomatoes-250g-4834736",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4834736.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Tomatoes Cherry Vine Ripened | 200g",
+          "price": 3.5,
+          "unit_price": 3.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tomatoes-cherry-vine-ripened-200g-8003851",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8003851.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Chickpeas",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-02-11",
+          "price": 1.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 1.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Chickpeas",
+        "price": 1.0,
+        "unit_price": 2.38,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/907050/woolworths-chickpeas",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/907050.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Cook Chicken Roasting Portions Italian Style",
+      "trip_count": 11,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 18.0
+        },
+        {
+          "date": "2024-12-09",
+          "price": 18.0
+        },
+        {
+          "date": "2025-02-28",
+          "price": 18.0
+        },
+        {
+          "date": "2025-04-05",
+          "price": 18.0
+        },
+        {
+          "date": "2025-04-25",
+          "price": 18.0
+        },
+        {
+          "date": "2025-06-13",
+          "price": 18.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 18.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 18.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 16.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 14.0
+        },
+        {
+          "date": "2026-04-29",
+          "price": 16.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Cook Chicken Roasting Portions Italian Style",
+        "price": 16.0,
+        "unit_price": 8.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/83172/woolworths-cook-chicken-roasting-portions-italian-style",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/083172.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Cookie Caramel Bar Slice",
+      "trip_count": 10,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 7.5
+        },
+        {
+          "date": "2025-02-28",
+          "price": 7.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 7.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 7.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 7.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 7.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 7.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 7.5
+        },
+        {
+          "date": "2025-05-29",
+          "price": 7.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 7.5
+        }
+      ],
+      "category": "Snacks & Confectionery",
+      "woolworths": {
+        "name": "Woolworths Cookie Caramel Bar Slice",
+        "price": 7.0,
+        "unit_price": 2.5,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/61196/woolworths-cookie-caramel-bar-slice",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/061196.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Corn Sweet",
+      "trip_count": 20,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 5.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 1.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 5.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 5.5
+        },
+        {
+          "date": "2025-04-25",
+          "price": 5.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.5
+        },
+        {
+          "date": "2025-05-29",
+          "price": 5.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 5.5
+        },
+        {
+          "date": "2025-07-03",
+          "price": 5.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 5.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.9
+        },
+        {
+          "date": "2026-02-07",
+          "price": 3.9
+        },
+        {
+          "date": "2026-02-23",
+          "price": 3.9
+        },
+        {
+          "date": "2026-03-02",
+          "price": 4.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.0
+        },
+        {
+          "date": "2026-04-21",
+          "price": 5.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 4.5
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Corn Sweet",
+        "price": 5.5,
+        "unit_price": 11.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/139897/woolworths-corn-sweet",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139897.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Woolworths Sweet & Salty Microwave Popcorn",
+          "price": 0.95,
+          "unit_price": 0.95,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/587191/woolworths-sweet-salty-microwave-popcorn",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/587191.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Woolworths Corn Sweet Kernels",
+          "price": 1.05,
+          "unit_price": 2.5,
+          "unit": "1KG",
+          "url": "https://www.woolworths.com.au/shop/productdetails/218926/woolworths-corn-sweet-kernels",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/218926.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Woolworths Australian Frozen Sweet Corn Cobs",
+          "price": 5.0,
+          "unit_price": 5.0,
+          "unit": "1KG",
+          "url": "https://www.woolworths.com.au/shop/productdetails/374274/woolworths-australian-frozen-sweet-corn-cobs",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/374274.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Corn Sweet Kernels",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 1.2
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.2
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Corn Sweet Kernels",
+        "price": 1.05,
+        "unit_price": 2.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/218926/woolworths-corn-sweet-kernels",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/218926.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Cos Hearts Lettuce",
+      "trip_count": 22,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 3.5
+        },
+        {
+          "date": "2024-12-02",
+          "price": 2.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 3.5
+        },
+        {
+          "date": "2025-01-29",
+          "price": 3.5
+        },
+        {
+          "date": "2025-02-28",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-04",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.9
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-03",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.9
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.5
+        },
+        {
+          "date": "2026-02-07",
+          "price": 3.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 3.5
+        },
+        {
+          "date": "2026-03-02",
+          "price": 3.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.5
+        },
+        {
+          "date": "2026-04-29",
+          "price": 3.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.5
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Cos Hearts Lettuce",
+        "price": 3.3,
+        "unit_price": 1.65,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/141496/woolworths-cos-hearts-lettuce",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/141496.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Cous Cous",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 2.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Cous Cous",
+        "price": 2.0,
+        "unit_price": 0.4,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/720060/woolworths-cous-cous",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/720060.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Diced Italian Tomatoes",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 1.1
+        },
+        {
+          "date": "2025-05-04",
+          "price": 1.1
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.1
+        },
+        {
+          "date": "2025-05-29",
+          "price": 1.1
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.1
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.1
+        },
+        {
+          "date": "2026-03-10",
+          "price": 1.1
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.1
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.1
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Diced Italian Tomatoes",
+        "price": 1.1,
+        "unit_price": 2.75,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/770320/woolworths-diced-italian-tomatoes",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/770320.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Dill Fresh Herb",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 3.2
+        },
+        {
+          "date": "2025-04-25",
+          "price": 3.2
+        },
+        {
+          "date": "2025-06-13",
+          "price": 3.2
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.2
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.2
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.2
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.2
+        }
+      ],
+      "category": "Spices & Herbs",
+      "woolworths": {
+        "name": "Woolworths Dill Fresh Herb",
+        "price": 3.2,
+        "unit_price": 2.13,
+        "unit": "10G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/707365/woolworths-dill-fresh-herb",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/707365.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
     }
   ],
   "not_found_items": [
@@ -6604,16 +7286,16 @@
     "Woolworths Basa Fillets Boneless With Skin Off"
   ],
   "summary": {
-    "total_woolworths": 1018.94,
-    "total_coles": 161.88,
+    "total_woolworths": 1062.29,
+    "total_coles": 164.58,
     "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 857.06,
-    "items_compared": 144,
+    "total_saving": 897.71,
+    "items_compared": 154,
     "items_not_found": 16
   },
   "scrape_progress": {
-    "done": 160,
+    "done": 170,
     "total": 211
   }
 }
