@@ -76,6 +76,20 @@ function saveUnitOverrides(obj) {
   localStorage.setItem('pw_units_v1', JSON.stringify(obj));
 }
 
+// ── Category overrides ───────────────────────────────────────────────────────
+
+const KNOWN_CATEGORIES = [
+  'Dairy & Eggs', 'Meat & Seafood', 'Fruit', 'Vegetables',
+  'Bread & Bakery', 'Pantry', 'Snacks', 'Drinks', 'Frozen', 'Household', 'Other',
+];
+
+function loadCategoryOverrides() {
+  try { return JSON.parse(localStorage.getItem('pw_categories_v1') || '{}'); } catch { return {}; }
+}
+function saveCategoryOverrides(obj) {
+  localStorage.setItem('pw_categories_v1', JSON.stringify(obj));
+}
+
 // ── Item analysis data (loaded from data/item_analysis.json) ─────────────────
 
 let _itemAnalysis = {};
@@ -118,6 +132,8 @@ const CATEGORY_REMAP = {
 };
 
 function getCategory(item) {
+  const ov = loadCategoryOverrides()[item.list_item];
+  if (ov) return ov;
   const c = (item.category || '').trim();
   return CATEGORY_REMAP[c] || c || 'Other';
 }
@@ -128,6 +144,19 @@ let _activePriority = 'all';
 let _showHotOnly = false;
 let _storeFilter = 'all';
 let _showPricesOnly = false;
+
+// ── Bulk selection ────────────────────────────────────────────────────────────
+
+let _checkedItems = new Set();
+
+function updateBulkBar() {
+  const bar = $('bulkBar');
+  if (!bar) return;
+  const count = _checkedItems.size;
+  bar.style.display = count > 0 ? 'flex' : 'none';
+  const el = $('bulkCount');
+  if (el) el.textContent = `${count} item${count !== 1 ? 's' : ''} selected`;
+}
 
 // ── Column order & widths ────────────────────────────────────────────────────
 
@@ -598,6 +627,48 @@ function initPriorityFilter() {
   }
 }
 
+// ── Bulk action bar ───────────────────────────────────────────────────────────
+
+function initBulkBar() {
+  const bar = $('bulkBar');
+  if (!bar) return;
+
+  $('bulkCategorySelect')?.addEventListener('change', () => {
+    const cat = $('bulkCategorySelect').value;
+    if (!cat) return;
+    const ov = loadCategoryOverrides();
+    _checkedItems.forEach(name => { ov[name] = cat; });
+    saveCategoryOverrides(ov);
+    $('bulkCategorySelect').value = '';
+    if (_lastData) renderPage(_lastData);
+  });
+
+  $('bulkPrioritySelect')?.addEventListener('change', () => {
+    const p = $('bulkPrioritySelect').value;
+    if (!p) return;
+    const pr = loadPriorities();
+    _checkedItems.forEach(name => { pr[name] = p; });
+    savePriorities(pr);
+    $('bulkPrioritySelect').value = '';
+    if (_lastData) renderPage(_lastData);
+  });
+
+  $('bulkArchiveBtn')?.addEventListener('click', () => {
+    const pr = loadPriorities();
+    _checkedItems.forEach(name => { pr[name] = 'archive'; });
+    savePriorities(pr);
+    _checkedItems.clear();
+    updateBulkBar();
+    if (_lastData) renderPage(_lastData);
+  });
+
+  $('bulkDeselectBtn')?.addEventListener('click', () => {
+    _checkedItems.clear();
+    updateBulkBar();
+    if (_lastData) renderPage(_lastData);
+  });
+}
+
 // ── Banner stats (priority-aware) ────────────────────────────────────────────
 
 function computeBannerStats(items) {
@@ -619,12 +690,7 @@ function computeBannerStats(items) {
     const u = getUnits(i.list_item);
     return s + (i.coles?.price ?? 0) * u;
   }, 0);
-  // Saving = sum of (price_diff * units) for items where both prices exist
-  const total_saving = filtered.reduce((s, i) => {
-    const ww = i.woolworths?.price, co = i.coles?.price, u = getUnits(i.list_item);
-    if (ww != null && co != null) return s + Math.abs(ww - co) * u;
-    return s;
-  }, 0);
+  const total_saving = Math.abs(ww_total - co_total);
   let cheaper_store;
   if (!ww_avail) cheaper_store = 'coles_only';
   else if (co_total === 0) cheaper_store = 'ww_only';
@@ -876,13 +942,26 @@ function initColumnResize() {
 function renderTableHead() {
   const thead = $('tableHead');
   if (!thead) return;
-  thead.innerHTML = `<tr>${_colOrder.map(colHeadHtml).join('')}</tr>`;
+  thead.innerHTML = `<tr><th class="check-cell"><input type="checkbox" id="checkAll" title="Select all visible"></th>${_colOrder.map(colHeadHtml).join('')}</tr>`;
 
   // Apply stored column widths (fall back to defaults)
   thead.querySelectorAll('th[data-col]').forEach(th => {
     const w = _colWidths[th.dataset.col] ?? DEFAULT_COL_WIDTHS[th.dataset.col];
     if (w) { th.style.width = w + 'px'; th.style.minWidth = w + 'px'; }
   });
+
+  // Check-all handler
+  const checkAllEl = thead.querySelector('#checkAll');
+  if (checkAllEl) {
+    checkAllEl.addEventListener('change', () => {
+      document.querySelectorAll('.row-check').forEach(cb => {
+        cb.checked = checkAllEl.checked;
+        if (checkAllEl.checked) _checkedItems.add(cb.dataset.item);
+        else _checkedItems.delete(cb.dataset.item);
+      });
+      updateBulkBar();
+    });
+  }
 
   initSortHeaders();
   initColumnDrag();
@@ -1204,13 +1283,13 @@ function renderPage(data) {
     toggleBtn.addEventListener('click', () => {
       _showPricesOnly = !_showPricesOnly;
       toggleBtn.classList.toggle('active', _showPricesOnly);
-      toggleBtn.textContent = _showPricesOnly ? 'Showing: prices only' : 'Show: prices only';
+      toggleBtn.textContent = _showPricesOnly ? 'Hiding unfound ✕' : 'Hide unfound items';
       if (_lastData) renderPage(_lastData);
     });
     const tabs = $('categoryTabs');
     tabs?.parentNode?.insertBefore(toggleBtn, tabs);
   }
-  toggleBtn.textContent = _showPricesOnly ? 'Showing: prices only' : 'Show: prices only';
+  toggleBtn.textContent = _showPricesOnly ? 'Hiding unfound ✕' : 'Hide unfound items';
   toggleBtn.classList.toggle('active', _showPricesOnly);
 
   renderTableHead();
@@ -1356,7 +1435,8 @@ function renderPage(data) {
       trips:    `<td class="trips-cell">${tripsHtml}</td>`,
     };
 
-    tbody.insertAdjacentHTML('beforeend', `<tr>${_colOrder.map(col => tdMap[col] || '').join('')}</tr>`);
+    const checked = _checkedItems.has(item.list_item) ? ' checked' : '';
+    tbody.insertAdjacentHTML('beforeend', `<tr><td class="check-cell"><input type="checkbox" class="row-check" data-item="${safeKey}"${checked}></td>${_colOrder.map(col => tdMap[col] || '').join('')}</tr>`);
   });
 
   // Tfoot — dynamic to match column order
@@ -1380,6 +1460,16 @@ function renderPage(data) {
 
   // Not-found items are now shown in the main table — hide the old separate section
   $('notFoundSection').style.display = 'none';
+
+  // Sync check-all indeterminate state
+  const allChecks = document.querySelectorAll('.row-check');
+  const checkAll = $('checkAll');
+  if (checkAll && allChecks.length) {
+    const numChecked = [...allChecks].filter(c => c.checked).length;
+    checkAll.checked = numChecked === allChecks.length;
+    checkAll.indeterminate = numChecked > 0 && numChecked < allChecks.length;
+  }
+  updateBulkBar();
 
   // Signal sticky header to re-sync next scroll
   _stickyNeedsSync = true;
@@ -1708,6 +1798,7 @@ async function boot() {
   initStickyHeader();
   initUploadModal();
   initPriorityFilter();
+  initBulkBar();
   updateImportBadge();
 
   const refreshBtn = $('refreshBtn');
@@ -1727,6 +1818,21 @@ async function boot() {
     const tbody = $('tableBody');
     if (tbody) {
       tbody.addEventListener('click', (e) => {
+        // Row checkbox
+        const rowCheck = e.target.closest('.row-check');
+        if (rowCheck) {
+          const name = rowCheck.dataset.item;
+          if (rowCheck.checked) _checkedItems.add(name);
+          else _checkedItems.delete(name);
+          // Sync check-all state
+          const allChecks = document.querySelectorAll('.row-check');
+          const numChecked = [...allChecks].filter(c => c.checked).length;
+          const ca = $('checkAll');
+          if (ca) { ca.checked = numChecked === allChecks.length; ca.indeterminate = numChecked > 0 && numChecked < allChecks.length; }
+          updateBulkBar();
+          return;
+        }
+
         // Units increment/decrement
         const incBtn = e.target.closest('.units-inc, .units-dec');
         if (incBtn) {

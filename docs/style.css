@@ -32,6 +32,7 @@ body {
   color: var(--text);
   font-size: 14px;
   line-height: 1.5;
+  overflow-x: clip;
 }
 
 a { color: inherit; text-decoration: none; }
@@ -346,10 +347,10 @@ main { max-width: 1140px; margin: 0 auto; padding: 24px 24px 60px; }
   border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow);
   overflow-x: auto;
-  margin-left: -24px;
-  margin-right: -24px;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
 }
-table { width: max-content; border-collapse: collapse; }
+table { width: max-content; min-width: 100%; border-collapse: collapse; }
 
 /* ── Sticky table header ─────────────────────────────────────── */
 #tableHead th {
@@ -1014,12 +1015,64 @@ td.priority-cell { text-align: center; }
   cursor: help; vertical-align: middle;
 }
 
+/* ── Row checkbox ────────────────────────────────────────────── */
+.check-cell {
+  width: 36px; min-width: 36px; max-width: 36px;
+  text-align: center; padding: 0 8px;
+}
+.check-cell input[type="checkbox"] { cursor: pointer; accent-color: var(--ww); width: 15px; height: 15px; }
+
+/* ── Bulk action bar ─────────────────────────────────────────── */
+.bulk-bar {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1E293B;
+  color: #fff;
+  border-radius: 14px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.35);
+  z-index: 300;
+  white-space: nowrap;
+  flex-wrap: wrap;
+  max-width: calc(100vw - 48px);
+}
+.bulk-count { font-size: 13px; font-weight: 600; margin-right: 4px; }
+.bulk-select {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  color: #fff;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.bulk-select option { background: #1E293B; }
+.bulk-btn {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  color: #fff;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s;
+}
+.bulk-btn:hover { background: rgba(255,255,255,.25); }
+.bulk-btn.danger { background: rgba(239,68,68,.3); border-color: rgba(239,68,68,.5); }
+.bulk-btn.danger:hover { background: rgba(239,68,68,.5); }
+.bulk-divider { width: 1px; background: rgba(255,255,255,.2); height: 24px; flex-shrink: 0; }
+
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 700px) {
   .header-inner { padding: 0 14px; }
   .brand-name { display: none; }
   main { padding: 16px 14px 48px; }
-  .table-wrap { margin-left: -14px; margin-right: -14px; }
   .store-cards { flex-direction: column; }
   .store-divider { flex-direction: row; padding: 0; }
   .comparison-banner { padding: 16px; }
