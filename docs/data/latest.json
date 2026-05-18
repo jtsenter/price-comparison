@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:40:02.643690+00:00",
+  "last_updated": "2026-05-18T21:40:14.294266+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7518,20 +7518,153 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "McKenzie's Green Lentil Whole",
+      "last_scraped": "2026-05-18T21:40:06.203121+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 4.8
+        },
+        {
+          "date": "2025-05-12",
+          "price": 4.8
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.8
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.7
+        },
+        {
+          "date": "2026-03-10",
+          "price": 4.8
+        },
+        {
+          "date": "2026-05-06",
+          "price": 4.8
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "McKenzie's Green Lentil Whole",
+        "price": 4.8,
+        "unit_price": 4.8,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/439264/mckenzie-s-green-lentil-whole",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/439264.jpg"
+      },
+      "coles": {
+        "name": "McKenzie's Whole Green Lentils | 375g",
+        "price": 2.3,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/mckenzie's-whole-green-lentils-375g-130050",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F130050.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 2.5,
+      "alternatives": []
+    },
+    {
+      "list_item": "McKenzie's Pepper Black Corns Blended",
+      "last_scraped": "2026-05-18T21:40:10.079446+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 5.95
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.95
+        },
+        {
+          "date": "2026-04-02",
+          "price": 6.95
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "McKenzie's Pepper Black Corns Blended",
+        "price": 6.95,
+        "unit_price": 0.35,
+        "unit": "10G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/320995/mckenzie-s-pepper-black-corns-blended",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/320995.jpg"
+      },
+      "coles": {
+        "name": "McKenzie's Whole Black Pepper Grinders | 200g",
+        "price": 9.95,
+        "unit_price": 9.95,
+        "unit": "10g",
+        "url": "https://www.coles.com.au/product/mckenzie's-whole-black-pepper-grinders-200g-3669430",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3669430.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "McKenzie's Red Lentils",
+      "last_scraped": "2026-05-18T21:40:14.291000+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 4.8
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.8
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.8
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.7
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "McKenzie's Red Lentils",
+        "price": 4.8,
+        "unit_price": 4.8,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/588066/mckenzie-s-red-lentils",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/588066.jpg"
+      },
+      "coles": {
+        "name": "McKenzie's Split Red Lentils | 1kg",
+        "price": 4.8,
+        "unit_price": 4.8,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/mckenzie's-split-red-lentils-1kg-9190991",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9190991.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 511.57,
-    "total_coles": 747.29,
+    "total_woolworths": 528.12,
+    "total_coles": 764.34,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 235.72,
-    "items_compared": 99,
+    "total_saving": 236.22,
+    "items_compared": 102,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 99,
+    "done": 102,
     "total": 211
   }
 }
