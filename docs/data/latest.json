@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T03:58:53.535452+00:00",
+  "last_updated": "2026-05-18T03:59:37.785042+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3457,20 +3457,665 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "KitKat Milk Chocolate Mini Bars Share Pack",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2026-02-07",
+          "price": 7.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 5.25
+        },
+        {
+          "date": "2026-04-21",
+          "price": 5.25
+        },
+        {
+          "date": "2026-05-06",
+          "price": 5.25
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "KitKat Milk Chocolate Mini Bars Share Pack",
+        "price": 5.25,
+        "unit_price": 3.41,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/348593/kitkat-milk-chocolate-mini-bars-share-pack",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/348593.jpg"
+      },
+      "coles": {
+        "name": "KitKat Milk Milk Chocolate Share Pack 11 Pieces | 154g",
+        "price": 7.5,
+        "unit_price": 7.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/kitkat-milk-milk-chocolate-share-pack-11-pieces-154g-7018853",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7018853.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.25,
+      "alternatives": [
+        {
+          "name": "KitKat Packed With Milo Milk Chocolate Block | 165g",
+          "price": 3.5,
+          "unit_price": 2.12,
+          "unit": "100g | Was $7.50",
+          "url": "https://www.coles.com.au/product/kitkat-packed-with-milo-milk-chocolate-block-165g-5389720",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5389720.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "KitKat Milk Chocolate Block | 160g",
+          "price": 3.5,
+          "unit_price": 2.19,
+          "unit": "100g | Was $7.50",
+          "url": "https://www.coles.com.au/product/kitkat-milk-chocolate-block-160g-5872479",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5872479.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Nestle Kit Kat Chocolate Milk 4 Finger Bar | 42g",
+          "price": 3.0,
+          "unit_price": 3.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/nestle-kit-kat-chocolate-milk-4-finger-bar-42g-9229441",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9229441.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Kiwi Fruit Green",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-04-25",
+          "price": 0.95
+        },
+        {
+          "date": "2025-05-29",
+          "price": 0.9
+        },
+        {
+          "date": "2025-06-13",
+          "price": 0.95
+        },
+        {
+          "date": "2025-07-03",
+          "price": 0.95
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.02
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Kiwi Fruit Green",
+        "price": 1.02,
+        "unit_price": 1.02,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/139238/kiwi-fruit-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139238.jpg"
+      },
+      "coles": {
+        "name": "Coles Green Kiwifruit | 1 Each",
+        "price": 1.0,
+        "unit_price": 1.0,
+        "unit": "1eaBuy 5 for $4",
+        "url": "https://www.coles.com.au/product/coles-green-kiwifruit-1-each-4425883",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4425883.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.02,
+      "alternatives": [
+        {
+          "name": "Woolworths Kiwifruit Green Kids",
+          "price": 3.5,
+          "unit_price": 0.7,
+          "unit": "1EA",
+          "url": "https://www.woolworths.com.au/shop/productdetails/648994/woolworths-kiwifruit-green-kids",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/648994.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Coles Green Kiwifruit | 1 Each",
+          "price": 1.0,
+          "unit_price": 1.0,
+          "unit": "1eaBuy 5 for $4",
+          "url": "https://www.coles.com.au/product/coles-green-kiwifruit-1-each-4425883",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4425883.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Lebanese Cucumbers",
+      "trip_count": 27,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 1.06
+        },
+        {
+          "date": "2024-12-19",
+          "price": 1.06
+        },
+        {
+          "date": "2025-01-29",
+          "price": 1.42
+        },
+        {
+          "date": "2025-02-02",
+          "price": 1.24
+        },
+        {
+          "date": "2025-02-28",
+          "price": 1.24
+        },
+        {
+          "date": "2025-03-11",
+          "price": 1.24
+        },
+        {
+          "date": "2025-03-27",
+          "price": 1.24
+        },
+        {
+          "date": "2025-05-04",
+          "price": 1.24
+        },
+        {
+          "date": "2025-05-12",
+          "price": 0.88
+        },
+        {
+          "date": "2025-05-22",
+          "price": 1.24
+        },
+        {
+          "date": "2025-05-29",
+          "price": 0.88
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.42
+        },
+        {
+          "date": "2025-06-13",
+          "price": 1.6
+        },
+        {
+          "date": "2025-06-21",
+          "price": 1.78
+        },
+        {
+          "date": "2025-07-03",
+          "price": 1.6
+        },
+        {
+          "date": "2025-07-26",
+          "price": 1.78
+        },
+        {
+          "date": "2026-02-03",
+          "price": 1.42
+        },
+        {
+          "date": "2026-02-07",
+          "price": 1.42
+        },
+        {
+          "date": "2026-02-11",
+          "price": 1.24
+        },
+        {
+          "date": "2026-02-23",
+          "price": 0.88
+        },
+        {
+          "date": "2026-03-02",
+          "price": 1.42
+        },
+        {
+          "date": "2026-03-10",
+          "price": 1.42
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.42
+        },
+        {
+          "date": "2026-04-13",
+          "price": 1.06
+        },
+        {
+          "date": "2026-04-21",
+          "price": 1.24
+        },
+        {
+          "date": "2026-04-29",
+          "price": 1.42
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.42
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Lebanese Cucumbers",
+        "price": 1.42,
+        "unit_price": 1.42,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/137130/lebanese-cucumbers",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/137130.jpg"
+      },
+      "coles": {
+        "name": "Coles Lebanese Cucumbers | approx. 160g",
+        "price": 1.58,
+        "unit_price": 9.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-lebanese-cucumbers-approx.-160g-4575208",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4575208.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.16,
+      "alternatives": []
+    },
+    {
+      "list_item": "Little One's Size 3 Ultra Dry Nappies Crawler 6-11Kg Boys & Girls",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 12.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 12.0
+        }
+      ],
+      "category": "Baby",
+      "woolworths": {
+        "name": "Little One's Size 3 Ultra Dry Nappies Crawler 6-11Kg Boys & Girls",
+        "price": 11.5,
+        "unit_price": 0.21,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/86175/little-one-s-size-3-ultra-dry-nappies-crawler-6-11kg-boys-girls",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/086175.jpg"
+      },
+      "coles": {
+        "name": "Huggies Ultra Dry Nappies Boys Size 3 (6-11kg) | 44 pack",
+        "price": 24.0,
+        "unit_price": 24.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/huggies-ultra-dry-nappies-boys-size-3-(6-11kg)-44-pack-6803904",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6803904.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 12.5,
+      "alternatives": []
+    },
+    {
+      "list_item": "Little One's Size 4 Ultra Dry Nappies Toddler 10-15Kg Boys & Girls",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 12.0
+        },
+        {
+          "date": "2025-06-21",
+          "price": 12.0
+        }
+      ],
+      "category": "Baby",
+      "woolworths": null,
+      "coles": {
+        "name": "Huggies Ultra Dry Nappies Boys Size 4 (10-15kg) | 36 pack",
+        "price": 24.0,
+        "unit_price": 24.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/huggies-ultra-dry-nappies-boys-size-4-(10-15kg)-36-pack-6803890",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6803890.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Huggies Ultra Dry Nappies Boys Size 4 (10-15kg) | 72 Pack",
+          "price": 29.0,
+          "unit_price": 0.4,
+          "unit": "1ea | Was $40.00",
+          "url": "https://www.coles.com.au/product/huggies-ultra-dry-nappies-boys-size-4-(10-15kg)-72-pack-9224109",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9224109.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Huggies Ultra Dry Nappies Girls Size 4 (10-15kg) | 72 Pack",
+          "price": 29.0,
+          "unit_price": 0.4,
+          "unit": "1ea | Was $40.00",
+          "url": "https://www.coles.com.au/product/huggies-ultra-dry-nappies-girls-size-4-(10-15kg)-72-pack-9224142",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9224142.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "CUB Nappies Unisex Toddler Size 4 (10-15kg) | 50 Pack",
+          "price": 11.5,
+          "unit_price": 11.5,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/cub-nappies-unisex-toddler-size-4-(10-15kg)-50-pack-3720786",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3720786.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Little One's Size 5 Ultra Dry Nappies Walker 12-17kg Boys & Girls",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-04-02",
+          "price": 11.5
+        },
+        {
+          "date": "2026-04-13",
+          "price": 11.5
+        }
+      ],
+      "category": "Baby",
+      "woolworths": {
+        "name": "Little One's Size 5 Ultra Dry Nappies Walker 12-17kg Boys & Girls",
+        "price": 11.5,
+        "unit_price": 0.26,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/86177/little-one-s-size-5-ultra-dry-nappies-walker-12-17kg-boys-girls",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/086177.jpg"
+      },
+      "coles": {
+        "name": "Huggies Ultra Dry Nappy Pants Girls Size 5 (12-17kg) | 26 pack",
+        "price": 22.0,
+        "unit_price": 22.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/huggies-ultra-dry-nappy-pants-girls-size-5-(12-17kg)-26-pack-2848263",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2848263.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 10.5,
+      "alternatives": []
+    },
+    {
+      "list_item": "Lotus Biscoff Spread",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 6.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 7.5
+        }
+      ],
+      "category": "Snacks & Confectionery",
+      "woolworths": {
+        "name": "Lotus Biscoff Spread",
+        "price": 7.5,
+        "unit_price": 1.88,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/670114/lotus-biscoff-spread",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/670114.jpg"
+      },
+      "coles": {
+        "name": "Lotus Biscoff Crunchy Spread | 380g",
+        "price": 6.0,
+        "unit_price": 1.58,
+        "unit": "100g | Was $7.50",
+        "url": "https://www.coles.com.au/product/lotus-biscoff-crunchy-spread-380g-3577220",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3577220.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.5,
+      "alternatives": [
+        {
+          "name": "Lotus Biscoff Smooth Spread | 400g",
+          "price": 6.0,
+          "unit_price": 1.5,
+          "unit": "100g | Was $7.50",
+          "url": "https://www.coles.com.au/product/lotus-biscoff-smooth-spread-400g-3577219",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3577219.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Lotus Biscoff Crunchy Spread | 380g",
+          "price": 6.0,
+          "unit_price": 1.58,
+          "unit": "100g | Was $7.50",
+          "url": "https://www.coles.com.au/product/lotus-biscoff-crunchy-spread-380g-3577220",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3577220.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Lotus Biscoff Spread Smooth",
+          "price": 12.0,
+          "unit_price": 1.67,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/6021133/lotus-biscoff-spread-smooth",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6021133.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Lurpak Butter Spreadable",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 7.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 8.2
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.2
+        },
+        {
+          "date": "2025-07-10",
+          "price": 8.2
+        },
+        {
+          "date": "2026-02-03",
+          "price": 9.0
+        },
+        {
+          "date": "2026-04-29",
+          "price": 8.3
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.3
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Lurpak Butter Spreadable",
+        "price": 8.3,
+        "unit_price": 2.08,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/87702/lurpak-butter-spreadable",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087702.jpg"
+      },
+      "coles": {
+        "name": "Lurpak Butter Spreadable Slightly Salted | 400g",
+        "price": 8.3,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/lurpak-butter-spreadable-slightly-salted-400g-5376659",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5376659.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Lurpak Plant Based Spreadable",
+          "price": 8.2,
+          "unit_price": 2.05,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/6026771/lurpak-plant-based-spreadable",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6026771.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Macro Grass Fed Australian Stir-Fry Beef",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-05-22",
+          "price": 10.25
+        },
+        {
+          "date": "2025-06-13",
+          "price": 13.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Macro Grass Fed Australian Stir-Fry Beef",
+        "price": 13.0,
+        "unit_price": 26.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/175569/macro-grass-fed-australian-stir-fry-beef",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/175569.jpg"
+      },
+      "coles": {
+        "name": "Coles Graze Grassfed Beef Stir Fry | 500g",
+        "price": 13.0,
+        "unit_price": 13.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-graze-grassfed-beef-stir-fry-500g-2023765",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2023765.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Drovers Choice Beef Stir Fry | 500g",
+          "price": 11.5,
+          "unit_price": 11.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/drovers-choice-beef-stir-fry-500g-1093073",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1093073.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Beef Stir Fry | 500g",
+          "price": 12.0,
+          "unit_price": 12.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-stir-fry-500g-9990965",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9990965.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Graze Grass Fed No Added Hormone Beef Mince | 500g",
+          "price": 12.5,
+          "unit_price": 12.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-graze-grass-fed-no-added-hormone-beef-mince-500g-2820606",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2820606.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Macro Natural Sunflower Kernels",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 5.3
+        },
+        {
+          "date": "2026-02-03",
+          "price": 4.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.0
+        }
+      ],
+      "category": "Nuts & Seeds",
+      "woolworths": null,
+      "coles": {
+        "name": "Wellness Road Sunflower Kernels | 500g",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/wellness-road-sunflower-kernels-500g-8669642",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8669642.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Gaganis Premium Raw Sunflower Kernals | 500g",
+          "price": 4.5,
+          "unit_price": 4.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/gaganis-premium-raw-sunflower-kernals-500g-9781896",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9781896.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Chacha Roasted Sunflower Seeds Coconut | 228g",
+          "price": 4.5,
+          "unit_price": 4.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/chacha-roasted-sunflower-seeds-coconut-228g-4211085",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4211085.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Chacha Roasted Sunflower Seeds Spiced | 228g",
+          "price": 4.5,
+          "unit_price": 4.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/chacha-roasted-sunflower-seeds-spiced-228g-4210989",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4210989.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 293.75,
-    "total_coles": 507.26,
+    "total_woolworths": 353.24,
+    "total_coles": 619.64,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 213.51,
-    "items_compared": 60,
+    "total_saving": 266.4,
+    "items_compared": 70,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 60,
+    "done": 70,
     "total": 211
   }
 }
