@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T03:57:26.160755+00:00",
+  "last_updated": "2026-05-18T03:58:10.211113+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2270,20 +2270,629 @@
           "retailer": "woolworths"
         }
       ]
+    },
+    {
+      "list_item": "Essentials Plain Flour",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 1.4
+        },
+        {
+          "date": "2025-04-25",
+          "price": 1.4
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Essentials Plain Flour",
+        "price": 1.3,
+        "unit_price": 1.3,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/33282/essentials-plain-flour",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/033282.jpg"
+      },
+      "coles": {
+        "name": "White Wings Plain Flour | 1kg",
+        "price": 2.7,
+        "unit_price": 2.7,
+        "unit": "1kg | Was $3.40",
+        "url": "https://www.coles.com.au/product/white-wings-plain-flour-1kg-119455",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F119455.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.4,
+      "alternatives": []
+    },
+    {
+      "list_item": "Essentials Salted Butter",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 7.0
+        },
+        {
+          "date": "2025-03-27",
+          "price": 7.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 7.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Essentials Unsalted Butter",
+        "price": 7.0,
+        "unit_price": 1.4,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/688962/essentials-unsalted-butter",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/688962.jpg"
+      },
+      "coles": {
+        "name": "Coppertree Farms Salted Butter | 200g",
+        "price": 7.5,
+        "unit_price": 7.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coppertree-farms-salted-butter-200g-8076469",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8076469.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.5,
+      "alternatives": []
+    },
+    {
+      "list_item": "Essentials White Vinegar",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 1.85
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.85
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.85
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.85
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Essentials White Vinegar",
+        "price": 1.85,
+        "unit_price": 0.09,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/94706/essentials-white-vinegar",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/094706.jpg"
+      },
+      "coles": {
+        "name": "Kedem White Wine Vinegar | 375mL",
+        "price": 9.0,
+        "unit_price": 2.4,
+        "unit": "100mL | Was $15.00",
+        "url": "https://www.coles.com.au/product/kedem-white-wine-vinegar-375ml-8184858",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8184858.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 7.15,
+      "alternatives": []
+    },
+    {
+      "list_item": "Fox's Chocolatey Milk Chocolate Rounds",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 5.5
+        },
+        {
+          "date": "2024-12-02",
+          "price": 5.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 5.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": null,
+      "coles": {
+        "name": "Foxes Den Butter Chicken | 400g",
+        "price": 14.9,
+        "unit_price": 14.9,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/foxes-den-butter-chicken-400g-6415075",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6415075.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Darrell Lea Milk Chocolate Double Chocolate Brownie | 160g",
+          "price": 4.5,
+          "unit_price": 2.81,
+          "unit": "100g | Was $7.00",
+          "url": "https://www.coles.com.au/product/darrell-lea-milk-chocolate-double-chocolate-brownie-160g-8484975",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8484975.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Cadbury Dairy Milk Furry Friends Chocolate Multipack | 100g",
+          "price": 4.0,
+          "unit_price": 4.0,
+          "unit": "100g | Was $4.30",
+          "url": "https://www.coles.com.au/product/cadbury-dairy-milk-furry-friends-chocolate-multipack-100g-3273338",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3273338.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Fresh Broccoli",
+      "trip_count": 20,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 1.62
+        },
+        {
+          "date": "2024-11-20",
+          "price": 2.48
+        },
+        {
+          "date": "2024-12-09",
+          "price": 1.62
+        },
+        {
+          "date": "2025-02-02",
+          "price": 1.62
+        },
+        {
+          "date": "2025-03-27",
+          "price": 1.58
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.15
+        },
+        {
+          "date": "2025-04-25",
+          "price": 2.28
+        },
+        {
+          "date": "2025-05-04",
+          "price": 1.62
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.95
+        },
+        {
+          "date": "2025-05-22",
+          "price": 1.95
+        },
+        {
+          "date": "2025-05-29",
+          "price": 2.28
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.48
+        },
+        {
+          "date": "2025-06-13",
+          "price": 2.61
+        },
+        {
+          "date": "2025-06-21",
+          "price": 1.29
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.27
+        },
+        {
+          "date": "2025-07-26",
+          "price": 1.95
+        },
+        {
+          "date": "2026-02-11",
+          "price": 1.95
+        },
+        {
+          "date": "2026-02-23",
+          "price": 1.95
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.82
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.49
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Fresh Broccoli",
+        "price": 1.95,
+        "unit_price": 1.95,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/134681/fresh-broccoli",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/134681.jpg"
+      },
+      "coles": {
+        "name": "Coles Broccoli Medium | approx. 340g",
+        "price": 1.7,
+        "unit_price": 5.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-broccoli-medium-approx.-340g-407755",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F407755.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.25,
+      "alternatives": []
+    },
+    {
+      "list_item": "Fresh Cauliflower Half",
+      "trip_count": 20,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 2.25
+        },
+        {
+          "date": "2024-11-20",
+          "price": 1.95
+        },
+        {
+          "date": "2024-12-09",
+          "price": 1.5
+        },
+        {
+          "date": "2025-01-29",
+          "price": 2.45
+        },
+        {
+          "date": "2025-02-28",
+          "price": 2.95
+        },
+        {
+          "date": "2025-03-11",
+          "price": 2.95
+        },
+        {
+          "date": "2025-03-17",
+          "price": 1.95
+        },
+        {
+          "date": "2025-03-27",
+          "price": 1.75
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.45
+        },
+        {
+          "date": "2025-04-25",
+          "price": 1.95
+        },
+        {
+          "date": "2025-05-04",
+          "price": 2.75
+        },
+        {
+          "date": "2025-05-12",
+          "price": 2.75
+        },
+        {
+          "date": "2025-05-29",
+          "price": 1.95
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.75
+        },
+        {
+          "date": "2025-07-03",
+          "price": 3.95
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.95
+        },
+        {
+          "date": "2025-07-26",
+          "price": 1.75
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.75
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.75
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.95
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Fresh Cauliflower Half",
+        "price": 2.75,
+        "unit_price": 2.75,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/135568/fresh-cauliflower-half",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135568.jpg"
+      },
+      "coles": {
+        "name": "Coles Cauliflower Half | 1 each",
+        "price": 2.0,
+        "unit_price": 2.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-cauliflower-half-1-each-4601320",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4601320.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.75,
+      "alternatives": [
+        {
+          "name": "Coles Cauliflower Half | 1 each",
+          "price": 2.0,
+          "unit_price": 2.0,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-cauliflower-half-1-each-4601320",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4601320.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Fresh Radish Bunch",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.9
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.9
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Fresh Radish Bunch",
+        "price": 3.9,
+        "unit_price": 3.9,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/147319/fresh-radish-bunch",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147319.jpg"
+      },
+      "coles": {
+        "name": "Coles Radish Bunch | 1 Each",
+        "price": 3.8,
+        "unit_price": 3.8,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-radish-bunch-1-each-4911870",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4911870.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.1,
+      "alternatives": [
+        {
+          "name": "Coles Radish Bunch | 1 Each",
+          "price": 3.8,
+          "unit_price": 3.8,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-radish-bunch-1-each-4911870",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4911870.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Golden Palm Medjool Dates Punnet",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 10.0
+        },
+        {
+          "date": "2025-06-13",
+          "price": 11.9
+        },
+        {
+          "date": "2026-02-03",
+          "price": 10.9
+        },
+        {
+          "date": "2026-05-06",
+          "price": 12.5
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Golden Palm Medjool Dates Punnet",
+        "price": 12.5,
+        "unit_price": 27.78,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/774695/golden-palm-medjool-dates-punnet",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/774695.jpg"
+      },
+      "coles": {
+        "name": "Medjool Date Gift Box 5kg | 1 Each",
+        "price": 100.0,
+        "unit_price": 100.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/medjool-date-gift-box-5kg-1-each-7273420",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7273420.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 87.5,
+      "alternatives": [
+        {
+          "name": "Coles Herb Punnets Dill | 10g",
+          "price": 3.2,
+          "unit_price": 3.2,
+          "unit": "10g",
+          "url": "https://www.coles.com.au/product/coles-herb-punnets-dill-10g-3214769",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3214769.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Organic Medjool Dates | 227g",
+          "price": 7.9,
+          "unit_price": 7.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-organic-medjool-dates-227g-2823342",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2823342.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Pitted Medjool Date | 340g",
+          "price": 14.0,
+          "unit_price": 14.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-pitted-medjool-date-340g-5139518",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5139518.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Green Zucchini",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 0.78
+        },
+        {
+          "date": "2025-04-25",
+          "price": 1.18
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Fresh Zucchini Green",
+        "price": 0.78,
+        "unit_price": 0.78,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/170225/fresh-zucchini-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/170225.jpg"
+      },
+      "coles": {
+        "name": "Coles Green Zucchini | approx. 200g",
+        "price": 1.38,
+        "unit_price": 6.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-green-zucchini-approx.-200g-4910506",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4910506.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.6,
+      "alternatives": []
+    },
+    {
+      "list_item": "Hass Avocado",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 2.5
+        },
+        {
+          "date": "2024-11-12",
+          "price": 2.5
+        },
+        {
+          "date": "2024-11-20",
+          "price": 2.9
+        },
+        {
+          "date": "2024-12-02",
+          "price": 2.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 2.9
+        },
+        {
+          "date": "2024-12-19",
+          "price": 2.9
+        },
+        {
+          "date": "2025-01-29",
+          "price": 3.5
+        },
+        {
+          "date": "2025-02-02",
+          "price": 3.5
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Hass Avocado",
+        "price": 2.5,
+        "unit_price": 2.5,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/120080/hass-avocado",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120080.jpg"
+      },
+      "coles": {
+        "name": "Coles Hass Avocados | 1 Each",
+        "price": 2.2,
+        "unit_price": 2.2,
+        "unit": "1eaBuy 2 for $4",
+        "url": "https://www.coles.com.au/product/coles-hass-avocados-1-each-5900530",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5900530.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.3,
+      "alternatives": [
+        {
+          "name": "Coles Hass Avocados | 1 Each",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1eaBuy 2 for $4",
+          "url": "https://www.coles.com.au/product/coles-hass-avocados-1-each-5900530",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5900530.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 180.62,
-    "total_coles": 288.78,
+    "total_woolworths": 215.15,
+    "total_coles": 433.96,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 108.16,
-    "items_compared": 40,
+    "total_saving": 218.81,
+    "items_compared": 50,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 40,
+    "done": 50,
     "total": 211
   }
 }
