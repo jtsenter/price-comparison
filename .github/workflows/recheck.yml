@@ -1,0 +1,32 @@
+name: Re-check Flagged Items
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  PYTHON: 'C:\Users\jtsen\AppData\Local\Python\pythoncore-3.14-64\python.exe'
+
+jobs:
+  recheck:
+    runs-on: self-hosted
+    timeout-minutes: 60
+
+    defaults:
+      run:
+        shell: powershell
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: '& $env:PYTHON -m pip install -r requirements.txt'
+
+      - name: Install Playwright browsers
+        run: '& $env:PYTHON -m playwright install chromium chromium-headless-shell'
+
+      - name: Run recheck
+        run: '& $env:PYTHON scripts/recheck.py'
