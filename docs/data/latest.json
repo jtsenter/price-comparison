@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T03:14:18.186017+00:00",
+  "last_updated": "2026-05-18T03:15:10.413711+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3842,6 +3842,451 @@
       "cheaper_store": "woolworths",
       "saving_per_item": null,
       "alternatives": []
+    },
+    {
+      "list_item": "McKenzie's Red Lentils",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 4.8
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.8
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.8
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.7
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "McKenzie's Red Lentils",
+        "price": 4.8,
+        "unit_price": 4.8,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/588066/mckenzie-s-red-lentils",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/588066.jpg"
+      },
+      "coles": {
+        "name": "McKenzie's Split Red Lentils | 375g",
+        "price": 2.3,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/mckenzie's-split-red-lentils-375g-130061",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F130061.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 2.5,
+      "alternatives": []
+    },
+    {
+      "list_item": "McVitie's Digestives Milk Chocolate",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 5.5
+        },
+        {
+          "date": "2025-04-25",
+          "price": 2.75
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.5
+        },
+        {
+          "date": "2026-04-29",
+          "price": 2.75
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "McVitie's Digestives Milk Chocolate",
+        "price": 5.5,
+        "unit_price": 2.07,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/263373/mcvitie-s-digestives-milk-chocolate",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/263373.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "McVitie's Digestives Choc Tops Milk Chocolate",
+          "price": 2.0,
+          "unit_price": 2.0,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/262411/mcvitie-s-digestives-choc-tops-milk-chocolate",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/262411.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "McVitie's Hobnobs Milk Chocolate",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 2.75
+        },
+        {
+          "date": "2025-05-12",
+          "price": 2.75
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.75
+        },
+        {
+          "date": "2026-02-03",
+          "price": 2.75
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "McVitie's Hobnobs Milk Chocolate",
+        "price": 5.5,
+        "unit_price": 2.1,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/260691/mcvitie-s-hobnobs-milk-chocolate",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/260691.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Mon Ami French Camembert Cheese",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 7.2
+        },
+        {
+          "date": "2025-05-04",
+          "price": 6.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 7.2
+        },
+        {
+          "date": "2025-06-06",
+          "price": 7.2
+        },
+        {
+          "date": "2025-07-10",
+          "price": 7.2
+        },
+        {
+          "date": "2026-02-23",
+          "price": 6.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Mon Ami French Camembert Cheese",
+        "price": 7.2,
+        "unit_price": 36.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/751148/mon-ami-french-camembert-cheese",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/751148.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Mon Ami French Le Fromager Double Cream Brie",
+          "price": 8.9,
+          "unit_price": 29.67,
+          "unit": "1KG",
+          "url": "https://www.woolworths.com.au/shop/productdetails/319652/mon-ami-french-le-fromager-double-cream-brie",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/319652.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Munchkin Miracle 360 Trainer Cup Assorted",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 8.4
+        },
+        {
+          "date": "2025-05-12",
+          "price": 12.0
+        }
+      ],
+      "category": "Baby",
+      "woolworths": {
+        "name": "Munchkin Miracle 360 Trainer Cup Assorted",
+        "price": 12.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.woolworths.com.au/shop/productdetails/428373/munchkin-miracle-360-trainer-cup-assorted",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/428373.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Mushrooms Cups Loose",
+      "trip_count": 17,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 12.9
+        },
+        {
+          "date": "2024-11-12",
+          "price": 10.9
+        },
+        {
+          "date": "2024-11-20",
+          "price": 12.9
+        },
+        {
+          "date": "2025-01-29",
+          "price": 12.9
+        },
+        {
+          "date": "2025-02-02",
+          "price": 11.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 12.9
+        },
+        {
+          "date": "2025-03-27",
+          "price": 12.9
+        },
+        {
+          "date": "2025-04-25",
+          "price": 12.9
+        },
+        {
+          "date": "2025-05-04",
+          "price": 12.9
+        },
+        {
+          "date": "2025-05-12",
+          "price": 10.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 12.9
+        },
+        {
+          "date": "2025-06-06",
+          "price": 12.9
+        },
+        {
+          "date": "2025-06-13",
+          "price": 11.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 11.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 11.5
+        },
+        {
+          "date": "2026-03-02",
+          "price": 12.9
+        },
+        {
+          "date": "2026-05-06",
+          "price": 12.9
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Mushrooms Cups Loose",
+        "price": 12.5,
+        "unit_price": 12.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/143109/mushrooms-cups-loose",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/143109.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Mushrooms Flat Large Loose",
+          "price": 11.5,
+          "unit_price": 11.5,
+          "unit": "1KG",
+          "url": "https://www.woolworths.com.au/shop/productdetails/145028/mushrooms-flat-large-loose",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/145028.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Mushrooms Flat Large Loose",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-02-11",
+          "price": 11.5
+        },
+        {
+          "date": "2026-04-21",
+          "price": 12.5
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Mushroom Portobello Flat Large Loose",
+        "price": 13.5,
+        "unit_price": 13.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/124011/mushroom-portobello-flat-large-loose",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124011.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Mushrooms Flat Large Loose",
+          "price": 11.5,
+          "unit_price": 11.5,
+          "unit": "1KG",
+          "url": "https://www.woolworths.com.au/shop/productdetails/145028/mushrooms-flat-large-loose",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/145028.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Mushrooms Cups Loose",
+          "price": 12.5,
+          "unit_price": 12.5,
+          "unit": "1KG",
+          "url": "https://www.woolworths.com.au/shop/productdetails/143109/mushrooms-cups-loose",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/143109.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Mutti Tomato Paste Double Concentrate",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 2.1
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.1
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.4
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.4
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Mutti Tomato Paste Double Concentrate",
+        "price": 2.4,
+        "unit_price": 1.85,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/290303/mutti-tomato-paste-double-concentrate",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/290303.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Nutella Hazelnut Chocolate Spread Spread",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-03-10",
+          "price": 14.8
+        },
+        {
+          "date": "2026-05-06",
+          "price": 14.8
+        }
+      ],
+      "category": "Snacks & Confectionery",
+      "woolworths": {
+        "name": "Nutella Hazelnut Chocolate Spread Spread",
+        "price": 12.5,
+        "unit_price": 1.67,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/147314/nutella-hazelnut-chocolate-spread-spread",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147314.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Obela Hommus Dip With Garlic Smashed Falafel",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-02-03",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 4.0
+        }
+      ],
+      "category": "Spreads & Dips",
+      "woolworths": {
+        "name": "Obela Hommus Dip With Garlic Smashed Falafel",
+        "price": 5.5,
+        "unit_price": 2.5,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/6038199/obela-hommus-dip-with-garlic-smashed-falafel",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6038199.jpg"
+      },
+      "coles": {
+        "name": "Obela Garnished Dip Garlic Hommus With Smashed Falafel | 220g",
+        "price": 5.5,
+        "unit_price": 5.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/obela-garnished-dip-garlic-hommus-with-smashed-falafel-220g-1048818",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1048818.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
     }
   ],
   "not_found_items": [
@@ -3852,16 +4297,16 @@
     "Market Value Scotch Fillet"
   ],
   "summary": {
-    "total_woolworths": 414.39,
-    "total_coles": 423.03,
-    "cheaper_store": "woolworths",
+    "total_woolworths": 495.79,
+    "total_coles": 430.83,
+    "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 8.64,
-    "items_compared": 75,
+    "total_saving": 64.96,
+    "items_compared": 85,
     "items_not_found": 5
   },
   "scrape_progress": {
-    "done": 80,
+    "done": 90,
     "total": 211
   }
 }
