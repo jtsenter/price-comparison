@@ -102,7 +102,24 @@ function getPriority(itemName) {
 function getUnits(itemName) {
   const ov = loadUnitOverrides()[itemName];
   if (ov != null) return ov;
-  return getAnalysisData(itemName).avg_qty ?? 1;
+  const qty = getAnalysisData(itemName).avg_qty;
+  return qty != null ? Math.round(qty) : 1;
+}
+
+// ── Category normalisation ────────────────────────────────────────────────────
+
+const CATEGORY_REMAP = {
+  'Spices & Herbs':         'Pantry',
+  'Spreads & Dips':         'Pantry',
+  'Nuts & Seeds':           'Snacks',
+  'Snacks & Confectionery': 'Snacks',
+  'Health & Beauty':        'Household',
+  'Baby':                   'Household',
+};
+
+function getCategory(item) {
+  const c = (item.category || '').trim();
+  return CATEGORY_REMAP[c] || c || 'Other';
 }
 
 // ── Filter state ─────────────────────────────────────────────────────────────
@@ -588,6 +605,8 @@ function computeBannerStats(items) {
     const p = getPriority(item.list_item);
     if (_activePriority !== 'archive' && p === 'archive') return false;
     if (_activePriority !== 'all' && _activePriority !== 'archive' && p !== _activePriority) return false;
+    if (_activeCategory !== 'All' && getCategory(item) !== _activeCategory) return false;
+    if (_showHotOnly && !isHotDeal(item)) return false;
     return true;
   });
   const ww_avail = filtered.some(i => i.woolworths?.price != null);
@@ -630,13 +649,13 @@ function buildCategoryTabs(items) {
   const container = $('categoryTabs');
   if (!container) return;
 
-  const seen = new Set();
-  const cats = ['All'];
+  const counts = {};
   items.forEach(i => {
-    const c = (i.category || '').trim();
-    if (c && !seen.has(c)) { seen.add(c); cats.push(c); }
+    const c = getCategory(i);
+    counts[c] = (counts[c] || 0) + 1;
   });
-  cats.sort((a, b) => a === 'All' ? -1 : b === 'All' ? 1 : a.localeCompare(b));
+  const top10 = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([c]) => c);
+  const cats = ['All', ...top10];
 
   container.innerHTML = '';
   cats.forEach(cat => {
@@ -1001,7 +1020,7 @@ function sortItems(items) {
 
   // Category filter
   if (_activeCategory !== 'All') {
-    filtered = filtered.filter(i => (i.category || '').trim() === _activeCategory);
+    filtered = filtered.filter(i => getCategory(i) === _activeCategory);
   }
 
   return [...filtered].sort((a, b) => {
@@ -1437,7 +1456,12 @@ async function showNameChangesNotice() {
   const notifBadge = $('notifBadge');
   const notifItems = $('notifItems');
   if (!notifBtn || !changes || Object.keys(changes).length === 0) return;
-  const keys = Object.keys(changes);
+  const keys = Object.keys(changes).sort();
+  const fingerprint = keys.join('|');
+
+  // Don't re-show if user already dismissed this exact set of changes
+  if (localStorage.getItem('pw_notif_dismissed_v1') === fingerprint) return;
+
   notifBadge.textContent = keys.length;
   notifBtn.style.display = 'inline-flex';
   notifItems.innerHTML = keys.map(k => `<span class="notif-item">${k}</span>`).join('');
@@ -1449,6 +1473,7 @@ async function showNameChangesNotice() {
   });
   document.addEventListener('click', () => { $('notifDropdown').style.display = 'none'; });
   $('notifDismissAll')?.addEventListener('click', () => {
+    localStorage.setItem('pw_notif_dismissed_v1', fingerprint);
     notifBtn.style.display = 'none';
     $('notifDropdown').style.display = 'none';
   });

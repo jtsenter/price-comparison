@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discrepancy Review — PriceWatch</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <style>
+    :root {
+      --ww: #00843D; --coles: #CC0000; --bg: #F0F4F8; --card: #fff;
+      --border: #E2E8F0; --text: #1A1F2E; --text-mid: #475569; --text-soft: #94A3B8;
+      --green: #059669; --radius: 10px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
+    header { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    header a { text-decoration: none; color: var(--text-mid); font-size: 13px; font-weight: 500; }
+    header h1 { font-size: 16px; font-weight: 700; }
+    main { max-width: 900px; margin: 0 auto; padding: 24px; }
+    .summary { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .summary-stat { font-size: 13px; color: var(--text-mid); }
+    .summary-stat strong { color: var(--text); font-size: 20px; display: block; }
+    .filter-row { display: flex; gap: 8px; margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
+    .filter-btn { padding: 6px 14px; border: 1px solid var(--border); border-radius: 20px; background: var(--card); font-size: 12px; cursor: pointer; font-weight: 500; color: var(--text-mid); }
+    .filter-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
+    .item-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
+    .item-card.confirmed { border-color: #BBF7D0; background: #F0FDF4; }
+    .item-card.flagged { border-color: #FED7AA; background: #FFF7ED; }
+    .card-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+    .item-card.confirmed .card-header { border-bottom-color: #BBF7D0; }
+    .item-card.flagged .card-header { border-bottom-color: #FED7AA; }
+    .item-name { font-weight: 600; font-size: 14px; flex: 1; }
+    .pct-badge { font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 12px; background: #FEF3C7; color: #92400E; }
+    .pct-badge.high { background: #FEE2E2; color: #991B1B; }
+    .stores-row { display: grid; grid-template-columns: 1fr 1fr; }
+    .store-block { padding: 14px 16px; }
+    .store-block + .store-block { border-left: 1px solid var(--border); }
+    .store-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+    .store-label.ww { color: var(--ww); }
+    .store-label.coles { color: var(--coles); }
+    .product-name { font-size: 13px; color: var(--text-mid); margin-bottom: 4px; line-height: 1.3; }
+    .product-price { font-size: 18px; font-weight: 700; }
+    .store-link { display: inline-block; margin-top: 6px; font-size: 12px; color: var(--text-soft); text-decoration: underline; word-break: break-all; }
+    .store-link:hover { color: var(--text); }
+    .missing { font-size: 13px; color: var(--text-soft); font-style: italic; }
+    .card-actions { padding: 10px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
+    .item-card.confirmed .card-actions { border-top-color: #BBF7D0; }
+    .item-card.flagged .card-actions { border-top-color: #FED7AA; }
+    .btn { padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid; }
+    .btn-ok { background: #ECFDF5; color: #065F46; border-color: #6EE7B7; }
+    .btn-ok:hover, .btn-ok.active { background: #059669; color: #fff; border-color: #059669; }
+    .btn-flag { background: #FFF7ED; color: #92400E; border-color: #FED7AA; }
+    .btn-flag:hover, .btn-flag.active { background: #D97706; color: #fff; border-color: #D97706; }
+    .btn-fix { background: var(--card); color: var(--text-mid); border-color: var(--border); }
+    .btn-fix:hover { background: var(--bg); }
+    .status-chip { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 10px; margin-left: auto; }
+    .status-chip.ok { background: #D1FAE5; color: #065F46; }
+    .status-chip.flagged { background: #FEE2E2; color: #991B1B; }
+    .empty { text-align: center; padding: 48px 16px; color: var(--text-soft); }
+    .progress { color: var(--text-mid); font-size: 13px; }
+    @media (max-width: 600px) {
+      .stores-row { grid-template-columns: 1fr; }
+      .store-block + .store-block { border-left: none; border-top: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>⚠ Discrepancy Review</h1>
+  <div style="display:flex;gap:16px;align-items:center;">
+    <span class="progress" id="progressText"></span>
+    <a href="index.html">← Back to list</a>
+  </div>
+</header>
+
+<main>
+  <div class="summary" id="summary" style="display:none">
+    <div class="summary-stat"><strong id="totalCount">—</strong>items with &gt;31% price gap</div>
+    <div class="summary-stat"><strong id="okCount">—</strong>confirmed correct</div>
+    <div class="summary-stat"><strong id="flagCount">—</strong>flagged as wrong match</div>
+    <div class="summary-stat"><strong id="todoCount">—</strong>not yet reviewed</div>
+  </div>
+
+  <div class="filter-row">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="todo">Not reviewed</button>
+    <button class="filter-btn" data-filter="ok">Confirmed OK</button>
+    <button class="filter-btn" data-filter="flagged">Flagged</button>
+  </div>
+
+  <div id="list"></div>
+</main>
+
+<script>
+const THRESHOLD = 0.31;
+const STORAGE_KEY = 'pw_review_v1';
+let _items = [];
+let _filter = 'all';
+
+function loadReviews() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
+}
+function saveReview(itemName, status) {
+  const r = loadReviews();
+  if (status == null) delete r[itemName];
+  else r[itemName] = status;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(r));
+}
+
+function pct(ww, co) {
+  return Math.round(Math.abs(ww - co) / Math.max(ww, co) * 100);
+}
+
+function fmt(n) { return n != null ? `$${Number(n).toFixed(2)}` : '—'; }
+
+function renderCard(item, reviews) {
+  const ww = item.woolworths;
+  const co = item.coles;
+  const p = ww?.price != null && co?.price != null ? pct(ww.price, co.price) : null;
+  const status = reviews[item.list_item];
+
+  const cardClass = status === 'ok' ? 'confirmed' : status === 'flagged' ? 'flagged' : '';
+  const statusChip = status === 'ok'
+    ? '<span class="status-chip ok">✓ Confirmed</span>'
+    : status === 'flagged'
+    ? '<span class="status-chip flagged">⚠ Wrong match</span>'
+    : '';
+
+  const pctClass = p >= 60 ? 'high' : '';
+  const pctBadge = p != null ? `<span class="pct-badge ${pctClass}">${p}% gap</span>` : '';
+
+  const wwBlock = ww
+    ? `<div class="store-block">
+        <div class="store-label ww">Woolworths</div>
+        <div class="product-name">${ww.name || '—'}</div>
+        <div class="product-price">${fmt(ww.price)}</div>
+        ${ww.url ? `<a class="store-link" href="${ww.url}" target="_blank">View product →</a>` : ''}
+      </div>`
+    : `<div class="store-block"><div class="store-label ww">Woolworths</div><div class="missing">Not found</div></div>`;
+
+  const coBlock = co
+    ? `<div class="store-block">
+        <div class="store-label coles">Coles</div>
+        <div class="product-name">${co.name || '—'}</div>
+        <div class="product-price">${fmt(co.price)}</div>
+        ${co.url ? `<a class="store-link" href="${co.url}" target="_blank">View product →</a>` : ''}
+      </div>`
+    : `<div class="store-block"><div class="store-label coles">Coles</div><div class="missing">Not found</div></div>`;
+
+  return `
+    <div class="item-card ${cardClass}" data-item="${item.list_item.replace(/"/g,'&quot;')}">
+      <div class="card-header">
+        <div class="item-name">${item.list_item}</div>
+        ${pctBadge}
+        ${statusChip}
+      </div>
+      <div class="stores-row">${wwBlock}${coBlock}</div>
+      <div class="card-actions">
+        <button class="btn btn-ok ${status==='ok'?'active':''}" data-action="ok">✓ Looks correct</button>
+        <button class="btn btn-flag ${status==='flagged'?'active':''}" data-action="flag">⚠ Wrong match</button>
+        <a class="btn btn-fix" href="index.html#edit-${encodeURIComponent(item.list_item)}" target="_blank">Fix URLs →</a>
+        ${status ? '<button class="btn btn-fix" data-action="clear">Clear</button>' : ''}
+      </div>
+    </div>`;
+}
+
+function updateSummary(reviews) {
+  const ok = _items.filter(i => reviews[i.list_item] === 'ok').length;
+  const flagged = _items.filter(i => reviews[i.list_item] === 'flagged').length;
+  const todo = _items.length - ok - flagged;
+  document.getElementById('totalCount').textContent = _items.length;
+  document.getElementById('okCount').textContent = ok;
+  document.getElementById('flagCount').textContent = flagged;
+  document.getElementById('todoCount').textContent = todo;
+  document.getElementById('progressText').textContent = `${ok + flagged}/${_items.length} reviewed`;
+  document.getElementById('summary').style.display = 'flex';
+}
+
+function renderList() {
+  const reviews = loadReviews();
+  const visible = _filter === 'all' ? _items
+    : _filter === 'ok' ? _items.filter(i => reviews[i.list_item] === 'ok')
+    : _filter === 'todo' ? _items.filter(i => !reviews[i.list_item])
+    : _items.filter(i => reviews[i.list_item] === 'flagged');
+
+  const el = document.getElementById('list');
+  if (!visible.length) {
+    el.innerHTML = '<div class="empty">No items in this filter.</div>';
+    return;
+  }
+  el.innerHTML = visible.map(i => renderCard(i, reviews)).join('');
+  updateSummary(reviews);
+}
+
+document.getElementById('list').addEventListener('click', (e) => {
+  const card = e.target.closest('.item-card');
+  if (!card) return;
+  const itemName = card.dataset.item;
+  const action = e.target.closest('[data-action]')?.dataset.action;
+  if (!action) return;
+
+  if (action === 'ok') saveReview(itemName, 'ok');
+  else if (action === 'flag') saveReview(itemName, 'flagged');
+  else if (action === 'clear') saveReview(itemName, null);
+  renderList();
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    _filter = btn.dataset.filter;
+    renderList();
+  });
+});
+
+async function boot() {
+  const el = document.getElementById('list');
+  el.innerHTML = '<div class="empty">Loading…</div>';
+  try {
+    const res = await fetch(`data/latest.json?t=${Date.now()}`);
+    const data = await res.json();
+    _items = (data.items || []).filter(item => {
+      const ww = item.woolworths?.price;
+      const co = item.coles?.price;
+      if (ww == null || co == null) return false;
+      return Math.abs(ww - co) / Math.max(ww, co) > THRESHOLD;
+    }).sort((a, b) => {
+      const pa = Math.abs(a.woolworths.price - a.coles.price) / Math.max(a.woolworths.price, a.coles.price);
+      const pb = Math.abs(b.woolworths.price - b.coles.price) / Math.max(b.woolworths.price, b.coles.price);
+      return pb - pa;
+    });
+    renderList();
+  } catch (e) {
+    el.innerHTML = `<div class="empty">Could not load price data: ${e.message}</div>`;
+  }
+}
+
+boot();
+</script>
+</body>
+</html>

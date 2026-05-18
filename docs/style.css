@@ -291,14 +291,21 @@ main { max-width: 1140px; margin: 0 auto; padding: 24px 24px 60px; }
 /* ── Category tabs ───────────────────────────────────────────── */
 .category-tabs {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 6px;
   margin-bottom: 14px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2px;
+  scrollbar-width: none;
 }
+.category-tabs::-webkit-scrollbar { display: none; }
 .category-tab {
-  padding: 5px 14px;
+  padding: 5px 12px;
   border-radius: 20px;
   font-size: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
   font-weight: 600;
   border: 1px solid var(--border-strong);
   background: var(--card);
@@ -335,13 +342,14 @@ main { max-width: 1140px; margin: 0 auto; padding: 24px 24px 60px; }
 /* ── Table ───────────────────────────────────────────────────── */
 .table-wrap {
   background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow);
   overflow-x: auto;
+  margin-left: -24px;
+  margin-right: -24px;
 }
-table { width: max-content; min-width: 100%; border-collapse: collapse; }
+table { width: max-content; border-collapse: collapse; }
 
 /* ── Sticky table header ─────────────────────────────────────── */
 #tableHead th {
@@ -1011,6 +1019,7 @@ td.priority-cell { text-align: center; }
   .header-inner { padding: 0 14px; }
   .brand-name { display: none; }
   main { padding: 16px 14px 48px; }
+  .table-wrap { margin-left: -14px; margin-right: -14px; }
   .store-cards { flex-direction: column; }
   .store-divider { flex-direction: row; padding: 0; }
   .comparison-banner { padding: 16px; }
