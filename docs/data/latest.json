@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:38:50.077535+00:00",
+  "last_updated": "2026-05-18T21:39:26.292754+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6648,20 +6648,192 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 7.15,
       "alternatives": []
+    },
+    {
+      "list_item": "Fresh Radish Bunch",
+      "last_scraped": "2026-05-18T21:38:53.812593+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.9
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.9
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Fresh Radish Bunch",
+        "price": 3.9,
+        "unit_price": 3.9,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/147319/fresh-radish-bunch",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147319.jpg"
+      },
+      "coles": {
+        "name": "Coles Radish Bunch | 1 Each",
+        "price": 3.8,
+        "unit_price": 3.8,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-radish-bunch-1-each-4911870",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4911870.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.1,
+      "alternatives": [
+        {
+          "name": "Coles Radish Bunch | 1 Each",
+          "price": 3.8,
+          "unit_price": 3.8,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-radish-bunch-1-each-4911870",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4911870.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Golden Palm Medjool Dates Punnet",
+      "last_scraped": "2026-05-18T21:38:59.410598+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 10.0
+        },
+        {
+          "date": "2025-06-13",
+          "price": 11.9
+        },
+        {
+          "date": "2026-02-03",
+          "price": 10.9
+        },
+        {
+          "date": "2026-05-06",
+          "price": 12.5
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Golden Palm Medjool Dates Punnet",
+        "price": 12.5,
+        "unit_price": 27.78,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/774695/golden-palm-medjool-dates-punnet",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/774695.jpg"
+      },
+      "coles": {
+        "name": "Medjool Date Gift Box 5kg | 1 Each",
+        "price": 100.0,
+        "unit_price": 100.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/medjool-date-gift-box-5kg-1-each-7273420",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7273420.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 87.5,
+      "alternatives": [
+        {
+          "name": "Coles Herb Punnets Dill | 10g",
+          "price": 3.2,
+          "unit_price": 3.2,
+          "unit": "10g",
+          "url": "https://www.coles.com.au/product/coles-herb-punnets-dill-10g-3214769",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3214769.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Organic Medjool Dates | 227g",
+          "price": 7.9,
+          "unit_price": 7.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-organic-medjool-dates-227g-2823342",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2823342.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Pitted Medjool Date | 340g",
+          "price": 14.0,
+          "unit_price": 14.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-pitted-medjool-date-340g-5139518",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5139518.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Fox's Chocolatey Milk Chocolate Rounds",
+      "last_scraped": "2026-05-18T21:39:26.290081+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 5.5
+        },
+        {
+          "date": "2024-12-02",
+          "price": 5.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 5.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": null,
+      "coles": {
+        "name": "Foxes Den Butter Chicken | 400g",
+        "price": 14.9,
+        "unit_price": 14.9,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/foxes-den-butter-chicken-400g-6415075",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6415075.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Darrell Lea Milk Chocolate Double Chocolate Brownie | 160g",
+          "price": 4.5,
+          "unit_price": 2.81,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/darrell-lea-milk-chocolate-double-chocolate-brownie-160g-8484975",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8484975.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Cadbury Dairy Milk Furry Friends Chocolate Multipack | 100g",
+          "price": 4.0,
+          "unit_price": 4.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/cadbury-dairy-milk-furry-friends-chocolate-multipack-100g-3273338",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3273338.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 400.1,
-    "total_coles": 549.59,
+    "total_woolworths": 416.5,
+    "total_coles": 668.29,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 149.49,
-    "items_compared": 84,
+    "total_saving": 251.79,
+    "items_compared": 87,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 84,
+    "done": 87,
     "total": 211
   }
 }
