@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:35:34.099364+00:00",
+  "last_updated": "2026-05-18T21:36:11.316099+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3207,20 +3207,271 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "Woolworths 12 Extra Large Free Range Eggs",
+      "last_scraped": "2026-05-18T21:36:01.695889+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 6.1
+        },
+        {
+          "date": "2024-12-19",
+          "price": 6.1
+        },
+        {
+          "date": "2025-07-03",
+          "price": 6.6
+        },
+        {
+          "date": "2026-02-11",
+          "price": 6.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 6.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 6.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 6.5
+        },
+        {
+          "date": "2026-04-13",
+          "price": 6.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 6.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": null,
+      "coles": {
+        "name": "Coles Organic Free Range Eggs 12 Pack | 600g",
+        "price": 10.6,
+        "unit_price": 10.6,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-organic-free-range-eggs-12-pack-600g-3169697",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3169697.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Coles Free Range Eggs 12 Pack | 600g",
+          "price": 6.2,
+          "unit_price": 6.2,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-free-range-eggs-12-pack-600g-9453456",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9453456.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Free Range Eggs 12 Pack | 700g",
+          "price": 6.5,
+          "unit_price": 6.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-free-range-eggs-12-pack-700g-9453478",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9453478.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Jumbo Free Range Eggs 12 Pack | 800g",
+          "price": 7.25,
+          "unit_price": 7.25,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-jumbo-free-range-eggs-12-pack-800g-1034234",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1034234.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Beef Porterhouse Steak & Butter",
+      "last_scraped": "2026-05-18T21:36:07.399619+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-12-09",
+          "price": 15.0
+        },
+        {
+          "date": "2025-02-02",
+          "price": 15.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 16.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 16.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 16.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 15.2
+        },
+        {
+          "date": "2026-03-10",
+          "price": 18.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 18.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 15.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Beef Porterhouse Steak & Butter",
+        "price": 18.0,
+        "unit_price": 45.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/243050/woolworths-beef-porterhouse-steak-butter",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/243050.jpg"
+      },
+      "coles": {
+        "name": "Coles No Added Hormone Beef Porterhouse Steak With Thyme And Pepper Bu ... 500g",
+        "price": 22.0,
+        "unit_price": 22.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-porterhouse-steak-with-thyme-and-pepper-butter-500g-3853699",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3853699.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.0,
+      "alternatives": [
+        {
+          "name": "Coles Pork Scotch Steak With Rosemary & Honey Butter | 280g",
+          "price": 8.0,
+          "unit_price": 8.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-pork-scotch-steak-with-rosemary-and-honey-butter-280g-5886429",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5886429.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles No Added Hormone Beef Quick Cook Porterhouse Steak | 180g",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-quick-cook-porterhouse-steak-180g-3293583",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3293583.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Beef Scotch Steak With Bearnaise Butter | 265g",
+          "price": 14.5,
+          "unit_price": 14.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-scotch-steak-with-bearnaise-butter-265g-6641427",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6641427.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Basa Fillets Boneless With Skin Off",
+      "last_scraped": "2026-05-18T21:36:11.313456+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 8.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 11.0
+        },
+        {
+          "date": "2025-05-04",
+          "price": 7.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 8.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 11.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 11.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 11.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": null,
+      "coles": {
+        "name": "Coles Basa Portions Skin Off 2 Pack | 260g",
+        "price": 5.4,
+        "unit_price": 20.77,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-basa-portions-skin-off-2-pack-260g-1567000",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1567000.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Kb's Basa Fillets | 1kg",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/kb's-basa-fillets-1kg-3984460",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3984460.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Kitchen Salmon Fillets So With Creamy Garlic & Herb Sauce 2 Pack | 300g",
+          "price": 12.5,
+          "unit_price": 12.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-kitchen-salmon-fillets-so-with-creamy-garlic-and-herb-sauce-2-pack-300g-1063039",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1063039.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles RSPCA Approved Whole Boneless Chicken With Asian BBQ Rub | 1kg",
+          "price": 13.0,
+          "unit_price": 13.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-rspca-approved-whole-boneless-chicken-with-asian-bbq-rub-1kg-7353870",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7353870.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 128.99,
-    "total_coles": 162.38,
+    "total_woolworths": 146.99,
+    "total_coles": 200.38,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 33.39,
-    "items_compared": 36,
+    "total_saving": 53.39,
+    "items_compared": 39,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 36,
+    "done": 39,
     "total": 211
   }
 }
