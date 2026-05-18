@@ -1226,6 +1226,21 @@ function renderPage(data) {
     const currentRef = cheaper === 'woolworths' ? ww?.price : (cheaper === 'coles' ? co?.price : (co?.price ?? ww?.price));
     const bar = buildPriceBar(item.list_item, item.price_history, currentRef);
 
+    // % Cheaper + discrepancy warning (must be before itemCell)
+    const wwPrice = ww?.price;
+    const coPrice = co?.price;
+    let pctHtml = '';
+    if (wwPrice != null && coPrice != null && wwPrice !== coPrice) {
+      const pct = Math.round(Math.abs(wwPrice - coPrice) / Math.max(wwPrice, coPrice) * 100);
+      pctHtml = `<span class="${cheaper === 'woolworths' ? 'pct-ww' : 'pct-coles'}">${pct}%</span>`;
+    }
+    const priceDiffPct = (wwPrice != null && coPrice != null)
+      ? Math.abs(wwPrice - coPrice) / Math.max(wwPrice, coPrice)
+      : 0;
+    const discrepancyWarning = priceDiffPct > 0.31
+      ? `<span class="discrepancy-warn" title="Large price difference — double check the match is correct">⚠</span>`
+      : '';
+
     const itemCell = `
       <div class="item-row">
         ${imgHtml}
@@ -1276,22 +1291,6 @@ function renderPage(data) {
     } else if (cheaper === 'equal') {
       badgeHtml = '<span class="cheaper-badge equal">Equal</span>';
     }
-
-    // % Cheaper
-    let pctHtml = '';
-    const wwPrice = ww?.price;
-    const coPrice = co?.price;
-    if (wwPrice != null && coPrice != null && wwPrice !== coPrice) {
-      const pct = Math.round(Math.abs(wwPrice - coPrice) / Math.max(wwPrice, coPrice) * 100);
-      pctHtml = `<span class="${cheaper === 'woolworths' ? 'pct-ww' : 'pct-coles'}">${pct}%</span>`;
-    }
-
-    const priceDiffPct = (wwPrice != null && coPrice != null)
-      ? Math.abs(wwPrice - coPrice) / Math.max(wwPrice, coPrice)
-      : 0;
-    const discrepancyWarning = priceDiffPct > 0.31
-      ? `<span class="discrepancy-warn" title="Large price difference — double check the match is correct">⚠</span>`
-      : '';
 
     // Units cell (declared before unitsSaving so it's in scope)
     const units = getUnits(item.list_item);
