@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:38:05.541978+00:00",
+  "last_updated": "2026-05-18T21:38:12.489546+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6090,20 +6090,148 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": []
+    },
+    {
+      "list_item": "Ben & Jerry's Ice Cream Tub Chocolate Chip Cookie Dough",
+      "last_scraped": "2026-05-18T21:38:08.864503+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 9.0
+        },
+        {
+          "date": "2024-12-02",
+          "price": 10.0
+        },
+        {
+          "date": "2024-12-19",
+          "price": 8.7
+        },
+        {
+          "date": "2025-02-02",
+          "price": 8.7
+        },
+        {
+          "date": "2025-03-11",
+          "price": 8.7
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Ben & Jerry's Chocolate Chip Cookie Dough Ice Cream Tub",
+        "price": 9.5,
+        "unit_price": 2.07,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/345039/ben-jerry-s-chocolate-chip-cookie-dough-ice-cream-tub",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/345039.jpg"
+      },
+      "coles": {
+        "name": "Ben & Jerry's Chocolate Chip Cookie Dough Ice Cream Tub | 458mL",
+        "price": 14.5,
+        "unit_price": 14.5,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/ben-and-jerry's-chocolate-chip-cookie-dough-ice-cream-tub-458ml-7806125",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7806125.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 5.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Arnold's Farm Granola Pink Lady Apple & Cinnamon",
+      "last_scraped": "2026-05-18T21:38:09.698518+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 6.8
+        },
+        {
+          "date": "2025-04-14",
+          "price": 6.8
+        },
+        {
+          "date": "2025-06-06",
+          "price": 6.8
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": null,
+      "coles": {
+        "name": "Carman's Pink Lady Apple & Blueberry Granola | 450g",
+        "price": 8.9,
+        "unit_price": 8.9,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/carman's-pink-lady-apple-and-blueberry-granola-450g-3500382",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3500382.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Red Tractor Protein Low Sugar Granola Apple Caramel | 450g",
+          "price": 6.5,
+          "unit_price": 1.44,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/red-tractor-protein-low-sugar-granola-apple-caramel-450g-4312843",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4312843.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Bulla Creme Fraiche Creme Fraiche",
+      "last_scraped": "2026-05-18T21:38:12.485015+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 5.0
+        },
+        {
+          "date": "2024-11-20",
+          "price": 5.0
+        },
+        {
+          "date": "2025-05-29",
+          "price": 5.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Bulla Creme Fraiche Creme Fraiche",
+        "price": 5.4,
+        "unit_price": 2.7,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/374553/bulla-creme-fraiche-creme-fraiche",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/374553.jpg"
+      },
+      "coles": {
+        "name": "Bulla Creme Fraiche | 200g",
+        "price": 5.4,
+        "unit_price": 5.4,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/bulla-creme-fraiche-200g-8453381",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8453381.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 352.77,
-    "total_coles": 444.28,
+    "total_woolworths": 367.67,
+    "total_coles": 473.08,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 91.51,
-    "items_compared": 72,
+    "total_saving": 105.41,
+    "items_compared": 75,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 72,
+    "done": 75,
     "total": 211
   }
 }
