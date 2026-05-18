@@ -221,6 +221,7 @@ async function boot() {
     const res = await fetch(`data/latest.json?t=${Date.now()}`);
     const data = await res.json();
     _items = (data.items || []).filter(item => {
+      if (item.archived) return false;
       const ww = item.woolworths?.price;
       const co = item.coles?.price;
       if (ww == null || co == null) return false;

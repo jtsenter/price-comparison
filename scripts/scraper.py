@@ -39,7 +39,7 @@ def parse_unit_price(text: str) -> tuple[float | None, str | None]:
     if not text:
         return None, None
     price = parse_price(text)
-    m = re.search(r"(?:per|/)\s*(.+?)(?:\s*$|\))", text, re.IGNORECASE)
+    m = re.search(r"(?:per|/)\s*(\d*\.?\d*\s*(?:g|kg|ml|l|ea|pk|pack|each))\b", text, re.IGNORECASE)
     unit = m.group(1).strip() if m else None
     return price, unit
 
@@ -250,7 +250,8 @@ COLES_EXTRACT_JS = """
             '[data-testid*="cup"]','[data-testid*="unit"]',
         ]) {
             const el = tile.querySelector(s);
-            if (el?.textContent?.trim()) { unitPriceText = el.textContent.trim(); break; }
+            const t = el?.textContent?.trim() || '';
+            if (t && t.length < 30) { unitPriceText = t; break; }
         }
         // Fallback: scan all small text nodes in the tile for "per" or "/" price patterns
         if (!unitPriceText) {
@@ -326,7 +327,8 @@ COLES_PRODUCT_PAGE_JS = """
         '[data-testid*="cup"]','[data-testid*="unit"]',
     ]) {
         const el = document.querySelector(s);
-        if (el?.textContent?.trim()) { unitPriceText = el.textContent.trim(); break; }
+        const t = el?.textContent?.trim() || '';
+        if (t && t.length < 30) { unitPriceText = t; break; }
     }
     let imageUrl = '';
     const imgEl = document.querySelector('[class*="product-image"] img, img[alt][src*="coles"]');

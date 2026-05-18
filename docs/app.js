@@ -2,7 +2,12 @@
 
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '—';
-const fmtUnit = (price, unit) => price != null ? `${fmt(price)}/${unit || 'unit'}` : '';
+const fmtUnit = (price, unit) => {
+  if (price == null) return '';
+  if (!unit) return `${fmt(price)}/unit`;
+  const m = unit.match(/^\d*\.?\d*\s*(?:g|kg|ml|l|ea|pk|pack|each)\b/i);
+  return m ? `${fmt(price)}/${m[0].trim()}` : fmt(price);
+};
 
 function daysSince(isoString) {
   return (Date.now() - new Date(isoString).getTime()) / (1000 * 60 * 60 * 24);
@@ -173,8 +178,8 @@ let _colOrder = (() => {
 const DEFAULT_COL_WIDTHS = {
   name:     300,
   priority:  90,
-  ww:       110,
-  coles:    110,
+  ww:        85,
+  coles:     85,
   cheaper:   90,
   pct:       80,
   saving:    95,
@@ -673,6 +678,7 @@ function initBulkBar() {
 
 function computeBannerStats(items) {
   const filtered = items.filter(item => {
+    if (item.archived && _activePriority !== 'archive') return false;
     const p = getPriority(item.list_item);
     if (_activePriority !== 'archive' && p === 'archive') return false;
     if (_activePriority !== 'all' && _activePriority !== 'archive' && p !== _activePriority) return false;
@@ -1080,6 +1086,7 @@ function sortItems(items) {
   const mul = dir === 'asc' ? 1 : -1;
 
   let filtered = items.filter(item => {
+    if (item.archived && _activePriority !== 'archive') return false;
     const p = getPriority(item.list_item);
     // Always hide archived items unless archive view is active
     if (_activePriority !== 'archive' && p === 'archive') return false;
