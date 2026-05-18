@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:40:14.294266+00:00",
+  "last_updated": "2026-05-18T21:40:22.902495+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7651,20 +7651,214 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": []
+    },
+    {
+      "list_item": "McVitie's Digestives Milk Chocolate",
+      "last_scraped": "2026-05-18T21:40:17.618157+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 5.5
+        },
+        {
+          "date": "2025-04-25",
+          "price": 2.75
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.5
+        },
+        {
+          "date": "2026-04-29",
+          "price": 2.75
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "McVitie's Digestives Milk Chocolate",
+        "price": 5.5,
+        "unit_price": 2.07,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/263373/mcvitie-s-digestives-milk-chocolate",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/263373.jpg"
+      },
+      "coles": {
+        "name": "Mcvities Digestives Biscuits Milk Chocolate | 266g",
+        "price": 2.75,
+        "unit_price": 1.03,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/mcvities-digestives-biscuits-milk-chocolate-266g-5854739",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5854739.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 2.75,
+      "alternatives": [
+        {
+          "name": "Mcvities Digestives Tops Biscuits Milk Chocolate | 100g",
+          "price": 1.0,
+          "unit_price": 1.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/mcvities-digestives-tops-biscuits-milk-chocolate-100g-5777536",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5777536.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Mcvities Digestives Biscuits Milk Chocolate | 266g",
+          "price": 2.75,
+          "unit_price": 1.03,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/mcvities-digestives-biscuits-milk-chocolate-266g-5854739",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5854739.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "McVitie's Digestives Choc Tops Milk Chocolate",
+          "price": 2.0,
+          "unit_price": 2.0,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/262411/mcvitie-s-digestives-choc-tops-milk-chocolate",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/262411.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "McVitie's Hobnobs Milk Chocolate",
+      "last_scraped": "2026-05-18T21:40:21.303911+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 2.75
+        },
+        {
+          "date": "2025-05-12",
+          "price": 2.75
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.75
+        },
+        {
+          "date": "2026-02-03",
+          "price": 2.75
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "McVitie's Hobnobs Milk Chocolate",
+        "price": 5.5,
+        "unit_price": 2.1,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/260691/mcvitie-s-hobnobs-milk-chocolate",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/260691.jpg"
+      },
+      "coles": {
+        "name": "Mcvitie's Milk Chocolate Hobnobs | 262g",
+        "price": 2.75,
+        "unit_price": 1.05,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/mcvitie's-milk-chocolate-hobnobs-262g-9221042",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9221042.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 2.75,
+      "alternatives": [
+        {
+          "name": "Mcvitie's Milk Chocolate Hobnobs | 262g",
+          "price": 2.75,
+          "unit_price": 1.05,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/mcvitie's-milk-chocolate-hobnobs-262g-9221042",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9221042.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Macro Natural Sunflower Kernels",
+      "last_scraped": "2026-05-18T21:40:22.897007+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 5.3
+        },
+        {
+          "date": "2026-02-03",
+          "price": 4.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.0
+        }
+      ],
+      "category": "Nuts & Seeds",
+      "woolworths": null,
+      "coles": {
+        "name": "Wellness Road Sunflower Kernels | 500g",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/wellness-road-sunflower-kernels-500g-8669642",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8669642.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Gaganis Premium Raw Sunflower Kernals | 500g",
+          "price": 4.5,
+          "unit_price": 4.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/gaganis-premium-raw-sunflower-kernals-500g-9781896",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9781896.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Chacha Roasted Sunflower Seeds Coconut | 228g",
+          "price": 4.5,
+          "unit_price": 4.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/chacha-roasted-sunflower-seeds-coconut-228g-4211085",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4211085.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Chacha Roasted Sunflower Seeds Spiced | 228g",
+          "price": 4.5,
+          "unit_price": 4.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/chacha-roasted-sunflower-seeds-spiced-228g-4210989",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4210989.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 528.12,
-    "total_coles": 764.34,
+    "total_woolworths": 539.12,
+    "total_coles": 774.84,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 236.22,
-    "items_compared": 102,
+    "total_saving": 235.72,
+    "items_compared": 105,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 102,
+    "done": 105,
     "total": 211
   }
 }
