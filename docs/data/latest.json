@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:46:25.438512+00:00",
+  "last_updated": "2026-05-18T21:46:34.219599+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12464,20 +12464,183 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "Woolworths Black Beans",
+      "last_scraped": "2026-05-18T21:46:29.627736+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-04-02",
+          "price": 1.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.0
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Black Beans",
+        "price": 1.0,
+        "unit_price": 2.38,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/907377/woolworths-black-beans",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/907377.jpg"
+      },
+      "coles": {
+        "name": "Coles Black Beans | 420g",
+        "price": 1.0,
+        "unit_price": 1.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3812975.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Coles Black Beans | 420g",
+          "price": 1.0,
+          "unit_price": 1.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3812975.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Carmelina Black Beans | 400 GRAM",
+          "price": 1.9,
+          "unit_price": 1.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/carmelina-black-beans-400-gram-8855589",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8855589.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Woolworths Beef & Black Bean With Rice",
+          "price": 8.0,
+          "unit_price": 2.29,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/6038388/woolworths-beef-black-bean-with-rice",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6038388.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Beef & Lamb Meatballs",
+      "last_scraped": "2026-05-18T21:46:29.688583+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 8.0
+        },
+        {
+          "date": "2024-11-12",
+          "price": 8.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Beef & Lamb Meatballs",
+        "price": 8.0,
+        "unit_price": 20.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/764264/woolworths-beef-lamb-meatballs",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/764264.jpg"
+      },
+      "coles": {
+        "name": "Coles Beef & Pork Meatballs | 560g",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-beef-and-pork-meatballs-560g-3569447",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3569447.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "V.I.P Dog Chunkers Meatballs Lamb | 1Kg",
+          "price": 6.5,
+          "unit_price": 6.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/v.i.p-dog-chunkers-meatballs-lamb-1kg-1649159",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1649159.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Beef & Pork Meatballs | 560g",
+          "price": 8.0,
+          "unit_price": 8.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-and-pork-meatballs-560g-3569447",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3569447.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Lamb Burgers With Rosemary And Garlic 4 Pack | 400g",
+          "price": 8.5,
+          "unit_price": 8.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-lamb-burgers-with-rosemary-and-garlic-4-pack-400g-5132541",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5132541.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Butternut Pumpkin Cut",
+      "last_scraped": "2026-05-18T21:46:34.213532+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 2.03
+        },
+        {
+          "date": "2025-04-25",
+          "price": 2.45
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Butternut Pumpkin Cut",
+        "price": 3.51,
+        "unit_price": 3.51,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/147197/woolworths-butternut-pumpkin-cut",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147197.jpg"
+      },
+      "coles": {
+        "name": "Coles Organic Butternut Pumpkin Cut | approx. 800g",
+        "price": 5.2,
+        "unit_price": 6.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-organic-butternut-pumpkin-cut-approx.-800g-3119190",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3119190.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.69,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 1269.94,
-    "total_coles": 1438.51,
+    "total_woolworths": 1282.45,
+    "total_coles": 1452.71,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 168.57,
-    "items_compared": 198,
+    "total_saving": 170.26,
+    "items_compared": 201,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 198,
+    "done": 201,
     "total": 211
   }
 }
