@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:42:45.572031+00:00",
+  "last_updated": "2026-05-18T21:43:02.259235+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10069,20 +10069,165 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 1.05,
       "alternatives": []
+    },
+    {
+      "list_item": "Woolworths RSPCA Approved Chicken Drumsticks",
+      "last_scraped": "2026-05-18T21:42:50.727260+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-04-25",
+          "price": 4.8
+        },
+        {
+          "date": "2025-05-12",
+          "price": 4.8
+        },
+        {
+          "date": "2025-06-13",
+          "price": 4.3
+        },
+        {
+          "date": "2026-02-07",
+          "price": 5.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 4.3
+        },
+        {
+          "date": "2026-02-23",
+          "price": 5.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths RSPCA Approved Chicken Drumsticks",
+        "price": 4.0,
+        "unit_price": 4.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/23208/woolworths-rspca-approved-chicken-drumsticks",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/023208.jpg"
+      },
+      "coles": {
+        "name": "Coles Free Range RSPCA Approved Chicken Drumsticks | approx. 1.4kg",
+        "price": 7.7,
+        "unit_price": 5.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-free-range-rspca-approved-chicken-drumsticks-approx.-1.4kg-3228774",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3228774.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.7,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In",
+      "last_scraped": "2026-05-18T21:42:56.568380+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-05-29",
+          "price": 7.15
+        },
+        {
+          "date": "2025-06-06",
+          "price": 7.15
+        },
+        {
+          "date": "2025-07-03",
+          "price": 7.15
+        },
+        {
+          "date": "2026-02-03",
+          "price": 7.15
+        },
+        {
+          "date": "2026-03-10",
+          "price": 7.51
+        },
+        {
+          "date": "2026-05-06",
+          "price": 7.51
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone In",
+        "price": 6.83,
+        "unit_price": 10.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/119370/woolworths-rspca-approved-chicken-thigh-skinless-cutlets-bone-in",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/119370.jpg"
+      },
+      "coles": {
+        "name": "Coles RSPCA Approved Chicken Thigh Cutlets | approx. 1.1kg",
+        "price": 9.9,
+        "unit_price": 9.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-thigh-cutlets-approx.-1.1kg-2268365",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2268365.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.07,
+      "alternatives": [
+        {
+          "name": "Coles RSPCA Approved Chicken Thigh Cutlets | approx. 1.1kg",
+          "price": 9.9,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-thigh-cutlets-approx.-1.1kg-2268365",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2268365.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Lamb Mince",
+      "last_scraped": "2026-05-18T21:43:02.252630+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 7.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 8.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": null,
+      "coles": {
+        "name": "Coles 3 Star Lamb Mince | 500g",
+        "price": 9.0,
+        "unit_price": 9.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8850461.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 951.78,
-    "total_coles": 1030.2,
+    "total_woolworths": 962.61,
+    "total_coles": 1056.8,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 78.42,
-    "items_compared": 147,
+    "total_saving": 94.19,
+    "items_compared": 150,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 147,
+    "done": 150,
     "total": 211
   }
 }
