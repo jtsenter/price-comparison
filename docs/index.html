@@ -33,6 +33,10 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span class="notif-badge" id="notifBadge"></span>
       </button>
+      <button class="btn btn-ghost" id="resetColsBtn" title="Reset column order, widths and visibility to defaults">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg>
+        Reset Columns
+      </button>
       <div class="col-chooser-wrap">
         <button class="btn btn-ghost" id="colChooserBtn">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
@@ -290,6 +294,22 @@
       <button class="btn btn-ghost" id="uploadCancel">Cancel</button>
       <button class="btn btn-primary" id="uploadConfirm" style="display:none">Add Items &amp; Scrape</button>
     </div>
+  </div>
+</div>
+
+<!-- Column filter dropdown (fixed position, shared across all columns) -->
+<div id="colFilterDropdown" class="col-filter-dropdown" style="display:none">
+  <button class="cfd-sort-btn cfd-sort-asc">Sort A → Z</button>
+  <button class="cfd-sort-btn cfd-sort-desc">Sort Z → A</button>
+  <div class="cfd-sep"></div>
+  <div class="cfd-search-wrap">
+    <input class="cfd-search" type="text" placeholder="Search…">
+  </div>
+  <label class="cfd-item cfd-select-all-row"><input type="checkbox" class="cfd-select-all"> (Select All)</label>
+  <div class="cfd-values"></div>
+  <div class="cfd-footer">
+    <button class="cfd-ok btn btn-primary" style="font-size:12px;padding:5px 14px">OK</button>
+    <button class="cfd-clear btn btn-ghost" style="font-size:12px;padding:5px 14px">Clear filter</button>
   </div>
 </div>
 

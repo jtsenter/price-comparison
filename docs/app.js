@@ -5,6 +5,8 @@ const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '—';
 const fmtUnit = (price, unit) => {
   if (price == null) return '';
   if (!unit) return `${fmt(price)}/unit`;
+  // Suppress "1ea" display — it just means the whole pack and adds no info
+  if (/^1\s*ea\b/i.test(unit.trim())) return '';
   const m = unit.match(/^\d*\.?\d*\s*(?:g|kg|ml|l|ea|pk|pack|each)\b/i);
   return m ? `${fmt(price)}/${m[0].trim()}` : fmt(price);
 };
@@ -172,7 +174,10 @@ const DEFAULT_COL_ORDER = ['name', 'priority', 'ww', 'coles', 'cheaper', 'pct', 
 let _colOrder = (() => {
   try {
     const saved = JSON.parse(localStorage.getItem('pw_col_order'));
-    if (Array.isArray(saved) && saved.every(c => DEFAULT_COL_ORDER.includes(c))) return saved;
+    if (Array.isArray(saved) && saved.every(c => DEFAULT_COL_ORDER.includes(c))) {
+      const newCols = DEFAULT_COL_ORDER.filter(c => !saved.includes(c));
+      return newCols.length ? [...saved, ...newCols] : saved;
+    }
   } catch {}
   return [...DEFAULT_COL_ORDER];
 })();
@@ -215,23 +220,74 @@ function saveColOrder()      { localStorage.setItem('pw_col_order', JSON.stringi
 function saveColWidths()     { localStorage.setItem('pw_col_widths', JSON.stringify(_colWidths)); }
 function saveColVisibility() { localStorage.setItem('pw_col_vis', JSON.stringify(_colVisibility)); }
 
+// ── Column filters (per-column value sets) ───────────────────────────────────
+
+let _colFilters = {};  // col → Set<string> of active values (undefined = all shown)
+
+function getColValue(col, item) {
+  switch (col) {
+    case 'name':         return item.list_item;
+    case 'priority':     return getPriority(item.list_item);
+    case 'ww':           return item.woolworths?.price != null ? fmt(item.woolworths.price) : '—';
+    case 'coles':        return item.coles?.price != null ? fmt(item.coles.price) : '—';
+    case 'cheaper':      return item.cheaper_store || 'N/A';
+    case 'pct': {
+      const ww = item.woolworths?.price, co = item.coles?.price;
+      if (ww == null || co == null) return '—';
+      return Math.round(Math.abs(ww - co) / Math.max(ww, co) * 100) + '%';
+    }
+    case 'saving':       return item.saving_per_item > 0 ? fmt(item.saving_per_item) : '—';
+    case 'trips':        return String(item.trip_count || 0);
+    case 'units':        return String(getUnits(item.list_item));
+    case 'category':     return getCategory(item);
+    case 'last_scraped': return item.last_scraped
+      ? new Date(item.last_scraped).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
+      : '—';
+    case 'ww_total': {
+      const v = item.woolworths?.price != null ? item.woolworths.price * getUnits(item.list_item) : null;
+      return v != null ? fmt(v) : '—';
+    }
+    case 'coles_total': {
+      const v = item.coles?.price != null ? item.coles.price * getUnits(item.list_item) : null;
+      return v != null ? fmt(v) : '—';
+    }
+    default: return '';
+  }
+}
+
+function resetColumns() {
+  _colOrder      = [...DEFAULT_COL_ORDER];
+  _colVisibility = { ...DEFAULT_COL_VISIBILITY };
+  _colWidths     = {};
+  _colFilters    = {};
+  saveColOrder();
+  saveColVisibility();
+  saveColWidths();
+  if (_lastData) renderPage(_lastData);
+}
+
 // Column header HTML (function so store-chips render fresh each time)
 function colHeadHtml(col) {
-  const r = '.col-resize-handle';
+  const fa = `<button class="col-filter-btn" data-filter-col="${col}" title="Filter">▾</button>`;
+  const fa2 = (extra = '') => `${extra}${fa}<div class="col-resize-handle"></div>`;
+  const hasFilter = _colFilters[col]?.size > 0;
+  function th(col, cls, label) {
+    return `<th data-col="${col}" class="sortable${cls ? ' '+cls : ''}${hasFilter ? ' filter-active' : ''}">${label} <span class="sort-arrow"></span>${fa2()}</th>`;
+  }
   switch (col) {
-    case 'name':    return `<th data-col="name" class="sortable">Item <span class="sort-arrow"></span><div class="${r.slice(1)}"></div></th>`;
-    case 'ww':      return `<th data-col="ww" class="sortable"><span class="store-chip ww sm">W</span> WW <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'coles':   return `<th data-col="coles" class="sortable"><span class="store-chip coles sm">C</span> Coles <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'cheaper': return `<th data-col="cheaper" class="sortable center-th">Best <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'pct':     return `<th data-col="pct" class="sortable center-th">Diff <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'saving':  return `<th data-col="saving" class="sortable">Savings <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'trips':    return `<th data-col="trips" class="sortable center-th">Buys <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'priority':     return `<th data-col="priority" class="sortable center-th">Priority <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'units':        return `<th data-col="units" class="sortable center-th">Qty <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'category':     return `<th data-col="category" class="sortable">Category <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'last_scraped': return `<th data-col="last_scraped" class="sortable">Last Scraped <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'ww_total':     return `<th data-col="ww_total" class="sortable">WW Total <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'coles_total':  return `<th data-col="coles_total" class="sortable">Coles Total <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'name':         return th('name', '', 'Product');
+    case 'ww':           return th('ww', '', '<span class="store-chip ww sm">W</span> WW');
+    case 'coles':        return th('coles', '', '<span class="store-chip coles sm">C</span> Coles');
+    case 'cheaper':      return th('cheaper', 'center-th', 'Best');
+    case 'pct':          return th('pct', 'center-th', 'Diff');
+    case 'saving':       return th('saving', '', 'Savings');
+    case 'trips':        return th('trips', 'center-th', 'Buys');
+    case 'priority':     return th('priority', 'center-th', 'Priority');
+    case 'units':        return th('units', 'center-th', 'Qty');
+    case 'category':     return th('category', '', 'Category');
+    case 'last_scraped': return th('last_scraped', '', 'Last Scraped');
+    case 'ww_total':     return th('ww_total', '', 'WW Total');
+    case 'coles_total':  return th('coles_total', '', 'Coles Total');
     default: return '';
   }
 }
@@ -364,8 +420,10 @@ async function triggerItemRefresh(itemName, btn, urlOverrides) {
 }
 
 async function pollItemRefresh(s, btn, itemName) {
-  const origWw = _lastData?.items?.find(i => i.list_item === itemName)?.woolworths?.price;
-  const origCo = _lastData?.items?.find(i => i.list_item === itemName)?.coles?.price;
+  const origItem = _lastData?.items?.find(i => i.list_item === itemName);
+  const origWw = origItem?.woolworths?.price;
+  const origCo = origItem?.coles?.price;
+  const origScraped = origItem?.last_scraped;
 
   _pendingRefreshItem = itemName;
   if (_lastData) renderPage(_lastData);
@@ -384,7 +442,7 @@ async function pollItemRefresh(s, btn, itemName) {
       const found = fresh?.items?.find(i => i.list_item === itemName);
       const newWw = found?.woolworths?.price;
       const newCo = found?.coles?.price;
-      if (newWw !== origWw || newCo !== origCo) {
+      if (newWw !== origWw || newCo !== origCo || found?.last_scraped !== origScraped) {
         _pendingRefreshItem = null;
         if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
         renderPage(fresh);
@@ -841,7 +899,8 @@ function syncStickyNow() {
   // Attach sort + update sort arrow state
   updateSortHeaders(cloned);
   cloned.querySelectorAll('th[data-col]').forEach(th => {
-    th.addEventListener('click', () => {
+    th.addEventListener('click', (e) => {
+      if (e.target.closest('.col-filter-btn')) return;
       const col = th.dataset.col;
       if (sortState.col === col) {
         sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
@@ -1148,6 +1207,12 @@ function sortItems(items) {
     filtered = filtered.filter(i => getCategory(i) === _activeCategory);
   }
 
+  // Per-column value filters
+  for (const [col, vals] of Object.entries(_colFilters)) {
+    if (!vals?.size) continue;
+    filtered = filtered.filter(i => vals.has(getColValue(col, i)));
+  }
+
   return [...filtered].sort((a, b) => {
     let av, bv;
     switch (col) {
@@ -1202,6 +1267,7 @@ function initSortHeaders() {
   document.querySelectorAll('#tableHead th[data-col]').forEach(th => {
     th.addEventListener('click', (e) => {
       if (e.target.classList.contains('col-resize-handle')) return;
+      if (e.target.closest('.col-filter-btn')) return;
       const col = th.dataset.col;
       if (sortState.col === col) {
         sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
@@ -1467,11 +1533,11 @@ function renderPage(data) {
     if (!ww || !co) {
       badgeHtml = '<span class="cheaper-badge na">N/A</span>';
     } else if (cheaper === 'woolworths') {
-      badgeHtml = '<span class="cheaper-badge ww">WW</span>';
+      badgeHtml = '<span class="store-chip ww sm">W</span>';
     } else if (cheaper === 'coles') {
-      badgeHtml = '<span class="cheaper-badge coles">Coles</span>';
+      badgeHtml = '<span class="store-chip coles sm">C</span>';
     } else if (cheaper === 'equal') {
-      badgeHtml = '<span class="cheaper-badge equal">Equal</span>';
+      badgeHtml = '<span class="cheaper-badge equal">=</span>';
     }
 
     // Units cell (declared before unitsSaving so it's in scope)
@@ -1945,6 +2011,143 @@ function initColumnChooser() {
   });
 }
 
+// ── Column filter dropdown ────────────────────────────────────────────────────
+
+let _cfdCol = null;
+let _cfdAllValues = [];
+let _cfdTempValues = null;
+
+function initColFilterDropdown() {
+  const dd = $('colFilterDropdown');
+  if (!dd) return;
+
+  dd.addEventListener('click', (e) => e.stopPropagation());
+
+  dd.querySelector('.cfd-sort-asc')?.addEventListener('click', () => {
+    if (_cfdCol) {
+      sortState.col = _cfdCol;
+      sortState.dir = 'asc';
+      closeColFilter();
+      if (_lastData) renderPage(_lastData);
+    }
+  });
+  dd.querySelector('.cfd-sort-desc')?.addEventListener('click', () => {
+    if (_cfdCol) {
+      sortState.col = _cfdCol;
+      sortState.dir = 'desc';
+      closeColFilter();
+      if (_lastData) renderPage(_lastData);
+    }
+  });
+
+  dd.querySelector('.cfd-search')?.addEventListener('input', (e) => renderCfdValues(e.target.value));
+
+  dd.querySelector('.cfd-select-all')?.addEventListener('change', (e) => {
+    const search = dd.querySelector('.cfd-search').value.toLowerCase();
+    const visible = _cfdAllValues.filter(v => !search || v.toLowerCase().includes(search));
+    if (e.target.checked) visible.forEach(v => _cfdTempValues.add(v));
+    else visible.forEach(v => _cfdTempValues.delete(v));
+    renderCfdValues(search, false);
+  });
+
+  dd.querySelector('.cfd-ok')?.addEventListener('click', () => {
+    if (_cfdCol) {
+      if (_cfdTempValues.size === _cfdAllValues.length || _cfdTempValues.size === 0) {
+        delete _colFilters[_cfdCol];
+      } else {
+        _colFilters[_cfdCol] = new Set(_cfdTempValues);
+      }
+    }
+    closeColFilter();
+    if (_lastData) renderPage(_lastData);
+  });
+
+  dd.querySelector('.cfd-clear')?.addEventListener('click', () => {
+    if (_cfdCol) delete _colFilters[_cfdCol];
+    closeColFilter();
+    if (_lastData) renderPage(_lastData);
+  });
+
+  document.addEventListener('click', closeColFilter);
+}
+
+function closeColFilter(e) {
+  if (e?.target?.closest?.('.col-filter-btn')) return;
+  const dd = $('colFilterDropdown');
+  if (dd) dd.style.display = 'none';
+  _cfdCol = null;
+}
+
+function openColFilter(col, btn) {
+  const dd = $('colFilterDropdown');
+  if (!dd || !_lastData) return;
+
+  if (_cfdCol === col && dd.style.display !== 'none') { closeColFilter(); return; }
+
+  _cfdCol = col;
+  const existing = _colFilters[col];
+
+  // Gather all unique values from full (unfiltered by this col) items
+  const allItems = [...(_lastData.items || []), ...(_lastData.not_found_items || []).map(n => ({ list_item: n }))];
+  _cfdAllValues = [...new Set(allItems.map(i => getColValue(col, i)))].sort((a, b) => {
+    // Numeric sort for price/numeric-looking values
+    const na = parseFloat(a.replace(/[$,]/g, '')), nb = parseFloat(b.replace(/[$,]/g, ''));
+    if (!isNaN(na) && !isNaN(nb)) return na - nb;
+    return a.localeCompare(b);
+  });
+
+  _cfdTempValues = existing ? new Set(existing) : new Set(_cfdAllValues);
+
+  // Update sort-asc label with column name
+  const asc = dd.querySelector('.cfd-sort-asc');
+  const desc = dd.querySelector('.cfd-sort-desc');
+  if (asc) asc.textContent = 'Sort A → Z';
+  if (desc) desc.textContent = 'Sort Z → A';
+
+  dd.querySelector('.cfd-search').value = '';
+  renderCfdValues('');
+
+  // Position dropdown under button
+  const rect = btn.getBoundingClientRect();
+  dd.style.display = 'block';
+  const ddW = 220;
+  let left = rect.left;
+  if (left + ddW > window.innerWidth - 8) left = window.innerWidth - ddW - 8;
+  dd.style.top = (rect.bottom + 4) + 'px';
+  dd.style.left = left + 'px';
+}
+
+function renderCfdValues(search, resetScroll = true) {
+  const dd = $('colFilterDropdown');
+  if (!dd) return;
+  const term = (search || '').toLowerCase();
+  const visible = _cfdAllValues.filter(v => !term || v.toLowerCase().includes(term));
+
+  const container = dd.querySelector('.cfd-values');
+  if (!container) return;
+
+  const allChecked = visible.every(v => _cfdTempValues.has(v));
+  const someChecked = visible.some(v => _cfdTempValues.has(v));
+  const saEl = dd.querySelector('.cfd-select-all');
+  if (saEl) { saEl.checked = allChecked; saEl.indeterminate = !allChecked && someChecked; }
+
+  container.innerHTML = visible.map(v => {
+    const checked = _cfdTempValues.has(v) ? ' checked' : '';
+    const safe = v.replace(/"/g, '&quot;');
+    return `<label class="cfd-item"><input type="checkbox" value="${safe}"${checked}> ${safe}</label>`;
+  }).join('');
+
+  if (resetScroll) container.scrollTop = 0;
+
+  container.querySelectorAll('input[type=checkbox]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (cb.checked) _cfdTempValues.add(cb.value);
+      else _cfdTempValues.delete(cb.value);
+      renderCfdValues(dd.querySelector('.cfd-search').value, false);
+    });
+  });
+}
+
 // ── Export shopping list ──────────────────────────────────────────────────────
 
 function exportShoppingList(useChecked) {
@@ -1967,13 +2170,25 @@ async function boot() {
   initPriorityFilter();
   initBulkBar();
   initColumnChooser();
+  initColFilterDropdown();
   updateImportBadge();
 
   const refreshBtn = $('refreshBtn');
   if (refreshBtn) refreshBtn.addEventListener('click', triggerRefresh);
 
+  $('resetColsBtn')?.addEventListener('click', resetColumns);
   $('exportListBtn')?.addEventListener('click', () => exportShoppingList(false));
   $('bulkExportBtn')?.addEventListener('click', () => exportShoppingList(true));
+
+  // Column filter button clicks (delegated from thead, re-bound after each render via renderTableHead)
+  document.addEventListener('click', (e) => {
+    const fb = e.target.closest('.col-filter-btn');
+    if (fb) {
+      e.stopPropagation();
+      const col = fb.dataset.filterCol;
+      if (col) openColFilter(col, fb);
+    }
+  });
 
   // Load analysis data first so priorities/units are ready before render
   await loadItemAnalysis();

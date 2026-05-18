@@ -353,12 +353,10 @@ main { max-width: 1140px; margin: 0 auto; padding: 24px 24px 60px; }
 /* ── Table ───────────────────────────────────────────────────── */
 .table-wrap {
   background: var(--card);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   box-shadow: var(--shadow);
   overflow-x: auto;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
 }
 table { width: max-content; min-width: 100%; border-collapse: collapse; }
 
@@ -418,12 +416,86 @@ table { width: max-content; min-width: 100%; border-collapse: collapse; }
 /* ── Column resize handle */
 .col-resize-handle {
   position: absolute;
-  right: 0; top: 20%; bottom: 20%;
-  width: 5px; cursor: col-resize;
-  border-radius: 3px; background: transparent;
+  right: 0; top: 15%; bottom: 15%;
+  width: 4px; cursor: col-resize;
+  border-radius: 3px;
+  background: rgba(0,0,0,0.12);
   transition: background 0.15s; z-index: 2;
 }
-.col-resize-handle:hover, .col-resize-handle.resizing { background: var(--ww); opacity: 0.5; }
+.col-resize-handle:hover, .col-resize-handle.resizing { background: var(--ww); opacity: 1; }
+
+/* ── Column filter button (▾ in header) */
+.col-filter-btn {
+  position: absolute;
+  right: 18px; top: 50%;
+  transform: translateY(-50%);
+  width: 16px; height: 16px;
+  border: none; background: none;
+  color: var(--text-soft); font-size: 10px;
+  cursor: pointer; padding: 0; line-height: 1;
+  border-radius: 3px; opacity: 0;
+  transition: opacity 0.15s, background 0.15s;
+  z-index: 3;
+}
+th:hover .col-filter-btn,
+th.filter-active .col-filter-btn { opacity: 1; }
+th.filter-active .col-filter-btn { color: var(--ww); }
+.col-filter-btn:hover { background: var(--border); color: var(--text); opacity: 1; }
+
+/* ── Column filter dropdown */
+.col-filter-dropdown {
+  position: fixed;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  z-index: 9999;
+  width: 220px;
+  font-size: 13px;
+  overflow: hidden;
+}
+.cfd-sort-btn {
+  display: block; width: 100%;
+  text-align: left; padding: 9px 16px;
+  border: none; background: none;
+  font-size: 13px; color: var(--text-mid);
+  cursor: pointer; transition: background 0.1s;
+}
+.cfd-sort-btn:hover { background: var(--bg); color: var(--text); }
+.cfd-sep { height: 1px; background: var(--border); margin: 4px 0; }
+.cfd-search-wrap { padding: 6px 10px; border-bottom: 1px solid var(--border); }
+.cfd-search {
+  width: 100%; padding: 5px 8px;
+  border: 1px solid var(--border); border-radius: 6px;
+  font-size: 12px; outline: none;
+}
+.cfd-search:focus { border-color: var(--ww); }
+.cfd-values {
+  max-height: 200px; overflow-y: auto; padding: 4px 0;
+}
+.cfd-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 5px 14px; cursor: pointer;
+  font-size: 12px; color: var(--text);
+  transition: background 0.1s;
+}
+.cfd-item:hover { background: var(--bg); }
+.cfd-item input[type="checkbox"] { accent-color: var(--ww); flex-shrink: 0; }
+.cfd-footer {
+  display: flex; justify-content: flex-end; gap: 8px;
+  padding: 8px 12px; border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+.cfd-select-all-row { border-bottom: 1px solid var(--border); margin-bottom: 2px; font-weight: 600; }
+.cfd-clear-row { padding: 4px 14px 0; }
+.cfd-clear-btn { font-size: 11px; color: var(--coles); background: none; border: none; cursor: pointer; padding: 0; }
+.cfd-clear-btn:hover { text-decoration: underline; }
+.cfd-footer-btn {
+  padding: 5px 14px; border-radius: 6px; font-size: 12px;
+  font-weight: 600; cursor: pointer; border: 1px solid var(--border);
+  background: var(--card); color: var(--text-mid);
+}
+.cfd-footer-btn.primary { background: var(--ww); color: #fff; border-color: var(--ww); }
 
 tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
 tbody tr:last-child { border-bottom: none; }
@@ -596,8 +668,8 @@ tr:hover .price-bar-manage { opacity: 1; }
   letter-spacing: 0.03em;
   text-transform: uppercase;
 }
-.cheaper-badge.ww    { background: var(--ww-light); color: var(--ww); border: 1px solid var(--ww-mid); }
-.cheaper-badge.coles { background: var(--ww-light); color: var(--ww); border: 1px solid var(--ww-mid); }
+.cheaper-badge.ww    { background: transparent; border: none; padding: 0; }
+.cheaper-badge.coles { background: transparent; border: none; padding: 0; }
 .cheaper-badge.equal { background: var(--bg); color: var(--text-mid); border: 1px solid var(--border); }
 .cheaper-badge.na    { background: var(--bg); color: var(--text-soft); border: 1px solid var(--border); font-style: italic; }
 
