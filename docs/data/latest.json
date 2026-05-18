@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T06:12:59.435141+00:00",
+  "last_updated": "2026-05-18T06:13:07.412067+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9174,6 +9174,48 @@
       "cheaper_store": "woolworths",
       "saving_per_item": null,
       "alternatives": []
+    },
+    {
+      "list_item": "Yumi's Eggplant Mediterranean Dip",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-06-21",
+          "price": 4.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 5.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 5.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.75
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Yumi's Eggplant Mediterranean Dip",
+        "price": 4.0,
+        "unit_price": 2.0,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/139881/yumi-s-eggplant-mediterranean-dip",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139881.jpg"
+      },
+      "coles": {
+        "name": "Yumi's Mediterranean Eggplant Dip | 200g",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/yumi's-mediterranean-eggplant-dip-200g-8670878",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8670878.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.0,
+      "alternatives": []
     }
   ],
   "not_found_items": [
@@ -9195,16 +9237,12 @@
     "Woolworths Basa Fillets Boneless With Skin Off"
   ],
   "summary": {
-    "total_woolworths": 1333.5,
-    "total_coles": 164.58,
+    "total_woolworths": 1337.5,
+    "total_coles": 169.58,
     "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 1168.92,
-    "items_compared": 194,
+    "total_saving": 1167.92,
+    "items_compared": 195,
     "items_not_found": 16
-  },
-  "scrape_progress": {
-    "done": 210,
-    "total": 211
   }
 }
