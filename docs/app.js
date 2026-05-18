@@ -167,34 +167,53 @@ function updateBulkBar() {
 
 // ── Column order & widths ────────────────────────────────────────────────────
 
-const DEFAULT_COL_ORDER = ['name', 'priority', 'ww', 'coles', 'cheaper', 'pct', 'saving', 'units', 'trips'];
+const DEFAULT_COL_ORDER = ['name', 'priority', 'ww', 'coles', 'cheaper', 'pct', 'saving', 'units', 'trips', 'category', 'last_scraped', 'ww_total', 'coles_total'];
 
 let _colOrder = (() => {
   try {
     const saved = JSON.parse(localStorage.getItem('pw_col_order'));
-    if (Array.isArray(saved) && saved.length === DEFAULT_COL_ORDER.length) return saved;
+    if (Array.isArray(saved) && saved.every(c => DEFAULT_COL_ORDER.includes(c))) return saved;
   } catch {}
   return [...DEFAULT_COL_ORDER];
 })();
 
 const DEFAULT_COL_WIDTHS = {
-  name:     340,
-  priority:  90,
-  ww:        85,
-  coles:     85,
-  cheaper:   90,
-  pct:       80,
-  saving:   110,
-  units:     80,
-  trips:     65,
+  name:         340,
+  priority:      90,
+  ww:            85,
+  coles:         85,
+  cheaper:       90,
+  pct:           80,
+  saving:       110,
+  units:         80,
+  trips:         65,
+  category:     110,
+  last_scraped: 130,
+  ww_total:      95,
+  coles_total:  100,
 };
+
+const DEFAULT_COL_VISIBILITY = {
+  name: true, priority: true, ww: true, coles: true,
+  cheaper: true, pct: true, saving: true, units: true, trips: true,
+  category: false, last_scraped: false, ww_total: false, coles_total: false,
+};
+
+let _colVisibility = (() => {
+  try {
+    const saved = JSON.parse(localStorage.getItem('pw_col_vis'));
+    if (saved && typeof saved === 'object') return { ...DEFAULT_COL_VISIBILITY, ...saved };
+  } catch {}
+  return { ...DEFAULT_COL_VISIBILITY };
+})();
 
 let _colWidths = (() => {
   try { return JSON.parse(localStorage.getItem('pw_col_widths')) || {}; } catch { return {}; }
 })();
 
-function saveColOrder() { localStorage.setItem('pw_col_order', JSON.stringify(_colOrder)); }
-function saveColWidths() { localStorage.setItem('pw_col_widths', JSON.stringify(_colWidths)); }
+function saveColOrder()      { localStorage.setItem('pw_col_order', JSON.stringify(_colOrder)); }
+function saveColWidths()     { localStorage.setItem('pw_col_widths', JSON.stringify(_colWidths)); }
+function saveColVisibility() { localStorage.setItem('pw_col_vis', JSON.stringify(_colVisibility)); }
 
 // Column header HTML (function so store-chips render fresh each time)
 function colHeadHtml(col) {
@@ -207,8 +226,12 @@ function colHeadHtml(col) {
     case 'pct':     return `<th data-col="pct" class="sortable center-th">Diff <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     case 'saving':  return `<th data-col="saving" class="sortable">Savings <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     case 'trips':    return `<th data-col="trips" class="sortable center-th">Buys <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'priority': return `<th data-col="priority" class="sortable center-th">Priority <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
-    case 'units':    return `<th data-col="units" class="sortable center-th">Qty <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'priority':     return `<th data-col="priority" class="sortable center-th">Priority <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'units':        return `<th data-col="units" class="sortable center-th">Qty <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'category':     return `<th data-col="category" class="sortable">Category <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'last_scraped': return `<th data-col="last_scraped" class="sortable">Last Scraped <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'ww_total':     return `<th data-col="ww_total" class="sortable">WW Total <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
+    case 'coles_total':  return `<th data-col="coles_total" class="sortable">Coles Total <span class="sort-arrow"></span><div class="col-resize-handle"></div></th>`;
     default: return '';
   }
 }
@@ -954,10 +977,15 @@ function initColumnResize() {
 
 // ── Render table head (dynamic, respects _colOrder) ─────────────────────────
 
+function getVisibleCols() {
+  return _colOrder.filter(col => _colVisibility[col] !== false);
+}
+
 function renderTableHead() {
   const thead = $('tableHead');
   if (!thead) return;
-  thead.innerHTML = `<tr><th class="check-cell"><input type="checkbox" id="checkAll" title="Select all visible"></th>${_colOrder.map(colHeadHtml).join('')}</tr>`;
+  const visibleCols = getVisibleCols();
+  thead.innerHTML = `<tr><th class="check-cell"><input type="checkbox" id="checkAll" title="Select all visible"></th>${visibleCols.map(colHeadHtml).join('')}</tr>`;
 
   // Apply stored column widths (fall back to defaults)
   thead.querySelectorAll('th[data-col]').forEach(th => {
@@ -1142,6 +1170,10 @@ function sortItems(items) {
         bv = (wwB != null && coB != null) ? Math.abs(wwB - coB) / Math.max(wwB, coB) : -Infinity;
         break;
       }
+      case 'category':     av = getCategory(a).toLowerCase(); bv = getCategory(b).toLowerCase(); break;
+      case 'last_scraped': av = a.last_scraped || ''; bv = b.last_scraped || ''; break;
+      case 'ww_total':     av = (a.woolworths?.price ?? 0) * getUnits(a.list_item); bv = (b.woolworths?.price ?? 0) * getUnits(b.list_item); break;
+      case 'coles_total':  av = (a.coles?.price ?? 0) * getUnits(a.list_item); bv = (b.coles?.price ?? 0) * getUnits(b.list_item); break;
       default: av = a.trip_count || 0; bv = b.trip_count || 0; break;
     }
     if (av < bv) return -1 * mul;
@@ -1254,9 +1286,9 @@ function renderPage(data) {
   const coverageText = missingCount > 0
     ? `${pricedBoth}/${totalNonArchived} priced · ${missingCount} missing`
     : `${totalNonArchived} items`;
-  $('lastUpdated').textContent = prog
-    ? `Updates every 7s · ${coverageText}`
-    : `Updated ${formatDate(data.last_updated)} · ${coverageText}`;
+  $('lastUpdated').innerHTML = prog
+    ? `Updates every 7s<br>${coverageText}`
+    : `Updated ${formatDate(data.last_updated)}<br>${coverageText}`;
   $('banner').style.display = 'block';
 
   // Scrape progress bar
@@ -1347,7 +1379,7 @@ function renderPage(data) {
       all:     { title: 'No items match', sub: 'Try clearing filters or adding items via Import.' },
     };
     const msg = emptyMessages[_activePriority] || emptyMessages.all;
-    tbody.innerHTML = `<tr><td colspan="${_colOrder.length + 1}"><div class="table-empty-state"><strong>${msg.title}</strong>${msg.sub}</div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="${getVisibleCols().length + 1}"><div class="table-empty-state"><strong>${msg.title}</strong>${msg.sub}</div></td></tr>`;
     $('tableContainer').style.display = 'block';
     return;
   }
@@ -1474,17 +1506,27 @@ function renderPage(data) {
       </div>
     </td>`;
 
+    const wwTotalVal   = ww?.price != null ? ww.price * units : null;
+    const colesTotalVal = co?.price != null ? co.price * units : null;
+    const scrapedDate = item.last_scraped
+      ? new Date(item.last_scraped).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
+      : '—';
+
     // Build cell map keyed by col id
     const tdMap = {
-      name:     `<td class="item-name">${itemCell}</td>`,
-      priority: priorityCell,
-      units:    unitsCell,
-      ww:       `<td class="price-cell ${wwClass}">${wwCellContent}</td>`,
-      coles:    `<td class="price-cell ${coClass}">${coCellContent}</td>`,
-      cheaper:  `<td class="cheaper-cell">${badgeHtml}</td>`,
-      pct:      `<td class="pct-cell">${pctHtml}</td>`,
-      saving:   `<td><div class="saving-row">${savingHtml}${refreshBtn}</div></td>`,
-      trips:    `<td class="trips-cell">${tripsHtml}</td>`,
+      name:         `<td class="item-name">${itemCell}</td>`,
+      priority:     priorityCell,
+      units:        unitsCell,
+      ww:           `<td class="price-cell ${wwClass}">${wwCellContent}</td>`,
+      coles:        `<td class="price-cell ${coClass}">${coCellContent}</td>`,
+      cheaper:      `<td class="cheaper-cell">${badgeHtml}</td>`,
+      pct:          `<td class="pct-cell">${pctHtml}</td>`,
+      saving:       `<td><div class="saving-row">${savingHtml}${refreshBtn}</div></td>`,
+      trips:        `<td class="trips-cell">${tripsHtml}</td>`,
+      category:     `<td style="font-size:12px;color:var(--text-mid)">${getCategory(item)}</td>`,
+      last_scraped: `<td style="font-size:11px;color:var(--text-soft);white-space:nowrap">${scrapedDate}</td>`,
+      ww_total:     `<td style="font-size:13px;font-weight:600">${wwTotalVal != null ? fmt(wwTotalVal) : '<span class="no-data">—</span>'}</td>`,
+      coles_total:  `<td style="font-size:13px;font-weight:600">${colesTotalVal != null ? fmt(colesTotalVal) : '<span class="no-data">—</span>'}</td>`,
     };
 
     const checked = _checkedItems.has(item.list_item) ? ' checked' : '';
@@ -1493,7 +1535,7 @@ function renderPage(data) {
     const prevCo = _prevPrices[item.list_item]?.co;
     const priceChanged = (prevWw != null && prevWw !== ww?.price) || (prevCo != null && prevCo !== co?.price);
     const rowClass = isPending ? ' class="row-pending"' : (priceChanged ? ' class="row-flash"' : '');
-    tbody.insertAdjacentHTML('beforeend', `<tr${rowClass} data-item="${safeKey}"><td class="check-cell"><input type="checkbox" class="row-check" data-item="${safeKey}"${checked}></td>${_colOrder.map(col => tdMap[col] || '').join('')}</tr>`);
+    tbody.insertAdjacentHTML('beforeend', `<tr${rowClass} data-item="${safeKey}"><td class="check-cell"><input type="checkbox" class="row-check" data-item="${safeKey}"${checked}></td>${getVisibleCols().map(col => tdMap[col] || '').join('')}</tr>`);
 
     _prevPrices[item.list_item] = { ww: ww?.price, co: co?.price };
     if (priceChanged && _pendingRefreshItem === item.list_item) _pendingRefreshItem = null;
@@ -1503,17 +1545,21 @@ function renderPage(data) {
   const tfootRow = document.querySelector('tfoot tr');
   if (tfootRow) {
     const footMap = {
-      name:     `<td>Total basket</td>`,
-      priority: `<td></td>`,
-      units:    `<td></td>`,
-      ww:       `<td id="footWW">${s.ww_data_available ? fmt(s.total_woolworths) : '—'}</td>`,
-      coles:    `<td id="footColes">${fmt(s.total_coles)}</td>`,
-      cheaper:  `<td></td>`,
-      pct:      `<td></td>`,
-      saving:   `<td id="footSaving">${s.ww_data_available ? `<span class="saving-cell">${fmt(s.total_saving)}</span>` : ''}</td>`,
-      trips:    `<td></td>`,
+      name:         `<td>Total basket</td>`,
+      priority:     `<td></td>`,
+      units:        `<td></td>`,
+      ww:           `<td id="footWW">${s.ww_data_available ? fmt(s.total_woolworths) : '—'}</td>`,
+      coles:        `<td id="footColes">${fmt(s.total_coles)}</td>`,
+      cheaper:      `<td></td>`,
+      pct:          `<td></td>`,
+      saving:       `<td id="footSaving">${s.ww_data_available ? `<span class="saving-cell">${fmt(s.total_saving)}</span>` : ''}</td>`,
+      trips:        `<td></td>`,
+      category:     `<td></td>`,
+      last_scraped: `<td></td>`,
+      ww_total:     `<td style="font-weight:700">${s.ww_data_available ? fmt(s.total_woolworths) : '—'}</td>`,
+      coles_total:  `<td style="font-weight:700">${fmt(s.total_coles)}</td>`,
     };
-    tfootRow.innerHTML = _colOrder.map(col => footMap[col] || '<td></td>').join('');
+    tfootRow.innerHTML = getVisibleCols().map(col => footMap[col] || '<td></td>').join('');
   }
 
   $('tableContainer').style.display = 'block';
@@ -1848,6 +1894,67 @@ async function addItemsToShoppingList(newItems) {
   }
 }
 
+// ── Column chooser ────────────────────────────────────────────────────────────
+
+const COL_LABELS = {
+  name: 'Item name', priority: 'Priority', ww: 'WW price', coles: 'Coles price',
+  cheaper: 'Best store', pct: 'Diff %', saving: 'Savings', units: 'Qty', trips: 'Buys',
+  category: 'Category', last_scraped: 'Last scraped',
+  ww_total: 'WW total (qty × price)', coles_total: 'Coles total (qty × price)',
+};
+
+function initColumnChooser() {
+  const btn = $('colChooserBtn');
+  const dropdown = $('colChooserDropdown');
+  if (!btn || !dropdown) return;
+
+  const coreGroups = [
+    ['name', 'priority', 'ww', 'coles', 'cheaper', 'pct', 'saving', 'units', 'trips'],
+    ['category', 'last_scraped', 'ww_total', 'coles_total'],
+  ];
+
+  function renderDropdown() {
+    dropdown.innerHTML = coreGroups.map((group, gi) => {
+      const items = group.map(col => {
+        const checked = _colVisibility[col] !== false;
+        return `<label class="col-chooser-item"><input type="checkbox" data-col="${col}" ${checked ? 'checked' : ''}> ${COL_LABELS[col] || col}</label>`;
+      }).join('');
+      return (gi > 0 ? '<div class="col-chooser-sep"></div>' : '') + items;
+    }).join('');
+  }
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (dropdown.style.display === 'none') {
+      renderDropdown();
+      dropdown.style.display = 'block';
+    } else {
+      dropdown.style.display = 'none';
+    }
+  });
+
+  document.addEventListener('click', () => { if (dropdown) dropdown.style.display = 'none'; });
+  dropdown.addEventListener('click', (e) => e.stopPropagation());
+  dropdown.addEventListener('change', (e) => {
+    const col = e.target.dataset?.col;
+    if (col) {
+      _colVisibility[col] = e.target.checked;
+      saveColVisibility();
+      if (_lastData) renderPage(_lastData);
+    }
+  });
+}
+
+// ── Export shopping list ──────────────────────────────────────────────────────
+
+function exportShoppingList(useChecked) {
+  const sel = (useChecked && _checkedItems.size > 0)
+    ? { type: 'checked', items: [..._checkedItems] }
+    : { type: 'filter', priority: _activePriority, category: _activeCategory, hotOnly: _showHotOnly, pricesOnly: _showPricesOnly };
+  localStorage.setItem('pw_export_sel', JSON.stringify(sel));
+  window.open('shopping-list.html', '_blank');
+}
+
 // ── Boot ─────────────────────────────────────────────────────────────────────
 
 async function boot() {
@@ -1859,10 +1966,14 @@ async function boot() {
   initUploadModal();
   initPriorityFilter();
   initBulkBar();
+  initColumnChooser();
   updateImportBadge();
 
   const refreshBtn = $('refreshBtn');
   if (refreshBtn) refreshBtn.addEventListener('click', triggerRefresh);
+
+  $('exportListBtn')?.addEventListener('click', () => exportShoppingList(false));
+  $('bulkExportBtn')?.addEventListener('click', () => exportShoppingList(true));
 
   // Load analysis data first so priorities/units are ready before render
   await loadItemAnalysis();
