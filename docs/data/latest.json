@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:42:11.629446+00:00",
+  "last_updated": "2026-05-18T21:42:21.689714+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9633,20 +9633,165 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "Woolworths Capsicum Green",
+      "last_scraped": "2026-05-18T21:42:15.682169+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2026-02-23",
+          "price": 2.23
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.23
+        },
+        {
+          "date": "2026-04-21",
+          "price": 2.73
+        },
+        {
+          "date": "2026-04-29",
+          "price": 2.73
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Capsicum Green",
+        "price": 1.98,
+        "unit_price": 1.98,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/135156/woolworths-capsicum-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135156.jpg"
+      },
+      "coles": {
+        "name": "Coles Organic Capsicum Red | 400g",
+        "price": 10.9,
+        "unit_price": 10.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-organic-capsicum-red-400g-3004041",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3004041.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 8.92,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Celery Heart",
+      "last_scraped": "2026-05-18T21:42:16.994633+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 4.0
+        },
+        {
+          "date": "2025-06-13",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 4.0
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Celery Heart",
+        "price": 4.5,
+        "unit_price": 4.5,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/748851/woolworths-celery-heart",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/748851.jpg"
+      },
+      "coles": {
+        "name": "Coles Lettuce Cos Baby Hearts | 2 Pack",
+        "price": 3.9,
+        "unit_price": 3.9,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-lettuce-cos-baby-hearts-2-pack-4646485",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4646485.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.6,
+      "alternatives": [
+        {
+          "name": "Coles Lettuce Cos Baby Hearts | 2 Pack",
+          "price": 3.9,
+          "unit_price": 3.9,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-lettuce-cos-baby-hearts-2-pack-4646485",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4646485.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Celery Bunch | 1 Each",
+          "price": 4.2,
+          "unit_price": 4.2,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-celery-bunch-1-each-4845732",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4845732.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Extra Virgin Olive Oil Spray",
+      "last_scraped": "2026-05-18T21:42:21.678162+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 3.7
+        },
+        {
+          "date": "2025-02-02",
+          "price": 3.7
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.7
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.3
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Extra Virgin Olive Oil Spray",
+        "price": 3.3,
+        "unit_price": 2.2,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/260739/woolworths-extra-virgin-olive-oil-spray",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/260739.jpg"
+      },
+      "coles": {
+        "name": "Coles Extra Virgin Olive Oil | 500mL",
+        "price": 9.0,
+        "unit_price": 9.0,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5449504.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 5.7,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 888.55,
-    "total_coles": 979.0,
+    "total_woolworths": 898.33,
+    "total_coles": 1002.8,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 90.45,
-    "items_compared": 138,
+    "total_saving": 104.47,
+    "items_compared": 141,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 138,
+    "done": 141,
     "total": 211
   }
 }
