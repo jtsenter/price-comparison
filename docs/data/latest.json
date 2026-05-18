@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:35:24.938255+00:00",
+  "last_updated": "2026-05-18T21:35:34.099364+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2980,20 +2980,247 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 5.2,
       "alternatives": []
+    },
+    {
+      "list_item": "Weet-Bix Little Kids Breakfast Cereal",
+      "last_scraped": "2026-05-18T21:35:26.394455+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2025-05-22",
+          "price": 3.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 5.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 5.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 4.0
+        }
+      ],
+      "category": "Other",
+      "woolworths": {
+        "name": "Weet-Bix Little Kids Breakfast Cereal",
+        "price": 5.0,
+        "unit_price": 1.25,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/142976/weet-bix-little-kids-breakfast-cereal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/142976.jpg"
+      },
+      "coles": {
+        "name": "Sanitarium Weet-bix Little Kids Essentials Breakfast Cereal | 400g",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/sanitarium-weet-bix-little-kids-essentials-breakfast-cereal-400g-4233292",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4233292.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths BBQ Lamb Kebabs With Mint & Honey",
+      "last_scraped": "2026-05-18T21:35:30.427463+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 8.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 8.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 8.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 8.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 8.5
+        },
+        {
+          "date": "2025-06-21",
+          "price": 8.5
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths BBQ Australian Lamb Koftas Honey & Mint",
+        "price": 8.5,
+        "unit_price": 18.89,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/6024489/woolworths-bbq-australian-lamb-koftas-honey-mint",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6024489.jpg"
+      },
+      "coles": {
+        "name": "Coles RSPCA Approved Chicken Kebabs Honey & Soy | 375g",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-kebabs-honey-and-soy-375g-3745710",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3745710.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.5,
+      "alternatives": [
+        {
+          "name": "Coles RSPCA Approved Chicken Kebabs Honey & Soy | 375g",
+          "price": 8.0,
+          "unit_price": 8.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-kebabs-honey-and-soy-375g-3745710",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3745710.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Pork Scotch Steak With Rosemary & Honey Butter | 280g",
+          "price": 8.0,
+          "unit_price": 8.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-pork-scotch-steak-with-rosemary-and-honey-butter-280g-5886429",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5886429.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles RSPCA Approved Chicken Kebabs Honey & Soy | 750g",
+          "price": 10.0,
+          "unit_price": 13.33,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-kebabs-honey-and-soy-750g-3745878",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3745878.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Baby Leaf Spinach",
+      "last_scraped": "2026-05-18T21:35:34.094104+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 2.5
+        },
+        {
+          "date": "2024-11-20",
+          "price": 2.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 2.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 2.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 2.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 2.5
+        },
+        {
+          "date": "2026-04-21",
+          "price": 2.7
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.7
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Baby Leaf Spinach",
+        "price": 2.7,
+        "unit_price": 22.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/524322/woolworths-baby-leaf-spinach",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/524322.jpg"
+      },
+      "coles": {
+        "name": "Coles Baby Spinach | 60g",
+        "price": 2.2,
+        "unit_price": 2.2,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-baby-spinach-60g-1499486",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1499486.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.5,
+      "alternatives": [
+        {
+          "name": "Coles Baby Spinach | 60g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-baby-spinach-60g-1499486",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1499486.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Baby Spinach | 120g",
+          "price": 3.3,
+          "unit_price": 3.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-baby-spinach-120g-1499340",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1499340.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Salad Baby Leaf Spinach & Rocket | 120g",
+          "price": 3.3,
+          "unit_price": 3.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-salad-baby-leaf-spinach-and-rocket-120g-5464290",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5464290.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 112.79,
-    "total_coles": 147.18,
+    "total_woolworths": 128.99,
+    "total_coles": 162.38,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 34.39,
-    "items_compared": 33,
+    "total_saving": 33.39,
+    "items_compared": 36,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 33,
+    "done": 36,
     "total": 211
   }
 }
