@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:39:42.157473+00:00",
+  "last_updated": "2026-05-18T21:39:50.490525+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7128,20 +7128,229 @@
       "cheaper_store": "coles",
       "saving_per_item": 0.4,
       "alternatives": []
+    },
+    {
+      "list_item": "KitKat Milk Chocolate Mini Bars Share Pack",
+      "last_scraped": "2026-05-18T21:39:46.402426+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2026-02-07",
+          "price": 7.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 5.25
+        },
+        {
+          "date": "2026-04-21",
+          "price": 5.25
+        },
+        {
+          "date": "2026-05-06",
+          "price": 5.25
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "KitKat Milk Chocolate Mini Bars Share Pack",
+        "price": 5.25,
+        "unit_price": 3.41,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/348593/kitkat-milk-chocolate-mini-bars-share-pack",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/348593.jpg"
+      },
+      "coles": {
+        "name": "KitKat Milk Milk Chocolate Share Pack 11 Pieces | 154g",
+        "price": 7.5,
+        "unit_price": 7.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/kitkat-milk-milk-chocolate-share-pack-11-pieces-154g-7018853",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7018853.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.25,
+      "alternatives": [
+        {
+          "name": "KitKat Packed With Milo Milk Chocolate Block | 165g",
+          "price": 3.5,
+          "unit_price": 2.12,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/kitkat-packed-with-milo-milk-chocolate-block-165g-5389720",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5389720.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "KitKat Milk Chocolate Block | 160g",
+          "price": 3.5,
+          "unit_price": 2.19,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/kitkat-milk-chocolate-block-160g-5872479",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5872479.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Nestle Kit Kat Chocolate Milk 4 Finger Bar | 42g",
+          "price": 3.0,
+          "unit_price": 3.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/nestle-kit-kat-chocolate-milk-4-finger-bar-42g-9229441",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9229441.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Kiwi Fruit Green",
+      "last_scraped": "2026-05-18T21:39:46.496726+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-04-25",
+          "price": 0.95
+        },
+        {
+          "date": "2025-05-29",
+          "price": 0.9
+        },
+        {
+          "date": "2025-06-13",
+          "price": 0.95
+        },
+        {
+          "date": "2025-07-03",
+          "price": 0.95
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.02
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Kiwi Fruit Green",
+        "price": 1.02,
+        "unit_price": 1.02,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/139238/kiwi-fruit-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139238.jpg"
+      },
+      "coles": {
+        "name": "Coles Green Kiwifruit | 1 Each",
+        "price": 1.0,
+        "unit_price": 1.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-green-kiwifruit-1-each-4425883",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4425883.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.02,
+      "alternatives": [
+        {
+          "name": "Woolworths Kiwifruit Green Kids",
+          "price": 3.5,
+          "unit_price": 0.7,
+          "unit": "1EA",
+          "url": "https://www.woolworths.com.au/shop/productdetails/648994/woolworths-kiwifruit-green-kids",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/648994.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Coles Green Kiwifruit | 1 Each",
+          "price": 1.0,
+          "unit_price": 1.0,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-green-kiwifruit-1-each-4425883",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4425883.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Macro Organic Natural Pumpkin Kernels",
+      "last_scraped": "2026-05-18T21:39:50.483069+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 5.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 5.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 5.0
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Macro Organic Natural Pumpkin Kernels",
+        "price": 5.7,
+        "unit_price": 22.8,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/133300/macro-organic-natural-pumpkin-kernels",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/133300.jpg"
+      },
+      "coles": {
+        "name": "Coles Organic Pumpkin Kent | approx. 800g",
+        "price": 6.0,
+        "unit_price": 7.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-organic-pumpkin-kent-approx.-800g-3119043",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3119043.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.3,
+      "alternatives": [
+        {
+          "name": "Only Organic Sweet Potato & Pumpkin Pouch | 120g",
+          "price": 2.0,
+          "unit_price": 1.67,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/only-organic-sweet-potato-and-pumpkin-pouch-120g-8423369",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8423369.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Little Bellies Organic Pumpkin And Carrot Soft Corn 10+ Months | 8g",
+          "price": 2.15,
+          "unit_price": 2.15,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/little-bellies-organic-pumpkin-and-carrot-soft-corn-10+-months-8g-4163390",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4163390.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Wellness Road Organic Buckwheat Kernels | 500g",
+          "price": 5.0,
+          "unit_price": 5.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/wellness-road-organic-buckwheat-kernels-500g-3405803",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3405803.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 483.7,
-    "total_coles": 720.89,
+    "total_woolworths": 495.67,
+    "total_coles": 735.39,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 237.19,
-    "items_compared": 93,
+    "total_saving": 239.72,
+    "items_compared": 96,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 93,
+    "done": 96,
     "total": 211
   }
 }
