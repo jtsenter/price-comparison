@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:43:14.865675+00:00",
+  "last_updated": "2026-05-18T21:43:23.558040+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10539,20 +10539,173 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": []
+    },
+    {
+      "list_item": "Yumi's Eggplant Mediterranean Dip",
+      "last_scraped": "2026-05-18T21:43:18.639908+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-06-21",
+          "price": 4.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 5.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 5.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.75
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Yumi's Eggplant Mediterranean Dip",
+        "price": 4.0,
+        "unit_price": 2.0,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/139881/yumi-s-eggplant-mediterranean-dip",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139881.jpg"
+      },
+      "coles": {
+        "name": "Yumi's Mediterranean Eggplant Dip | 200g",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/yumi's-mediterranean-eggplant-dip-200g-8670878",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8670878.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Ajax Antibacterial Wipes Eco Vanilla & Berries 110 Wipes",
+      "last_scraped": "2026-05-18T21:43:19.919872+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 17.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 17.0
+        }
+      ],
+      "category": "Household",
+      "woolworths": {
+        "name": "Ajax Eco Antibacterial Disinfectant Surface Cleaning Wipes, Bulk 110 Pack, Vanilla and Berries, Multipurpose, Biodegradable and Compostable, Made with Bamboo Fibres",
+        "price": 20.99,
+        "unit_price": 19.08,
+        "unit": "100EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/1116998665/ajax-eco-antibacterial-disinfectant-surface-cleaning-wipes-bulk-110-pack-vanilla-and-berries-multipurpose-biodegradable-and-compostable-made-with-bamboo-fibres",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/1116998665.jpg"
+      },
+      "coles": {
+        "name": "Ajax Eco Antibacterial Multipurpose Disinfectant Wipes Vanilla & Be ... 110 pack",
+        "price": 11.0,
+        "unit_price": 11.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/ajax-eco-antibacterial-multipurpose-disinfectant-wipes-vanilla-and-berries-110-pack-3741844",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3741844.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 9.99,
+      "alternatives": [
+        {
+          "name": "Ajax Spray N Wipe Divine Blends Vanilla & Berries | 475mL",
+          "price": 3.5,
+          "unit_price": 3.5,
+          "unit": "100mL",
+          "url": "https://www.coles.com.au/product/ajax-spray-n-wipe-divine-blends-vanilla-and-berries-475ml-3059848",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3059848.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Ajax Spray & Wipe Vanilla & Berries Multipurpose Cleaner Refill | 750mL",
+          "price": 4.0,
+          "unit_price": 4.0,
+          "unit": "100mL",
+          "url": "https://www.coles.com.au/product/ajax-spray-and-wipe-vanilla-and-berries-multipurpose-cleaner-refill-750ml-7991050",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7991050.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Ajax Eco Antibacterial Multipurpose Disinfectant Wipes Vanilla & Be ... 110 pack",
+          "price": 11.0,
+          "unit_price": 11.0,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/ajax-eco-antibacterial-multipurpose-disinfectant-wipes-vanilla-and-berries-110-pack-3741844",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3741844.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
+      "last_scraped": "2026-05-18T21:43:23.550032+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 3.85
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.85
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
+        "price": 2.85,
+        "unit_price": 7.92,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/634312/baby-mum-mum-organiic-rice-rusks-blueberry-carrot",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634312.jpg"
+      },
+      "coles": {
+        "name": "Baby Mum-Mum Rice Rusk Organic Blueberry & Carrot +8 Months | 36g",
+        "price": 3.85,
+        "unit_price": 3.85,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/baby-mum-mum-rice-rusk-organic-blueberry-and-carrot-+8-months-36g-2800347",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2800347.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.0,
+      "alternatives": [
+        {
+          "name": "Baby Mum-Mum Rice Rusk Organic Blueberry & Carrot +8 Months | 36g",
+          "price": 3.85,
+          "unit_price": 3.85,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/baby-mum-mum-rice-rusk-organic-blueberry-and-carrot-+8-months-36g-2800347",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2800347.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 983.31,
-    "total_coles": 1082.7,
+    "total_woolworths": 1011.15,
+    "total_coles": 1102.55,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 99.39,
-    "items_compared": 156,
+    "total_saving": 91.4,
+    "items_compared": 159,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 156,
+    "done": 159,
     "total": 211
   }
 }
