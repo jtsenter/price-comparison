@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:46:34.219599+00:00",
+  "last_updated": "2026-05-18T21:46:41.654886+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12627,20 +12627,183 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 1.69,
       "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Chickpeas",
+      "last_scraped": "2026-05-18T21:46:35.633674+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-02-11",
+          "price": 1.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 1.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Chickpeas",
+        "price": 1.0,
+        "unit_price": 2.38,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/907050/woolworths-chickpeas",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/907050.jpg"
+      },
+      "coles": {
+        "name": "Edgell Australian Grown Chick Peas | 400g",
+        "price": 2.2,
+        "unit_price": 2.2,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/edgell-australian-grown-chick-peas-400g-9701489",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9701489.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.2,
+      "alternatives": [
+        {
+          "name": "Edgell Australian Grown Chick Peas | 400g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/edgell-australian-grown-chick-peas-400g-9701489",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9701489.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Corn Sweet Kernels",
+      "last_scraped": "2026-05-18T21:46:38.219475+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 1.2
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.2
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Corn Sweet Kernels",
+        "price": 1.05,
+        "unit_price": 2.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/218926/woolworths-corn-sweet-kernels",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/218926.jpg"
+      },
+      "coles": {
+        "name": "Edgell Super Sweet Corn Kernels | 420g",
+        "price": 2.5,
+        "unit_price": 2.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/edgell-super-sweet-corn-kernels-420g-6836889",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6836889.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.45,
+      "alternatives": [
+        {
+          "name": "Coles Corn Kernels | 420g",
+          "price": 1.05,
+          "unit_price": 1.05,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4774066.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Popping Corn Kernels | 400g",
+          "price": 1.8,
+          "unit_price": 1.8,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-popping-corn-kernels-400g-5374675",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5374675.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Greek Style Fetta",
+      "last_scraped": "2026-05-18T21:46:41.627133+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Greek Style Fetta",
+        "price": 3.2,
+        "unit_price": 16.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/452083/woolworths-greek-style-fetta",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/452083.jpg"
+      },
+      "coles": {
+        "name": "Riverina Fetta Greek Style | 200g",
+        "price": 4.5,
+        "unit_price": 22.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/riverina-fetta-greek-style-200g-4360879",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4360879.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.3,
+      "alternatives": [
+        {
+          "name": "Castello Greek Style Feta Cubes | 410g",
+          "price": 6.0,
+          "unit_price": 6.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/castello-greek-style-feta-cubes-410g-1096832",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1096832.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "South Cape Greek Style Fetta | 200g",
+          "price": 6.5,
+          "unit_price": 6.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/south-cape-greek-style-fetta-200g-6416861",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6416861.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "South Cape Greek Style Fetta Reduced Fat | 200g",
+          "price": 6.5,
+          "unit_price": 6.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/south-cape-greek-style-fetta-reduced-fat-200g-6416883",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6416883.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 1282.45,
-    "total_coles": 1452.71,
+    "total_woolworths": 1287.7,
+    "total_coles": 1461.91,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 170.26,
-    "items_compared": 201,
+    "total_saving": 174.21,
+    "items_compared": 204,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 201,
+    "done": 204,
     "total": 211
   }
 }
