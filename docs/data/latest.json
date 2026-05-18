@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T06:41:37.393244+00:00",
+  "last_updated": "2026-05-18T06:42:30.805076+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8223,20 +8223,659 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "Woolworths 12 Extra Large Cage Free Eggs",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 5.4
+        },
+        {
+          "date": "2024-12-02",
+          "price": 5.4
+        },
+        {
+          "date": "2025-04-14",
+          "price": 5.9
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.9
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths 12 Extra Large Cage Free Eggs",
+        "price": 5.7,
+        "unit_price": 0.81,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/165367/woolworths-12-extra-large-cage-free-eggs",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/165367.jpg"
+      },
+      "coles": {
+        "name": "Coles Cage Free Eggs 12 Pack | 800g",
+        "price": 6.4,
+        "unit_price": 6.4,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-cage-free-eggs-12-pack-800g-5178804",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5178804.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.7,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths 12 Extra Large Free Range Eggs",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 6.1
+        },
+        {
+          "date": "2024-12-19",
+          "price": 6.1
+        },
+        {
+          "date": "2025-07-03",
+          "price": 6.6
+        },
+        {
+          "date": "2026-02-11",
+          "price": 6.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 6.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 6.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 6.5
+        },
+        {
+          "date": "2026-04-13",
+          "price": 6.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 6.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": null,
+      "coles": {
+        "name": "Coles Organic Free Range Eggs 12 Pack | 600g",
+        "price": 10.6,
+        "unit_price": 10.6,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-organic-free-range-eggs-12-pack-600g-3169697",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3169697.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Coles Free Range Eggs 12 Pack | 600g",
+          "price": 6.2,
+          "unit_price": 6.2,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-free-range-eggs-12-pack-600g-9453456",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9453456.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Free Range Eggs 12 Pack | 700g",
+          "price": 6.5,
+          "unit_price": 6.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-free-range-eggs-12-pack-700g-9453478",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9453478.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Jumbo Free Range Eggs 12 Pack | 800g",
+          "price": 7.25,
+          "unit_price": 7.25,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-jumbo-free-range-eggs-12-pack-800g-1034234",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1034234.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths 18 Large Cage Free Eggs",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 7.9
+        },
+        {
+          "date": "2025-03-27",
+          "price": 7.9
+        },
+        {
+          "date": "2025-05-29",
+          "price": 8.7
+        },
+        {
+          "date": "2025-06-13",
+          "price": 8.7
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths 18 Large Cage Free Eggs",
+        "price": 8.4,
+        "unit_price": 0.93,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/74593/woolworths-18-large-cage-free-eggs",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/074593.jpg"
+      },
+      "coles": {
+        "name": "Coles Cage Free Eggs 18 Pack | 900g",
+        "price": 8.4,
+        "unit_price": 8.4,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-cage-free-eggs-18-pack-900g-5178961",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5178961.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths 4 Angus Quarter Pound Beef Burgers",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-01-29",
+          "price": 9.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 9.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths 4 Angus Quarter Pound Beef Burgers",
+        "price": 9.0,
+        "unit_price": 19.82,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/901703/woolworths-4-angus-quarter-pound-beef-burgers",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/901703.jpg"
+      },
+      "coles": {
+        "name": "Coles Lamb Burgers With Rosemary And Garlic 4 Pack | 400g",
+        "price": 8.5,
+        "unit_price": 8.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-lamb-burgers-with-rosemary-and-garlic-4-pack-400g-5132541",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5132541.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.5,
+      "alternatives": [
+        {
+          "name": "V2 Burger Beef 4pk 452g | 452GRAM",
+          "price": 8.0,
+          "unit_price": 1.77,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/v2-burger-beef-4pk-452g-452gram-8851668",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8851668.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Lamb Burgers With Rosemary And Garlic 4 Pack | 400g",
+          "price": 8.5,
+          "unit_price": 8.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-lamb-burgers-with-rosemary-and-garlic-4-pack-400g-5132541",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5132541.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Simply Australian Beef Burgers | 800g",
+          "price": 9.3,
+          "unit_price": 9.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-simply-australian-beef-burgers-800g-2700580",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2700580.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Asparagus Green Bunch",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 1.5
+        },
+        {
+          "date": "2024-12-02",
+          "price": 2.0
+        },
+        {
+          "date": "2025-02-02",
+          "price": 3.9
+        },
+        {
+          "date": "2025-03-11",
+          "price": 4.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.9
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Green Asparagus Bunch Green",
+        "price": 4.5,
+        "unit_price": 4.5,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/305235/woolworths-green-asparagus-bunch-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/305235.jpg"
+      },
+      "coles": {
+        "name": "Coles Green Asparagus | 1 each",
+        "price": 4.5,
+        "unit_price": 4.5,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-green-asparagus-1-each-4838737",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4838737.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Coles Asparagus Spears | 425g",
+          "price": 3.0,
+          "unit_price": 3.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-asparagus-spears-425g-5841817",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5841817.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Asparagus Entertainer Large | 1 Bunch",
+          "price": 4.4,
+          "unit_price": 4.4,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-asparagus-entertainer-large-1-bunch-8809049",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8809049.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Australian Grown Carrots",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 1.7
+        },
+        {
+          "date": "2024-12-09",
+          "price": 1.7
+        },
+        {
+          "date": "2025-02-28",
+          "price": 2.4
+        },
+        {
+          "date": "2025-04-05",
+          "price": 1.7
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Australian Grown Carrots",
+        "price": 2.4,
+        "unit_price": 2.4,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/135369/woolworths-australian-grown-carrots",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135369.jpg"
+      },
+      "coles": {
+        "name": "Coles Kitchen Carrot Sticks | 150g",
+        "price": 2.2,
+        "unit_price": 2.2,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-kitchen-carrot-sticks-150g-2313448",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2313448.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.2,
+      "alternatives": [
+        {
+          "name": "Coles Peas & Carrots | 420g",
+          "price": 1.8,
+          "unit_price": 1.8,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-peas-and-carrots-420g-2043478",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2043478.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Kitchen Carrot Sticks | 150g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-kitchen-carrot-sticks-150g-2313448",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2313448.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Kitchen Shredded Carrot | 200g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-kitchen-shredded-carrot-200g-2470424",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2470424.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths BBQ Lamb Kebabs With Mint & Honey",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 8.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 8.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 8.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 8.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 8.5
+        },
+        {
+          "date": "2025-06-21",
+          "price": 8.5
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": null,
+      "coles": {
+        "name": "Coles RSPCA Approved Chicken Kebabs Honey & Soy | 375g",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-kebabs-honey-and-soy-375g-3745710",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3745710.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Baby Corn Spears",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 1.9
+        },
+        {
+          "date": "2024-12-02",
+          "price": 1.9
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.9
+        },
+        {
+          "date": "2026-03-10",
+          "price": 1.9
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.9
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Baby Corn Spears",
+        "price": 1.9,
+        "unit_price": 4.63,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/491829/woolworths-baby-corn-spears",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/491829.jpg"
+      },
+      "coles": {
+        "name": "Coles Corn Spears Young | 410g",
+        "price": 1.9,
+        "unit_price": 1.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-corn-spears-young-410g-8701042",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8701042.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Coles Corn Kernels | 420g",
+          "price": 1.05,
+          "unit_price": 1.05,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4774066.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Popping Corn Kernels | 400g",
+          "price": 1.8,
+          "unit_price": 1.8,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-popping-corn-kernels-400g-5374675",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5374675.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Corn Spears Young | 410g",
+          "price": 1.9,
+          "unit_price": 1.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-corn-spears-young-410g-8701042",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8701042.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Baby Leaf Spinach",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 2.5
+        },
+        {
+          "date": "2024-11-20",
+          "price": 2.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 2.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 2.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 2.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 2.5
+        },
+        {
+          "date": "2026-04-21",
+          "price": 2.7
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.7
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Baby Leaf Spinach",
+        "price": 2.7,
+        "unit_price": 22.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/524322/woolworths-baby-leaf-spinach",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/524322.jpg"
+      },
+      "coles": {
+        "name": "Coles Baby Spinach | 60g",
+        "price": 2.2,
+        "unit_price": 2.2,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-baby-spinach-60g-1499486",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1499486.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.5,
+      "alternatives": [
+        {
+          "name": "Coles Baby Spinach | 60g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-baby-spinach-60g-1499486",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1499486.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Baby Spinach | 120g",
+          "price": 3.3,
+          "unit_price": 3.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-baby-spinach-120g-1499340",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1499340.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Salad Baby Leaf Spinach & Rocket | 120g",
+          "price": 3.3,
+          "unit_price": 3.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-salad-baby-leaf-spinach-and-rocket-120g-5464290",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5464290.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Baked Beans In Tomato Sauce",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 1.1
+        },
+        {
+          "date": "2024-12-19",
+          "price": 1.1
+        },
+        {
+          "date": "2025-03-11",
+          "price": 1.1
+        },
+        {
+          "date": "2026-02-23",
+          "price": 1.1
+        },
+        {
+          "date": "2026-03-10",
+          "price": 1.1
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.1
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Baked Beans In Tomato Sauce",
+        "price": 1.1,
+        "unit_price": 0.26,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/47682/woolworths-baked-beans-in-tomato-sauce",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/047682.jpg"
+      },
+      "coles": {
+        "name": "Coles Baked Beans In Tomato Sauce 4x220g | 880g",
+        "price": 4.4,
+        "unit_price": 4.4,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-baked-beans-in-tomato-sauce-4x220g-880g-6264446",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6264446.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.3,
+      "alternatives": [
+        {
+          "name": "Woolworths Spaghetti In Tomato Sauce",
+          "price": 0.9,
+          "unit_price": 0.21,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/47681/woolworths-spaghetti-in-tomato-sauce",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/047681.jpg",
+          "retailer": "woolworths"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 932.85,
-    "total_coles": 1040.21,
+    "total_woolworths": 968.55,
+    "total_coles": 1097.31,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 107.36,
-    "items_compared": 140,
+    "total_saving": 128.76,
+    "items_compared": 150,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 140,
+    "done": 150,
     "total": 211
   }
 }
