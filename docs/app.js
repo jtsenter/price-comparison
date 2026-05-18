@@ -1287,8 +1287,8 @@ function renderPage(data) {
     ? `${pricedBoth}/${totalNonArchived} priced · ${missingCount} missing`
     : `${totalNonArchived} items`;
   $('lastUpdated').innerHTML = prog
-    ? `Updates every 7s<br>${coverageText}`
-    : `Updated ${formatDate(data.last_updated)}<br>${coverageText}`;
+    ? `<span>Updates every 7s</span><span>${coverageText}</span>`
+    : `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>`;
   $('banner').style.display = 'block';
 
   // Scrape progress bar

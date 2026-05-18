@@ -297,6 +297,7 @@ main { max-width: 1140px; margin: 0 auto; padding: 24px 24px 60px; }
   text-align: center;
 }
 .last-updated { font-size: 11px; color: var(--text-soft); text-align: center; }
+.last-updated span { display: block; }
 
 /* ── Category tabs ───────────────────────────────────────────── */
 .category-tabs {
