@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:40:42.673840+00:00",
+  "last_updated": "2026-05-18T21:40:53.313996+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8368,20 +8368,161 @@
           "retailer": "woolworths"
         }
       ]
+    },
+    {
+      "list_item": "Sam's Pantry Granola Pink Lady Apple & Cinnamon",
+      "last_scraped": "2026-05-18T21:40:47.090558+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2026-03-10",
+          "price": 7.6
+        },
+        {
+          "date": "2026-04-02",
+          "price": 7.6
+        },
+        {
+          "date": "2026-05-06",
+          "price": 7.6
+        }
+      ],
+      "category": "Fruit",
+      "woolworths": {
+        "name": "Sam's Pantry Granola Pink Lady Apple & Cinnamon",
+        "price": 4.5,
+        "unit_price": 0.64,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/6054860/sam-s-pantry-granola-pink-lady-apple-cinnamon",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6054860.jpg"
+      },
+      "coles": {
+        "name": "Carman's Pink Lady Apple & Blueberry Granola | 450g",
+        "price": 8.9,
+        "unit_price": 8.9,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/carman's-pink-lady-apple-and-blueberry-granola-450g-3500382",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3500382.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.4,
+      "alternatives": []
+    },
+    {
+      "list_item": "Sam's Pantry Chocolate Brownie with Roasted Almonds Protein Bar",
+      "last_scraped": "2026-05-18T21:40:47.875520+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 8.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 8.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 8.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 8.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.5
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Sam's Pantry Chocolate Brownie with Roasted Almonds Protein Bar",
+        "price": 8.5,
+        "unit_price": 1.86,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/212807/sam-s-pantry-chocolate-brownie-with-roasted-almonds-protein-bar",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/212807.jpg"
+      },
+      "coles": {
+        "name": "BC Snacks Dark Chocolate Almond High Protein Bar | 40g",
+        "price": 4.0,
+        "unit_price": 4.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/bc-snacks-dark-chocolate-almond-high-protein-bar-40g-1751224",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1751224.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 4.5,
+      "alternatives": []
+    },
+    {
+      "list_item": "Snickers Milk Chocolate Party Share Bag 20 Pieces",
+      "last_scraped": "2026-05-18T21:40:53.307534+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 6.5
+        },
+        {
+          "date": "2024-12-02",
+          "price": 6.5
+        },
+        {
+          "date": "2025-02-28",
+          "price": 6.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 7.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 7.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 7.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Snickers Milk Chocolate Party Share Bag",
+        "price": 8.0,
+        "unit_price": 2.67,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/206888/snickers-milk-chocolate-party-share-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/206888.jpg"
+      },
+      "coles": {
+        "name": "Snickers Chocolate Party Share Bag 20 Pieces | 300g",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/snickers-chocolate-party-share-bag-20-pieces-300g-5369981",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5369981.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 773.05,
-    "total_coles": 809.0,
+    "total_woolworths": 794.05,
+    "total_coles": 829.9,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 35.95,
-    "items_compared": 114,
+    "total_saving": 35.85,
+    "items_compared": 117,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 114,
+    "done": 117,
     "total": 211
   }
 }
