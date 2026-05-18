@@ -114,8 +114,10 @@ function getPriority(itemName) {
   const p = loadPriorities()[itemName];
   if (p) return p;  // explicit user override always wins
   const d = getAnalysisData(itemName);
-  if ((d.trip_count || 0) > 10) return 'weekly';
-  return d.priority || 'monthly';
+  const trips = d.trip_count || 0;
+  if (trips >= 7) return 'weekly';
+  if (trips >= 3) return 'monthly';
+  return d.priority || 'rare';
 }
 
 function getUnits(itemName) {
@@ -684,6 +686,8 @@ function computeBannerStats(items) {
     if (_activePriority !== 'all' && _activePriority !== 'archive' && p !== _activePriority) return false;
     if (_activeCategory !== 'All' && getCategory(item) !== _activeCategory) return false;
     if (_showHotOnly && !isHotDeal(item)) return false;
+    // Only include items that have prices at both stores
+    if (item.woolworths?.price == null || item.coles?.price == null) return false;
     return true;
   });
   const ww_avail = filtered.some(i => i.woolworths?.price != null);
@@ -1237,9 +1241,15 @@ function renderPage(data) {
   }
 
   const prog = data.scrape_progress;
+  const totalNonArchived = (data.items || []).filter(i => !i.archived).length;
+  const pricedBoth = (data.items || []).filter(i => !i.archived && i.woolworths?.price != null && i.coles?.price != null).length;
+  const missingCount = totalNonArchived - pricedBoth;
+  const coverageText = missingCount > 0
+    ? `${pricedBoth}/${totalNonArchived} priced · ${missingCount} missing`
+    : `${totalNonArchived} items`;
   $('lastUpdated').textContent = prog
-    ? `Scraping… ${prog.done}/${prog.total} items done · refreshes every 10`
-    : `Updated ${formatDate(data.last_updated)} · ${s.items_compared} items`;
+    ? `Scraping… ${prog.done}/${prog.total} items done · updates every 7s · ${coverageText}`
+    : `Updated ${formatDate(data.last_updated)} · ${coverageText}`;
   $('banner').style.display = 'block';
 
   _lastData = data;
@@ -1257,7 +1267,7 @@ function renderPage(data) {
         if (fresh.scrape_progress?.done !== _lastData?.scrape_progress?.done || !fresh.scrape_progress) {
           renderPage(fresh);
         }
-      }, 20000);
+      }, 7000);
     }
   } else {
     if (window._progressPollTimer) {
@@ -1290,13 +1300,13 @@ function renderPage(data) {
     toggleBtn.addEventListener('click', () => {
       _showPricesOnly = !_showPricesOnly;
       toggleBtn.classList.toggle('active', _showPricesOnly);
-      toggleBtn.textContent = _showPricesOnly ? 'Hiding unfound ✕' : 'Hide unfound items';
+      toggleBtn.textContent = _showPricesOnly ? 'Priced only ✕' : 'Priced only';
       if (_lastData) renderPage(_lastData);
     });
     const tabs = $('categoryTabs');
     tabs?.parentNode?.insertBefore(toggleBtn, tabs);
   }
-  toggleBtn.textContent = _showPricesOnly ? 'Hiding unfound ✕' : 'Hide unfound items';
+  toggleBtn.textContent = _showPricesOnly ? 'Priced only ✕' : 'Priced only';
   toggleBtn.classList.toggle('active', _showPricesOnly);
 
   renderTableHead();

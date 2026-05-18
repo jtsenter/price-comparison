@@ -448,7 +448,14 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         shopping_list = [single_item]
         print(f"Single-item refresh: {single_item}" + (f" [WW URL]" if ww_url else "") + (f" [Coles URL]" if coles_url else ""))
     else:
-        shopping_list = sorted(purchase_history.keys())
+        # Sort by priority: weekly (7+ trips) first, monthly (3+) second, then rest
+        def _priority_key(name):
+            h = purchase_history.get(name, {})
+            trips = h.get("trip_count", 0)
+            if trips >= 7: return 0
+            if trips >= 3: return 1
+            return 2
+        shopping_list = sorted(purchase_history.keys(), key=_priority_key)
         print(f"Active shopping list: {len(shopping_list)} items")
 
     detect_fuzzy_changes(shopping_list, FLAG_PATH)
@@ -591,7 +598,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                 "alternatives": alternatives,
             })
 
-            if not single_item and i % 10 == 0:
+            if not single_item and i % 3 == 0:
                 push_progress(items_output, not_found, i, total, trigger)
 
         await browser.close()
