@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:42:28.129203+00:00",
+  "last_updated": "2026-05-18T21:42:45.572031+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9932,20 +9932,157 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 2.9,
       "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Mashing Potatoes Bag",
+      "last_scraped": "2026-05-18T21:42:33.754530+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 7.0
+        },
+        {
+          "date": "2024-11-20",
+          "price": 5.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 4.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 5.5
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Mashing Potatoes Bag",
+        "price": 7.5,
+        "unit_price": 5.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/177574/woolworths-mashing-potatoes-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/177574.jpg"
+      },
+      "coles": {
+        "name": "Coles Growers Selection Mashing Potatoes | 1.5Kg",
+        "price": 5.5,
+        "unit_price": 5.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-growers-selection-mashing-potatoes-1.5kg-1632586",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1632586.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 2.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Mild Salsa",
+      "last_scraped": "2026-05-18T21:42:39.708016+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 1.5
+        },
+        {
+          "date": "2025-01-29",
+          "price": 2.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.9
+        },
+        {
+          "date": "2026-04-13",
+          "price": 1.9
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.9
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Mild Salsa",
+        "price": 1.9,
+        "unit_price": 0.63,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/311121/woolworths-mild-salsa",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/311121.jpg"
+      },
+      "coles": {
+        "name": "Coles Salsa Mild | 300g",
+        "price": 1.9,
+        "unit_price": 1.9,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-salsa-mild-300g-5859834",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5859834.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Pesto Basil",
+      "last_scraped": "2026-05-18T21:42:45.564441+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 1.85
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.85
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.85
+        },
+        {
+          "date": "2026-02-23",
+          "price": 1.95
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Pesto Basil",
+        "price": 1.95,
+        "unit_price": 1.03,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/753340/woolworths-pesto-basil",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/753340.jpg"
+      },
+      "coles": {
+        "name": "Coles Nature's Kitchen Basil Pesto | 180g",
+        "price": 3.0,
+        "unit_price": 3.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-nature's-kitchen-basil-pesto-180g-5050844",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5050844.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.05,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 940.43,
-    "total_coles": 1019.8,
+    "total_woolworths": 951.78,
+    "total_coles": 1030.2,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 79.37,
-    "items_compared": 144,
+    "total_saving": 78.42,
+    "items_compared": 147,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 144,
+    "done": 147,
     "total": 211
   }
 }
