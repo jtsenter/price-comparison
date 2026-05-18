@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T21:43:02.259235+00:00",
+  "last_updated": "2026-05-18T21:43:08.310485+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10214,20 +10214,183 @@
       "cheaper_store": "coles",
       "saving_per_item": null,
       "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Red Onions",
+      "last_scraped": "2026-05-18T21:43:02.303960+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 4.9
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.5
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Red Onions Bag",
+        "price": 5.1,
+        "unit_price": 5.1,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg"
+      },
+      "coles": {
+        "name": "Coles Organic Red Onions | 1kg",
+        "price": 7.9,
+        "unit_price": 7.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-organic-red-onions-1kg-5071833",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5071833.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.8,
+      "alternatives": [
+        {
+          "name": "Onion Red",
+          "price": 0.89,
+          "unit_price": 0.89,
+          "unit": "1EA",
+          "url": "https://www.woolworths.com.au/shop/productdetails/144497/onion-red",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144497.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Woolworths Creamy Broccoli Bake With Red Onion & Parmesan",
+          "price": 7.0,
+          "unit_price": 2.33,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/6056905/woolworths-creamy-broccoli-bake-with-red-onion-parmesan",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6056905.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Coles Brown Onions | 1kg",
+          "price": 2.5,
+          "unit_price": 2.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4803991.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Red Onions Bag",
+      "last_scraped": "2026-05-18T21:43:06.276616+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-06-06",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 4.9
+        },
+        {
+          "date": "2026-04-02",
+          "price": 4.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 5.1
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Red Onions Bag",
+        "price": 5.1,
+        "unit_price": 5.1,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg"
+      },
+      "coles": {
+        "name": "Coles Organic Red Onions | 1kg",
+        "price": 7.9,
+        "unit_price": 7.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-organic-red-onions-1kg-5071833",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5071833.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.8,
+      "alternatives": [
+        {
+          "name": "Coles Brown Onions | 1kg",
+          "price": 2.5,
+          "unit_price": 2.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4803991.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Rosemary Leaves",
+      "last_scraped": "2026-05-18T21:43:08.303870+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-01-29",
+          "price": 2.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 2.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 2.0
+        }
+      ],
+      "category": "Spices & Herbs",
+      "woolworths": {
+        "name": "Woolworths Rosemary Leaves",
+        "price": 2.0,
+        "unit_price": 1.11,
+        "unit": "10G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/251141/woolworths-rosemary-leaves",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251141.jpg"
+      },
+      "coles": {
+        "name": "Coles Rosemary Leaves | 28g",
+        "price": 2.8,
+        "unit_price": 2.8,
+        "unit": "10g",
+        "url": "https://www.coles.com.au/product/coles-rosemary-leaves-28g-8984220",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8984220.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.8,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 962.61,
-    "total_coles": 1056.8,
+    "total_woolworths": 974.81,
+    "total_coles": 1075.4,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 94.19,
-    "items_compared": 150,
+    "total_saving": 100.59,
+    "items_compared": 153,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 150,
+    "done": 153,
     "total": 211
   }
 }
