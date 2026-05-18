@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-18T06:46:52.811327+00:00",
+  "last_updated": "2026-05-18T06:47:48.082891+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12337,20 +12337,607 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "Woolworths Salmon Tasmanian Atlantic Fillets Skin On",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 34.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 36.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets",
+        "price": 38.0,
+        "unit_price": 38.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/95171/woolworths-fresh-tasmanian-atlantic-skin-on-salmon-fillets",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/095171.jpg"
+      },
+      "coles": {
+        "name": "Coles Tasmanian Salmon Portion Skin On | 200g",
+        "price": 10.0,
+        "unit_price": 10.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portion-skin-on-200g-6400861",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6400861.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 28.0,
+      "alternatives": [
+        {
+          "name": "Coles Tasmanian Salmon Portion Skin On | 200g",
+          "price": 10.0,
+          "unit_price": 10.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portion-skin-on-200g-6400861",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6400861.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Tasmanian Salmon Portions Skin On 4 Pack | 460g",
+          "price": 19.5,
+          "unit_price": 19.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portions-skin-on-4-pack-460g-1546564",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1546564.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Tasmanian Salmon Portions Skin Off 4 Pack | 460g",
+          "price": 21.5,
+          "unit_price": 21.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portions-skin-off-4-pack-460g-3613822",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3613822.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Sour Cream",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 3.25
+        },
+        {
+          "date": "2024-11-20",
+          "price": 3.25
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.4
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.4
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.4
+        },
+        {
+          "date": "2025-06-13",
+          "price": 3.3
+        },
+        {
+          "date": "2025-06-21",
+          "price": 3.3
+        },
+        {
+          "date": "2026-04-13",
+          "price": 3.3
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Sour Cream",
+        "price": 3.3,
+        "unit_price": 1.1,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/105609/woolworths-sour-cream",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/105609.jpg"
+      },
+      "coles": {
+        "name": "Coles Sour Cream | 300g",
+        "price": 3.3,
+        "unit_price": 3.3,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-sour-cream-300g-3676946",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3676946.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Woolworths Thickened Cream",
+          "price": 5.2,
+          "unit_price": 0.87,
+          "unit": "100ML",
+          "url": "https://www.woolworths.com.au/shop/productdetails/48720/woolworths-thickened-cream",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/048720.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Spring Water Bottles",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 5.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 4.9
+        },
+        {
+          "date": "2025-04-14",
+          "price": 4.9
+        },
+        {
+          "date": "2025-05-12",
+          "price": 4.9
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.9
+        },
+        {
+          "date": "2025-07-03",
+          "price": 4.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.9
+        },
+        {
+          "date": "2026-04-02",
+          "price": 4.9
+        }
+      ],
+      "category": "Drinks",
+      "woolworths": {
+        "name": "Woolworths Spring Water Bottles",
+        "price": 8.0,
+        "unit_price": 0.56,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/116784/woolworths-spring-water-bottles",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/116784.jpg"
+      },
+      "coles": {
+        "name": "Pump Spring Water Bottle | 1.25L",
+        "price": 3.3,
+        "unit_price": 3.3,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/pump-spring-water-bottle-1.25l-8973472",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8973472.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 4.7,
+      "alternatives": [
+        {
+          "name": "Woolworths Spring Water Bottle",
+          "price": 0.8,
+          "unit_price": 0.53,
+          "unit": "1L",
+          "url": "https://www.woolworths.com.au/shop/productdetails/749793/woolworths-spring-water-bottle",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/749793.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Thickened Cream",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-03-17",
+          "price": 4.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 5.2
+        },
+        {
+          "date": "2026-03-02",
+          "price": 3.4
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.4
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Thickened Cream",
+        "price": 5.2,
+        "unit_price": 0.87,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/48720/woolworths-thickened-cream",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/048720.jpg"
+      },
+      "coles": {
+        "name": "Coles Thickened Cream | 300mL",
+        "price": 3.4,
+        "unit_price": 3.4,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/coles-thickened-cream-300ml-246973",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F246973.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.8,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Thyme Leaves",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-07-10",
+          "price": 2.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 2.0
+        }
+      ],
+      "category": "Spices & Herbs",
+      "woolworths": {
+        "name": "Woolworths Thyme Leaves",
+        "price": 2.0,
+        "unit_price": 1.67,
+        "unit": "10G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/251228/woolworths-thyme-leaves",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251228.jpg"
+      },
+      "coles": {
+        "name": "Coles Thyme Leaves | 18g",
+        "price": 2.0,
+        "unit_price": 2.0,
+        "unit": "10g",
+        "url": "https://www.coles.com.au/product/coles-thyme-leaves-18g-8983046",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8983046.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Hoyts Thyme | 15g",
+          "price": 1.6,
+          "unit_price": 1.6,
+          "unit": "10g",
+          "url": "https://www.coles.com.au/product/hoyts-thyme-15g-286901",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F286901.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Tuna In Springwater",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 1.1
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.1
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.1
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Tuna In Springwater",
+        "price": 1.1,
+        "unit_price": 11.58,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/476700/woolworths-tuna-in-springwater",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/476700.jpg"
+      },
+      "coles": {
+        "name": "Coles Simply Tuna In Springwater | 185g",
+        "price": 1.7,
+        "unit_price": 1.7,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-simply-tuna-in-springwater-185g-3544130",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3544130.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.6,
+      "alternatives": [
+        {
+          "name": "Coles Tuna Chunks in Springwater | 95g",
+          "price": 1.1,
+          "unit_price": 1.1,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tuna-chunks-in-springwater-95g-8675281",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8675281.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Simply Tuna In Springwater | 185g",
+          "price": 1.7,
+          "unit_price": 1.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-simply-tuna-in-springwater-185g-3544130",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3544130.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Tuna Chunks In Springwater | 185g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tuna-chunks-in-springwater-185g-8675270",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8675270.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Washed Potato Bag",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 7.9
+        },
+        {
+          "date": "2025-05-12",
+          "price": 9.9
+        },
+        {
+          "date": "2025-06-06",
+          "price": 9.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 9.9
+        },
+        {
+          "date": "2025-07-26",
+          "price": 9.9
+        },
+        {
+          "date": "2026-02-03",
+          "price": 12.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 12.5
+        }
+      ],
+      "category": "Vegetables",
+      "woolworths": {
+        "name": "Woolworths Washed Potatoes Bag",
+        "price": 8.0,
+        "unit_price": 4.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/262783/woolworths-washed-potatoes-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/262783.jpg"
+      },
+      "coles": {
+        "name": "Coles Potatoes Washed | 2kg",
+        "price": 8.5,
+        "unit_price": 8.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1206748.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.5,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Water Chestnuts Sliced",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 1.25
+        },
+        {
+          "date": "2025-04-25",
+          "price": 1.25
+        }
+      ],
+      "category": "Drinks",
+      "woolworths": {
+        "name": "Woolworths Water Chestnuts Sliced",
+        "price": 1.25,
+        "unit_price": 5.56,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/492077/woolworths-water-chestnuts-sliced",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/492077.jpg"
+      },
+      "coles": {
+        "name": "Valcom Water Chestnut Slices | 227g",
+        "price": 1.6,
+        "unit_price": 1.6,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/valcom-water-chestnut-slices-227g-5789579",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5789579.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.35,
+      "alternatives": [
+        {
+          "name": "Valcom Water Chestnut Slices | 227g",
+          "price": 1.6,
+          "unit_price": 1.6,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/valcom-water-chestnut-slices-227g-5789579",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5789579.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Double Phoenix Whole Water Chestnuts | 567g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/double-phoenix-whole-water-chestnuts-567g-1384190",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1384190.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Springhill Farm Choc Coconut Slice | 180g",
+          "price": 6.0,
+          "unit_price": 3.33,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/springhill-farm-choc-coconut-slice-180g-1593305",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1593305.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Whole Milk Full Cream Milk",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2026-02-07",
+          "price": 3.2
+        },
+        {
+          "date": "2026-03-02",
+          "price": 3.2
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.2
+        },
+        {
+          "date": "2026-04-02",
+          "price": 3.2
+        },
+        {
+          "date": "2026-04-13",
+          "price": 3.2
+        },
+        {
+          "date": "2026-04-21",
+          "price": 4.65
+        },
+        {
+          "date": "2026-04-29",
+          "price": 5.15
+        },
+        {
+          "date": "2026-05-06",
+          "price": 5.15
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Full Cream Milk",
+        "price": 5.15,
+        "unit_price": 1.72,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/888140/woolworths-full-cream-milk",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/888140.jpg"
+      },
+      "coles": {
+        "name": "Coles Dairy Full Cream Milk | 1L",
+        "price": 1.85,
+        "unit_price": 1.85,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/coles-dairy-full-cream-milk-1l-9052681",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9052681.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 3.3,
+      "alternatives": [
+        {
+          "name": "Coles Full Cream Milk | 600mL",
+          "price": 1.45,
+          "unit_price": 1.45,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/coles-full-cream-milk-600ml-6759482",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6759482.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Wholegrain Wrap 8Pk",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 2.4
+        },
+        {
+          "date": "2025-07-10",
+          "price": 2.2
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.2
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.2
+        }
+      ],
+      "category": "Bread & Bakery",
+      "woolworths": {
+        "name": "Woolworths Wholegrain Wrap 8Pk",
+        "price": 2.2,
+        "unit_price": 0.61,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/634919/woolworths-wholegrain-wrap-8pk",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634919.jpg"
+      },
+      "coles": {
+        "name": "Coles Wholemeal & Grain Soft Wraps 8 Pack | 360g",
+        "price": 2.2,
+        "unit_price": 2.2,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-wholemeal-and-grain-soft-wraps-8-pack-360g-3731716",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3731716.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 1278.0,
-    "total_coles": 1444.81,
+    "total_woolworths": 1352.2,
+    "total_coles": 1482.66,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 166.81,
-    "items_compared": 200,
+    "total_saving": 130.46,
+    "items_compared": 210,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 200,
+    "done": 210,
     "total": 211
   }
 }
