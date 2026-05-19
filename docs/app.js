@@ -272,8 +272,8 @@ function getColValue(col, item) {
   switch (col) {
     case 'name':         return item.list_item;
     case 'priority':     return getPriority(item.list_item);
-    case 'ww':           return item.woolworths?.price != null ? fmt(item.woolworths.price) : '—';
-    case 'coles':        return item.coles?.price != null ? fmt(item.coles.price) : '—';
+    case 'ww':           return item.woolworths?.price != null ? fmt(item.woolworths.price) : '(Missing)';
+    case 'coles':        return item.coles?.price != null ? fmt(item.coles.price) : '(Missing)';
     case 'cheaper':      return item.cheaper_store || 'N/A';
     case 'pct': {
       const ww = item.woolworths?.price, co = item.coles?.price;
@@ -978,7 +978,7 @@ function onStickyScroll() {
   if (!realThead) { _stickyGhost.style.display = 'none'; return; }
 
   const rect = realThead.getBoundingClientRect();
-  const HEADER_H = 60;
+  const HEADER_H = document.querySelector('header')?.offsetHeight || 60;
 
   if (rect.bottom < HEADER_H) {
     if (_stickyNeedsSync) syncStickyNow();
@@ -1488,9 +1488,7 @@ function renderPage(data) {
   const coverageText = missingCount > 0
     ? `${pricedBoth}/${totalNonArchived} priced · ${missingCount} missing`
     : `${totalNonArchived} items`;
-  $('lastUpdated').innerHTML = prog
-    ? `<span>Updates every 7s</span><span>${coverageText}</span>`
-    : `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>`;
+  $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>`;
   $('banner').style.display = 'block';
 
   _lastData = data;
