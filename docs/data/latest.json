@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T01:32:03.404360+00:00",
+  "last_updated": "2026-05-19T01:32:13.894127+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11163,20 +11163,154 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 1.4,
       "alternatives": []
+    },
+    {
+      "list_item": "Kinder Chocolate Sharepack",
+      "last_scraped": "2026-05-19T01:32:07.317574+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 7.0
+        },
+        {
+          "date": "2025-05-04",
+          "price": 7.5
+        }
+      ],
+      "category": "Sweets",
+      "woolworths": {
+        "name": "Kinder Surprise Milk Chocolate Egg with Natoons Toy",
+        "price": 6.8,
+        "unit_price": 11.33,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/69021/kinder-surprise-milk-chocolate-egg-with-natoons-toy",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/069021.jpg"
+      },
+      "coles": {
+        "name": "Kinder Choc Little Ones Share Pack 16 Pack | 200g",
+        "price": 7.5,
+        "unit_price": 7.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/kinder-choc-little-ones-share-pack-16-pack-200g-2528761",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2528761.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.7,
+      "alternatives": [
+        {
+          "name": "Kinder Chocolate Treats",
+          "price": 5.5,
+          "unit_price": 2.75,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/839689/kinder-chocolate-treats",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/839689.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Kinder Chocolate Little Ones",
+          "price": 1.4,
+          "unit_price": 2.8,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/21197/kinder-chocolate-little-ones",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/021197.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Kinder Choc Little Ones Share Pack 16 Pack | 200g",
+          "price": 7.5,
+          "unit_price": 7.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/kinder-choc-little-ones-share-pack-16-pack-200g-2528761",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2528761.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Green Zucchini",
+      "last_scraped": "2026-05-19T01:32:08.291668+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 0.78
+        },
+        {
+          "date": "2025-04-25",
+          "price": 1.18
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Fresh Zucchini Green",
+        "price": 0.78,
+        "unit_price": 0.78,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/170225/fresh-zucchini-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/170225.jpg"
+      },
+      "coles": {
+        "name": "Coles Green Zucchini | approx. 200g",
+        "price": 1.38,
+        "unit_price": 6.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-green-zucchini-approx.-200g-4910506",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4910506.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.6,
+      "alternatives": []
+    },
+    {
+      "list_item": "Little One's Size 3 Ultra Dry Nappies Crawler 6-11Kg Boys & Girls",
+      "last_scraped": "2026-05-19T01:32:13.884088+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 12.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 12.0
+        }
+      ],
+      "category": "Baby",
+      "woolworths": {
+        "name": "Little One's Size 3 Ultra Dry Nappies Crawler 6-11Kg Boys & Girls",
+        "price": 11.5,
+        "unit_price": 0.21,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/86175/little-one-s-size-3-ultra-dry-nappies-crawler-6-11kg-boys-girls",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/086175.jpg"
+      },
+      "coles": {
+        "name": "Huggies Ultra Dry Nappies Boys Size 3 (6-11kg) | 44 pack",
+        "price": 24.0,
+        "unit_price": 24.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/huggies-ultra-dry-nappies-boys-size-3-(6-11kg)-44-pack-6803904",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6803904.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 12.5,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 1050.1,
-    "total_coles": 1066.1,
+    "total_woolworths": 1069.18,
+    "total_coles": 1098.98,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 16.0,
-    "items_compared": 171,
+    "total_saving": 29.8,
+    "items_compared": 174,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 171,
+    "done": 174,
     "total": 211
   }
 }
