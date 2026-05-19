@@ -1477,9 +1477,9 @@ function renderPage(data) {
 
   // ── Pre-scrape snapshot: keep all items visible while scraping ──
   if (prog) {
-    if (!_preScrapeData && _lastData) {
-      // Scrape just started — snapshot current data
-      _preScrapeData = _lastData;
+    if (!_preScrapeData) {
+      // Take snapshot: prefer last full data set, fall back to current (may be partial)
+      _preScrapeData = _lastData ?? data;
       _progressLastDone = prog.done;
       _progressLastChangeTime = Date.now();
     } else if (_preScrapeData) {
@@ -1561,13 +1561,17 @@ function renderPage(data) {
     category: '',
   }));
 
-  // While scraping, merge snapshot items so already-scraped + not-yet-scraped items all show
+  // While scraping, merge snapshot items so all products remain visible
   let allDisplayItems;
   if (_preScrapeData && prog) {
-    const scrapeMap = new Map((data.items || []).map(i => [i.list_item, i]));
-    const merged = new Map((_preScrapeData.items || []).map(i => [i.list_item, i]));
-    scrapeMap.forEach((item, name) => merged.set(name, item));
-    allDisplayItems = [...merged.values(), ...notFoundAsItems];
+    // Start from snapshot (has everything), overwrite with freshly scraped data
+    const merged = new Map([
+      ...(_preScrapeData.items || []).map(i => [i.list_item, i]),
+      ...(_preScrapeData.not_found_items || []).map(n => [n, { list_item: n, woolworths: null, coles: null, cheaper_store: null, saving_per_item: null, trip_count: 0, price_history: [], category: '' }]),
+    ]);
+    (data.items || []).forEach(i => merged.set(i.list_item, i));
+    (data.not_found_items || []).forEach(n => merged.set(n, { list_item: n, woolworths: null, coles: null, cheaper_store: null, saving_per_item: null, trip_count: 0, price_history: [], category: '' }));
+    allDisplayItems = [...merged.values()];
   } else {
     allDisplayItems = [...data.items, ...notFoundAsItems];
   }
@@ -1679,15 +1683,9 @@ function renderPage(data) {
     const hotDeal = isHotDeal(item);
     const hotBadge = `<span class="hot-badge" title="Current price is 10%+ below historical average">🔥</span>`;
 
-    // Per-100g/ml lines — computed client-side so correct for all items (new and old JSON)
-    const wwP100  = clientPer100(ww);
-    const coP100  = clientPer100(co);
-    const per100WwHtml = wwP100.value != null
-      ? `<div class="price-per100">$${wwP100.value.toFixed(2)}/${wwP100.label}</div>`
-      : '';
-    const per100CoHtml = coP100.value != null
-      ? `<div class="price-per100">$${coP100.value.toFixed(2)}/${coP100.label}</div>`
-      : '';
+    // Per-100g/ml — computed from product name (reliable for packs); falls back to scraped cup price
+    const wwP100 = clientPer100(ww);
+    const coP100 = clientPer100(co);
 
     // WW price cell
     let wwCellContent;
@@ -1697,7 +1695,8 @@ function renderPage(data) {
         : fmt(ww.price);
       const wwFire = hotDeal && (cheaper === 'woolworths' || (cheaper == null && ww && !co)) ? hotBadge : '';
       const wwNameTip = ww.name ? ` title="${ww.name.replace(/"/g, '&quot;')}"` : '';
-      wwCellContent = `<div class="price-main"${wwNameTip}>${wwPriceVal}${wwFire}</div><div class="price-unit">${fmtUnit(ww.unit_price, ww.unit)}</div>${per100WwHtml}`;
+      const wwUnitStr = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : fmtUnit(ww.unit_price, ww.unit);
+      wwCellContent = `<div class="price-main"${wwNameTip}>${wwPriceVal}${wwFire}</div><div class="price-unit">${wwUnitStr}</div>`;
     } else {
       const searchUrl = `https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}`;
       wwCellContent = `<a href="${searchUrl}" target="_blank" class="search-link">Find on WW →</a>`;
@@ -1711,7 +1710,8 @@ function renderPage(data) {
         : fmt(co.price);
       const coFire = hotDeal && (cheaper === 'coles' || (cheaper == null && co && !ww)) ? hotBadge : '';
       const coNameTip = co.name ? ` title="${co.name.replace(/"/g, '&quot;')}"` : '';
-      coCellContent = `<div class="price-main"${coNameTip}>${coPriceVal}${coFire}</div><div class="price-unit">${fmtUnit(co.unit_price, co.unit)}</div>${per100CoHtml}`;
+      const coUnitStr = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : fmtUnit(co.unit_price, co.unit);
+      coCellContent = `<div class="price-main"${coNameTip}>${coPriceVal}${coFire}</div><div class="price-unit">${coUnitStr}</div>`;
     } else {
       const searchUrl = `https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}`;
       coCellContent = `<a href="${searchUrl}" target="_blank" class="search-link">Find on Coles →</a>`;

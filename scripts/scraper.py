@@ -452,21 +452,25 @@ def _build_output(items: list, not_found: list, trigger: str, progress: dict | N
     return out
 
 
+_GIT_TIMEOUT = 45  # seconds per git subprocess call
+
 def push_progress(items: list, not_found: list, done: int, total: int, trigger: str):
     out = _build_output(items, not_found, trigger, progress={"done": done, "total": total})
     os.makedirs(DATA_DIR, exist_ok=True)
     with open(os.path.join(DATA_DIR, "latest.json"), "w") as f:
         json.dump(out, f, indent=2)
     try:
-        subprocess.run(["git", "config", "user.name", "github-actions[bot]"], cwd=REPO_ROOT, check=False, capture_output=True)
-        subprocess.run(["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"], cwd=REPO_ROOT, check=False, capture_output=True)
-        subprocess.run(["git", "add", "docs/data/"], cwd=REPO_ROOT, check=False, capture_output=True)
-        diff = subprocess.run(["git", "diff", "--staged", "--quiet"], cwd=REPO_ROOT)
+        subprocess.run(["git", "config", "user.name", "github-actions[bot]"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
+        subprocess.run(["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
+        subprocess.run(["git", "add", "docs/data/"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
+        diff = subprocess.run(["git", "diff", "--staged", "--quiet"], cwd=REPO_ROOT, timeout=_GIT_TIMEOUT)
         if diff.returncode != 0:
-            subprocess.run(["git", "commit", "-m", f"progress: {done}/{total} items scraped"], cwd=REPO_ROOT, check=False, capture_output=True)
-            subprocess.run(["git", "pull", "--rebase", "origin", "main"], cwd=REPO_ROOT, check=False, capture_output=True)
-            subprocess.run(["git", "push"], cwd=REPO_ROOT, check=False, capture_output=True)
+            subprocess.run(["git", "commit", "-m", f"progress: {done}/{total} items scraped"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
+            subprocess.run(["git", "pull", "--rebase", "origin", "main"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
+            subprocess.run(["git", "push"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
             print(f"  -> Pushed progress ({done}/{total})")
+    except subprocess.TimeoutExpired as e:
+        print(f"  -> Progress push timed out: {e}")
     except Exception as e:
         print(f"  -> Progress push skipped: {e}")
 
@@ -474,16 +478,25 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
 _push_thread_ref = [None]
 _push_lock = threading.Lock()
 
-def push_progress_bg(items, not_found, done, total, trigger):
-    """Non-blocking progress push — skips if a previous push is still running."""
+def push_progress_bg(items, not_found, done, total, trigger, existing_items=None):
+    """Non-blocking progress push — skips if a previous push is still running.
+    existing_items: full pre-scrape item list; carry-forward items not yet re-scraped
+    so the JSON always shows all products during a scrape.
+    """
     with _push_lock:
         if _push_thread_ref[0] and _push_thread_ref[0].is_alive():
             print(f"  -> Push skipped (previous still running)")
             return
-        snapshot = json.loads(json.dumps(items))
+        # Merge carry-forward items for items not yet scraped in this run
+        if existing_items:
+            scraped_names = {i["list_item"] for i in items} | set(not_found)
+            carry = [ex for ex in existing_items if ex["list_item"] not in scraped_names]
+            merged = json.loads(json.dumps(items)) + carry
+        else:
+            merged = json.loads(json.dumps(items))
         t = threading.Thread(
             target=push_progress,
-            args=(snapshot, list(not_found), done, total, trigger),
+            args=(merged, list(not_found), done, total, trigger),
             daemon=True,
         )
         _push_thread_ref[0] = t
@@ -793,11 +806,12 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                         else:
                             not_found.append(name)
                         completed[0] += 1
-                        if completed[0] % 3 == 0:
+                        if completed[0] % 5 == 0:
                             push_progress_bg(
                                 items_output, not_found,
                                 len(items_output) + len(not_found) + skipped,
                                 total_all, trigger,
+                                existing_items=list(existing_map.values()),
                             )
                     except Exception as e:
                         print(f"  Error scraping {name}: {e}")
