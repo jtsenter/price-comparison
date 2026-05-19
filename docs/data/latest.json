@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T01:34:55.535033+00:00",
+  "last_updated": "2026-05-19T01:35:04.508440+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12436,20 +12436,175 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "The Odd Bunch Cherries Punnet",
+      "last_scraped": "2026-05-19T01:35:00.028134+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 7.0
+        },
+        {
+          "date": "2024-12-09",
+          "price": 6.7
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": null,
+      "coles": {
+        "name": "Yoplait Berry Punnet Yoghurt Strawberry Mixed Berries | 12 Pack",
+        "price": 8.5,
+        "unit_price": 8.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/yoplait-berry-punnet-yoghurt-strawberry-mixed-berries-12-pack-8877195",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8877195.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Haribo Happy Cherries Sour | 140g",
+          "price": 2.5,
+          "unit_price": 1.79,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/haribo-happy-cherries-sour-140g-1063083",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1063083.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Sundae For Kids Assorted Bath Sponge Watermelon Rainbow And Cherry | 1 each",
+          "price": 3.47,
+          "unit_price": 3.47,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/sundae-for-kids-assorted-bath-sponge-watermelon-rainbow-and-cherry-1-each-5857216",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5857216.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Winn Red Glace Cherries | 200g",
+          "price": 6.0,
+          "unit_price": 6.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/winn-red-glace-cherries-200g-2140984",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2140984.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Black Beans",
+      "last_scraped": "2026-05-19T01:35:02.300524+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-04-02",
+          "price": 1.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.0
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Black Beans",
+        "price": 1.0,
+        "unit_price": 2.38,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/907377/woolworths-black-beans",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/907377.jpg"
+      },
+      "coles": {
+        "name": "Coles Black Beans | 420g",
+        "price": 1.0,
+        "unit_price": 1.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3812975.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Coles Black Beans | 420g",
+          "price": 1.0,
+          "unit_price": 1.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3812975.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Carmelina Black Beans | 400 GRAM",
+          "price": 1.9,
+          "unit_price": 1.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/carmelina-black-beans-400-gram-8855589",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8855589.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Woolworths Beef & Black Bean With Rice",
+          "price": 8.0,
+          "unit_price": 2.29,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/6038388/woolworths-beef-black-bean-with-rice",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6038388.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Butternut Pumpkin Cut",
+      "last_scraped": "2026-05-19T01:35:04.496115+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 2.03
+        },
+        {
+          "date": "2025-04-25",
+          "price": 2.45
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Butternut Pumpkin Cut",
+        "price": 3.51,
+        "unit_price": 3.51,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/147197/woolworths-butternut-pumpkin-cut",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147197.jpg"
+      },
+      "coles": {
+        "name": "Coles Organic Butternut Pumpkin Cut | approx. 800g",
+        "price": 5.2,
+        "unit_price": 6.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-organic-butternut-pumpkin-cut-approx.-800g-3119190",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3119190.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.69,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 1269.59,
-    "total_coles": 1338.86,
+    "total_woolworths": 1274.1,
+    "total_coles": 1353.56,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 69.27,
-    "items_compared": 198,
+    "total_saving": 79.46,
+    "items_compared": 201,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 198,
+    "done": 201,
     "total": 211
   }
 }
