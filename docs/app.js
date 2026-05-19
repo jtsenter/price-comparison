@@ -1619,11 +1619,24 @@ function renderPage(data) {
       ? `<span class="discrepancy-warn" title="Large price difference — double check the match is correct">⚠</span>`
       : '';
 
+    // Match quality warning (from scraper confidence / size validation)
+    const matchConf = item.match_confidence;
+    const sizeWarn  = item.size_warning;
+    let matchWarnHtml = '';
+    if (matchConf === 'none') {
+      matchWarnHtml = `<span class="match-warn" title="Could not confidently match this item across stores — prices may be for different products">⚠ bad match?</span>`;
+    } else if (matchConf === 'low' || sizeWarn) {
+      const tip = sizeWarn
+        ? 'Pack sizes differ significantly between stores — per-100g comparison may be more useful than price'
+        : 'Low-confidence match — products may not be equivalent';
+      matchWarnHtml = `<span class="match-warn" title="${tip}">⚠</span>`;
+    }
+
     const itemCell = `
       <div class="item-row">
         ${imgHtml}
         <div class="item-info">
-          <div class="item-title-row">${displayName}${discrepancyWarning}${editBtn}</div>
+          <div class="item-title-row">${displayName}${discrepancyWarning}${matchWarnHtml}${editBtn}</div>
           ${bar}
         </div>
       </div>`;
@@ -1632,6 +1645,15 @@ function renderPage(data) {
     const hotDeal = isHotDeal(item);
     const hotBadge = `<span class="hot-badge" title="Current price is 10%+ below historical average">🔥</span>`;
 
+    // Per-100g/ml lines (from scraper-computed normalised prices)
+    const per100Unit  = item.per_100_unit || '100g';
+    const per100WwHtml = item.per_100_ww != null
+      ? `<div class="price-per100">$${Number(item.per_100_ww).toFixed(2)}/${per100Unit}</div>`
+      : '';
+    const per100CoHtml = item.per_100_coles != null
+      ? `<div class="price-per100">$${Number(item.per_100_coles).toFixed(2)}/${per100Unit}</div>`
+      : '';
+
     // WW price cell
     let wwCellContent;
     if (ww) {
@@ -1639,7 +1661,8 @@ function renderPage(data) {
         ? `<a href="${wwUrl}" target="_blank" class="price-link">${fmt(ww.price)}</a>`
         : fmt(ww.price);
       const wwFire = hotDeal && (cheaper === 'woolworths' || (cheaper == null && ww && !co)) ? hotBadge : '';
-      wwCellContent = `<div class="price-main">${wwPriceVal}${wwFire}</div><div class="price-unit">${fmtUnit(ww.unit_price, ww.unit)}</div>`;
+      const wwNameTip = ww.name ? ` title="${ww.name.replace(/"/g, '&quot;')}"` : '';
+      wwCellContent = `<div class="price-main"${wwNameTip}>${wwPriceVal}${wwFire}</div><div class="price-unit">${fmtUnit(ww.unit_price, ww.unit)}</div>${per100WwHtml}`;
     } else {
       const searchUrl = `https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}`;
       wwCellContent = `<a href="${searchUrl}" target="_blank" class="search-link">Find on WW →</a>`;
@@ -1652,7 +1675,8 @@ function renderPage(data) {
         ? `<a href="${coUrl}" target="_blank" class="price-link">${fmt(co.price)}</a>`
         : fmt(co.price);
       const coFire = hotDeal && (cheaper === 'coles' || (cheaper == null && co && !ww)) ? hotBadge : '';
-      coCellContent = `<div class="price-main">${coPriceVal}${coFire}</div><div class="price-unit">${fmtUnit(co.unit_price, co.unit)}</div>`;
+      const coNameTip = co.name ? ` title="${co.name.replace(/"/g, '&quot;')}"` : '';
+      coCellContent = `<div class="price-main"${coNameTip}>${coPriceVal}${coFire}</div><div class="price-unit">${fmtUnit(co.unit_price, co.unit)}</div>${per100CoHtml}`;
     } else {
       const searchUrl = `https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}`;
       coCellContent = `<a href="${searchUrl}" target="_blank" class="search-link">Find on Coles →</a>`;

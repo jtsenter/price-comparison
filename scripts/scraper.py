@@ -13,6 +13,7 @@ from playwright.async_api import async_playwright
 
 sys.path.insert(0, os.path.dirname(__file__))
 from categories import guess_category
+from matcher import pick_best_match, validate_pair
 from shopping_list import detect_fuzzy_changes, get_purchase_history
 
 WOOLWORTHS_BASE = "https://www.woolworths.com.au"
@@ -506,6 +507,10 @@ async def _scrape_single_item(
     history = purchase_history.get(item, {})
     existing_item = next((ex for ex in existing_data.get("items", []) if ex["list_item"] == item), {})
 
+    # Tracks whether each side was fetched directly (skip name-based picker)
+    _skip_picker_ww = False
+    _skip_picker_co = False
+
     if ww_url or coles_url:
         # URL-based fetch (single-item refresh with explicit URLs)
         if ww_url and not coles_url:
@@ -514,25 +519,35 @@ async def _scrape_single_item(
             if not ww_match:
                 res = await search_with_retry(search_woolworths, ww_page, item)
                 ww_match = res[0] if res else None
+            else:
+                _skip_picker_ww = True
             coles_match = existing_item.get("coles")
+            _skip_picker_co = True  # carry-forward, no re-pick needed
         elif coles_url and not ww_url:
             print(f"  Fetching Coles by URL: {coles_url}")
             coles_match = await fetch_coles_by_url(coles_page, coles_url)
             if not coles_match:
                 res = await search_with_retry(search_coles, coles_page, item)
                 coles_match = res[0] if res else None
+            else:
+                _skip_picker_co = True
             ww_match = existing_item.get("woolworths")
+            _skip_picker_ww = True  # carry-forward
         else:
             print(f"  Fetching WW by URL: {ww_url}")
             ww_match = await fetch_ww_by_url(ww_page, ww_url)
             if not ww_match:
                 res = await search_with_retry(search_woolworths, ww_page, item)
                 ww_match = res[0] if res else None
+            else:
+                _skip_picker_ww = True
             print(f"  Fetching Coles by URL: {coles_url}")
             coles_match = await fetch_coles_by_url(coles_page, coles_url)
             if not coles_match:
                 res = await search_with_retry(search_coles, coles_page, item)
                 coles_match = res[0] if res else None
+            else:
+                _skip_picker_co = True
         ww_results = [ww_match] if ww_match else []
         coles_results = [coles_match] if coles_match else []
     else:
@@ -552,7 +567,9 @@ async def _scrape_single_item(
             # Fetch by pinned URL(s), fall back to search for the unpinned store
             if pinned_ww:
                 ww_match = await fetch_ww_by_url(ww_page, pinned_ww)
-                if not ww_match:
+                if ww_match:
+                    _skip_picker_ww = True
+                else:
                     res = await search_with_retry(search_woolworths, ww_page, item)
                     ww_match = res[0] if res else None
             else:
@@ -560,7 +577,9 @@ async def _scrape_single_item(
                 ww_match = res[0] if res else None
             if pinned_co:
                 coles_match = await fetch_coles_by_url(coles_page, pinned_co)
-                if not coles_match:
+                if coles_match:
+                    _skip_picker_co = True
+                else:
                     res = await search_with_retry(search_coles, coles_page, item)
                     coles_match = res[0] if res else None
             else:
@@ -575,8 +594,22 @@ async def _scrape_single_item(
             )
         await delay()
 
-    ww_match = ww_results[0] if ww_results else None
-    coles_match = coles_results[0] if coles_results else None
+    # Pick best matching product from each result list
+    if _skip_picker_ww:
+        ww_match  = ww_results[0]  if ww_results  else None
+        ww_conf   = 'high' if ww_match else 'none'
+    else:
+        ww_match, ww_conf = pick_best_match(item, ww_results)
+        if ww_match:
+            print(f"    WW match ({ww_conf}): {ww_match['name']}")
+
+    if _skip_picker_co:
+        coles_match = coles_results[0] if coles_results else None
+        co_conf     = 'high' if coles_match else 'none'
+    else:
+        coles_match, co_conf = pick_best_match(item, coles_results)
+        if coles_match:
+            print(f"    Coles match ({co_conf}): {coles_match['name']}")
 
     if not ww_match and not coles_match:
         return None, True
@@ -605,6 +638,8 @@ async def _scrape_single_item(
         if not alt.get("retailer"):
             alt["retailer"] = "woolworths" if WOOLWORTHS_BASE in alt.get("url", "") else "coles"
 
+    pair_meta = validate_pair(item, ww_match, coles_match, ww_conf, co_conf)
+
     return {
         "list_item": item,
         "last_scraped": datetime.now(timezone.utc).isoformat(),
@@ -616,6 +651,7 @@ async def _scrape_single_item(
         "cheaper_store": cheaper_store,
         "saving_per_item": saving,
         "alternatives": alternatives,
+        **pair_meta,
     }, False
 
 

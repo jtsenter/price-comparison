@@ -661,8 +661,9 @@ tr:hover .price-bar-manage { opacity: 1; }
 
 /* Price cells */
 .price-cell { white-space: nowrap; }
-.price-main { font-weight: 700; font-size: 18px; }
+.price-main { font-weight: 700; font-size: 18px; cursor: default; }
 .price-unit { font-size: 11px; color: var(--text-soft); margin-top: 1px; }
+.price-per100 { font-size: 10px; color: var(--text-soft); margin-top: 1px; opacity: 0.8; }
 .price-link { color: inherit; text-decoration: none; }
 .price-link:hover { color: var(--ww); text-decoration: underline; }
 .no-data { color: var(--text-soft); font-size: 13px; }
@@ -1127,6 +1128,12 @@ td.priority-cell { text-align: center; }
 .discrepancy-warn {
   font-size: 11px; color: #D97706; margin-left: 4px;
   cursor: help; vertical-align: middle;
+}
+
+/* ── Match quality warning (low-confidence / size mismatch) ─── */
+.match-warn {
+  font-size: 11px; color: #E53E3E; margin-left: 4px;
+  cursor: help; vertical-align: middle; font-style: normal;
 }
 
 /* ── Row checkbox ────────────────────────────────────────────── */
