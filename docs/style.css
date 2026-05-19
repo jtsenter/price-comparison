@@ -496,6 +496,35 @@ th.filter-active .col-filter-btn { opacity: 1; color: var(--ww); }
 }
 .cfd-footer-btn.primary { background: var(--ww); color: #fff; border-color: var(--ww); }
 
+/* ── Numeric filter inside column filter dropdown ─────────────── */
+.cfd-num-filter { padding: 8px 12px 0; }
+.cfd-num-label { font-size: 11px; font-weight: 700; color: var(--text-soft); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+.cfd-num-row {
+  display: flex; gap: 6px; align-items: center; margin-bottom: 6px;
+}
+.cfd-num-op {
+  width: 64px; flex-shrink: 0;
+  padding: 4px 6px; font-size: 12px;
+  border: 1px solid var(--border); border-radius: 6px;
+  background: var(--card); color: var(--text);
+  cursor: pointer;
+}
+.cfd-num-val {
+  flex: 1; min-width: 0;
+  padding: 4px 8px; font-size: 12px;
+  border: 1px solid var(--border); border-radius: 6px;
+  background: var(--card); color: var(--text); outline: none;
+}
+.cfd-num-val:focus { border-color: var(--ww); }
+.cfd-num-link-row { display: flex; justify-content: center; margin-bottom: 6px; }
+.cfd-num-link-btn {
+  font-size: 11px; font-weight: 700;
+  padding: 3px 14px; border-radius: 10px;
+  background: var(--bg); border: 1px solid var(--border);
+  color: var(--text-mid); cursor: pointer; transition: all 0.15s;
+}
+.cfd-num-link-btn:hover { background: var(--border); }
+
 tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
 tbody tr:last-child { border-bottom: none; }
 tbody tr:nth-child(even) { background: #FAFBFC; }
@@ -1186,6 +1215,22 @@ td.priority-cell { text-align: center; }
 .col-chooser-item:hover { background: var(--bg); }
 .col-chooser-item input[type="checkbox"] { accent-color: var(--ww); width: 14px; height: 14px; flex-shrink: 0; }
 .col-chooser-sep { height: 1px; background: var(--border); margin: 4px 0; }
+.col-chooser-reset-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-mid);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+}
+.col-chooser-reset-btn:hover { background: var(--bg); color: var(--text); }
 
 /* ── Priority pill tints ─────────────────────────────────────── */
 .priority-pill[data-priority="weekly"].active   { background: #D97706; border-color: #D97706; }
@@ -1193,36 +1238,65 @@ td.priority-cell { text-align: center; }
 .priority-pill[data-priority="rare"].active     { background: #475569; border-color: #475569; }
 .priority-pill[data-priority="archive"].active  { background: #94A3B8; border-color: #94A3B8; }
 
-/* ── Scrape progress bar ─────────────────────────────────────── */
-.scrape-progress-bar {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 10px 16px;
-  margin-bottom: 14px;
-  font-size: 12px;
-  color: var(--text-mid);
+/* ── Header scrape progress widget ───────────────────────────── */
+.header-progress-wrap {
   display: flex;
   align-items: center;
-  gap: 12px;
-}
-.scrape-progress-track {
-  flex: 1;
-  height: 8px;
+  gap: 8px;
   background: var(--bg);
-  border-radius: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 5px 10px;
+  font-size: 12px;
+  color: var(--text-mid);
+  max-width: 240px;
+}
+.header-progress-label { white-space: nowrap; font-weight: 600; font-size: 12px; }
+.header-progress-track {
+  flex: 1;
+  height: 6px;
+  background: #fff;
+  border-radius: 3px;
   overflow: hidden;
   border: 1px solid var(--border);
+  min-width: 60px;
 }
-.scrape-progress-fill {
+.header-progress-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--ww), #00c851);
-  border-radius: 4px;
+  border-radius: 3px;
   transition: width 0.4s ease;
   min-width: 4px;
 }
-.scrape-progress-label { white-space: nowrap; font-weight: 600; }
-.scrape-progress-pct   { font-size: 11px; color: var(--text-soft); white-space: nowrap; }
+.header-progress-pct { font-size: 11px; color: var(--text-soft); white-space: nowrap; }
+.header-progress-dismiss {
+  background: none; border: none; cursor: pointer;
+  color: var(--text-soft); font-size: 14px; line-height: 1;
+  padding: 0 2px; flex-shrink: 0;
+}
+.header-progress-dismiss:hover { color: var(--text); }
+.header-progress-wrap.stale .header-progress-label { color: #D97706; }
+
+/* ── More dropdown menu ──────────────────────────────────────── */
+.more-dropdown { min-width: 180px; padding: 6px 0; }
+.more-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+}
+.more-dropdown-item:hover { background: var(--bg); }
+.more-dropdown-item svg { flex-shrink: 0; color: var(--text-mid); }
+.more-dropdown-sep { height: 1px; background: var(--border); margin: 4px 0; }
 
 /* ── Empty state for filtered table ─────────────────────────── */
 .table-empty-state {

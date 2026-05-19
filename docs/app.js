@@ -207,7 +207,7 @@ const DEFAULT_COL_WIDTHS = {
 
 const DEFAULT_COL_VISIBILITY = {
   name: true, priority: true, ww: true, coles: true,
-  cheaper: true, pct: true, saving: true, units: true, trips: true,
+  cheaper: true, pct: true, saving: true, units: true, trips: false,
   category: false, last_scraped: false, ww_total: false, coles_total: false,
 };
 
@@ -229,7 +229,53 @@ function saveColVisibility() { localStorage.setItem('pw_col_vis', JSON.stringify
 
 // ── Column filters (per-column value sets) ───────────────────────────────────
 
-let _colFilters = {};  // col → Set<string> of active values (undefined = all shown)
+let _colFilters = {};     // col → Set<string> of active values (undefined = all shown)
+let _colNumFilters = {};  // col → { op1, val1, link, op2, val2 } for numeric columns
+
+const NUMERIC_COLS = new Set(['ww', 'coles', 'pct', 'saving', 'units', 'trips', 'ww_total', 'coles_total']);
+
+function getColNumericValue(col, item) {
+  switch (col) {
+    case 'ww':        return item.woolworths?.price ?? null;
+    case 'coles':     return item.coles?.price ?? null;
+    case 'pct': {
+      const ww = item.woolworths?.price, co = item.coles?.price;
+      if (ww == null || co == null) return null;
+      return Math.abs(ww - co) / Math.max(ww, co) * 100;
+    }
+    case 'saving':    return item.saving_per_item ?? null;
+    case 'units':     return getUnits(item.list_item);
+    case 'trips':     return item.trip_count || 0;
+    case 'ww_total':  return item.woolworths?.price != null ? item.woolworths.price * getUnits(item.list_item) : null;
+    case 'coles_total': return item.coles?.price != null ? item.coles.price * getUnits(item.list_item) : null;
+    default: return null;
+  }
+}
+
+function applyNumFilter(val, { op1, val1, link, op2, val2 }) {
+  function check(v, op, threshold) {
+    if (threshold === '' || threshold == null) return true;
+    const t = parseFloat(threshold);
+    if (isNaN(t)) return true;
+    switch (op) {
+      case '>':  return v > t;
+      case '<':  return v < t;
+      case '>=': return v >= t;
+      case '<=': return v <= t;
+      case '=':  return Math.abs(v - t) < 0.0001;
+      case '≠':  return Math.abs(v - t) >= 0.0001;
+      default:   return true;
+    }
+  }
+  const hasC1 = val1 !== '' && val1 != null;
+  const hasC2 = val2 !== '' && val2 != null && op2 !== '';
+  if (!hasC1 && !hasC2) return true;
+  if (val == null) return false;  // item has no value for this col
+  if (!hasC2) return check(val, op1, val1);
+  const c1 = check(val, op1, val1);
+  const c2 = check(val, op2, val2);
+  return link === 'or' ? (c1 || c2) : (c1 && c2);
+}
 
 function getColValue(col, item) {
   switch (col) {
@@ -267,6 +313,19 @@ function resetColumns() {
   _colVisibility = { ...DEFAULT_COL_VISIBILITY };
   _colWidths     = {};
   _colFilters    = {};
+  _colNumFilters = {};
+  // Show the cheaper store's total column; hide the other
+  if (_lastData) {
+    const s = computeBannerStats(_lastData.items || []);
+    if (s.cheaper_store === 'woolworths') {
+      _colVisibility.ww_total    = true;
+      _colVisibility.coles_total = false;
+    } else if (s.cheaper_store === 'coles') {
+      _colVisibility.ww_total    = false;
+      _colVisibility.coles_total = true;
+    }
+    // equal/unknown → both hidden (default)
+  }
   saveColOrder();
   saveColVisibility();
   saveColWidths();
@@ -277,7 +336,7 @@ function resetColumns() {
 function colHeadHtml(col) {
   const fa = `<button class="col-filter-btn" data-filter-col="${col}" title="Filter">▾</button>`;
   const fa2 = (extra = '') => `${extra}${fa}<div class="col-resize-handle"></div>`;
-  const hasFilter = _colFilters[col]?.size > 0;
+  const hasFilter = _colFilters[col]?.size > 0 || !!_colNumFilters[col];
   function th(col, cls, label) {
     return `<th data-col="${col}" class="sortable${cls ? ' '+cls : ''}${hasFilter ? ' filter-active' : ''}">${label} <span class="sort-arrow"></span>${fa2()}</th>`;
   }
@@ -1207,6 +1266,10 @@ let sortState = { col: 'trips', dir: 'desc' };
 let _lastData = null;
 let _prevPrices = {};
 let _pendingRefreshItem = null;
+let _preScrapeData = null;         // snapshot of data when scrape started
+let _progressLastDone = null;      // last seen done count
+let _progressLastChangeTime = null; // timestamp of last progress change
+let _progressDismissed = false;    // user dismissed the header progress widget
 
 const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
 
@@ -1238,10 +1301,19 @@ function sortItems(items) {
     filtered = filtered.filter(i => getCategory(i) === _activeCategory);
   }
 
-  // Per-column value filters
+  // Per-column value (checkbox) filters
   for (const [col, vals] of Object.entries(_colFilters)) {
     if (!vals?.size) continue;
     filtered = filtered.filter(i => vals.has(getColValue(col, i)));
+  }
+
+  // Per-column numeric filters (AND'd with checkbox filters)
+  for (const [col, nf] of Object.entries(_colNumFilters)) {
+    if (!nf) continue;
+    filtered = filtered.filter(i => {
+      const numVal = getColNumericValue(col, i);
+      return applyNumFilter(numVal, nf);
+    });
   }
 
   return [...filtered].sort((a, b) => {
@@ -1377,6 +1449,46 @@ function renderPage(data) {
   }
 
   const prog = data.scrape_progress;
+
+  // ── Pre-scrape snapshot: keep all items visible while scraping ──
+  if (prog) {
+    if (!_preScrapeData && _lastData) {
+      // Scrape just started — snapshot current data
+      _preScrapeData = _lastData;
+      _progressLastDone = prog.done;
+      _progressLastChangeTime = Date.now();
+    } else if (_preScrapeData) {
+      if (prog.done !== _progressLastDone) {
+        _progressLastDone = prog.done;
+        _progressLastChangeTime = Date.now();
+      }
+    }
+  } else {
+    _preScrapeData = null;
+    _progressLastDone = null;
+    _progressLastChangeTime = null;
+    _progressDismissed = false;
+  }
+
+  // ── Header progress widget ──────────────────────────────────────
+  const hpw = $('headerProgressWrap');
+  if (hpw) {
+    if (prog && prog.total > 0 && !_progressDismissed) {
+      const pct = Math.round((prog.done / prog.total) * 100);
+      const STALE_MS = 5 * 60 * 1000;
+      const isStale = _progressLastChangeTime && (Date.now() - _progressLastChangeTime > STALE_MS);
+      hpw.style.display = 'flex';
+      hpw.classList.toggle('stale', isStale);
+      $('headerProgressLabel').textContent = isStale
+        ? `⚠ Stalled ${prog.done}/${prog.total}`
+        : `Scraping ${prog.done}/${prog.total}`;
+      $('headerProgressFill').style.width = `${pct}%`;
+      $('headerProgressPct').textContent = `${pct}%`;
+    } else {
+      hpw.style.display = 'none';
+    }
+  }
+
   const totalNonArchived = (data.items || []).filter(i => !i.archived).length;
   const pricedBoth = (data.items || []).filter(i => !i.archived && i.woolworths?.price != null && i.coles?.price != null).length;
   const missingCount = totalNonArchived - pricedBoth;
@@ -1387,20 +1499,6 @@ function renderPage(data) {
     ? `<span>Updates every 7s</span><span>${coverageText}</span>`
     : `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>`;
   $('banner').style.display = 'block';
-
-  // Scrape progress bar
-  const progressBar = $('scrapeProgressBar');
-  if (progressBar) {
-    if (prog && prog.total > 0) {
-      const pct = Math.round((prog.done / prog.total) * 100);
-      progressBar.style.display = 'flex';
-      $('scrapeProgressLabel').textContent = `Scraping… ${prog.done}/${prog.total} items`;
-      $('scrapeProgressFill').style.width = `${pct}%`;
-      $('scrapeProgressPct').textContent = `${pct}%`;
-    } else {
-      progressBar.style.display = 'none';
-    }
-  }
 
   _lastData = data;
 
@@ -1437,7 +1535,17 @@ function renderPage(data) {
     price_history: [],
     category: '',
   }));
-  const allDisplayItems = [...data.items, ...notFoundAsItems];
+
+  // While scraping, merge snapshot items so already-scraped + not-yet-scraped items all show
+  let allDisplayItems;
+  if (_preScrapeData && prog) {
+    const scrapeMap = new Map((data.items || []).map(i => [i.list_item, i]));
+    const merged = new Map((_preScrapeData.items || []).map(i => [i.list_item, i]));
+    scrapeMap.forEach((item, name) => merged.set(name, item));
+    allDisplayItems = [...merged.values(), ...notFoundAsItems];
+  } else {
+    allDisplayItems = [...data.items, ...notFoundAsItems];
+  }
 
   buildCategoryTabs(allDisplayItems);
 
@@ -1954,7 +2062,18 @@ function initColumnChooser() {
         return `<label class="col-chooser-item"><input type="checkbox" data-col="${col}" ${checked ? 'checked' : ''}> ${COL_LABELS[col] || col}</label>`;
       }).join('');
       return (gi > 0 ? '<div class="col-chooser-sep"></div>' : '') + items;
-    }).join('');
+    }).join('') +
+    `<div class="col-chooser-sep"></div>
+     <button class="col-chooser-reset-btn" id="resetColsBtnInner">
+       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg>
+       Reset Columns
+     </button>`;
+    // Wire up the reset button each time dropdown is rendered
+    dropdown.querySelector('#resetColsBtnInner')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      resetColumns();
+    });
   }
 
   btn.addEventListener('click', (e) => {
@@ -2018,8 +2137,31 @@ function initColFilterDropdown() {
     renderCfdValues(search, false);
   });
 
+  // AND/OR toggle for numeric filter
+  $('cfdNumLinkBtn')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const btn = $('cfdNumLinkBtn');
+    const newLink = btn.dataset.link === 'and' ? 'or' : 'and';
+    btn.dataset.link = newLink;
+    btn.textContent = newLink.toUpperCase();
+  });
+
   dd.querySelector('.cfd-ok')?.addEventListener('click', () => {
     if (_cfdCol) {
+      // Save numeric filter if column supports it
+      if (NUMERIC_COLS.has(_cfdCol)) {
+        const op1  = $('cfdNumOp1').value;
+        const val1 = $('cfdNumVal1').value.trim();
+        const link = $('cfdNumLinkBtn').dataset.link || 'and';
+        const op2  = $('cfdNumOp2').value;
+        const val2 = $('cfdNumVal2').value.trim();
+        if (val1 || val2) {
+          _colNumFilters[_cfdCol] = { op1, val1, link, op2, val2 };
+        } else {
+          delete _colNumFilters[_cfdCol];
+        }
+      }
+      // Save checkbox filter
       if (_cfdTempValues.size === _cfdAllValues.length || _cfdTempValues.size === 0) {
         delete _colFilters[_cfdCol];
       } else {
@@ -2031,7 +2173,10 @@ function initColFilterDropdown() {
   });
 
   dd.querySelector('.cfd-clear')?.addEventListener('click', () => {
-    if (_cfdCol) delete _colFilters[_cfdCol];
+    if (_cfdCol) {
+      delete _colFilters[_cfdCol];
+      delete _colNumFilters[_cfdCol];
+    }
     closeColFilter();
     if (_lastData) renderPage(_lastData);
   });
@@ -2066,11 +2211,31 @@ function openColFilter(col, btn) {
 
   _cfdTempValues = existing ? new Set(existing) : new Set(_cfdAllValues);
 
-  // Update sort-asc label with column name
+  // Update sort labels
   const asc = dd.querySelector('.cfd-sort-asc');
   const desc = dd.querySelector('.cfd-sort-desc');
   if (asc) asc.textContent = 'Sort A → Z';
   if (desc) desc.textContent = 'Sort Z → A';
+
+  // Show/hide and populate numeric filter section
+  const numSec = $('cfdNumFilter');
+  if (numSec) {
+    if (NUMERIC_COLS.has(col)) {
+      numSec.style.display = 'block';
+      const nf = _colNumFilters[col] || {};
+      $('cfdNumOp1').value = nf.op1 || '>';
+      $('cfdNumVal1').value = nf.val1 ?? '';
+      const linkBtn = $('cfdNumLinkBtn');
+      if (linkBtn) {
+        linkBtn.dataset.link = nf.link || 'and';
+        linkBtn.textContent = (nf.link || 'and').toUpperCase();
+      }
+      $('cfdNumOp2').value = nf.op2 || '';
+      $('cfdNumVal2').value = nf.val2 ?? '';
+    } else {
+      numSec.style.display = 'none';
+    }
+  }
 
   dd.querySelector('.cfd-search').value = '';
   renderCfdValues('');
@@ -2144,9 +2309,27 @@ async function boot() {
   const refreshBtn = $('refreshBtn');
   if (refreshBtn) refreshBtn.addEventListener('click', triggerRefresh);
 
-  $('resetColsBtn')?.addEventListener('click', resetColumns);
-  $('exportListBtn')?.addEventListener('click', () => exportShoppingList(false));
+  $('shopListBtn')?.addEventListener('click', () => exportShoppingList(false));
   $('bulkExportBtn')?.addEventListener('click', () => exportShoppingList(true));
+
+  // Header progress dismiss
+  $('headerProgressDismiss')?.addEventListener('click', () => {
+    _progressDismissed = true;
+    const hpw = $('headerProgressWrap');
+    if (hpw) hpw.style.display = 'none';
+  });
+
+  // More menu dropdown
+  const moreBtn = $('moreMenuBtn');
+  const moreDd  = $('moreMenuDropdown');
+  if (moreBtn && moreDd) {
+    moreBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      moreDd.style.display = moreDd.style.display === 'none' ? 'block' : 'none';
+    });
+    moreDd.addEventListener('click', (e) => e.stopPropagation());
+    document.addEventListener('click', () => { if (moreDd) moreDd.style.display = 'none'; });
+  }
 
   // Column filter button clicks (delegated from thead, re-bound after each render via renderTableHead)
   document.addEventListener('click', (e) => {

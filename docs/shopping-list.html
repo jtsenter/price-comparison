@@ -15,10 +15,21 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
 
-    header { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow); }
-    header h1 { font-size: 16px; font-weight: 700; }
-    .header-actions { display: flex; gap: 8px; align-items: center; }
-    header a { text-decoration: none; color: var(--text-mid); font-size: 13px; font-weight: 500; }
+    header { background: var(--card); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); }
+    .header-inner { max-width: 1600px; margin: 0 auto; padding: 0 20px; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .header-left { display: flex; align-items: center; gap: 20px; }
+    .brand { display: flex; align-items: center; gap: 7px; text-decoration: none; }
+    .brand-name { font-size: 17px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
+    .store-chip-hdr { display: inline-flex; align-items: center; justify-content: center; font-weight: 900; border-radius: 7px; color: #fff; width: 26px; height: 26px; font-size: 13px; }
+    .store-chip-hdr.ww { background: var(--ww); }
+    .store-chip-hdr.coles { background: var(--coles); }
+    nav { display: flex; gap: 4px; }
+    nav a { font-size: 13px; font-weight: 500; color: var(--text-mid); padding: 6px 12px; border-radius: 8px; text-decoration: none; transition: background 0.15s, color 0.15s; }
+    nav a:hover { background: var(--bg); color: var(--text); }
+    nav a.active { background: var(--bg); color: var(--text); font-weight: 600; }
+    .header-right { display: flex; align-items: center; gap: 8px; }
+    .btn-hdr { display: inline-flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; background: var(--ww); color: #fff; box-shadow: 0 1px 3px rgba(0,132,61,0.35); transition: all 0.15s; }
+    .btn-hdr:hover { background: #006B31; transform: translateY(-1px); }
 
     main { max-width: 860px; margin: 0 auto; padding: 24px; }
 
@@ -94,10 +105,21 @@
 </head>
 <body>
 <header>
-  <h1>🛒 Shopping List</h1>
-  <div class="header-actions">
-    <button class="btn btn-primary" onclick="window.print()">🖨 Print</button>
-    <a href="index.html">← Back</a>
+  <div class="header-inner">
+    <div class="header-left">
+      <a href="index.html" class="brand">
+        <span class="store-chip-hdr ww">W</span>
+        <span class="store-chip-hdr coles">C</span>
+        <span class="brand-name">PriceWatch</span>
+      </a>
+      <nav>
+        <a href="index.html">My Shopping List</a>
+        <a href="shopping-list.html" class="active">🛒 Shopping List</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <button class="btn-hdr" onclick="window.print()">🖨 Print</button>
+    </div>
   </div>
 </header>
 

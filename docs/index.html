@@ -19,22 +19,29 @@
       </a>
       <nav>
         <a href="index.html" class="active">My Shopping List</a>
-        <a href="shopping-list.html" id="exportNavBtn">🛒 Shopping List</a>
       </nav>
     </div>
     <div class="header-right">
-      <button class="btn btn-ghost" id="importBtn">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Import Items
-      </button>
       <button class="btn btn-ghost btn-icon" id="notifBtn" style="display:none">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span class="notif-badge" id="notifBadge"></span>
       </button>
-      <button class="btn btn-ghost" id="resetColsBtn" title="Reset column order, widths and visibility to defaults">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg>
-        Reset Columns
-      </button>
+      <div class="col-chooser-wrap" id="moreMenuWrap">
+        <button class="btn btn-ghost" id="moreMenuBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
+          More
+        </button>
+        <div id="moreMenuDropdown" class="col-chooser-dropdown more-dropdown" style="display:none">
+          <button class="more-dropdown-item" id="importBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Import Items
+          </button>
+          <button class="more-dropdown-item" id="settingsBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Auto-update Setup
+          </button>
+        </div>
+      </div>
       <div class="col-chooser-wrap">
         <button class="btn btn-ghost" id="colChooserBtn">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
@@ -42,14 +49,17 @@
         </button>
         <div id="colChooserDropdown" class="col-chooser-dropdown" style="display:none"></div>
       </div>
-      <button class="btn btn-ghost" id="exportListBtn">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        Export list
+      <button class="btn btn-ghost" id="shopListBtn">
+        🛒 Shopping List
       </button>
-      <button class="btn btn-ghost" id="settingsBtn">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        Auto-update Setup
-      </button>
+      <div id="headerProgressWrap" class="header-progress-wrap" style="display:none">
+        <span id="headerProgressLabel" class="header-progress-label">Scraping…</span>
+        <div class="header-progress-track">
+          <div class="header-progress-fill" id="headerProgressFill" style="width:0%"></div>
+        </div>
+        <span id="headerProgressPct" class="header-progress-pct">0%</span>
+        <button id="headerProgressDismiss" class="header-progress-dismiss" title="Dismiss">✕</button>
+      </div>
       <button class="btn btn-primary" id="refreshBtn">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
         Update Prices
@@ -150,15 +160,6 @@
 
   <!-- Category filter tabs -->
   <div id="categoryTabs" class="category-tabs"></div>
-
-  <!-- Scrape progress bar -->
-  <div id="scrapeProgressBar" class="scrape-progress-bar" style="display:none">
-    <span class="scrape-progress-label" id="scrapeProgressLabel">Scraping…</span>
-    <div class="scrape-progress-track">
-      <div class="scrape-progress-fill" id="scrapeProgressFill" style="width:0%"></div>
-    </div>
-    <span class="scrape-progress-pct" id="scrapeProgressPct">0%</span>
-  </div>
 
   <div id="loading" class="loading-message">
     <div class="loading-spinner"></div>
@@ -299,6 +300,37 @@
   <button class="cfd-sort-btn cfd-sort-asc">Sort A → Z</button>
   <button class="cfd-sort-btn cfd-sort-desc">Sort Z → A</button>
   <div class="cfd-sep"></div>
+  <!-- Numeric filter section (shown only for numeric columns) -->
+  <div class="cfd-num-filter" id="cfdNumFilter" style="display:none">
+    <div class="cfd-num-label">Filter by value</div>
+    <div class="cfd-num-row">
+      <select class="cfd-num-op" id="cfdNumOp1">
+        <option value=">">&gt;</option>
+        <option value="<">&lt;</option>
+        <option value=">=">&gt;=</option>
+        <option value="<=">&lt;=</option>
+        <option value="=">=</option>
+        <option value="≠">≠</option>
+      </select>
+      <input class="cfd-num-val" id="cfdNumVal1" type="number" placeholder="Value" step="any">
+    </div>
+    <div class="cfd-num-link-row">
+      <button class="cfd-num-link-btn" id="cfdNumLinkBtn" data-link="and">AND</button>
+    </div>
+    <div class="cfd-num-row">
+      <select class="cfd-num-op" id="cfdNumOp2">
+        <option value="">(none)</option>
+        <option value=">">&gt;</option>
+        <option value="<">&lt;</option>
+        <option value=">=">&gt;=</option>
+        <option value="<=">&lt;=</option>
+        <option value="=">=</option>
+        <option value="≠">≠</option>
+      </select>
+      <input class="cfd-num-val" id="cfdNumVal2" type="number" placeholder="Value" step="any">
+    </div>
+    <div class="cfd-sep" style="margin:6px 0 0"></div>
+  </div>
   <div class="cfd-search-wrap">
     <input class="cfd-search" type="text" placeholder="Search…">
   </div>
