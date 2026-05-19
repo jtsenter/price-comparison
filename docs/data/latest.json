@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T01:26:12.041029+00:00",
+  "last_updated": "2026-05-19T01:26:17.434205+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8761,20 +8761,167 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "The Odd Bunch Mandarin Prepacked",
+      "last_scraped": "2026-05-19T01:26:12.864718+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 3.6
+        },
+        {
+          "date": "2024-11-20",
+          "price": 3.6
+        },
+        {
+          "date": "2025-04-14",
+          "price": 5.2
+        },
+        {
+          "date": "2026-04-13",
+          "price": 4.4
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.8
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "The Odd Bunch Mandarin Prepacked",
+        "price": 2.8,
+        "unit_price": 2.8,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/845671/the-odd-bunch-mandarin-prepacked",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/845671.jpg"
+      },
+      "coles": {
+        "name": "Strangelove Lo-cal Very Mandarin | 4 pack",
+        "price": 10.5,
+        "unit_price": 10.5,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/strangelove-lo-cal-very-mandarin-4-pack-3290825",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3290825.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 7.7,
+      "alternatives": [
+        {
+          "name": "Coles Mandarin Segments in Syrup 4 Pack | 480g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-mandarin-segments-in-syrup-4-pack-480g-9837753",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9837753.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Twinings Honeybush, Orange & Mandarin",
+      "last_scraped": "2026-05-19T01:26:15.947674+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 3.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.0
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Twinings Honeybush Orange & Mandarin",
+        "price": 2.7,
+        "unit_price": 0.27,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/659035/twinings-honeybush-orange-mandarin",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/659035.jpg"
+      },
+      "coles": {
+        "name": "Twinings Honeybush Orange Mandarin Tea Bags | 10 pack",
+        "price": 2.7,
+        "unit_price": 2.7,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/twinings-honeybush-orange-mandarin-tea-bags-10-pack-8067560",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8067560.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Twinings Orange & Cinnamon Tea Bags Tea",
+      "last_scraped": "2026-05-19T01:26:17.421023+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-03-17",
+          "price": 3.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Twinings Orange & Cinnamon Tea Bags Tea",
+        "price": 2.7,
+        "unit_price": 0.27,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/791152/twinings-orange-cinnamon-tea-bags-tea",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/791152.jpg"
+      },
+      "coles": {
+        "name": "Twinings Infused Orange & Cinnamon Tea Bags | 10 pack",
+        "price": 2.7,
+        "unit_price": 2.7,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/twinings-infused-orange-and-cinnamon-tea-bags-10-pack-2006132",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2006132.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 807.75,
-    "total_coles": 771.45,
+    "total_woolworths": 815.95,
+    "total_coles": 787.35,
     "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 36.3,
-    "items_compared": 123,
+    "total_saving": 28.6,
+    "items_compared": 126,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 123,
+    "done": 126,
     "total": 211
   }
 }
