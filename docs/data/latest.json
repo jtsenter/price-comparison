@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T01:16:11.366973+00:00",
+  "last_updated": "2026-05-19T01:16:26.215378+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2584,20 +2584,349 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "The Odd Bunch Zucchini Prepacked",
+      "last_scraped": "2026-05-19T01:16:17.703387+00:00",
+      "trip_count": 20,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 3.5
+        },
+        {
+          "date": "2024-11-12",
+          "price": 2.9
+        },
+        {
+          "date": "2024-12-02",
+          "price": 2.9
+        },
+        {
+          "date": "2024-12-19",
+          "price": 2.9
+        },
+        {
+          "date": "2025-01-29",
+          "price": 3.5
+        },
+        {
+          "date": "2025-02-28",
+          "price": 4.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 4.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 4.0
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-04",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 2.9
+        },
+        {
+          "date": "2025-05-22",
+          "price": 3.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.9
+        },
+        {
+          "date": "2025-07-03",
+          "price": 2.3
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 3.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.3
+        },
+        {
+          "date": "2026-04-29",
+          "price": 2.9
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.9
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "The Odd Bunch Zucchini Prepacked",
+        "price": 2.3,
+        "unit_price": 3.07,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/825869/the-odd-bunch-zucchini-prepacked",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/825869.jpg"
+      },
+      "coles": {
+        "name": "Yumis Zucchini Veggie Fritter | 260g",
+        "price": 7.5,
+        "unit_price": 7.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/yumis-zucchini-veggie-fritter-260g-6769169",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6769169.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 5.2,
+      "alternatives": []
+    },
+    {
+      "list_item": "Truss Tomatoes",
+      "last_scraped": "2026-05-19T01:16:21.863186+00:00",
+      "trip_count": 35,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 0.97
+        },
+        {
+          "date": "2024-11-20",
+          "price": 0.55
+        },
+        {
+          "date": "2024-12-02",
+          "price": 0.55
+        },
+        {
+          "date": "2024-12-09",
+          "price": 0.55
+        },
+        {
+          "date": "2024-12-19",
+          "price": 0.35
+        },
+        {
+          "date": "2025-01-29",
+          "price": 0.69
+        },
+        {
+          "date": "2025-02-02",
+          "price": 0.97
+        },
+        {
+          "date": "2025-02-28",
+          "price": 1.11
+        },
+        {
+          "date": "2025-03-11",
+          "price": 0.83
+        },
+        {
+          "date": "2025-03-17",
+          "price": 1.25
+        },
+        {
+          "date": "2025-03-27",
+          "price": 1.25
+        },
+        {
+          "date": "2025-04-05",
+          "price": 0.97
+        },
+        {
+          "date": "2025-04-14",
+          "price": 0.97
+        },
+        {
+          "date": "2025-04-25",
+          "price": 1.39
+        },
+        {
+          "date": "2025-05-04",
+          "price": 0.97
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.39
+        },
+        {
+          "date": "2025-05-22",
+          "price": 1.67
+        },
+        {
+          "date": "2025-05-29",
+          "price": 1.95
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.95
+        },
+        {
+          "date": "2025-06-13",
+          "price": 1.95
+        },
+        {
+          "date": "2025-06-21",
+          "price": 1.95
+        },
+        {
+          "date": "2025-07-03",
+          "price": 1.95
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.95
+        },
+        {
+          "date": "2025-07-26",
+          "price": 1.53
+        },
+        {
+          "date": "2026-02-03",
+          "price": 0.97
+        },
+        {
+          "date": "2026-02-07",
+          "price": 1.11
+        },
+        {
+          "date": "2026-02-11",
+          "price": 0.55
+        },
+        {
+          "date": "2026-02-23",
+          "price": 1.11
+        },
+        {
+          "date": "2026-03-02",
+          "price": 1.11
+        },
+        {
+          "date": "2026-03-10",
+          "price": 1.11
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.81
+        },
+        {
+          "date": "2026-04-13",
+          "price": 1.53
+        },
+        {
+          "date": "2026-04-21",
+          "price": 1.25
+        },
+        {
+          "date": "2026-04-29",
+          "price": 1.53
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.39
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Truss Tomatoes",
+        "price": 1.25,
+        "unit_price": 1.25,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/169438/truss-tomatoes",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/169438.jpg"
+      },
+      "coles": {
+        "name": "Coles Tomatoes Greenhouse Truss | approx. 130g",
+        "price": 1.1,
+        "unit_price": 8.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-tomatoes-greenhouse-truss-approx.-130g-4628676",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4628676.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.15,
+      "alternatives": []
+    },
+    {
+      "list_item": "Weet-Bix Little Kids Breakfast Cereal",
+      "last_scraped": "2026-05-19T01:16:26.211089+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2025-05-22",
+          "price": 3.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 5.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 5.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 4.0
+        }
+      ],
+      "category": "Other",
+      "woolworths": {
+        "name": "Weet-Bix Little Kids Breakfast Cereal",
+        "price": 5.0,
+        "unit_price": 1.25,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/142976/weet-bix-little-kids-breakfast-cereal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/142976.jpg"
+      },
+      "coles": {
+        "name": "Sanitarium Weet-bix Little Kids Essentials Breakfast Cereal | 400g",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/sanitarium-weet-bix-little-kids-essentials-breakfast-cereal-400g-4233292",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4233292.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 109.24,
-    "total_coles": 128.08,
+    "total_woolworths": 117.79,
+    "total_coles": 141.68,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 18.84,
-    "items_compared": 30,
+    "total_saving": 23.89,
+    "items_compared": 33,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 30,
+    "done": 33,
     "total": 211
   }
 }
