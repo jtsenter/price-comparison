@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T01:27:14.917871+00:00",
+  "last_updated": "2026-05-19T01:27:55.895061+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9438,20 +9438,169 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "Woolworths Baked Beans In Tomato Sauce",
+      "last_scraped": "2026-05-19T01:27:18.349701+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 1.1
+        },
+        {
+          "date": "2024-12-19",
+          "price": 1.1
+        },
+        {
+          "date": "2025-03-11",
+          "price": 1.1
+        },
+        {
+          "date": "2026-02-23",
+          "price": 1.1
+        },
+        {
+          "date": "2026-03-10",
+          "price": 1.1
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.1
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Baked Beans In Tomato Sauce",
+        "price": 1.1,
+        "unit_price": 0.26,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/47682/woolworths-baked-beans-in-tomato-sauce",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/047682.jpg"
+      },
+      "coles": {
+        "name": "Coles Baked Beans In Tomato Sauce 4x220g | 880g",
+        "price": 4.4,
+        "unit_price": 4.4,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-baked-beans-in-tomato-sauce-4x220g-880g-6264446",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6264446.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.3,
+      "alternatives": [
+        {
+          "name": "Woolworths Spaghetti In Tomato Sauce",
+          "price": 0.9,
+          "unit_price": 0.21,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/47681/woolworths-spaghetti-in-tomato-sauce",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/047681.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Basmati Rice",
+      "last_scraped": "2026-05-19T01:27:52.238702+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 4.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Basmati Rice",
+        "price": 4.0,
+        "unit_price": 0.4,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/694550/woolworths-basmati-rice",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/694550.jpg"
+      },
+      "coles": {
+        "name": "Coles Basmati Rice | 5kg",
+        "price": 18.0,
+        "unit_price": 18.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-basmati-rice-5kg-9540288",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9540288.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 14.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Beef Chuck Steak Medium",
+      "last_scraped": "2026-05-19T01:27:55.870552+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-07-10",
+          "price": 12.4
+        },
+        {
+          "date": "2026-02-23",
+          "price": 16.0
+        },
+        {
+          "date": "2026-04-21",
+          "price": 16.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Beef Chuck Steak Medium",
+        "price": 14.4,
+        "unit_price": 18.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/675632/woolworths-beef-chuck-steak-medium",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/675632.jpg"
+      },
+      "coles": {
+        "name": "Coles Beef Chuck Casserole Steak | 1kg",
+        "price": 20.0,
+        "unit_price": 20.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-beef-chuck-casserole-steak-1kg-1773726",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1773726.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 5.6,
+      "alternatives": [
+        {
+          "name": "Coles Beef Chuck Casserole Steak | 850g",
+          "price": 17.0,
+          "unit_price": 17.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-chuck-casserole-steak-850g-6332331",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6332331.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 862.35,
-    "total_coles": 837.45,
+    "total_woolworths": 881.85,
+    "total_coles": 879.85,
     "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 24.9,
-    "items_compared": 135,
+    "total_saving": 2.0,
+    "items_compared": 138,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 135,
+    "done": 138,
     "total": 211
   }
 }
