@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T11:38:56.842904+00:00",
+  "last_updated": "2026-05-19T11:39:03.724721+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3988,20 +3988,371 @@
       "per_100_ww": 0.8,
       "per_100_coles": 8.0,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Cookie Caramel Bar Slice",
+      "last_scraped": "2026-05-19T11:38:58.061393+00:00",
+      "trip_count": 10,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 7.5
+        },
+        {
+          "date": "2025-02-28",
+          "price": 7.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 7.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 7.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 7.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 7.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 7.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 7.5
+        },
+        {
+          "date": "2025-05-29",
+          "price": 7.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 7.5
+        }
+      ],
+      "category": "Sweets",
+      "woolworths": {
+        "name": "Woolworths Cookie Caramel Bar Slice",
+        "price": 7.0,
+        "unit_price": 2.5,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/61196/woolworths-cookie-caramel-bar-slice",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/061196.jpg"
+      },
+      "coles": {
+        "name": "Coles Cafe Style Cookie Caramel Slice | 280g",
+        "price": 6.75,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-cafe-style-cookie-caramel-slice-280g-8962523",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8962523.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.25,
+      "alternatives": [
+        {
+          "name": "Cadbury Peanut Caramel Slice Chocolate Bar | 48g",
+          "price": 1.25,
+          "unit_price": 1.25,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/cadbury-peanut-caramel-slice-chocolate-bar-48g-1099262",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1099262.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Streets Golden Gaytime Caramel Slice 4 Pack | 400mL",
+          "price": 6.0,
+          "unit_price": 1.5,
+          "unit": "100mL",
+          "url": "https://www.coles.com.au/product/streets-golden-gaytime-caramel-slice-4-pack-400ml-8579823",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8579823.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 2.5,
+      "per_100_coles": 2.41,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Corn Sweet",
+      "last_scraped": "2026-05-19T11:39:01.452376+00:00",
+      "trip_count": 20,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 5.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 1.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 5.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 5.5
+        },
+        {
+          "date": "2025-04-25",
+          "price": 5.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.5
+        },
+        {
+          "date": "2025-05-29",
+          "price": 5.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 5.5
+        },
+        {
+          "date": "2025-07-03",
+          "price": 5.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 5.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.9
+        },
+        {
+          "date": "2026-02-07",
+          "price": 3.9
+        },
+        {
+          "date": "2026-02-23",
+          "price": 3.9
+        },
+        {
+          "date": "2026-03-02",
+          "price": 4.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.0
+        },
+        {
+          "date": "2026-04-21",
+          "price": 5.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 4.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Corn Sweet",
+        "price": 5.5,
+        "unit_price": 11.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/139897/woolworths-corn-sweet",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139897.jpg"
+      },
+      "coles": {
+        "name": "Coles Organic Potatoes Sweet | 500g",
+        "price": 5.9,
+        "unit_price": 5.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-organic-potatoes-sweet-500g-5045470",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5045470.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.4,
+      "alternatives": [
+        {
+          "name": "Woolworths Sweet & Salty Microwave Popcorn",
+          "price": 0.95,
+          "unit_price": 0.95,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/587191/woolworths-sweet-salty-microwave-popcorn",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/587191.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Coles Corn Kernels | 420g",
+          "price": 1.05,
+          "unit_price": 1.05,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4774066.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Popping Corn Kernels | 400g",
+          "price": 1.8,
+          "unit_price": 1.8,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-popping-corn-kernels-400g-5374675",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5374675.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 1.1,
+      "per_100_coles": 0.59,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Cos Hearts Lettuce",
+      "last_scraped": "2026-05-19T11:39:03.720175+00:00",
+      "trip_count": 22,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 3.5
+        },
+        {
+          "date": "2024-12-02",
+          "price": 2.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 3.5
+        },
+        {
+          "date": "2025-01-29",
+          "price": 3.5
+        },
+        {
+          "date": "2025-02-28",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-04",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.9
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-03",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.9
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.5
+        },
+        {
+          "date": "2026-02-07",
+          "price": 3.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 3.5
+        },
+        {
+          "date": "2026-03-02",
+          "price": 3.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.5
+        },
+        {
+          "date": "2026-04-29",
+          "price": 3.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Cos Hearts Lettuce",
+        "price": 3.3,
+        "unit_price": 1.65,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/141496/woolworths-cos-hearts-lettuce",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/141496.jpg"
+      },
+      "coles": {
+        "name": "Coles Organic Baby Cos Lettuce | 2 Pack",
+        "price": 5.9,
+        "unit_price": 5.9,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-organic-baby-cos-lettuce-2-pack-9210035",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9210035.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.6,
+      "alternatives": [],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 167.31,
-    "total_coles": 232.38,
+    "total_woolworths": 183.11,
+    "total_coles": 250.93,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 65.07,
-    "items_compared": 42,
+    "total_saving": 67.82,
+    "items_compared": 45,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 42,
+    "done": 45,
     "total": 211
   }
 }
