@@ -12,6 +12,7 @@ permissions:
 
 env:
   PYTHON: 'C:\Users\jtsen\AppData\Local\Python\pythoncore-3.14-64\python.exe'
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   recheck:
@@ -20,17 +21,26 @@ jobs:
 
     defaults:
       run:
-        shell: powershell
+        shell: cmd
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: '& $env:PYTHON -m pip install -r requirements.txt'
+        run: '"%PYTHON%" -m pip install -r requirements.txt'
 
       - name: Install Playwright browsers
-        run: '& $env:PYTHON -m playwright install chromium chromium-headless-shell'
+        run: '"%PYTHON%" -m playwright install chromium chromium-headless-shell'
 
       - name: Run recheck
-        run: '& $env:PYTHON scripts/recheck.py'
+        run: '"%PYTHON%" scripts/recheck.py'
+
+      - name: Commit and push results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/data/
+          git diff --staged --quiet || git commit -m "chore: recheck flagged items"
+          git pull --rebase origin main
+          git push
