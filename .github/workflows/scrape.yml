@@ -23,6 +23,10 @@ on:
         required: false
         default: ''
 
+concurrency:
+  group: scrape
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
