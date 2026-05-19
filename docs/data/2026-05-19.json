@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T11:24:33.054836+00:00",
+  "last_updated": "2026-05-19T11:27:19.744596+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -967,7 +967,7 @@
     },
     {
       "list_item": "Fresh Cauliflower Half",
-      "last_scraped": "2026-05-19T01:13:11.449337+00:00",
+      "last_scraped": "2026-05-19T11:27:19.495793+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -1060,10 +1060,22 @@
         "url": "https://www.woolworths.com.au/shop/productdetails/135568/fresh-cauliflower-half",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135568.jpg"
       },
-      "coles": null,
+      "coles": {
+        "name": "Coles Cauliflower Half | 1 each",
+        "price": 30.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-cauliflower-half-1-each-4601320",
+        "image_url": "https://shop.coles.com.au/wcsstore/Coles-CAS/images/4/6/0/4601320-th.jpg"
+      },
       "cheaper_store": "woolworths",
-      "saving_per_item": null,
-      "alternatives": []
+      "saving_per_item": 27.25,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Hass Avocado",
@@ -12601,10 +12613,10 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 1274.1,
-    "total_coles": 1376.06,
+    "total_coles": 1406.06,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 101.96,
+    "total_saving": 131.96,
     "items_compared": 201,
     "items_not_found": 0
   }
