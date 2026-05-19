@@ -32,6 +32,7 @@ permissions:
 
 env:
   PYTHON: 'C:\Users\jtsen\AppData\Local\Python\pythoncore-3.14-64\python.exe'
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   scrape:
