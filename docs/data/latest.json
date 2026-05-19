@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T11:38:15.970494+00:00",
+  "last_updated": "2026-05-19T11:38:48.001901+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3362,20 +3362,316 @@
       "per_100_ww": 2.25,
       "per_100_coles": 0.22,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths 12 Extra Large Free Range Eggs",
+      "last_scraped": "2026-05-19T11:38:39.160311+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 6.1
+        },
+        {
+          "date": "2024-12-19",
+          "price": 6.1
+        },
+        {
+          "date": "2025-07-03",
+          "price": 6.6
+        },
+        {
+          "date": "2026-02-11",
+          "price": 6.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 6.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 6.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 6.5
+        },
+        {
+          "date": "2026-04-13",
+          "price": 6.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 6.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": null,
+      "coles": {
+        "name": "Sunny Queen Free Range Large Eggs 12 Pack | 600g",
+        "price": 8.5,
+        "unit_price": 8.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/sunny-queen-free-range-large-eggs-12-pack-600g-5417778",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5417778.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Coles Free Range Eggs 12 Pack | 600g",
+          "price": 6.2,
+          "unit_price": 6.2,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-free-range-eggs-12-pack-600g-9453456",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9453456.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Free Range Eggs 12 Pack | 700g",
+          "price": 6.5,
+          "unit_price": 6.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-free-range-eggs-12-pack-700g-9453478",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9453478.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Jumbo Free Range Eggs 12 Pack | 800g",
+          "price": 7.25,
+          "unit_price": 7.25,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-jumbo-free-range-eggs-12-pack-800g-1034234",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1034234.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 8.5,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Beef Porterhouse Steak & Butter",
+      "last_scraped": "2026-05-19T11:38:43.682253+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-12-09",
+          "price": 15.0
+        },
+        {
+          "date": "2025-02-02",
+          "price": 15.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 16.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 16.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 16.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 15.2
+        },
+        {
+          "date": "2026-03-10",
+          "price": 18.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 18.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 15.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Beef Porterhouse Steak & Butter",
+        "price": 18.0,
+        "unit_price": 45.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/243050/woolworths-beef-porterhouse-steak-butter",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/243050.jpg"
+      },
+      "coles": {
+        "name": "Coles No Added Hormone Beef Porterhouse Steak 2 Pack | 450g",
+        "price": 20.5,
+        "unit_price": 20.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-porterhouse-steak-2-pack-450g-4997140",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4997140.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.5,
+      "alternatives": [
+        {
+          "name": "Coles Pork Scotch Steak With Rosemary & Honey Butter | 280g",
+          "price": 8.0,
+          "unit_price": 8.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-pork-scotch-steak-with-rosemary-and-honey-butter-280g-5886429",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5886429.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles No Added Hormone Beef Quick Cook Porterhouse Steak | 180g",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-quick-cook-porterhouse-steak-180g-3293583",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3293583.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Beef Scotch Steak With Bearnaise Butter | 265g",
+          "price": 14.5,
+          "unit_price": 14.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-scotch-steak-with-bearnaise-butter-265g-6641427",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6641427.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 4.5,
+      "per_100_coles": 2.05,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Broccolini Bunch",
+      "last_scraped": "2026-05-19T11:38:47.997479+00:00",
+      "trip_count": 15,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 3.0
+        },
+        {
+          "date": "2024-11-20",
+          "price": 3.7
+        },
+        {
+          "date": "2025-03-11",
+          "price": 2.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.7
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.3
+        },
+        {
+          "date": "2025-04-25",
+          "price": 3.7
+        },
+        {
+          "date": "2025-05-22",
+          "price": 3.7
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.7
+        },
+        {
+          "date": "2025-06-21",
+          "price": 3.7
+        },
+        {
+          "date": "2025-07-03",
+          "price": 3.7
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.0
+        },
+        {
+          "date": "2026-04-13",
+          "price": 3.7
+        },
+        {
+          "date": "2026-04-29",
+          "price": 3.7
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.3
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Broccolini Bunch",
+        "price": 3.7,
+        "unit_price": 3.7,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/187314/woolworths-broccolini-bunch",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/187314.jpg"
+      },
+      "coles": {
+        "name": "Coles Organic Broccoli | 500g",
+        "price": 7.9,
+        "unit_price": 7.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-organic-broccoli-500g-3048820",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3048820.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.2,
+      "alternatives": [
+        {
+          "name": "Coles Kitchen Broccoli Florets | 150g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-kitchen-broccoli-florets-150g-2310971",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2310971.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Kitchen Carrot & Broccoli Florets | 150g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-kitchen-carrot-and-broccoli-florets-150g-2674650",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2674650.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 0.79,
+      "per_100_unit": "100g"
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 126.41,
-    "total_coles": 179.08,
+    "total_woolworths": 148.11,
+    "total_coles": 215.98,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 52.67,
-    "items_compared": 36,
+    "total_saving": 67.87,
+    "items_compared": 39,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 36,
+    "done": 39,
     "total": 211
   }
 }
