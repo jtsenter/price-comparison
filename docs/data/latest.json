@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T11:39:32.897268+00:00",
+  "last_updated": "2026-05-19T11:39:42.525910+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5399,20 +5399,341 @@
       "per_100_ww": 0.36,
       "per_100_coles": 25.0,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Red Watermelon Cut Quarter",
+      "last_scraped": "2026-05-19T11:39:37.104242+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 5.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 6.38
+        },
+        {
+          "date": "2025-04-05",
+          "price": 7.7
+        },
+        {
+          "date": "2025-04-14",
+          "price": 7.7
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 6.38
+        },
+        {
+          "date": "2025-06-21",
+          "price": 6.38
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Red Watermelon Cut Quarter",
+        "price": 6.38,
+        "unit_price": 6.38,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/120384/woolworths-red-watermelon-cut-quarter",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120384.jpg"
+      },
+      "coles": {
+        "name": "Coles Seedless Watermelon Cut | approx. 1.8kg",
+        "price": 5.22,
+        "unit_price": 2.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-seedless-watermelon-cut-approx.-1.8kg-7508229",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7508229.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.16,
+      "alternatives": [
+        {
+          "name": "Coles Seedless Watermelon Cut | approx. 1.8kg",
+          "price": 5.22,
+          "unit_price": 2.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-seedless-watermelon-cut-approx.-1.8kg-7508229",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7508229.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Red Split Lentils | 1kg",
+          "price": 4.0,
+          "unit_price": 4.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-red-split-lentils-1kg-9073535",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9073535.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 0.29,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths RSPCA Approved Chicken Breast Fillet",
+      "last_scraped": "2026-05-19T11:39:37.851029+00:00",
+      "trip_count": 23,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 15.68
+        },
+        {
+          "date": "2024-11-20",
+          "price": 18.15
+        },
+        {
+          "date": "2024-12-02",
+          "price": 12.0
+        },
+        {
+          "date": "2024-12-09",
+          "price": 14.85
+        },
+        {
+          "date": "2025-02-02",
+          "price": 12.0
+        },
+        {
+          "date": "2025-02-28",
+          "price": 15.68
+        },
+        {
+          "date": "2025-03-11",
+          "price": 12.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 15.68
+        },
+        {
+          "date": "2025-03-27",
+          "price": 10.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 18.15
+        },
+        {
+          "date": "2025-04-14",
+          "price": 15.68
+        },
+        {
+          "date": "2025-05-04",
+          "price": 18.15
+        },
+        {
+          "date": "2025-05-12",
+          "price": 15.68
+        },
+        {
+          "date": "2025-06-13",
+          "price": 15.68
+        },
+        {
+          "date": "2025-06-21",
+          "price": 18.15
+        },
+        {
+          "date": "2026-02-07",
+          "price": 8.5
+        },
+        {
+          "date": "2026-02-11",
+          "price": 15.68
+        },
+        {
+          "date": "2026-02-23",
+          "price": 18.15
+        },
+        {
+          "date": "2026-03-02",
+          "price": 18.15
+        },
+        {
+          "date": "2026-04-02",
+          "price": 18.15
+        },
+        {
+          "date": "2026-04-13",
+          "price": 18.15
+        },
+        {
+          "date": "2026-04-13",
+          "price": 12.0
+        },
+        {
+          "date": "2026-04-21",
+          "price": 9.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 9.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths RSPCA Approved Chicken Breast Fillet",
+        "price": 12.0,
+        "unit_price": 12.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/710953/woolworths-rspca-approved-chicken-breast-fillet",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/710953.jpg"
+      },
+      "coles": {
+        "name": "Coles RSPCA Approved Chicken Breast Fillets Large Pack | approx. 1.4kg",
+        "price": 8.7,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-breast-fillets-large-pack-approx.-1.4kg-2263179",
+        "image_url": "https://shop.coles.com.au/wcsstore/Coles-CAS/images/2/2/6/2263179-th.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 3.3,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 1.2,
+      "per_100_coles": 0.62,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Salmon Portions Skin On",
+      "last_scraped": "2026-05-19T11:39:42.523347+00:00",
+      "trip_count": 12,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 17.5
+        },
+        {
+          "date": "2024-12-02",
+          "price": 17.5
+        },
+        {
+          "date": "2025-01-29",
+          "price": 17.5
+        },
+        {
+          "date": "2025-02-02",
+          "price": 17.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 19.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 16.5
+        },
+        {
+          "date": "2025-04-25",
+          "price": 17.5
+        },
+        {
+          "date": "2025-05-29",
+          "price": 17.5
+        },
+        {
+          "date": "2025-06-21",
+          "price": 17.5
+        },
+        {
+          "date": "2025-07-26",
+          "price": 15.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 17.5
+        },
+        {
+          "date": "2026-04-29",
+          "price": 17.5
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Salmon Portions Skin On",
+        "price": 15.0,
+        "unit_price": 53.57,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/157052/woolworths-salmon-portions-skin-on",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/157052.jpg"
+      },
+      "coles": {
+        "name": "Tassal Salmon Portions Skin On | 300g",
+        "price": 18.0,
+        "unit_price": 18.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/tassal-salmon-portions-skin-on-300g-5285371",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5285371.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.0,
+      "alternatives": [
+        {
+          "name": "Coles Tasmanian Salmon Portion Skin On | 200g",
+          "price": 10.0,
+          "unit_price": 10.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portion-skin-on-200g-6400861",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6400861.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Tassal Salmon Portions Skin On | 300g",
+          "price": 18.0,
+          "unit_price": 18.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/tassal-salmon-portions-skin-on-300g-5285371",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5285371.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Tasmanian Salmon Portions Skin On 4 Pack | 460g",
+          "price": 19.5,
+          "unit_price": 19.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portions-skin-on-4-pack-460g-1546564",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1546564.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 5.36,
+      "per_100_coles": 1.8,
+      "per_100_unit": "100g"
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 247.76,
-    "total_coles": 307.23,
+    "total_woolworths": 281.14,
+    "total_coles": 339.15,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 59.47,
-    "items_compared": 57,
+    "total_saving": 58.01,
+    "items_compared": 60,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 57,
+    "done": 60,
     "total": 211
   }
 }
