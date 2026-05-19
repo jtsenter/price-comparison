@@ -111,14 +111,14 @@ async def delay():
     await asyncio.sleep(random.uniform(0.3, 0.8))
 
 
-async def search_with_retry(search_fn, page, query, retries=1):
+async def search_with_retry(search_fn, page, query, retries=0):
     for attempt in range(retries + 1):
         results = await search_fn(page, query)
         if results:
             return results
         if attempt < retries:
-            print(f"    No results for '{query}', retrying in 30s…")
-            await asyncio.sleep(30)
+            print(f"    No results for '{query}', retrying in 5s…")
+            await asyncio.sleep(5)
     return []
 
 
@@ -509,9 +509,12 @@ def push_progress_bg(items, not_found, done, total, trigger, existing_items=None
 
 def should_skip_item(ex_data: dict | None, trigger: str) -> bool:
     """Return True if item was recently scraped and can be skipped on scheduled runs."""
-    if trigger == "manual" or not ex_data:
+    if not ex_data:
         return False
-    if ex_data.get("archived"):
+    # Archived items: skip unless this is an explicit archived-only scrape
+    if ex_data.get("archived") and trigger != "scrape_archived":
+        return True
+    if trigger == "manual":
         return False
     last_scraped = ex_data.get("last_scraped")
     if not last_scraped:
@@ -696,15 +699,32 @@ async def _scrape_single_item(
 async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str = "", coles_url: str = ""):
     purchase_history = get_purchase_history(EXCEL_PATH)
 
+    # Load archived items list (written by UI via GitHub API)
+    archived_path = os.path.join(DATA_DIR, "archived_items.json")
+    archived_set: set[str] = set()
+    if os.path.exists(archived_path):
+        try:
+            with open(archived_path) as _f:
+                archived_set = set(json.load(_f))
+        except Exception:
+            pass
+
     if single_item:
         shopping_list = [single_item]
         print(f"Single-item refresh: {single_item}" + (f" [WW URL]" if ww_url else "") + (f" [Coles URL]" if coles_url else ""))
+    elif trigger == "scrape_archived":
+        shopping_list = sorted(archived_set)
+        print(f"Archived-only scrape: {len(shopping_list)} items")
     else:
         def _priority_key(name):
             trips = purchase_history.get(name, {}).get("trip_count", 0)
             return 0 if trips >= 7 else (1 if trips >= 3 else 2)
-        shopping_list = sorted(purchase_history.keys(), key=_priority_key)
-        print(f"Active shopping list: {len(shopping_list)} items")
+        # Exclude archived items from normal scrapes
+        shopping_list = sorted(
+            [n for n in purchase_history.keys() if n not in archived_set],
+            key=_priority_key,
+        )
+        print(f"Active shopping list: {len(shopping_list)} items (excluding {len(archived_set)} archived)")
 
     detect_fuzzy_changes(shopping_list, FLAG_PATH)
 

@@ -598,28 +598,8 @@ function buildCategoryTabs(items) {
   });
 }
 
-// ── Sort bar (active key chips) ───────────────────────────────────────────────
-
 function renderSortBar() {
-  const bar = document.getElementById('sortBar');
-  const chips = document.getElementById('sortKeyChips');
-  if (!bar || !chips) return;
-
-  const isDefault = sortKeys.length === 1 && sortKeys[0].col === 'deal' && sortKeys[0].dir === 'desc';
-  bar.style.display = isDefault ? 'none' : 'flex';
-
-  chips.innerHTML = sortKeys.map((k, i) => {
-    const dirArrow = k.dir === 'asc' ? '↑' : '↓';
-    const cls = i === 0 ? 'sort-key-chip' : 'sort-key-chip';
-    const numBadge = sortKeys.length > 1
-      ? `<span class="sort-key-badge${i > 0 ? ' secondary' : ''}">${i + 1}</span>`
-      : '';
-    return `<span class="${cls}" data-col="${k.col}">${COL_LABELS[k.col]} <span class="chip-dir">${dirArrow}</span>${numBadge}</span>`;
-  }).join('');
-
-  chips.querySelectorAll('.sort-key-chip').forEach(chip => {
-    chip.addEventListener('click', () => onColClick(chip.dataset.col));
-  });
+  // No sort bar shown — multi-key sort works silently like Excel
 }
 
 // ── Render ─────────────────────────────────────────────────────────────────────
@@ -652,23 +632,12 @@ function renderDeals() {
   // Update sort headers
   const thead = document.getElementById('dealsHead');
   if (thead) {
+    const primary = sortKeys[0];
     thead.querySelectorAll('th[data-col]').forEach(th => {
       const col = th.dataset.col;
-      const keyIdx = sortKeys.findIndex(k => k.col === col);
       const arrow = th.querySelector('.sort-arrow');
-      th.classList.toggle('sort-primary', keyIdx === 0);
-      // Show number badge if multiple sort keys
-      let badge = th.querySelector('.sort-key-badge');
-      if (keyIdx >= 0 && sortKeys.length > 1) {
-        if (!badge) { badge = document.createElement('span'); badge.className = 'sort-key-badge'; th.insertBefore(badge, arrow); }
-        badge.className = `sort-key-badge${keyIdx > 0 ? ' secondary' : ''}`;
-        badge.textContent = keyIdx + 1;
-      } else {
-        badge?.remove();
-      }
-      if (arrow) {
-        arrow.textContent = keyIdx === 0 ? (sortKeys[0].dir === 'asc' ? ' ↑' : ' ↓') : '';
-      }
+      th.classList.toggle('sort-primary', col === primary?.col);
+      if (arrow) arrow.textContent = col === primary?.col ? (primary.dir === 'asc' ? ' ↑' : ' ↓') : '';
     });
   }
 

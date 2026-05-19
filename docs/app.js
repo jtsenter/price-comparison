@@ -780,8 +780,9 @@ function initPriorityFilter() {
         btn.classList.add('active');
         $('hotFilterBtn')?.classList.remove('active');
         $('storeFilter').style.display = 'none';
-      } else {
-        // fire pill handled below
+        // Show/hide the Scrape Archived button
+        const scrapeArchBtn = $('scrapeArchivedBtn');
+        if (scrapeArchBtn) scrapeArchBtn.style.display = p === 'archive' ? 'inline-flex' : 'none';
       }
       if (_lastData) renderPage(_lastData);
     });
@@ -992,14 +993,7 @@ function syncStickyNow() {
   cloned.querySelectorAll('th[data-col]').forEach(th => {
     th.addEventListener('click', (e) => {
       if (e.target.closest('.col-filter-btn')) return;
-      const col = th.dataset.col;
-      if (sortState.col === col) {
-        sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
-      } else {
-        sortState.col = col;
-        sortState.dir = col === 'name' ? 'asc' : 'desc';
-      }
-      if (_lastData) renderPage(_lastData);
+      applyColSort(th.dataset.col);
     });
   });
 
@@ -1287,7 +1281,7 @@ async function loadNameChanges() {
 
 // ── Sort state ───────────────────────────────────────────────────────────────
 
-let sortState = { col: 'trips', dir: 'desc' };
+let sortKeys = [{ col: 'trips', dir: 'desc' }];
 let _lastData = null;
 let _prevPrices = {};
 let _pendingRefreshItem = null;
@@ -1299,9 +1293,6 @@ let _progressDismissed = false;    // user dismissed the header progress widget
 const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
 
 function sortItems(items) {
-  const { col, dir } = sortState;
-  const mul = dir === 'asc' ? 1 : -1;
-
   let filtered = items.filter(item => {
     if (item.archived && _activePriority !== 'archive') return false;
     const p = getPriority(item.list_item);
@@ -1341,36 +1332,36 @@ function sortItems(items) {
     });
   }
 
-  return [...filtered].sort((a, b) => {
-    let av, bv;
+  function getSortVal(col, item) {
     switch (col) {
-      case 'name':     av = a.list_item.toLowerCase(); bv = b.list_item.toLowerCase(); break;
-      case 'ww':       av = a.woolworths?.price ?? Infinity; bv = b.woolworths?.price ?? Infinity; break;
-      case 'coles':    av = a.coles?.price ?? Infinity; bv = b.coles?.price ?? Infinity; break;
-      case 'cheaper':  av = a.cheaper_store ?? 'zzz'; bv = b.cheaper_store ?? 'zzz'; break;
-      case 'saving':   av = a.saving_per_item ?? -Infinity; bv = b.saving_per_item ?? -Infinity; break;
-      case 'trips':    av = a.trip_count || 0; bv = b.trip_count || 0; break;
-      case 'units':    av = getUnits(a.list_item); bv = getUnits(b.list_item); break;
-      case 'priority': {
-        av = PRIORITY_ORDER[getPriority(a.list_item)] ?? 99;
-        bv = PRIORITY_ORDER[getPriority(b.list_item)] ?? 99;
-        break;
-      }
+      case 'name':     return item.list_item.toLowerCase();
+      case 'ww':       return item.woolworths?.price ?? Infinity;
+      case 'coles':    return item.coles?.price ?? Infinity;
+      case 'cheaper':  return item.cheaper_store ?? 'zzz';
+      case 'saving':   return item.saving_per_item ?? -Infinity;
+      case 'trips':    return item.trip_count || 0;
+      case 'units':    return getUnits(item.list_item);
+      case 'priority': return PRIORITY_ORDER[getPriority(item.list_item)] ?? 99;
       case 'pct': {
-        const wwA = a.woolworths?.price; const coA = a.coles?.price;
-        av = (wwA != null && coA != null) ? Math.abs(wwA - coA) / Math.max(wwA, coA) : -Infinity;
-        const wwB = b.woolworths?.price; const coB = b.coles?.price;
-        bv = (wwB != null && coB != null) ? Math.abs(wwB - coB) / Math.max(wwB, coB) : -Infinity;
-        break;
+        const ww = item.woolworths?.price, co = item.coles?.price;
+        return (ww != null && co != null) ? Math.abs(ww - co) / Math.max(ww, co) : -Infinity;
       }
-      case 'category':     av = getCategory(a).toLowerCase(); bv = getCategory(b).toLowerCase(); break;
-      case 'last_scraped': av = a.last_scraped || ''; bv = b.last_scraped || ''; break;
-      case 'ww_total':     av = (a.woolworths?.price ?? 0) * getUnits(a.list_item); bv = (b.woolworths?.price ?? 0) * getUnits(b.list_item); break;
-      case 'coles_total':  av = (a.coles?.price ?? 0) * getUnits(a.list_item); bv = (b.coles?.price ?? 0) * getUnits(b.list_item); break;
-      default: av = a.trip_count || 0; bv = b.trip_count || 0; break;
+      case 'category':     return getCategory(item).toLowerCase();
+      case 'last_scraped': return item.last_scraped || '';
+      case 'ww_total':     return (item.woolworths?.price ?? 0) * getUnits(item.list_item);
+      case 'coles_total':  return (item.coles?.price ?? 0) * getUnits(item.list_item);
+      default: return item.trip_count || 0;
     }
-    if (av < bv) return -1 * mul;
-    if (av > bv) return  1 * mul;
+  }
+
+  return [...filtered].sort((a, b) => {
+    for (const { col, dir } of sortKeys) {
+      const mul = dir === 'asc' ? 1 : -1;
+      const av = getSortVal(col, a);
+      const bv = getSortVal(col, b);
+      if (av < bv) return -1 * mul;
+      if (av > bv) return  1 * mul;
+    }
     return 0;
   });
 }
@@ -1378,12 +1369,13 @@ function sortItems(items) {
 function updateSortHeaders(thead) {
   const container = thead || document.querySelector('#tableHead');
   if (!container) return;
+  const primary = sortKeys[0];
   container.querySelectorAll('th[data-col]').forEach(th => {
     const arrow = th.querySelector('.sort-arrow');
     if (!arrow) return;
-    if (th.dataset.col === sortState.col) {
+    if (th.dataset.col === primary?.col) {
       th.classList.add('sort-active');
-      arrow.textContent = sortState.dir === 'asc' ? ' ↑' : ' ↓';
+      arrow.textContent = primary.dir === 'asc' ? ' ↑' : ' ↓';
     } else {
       th.classList.remove('sort-active');
       arrow.textContent = '';
@@ -1396,16 +1388,19 @@ function initSortHeaders() {
     th.addEventListener('click', (e) => {
       if (e.target.classList.contains('col-resize-handle')) return;
       if (e.target.closest('.col-filter-btn')) return;
-      const col = th.dataset.col;
-      if (sortState.col === col) {
-        sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
-      } else {
-        sortState.col = col;
-        sortState.dir = col === 'name' ? 'asc' : 'desc';
-      }
-      if (_lastData) renderPage(_lastData);
+      applyColSort(th.dataset.col);
     });
   });
+}
+
+function applyColSort(col) {
+  if (sortKeys[0]?.col === col) {
+    sortKeys[0] = { col, dir: sortKeys[0].dir === 'asc' ? 'desc' : 'asc' };
+  } else {
+    const defaultDir = col === 'name' || col === 'category' ? 'asc' : 'desc';
+    sortKeys = [{ col, dir: defaultDir }, ...sortKeys.filter(k => k.col !== col)];
+  }
+  if (_lastData) renderPage(_lastData);
 }
 
 // ── Weekly special detection ─────────────────────────────────────────────────
@@ -2162,16 +2157,14 @@ function initColFilterDropdown() {
 
   dd.querySelector('.cfd-sort-asc')?.addEventListener('click', () => {
     if (_cfdCol) {
-      sortState.col = _cfdCol;
-      sortState.dir = 'asc';
+      sortKeys = [{ col: _cfdCol, dir: 'asc' }, ...sortKeys.filter(k => k.col !== _cfdCol)];
       closeColFilter();
       if (_lastData) renderPage(_lastData);
     }
   });
   dd.querySelector('.cfd-sort-desc')?.addEventListener('click', () => {
     if (_cfdCol) {
-      sortState.col = _cfdCol;
-      sortState.dir = 'desc';
+      sortKeys = [{ col: _cfdCol, dir: 'desc' }, ...sortKeys.filter(k => k.col !== _cfdCol)];
       closeColFilter();
       if (_lastData) renderPage(_lastData);
     }
@@ -2344,6 +2337,58 @@ async function boot() {
   $('bulkExportBtn')?.addEventListener('click', () => exportShoppingList(true));
 
   // Scrape strip dismiss & retry
+  // Scrape Archived button — persists archived list to GitHub then dispatches workflow
+  $('scrapeArchivedBtn')?.addEventListener('click', async () => {
+    const s = loadSettings();
+    if (!s.user || !s.repo || !s.token) {
+      alert('Please configure Auto-update Setup first.');
+      return;
+    }
+    const pr = loadPriorities();
+    const archivedNames = Object.keys(pr).filter(k => pr[k] === 'archive');
+    if (!archivedNames.length) {
+      alert('No archived items found.');
+      return;
+    }
+    const btn = $('scrapeArchivedBtn');
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    try {
+      // Write archived_items.json to repo via GitHub API
+      const content = btoa(JSON.stringify(archivedNames, null, 2) + '\n');
+      const getRes = await fetch(
+        `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/archived_items.json`,
+        { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
+      );
+      const shaJson = getRes.ok ? (await getRes.json()) : {};
+      const putBody = { message: 'Update archived items list', content };
+      if (shaJson.sha) putBody.sha = shaJson.sha;
+      await fetch(
+        `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/archived_items.json`,
+        {
+          method: 'PUT',
+          headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify(putBody),
+        }
+      );
+      // Dispatch scrape_archived workflow
+      btn.textContent = 'Dispatching…';
+      await fetch(
+        `https://api.github.com/repos/${s.user}/${s.repo}/actions/workflows/scrape.yml/dispatches`,
+        {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ref: 'main', inputs: { trigger: 'scrape_archived' } }),
+        }
+      );
+      btn.textContent = '✓ Triggered';
+      setTimeout(() => { btn.disabled = false; btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Scrape Archived'; }, 4000);
+    } catch (e) {
+      alert(`Error: ${e.message}`);
+      btn.disabled = false;
+    }
+  });
+
   $('scrapeStripDismiss')?.addEventListener('click', () => {
     _progressDismissed = true;
     const strip = $('scrapeStrip');

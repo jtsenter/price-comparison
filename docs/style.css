@@ -1021,6 +1021,12 @@ th.sort-active { color: var(--text); }
   border-color: #c95000;
   color: #fff;
 }
+.priority-pill.archive-pill { color: var(--text-mid); }
+.priority-pill.archive-pill.active {
+  background: #64748b;
+  border-color: #64748b;
+  color: #fff;
+}
 .store-filter {
   display: flex;
   gap: 6px;
