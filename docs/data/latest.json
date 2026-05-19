@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T01:28:51.488462+00:00",
+  "last_updated": "2026-05-19T01:29:34.240383+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10012,20 +10012,181 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Pesto Basil",
+      "last_scraped": "2026-05-19T01:28:55.109546+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 1.85
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.85
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.85
+        },
+        {
+          "date": "2026-02-23",
+          "price": 1.95
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Pesto Basil",
+        "price": 1.95,
+        "unit_price": 1.03,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/753340/woolworths-pesto-basil",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/753340.jpg"
+      },
+      "coles": {
+        "name": "Coles Nature's Kitchen Basil Pesto | 180g",
+        "price": 3.0,
+        "unit_price": 3.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-nature's-kitchen-basil-pesto-180g-5050844",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5050844.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.05,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths RSPCA Approved Chicken Drumsticks",
+      "last_scraped": "2026-05-19T01:28:56.072000+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-04-25",
+          "price": 4.8
+        },
+        {
+          "date": "2025-05-12",
+          "price": 4.8
+        },
+        {
+          "date": "2025-06-13",
+          "price": 4.3
+        },
+        {
+          "date": "2026-02-07",
+          "price": 5.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 4.3
+        },
+        {
+          "date": "2026-02-23",
+          "price": 5.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths RSPCA Approved Chicken Drumsticks",
+        "price": 4.0,
+        "unit_price": 4.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/23208/woolworths-rspca-approved-chicken-drumsticks",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/023208.jpg"
+      },
+      "coles": {
+        "name": "Coles Free Range RSPCA Approved Chicken Drumsticks | approx. 1.4kg",
+        "price": 7.7,
+        "unit_price": 5.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-free-range-rspca-approved-chicken-drumsticks-approx.-1.4kg-3228774",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3228774.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.7,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Red Onions",
+      "last_scraped": "2026-05-19T01:29:34.210815+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 4.9
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Red Onions Bag",
+        "price": 5.1,
+        "unit_price": 5.1,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg"
+      },
+      "coles": {
+        "name": "Coles Organic Red Onions | 1kg",
+        "price": 7.9,
+        "unit_price": 7.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-organic-red-onions-1kg-5071833",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5071833.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.8,
+      "alternatives": [
+        {
+          "name": "Onion Red",
+          "price": 0.89,
+          "unit_price": 0.89,
+          "unit": "1EA",
+          "url": "https://www.woolworths.com.au/shop/productdetails/144497/onion-red",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144497.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Woolworths Creamy Broccoli Bake With Red Onion & Parmesan",
+          "price": 7.0,
+          "unit_price": 2.33,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/6056905/woolworths-creamy-broccoli-bake-with-red-onion-parmesan",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6056905.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Coles Brown Onions | 1kg",
+          "price": 2.5,
+          "unit_price": 2.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4803991.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 943.13,
-    "total_coles": 937.05,
-    "cheaper_store": "coles",
+    "total_woolworths": 954.18,
+    "total_coles": 955.65,
+    "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 6.08,
-    "items_compared": 147,
+    "total_saving": 1.47,
+    "items_compared": 150,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 147,
+    "done": 150,
     "total": 211
   }
 }
