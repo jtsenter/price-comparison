@@ -3,6 +3,10 @@ name: Re-check Flagged Items
 on:
   workflow_dispatch:
 
+concurrency:
+  group: recheck
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
