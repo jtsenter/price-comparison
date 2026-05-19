@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T01:32:54.981135+00:00",
+  "last_updated": "2026-05-19T01:33:01.166260+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11435,20 +11435,182 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "Lotus Biscoff Spread",
+      "last_scraped": "2026-05-19T01:32:55.620409+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 6.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 7.5
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Lotus Biscoff Spread",
+        "price": 7.5,
+        "unit_price": 1.88,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/670114/lotus-biscoff-spread",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/670114.jpg"
+      },
+      "coles": {
+        "name": "Lotus Biscoff Crunchy Spread | 380g",
+        "price": 6.0,
+        "unit_price": 1.58,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/lotus-biscoff-crunchy-spread-380g-3577220",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3577220.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.5,
+      "alternatives": [
+        {
+          "name": "Lotus Biscoff Smooth Spread | 400g",
+          "price": 6.0,
+          "unit_price": 1.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/lotus-biscoff-smooth-spread-400g-3577219",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3577219.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Lotus Biscoff Crunchy Spread | 380g",
+          "price": 6.0,
+          "unit_price": 1.58,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/lotus-biscoff-crunchy-spread-380g-3577220",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3577220.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Lotus Biscoff Spread Smooth",
+          "price": 12.0,
+          "unit_price": 1.67,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/6021133/lotus-biscoff-spread-smooth",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6021133.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Maltesers Milk Chocolate Party Gift Box",
+      "last_scraped": "2026-05-19T01:33:00.088052+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-03-02",
+          "price": 7.75
+        },
+        {
+          "date": "2026-04-02",
+          "price": 7.75
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Maltesers Milk Chocolate Party Gift Box",
+        "price": 15.5,
+        "unit_price": 3.88,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/54407/maltesers-milk-chocolate-party-gift-box",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/054407.jpg"
+      },
+      "coles": {
+        "name": "Maltesers Milk Chocolate Party Gift Box | 400g",
+        "price": 15.5,
+        "unit_price": 15.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/maltesers-milk-chocolate-party-gift-box-400g-3609268",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3609268.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Macro Grass Fed Australian Stir-Fry Beef",
+      "last_scraped": "2026-05-19T01:33:01.156379+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-05-22",
+          "price": 10.25
+        },
+        {
+          "date": "2025-06-13",
+          "price": 13.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Macro Grass Fed Australian Stir-Fry Beef",
+        "price": 13.0,
+        "unit_price": 26.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/175569/macro-grass-fed-australian-stir-fry-beef",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/175569.jpg"
+      },
+      "coles": {
+        "name": "Coles Graze Grassfed Beef Stir Fry | 500g",
+        "price": 13.0,
+        "unit_price": 13.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-graze-grassfed-beef-stir-fry-500g-2023765",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2023765.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Drovers Choice Beef Stir Fry | 500g",
+          "price": 11.5,
+          "unit_price": 11.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/drovers-choice-beef-stir-fry-500g-1093073",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1093073.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Beef Stir Fry | 500g",
+          "price": 12.0,
+          "unit_price": 12.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-stir-fry-500g-9990965",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9990965.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Graze Grass Fed No Added Hormone Beef Mince | 500g",
+          "price": 12.5,
+          "unit_price": 12.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-graze-grass-fed-no-added-hormone-beef-mince-500g-2820606",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2820606.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 1080.68,
-    "total_coles": 1148.48,
+    "total_woolworths": 1116.68,
+    "total_coles": 1182.98,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 67.8,
-    "items_compared": 177,
+    "total_saving": 66.3,
+    "items_compared": 180,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 177,
+    "done": 180,
     "total": 211
   }
 }
