@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T12:23:28.236832+00:00",
+  "last_updated": "2026-05-19T12:23:39.074169+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8632,20 +8632,304 @@
       "per_100_ww": 2.28,
       "per_100_coles": 2.28,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Philadelphia Original Cream Cheese Spread Tub",
+      "last_scraped": "2026-05-19T12:23:28.441501+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 4.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 5.7
+        },
+        {
+          "date": "2026-04-21",
+          "price": 5.7
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Philadelphia Original Cream Cheese Spread Tub",
+        "price": 5.7,
+        "unit_price": 22.8,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/79223/philadelphia-original-cream-cheese-spread-tub",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/079223.jpg"
+      },
+      "coles": {
+        "name": "Philadelphia Original Soft Cream Cheese Tub | 250g",
+        "price": 5.7,
+        "unit_price": 5.7,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/philadelphia-original-soft-cream-cheese-tub-250g-5196114",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5196114.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Philadelphia Original Soft Cream Cheese Tub | 250g",
+          "price": 5.7,
+          "unit_price": 5.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-original-soft-cream-cheese-tub-250g-5196114",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5196114.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 2.28,
+      "per_100_coles": 2.28,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Plum Red",
+      "last_scraped": "2026-05-19T12:23:32.079854+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 0.31
+        },
+        {
+          "date": "2025-04-05",
+          "price": 0.47
+        },
+        {
+          "date": "2025-04-14",
+          "price": 0.47
+        },
+        {
+          "date": "2026-02-11",
+          "price": 0.47
+        },
+        {
+          "date": "2026-03-02",
+          "price": 0.31
+        },
+        {
+          "date": "2026-04-02",
+          "price": 0.47
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Motorola G05 4G 64GB - Plum Red",
+        "price": 200.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.woolworths.com.au/shop/productdetails/1126397237/motorola-g05-4g-64gb-plum-red",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/1126397237.jpg"
+      },
+      "coles": {
+        "name": "Fresh Plums Red | approx. 110g",
+        "price": 0.76,
+        "unit_price": 6.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/fresh-plums-red-approx.-110g-156382",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F156382.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 199.24,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": true,
+      "per_100_ww": 5000.0,
+      "per_100_coles": 0.69,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Red Capsicum",
+      "last_scraped": "2026-05-19T12:23:32.950464+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 2.23
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.48
+        },
+        {
+          "date": "2026-02-23",
+          "price": 2.23
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Red Capsicum",
+        "price": 2.48,
+        "unit_price": 2.48,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/135306/red-capsicum",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135306.jpg"
+      },
+      "coles": {
+        "name": "Coles Mini Capsicum | 175g",
+        "price": 4.9,
+        "unit_price": 4.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-mini-capsicum-175g-7296299",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7296299.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.42,
+      "alternatives": [],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 2.8,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Reese's Peanut Butter Cups Miniatures Milk Chocolate",
+      "last_scraped": "2026-05-19T12:23:36.735778+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-06-06",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Reese's Peanut Butter Cups Miniatures Milk Chocolate",
+        "price": 6.0,
+        "unit_price": 4.0,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/348306/reese-s-peanut-butter-cups-miniatures-milk-chocolate",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/348306.jpg"
+      },
+      "coles": {
+        "name": "Reese's Peanut Butter Cups Milk Chocolate 2 pack | 42g",
+        "price": 3.0,
+        "unit_price": 3.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/reese's-peanut-butter-cups-milk-chocolate-2-pack-42g-2137550",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2137550.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 3.0,
+      "alternatives": [
+        {
+          "name": "M&M's Peanut Milk Chocolate Snack & Share Bag | 180g",
+          "price": 3.5,
+          "unit_price": 1.94,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/mandm's-peanut-milk-chocolate-snack-and-share-bag-180g-5258947",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5258947.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Reese's Peanut Butter Cups Milk Chocolate 2 pack | 42g",
+          "price": 3.0,
+          "unit_price": 3.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/reese's-peanut-butter-cups-milk-chocolate-2-pack-42g-2137550",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2137550.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Reese's Miniature Peanut Butter Cups Milk Chocolate Candy 1.58 kg Bulk Pack",
+          "price": 47.95,
+          "unit_price": 3.03,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/1119946981/reese-s-miniature-peanut-butter-cups-milk-chocolate-candy-1-58-kg-bulk-pack",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/1119946981.jpg",
+          "retailer": "woolworths"
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 4.0,
+      "per_100_coles": 7.14,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Sam's Pantry Chocolate Brownie with Roasted Almonds Protein Bar",
+      "last_scraped": "2026-05-19T12:23:39.064350+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 8.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 8.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 8.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 8.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.5
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Sam's Pantry Chocolate Brownie with Roasted Almonds Protein Bar",
+        "price": 8.5,
+        "unit_price": 1.86,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/212807/sam-s-pantry-chocolate-brownie-with-roasted-almonds-protein-bar",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/212807.jpg"
+      },
+      "coles": {
+        "name": "BC Snacks Dark Chocolate Almond High Protein Bar | 40g",
+        "price": 4.0,
+        "unit_price": 4.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/bc-snacks-dark-chocolate-almond-high-protein-bar-40g-1751224",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1751224.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 4.5,
+      "alternatives": [],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 1.86,
+      "per_100_coles": 10.0,
+      "per_100_unit": "100g"
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 570.54,
-    "total_coles": 656.56,
-    "cheaper_store": "woolworths",
+    "total_woolworths": 793.22,
+    "total_coles": 674.92,
+    "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 86.02,
-    "items_compared": 110,
+    "total_saving": 118.3,
+    "items_compared": 115,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 110,
+    "done": 115,
     "total": 211
   }
 }
