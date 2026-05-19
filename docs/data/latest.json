@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T01:33:14.473163+00:00",
+  "last_updated": "2026-05-19T01:33:31.465848+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11749,20 +11749,125 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "Nutella Hazelnut Chocolate Spread Spread",
+      "last_scraped": "2026-05-19T01:33:20.406978+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-03-10",
+          "price": 14.8
+        },
+        {
+          "date": "2026-05-06",
+          "price": 14.8
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Nutella Hazelnut Chocolate Spread Spread",
+        "price": 12.5,
+        "unit_price": 1.67,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/147314/nutella-hazelnut-chocolate-spread-spread",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147314.jpg"
+      },
+      "coles": {
+        "name": "Nutella Hazelnut Chocolate Spread | 220g",
+        "price": 5.6,
+        "unit_price": 5.6,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/nutella-hazelnut-chocolate-spread-220g-9468045",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9468045.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 6.9,
+      "alternatives": []
+    },
+    {
+      "list_item": "Obela Hommus Dip With Garlic Smashed Falafel",
+      "last_scraped": "2026-05-19T01:33:24.414849+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-02-03",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 4.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Obela Hommus Dip With Garlic Smashed Falafel",
+        "price": 5.5,
+        "unit_price": 2.5,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/6038199/obela-hommus-dip-with-garlic-smashed-falafel",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6038199.jpg"
+      },
+      "coles": {
+        "name": "Obela Garnished Dip Garlic Hommus With Smashed Falafel | 220g",
+        "price": 5.5,
+        "unit_price": 5.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/obela-garnished-dip-garlic-hommus-with-smashed-falafel-220g-1048818",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1048818.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Orange Navel",
+      "last_scraped": "2026-05-19T01:33:31.453123+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-05-29",
+          "price": 0.96
+        },
+        {
+          "date": "2025-06-13",
+          "price": 0.96
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Orange Navel",
+        "price": 1.62,
+        "unit_price": 1.62,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/259450/orange-navel",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/259450.jpg"
+      },
+      "coles": {
+        "name": "Coles Orange Navel | approx. 250g",
+        "price": 1.23,
+        "unit_price": 4.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-orange-navel-approx.-250g-4255717",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4255717.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.39,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 1150.88,
-    "total_coles": 1213.58,
+    "total_woolworths": 1170.5,
+    "total_coles": 1225.91,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 62.7,
-    "items_compared": 183,
+    "total_saving": 55.41,
+    "items_compared": 186,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 183,
+    "done": 186,
     "total": 211
   }
 }
