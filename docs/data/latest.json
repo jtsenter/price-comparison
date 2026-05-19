@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T01:30:28.928058+00:00",
+  "last_updated": "2026-05-19T01:30:34.844198+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10635,20 +10635,136 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 4.7,
       "alternatives": []
+    },
+    {
+      "list_item": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
+      "last_scraped": "2026-05-19T01:30:29.226669+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 3.85
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.85
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
+        "price": 2.85,
+        "unit_price": 7.92,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/634312/baby-mum-mum-organiic-rice-rusks-blueberry-carrot",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634312.jpg"
+      },
+      "coles": {
+        "name": "Baby Mum-Mum Rice Rusk Organic Blueberry & Carrot +8 Months | 36g",
+        "price": 3.85,
+        "unit_price": 3.85,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/baby-mum-mum-rice-rusk-organic-blueberry-and-carrot-+8-months-36g-2800347",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2800347.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.0,
+      "alternatives": [
+        {
+          "name": "Baby Mum-Mum Rice Rusk Organic Blueberry & Carrot +8 Months | 36g",
+          "price": 3.85,
+          "unit_price": 3.85,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/baby-mum-mum-rice-rusk-organic-blueberry-and-carrot-+8-months-36g-2800347",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2800347.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Coca-Cola Zero Sugar Soft Drink Bottle",
+      "last_scraped": "2026-05-19T01:30:34.689024+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-06-21",
+          "price": 3.5
+        },
+        {
+          "date": "2026-04-21",
+          "price": 2.1
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Coca-Cola Zero Sugar Soft Drink Bottle",
+        "price": 2.5,
+        "unit_price": 2.0,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/623034/coca-cola-zero-sugar-soft-drink-bottle",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/623034.jpg"
+      },
+      "coles": {
+        "name": "Coca-Cola Zero Sugar Soft Drink Bottle | 1.25L",
+        "price": 4.2,
+        "unit_price": 4.2,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/coca-cola-zero-sugar-soft-drink-bottle-1.25l-2993706",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2993706.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.7,
+      "alternatives": []
+    },
+    {
+      "list_item": "Balconi Mix Max Spgnckes Cocoa",
+      "last_scraped": "2026-05-19T01:30:34.826665+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 6.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 5.4
+        }
+      ],
+      "category": "Sweets",
+      "woolworths": {
+        "name": "Balconi Mix Max Cake Cocoa 350g",
+        "price": 6.6,
+        "unit_price": 0.66,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/88602/balconi-mix-max-cake-cocoa-350g",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/088602.jpg"
+      },
+      "coles": {
+        "name": "Balconi Mix Max Cocoa Cakes 10 Pack | 350g",
+        "price": 7.7,
+        "unit_price": 7.7,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/balconi-mix-max-cocoa-cakes-10-pack-350g-5088122",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5088122.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.1,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 1006.9,
-    "total_coles": 1009.55,
+    "total_woolworths": 1018.85,
+    "total_coles": 1025.3,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 2.65,
-    "items_compared": 159,
+    "total_saving": 6.45,
+    "items_compared": 162,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 159,
+    "done": 162,
     "total": 211
   }
 }
