@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T01:28:05.002331+00:00",
+  "last_updated": "2026-05-19T01:28:42.261175+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9728,20 +9728,178 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Extra Virgin Olive Oil Spray",
+      "last_scraped": "2026-05-19T01:28:05.610581+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 3.7
+        },
+        {
+          "date": "2025-02-02",
+          "price": 3.7
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.7
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.3
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Extra Virgin Olive Oil Spray",
+        "price": 3.3,
+        "unit_price": 2.2,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/260739/woolworths-extra-virgin-olive-oil-spray",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/260739.jpg"
+      },
+      "coles": {
+        "name": "Coles Extra Virgin Olive Oil | 500mL",
+        "price": 9.0,
+        "unit_price": 9.0,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5449504.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 5.7,
+      "alternatives": []
+    },
+    {
+      "list_item": "Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets",
+      "last_scraped": "2026-05-19T01:28:11.619224+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2026-02-11",
+          "price": 34.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 34.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 30.0
+        },
+        {
+          "date": "2026-04-13",
+          "price": 30.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets",
+        "price": 38.0,
+        "unit_price": 38.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/95171/woolworths-fresh-tasmanian-atlantic-skin-on-salmon-fillets",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/095171.jpg"
+      },
+      "coles": {
+        "name": "Coles Tasmanian Salmon Portion Skin On | 200g",
+        "price": 10.0,
+        "unit_price": 10.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portion-skin-on-200g-6400861",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6400861.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 28.0,
+      "alternatives": [
+        {
+          "name": "Coles Tasmanian Salmon Portion Skin On | 200g",
+          "price": 10.0,
+          "unit_price": 10.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portion-skin-on-200g-6400861",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6400861.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Tasmanian Salmon Portions Skin On 4 Pack | 460g",
+          "price": 19.5,
+          "unit_price": 19.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portions-skin-on-4-pack-460g-1546564",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1546564.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Tasmanian Salmon Portions Skin Off 4 Pack | 460g",
+          "price": 21.5,
+          "unit_price": 21.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portions-skin-off-4-pack-460g-3613822",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3613822.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Woolworths Green Cabbage Quarter",
+      "last_scraped": "2026-05-19T01:28:42.248440+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-04-05",
+          "price": 1.95
+        },
+        {
+          "date": "2025-05-29",
+          "price": 1.95
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.95
+        },
+        {
+          "date": "2026-02-03",
+          "price": 2.1
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Green Cabbage Quarter",
+        "price": 2.1,
+        "unit_price": 2.1,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/134968/woolworths-green-cabbage-quarter",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/134968.jpg"
+      },
+      "coles": {
+        "name": "Coles Cabbage Half Wombok | 1 each",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-cabbage-half-wombok-1-each-4456832",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4456832.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.9,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 890.33,
-    "total_coles": 896.65,
-    "cheaper_store": "woolworths",
+    "total_woolworths": 933.73,
+    "total_coles": 920.65,
+    "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 6.32,
-    "items_compared": 141,
+    "total_saving": 13.08,
+    "items_compared": 144,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 141,
+    "done": 144,
     "total": 211
   }
 }
