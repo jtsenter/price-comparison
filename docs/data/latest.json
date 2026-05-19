@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T01:32:13.894127+00:00",
+  "last_updated": "2026-05-19T01:32:54.981135+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11297,20 +11297,158 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 12.5,
       "alternatives": []
+    },
+    {
+      "list_item": "KitKat Gold Crush Block",
+      "last_scraped": "2026-05-19T01:32:46.984124+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 4.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 5.0
+        }
+      ],
+      "category": "Sweets",
+      "woolworths": null,
+      "coles": {
+        "name": "KitKat Milk Chocolate Block | 160g",
+        "price": 3.5,
+        "unit_price": 2.19,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/kitkat-milk-chocolate-block-160g-5872479",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5872479.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "KitKat Cookie Dough Block Chocolate | 170g",
+          "price": 3.5,
+          "unit_price": 2.06,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/kitkat-cookie-dough-block-chocolate-170g-7524247",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7524247.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "KitKat Packed With Milo Milk Chocolate Block | 165g",
+          "price": 3.5,
+          "unit_price": 2.12,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/kitkat-packed-with-milo-milk-chocolate-block-165g-5389720",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5389720.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Little One's Size 5 Ultra Dry Nappies Walker 12-17kg Boys & Girls",
+      "last_scraped": "2026-05-19T01:32:51.626128+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-04-02",
+          "price": 11.5
+        },
+        {
+          "date": "2026-04-13",
+          "price": 11.5
+        }
+      ],
+      "category": "Baby",
+      "woolworths": {
+        "name": "Little One's Size 5 Ultra Dry Nappies Walker 12-17kg Boys & Girls",
+        "price": 11.5,
+        "unit_price": 0.26,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/86177/little-one-s-size-5-ultra-dry-nappies-walker-12-17kg-boys-girls",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/086177.jpg"
+      },
+      "coles": {
+        "name": "Huggies Ultra Dry Nappy Pants Girls Size 5 (12-17kg) | 26 pack",
+        "price": 22.0,
+        "unit_price": 22.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/huggies-ultra-dry-nappy-pants-girls-size-5-(12-17kg)-26-pack-2848263",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2848263.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 10.5,
+      "alternatives": []
+    },
+    {
+      "list_item": "Little One's Size 4 Ultra Dry Nappies Toddler 10-15Kg Boys & Girls",
+      "last_scraped": "2026-05-19T01:32:54.970319+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 12.0
+        },
+        {
+          "date": "2025-06-21",
+          "price": 12.0
+        }
+      ],
+      "category": "Baby",
+      "woolworths": null,
+      "coles": {
+        "name": "Huggies Ultra Dry Nappies Boys Size 4 (10-15kg) | 36 pack",
+        "price": 24.0,
+        "unit_price": 24.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/huggies-ultra-dry-nappies-boys-size-4-(10-15kg)-36-pack-6803890",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6803890.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Huggies Ultra Dry Nappies Boys Size 4 (10-15kg) | 72 Pack",
+          "price": 29.0,
+          "unit_price": 0.4,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/huggies-ultra-dry-nappies-boys-size-4-(10-15kg)-72-pack-9224109",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9224109.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Huggies Ultra Dry Nappies Girls Size 4 (10-15kg) | 72 Pack",
+          "price": 29.0,
+          "unit_price": 0.4,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/huggies-ultra-dry-nappies-girls-size-4-(10-15kg)-72-pack-9224142",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9224142.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "CUB Nappies Unisex Toddler Size 4 (10-15kg) | 50 Pack",
+          "price": 11.5,
+          "unit_price": 11.5,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/cub-nappies-unisex-toddler-size-4-(10-15kg)-50-pack-3720786",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3720786.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 1069.18,
-    "total_coles": 1098.98,
+    "total_woolworths": 1080.68,
+    "total_coles": 1148.48,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 29.8,
-    "items_compared": 174,
+    "total_saving": 67.8,
+    "items_compared": 177,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 174,
+    "done": 177,
     "total": 211
   }
 }
