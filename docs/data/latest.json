@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T01:25:22.463768+00:00",
+  "last_updated": "2026-05-19T01:25:55.055701+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8463,20 +8463,170 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": []
+    },
+    {
+      "list_item": "South Island Marlborough Sauvignon Blanc",
+      "last_scraped": "2026-05-19T01:25:27.290330+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 17.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 13.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 17.0
+        }
+      ],
+      "category": "Drinks & Alcohol",
+      "woolworths": {
+        "name": "South Island Marlborough Sauvignon Blanc",
+        "price": 13.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.woolworths.com.au/shop/productdetails/906238/south-island-marlborough-sauvignon-blanc",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/906238.jpg"
+      },
+      "coles": {
+        "name": "Oyster Bay Marlborough Sauvignon Blanc 750ml | 1 Each",
+        "price": 23.0,
+        "unit_price": 23.0,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/oyster-bay-marlborough-sauvignon-blanc-750ml-1-each-8258681",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8258681.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 10.0,
+      "alternatives": [
+        {
+          "name": "Atiru Marlborough Sauvignon Blanc 375ml | 1 Each",
+          "price": 8.0,
+          "unit_price": 8.0,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/atiru-marlborough-sauvignon-blanc-375ml-1-each-7446482",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7446482.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Atiru Marlborough Sauvignon Blanc 750ml | 1 Each",
+          "price": 10.0,
+          "unit_price": 13.33,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/atiru-marlborough-sauvignon-blanc-750ml-1-each-2540563",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2540563.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Land of Giants Marlborough Sauvignon Blanc 750ml | 1 Each",
+          "price": 12.0,
+          "unit_price": 16.0,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/land-of-giants-marlborough-sauvignon-blanc-750ml-1-each-2525130",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2525130.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Spring Onion Bunch",
+      "last_scraped": "2026-05-19T01:25:31.890280+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-06-21",
+          "price": 2.8
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.9
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Spring Onion Bunch",
+        "price": 3.0,
+        "unit_price": 3.0,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/147603/spring-onion-bunch",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147603.jpg"
+      },
+      "coles": {
+        "name": "Coles Spring Onions | 1 Bunch",
+        "price": 3.0,
+        "unit_price": 3.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-spring-onions-1-bunch-408419",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F408419.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
+    },
+    {
+      "list_item": "Schweppes Lemon Lime Natural Mineral Water Bottle",
+      "last_scraped": "2026-05-19T01:25:55.045936+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 1.8
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.8
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.8
+        },
+        {
+          "date": "2026-03-10",
+          "price": 1.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": null,
+      "coles": {
+        "name": "Schweppes Mineral Water Infused Lemon Lime | 1.1L",
+        "price": 1.8,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/schweppes-mineral-water-infused-lemon-lime-1.1l-1056554",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1056554.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 787.35,
-    "total_coles": 730.75,
+    "total_woolworths": 803.35,
+    "total_coles": 758.55,
     "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 56.6,
-    "items_compared": 117,
+    "total_saving": 44.8,
+    "items_compared": 120,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 117,
+    "done": 120,
     "total": 211
   }
 }
