@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T01:12:22.946822+00:00",
+  "last_updated": "2026-05-19T01:12:35.742978+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -575,20 +575,361 @@
       "cheaper_store": "coles",
       "saving_per_item": 0.08,
       "alternatives": []
+    },
+    {
+      "list_item": "Cavendish Bananas",
+      "last_scraped": "2026-05-19T01:12:26.183065+00:00",
+      "trip_count": 30,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 0.81
+        },
+        {
+          "date": "2025-01-29",
+          "price": 0.48
+        },
+        {
+          "date": "2025-02-02",
+          "price": 0.86
+        },
+        {
+          "date": "2025-02-28",
+          "price": 0.93
+        },
+        {
+          "date": "2025-03-11",
+          "price": 0.93
+        },
+        {
+          "date": "2025-03-17",
+          "price": 0.93
+        },
+        {
+          "date": "2025-04-05",
+          "price": 0.93
+        },
+        {
+          "date": "2025-04-14",
+          "price": 0.93
+        },
+        {
+          "date": "2025-04-25",
+          "price": 0.93
+        },
+        {
+          "date": "2025-05-04",
+          "price": 0.93
+        },
+        {
+          "date": "2025-05-12",
+          "price": 0.93
+        },
+        {
+          "date": "2025-05-22",
+          "price": 0.93
+        },
+        {
+          "date": "2025-05-29",
+          "price": 0.93
+        },
+        {
+          "date": "2025-06-06",
+          "price": 0.93
+        },
+        {
+          "date": "2025-06-13",
+          "price": 0.88
+        },
+        {
+          "date": "2025-06-21",
+          "price": 0.88
+        },
+        {
+          "date": "2025-07-03",
+          "price": 0.88
+        },
+        {
+          "date": "2025-07-10",
+          "price": 0.88
+        },
+        {
+          "date": "2025-07-26",
+          "price": 0.88
+        },
+        {
+          "date": "2026-02-03",
+          "price": 0.46
+        },
+        {
+          "date": "2026-02-07",
+          "price": 0.88
+        },
+        {
+          "date": "2026-02-11",
+          "price": 0.91
+        },
+        {
+          "date": "2026-02-23",
+          "price": 0.91
+        },
+        {
+          "date": "2026-03-02",
+          "price": 0.88
+        },
+        {
+          "date": "2026-03-10",
+          "price": 0.88
+        },
+        {
+          "date": "2026-04-02",
+          "price": 0.7
+        },
+        {
+          "date": "2026-04-13",
+          "price": 0.7
+        },
+        {
+          "date": "2026-04-21",
+          "price": 0.52
+        },
+        {
+          "date": "2026-04-29",
+          "price": 0.52
+        },
+        {
+          "date": "2026-05-06",
+          "price": 0.72
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Cavendish Bananas",
+        "price": 0.72,
+        "unit_price": 0.72,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/133211/cavendish-bananas",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/133211.jpg"
+      },
+      "coles": {
+        "name": "Coles Bananas | approx. 170g",
+        "price": 0.77,
+        "unit_price": 4.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-bananas-approx.-170g-409499",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F409499.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.05,
+      "alternatives": []
+    },
+    {
+      "list_item": "Driscoll's Raspberries Punnet",
+      "last_scraped": "2026-05-19T01:12:29.636604+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 4.9
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-07",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 4.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 4.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 4.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Driscoll's Raspberries Punnet",
+        "price": 3.7,
+        "unit_price": 29.6,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/165262/driscoll-s-raspberries-punnet",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/165262.jpg"
+      },
+      "coles": {
+        "name": "Yoplait Berry Punnet Yoghurt Strawberry Mixed Berries | 12 Pack",
+        "price": 8.5,
+        "unit_price": 8.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/yoplait-berry-punnet-yoghurt-strawberry-mixed-berries-12-pack-8877195",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8877195.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.8,
+      "alternatives": [
+        {
+          "name": "Cottees Raspberry Jam | 375g",
+          "price": 3.8,
+          "unit_price": 3.8,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/cottees-raspberry-jam-375g-6397632",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6397632.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Yoplait Berry Punnet Yoghurt Strawberry Mixed Berries 6x160g | 960g",
+          "price": 7.0,
+          "unit_price": 7.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/yoplait-berry-punnet-yoghurt-strawberry-mixed-berries-6x160g-960g-3619567",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3619567.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Bonne Maman Raspberry Jam | 370g",
+          "price": 7.6,
+          "unit_price": 7.6,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/bonne-maman-raspberry-jam-370g-8558164",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8558164.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Fresh Broccoli",
+      "last_scraped": "2026-05-19T01:12:35.741065+00:00",
+      "trip_count": 20,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 1.62
+        },
+        {
+          "date": "2024-11-20",
+          "price": 2.48
+        },
+        {
+          "date": "2024-12-09",
+          "price": 1.62
+        },
+        {
+          "date": "2025-02-02",
+          "price": 1.62
+        },
+        {
+          "date": "2025-03-27",
+          "price": 1.58
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.15
+        },
+        {
+          "date": "2025-04-25",
+          "price": 2.28
+        },
+        {
+          "date": "2025-05-04",
+          "price": 1.62
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.95
+        },
+        {
+          "date": "2025-05-22",
+          "price": 1.95
+        },
+        {
+          "date": "2025-05-29",
+          "price": 2.28
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.48
+        },
+        {
+          "date": "2025-06-13",
+          "price": 2.61
+        },
+        {
+          "date": "2025-06-21",
+          "price": 1.29
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.27
+        },
+        {
+          "date": "2025-07-26",
+          "price": 1.95
+        },
+        {
+          "date": "2026-02-11",
+          "price": 1.95
+        },
+        {
+          "date": "2026-02-23",
+          "price": 1.95
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.82
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.49
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Fresh Broccoli",
+        "price": 1.95,
+        "unit_price": 1.95,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/134681/fresh-broccoli",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/134681.jpg"
+      },
+      "coles": {
+        "name": "Coles Broccoli Medium | approx. 340g",
+        "price": 1.7,
+        "unit_price": 5.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-broccoli-medium-approx.-340g-407755",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F407755.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.25,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 32.33,
-    "total_coles": 33.35,
+    "total_woolworths": 38.7,
+    "total_coles": 44.32,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 1.02,
-    "items_compared": 6,
+    "total_saving": 5.62,
+    "items_compared": 9,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 6,
+    "done": 9,
     "total": 211
   }
 }
