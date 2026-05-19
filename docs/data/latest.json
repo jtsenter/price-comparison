@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T01:31:25.717166+00:00",
+  "last_updated": "2026-05-19T01:32:03.404360+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11048,20 +11048,135 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "Ecostore Dish Liquid Ultrasensitive",
+      "last_scraped": "2026-05-19T01:31:26.563000+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 3.35
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.8
+        }
+      ],
+      "category": "Household",
+      "woolworths": {
+        "name": "Ecostore Dish Liquid Ultrasensitive",
+        "price": 5.0,
+        "unit_price": 1.0,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/742382/ecostore-dish-liquid-ultrasensitive",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/742382.jpg"
+      },
+      "coles": {
+        "name": "Ecostore Dishwashing Liquid Extra Gentle Jasmine & Harakeke | 1L",
+        "price": 9.2,
+        "unit_price": 9.2,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/ecostore-dishwashing-liquid-extra-gentle-jasmine-and-harakeke-1l-7752310",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7752310.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.2,
+      "alternatives": []
+    },
+    {
+      "list_item": "Essentials Domestic Wipes Roll",
+      "last_scraped": "2026-05-19T01:31:32.055102+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 4.8
+        },
+        {
+          "date": "2025-04-14",
+          "price": 4.8
+        }
+      ],
+      "category": "Bakery",
+      "woolworths": {
+        "name": "Essentials Wipes Domestic Wipes",
+        "price": 3.15,
+        "unit_price": 0.11,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/293058/essentials-wipes-domestic-wipes",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/293058.jpg"
+      },
+      "coles": {
+        "name": "Coles Ultra Multi-purpose Domestic Cleaning Wipes | 50 Pack",
+        "price": 4.8,
+        "unit_price": 4.8,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-ultra-multi-purpose-domestic-cleaning-wipes-50-pack-3056249",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3056249.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.65,
+      "alternatives": [
+        {
+          "name": "Essentials Domestic Wipes Roll",
+          "price": 4.8,
+          "unit_price": 0.1,
+          "unit": "1EA",
+          "url": "https://www.woolworths.com.au/shop/productdetails/789683/essentials-domestic-wipes-roll",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/789683.jpg",
+          "retailer": "woolworths"
+        }
+      ]
+    },
+    {
+      "list_item": "Essentials Plain Flour",
+      "last_scraped": "2026-05-19T01:32:03.399334+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 1.4
+        },
+        {
+          "date": "2025-04-25",
+          "price": 1.4
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Essentials Plain Flour",
+        "price": 1.3,
+        "unit_price": 1.3,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/33282/essentials-plain-flour",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/033282.jpg"
+      },
+      "coles": {
+        "name": "White Wings Plain Flour | 1kg",
+        "price": 2.7,
+        "unit_price": 2.7,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/white-wings-plain-flour-1kg-119455",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F119455.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.4,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 1040.65,
-    "total_coles": 1049.4,
+    "total_woolworths": 1050.1,
+    "total_coles": 1066.1,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 8.75,
-    "items_compared": 168,
+    "total_saving": 16.0,
+    "items_compared": 171,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 168,
+    "done": 171,
     "total": 211
   }
 }
