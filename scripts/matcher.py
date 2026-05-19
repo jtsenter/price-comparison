@@ -199,7 +199,19 @@ def compute_per_100(result: dict) -> tuple[float | None, str]:
     unit_price = result.get('unit_price')
     price      = result.get('price')
 
-    # Strategy 1 — cup price
+    if price is None:
+        return None, '100g'
+
+    # Strategy 1 — extract size from product name (most reliable for pre-packed goods)
+    name = result.get('name', '')
+    w = extract_weight_g(name)
+    if w and w > 0:
+        return round(price * 100 / w, 2), '100g'
+    v = extract_volume_ml(name)
+    if v and v > 0:
+        return round(price * 100 / v, 2), '100ml'
+
+    # Strategy 2 — cup price + unit (for loose/bulk goods sold by weight)
     if unit_price is not None and unit:
         m = re.match(r'(\d*\.?\d*)?\s*(g|kg|ml|l)\b', unit)
         if m:
@@ -211,18 +223,6 @@ def compute_per_100(result: dict) -> tuple[float | None, str]:
             if qty > 0:
                 lbl = '100ml' if uom in ('ml', 'l') else '100g'
                 return round(unit_price * 100 / qty, 2), lbl
-
-    if price is None:
-        return None, '100g'
-
-    # Strategy 2 — extract from product name
-    name = result.get('name', '')
-    w = extract_weight_g(name)
-    if w and w > 0:
-        return round(price * 100 / w, 2), '100g'
-    v = extract_volume_ml(name)
-    if v and v > 0:
-        return round(price * 100 / v, 2), '100ml'
 
     return None, '100g'
 

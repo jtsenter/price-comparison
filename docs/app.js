@@ -11,6 +11,40 @@ const fmtUnit = (price, unit) => {
   return m ? `${fmt(price)}/${m[0].trim()}` : fmt(price);
 };
 
+// Compute per-100g or per-100ml price from a product result object.
+// Prioritises size extracted from the product name (reliable for pack goods)
+// over the store-scraped cup price (which is often wrong for Coles packs).
+function clientPer100(result) {
+  if (!result || result.price == null) return { value: null, label: '100g' };
+  const price = result.price;
+  const name  = result.name || '';
+
+  // Strategy 1: extract size from product name
+  const kgM = name.match(/(\d+(?:\.\d+)?)\s*kg\b/i);
+  if (kgM) { const g = +kgM[1] * 1000; return { value: +(price * 100 / g).toFixed(2), label: '100g' }; }
+  const gM = name.match(/(\d+(?:\.\d+)?)\s*g\b/i);
+  if (gM && +gM[1] > 0) return { value: +(price * 100 / +gM[1]).toFixed(2), label: '100g' };
+  const lM = name.match(/(\d+(?:\.\d+)?)\s*l(?:it(?:re|er)s?)?\b(?!\w)/i);
+  if (lM) { const ml = +lM[1] * 1000; return { value: +(price * 100 / ml).toFixed(2), label: '100ml' }; }
+  const mlM = name.match(/(\d+(?:\.\d+)?)\s*ml\b/i);
+  if (mlM && +mlM[1] > 0) return { value: +(price * 100 / +mlM[1]).toFixed(2), label: '100ml' };
+
+  // Strategy 2: use store-provided cup price + unit (for loose/weight goods)
+  const unit = (result.unit || '').toLowerCase().trim();
+  const up   = result.unit_price;
+  if (up != null && unit) {
+    const uM = unit.match(/^(\d*\.?\d*)?\s*(g|kg|ml|l)\b/);
+    if (uM) {
+      let qty = parseFloat(uM[1]) || 1.0;
+      const uom = uM[2];
+      if (uom === 'kg') qty *= 1000;
+      else if (uom === 'l') qty *= 1000;
+      if (qty > 0) return { value: +(up * 100 / qty).toFixed(2), label: (uom === 'ml' || uom === 'l') ? '100ml' : '100g' };
+    }
+  }
+  return { value: null, label: '100g' };
+}
+
 function daysSince(isoString) {
   return (Date.now() - new Date(isoString).getTime()) / (1000 * 60 * 60 * 24);
 }
@@ -1645,13 +1679,14 @@ function renderPage(data) {
     const hotDeal = isHotDeal(item);
     const hotBadge = `<span class="hot-badge" title="Current price is 10%+ below historical average">🔥</span>`;
 
-    // Per-100g/ml lines (from scraper-computed normalised prices)
-    const per100Unit  = item.per_100_unit || '100g';
-    const per100WwHtml = item.per_100_ww != null
-      ? `<div class="price-per100">$${Number(item.per_100_ww).toFixed(2)}/${per100Unit}</div>`
+    // Per-100g/ml lines — computed client-side so correct for all items (new and old JSON)
+    const wwP100  = clientPer100(ww);
+    const coP100  = clientPer100(co);
+    const per100WwHtml = wwP100.value != null
+      ? `<div class="price-per100">$${wwP100.value.toFixed(2)}/${wwP100.label}</div>`
       : '';
-    const per100CoHtml = item.per_100_coles != null
-      ? `<div class="price-per100">$${Number(item.per_100_coles).toFixed(2)}/${per100Unit}</div>`
+    const per100CoHtml = coP100.value != null
+      ? `<div class="price-per100">$${coP100.value.toFixed(2)}/${coP100.label}</div>`
       : '';
 
     // WW price cell

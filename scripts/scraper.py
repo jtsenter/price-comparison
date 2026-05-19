@@ -327,11 +327,32 @@ COLES_PRODUCT_PAGE_JS = """
         const el = document.querySelector(s);
         if (el?.textContent?.trim()) { name = el.textContent.trim(); break; }
     }
+
+    // Extract the primary selling price — use the smallest $ value found in
+    // price-specific elements to avoid picking up multipack totals or "Was" prices.
     let priceText = '';
-    for (const s of ['[data-testid="product-pricing"]','[class*="price__value"]','[class*="product-price"]','[class*="Price"]']) {
-        const el = document.querySelector(s);
-        if (el?.textContent?.match(/\\$/)) { priceText = el.textContent.trim(); break; }
+    let bestPrice = Infinity;
+    const priceSelectors = [
+        '[data-testid="product-pricing"]',
+        '[class*="price__value"]',
+        '[class*="product__price"]:not([class*="was"]):not([class*="save"])',
+        '[class*="Price"]:not([class*="was"]):not([class*="save"]):not([class*="WasPrice"])',
+    ];
+    for (const s of priceSelectors) {
+        for (const el of document.querySelectorAll(s)) {
+            const t = el.textContent?.trim() || '';
+            // Must contain a $ and be reasonably short (not paragraph text)
+            if (!t.match(/\\$/) || t.length > 20) continue;
+            const m = t.match(/\\$\\s*([\\d,]+(?:\\.\\d{1,2})?)/);
+            if (m) {
+                const v = parseFloat(m[1].replace(',',''));
+                // Skip suspiciously large values (probably multipack/yearly totals)
+                if (v > 0 && v < 50 && v < bestPrice) { bestPrice = v; priceText = t; }
+            }
+        }
+        if (priceText) break;
     }
+
     let unitPriceText = '';
     for (const s of [
         '[class*="CupPrice"]','[class*="cup-price"]','[class*="cupPrice"]',
@@ -515,41 +536,45 @@ async def _scrape_single_item(
         # URL-based fetch (single-item refresh with explicit URLs)
         if ww_url and not coles_url:
             print(f"  Fetching WW by URL: {ww_url}")
-            ww_match = await fetch_ww_by_url(ww_page, ww_url)
-            if not ww_match:
-                res = await search_with_retry(search_woolworths, ww_page, item)
-                ww_match = res[0] if res else None
-            else:
+            _fetched = await fetch_ww_by_url(ww_page, ww_url)
+            if _fetched:
+                ww_results = [_fetched]
                 _skip_picker_ww = True
-            coles_match = existing_item.get("coles")
-            _skip_picker_co = True  # carry-forward, no re-pick needed
+            else:
+                print(f"  WW URL fetch failed, falling back to search for: {item}")
+                ww_results = await search_with_retry(search_woolworths, ww_page, item)
+            _co_carry = existing_item.get("coles")
+            coles_results = [_co_carry] if _co_carry else []
+            _skip_picker_co = True
         elif coles_url and not ww_url:
             print(f"  Fetching Coles by URL: {coles_url}")
-            coles_match = await fetch_coles_by_url(coles_page, coles_url)
-            if not coles_match:
-                res = await search_with_retry(search_coles, coles_page, item)
-                coles_match = res[0] if res else None
-            else:
+            _fetched = await fetch_coles_by_url(coles_page, coles_url)
+            if _fetched:
+                coles_results = [_fetched]
                 _skip_picker_co = True
-            ww_match = existing_item.get("woolworths")
-            _skip_picker_ww = True  # carry-forward
+            else:
+                print(f"  Coles URL fetch failed, falling back to search for: {item}")
+                coles_results = await search_with_retry(search_coles, coles_page, item)
+            _ww_carry = existing_item.get("woolworths")
+            ww_results = [_ww_carry] if _ww_carry else []
+            _skip_picker_ww = True
         else:
             print(f"  Fetching WW by URL: {ww_url}")
-            ww_match = await fetch_ww_by_url(ww_page, ww_url)
-            if not ww_match:
-                res = await search_with_retry(search_woolworths, ww_page, item)
-                ww_match = res[0] if res else None
-            else:
+            _ww_fetched = await fetch_ww_by_url(ww_page, ww_url)
+            if _ww_fetched:
+                ww_results = [_ww_fetched]
                 _skip_picker_ww = True
-            print(f"  Fetching Coles by URL: {coles_url}")
-            coles_match = await fetch_coles_by_url(coles_page, coles_url)
-            if not coles_match:
-                res = await search_with_retry(search_coles, coles_page, item)
-                coles_match = res[0] if res else None
             else:
+                print(f"  WW URL fetch failed, falling back to search for: {item}")
+                ww_results = await search_with_retry(search_woolworths, ww_page, item)
+            print(f"  Fetching Coles by URL: {coles_url}")
+            _co_fetched = await fetch_coles_by_url(coles_page, coles_url)
+            if _co_fetched:
+                coles_results = [_co_fetched]
                 _skip_picker_co = True
-        ww_results = [ww_match] if ww_match else []
-        coles_results = [coles_match] if coles_match else []
+            else:
+                print(f"  Coles URL fetch failed, falling back to search for: {item}")
+                coles_results = await search_with_retry(search_coles, coles_page, item)
     else:
         # Name-based search (normal scrape) — honour url_overrides.json if present
         overrides_path = os.path.join(DATA_DIR, "url_overrides.json")
