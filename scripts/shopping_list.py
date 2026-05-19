@@ -48,7 +48,12 @@ def get_purchase_history(excel_path: str, min_trips: int = 2) -> dict:
     Returns {item_name: {trip_count, price_history: [{date, price}]}}
     for items bought in at least min_trips distinct shopping dates.
     """
-    df = pd.read_excel(excel_path, sheet_name="Data")
+    if not os.path.exists(excel_path):
+        raise FileNotFoundError(f"Shopping list not found: {excel_path}")
+    try:
+        df = pd.read_excel(excel_path, sheet_name="Data")
+    except Exception as e:
+        raise RuntimeError(f"Could not read shopping list ({excel_path}): {e}") from e
     df["Item"] = df["Item"].apply(clean_name)
     df = df[df["Item"] != ""]
     df["Date"] = pd.to_datetime(df["Date"])

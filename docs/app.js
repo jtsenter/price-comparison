@@ -56,6 +56,13 @@ function formatDate(isoString) {
   });
 }
 
+// ── Thresholds ────────────────────────────────────────────────────────────────
+
+const HOT_DEAL_THRESHOLD       = 0.9;    // current price must be below this × historical mean
+const DISCREPANCY_WARN_THRESHOLD = 0.31; // price diff % above which ⚠ is shown
+const STALE_DATA_DAYS          = 5;      // days before "data is stale" banner appears
+const STALE_PROGRESS_MS        = 3 * 60 * 1000; // ms with no progress update → ⚠ Stalled
+
 // ── Overrides (edit name / URL) ──────────────────────────────────────────────
 
 function loadOverrides() {
@@ -1354,13 +1361,16 @@ function sortItems(items) {
     }
   }
 
+  // Pre-compute sort values once to avoid repeated localStorage reads per comparison
+  const sortCache = new Map(filtered.map(item => [item, sortKeys.map(({ col }) => getSortVal(col, item))]));
+
   return [...filtered].sort((a, b) => {
-    for (const { col, dir } of sortKeys) {
-      const mul = dir === 'asc' ? 1 : -1;
-      const av = getSortVal(col, a);
-      const bv = getSortVal(col, b);
-      if (av < bv) return -1 * mul;
-      if (av > bv) return  1 * mul;
+    const av = sortCache.get(a);
+    const bv = sortCache.get(b);
+    for (let i = 0; i < sortKeys.length; i++) {
+      const mul = sortKeys[i].dir === 'asc' ? 1 : -1;
+      if (av[i] < bv[i]) return -1 * mul;
+      if (av[i] > bv[i]) return  1 * mul;
     }
     return 0;
   });
@@ -1416,7 +1426,7 @@ function isHotDeal(item) {
   const co = item.coles?.price;
   const current = item.cheaper_store === 'woolworths' ? ww : (item.cheaper_store === 'coles' ? co : (co ?? ww));
   if (current == null) return false;
-  return current < mean * 0.9;
+  return current < mean * HOT_DEAL_THRESHOLD;
 }
 
 // ── Index page rendering ─────────────────────────────────────────────────────
@@ -1430,7 +1440,7 @@ function renderPage(data) {
     return;
   }
 
-  if (daysSince(data.last_updated) > 5) $('staleBanner').classList.add('visible');
+  if (daysSince(data.last_updated) > STALE_DATA_DAYS) $('staleBanner').classList.add('visible');
 
   // Always compute banner stats client-side so savings are units-weighted
   const s = computeBannerStats(data.items);
@@ -1495,8 +1505,7 @@ function renderPage(data) {
   if (strip) {
     if (prog && prog.total > 0 && !_progressDismissed) {
       const pct = Math.round((prog.done / prog.total) * 100);
-      const STALE_MS = 3 * 60 * 1000;  // stale after 3 min with no change
-      const isStale = _progressLastChangeTime && (Date.now() - _progressLastChangeTime > STALE_MS);
+      const isStale = _progressLastChangeTime && (Date.now() - _progressLastChangeTime > STALE_PROGRESS_MS);
       strip.style.display = 'flex';
       strip.classList.toggle('stale', isStale);
       $('scrapeStripLabel').textContent = isStale
@@ -1635,7 +1644,7 @@ function renderPage(data) {
 
     // Price bar uses cheaper store's price as reference (or fallback)
     const currentRef = cheaper === 'woolworths' ? ww?.price : (cheaper === 'coles' ? co?.price : (co?.price ?? ww?.price));
-    const bar = buildPriceBar(item.list_item, item.price_history, currentRef);
+    const bar = Array.isArray(item.price_history) ? buildPriceBar(item.list_item, item.price_history, currentRef) : '';
 
     // % Cheaper + discrepancy warning (must be before itemCell)
     const wwPrice = ww?.price;
@@ -1648,7 +1657,7 @@ function renderPage(data) {
     const priceDiffPct = (wwPrice != null && coPrice != null)
       ? Math.abs(wwPrice - coPrice) / Math.max(wwPrice, coPrice)
       : 0;
-    const discrepancyWarning = priceDiffPct > 0.31
+    const discrepancyWarning = priceDiffPct > DISCREPANCY_WARN_THRESHOLD
       ? `<span class="discrepancy-warn" title="Large price difference — double check the match is correct">⚠</span>`
       : '';
 

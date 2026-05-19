@@ -23,6 +23,13 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "docs", "data")
 FLAG_PATH = os.path.join(DATA_DIR, "name_changes_detected.json")
 EXCEL_PATH = os.path.join(os.path.dirname(__file__), "..", "shopping_list.xlsx")
 
+# ── Tunable constants ────────────────────────────────────────────────────────
+PAGE_TIMEOUT_MS      = 20_000   # page.goto timeout
+COLES_WAIT_MS        = 1_500    # post-navigation wait for Coles pages
+COLES_SCROLL_WAIT_MS = 800      # post-scroll wait for lazy-loaded tiles
+MAX_PRODUCT_PRICE    = 50.0     # upper bound for plausible product prices
+SKIP_AGE_DAYS        = 4        # items scraped within N days are skipped
+
 _ww_debug_done = False
 
 
@@ -126,7 +133,7 @@ async def search_woolworths(page, query: str) -> list[dict]:
     global _ww_debug_done
     url = f"{WOOLWORTHS_BASE}/shop/search/products?searchTerm={quote(query)}"
     try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=20000)
+        await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
         await page.wait_for_timeout(600)
 
         current_url = page.url
@@ -184,7 +191,7 @@ async def search_woolworths(page, query: str) -> list[dict]:
 async def fetch_ww_by_url(page, url: str) -> dict | None:
     """Fetch a single WW product directly by URL (faster than search)."""
     try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=20000)
+        await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
         await page.wait_for_timeout(800)
         next_data = await page.evaluate("""
             () => {
@@ -297,10 +304,10 @@ COLES_EXTRACT_JS = """
 async def search_coles(page, query: str) -> list[dict]:
     url = f"{COLES_BASE}/search?q={quote(query)}"
     try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=20000)
-        await page.wait_for_timeout(1500)
+        await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
+        await page.wait_for_timeout(COLES_WAIT_MS)
         await page.evaluate("window.scrollBy(0, 300)")
-        await page.wait_for_timeout(800)
+        await page.wait_for_timeout(COLES_SCROLL_WAIT_MS)
         raw = await page.evaluate(COLES_EXTRACT_JS)
         results = []
         for r in raw:
@@ -347,7 +354,7 @@ COLES_PRODUCT_PAGE_JS = """
             if (m) {
                 const v = parseFloat(m[1].replace(',',''));
                 // Skip suspiciously large values (probably multipack/yearly totals)
-                if (v > 0 && v < 50 && v < bestPrice) { bestPrice = v; priceText = t; }
+                if (v > 0 && v < 50 && v < bestPrice) { bestPrice = v; priceText = t; } // 50 = MAX_PRODUCT_PRICE
             }
         }
         if (priceText) break;
@@ -378,8 +385,8 @@ COLES_PRODUCT_PAGE_JS = """
 async def fetch_coles_by_url(page, url: str) -> dict | None:
     """Fetch a single Coles product directly by URL (faster than search)."""
     try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=20000)
-        await page.wait_for_timeout(1500)
+        await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
+        await page.wait_for_timeout(COLES_WAIT_MS)
         raw = await page.evaluate(COLES_PRODUCT_PAGE_JS)
         name = raw.get("name", "")
         price = parse_price(raw.get("price_text", ""))
@@ -465,10 +472,13 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
         subprocess.run(["git", "add", "docs/data/"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
         diff = subprocess.run(["git", "diff", "--staged", "--quiet"], cwd=REPO_ROOT, timeout=_GIT_TIMEOUT)
         if diff.returncode != 0:
-            subprocess.run(["git", "commit", "-m", f"progress: {done}/{total} items scraped"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-            subprocess.run(["git", "pull", "--rebase", "origin", "main"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-            subprocess.run(["git", "push"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-            print(f"  -> Pushed progress ({done}/{total})")
+            commit = subprocess.run(["git", "commit", "-m", f"progress: {done}/{total} items scraped"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
+            if commit.returncode == 0:
+                subprocess.run(["git", "pull", "--rebase", "origin", "main"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
+                subprocess.run(["git", "push"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
+                print(f"  -> Pushed progress ({done}/{total})")
+            else:
+                print(f"  -> Commit failed, skipping push: {commit.stderr.decode(errors='replace').strip()}")
     except subprocess.TimeoutExpired as e:
         print(f"  -> Progress push timed out: {e}")
     except Exception as e:
@@ -527,7 +537,7 @@ def should_skip_item(ex_data: dict | None, trigger: str) -> bool:
         return False
     try:
         age_days = (datetime.now(timezone.utc) - datetime.fromisoformat(last_scraped)).total_seconds() / 86400
-        return age_days < 4
+        return age_days < SKIP_AGE_DAYS
     except Exception:
         return False
 
@@ -763,10 +773,10 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             need_ww = not (coles_url and not ww_url)
             need_coles = not (ww_url and not coles_url)
             if need_ww:
-                await ww_page.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=20000)
+                await ww_page.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
                 await delay()
             if need_coles:
-                await coles_page.goto(COLES_BASE, wait_until="domcontentloaded", timeout=20000)
+                await coles_page.goto(COLES_BASE, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
                 await delay()
 
             result, is_nf = await _scrape_single_item(
@@ -802,10 +812,10 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             co_pool: asyncio.Queue = asyncio.Queue()
             for _ in range(CONCURRENCY):
                 p = await context.new_page()
-                await p.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=20000)
+                await p.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
                 await ww_pool.put(p)
                 p = await context.new_page()
-                await p.goto(COLES_BASE, wait_until="domcontentloaded", timeout=20000)
+                await p.goto(COLES_BASE, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
                 await co_pool.put(p)
 
             sem = asyncio.Semaphore(CONCURRENCY)
