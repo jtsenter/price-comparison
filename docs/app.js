@@ -252,29 +252,20 @@ function getColNumericValue(col, item) {
   }
 }
 
-function applyNumFilter(val, { op1, val1, link, op2, val2 }) {
-  function check(v, op, threshold) {
-    if (threshold === '' || threshold == null) return true;
-    const t = parseFloat(threshold);
-    if (isNaN(t)) return true;
-    switch (op) {
-      case '>':  return v > t;
-      case '<':  return v < t;
-      case '>=': return v >= t;
-      case '<=': return v <= t;
-      case '=':  return Math.abs(v - t) < 0.0001;
-      case '≠':  return Math.abs(v - t) >= 0.0001;
-      default:   return true;
-    }
+function applyNumFilter(val, { op1, val1 }) {
+  if (val1 === '' || val1 == null) return true;
+  const t = parseFloat(val1);
+  if (isNaN(t)) return true;
+  if (val == null) return false;
+  switch (op1) {
+    case '>':  return val > t;
+    case '<':  return val < t;
+    case '>=': return val >= t;
+    case '<=': return val <= t;
+    case '=':  return Math.abs(val - t) < 0.0001;
+    case '≠':  return Math.abs(val - t) >= 0.0001;
+    default:   return true;
   }
-  const hasC1 = val1 !== '' && val1 != null;
-  const hasC2 = val2 !== '' && val2 != null && op2 !== '';
-  if (!hasC1 && !hasC2) return true;
-  if (val == null) return false;  // item has no value for this col
-  if (!hasC2) return check(val, op1, val1);
-  const c1 = check(val, op1, val1);
-  const c2 = check(val, op2, val2);
-  return link === 'or' ? (c1 || c2) : (c1 && c2);
 }
 
 function getColValue(col, item) {
@@ -1470,22 +1461,24 @@ function renderPage(data) {
     _progressDismissed = false;
   }
 
-  // ── Header progress widget ──────────────────────────────────────
-  const hpw = $('headerProgressWrap');
-  if (hpw) {
+  // ── Scrape strip (full-width row below header) ─────────────────
+  const strip = $('scrapeStrip');
+  if (strip) {
     if (prog && prog.total > 0 && !_progressDismissed) {
       const pct = Math.round((prog.done / prog.total) * 100);
-      const STALE_MS = 5 * 60 * 1000;
+      const STALE_MS = 3 * 60 * 1000;  // stale after 3 min with no change
       const isStale = _progressLastChangeTime && (Date.now() - _progressLastChangeTime > STALE_MS);
-      hpw.style.display = 'flex';
-      hpw.classList.toggle('stale', isStale);
-      $('headerProgressLabel').textContent = isStale
-        ? `⚠ Stalled ${prog.done}/${prog.total}`
-        : `Scraping ${prog.done}/${prog.total}`;
-      $('headerProgressFill').style.width = `${pct}%`;
-      $('headerProgressPct').textContent = `${pct}%`;
+      strip.style.display = 'flex';
+      strip.classList.toggle('stale', isStale);
+      $('scrapeStripLabel').textContent = isStale
+        ? `⚠ Stalled at ${prog.done}/${prog.total} — consider retrying`
+        : `Scraping ${prog.done}/${prog.total} items`;
+      $('scrapeStripFill').style.width = `${pct}%`;
+      $('scrapeStripPct').textContent = `${pct}%`;
+      const retryBtn = $('scrapeStripRetry');
+      if (retryBtn) retryBtn.style.display = isStale ? 'inline-block' : 'none';
     } else {
-      hpw.style.display = 'none';
+      strip.style.display = 'none';
     }
   }
 
@@ -2137,26 +2130,14 @@ function initColFilterDropdown() {
     renderCfdValues(search, false);
   });
 
-  // AND/OR toggle for numeric filter
-  $('cfdNumLinkBtn')?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const btn = $('cfdNumLinkBtn');
-    const newLink = btn.dataset.link === 'and' ? 'or' : 'and';
-    btn.dataset.link = newLink;
-    btn.textContent = newLink.toUpperCase();
-  });
-
   dd.querySelector('.cfd-ok')?.addEventListener('click', () => {
     if (_cfdCol) {
       // Save numeric filter if column supports it
       if (NUMERIC_COLS.has(_cfdCol)) {
         const op1  = $('cfdNumOp1').value;
         const val1 = $('cfdNumVal1').value.trim();
-        const link = $('cfdNumLinkBtn').dataset.link || 'and';
-        const op2  = $('cfdNumOp2').value;
-        const val2 = $('cfdNumVal2').value.trim();
-        if (val1 || val2) {
-          _colNumFilters[_cfdCol] = { op1, val1, link, op2, val2 };
+        if (val1 !== '') {
+          _colNumFilters[_cfdCol] = { op1, val1 };
         } else {
           delete _colNumFilters[_cfdCol];
         }
@@ -2225,13 +2206,6 @@ function openColFilter(col, btn) {
       const nf = _colNumFilters[col] || {};
       $('cfdNumOp1').value = nf.op1 || '>';
       $('cfdNumVal1').value = nf.val1 ?? '';
-      const linkBtn = $('cfdNumLinkBtn');
-      if (linkBtn) {
-        linkBtn.dataset.link = nf.link || 'and';
-        linkBtn.textContent = (nf.link || 'and').toUpperCase();
-      }
-      $('cfdNumOp2').value = nf.op2 || '';
-      $('cfdNumVal2').value = nf.val2 ?? '';
     } else {
       numSec.style.display = 'none';
     }
@@ -2312,11 +2286,29 @@ async function boot() {
   $('shopListBtn')?.addEventListener('click', () => exportShoppingList(false));
   $('bulkExportBtn')?.addEventListener('click', () => exportShoppingList(true));
 
-  // Header progress dismiss
-  $('headerProgressDismiss')?.addEventListener('click', () => {
+  // Scrape strip dismiss & retry
+  $('scrapeStripDismiss')?.addEventListener('click', () => {
     _progressDismissed = true;
-    const hpw = $('headerProgressWrap');
-    if (hpw) hpw.style.display = 'none';
+    const strip = $('scrapeStrip');
+    if (strip) strip.style.display = 'none';
+  });
+  $('scrapeStripRetry')?.addEventListener('click', () => {
+    _progressDismissed = false;
+    triggerRefresh();
+  });
+
+  // Store banner clicks → show that store's total column
+  $('wwCard')?.addEventListener('click', () => {
+    _colVisibility.ww_total    = true;
+    _colVisibility.coles_total = false;
+    saveColVisibility();
+    if (_lastData) renderPage(_lastData);
+  });
+  $('colesCard')?.addEventListener('click', () => {
+    _colVisibility.coles_total = true;
+    _colVisibility.ww_total    = false;
+    saveColVisibility();
+    if (_lastData) renderPage(_lastData);
   });
 
   // More menu dropdown

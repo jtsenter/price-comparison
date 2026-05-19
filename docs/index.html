@@ -52,19 +52,21 @@
       <button class="btn btn-ghost" id="shopListBtn">
         🛒 Shopping List
       </button>
-      <div id="headerProgressWrap" class="header-progress-wrap" style="display:none">
-        <span id="headerProgressLabel" class="header-progress-label">Scraping…</span>
-        <div class="header-progress-track">
-          <div class="header-progress-fill" id="headerProgressFill" style="width:0%"></div>
-        </div>
-        <span id="headerProgressPct" class="header-progress-pct">0%</span>
-        <button id="headerProgressDismiss" class="header-progress-dismiss" title="Dismiss">✕</button>
-      </div>
       <button class="btn btn-primary" id="refreshBtn">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
         Update Prices
       </button>
     </div>
+  </div>
+  <!-- Scrape progress strip — full-width row below the main header bar -->
+  <div id="scrapeStrip" class="scrape-strip" style="display:none">
+    <span id="scrapeStripLabel" class="scrape-strip-label">Scraping…</span>
+    <div class="scrape-strip-track">
+      <div class="scrape-strip-fill" id="scrapeStripFill" style="width:0%"></div>
+    </div>
+    <span id="scrapeStripPct" class="scrape-strip-pct">0%</span>
+    <button id="scrapeStripRetry" class="scrape-strip-retry" style="display:none" title="Trigger a new scrape run">↺ Retry</button>
+    <button id="scrapeStripDismiss" class="scrape-strip-dismiss" title="Dismiss">✕</button>
   </div>
 </header>
 
@@ -313,21 +315,6 @@
         <option value="≠">≠</option>
       </select>
       <input class="cfd-num-val" id="cfdNumVal1" type="number" placeholder="Value" step="any">
-    </div>
-    <div class="cfd-num-link-row">
-      <button class="cfd-num-link-btn" id="cfdNumLinkBtn" data-link="and">AND</button>
-    </div>
-    <div class="cfd-num-row">
-      <select class="cfd-num-op" id="cfdNumOp2">
-        <option value="">(none)</option>
-        <option value=">">&gt;</option>
-        <option value="<">&lt;</option>
-        <option value=">=">&gt;=</option>
-        <option value="<=">&lt;=</option>
-        <option value="=">=</option>
-        <option value="≠">≠</option>
-      </select>
-      <input class="cfd-num-val" id="cfdNumVal2" type="number" placeholder="Value" step="any">
     </div>
     <div class="cfd-sep" style="margin:6px 0 0"></div>
   </div>
