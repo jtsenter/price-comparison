@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-19T01:14:30.802421+00:00",
+  "last_updated": "2026-05-19T01:14:39.360001+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1691,20 +1691,250 @@
           "retailer": "coles"
         }
       ]
+    },
+    {
+      "list_item": "Philadelphia Original Cream Cheese Portions Snacks",
+      "last_scraped": "2026-05-19T01:14:34.831889+00:00",
+      "trip_count": 10,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 4.0
+        },
+        {
+          "date": "2025-05-22",
+          "price": 4.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.0
+        },
+        {
+          "date": "2025-06-21",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-23",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 4.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 4.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Philadelphia Original Cream Cheese Portions Snacks",
+        "price": 4.0,
+        "unit_price": 26.67,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/221027/philadelphia-original-cream-cheese-portions-snacks",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/221027.jpg"
+      },
+      "coles": {
+        "name": "Philadelphia Portions Cream Cheese Original Spread | 150g",
+        "price": 4.0,
+        "unit_price": 4.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/philadelphia-portions-cream-cheese-original-spread-150g-5432035",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5432035.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Philadelphia Portions Cream Cheese Original Spread | 150g",
+          "price": 4.0,
+          "unit_price": 4.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-portions-cream-cheese-original-spread-150g-5432035",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5432035.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Philadelphia Portions Cream Cheese Light Spread | 150g",
+          "price": 4.0,
+          "unit_price": 4.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-portions-cream-cheese-light-spread-150g-5432057",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5432057.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Philadelphia Original Cream Cheese Block | 250g",
+          "price": 5.7,
+          "unit_price": 5.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-original-cream-cheese-block-250g-192502",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F192502.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Pringles Sour Cream & Onion Potato Chips",
+      "last_scraped": "2026-05-19T01:14:35.279654+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 2.75
+        },
+        {
+          "date": "2025-03-27",
+          "price": 5.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 3.3
+        },
+        {
+          "date": "2026-04-29",
+          "price": 2.75
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Pringles Sour Cream & Onion Potato Chips",
+        "price": 5.5,
+        "unit_price": 4.1,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/479502/pringles-sour-cream-onion-potato-chips",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/479502.jpg"
+      },
+      "coles": {
+        "name": "Pringles Potato Chips Sour Cream & Onion | 134g",
+        "price": 4.0,
+        "unit_price": 2.99,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-134g-2784058",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2784058.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.5,
+      "alternatives": [
+        {
+          "name": "Pringles Potato Chips Sour Cream & Onion | 134g",
+          "price": 4.0,
+          "unit_price": 2.99,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-134g-2784058",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2784058.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Pringles Potato Chips Sour Cream & Onion | 53g",
+          "price": 2.0,
+          "unit_price": 3.77,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-53g-2784138",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2784138.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ]
+    },
+    {
+      "list_item": "Schweppes Orange Mango Natural Mineral Water Bottle",
+      "last_scraped": "2026-05-19T01:14:39.355961+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 3.0
+        },
+        {
+          "date": "2025-02-28",
+          "price": 1.8
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.8
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.8
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.8
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 1.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Schweppes Orange Mango Natural Mineral Water Bottle",
+        "price": 1.8,
+        "unit_price": 1.64,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/634284/schweppes-orange-mango-natural-mineral-water-bottle",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634284.jpg"
+      },
+      "coles": {
+        "name": "Schweppes Orange Mango Natural Mineral Water Bottle | 1.1L",
+        "price": 1.8,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/schweppes-orange-mango-natural-mineral-water-bottle-1.1l-3014930",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3014930.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": []
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 72.38,
-    "total_coles": 77.3,
+    "total_woolworths": 83.68,
+    "total_coles": 87.1,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 4.92,
-    "items_compared": 18,
+    "total_saving": 3.42,
+    "items_compared": 21,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 18,
+    "done": 21,
     "total": 211
   }
 }
