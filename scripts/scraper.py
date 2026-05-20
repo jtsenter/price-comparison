@@ -654,7 +654,16 @@ async def _scrape_single_item(
                     # WW blocks direct page access from GHA — fall back to name search
                     print(f"  WW pinned URL failed, falling back to name search")
                     ww_results = await search_with_retry(search_woolworths, ww_page, item)
-                    _skip_picker_ww = False
+                    # Prefer the result matching the stockcode in the pinned URL (avoids
+                    # wrong-size matches when the item name has no size info)
+                    _sc_m = re.search(r'/productdetails/(\d+)/', pinned_ww)
+                    if _sc_m:
+                        _sc = _sc_m.group(1)
+                        _sc_hit = next((r for r in ww_results if _sc in r.get('url', '')), None)
+                        if _sc_hit:
+                            print(f"  WW: matched by stockcode {_sc}")
+                            ww_results = [_sc_hit]
+                            _skip_picker_ww = True
             else:
                 ww_results = await search_with_retry(search_woolworths, ww_page, item)
             if pinned_co:
