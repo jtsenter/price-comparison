@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T06:15:44.464983+00:00",
+  "last_updated": "2026-05-20T06:15:52.589831+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9022,7 +9022,7 @@
     },
     {
       "list_item": "Woolworths Cous Cous",
-      "last_scraped": "2026-05-20T05:20:03.475730+00:00",
+      "last_scraped": "2026-05-20T06:15:46.080270+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -9058,7 +9058,7 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.4,
@@ -9066,7 +9066,7 @@
     },
     {
       "list_item": "Woolworths Extra Virgin Olive Oil Spray",
-      "last_scraped": "2026-05-20T05:20:04.122823+00:00",
+      "last_scraped": "2026-05-20T06:15:47.509681+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9106,15 +9106,64 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 5.7,
       "alternatives": [],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.2,
       "per_100_coles": 1.8,
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets",
+      "last_scraped": "2026-05-20T06:15:49.198051+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2026-02-11",
+          "price": 34.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 34.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 30.0
+        },
+        {
+          "date": "2026-04-13",
+          "price": 30.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets",
+        "price": 38.0,
+        "unit_price": 38.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/95171/woolworths-fresh-tasmanian-atlantic-skin-on-salmon-fillets",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/095171.jpg"
+      },
+      "coles": {
+        "name": "Coles Tasmanian Salmon Portion Skin On | 200g",
+        "price": 10.0,
+        "unit_price": 10.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portion-skin-on-200g-6400861",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6400861.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 28.0,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 3.8,
+      "per_100_coles": 5.0,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Green Cabbage Quarter",
-      "last_scraped": "2026-05-20T05:20:09.977627+00:00",
+      "last_scraped": "2026-05-20T06:15:50.433794+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9161,85 +9210,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets",
-      "last_scraped": "2026-05-20T05:20:13.446159+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2026-02-11",
-          "price": 34.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 34.0
-        },
-        {
-          "date": "2026-04-02",
-          "price": 30.0
-        },
-        {
-          "date": "2026-04-13",
-          "price": 30.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets",
-        "price": 38.0,
-        "unit_price": 38.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/95171/woolworths-fresh-tasmanian-atlantic-skin-on-salmon-fillets",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/095171.jpg"
-      },
-      "coles": {
-        "name": "Coles Tasmanian Salmon Portion Skin On | 200g",
-        "price": 10.0,
-        "unit_price": 10.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portion-skin-on-200g-6400861",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6400861.jpg&w=640&q=90",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 28.0,
-      "alternatives": [
-        {
-          "name": "Coles Tasmanian Salmon Portion Skin On | 200g",
-          "price": 10.0,
-          "unit_price": 10.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portion-skin-on-200g-6400861",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6400861.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Tasmanian Salmon Portions Skin On 4 Pack | 460g",
-          "price": 19.5,
-          "unit_price": 19.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portions-skin-on-4-pack-460g-1546564",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1546564.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Tasmanian Salmon Portions Skin Off 4 Pack | 460g",
-          "price": 21.5,
-          "unit_price": 21.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portions-skin-off-4-pack-460g-3613822",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3613822.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 3.8,
-      "per_100_coles": 5.0,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Lamb Mince",
-      "last_scraped": "2026-05-20T05:20:15.163141+00:00",
+      "last_scraped": "2026-05-20T06:15:52.583669+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -9275,36 +9247,8 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 1.0,
-      "alternatives": [
-        {
-          "name": "Coles Lamb Leg Steak | 270g",
-          "price": 9.0,
-          "unit_price": 9.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-lamb-leg-steak-270g-3958405",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3958405.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Lamb Leg Diced | 450g",
-          "price": 13.0,
-          "unit_price": 13.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-lamb-leg-diced-450g-3580600",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3580600.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles 3 Star Lamb Mince | 500g",
-          "price": 8.0,
-          "unit_price": 16.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8850461.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.8,
       "per_100_coles": 1.6,
@@ -12848,7 +12792,7 @@
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 140,
+    "done": 145,
     "total": 211
   }
 }
