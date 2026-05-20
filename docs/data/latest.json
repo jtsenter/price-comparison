@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T23:49:45.564753+00:00",
+  "last_updated": "2026-05-20T23:50:05.362225+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1035,7 +1035,7 @@
     },
     {
       "list_item": "Hass Avocado",
-      "last_scraped": "2026-05-20T11:02:12.516983+00:00",
+      "last_scraped": "2026-05-20T23:49:49.971368+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1086,7 +1086,7 @@
         "unit_price": 2.2,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-hass-avocados-1-each-5900530",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5900530.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5900530.jpg"
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
@@ -1099,7 +1099,7 @@
     },
     {
       "list_item": "Fresh Cauliflower Half",
-      "last_scraped": "2026-05-20T11:02:15.845828+00:00",
+      "last_scraped": "2026-05-20T23:49:53.259486+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -1193,17 +1193,17 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135568.jpg"
       },
       "coles": {
-        "name": "Coles Cauliflower Half | 1 each",
+        "name": "Cauliflower Half",
         "price": 3.9,
-        "unit_price": null,
-        "unit": null,
+        "unit_price": 3.9,
+        "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-cauliflower-half-1-each-4601320",
-        "image_url": "https://shop.coles.com.au/wcsstore/Coles-CAS/images/4/6/0/4601320-th.jpg"
+        "image_url": "/4/4601320.jpg"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.95,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -1211,7 +1211,7 @@
     },
     {
       "list_item": "Kale Fresh Bunch",
-      "last_scraped": "2026-05-20T11:02:19.563354+00:00",
+      "last_scraped": "2026-05-20T23:49:57.334701+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1276,7 +1276,7 @@
     },
     {
       "list_item": "Lebanese Cucumbers",
-      "last_scraped": "2026-05-20T11:02:23.665561+00:00",
+      "last_scraped": "2026-05-20T23:50:01.760186+00:00",
       "trip_count": 27,
       "price_history": [
         {
@@ -1412,6 +1412,76 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.99,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Lurpak Butter Spreadable",
+      "last_scraped": "2026-05-20T23:50:05.359321+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 7.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 8.2
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.2
+        },
+        {
+          "date": "2025-07-10",
+          "price": 8.2
+        },
+        {
+          "date": "2026-02-03",
+          "price": 9.0
+        },
+        {
+          "date": "2026-04-29",
+          "price": 8.3
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.3
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Lurpak Butter Spreadable",
+        "price": 8.3,
+        "unit_price": 2.08,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/87702/lurpak-butter-spreadable",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087702.jpg"
+      },
+      "coles": {
+        "name": "Lurpak Butter Spreadable Slightly Salted | 400g",
+        "price": 8.3,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/lurpak-butter-spreadable-slightly-salted-400g-5376659",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5376659.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Lurpak Plant Based Spreadable",
+          "price": 4.9,
+          "unit_price": 1.23,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/6026771/lurpak-plant-based-spreadable",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6026771.jpg",
+          "retailer": "woolworths"
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.08,
+      "per_100_coles": 2.08,
       "per_100_unit": "100g"
     },
     {
@@ -1561,76 +1631,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.5,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Lurpak Butter Spreadable",
-      "last_scraped": "2026-05-20T11:02:28.648499+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 7.5
-        },
-        {
-          "date": "2025-03-11",
-          "price": 8.2
-        },
-        {
-          "date": "2025-04-14",
-          "price": 8.2
-        },
-        {
-          "date": "2025-07-10",
-          "price": 8.2
-        },
-        {
-          "date": "2026-02-03",
-          "price": 9.0
-        },
-        {
-          "date": "2026-04-29",
-          "price": 8.3
-        },
-        {
-          "date": "2026-05-06",
-          "price": 8.3
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Lurpak Butter Spreadable",
-        "price": 8.3,
-        "unit_price": 2.08,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/87702/lurpak-butter-spreadable",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087702.jpg"
-      },
-      "coles": {
-        "name": "Lurpak Butter Spreadable Slightly Salted | 400g",
-        "price": 8.3,
-        "unit_price": null,
-        "unit": null,
-        "url": "https://www.coles.com.au/product/lurpak-butter-spreadable-slightly-salted-400g-5376659",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5376659.jpg&w=640&q=90"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [
-        {
-          "name": "Lurpak Plant Based Spreadable",
-          "price": 4.9,
-          "unit_price": 1.23,
-          "unit": "100G",
-          "url": "https://www.woolworths.com.au/shop/productdetails/6026771/lurpak-plant-based-spreadable",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6026771.jpg",
-          "retailer": "woolworths"
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.08,
-      "per_100_coles": 2.08,
       "per_100_unit": "100g"
     },
     {
@@ -12174,7 +12174,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 10,
+    "done": 15,
     "total": 211
   }
 }
