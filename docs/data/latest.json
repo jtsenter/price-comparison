@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T23:59:05.520096+00:00",
+  "last_updated": "2026-05-20T23:59:17.621592+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11668,7 +11668,7 @@
     },
     {
       "list_item": "Woolworths Butternut Pumpkin Cut",
-      "last_scraped": "2026-05-20T11:09:12.288598+00:00",
+      "last_scraped": "2026-05-20T23:59:05.963486+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11708,7 +11708,7 @@
     },
     {
       "list_item": "Woolworths Chickpeas",
-      "last_scraped": "2026-05-20T11:09:15.062039+00:00",
+      "last_scraped": "2026-05-20T23:59:09.922718+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11741,7 +11741,7 @@
     },
     {
       "list_item": "Woolworths Corn Sweet Kernels",
-      "last_scraped": "2026-05-20T11:09:15.249780+00:00",
+      "last_scraped": "2026-05-20T23:59:11.728648+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11782,7 +11782,7 @@
     },
     {
       "list_item": "Woolworths Greek Style Fetta",
-      "last_scraped": "2026-05-20T11:09:18.326973+00:00",
+      "last_scraped": "2026-05-20T23:59:13.793724+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11819,6 +11819,46 @@
       "size_warning": false,
       "per_100_ww": 1.6,
       "per_100_coles": 3.38,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Mixed Herbs Dried",
+      "last_scraped": "2026-05-20T23:59:17.609164+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-17",
+          "price": 2.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 2.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Mixed Herbs Dried",
+        "price": 2.0,
+        "unit_price": 1.67,
+        "unit": "10G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/251120/woolworths-mixed-herbs-dried",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251120.jpg"
+      },
+      "coles": {
+        "name": "Coles Mixed Herbs | 13g",
+        "price": 2.15,
+        "unit_price": 2.15,
+        "unit": "10g",
+        "url": "https://www.coles.com.au/product/coles-mixed-herbs-13g-8987375",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8987375.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.15,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 16.7,
+      "per_100_coles": 16.54,
       "per_100_unit": "100g"
     },
     {
@@ -11859,46 +11899,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Mixed Herbs Dried",
-      "last_scraped": "2026-05-20T11:09:21.610757+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-03-17",
-          "price": 2.0
-        },
-        {
-          "date": "2026-02-03",
-          "price": 2.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Mixed Herbs Dried",
-        "price": 2.0,
-        "unit_price": 1.67,
-        "unit": "10G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/251120/woolworths-mixed-herbs-dried",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251120.jpg"
-      },
-      "coles": {
-        "name": "Coles Mixed Herbs | 13g",
-        "price": 2.15,
-        "unit_price": 2.15,
-        "unit": "10g",
-        "url": "https://www.coles.com.au/product/coles-mixed-herbs-13g-8987375",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8987375.jpg&w=640&q=90"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.15,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 16.7,
-      "per_100_coles": 16.54,
       "per_100_unit": "100g"
     },
     {
@@ -12149,7 +12149,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 200,
+    "done": 205,
     "total": 211
   }
 }
