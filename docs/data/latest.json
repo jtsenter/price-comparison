@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T03:12:08.646689+00:00",
+  "last_updated": "2026-05-20T03:12:22.270495+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5701,7 +5701,7 @@
     },
     {
       "list_item": "Woolworths Sour Cream",
-      "last_scraped": "2026-05-20T02:43:35.726947+00:00",
+      "last_scraped": "2026-05-20T03:12:11.781039+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5756,17 +5756,7 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [
-        {
-          "name": "Woolworths Thickened Cream",
-          "price": 5.2,
-          "unit_price": 0.87,
-          "unit": "100ML",
-          "url": "https://www.woolworths.com.au/shop/productdetails/48720/woolworths-thickened-cream",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/048720.jpg",
-          "retailer": "woolworths"
-        }
-      ],
+      "alternatives": [],
       "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.1,
@@ -5775,7 +5765,7 @@
     },
     {
       "list_item": "Woolworths Spring Water Bottles",
-      "last_scraped": "2026-05-20T02:43:39.499291+00:00",
+      "last_scraped": "2026-05-20T03:12:13.206810+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5849,7 +5839,7 @@
     },
     {
       "list_item": "Woolworths Washed Potato Bag",
-      "last_scraped": "2026-05-20T02:43:42.585886+00:00",
+      "last_scraped": "2026-05-20T03:12:17.758222+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -5891,25 +5881,25 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/262783.jpg"
       },
       "coles": {
-        "name": "Coles Organic Washed Potatoes 1kg | 1 Each",
-        "price": 6.5,
-        "unit_price": 6.5,
+        "name": "Coles Baby Washed Potatoes | 1Kg",
+        "price": 4.8,
+        "unit_price": 4.8,
         "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-organic-washed-potatoes-1kg-1-each-6391046",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6391046.jpg&w=640&q=90"
+        "url": "https://www.coles.com.au/product/coles-baby-washed-potatoes-1kg-2488485",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2488485.jpg&w=640&q=90"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 1.5,
+      "saving_per_item": 3.2,
       "alternatives": [],
       "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.4,
-      "per_100_coles": 0.65,
+      "per_100_coles": 0.48,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Whole Milk Full Cream Milk",
-      "last_scraped": "2026-05-20T02:43:43.645193+00:00",
+      "last_scraped": "2026-05-20T03:12:18.005757+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5984,7 +5974,7 @@
     },
     {
       "list_item": "Annalisa Chickpeas",
-      "last_scraped": "2026-05-20T02:43:47.606229+00:00",
+      "last_scraped": "2026-05-20T03:12:22.264894+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -14177,15 +14167,15 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 1345.39,
-    "total_coles": 1329.24,
+    "total_coles": 1327.54,
     "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 16.15,
+    "total_saving": 17.85,
     "items_compared": 211,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 60,
+    "done": 65,
     "total": 211
   }
 }
