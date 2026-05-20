@@ -67,10 +67,14 @@ _STRIP_LEADING = [
 ]
 
 _STRIP_INLINE = re.compile(
-    r'\b(organic|free[- ]range|australian|premium|classic|original|'
+    r'\b(free[- ]range|australian|premium|classic|original|'
     r'traditional|natural|value|economy|budget|finest|everyday)\b',
     re.IGNORECASE,
 )
+
+# Words that must match between query and result — organic vs non-organic is a
+# fundamentally different product, so penalise heavily if one has it and the other doesn't.
+_QUALITY_TIER = re.compile(r'\b(organic)\b', re.IGNORECASE)
 
 _STRIP_SIZE = re.compile(
     r'\b\d+(?:\.\d+)?\s*(?:kg|g|ml|l)\b'
@@ -149,6 +153,12 @@ def pick_best_match(query: str, results: list[dict]) -> tuple[dict | None, str]:
         )
         if not form_ok:
             sim *= 0.35
+
+        # Organic/quality-tier mismatch: "Truss Tomatoes" must NOT match "Organic Truss Tomatoes"
+        q_organic = bool(_QUALITY_TIER.search(query))
+        r_organic = bool(_QUALITY_TIER.search(r['name']))
+        if q_organic != r_organic:
+            sim *= 0.4
 
         # Size penalty only for very extreme mismatches
         r_size = m['size']

@@ -662,6 +662,21 @@ async def _scrape_single_item(
         if coles_match:
             print(f"    Coles match ({co_conf}): {coles_match['name']}")
 
+    # Carry forward existing store data when the search returned nothing.
+    # Prevents wiping prices on temporary Coles/WW failures or blocks.
+    if coles_match is None and not _skip_picker_co:
+        existing_co = existing_item.get("coles")
+        if existing_co and existing_co.get("price") is not None:
+            coles_match = existing_co
+            co_conf = "carried"
+            print(f"    Coles: no result, keeping existing ${existing_co.get('price')} ({existing_co.get('name','?')})")
+    if ww_match is None and not _skip_picker_ww:
+        existing_ww = existing_item.get("woolworths")
+        if existing_ww and existing_ww.get("price") is not None:
+            ww_match = existing_ww
+            ww_conf = "carried"
+            print(f"    WW: no result, keeping existing ${existing_ww.get('price')} ({existing_ww.get('name','?')})")
+
     if not ww_match and not coles_match:
         return None, True
 
