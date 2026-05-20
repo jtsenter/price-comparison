@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T11:02:58.585980+00:00",
+  "last_updated": "2026-05-20T11:03:16.240246+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2517,7 +2517,7 @@
     },
     {
       "list_item": "The Odd Bunch Zucchini Prepacked",
-      "last_scraped": "2026-05-20T06:33:26.424641+00:00",
+      "last_scraped": "2026-05-20T11:03:09.062022+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -2621,7 +2621,7 @@
       "cheaper_store": "coles",
       "saving_per_item": 0.85,
       "alternatives": [],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.47,
       "per_100_coles": 0.53,
@@ -2629,7 +2629,7 @@
     },
     {
       "list_item": "Truss Tomatoes",
-      "last_scraped": "2026-05-20T06:33:27.209693+00:00",
+      "last_scraped": "2026-05-20T11:03:09.971129+00:00",
       "trip_count": 35,
       "price_history": [
         {
@@ -2793,7 +2793,7 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.85,
@@ -2801,7 +2801,7 @@
     },
     {
       "list_item": "Weet-Bix Little Kids Breakfast Cereal",
-      "last_scraped": "2026-05-20T06:33:30.619911+00:00",
+      "last_scraped": "2026-05-20T11:03:13.081824+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -2853,7 +2853,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 1.0,
       "alternatives": [],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.0,
       "per_100_coles": 1.25,
@@ -2861,7 +2861,7 @@
     },
     {
       "list_item": "Woolworths 12 Extra Large Free Range Eggs",
-      "last_scraped": "2026-05-20T06:33:33.940169+00:00",
+      "last_scraped": "2026-05-20T11:03:16.236831+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -2913,35 +2913,7 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": null,
-      "alternatives": [
-        {
-          "name": "Coles Free Range Eggs 12 Pack | 600g",
-          "price": 6.2,
-          "unit_price": 6.2,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-free-range-eggs-12-pack-600g-9453456",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9453456.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Free Range Eggs 12 Pack | 700g",
-          "price": 6.5,
-          "unit_price": 6.5,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-free-range-eggs-12-pack-700g-9453478",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9453478.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Jumbo Free Range Eggs 12 Pack | 800g",
-          "price": 7.25,
-          "unit_price": 7.25,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-jumbo-free-range-eggs-12-pack-800g-1034234",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1034234.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "match_confidence": "none",
       "size_warning": false,
       "per_100_ww": null,
@@ -13179,7 +13151,8 @@
     }
   ],
   "not_found_items": [
-    "The Odd Bunch Mango"
+    "The Odd Bunch Mango",
+    "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
     "total_woolworths": 1113.27,
@@ -13188,10 +13161,10 @@
     "ww_data_available": true,
     "total_saving": 175.44,
     "items_compared": 209,
-    "items_not_found": 1
+    "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 30,
+    "done": 35,
     "total": 211
   }
 }
