@@ -104,9 +104,15 @@ async function persistUrlOverridesToRepo(s, overrides) {
   const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
   const getRes = await fetch(path, { headers });
   const shaJson = getRes.ok ? await getRes.json() : {};
-  const putBody = { message: 'Update URL overrides', content: btoa(JSON.stringify(scraperFmt, null, 2) + '\n') };
+  const content = JSON.stringify(scraperFmt, null, 2) + '\n';
+  const encoded = btoa(unescape(encodeURIComponent(content)));
+  const putBody = { message: 'Update URL overrides', content: encoded };
   if (shaJson.sha) putBody.sha = shaJson.sha;
-  await fetch(path, { method: 'PUT', headers, body: JSON.stringify(putBody) });
+  const putRes = await fetch(path, { method: 'PUT', headers, body: JSON.stringify(putBody) });
+  if (!putRes.ok) {
+    const msg = await putRes.text().catch(() => putRes.status);
+    throw new Error(`GitHub PUT failed (${putRes.status}): ${msg}`);
+  }
 }
 
 // ── Exclusions (price range manager) ────────────────────────────────────────
@@ -672,7 +678,9 @@ function initEditModal() {
     const s = loadSettings();
     if (s.user && s.repo && s.token) {
       // Always sync all URL overrides to repo so the scraper never misses a pinned URL
-      try { await persistUrlOverridesToRepo(s, overrides); } catch {}
+      try { await persistUrlOverridesToRepo(s, overrides); } catch (e) {
+        alert(`⚠ Could not save URL override to GitHub — check your token.\n${e.message}`);
+      }
       // If a URL was added/changed, trigger an immediate single-item scrape
       if (urlChanged && (newWwUrl || newCoUrl)) {
         triggerItemRefresh(item.list_item, null, { wwUrl: newWwUrl, colesUrl: newCoUrl });
@@ -688,7 +696,9 @@ function initEditModal() {
     saveOverrides(overrides);
     const s = loadSettings();
     if (s.user && s.repo && s.token) {
-      try { await persistUrlOverridesToRepo(s, overrides); } catch {}
+      try { await persistUrlOverridesToRepo(s, overrides); } catch (e) {
+        alert(`⚠ Could not remove URL override from GitHub — check your token.\n${e.message}`);
+      }
     }
     close();
     if (_lastData) renderPage(_lastData);
