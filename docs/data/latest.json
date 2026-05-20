@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T05:14:56.270455+00:00",
+  "last_updated": "2026-05-20T05:15:12.595372+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4137,7 +4137,7 @@
     },
     {
       "list_item": "Woolworths Cos Hearts Lettuce",
-      "last_scraped": "2026-05-20T04:53:31.480662+00:00",
+      "last_scraped": "2026-05-20T05:14:58.117198+00:00",
       "trip_count": 22,
       "price_history": [
         {
@@ -4257,7 +4257,7 @@
     },
     {
       "list_item": "Woolworths Dill Fresh Herb",
-      "last_scraped": "2026-05-20T04:53:35.044720+00:00",
+      "last_scraped": "2026-05-20T05:15:02.182799+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -4317,7 +4317,7 @@
     },
     {
       "list_item": "Woolworths Dreamy Choc Chip Cookies",
-      "last_scraped": "2026-05-20T04:53:37.183832+00:00",
+      "last_scraped": "2026-05-20T05:15:05.023069+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4373,7 +4373,7 @@
       "cheaper_store": "coles",
       "saving_per_item": 0.3,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.6,
@@ -4381,7 +4381,7 @@
     },
     {
       "list_item": "Woolworths Extra Virgin Spanish Olive Oil",
-      "last_scraped": "2026-05-20T04:53:39.030139+00:00",
+      "last_scraped": "2026-05-20T05:15:07.208960+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -4432,12 +4432,94 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 5.0,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "La Espanola Extra Virgin Olive Oil | 4L",
+          "price": 45.0,
+          "unit_price": 1.13,
+          "unit": "100mL",
+          "url": "https://www.coles.com.au/product/la-espanola-extra-virgin-olive-oil-4l-6542902",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6542902.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.4,
       "per_100_coles": 1.8,
       "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Woolworths Frozen Meat Pies",
+      "last_scraped": "2026-05-20T05:15:12.588983+00:00",
+      "trip_count": 10,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 5.5
+        },
+        {
+          "date": "2024-12-19",
+          "price": 5.5
+        },
+        {
+          "date": "2025-02-02",
+          "price": 5.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 5.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 5.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.5
+        },
+        {
+          "date": "2025-05-29",
+          "price": 5.5
+        },
+        {
+          "date": "2025-06-21",
+          "price": 5.5
+        },
+        {
+          "date": "2025-07-03",
+          "price": 5.5
+        },
+        {
+          "date": "2025-07-26",
+          "price": 5.5
+        }
+      ],
+      "category": "Frozen Foods",
+      "woolworths": {
+        "name": "Woolworths Frozen Meat Pies",
+        "price": 6.6,
+        "unit_price": 0.94,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/779251/woolworths-frozen-meat-pies",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/779251.jpg"
+      },
+      "coles": {
+        "name": "Coles Frozen Meat Pies 4 Pack | 700g",
+        "price": 6.6,
+        "unit_price": 6.6,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-frozen-meat-pies-4-pack-700g-5181729",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5181729.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.94,
+      "per_100_coles": 0.94,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Fresh Continental Parsley Bunch",
@@ -4513,78 +4595,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Frozen Meat Pies",
-      "last_scraped": "2026-05-20T04:53:42.610536+00:00",
-      "trip_count": 10,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 5.5
-        },
-        {
-          "date": "2024-12-19",
-          "price": 5.5
-        },
-        {
-          "date": "2025-02-02",
-          "price": 5.5
-        },
-        {
-          "date": "2025-03-17",
-          "price": 5.5
-        },
-        {
-          "date": "2025-04-05",
-          "price": 5.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 5.5
-        },
-        {
-          "date": "2025-05-29",
-          "price": 5.5
-        },
-        {
-          "date": "2025-06-21",
-          "price": 5.5
-        },
-        {
-          "date": "2025-07-03",
-          "price": 5.5
-        },
-        {
-          "date": "2025-07-26",
-          "price": 5.5
-        }
-      ],
-      "category": "Frozen Foods",
-      "woolworths": {
-        "name": "Woolworths Frozen Meat Pies",
-        "price": 6.6,
-        "unit_price": 0.94,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/779251/woolworths-frozen-meat-pies",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/779251.jpg"
-      },
-      "coles": {
-        "name": "Coles Frozen Meat Pies 4 Pack | 700g",
-        "price": 6.6,
-        "unit_price": 6.6,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-frozen-meat-pies-4-pack-700g-5181729",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5181729.jpg&w=640&q=90"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.94,
-      "per_100_coles": 0.94,
       "per_100_unit": "100g"
     },
     {
@@ -12159,7 +12169,7 @@
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 45,
+    "done": 50,
     "total": 211
   }
 }
