@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T02:34:55.086158+00:00",
+  "last_updated": "2026-05-20T02:37:02.263913+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -780,7 +780,7 @@
     },
     {
       "list_item": "Capsicum Yellow",
-      "last_scraped": "2026-05-19T12:16:05.473747+00:00",
+      "last_scraped": "2026-05-20T02:37:01.938918+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -828,11 +828,11 @@
       "woolworths": null,
       "coles": {
         "name": "Coles Yellow Capsicum | approx. 220g",
-        "price": 2.4,
-        "unit_price": 10.9,
-        "unit": "1kg",
+        "price": 3.7,
+        "unit_price": null,
+        "unit": null,
         "url": "https://www.coles.com.au/product/coles-yellow-capsicum-approx.-220g-7215355",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7215355.jpg&w=640&q=90"
+        "image_url": "https://shop.coles.com.au/wcsstore/Coles-CAS/images/7/2/1/7215355-zm.jpg"
       },
       "cheaper_store": "coles",
       "saving_per_item": null,
@@ -840,7 +840,7 @@
       "match_confidence": "none",
       "size_warning": false,
       "per_100_ww": null,
-      "per_100_coles": 1.09,
+      "per_100_coles": 1.68,
       "per_100_unit": "100g"
     },
     {
@@ -13207,10 +13207,10 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 1234.52,
-    "total_coles": 1255.98,
+    "total_coles": 1257.28,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 21.46,
+    "total_saving": 22.76,
     "items_compared": 195,
     "items_not_found": 0
   }
