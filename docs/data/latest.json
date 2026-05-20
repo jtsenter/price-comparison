@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T11:02:47.607607+00:00",
+  "last_updated": "2026-05-20T11:02:58.585980+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2229,7 +2229,7 @@
     },
     {
       "list_item": "The Odd Bunch Capsicum Prepacked",
-      "last_scraped": "2026-05-20T06:33:02.843553+00:00",
+      "last_scraped": "2026-05-20T11:02:50.435427+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -2312,18 +2312,8 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 2.6,
-      "alternatives": [
-        {
-          "name": "Coles Deli Roast Capsicum Strips | 130g",
-          "price": 3.75,
-          "unit_price": 3.75,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-deli-roast-capsicum-strips-130g-5651120",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5651120.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.63,
       "per_100_coles": 1.78,
@@ -2331,7 +2321,7 @@
     },
     {
       "list_item": "The Odd Bunch Carrots",
-      "last_scraped": "2026-05-20T06:33:04.692463+00:00",
+      "last_scraped": "2026-05-20T11:02:51.215387+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -2395,7 +2385,7 @@
     },
     {
       "list_item": "The Odd Bunch Lebanese Cucumber Punnet",
-      "last_scraped": "2026-05-20T06:33:09.696111+00:00",
+      "last_scraped": "2026-05-20T11:02:54.153790+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -2450,18 +2440,8 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 3.52,
-      "alternatives": [
-        {
-          "name": "Kvuzat Yavne Pickled Cucumbers In Brine | 540g",
-          "price": 6.0,
-          "unit_price": 6.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/kvuzat-yavne-pickled-cucumbers-in-brine-540g-7878534",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7878534.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.68,
       "per_100_coles": 0.99,
@@ -2469,7 +2449,7 @@
     },
     {
       "list_item": "The Odd Bunch Lemon Prepacked",
-      "last_scraped": "2026-05-20T06:33:09.910641+00:00",
+      "last_scraped": "2026-05-20T11:02:55.387732+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -2528,17 +2508,7 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 4.0,
-      "alternatives": [
-        {
-          "name": "Strepsils Extra Honey And Lemon Fast Numbing Sore Throat Pain Relief Wi ... 1 Pack",
-          "price": 7.0,
-          "unit_price": 0.44,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/strepsils-extra-honey-and-lemon-fast-numbing-sore-throat-pain-relief-with-anaesthetic-16-lozenges-1-pack-3417981",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3417981.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.7,
@@ -13208,7 +13178,9 @@
       "per_100_unit": "100g"
     }
   ],
-  "not_found_items": [],
+  "not_found_items": [
+    "The Odd Bunch Mango"
+  ],
   "summary": {
     "total_woolworths": 1113.27,
     "total_coles": 1288.71,
@@ -13216,10 +13188,10 @@
     "ww_data_available": true,
     "total_saving": 175.44,
     "items_compared": 209,
-    "items_not_found": 0
+    "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 25,
+    "done": 30,
     "total": 211
   }
 }
