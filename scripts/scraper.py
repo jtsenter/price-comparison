@@ -622,6 +622,9 @@ async def _scrape_single_item(
     # Tracks whether each side was fetched directly (skip name-based picker)
     _skip_picker_ww = False
     _skip_picker_co = False
+    # Set when a pinned WW URL existed but its fetch failed; ensures carry-forward
+    # fires even if fallback searches return non-empty-but-unmatched results.
+    _had_pinned_ww = False
 
     if ww_url or coles_url:
         # Explicit URL refresh (workflow dispatch) — use the URL; no name-search fallback
@@ -667,6 +670,7 @@ async def _scrape_single_item(
 
         if pinned_ww or pinned_co:
             if pinned_ww:
+                _had_pinned_ww = True
                 _ww = await fetch_ww_by_url(ww_page, pinned_ww)
                 if _ww:
                     ww_results = [_ww]
@@ -760,7 +764,9 @@ async def _scrape_single_item(
             coles_match, co_conf = _carry("coles", "carried", "Coles")
 
     if ww_match is None:
-        if _skip_picker_ww and not ww_results:             # URL was set but fetch failed
+        if _had_pinned_ww:                                 # pinned URL existed → always prefer carry-forward
+            ww_match, ww_conf = _carry("woolworths", "carried", "WW")
+        elif _skip_picker_ww and not ww_results:           # URL was set but fetch failed
             ww_match, ww_conf = _carry("woolworths", "carried", "WW")
         elif not _skip_picker_ww and not ww_results:       # name search returned empty
             ww_match, ww_conf = _carry("woolworths", "carried", "WW")
