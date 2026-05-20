@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T03:32:41.404281+00:00",
+  "last_updated": "2026-05-20T03:32:50.514496+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -13077,8 +13077,48 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Mixed Herbs Dried",
+      "last_scraped": "2026-05-20T03:32:43.870686+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-17",
+          "price": 2.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 2.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Mixed Herbs Dried",
+        "price": 2.0,
+        "unit_price": 1.67,
+        "unit": "10G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/251120/woolworths-mixed-herbs-dried",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251120.jpg"
+      },
+      "coles": {
+        "name": "Coles Mixed Herbs | 13g",
+        "price": 2.15,
+        "unit_price": 2.15,
+        "unit": "10g",
+        "url": "https://www.coles.com.au/product/coles-mixed-herbs-13g-8987375",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8987375.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.15,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 16.7,
+      "per_100_coles": 16.54,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Red Washed Potatoes Bag",
-      "last_scraped": "2026-05-20T02:49:43.874265+00:00",
+      "last_scraped": "2026-05-20T03:32:44.660279+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13110,134 +13150,15 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.42,
       "per_100_coles": 0.42,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Mixed Herbs Dried",
-      "last_scraped": "2026-05-20T02:49:44.962273+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-03-17",
-          "price": 2.0
-        },
-        {
-          "date": "2026-02-03",
-          "price": 2.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Mixed Herbs Dried",
-        "price": 2.0,
-        "unit_price": 1.67,
-        "unit": "10G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/251120/woolworths-mixed-herbs-dried",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251120.jpg"
-      },
-      "coles": {
-        "name": "Coles Mixed Herbs | 13g",
-        "price": 2.15,
-        "unit_price": 2.15,
-        "unit": "10g",
-        "url": "https://www.coles.com.au/product/coles-mixed-herbs-13g-8987375",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8987375.jpg&w=640&q=90"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.15,
-      "alternatives": [
-        {
-          "name": "Coles Mixed Herb Crushed Tomatoes | 400g",
-          "price": 1.3,
-          "unit_price": 1.3,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-mixed-herb-crushed-tomatoes-400g-8675678",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8675678.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 16.7,
-      "per_100_coles": 16.54,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Salmon Tasmanian Atlantic Fillets Skin On",
-      "last_scraped": "2026-05-20T02:49:49.977573+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-04-14",
-          "price": 34.0
-        },
-        {
-          "date": "2025-07-10",
-          "price": 36.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets",
-        "price": 38.0,
-        "unit_price": 38.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/95171/woolworths-fresh-tasmanian-atlantic-skin-on-salmon-fillets",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/095171.jpg"
-      },
-      "coles": {
-        "name": "Coles Tasmanian Salmon Portions Skin On 4 Pack | 460g",
-        "price": 19.5,
-        "unit_price": 19.5,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portions-skin-on-4-pack-460g-1546564",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1546564.jpg&w=640&q=90",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 18.5,
-      "alternatives": [
-        {
-          "name": "Coles Tasmanian Salmon Portion Skin On | 200g",
-          "price": 10.0,
-          "unit_price": 10.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portion-skin-on-200g-6400861",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6400861.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Tasmanian Salmon Portions Skin On 4 Pack | 460g",
-          "price": 19.5,
-          "unit_price": 19.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portions-skin-on-4-pack-460g-1546564",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1546564.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Tasmanian Salmon Portions Skin Off 4 Pack | 460g",
-          "price": 21.5,
-          "unit_price": 21.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portions-skin-off-4-pack-460g-3613822",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3613822.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 3.8,
-      "per_100_coles": 4.24,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Rolled Traditional Oats",
-      "last_scraped": "2026-05-20T02:49:50.004028+00:00",
+      "last_scraped": "2026-05-20T03:32:46.860611+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13269,15 +13190,56 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 1.4,
       "alternatives": [],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.21,
       "per_100_coles": 0.6,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Salmon Tasmanian Atlantic Fillets Skin On",
+      "last_scraped": "2026-05-20T03:32:47.606856+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 34.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 36.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets",
+        "price": 38.0,
+        "unit_price": 38.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/95171/woolworths-fresh-tasmanian-atlantic-skin-on-salmon-fillets",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/095171.jpg"
+      },
+      "coles": {
+        "name": "Coles Tasmanian Salmon Portions Skin On 4 Pack | 460g",
+        "price": 19.5,
+        "unit_price": 19.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portions-skin-on-4-pack-460g-1546564",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1546564.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 18.5,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 3.8,
+      "per_100_coles": 4.24,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Water Chestnuts Sliced",
-      "last_scraped": "2026-05-20T02:49:55.732221+00:00",
+      "last_scraped": "2026-05-20T03:32:50.500041+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13309,36 +13271,8 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.35,
-      "alternatives": [
-        {
-          "name": "Valcom Water Chestnut Slices | 227g",
-          "price": 1.6,
-          "unit_price": 1.6,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/valcom-water-chestnut-slices-227g-5789579",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5789579.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Double Phoenix Whole Water Chestnuts | 567g",
-          "price": 2.2,
-          "unit_price": 2.2,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/double-phoenix-whole-water-chestnuts-567g-1384190",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1384190.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Tick Fresh Water Chestnuts | 400g",
-          "price": 3.8,
-          "unit_price": 3.8,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/tick-fresh-water-chestnuts-400g-3908054",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3908054.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.56,
       "per_100_coles": 0.7,
@@ -13406,7 +13340,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 205,
+    "done": 210,
     "total": 211
   }
 }
