@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T04:52:53.913037+00:00",
+  "last_updated": "2026-05-20T04:53:01.969237+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2134,7 +2134,7 @@
     },
     {
       "list_item": "The Odd Bunch Capsicum Prepacked",
-      "last_scraped": "2026-05-20T03:25:23.802424+00:00",
+      "last_scraped": "2026-05-20T04:52:54.901397+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -2217,18 +2217,8 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 2.6,
-      "alternatives": [
-        {
-          "name": "Coles Deli Roast Capsicum Strips | 130g",
-          "price": 3.75,
-          "unit_price": 3.75,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-deli-roast-capsicum-strips-130g-5651120",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5651120.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.63,
       "per_100_coles": 1.78,
@@ -2236,7 +2226,7 @@
     },
     {
       "list_item": "The Odd Bunch Carrots",
-      "last_scraped": "2026-05-20T03:25:26.122201+00:00",
+      "last_scraped": "2026-05-20T04:52:57.098057+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -2300,7 +2290,7 @@
     },
     {
       "list_item": "The Odd Bunch Lebanese Cucumber Punnet",
-      "last_scraped": "2026-05-20T03:25:31.093418+00:00",
+      "last_scraped": "2026-05-20T04:52:58.533982+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -2355,18 +2345,8 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 3.52,
-      "alternatives": [
-        {
-          "name": "Kvuzat Yavne Pickled Cucumbers In Brine | 540g",
-          "price": 6.0,
-          "unit_price": 6.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/kvuzat-yavne-pickled-cucumbers-in-brine-540g-7878534",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7878534.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.68,
       "per_100_coles": 0.99,
@@ -2374,7 +2354,7 @@
     },
     {
       "list_item": "The Odd Bunch Lemon Prepacked",
-      "last_scraped": "2026-05-20T03:25:31.704288+00:00",
+      "last_scraped": "2026-05-20T04:53:00.214557+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -2433,21 +2413,64 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 4.0,
-      "alternatives": [
-        {
-          "name": "Strepsils Extra Honey And Lemon Fast Numbing Sore Throat Pain Relief Wi ... 1 Pack",
-          "price": 7.0,
-          "unit_price": 0.44,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/strepsils-extra-honey-and-lemon-fast-numbing-sore-throat-pain-relief-with-anaesthetic-16-lozenges-1-pack-3417981",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3417981.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.7,
       "per_100_coles": 0.75,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "The Odd Bunch Mango",
+      "last_scraped": "2026-05-20T04:53:01.966606+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 6.4
+        },
+        {
+          "date": "2024-11-12",
+          "price": 6.4
+        },
+        {
+          "date": "2024-11-20",
+          "price": 6.4
+        },
+        {
+          "date": "2024-12-02",
+          "price": 6.4
+        },
+        {
+          "date": "2024-12-09",
+          "price": 7.2
+        },
+        {
+          "date": "2024-12-19",
+          "price": 7.2
+        },
+        {
+          "date": "2025-03-17",
+          "price": 9.6
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": null,
+      "coles": {
+        "name": "Nice & Natural Fruit Oddities Raspberry Mango | 136g",
+        "price": 4.0,
+        "unit_price": 2.94,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/nice-and-natural-fruit-oddities-raspberry-mango-136g-3618178",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3618178.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 2.94,
       "per_100_unit": "100g"
     },
     {
@@ -2557,59 +2580,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 8.5,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "The Odd Bunch Mango",
-      "last_scraped": "2026-05-20T03:25:37.537975+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 6.4
-        },
-        {
-          "date": "2024-11-12",
-          "price": 6.4
-        },
-        {
-          "date": "2024-11-20",
-          "price": 6.4
-        },
-        {
-          "date": "2024-12-02",
-          "price": 6.4
-        },
-        {
-          "date": "2024-12-09",
-          "price": 7.2
-        },
-        {
-          "date": "2024-12-19",
-          "price": 7.2
-        },
-        {
-          "date": "2025-03-17",
-          "price": 9.6
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": null,
-      "coles": {
-        "name": "Nice & Natural Fruit Oddities Raspberry Mango | 136g",
-        "price": 4.0,
-        "unit_price": 2.94,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/nice-and-natural-fruit-oddities-raspberry-mango-136g-3618178",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3618178.jpg&w=640&q=90"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 2.94,
       "per_100_unit": "100g"
     },
     {
@@ -13130,7 +13100,7 @@
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 25,
+    "done": 30,
     "total": 211
   }
 }
