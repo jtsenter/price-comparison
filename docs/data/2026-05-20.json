@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T11:23:13.716349+00:00",
+  "last_updated": "2026-05-20T11:26:07.315523+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1413,7 +1413,7 @@
     },
     {
       "list_item": "Helga's Wholemeal Bread With Grains",
-      "last_scraped": "2026-05-20T11:02:23.710613+00:00",
+      "last_scraped": "2026-05-20T11:26:06.924205+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -1480,12 +1480,16 @@
       "category": "Bakery",
       "woolworths": null,
       "coles": {
-        "name": "Helga's Traditional Wholemeal Bread | 750g",
+        "name": "Traditional Wholemeal Bread",
         "price": 5.2,
-        "unit_price": null,
-        "unit": null,
+        "unit_price": 0.69,
+        "unit": "100g",
         "url": "https://www.coles.com.au/product/helga's-traditional-wholemeal-bread-750g-5969435",
-        "image_url": "https://shop.coles.com.au/wcsstore/Coles-CAS/images/5/9/6/5969435-th.jpg"
+        "image_url": {
+          "altText": "",
+          "type": "default",
+          "uri": "/5/5969435.jpg"
+        }
       },
       "cheaper_store": "coles",
       "saving_per_item": null,
