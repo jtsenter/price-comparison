@@ -656,7 +656,7 @@ async def _scrape_single_item(
                     ww_results = await search_with_retry(search_woolworths, ww_page, item)
                     # Prefer the result matching the stockcode in the pinned URL (avoids
                     # wrong-size matches when the item name has no size info)
-                    _sc_m = re.search(r'/productdetails/(\d+)/', pinned_ww)
+                    _sc_m = re.search(r'/productdetails/(\d+)/([^/?]+)', pinned_ww)
                     if _sc_m:
                         _sc = _sc_m.group(1)
                         _sc_hit = next((r for r in ww_results if _sc in r.get('url', '')), None)
@@ -664,6 +664,17 @@ async def _scrape_single_item(
                             print(f"  WW: matched by stockcode {_sc}")
                             ww_results = [_sc_hit]
                             _skip_picker_ww = True
+                        else:
+                            # Stockcode not in top-5 results — retry search using URL slug
+                            _slug_q = _sc_m.group(2).replace('-', ' ').strip()
+                            if _slug_q.lower() != item.lower():
+                                print(f"  WW: retrying with slug query: {_slug_q!r}")
+                                _slug_res = await search_with_retry(search_woolworths, ww_page, _slug_q)
+                                _sc_hit2 = next((r for r in _slug_res if _sc in r.get('url', '')), None)
+                                if _sc_hit2:
+                                    print(f"  WW: slug search found stockcode {_sc}")
+                                    ww_results = [_sc_hit2]
+                                    _skip_picker_ww = True
             else:
                 ww_results = await search_with_retry(search_woolworths, ww_page, item)
             if pinned_co:
