@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T23:56:58.951908+00:00",
+  "last_updated": "2026-05-20T23:57:10.533354+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9236,7 +9236,7 @@
     },
     {
       "list_item": "Woolworths Mashing Potatoes Bag",
-      "last_scraped": "2026-05-20T11:07:21.229545+00:00",
+      "last_scraped": "2026-05-20T23:57:02.972293+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9284,7 +9284,7 @@
     },
     {
       "list_item": "Woolworths Mild Salsa",
-      "last_scraped": "2026-05-20T11:07:21.708632+00:00",
+      "last_scraped": "2026-05-20T23:57:03.236522+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -9339,8 +9339,56 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Pesto Basil",
+      "last_scraped": "2026-05-20T23:57:06.906611+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 1.85
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.85
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.85
+        },
+        {
+          "date": "2026-02-23",
+          "price": 1.95
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Pesto Basil",
+        "price": 1.95,
+        "unit_price": 1.03,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/753340/woolworths-pesto-basil",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/753340.jpg"
+      },
+      "coles": {
+        "name": "Coles Pesto Basil | 190g",
+        "price": 1.95,
+        "unit_price": 1.95,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-pesto-basil-190g-5419660",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5419660.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 1.03,
+      "per_100_coles": 1.03,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths RSPCA Approved Chicken Drumsticks",
-      "last_scraped": "2026-05-20T11:07:24.994625+00:00",
+      "last_scraped": "2026-05-20T23:57:09.192602+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -9405,51 +9453,60 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Pesto Basil",
-      "last_scraped": "2026-05-20T11:07:25.116086+00:00",
-      "trip_count": 4,
+      "list_item": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In",
+      "last_scraped": "2026-05-20T23:57:10.523498+00:00",
+      "trip_count": 6,
       "price_history": [
         {
-          "date": "2025-03-27",
-          "price": 1.85
+          "date": "2025-05-29",
+          "price": 7.15
         },
         {
-          "date": "2025-04-14",
-          "price": 1.85
+          "date": "2025-06-06",
+          "price": 7.15
         },
         {
-          "date": "2025-07-10",
-          "price": 1.85
+          "date": "2025-07-03",
+          "price": 7.15
         },
         {
-          "date": "2026-02-23",
-          "price": 1.95
+          "date": "2026-02-03",
+          "price": 7.15
+        },
+        {
+          "date": "2026-03-10",
+          "price": 7.51
+        },
+        {
+          "date": "2026-05-06",
+          "price": 7.51
         }
       ],
-      "category": "Pantry",
+      "category": "Meat & Seafood",
       "woolworths": {
-        "name": "Woolworths Pesto Basil",
-        "price": 1.95,
-        "unit_price": 1.03,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/753340/woolworths-pesto-basil",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/753340.jpg"
+        "name": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone In",
+        "price": 6.83,
+        "unit_price": 10.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/119370/woolworths-rspca-approved-chicken-thigh-skinless-cutlets-bone-in",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/119370.jpg"
       },
       "coles": {
-        "name": "Coles Pesto Basil | 190g",
-        "price": 1.95,
-        "unit_price": 1.95,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-pesto-basil-190g-5419660",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5419660.jpg&w=640&q=90"
+        "name": "Coles RSPCA Approved Chicken Thigh Cutlets | approx. 1.1kg",
+        "price": 9.9,
+        "unit_price": 9.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-thigh-cutlets-approx.-1.1kg-2268365",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2268365.jpg&w=640&q=90",
+        "retailer": "coles"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.07,
       "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 1.03,
-      "per_100_coles": 1.03,
+      "per_100_ww": 1.05,
+      "per_100_coles": 0.9,
       "per_100_unit": "100g"
     },
     {
@@ -9504,63 +9561,6 @@
       "size_warning": false,
       "per_100_ww": 0.51,
       "per_100_coles": 0.51,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In",
-      "last_scraped": "2026-05-20T11:07:28.743562+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2025-05-29",
-          "price": 7.15
-        },
-        {
-          "date": "2025-06-06",
-          "price": 7.15
-        },
-        {
-          "date": "2025-07-03",
-          "price": 7.15
-        },
-        {
-          "date": "2026-02-03",
-          "price": 7.15
-        },
-        {
-          "date": "2026-03-10",
-          "price": 7.51
-        },
-        {
-          "date": "2026-05-06",
-          "price": 7.51
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone In",
-        "price": 6.83,
-        "unit_price": 10.5,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/119370/woolworths-rspca-approved-chicken-thigh-skinless-cutlets-bone-in",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/119370.jpg"
-      },
-      "coles": {
-        "name": "Coles RSPCA Approved Chicken Thigh Cutlets | approx. 1.1kg",
-        "price": 9.9,
-        "unit_price": 9.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-thigh-cutlets-approx.-1.1kg-2268365",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2268365.jpg&w=640&q=90",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 3.07,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.05,
-      "per_100_coles": 0.9,
       "per_100_unit": "100g"
     },
     {
@@ -12148,7 +12148,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 145,
+    "done": 150,
     "total": 211
   }
 }
