@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T06:12:08.979108+00:00",
+  "last_updated": "2026-05-20T06:12:23.719238+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2475,7 +2475,7 @@
     },
     {
       "list_item": "The Odd Bunch Strawberries Punnet",
-      "last_scraped": "2026-05-20T05:14:07.382475+00:00",
+      "last_scraped": "2026-05-20T06:12:12.364864+00:00",
       "trip_count": 14,
       "price_history": [
         {
@@ -2547,35 +2547,7 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": null,
-      "alternatives": [
-        {
-          "name": "Nice & Natural Fruit Oddities Raspberry Mango | 136g",
-          "price": 4.0,
-          "unit_price": 2.94,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/nice-and-natural-fruit-oddities-raspberry-mango-136g-3618178",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3618178.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Organic Strawberries | 250g",
-          "price": 6.9,
-          "unit_price": 6.9,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-organic-strawberries-250g-5048810",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5048810.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Yoplait Berry Punnet Yoghurt Strawberry Mixed Berries 6x160g | 960g",
-          "price": 7.0,
-          "unit_price": 7.0,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/yoplait-berry-punnet-yoghurt-strawberry-mixed-berries-6x160g-960g-3619567",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3619567.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "match_confidence": "none",
       "size_warning": false,
       "per_100_ww": null,
@@ -2584,7 +2556,7 @@
     },
     {
       "list_item": "The Odd Bunch Zucchini Prepacked",
-      "last_scraped": "2026-05-20T05:14:10.573534+00:00",
+      "last_scraped": "2026-05-20T06:12:14.325672+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -2689,7 +2661,7 @@
     },
     {
       "list_item": "Weet-Bix Little Kids Breakfast Cereal",
-      "last_scraped": "2026-05-20T05:14:15.141816+00:00",
+      "last_scraped": "2026-05-20T06:12:20.150050+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -2741,7 +2713,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 1.0,
       "alternatives": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.0,
       "per_100_coles": 1.25,
@@ -2749,7 +2721,7 @@
     },
     {
       "list_item": "Truss Tomatoes",
-      "last_scraped": "2026-05-20T05:14:16.161384+00:00",
+      "last_scraped": "2026-05-20T06:12:20.678860+00:00",
       "trip_count": 35,
       "price_history": [
         {
@@ -2913,6 +2885,67 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths 12 Extra Large Free Range Eggs",
+      "last_scraped": "2026-05-20T06:12:23.715893+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 6.1
+        },
+        {
+          "date": "2024-12-19",
+          "price": 6.1
+        },
+        {
+          "date": "2025-07-03",
+          "price": 6.6
+        },
+        {
+          "date": "2026-02-11",
+          "price": 6.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 6.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 6.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 6.5
+        },
+        {
+          "date": "2026-04-13",
+          "price": 6.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 6.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": null,
+      "coles": {
+        "name": "Sunny Queen Free Range Large Eggs 12 Pack | 600g",
+        "price": 8.5,
+        "unit_price": 8.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/sunny-queen-free-range-large-eggs-12-pack-600g-5417778",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5417778.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 1.42,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths BBQ Lamb Kebabs With Mint & Honey",
       "last_scraped": "2026-05-20T05:14:21.434297+00:00",
       "trip_count": 7,
@@ -2998,95 +3031,6 @@
       "size_warning": false,
       "per_100_ww": 1.89,
       "per_100_coles": 1.67,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths 12 Extra Large Free Range Eggs",
-      "last_scraped": "2026-05-20T05:14:24.016720+00:00",
-      "trip_count": 9,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 6.1
-        },
-        {
-          "date": "2024-12-19",
-          "price": 6.1
-        },
-        {
-          "date": "2025-07-03",
-          "price": 6.6
-        },
-        {
-          "date": "2026-02-11",
-          "price": 6.5
-        },
-        {
-          "date": "2026-02-23",
-          "price": 6.5
-        },
-        {
-          "date": "2026-03-10",
-          "price": 6.5
-        },
-        {
-          "date": "2026-04-02",
-          "price": 6.5
-        },
-        {
-          "date": "2026-04-13",
-          "price": 6.5
-        },
-        {
-          "date": "2026-05-06",
-          "price": 6.5
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": null,
-      "coles": {
-        "name": "Sunny Queen Free Range Large Eggs 12 Pack | 600g",
-        "price": 8.5,
-        "unit_price": 8.5,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/sunny-queen-free-range-large-eggs-12-pack-600g-5417778",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5417778.jpg&w=640&q=90"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
-      "alternatives": [
-        {
-          "name": "Coles Free Range Eggs 12 Pack | 600g",
-          "price": 6.2,
-          "unit_price": 6.2,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-free-range-eggs-12-pack-600g-9453456",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9453456.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Free Range Eggs 12 Pack | 700g",
-          "price": 6.5,
-          "unit_price": 6.5,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-free-range-eggs-12-pack-700g-9453478",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9453478.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Jumbo Free Range Eggs 12 Pack | 800g",
-          "price": 7.25,
-          "unit_price": 7.25,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-jumbo-free-range-eggs-12-pack-800g-1034234",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1034234.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 1.42,
       "per_100_unit": "100g"
     },
     {
@@ -13840,7 +13784,7 @@
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 30,
+    "done": 35,
     "total": 211
   }
 }
