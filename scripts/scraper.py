@@ -331,14 +331,51 @@ async def search_coles(page, query: str) -> list[dict]:
 
 COLES_PRODUCT_PAGE_JS = """
 () => {
+    // Strategy 1: __NEXT_DATA__ (Next.js SSR — most reliable, not affected by CSS changes)
+    const ndEl = document.getElementById('__NEXT_DATA__');
+    if (ndEl) {
+        try {
+            const nd = JSON.parse(ndEl.textContent);
+            const pp = nd?.props?.pageProps;
+            const candidates = [
+                pp?.product, pp?.productDetail, pp?.pageProduct,
+                pp?.catalogGroupView?.[0], pp?.searchResults?.results?.[0],
+            ].filter(Boolean);
+            for (const prod of candidates) {
+                const name = prod?.name || prod?.displayName || prod?.productTitle || '';
+                const pricing = prod?.pricing || prod?.price || {};
+                const price = pricing?.now ?? pricing?.current ?? prod?.priceCalc?.price ?? prod?.unitPrice ?? prod?.price;
+                if (name && price != null && price > 0) {
+                    const comparable = pricing?.comparable || pricing?.cupPrice || '';
+                    const img = prod?.imageUris?.[0] || prod?.images?.[0]?.uri || '';
+                    return { name, price_text: '$' + price, unit_price_text: comparable, image_url: img };
+                }
+            }
+        } catch {}
+    }
+
+    // Strategy 2: JSON-LD structured data
+    for (const script of document.querySelectorAll('script[type="application/ld+json"]')) {
+        try {
+            const items = [].concat(JSON.parse(script.textContent));
+            const prod = items.find(i => i['@type'] === 'Product');
+            if (prod?.name && prod?.offers?.price) {
+                return { name: prod.name, price_text: '$' + prod.offers.price,
+                         unit_price_text: '', image_url: prod.image || '' };
+            }
+        } catch {}
+    }
+
+    // Strategy 3: DOM selectors
     let name = '';
-    for (const s of ['h1[class*="product-title"]','h1[class*="heading"]','[data-testid="product-name"]','h1']) {
+    for (const s of [
+        '[data-testid="product-title"]','[data-testid="product-name"]',
+        'h1[class*="product-title"]','h1[class*="heading"]','h1',
+    ]) {
         const el = document.querySelector(s);
         if (el?.textContent?.trim()) { name = el.textContent.trim(); break; }
     }
 
-    // Extract the primary selling price — use the smallest $ value found in
-    // price-specific elements to avoid picking up multipack totals or "Was" prices.
     let priceText = '';
     let bestPrice = Infinity;
     const priceSelectors = [
@@ -350,13 +387,11 @@ COLES_PRODUCT_PAGE_JS = """
     for (const s of priceSelectors) {
         for (const el of document.querySelectorAll(s)) {
             const t = el.textContent?.trim() || '';
-            // Must contain a $ and be reasonably short (not paragraph text)
             if (!t.match(/\\$/) || t.length > 20) continue;
             const m = t.match(/\\$\\s*([\\d,]+(?:\\.\\d{1,2})?)/);
             if (m) {
                 const v = parseFloat(m[1].replace(',',''));
-                // Skip suspiciously large values (probably multipack/yearly totals)
-                if (v > 0 && v < 50 && v < bestPrice) { bestPrice = v; priceText = t; } // 50 = MAX_PRODUCT_PRICE
+                if (v > 0 && v < 50 && v < bestPrice) { bestPrice = v; priceText = t; }
             }
         }
         if (priceText) break;
@@ -478,6 +513,11 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
         if diff.returncode != 0:
             commit = subprocess.run(["git", "commit", "-m", f"progress: {done}/{total} items scraped"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
             if commit.returncode == 0:
+                # Clean up any stale rebase state before pulling
+                for stale in [".git/rebase-merge", ".git/rebase-apply"]:
+                    if os.path.exists(os.path.join(REPO_ROOT, stale)):
+                        subprocess.run(["git", "rebase", "--abort"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
+                        break
                 subprocess.run(["git", "pull", "--rebase", "origin", "main"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
                 subprocess.run(["git", "push"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
                 print(f"  -> Pushed progress ({done}/{total})")
@@ -619,9 +659,13 @@ async def _scrape_single_item(
                 ww_results = await search_with_retry(search_woolworths, ww_page, item)
             if pinned_co:
                 _co = await fetch_coles_by_url(coles_page, pinned_co)
-                if not _co: print(f"  Coles pinned URL fetch failed: {pinned_co}")
-                coles_results = [_co] if _co else []
-                _skip_picker_co = True
+                if _co:
+                    coles_results = [_co]
+                    _skip_picker_co = True
+                else:
+                    print(f"  Coles pinned URL failed, falling back to name search")
+                    coles_results = await search_with_retry(search_coles, coles_page, item)
+                    _skip_picker_co = False
             else:
                 coles_results = await search_with_retry(search_coles, coles_page, item)
         else:
