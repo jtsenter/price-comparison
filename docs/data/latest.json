@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T11:03:59.170483+00:00",
+  "last_updated": "2026-05-20T11:04:11.887659+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4561,7 +4561,7 @@
     },
     {
       "list_item": "Woolworths Lean Beef Mince",
-      "last_scraped": "2026-05-20T06:34:47.448293+00:00",
+      "last_scraped": "2026-05-20T11:04:00.108579+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -4620,36 +4620,8 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.5,
-      "alternatives": [
-        {
-          "name": "Coles 5 Star Extra Lean Pork Mince | 500g",
-          "price": 8.0,
-          "unit_price": 8.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-5-star-extra-lean-pork-mince-500g-8781132",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8781132.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles No Added Hormone Beef 4 Star Lean Mince | 500g",
-          "price": 11.0,
-          "unit_price": 11.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-4-star-lean-mince-500g-8112449",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8112449.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles No Added Hormone Beef 5 Star Extra Lean Mince | 500g",
-          "price": 12.0,
-          "unit_price": 12.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-5-star-extra-lean-mince-500g-8112799",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8112799.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.2,
       "per_100_coles": 2.5,
@@ -4657,7 +4629,7 @@
     },
     {
       "list_item": "Woolworths RSPCA Approved Chicken Breast Fillet",
-      "last_scraped": "2026-05-20T06:34:54.273532+00:00",
+      "last_scraped": "2026-05-20T11:04:04.208125+00:00",
       "trip_count": 23,
       "price_history": [
         {
@@ -4777,15 +4749,80 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 1.8,
       "alternatives": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.9,
       "per_100_coles": 1.8,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Red Watermelon Cut Quarter",
+      "last_scraped": "2026-05-20T11:04:08.078267+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 5.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 6.38
+        },
+        {
+          "date": "2025-04-05",
+          "price": 7.7
+        },
+        {
+          "date": "2025-04-14",
+          "price": 7.7
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 6.38
+        },
+        {
+          "date": "2025-06-21",
+          "price": 6.38
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Red Watermelon Cut Quarter",
+        "price": 6.38,
+        "unit_price": 6.38,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/120384/woolworths-red-watermelon-cut-quarter",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120384.jpg"
+      },
+      "coles": {
+        "name": "Coles Seedless Watermelon Cut | approx. 1.8kg",
+        "price": 5.22,
+        "unit_price": 2.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-seedless-watermelon-cut-approx.-1.8kg-7508229",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7508229.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.16,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 0.29,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Onion Brown Bag",
-      "last_scraped": "2026-05-20T06:34:58.480844+00:00",
+      "last_scraped": "2026-05-20T11:04:09.725751+00:00",
       "trip_count": 14,
       "price_history": [
         {
@@ -4875,99 +4912,15 @@
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.36,
       "per_100_coles": 0.69,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Red Watermelon Cut Quarter",
-      "last_scraped": "2026-05-20T06:35:00.622941+00:00",
-      "trip_count": 8,
-      "price_history": [
-        {
-          "date": "2025-02-02",
-          "price": 5.5
-        },
-        {
-          "date": "2025-03-17",
-          "price": 6.38
-        },
-        {
-          "date": "2025-04-05",
-          "price": 7.7
-        },
-        {
-          "date": "2025-04-14",
-          "price": 7.7
-        },
-        {
-          "date": "2025-05-22",
-          "price": 5.5
-        },
-        {
-          "date": "2025-06-06",
-          "price": 6.38
-        },
-        {
-          "date": "2025-06-21",
-          "price": 6.38
-        },
-        {
-          "date": "2026-03-10",
-          "price": 5.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Red Watermelon Cut Quarter",
-        "price": 6.38,
-        "unit_price": 6.38,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/120384/woolworths-red-watermelon-cut-quarter",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120384.jpg"
-      },
-      "coles": {
-        "name": "Coles Seedless Watermelon Cut | approx. 1.8kg",
-        "price": 5.22,
-        "unit_price": 2.9,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-seedless-watermelon-cut-approx.-1.8kg-7508229",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7508229.jpg&w=640&q=90",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.16,
-      "alternatives": [
-        {
-          "name": "Coles Seedless Watermelon Cut | approx. 1.8kg",
-          "price": 5.22,
-          "unit_price": 2.9,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-seedless-watermelon-cut-approx.-1.8kg-7508229",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7508229.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Red Split Lentils | 1kg",
-          "price": 4.0,
-          "unit_price": 4.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-red-split-lentils-1kg-9073535",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9073535.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 0.29,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Salmon Portions Skin On",
-      "last_scraped": "2026-05-20T06:35:04.225907+00:00",
+      "last_scraped": "2026-05-20T11:04:11.881131+00:00",
       "trip_count": 12,
       "price_history": [
         {
@@ -5038,36 +4991,8 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 3.5,
-      "alternatives": [
-        {
-          "name": "Coles Tasmanian Salmon Portion Skin On | 200g",
-          "price": 10.0,
-          "unit_price": 10.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portion-skin-on-200g-6400861",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6400861.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Tasmanian Salmon Portions Skin On 4 Pack | 460g",
-          "price": 19.5,
-          "unit_price": 19.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-tasmanian-salmon-portions-skin-on-4-pack-460g-1546564",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1546564.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "KB's Salmon Skin On Portions | 1kg",
-          "price": 30.0,
-          "unit_price": 30.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/kb's-salmon-skin-on-portions-1kg-8124619",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8124619.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "high",
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 3.8,
       "per_100_coles": 4.67,
@@ -12909,7 +12834,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 55,
+    "done": 60,
     "total": 211
   }
 }
