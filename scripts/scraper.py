@@ -190,6 +190,8 @@ async def search_woolworths(page, query: str) -> list[dict]:
 
 async def fetch_ww_by_url(page, url: str) -> dict | None:
     """Fetch a single WW product directly by URL (faster than search)."""
+    if url and not url.startswith("http"):
+        url = "https://" + url
     try:
         await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
         await page.wait_for_timeout(800)
@@ -384,6 +386,8 @@ COLES_PRODUCT_PAGE_JS = """
 
 async def fetch_coles_by_url(page, url: str) -> dict | None:
     """Fetch a single Coles product directly by URL (faster than search)."""
+    if url and not url.startswith("http"):
+        url = "https://" + url
     try:
         await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
         await page.wait_for_timeout(COLES_WAIT_MS)
@@ -640,21 +644,31 @@ async def _scrape_single_item(
         if coles_match:
             print(f"    Coles match ({co_conf}): {coles_match['name']}")
 
-    # Carry forward existing store data only when name-based search returned zero results
-    # (e.g. Coles/WW is blocking). Do NOT carry forward when search returned results but
-    # the matcher rejected them all — that means a real mismatch, not a temporary failure.
-    if coles_match is None and not _skip_picker_co and not coles_results:
-        existing_co = existing_item.get("coles")
-        if existing_co and existing_co.get("price") is not None:
-            coles_match = existing_co
-            co_conf = "carried"
-            print(f"    Coles: search empty, keeping existing ${existing_co.get('price')} ({existing_co.get('name','?')})")
-    if ww_match is None and not _skip_picker_ww and not ww_results:
-        existing_ww = existing_item.get("woolworths")
-        if existing_ww and existing_ww.get("price") is not None:
-            ww_match = existing_ww
-            ww_conf = "carried"
-            print(f"    WW: search empty, keeping existing ${existing_ww.get('price')} ({existing_ww.get('name','?')})")
+    # Carry forward existing store data when no fresh result is available.
+    # URL fetch failed (URL path, _skip_picker=True, empty results): always carry forward —
+    #   WW is blocked from GHA; a Coles URL failure may be transient.
+    # Name-based search returned zero results (_skip_picker=False, empty results): carry forward —
+    #   store is blocked/unavailable.
+    # Name-based search returned results that were all rejected by the matcher: do NOT carry
+    #   forward — real mismatch, old data would perpetuate the wrong product.
+    def _carry(existing_key, conf_label, tag):
+        existing = existing_item.get(existing_key)
+        if existing and existing.get("price") is not None:
+            print(f"    {tag}: keeping existing ${existing.get('price')} ({existing.get('name','?')})")
+            return existing, conf_label
+        return None, "none"
+
+    if coles_match is None:
+        if _skip_picker_co and not coles_results:          # URL was set but fetch failed
+            coles_match, co_conf = _carry("coles", "carried", "Coles")
+        elif not _skip_picker_co and not coles_results:    # name search returned empty
+            coles_match, co_conf = _carry("coles", "carried", "Coles")
+
+    if ww_match is None:
+        if _skip_picker_ww and not ww_results:             # URL was set but fetch failed
+            ww_match, ww_conf = _carry("woolworths", "carried", "WW")
+        elif not _skip_picker_ww and not ww_results:       # name search returned empty
+            ww_match, ww_conf = _carry("woolworths", "carried", "WW")
 
     if not ww_match and not coles_match:
         return None, True
