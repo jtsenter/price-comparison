@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T03:27:10.822650+00:00",
+  "last_updated": "2026-05-20T03:27:25.490750+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5701,7 +5701,7 @@
     },
     {
       "list_item": "Woolworths Sour Cream",
-      "last_scraped": "2026-05-20T03:12:11.781039+00:00",
+      "last_scraped": "2026-05-20T03:27:13.989078+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5765,7 +5765,7 @@
     },
     {
       "list_item": "Woolworths Spring Water Bottles",
-      "last_scraped": "2026-05-20T03:12:13.206810+00:00",
+      "last_scraped": "2026-05-20T03:27:18.038486+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5839,7 +5839,7 @@
     },
     {
       "list_item": "Woolworths Washed Potato Bag",
-      "last_scraped": "2026-05-20T03:18:20.507337+00:00",
+      "last_scraped": "2026-05-20T03:27:19.622494+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -5891,7 +5891,7 @@
       "cheaper_store": "coles",
       "saving_per_item": 3.2,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.48,
@@ -5899,7 +5899,7 @@
     },
     {
       "list_item": "Woolworths Whole Milk Full Cream Milk",
-      "last_scraped": "2026-05-20T03:12:18.005757+00:00",
+      "last_scraped": "2026-05-20T03:27:24.451634+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5938,11 +5938,11 @@
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Woolworths Full Cream Milk",
-        "price": 5.15,
-        "unit_price": 1.72,
+        "price": 1.85,
+        "unit_price": 1.85,
         "unit": "1L",
-        "url": "https://www.woolworths.com.au/shop/productdetails/888140/woolworths-full-cream-milk",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/888140.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/50923/woolworths-full-cream-milk",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/050923.jpg"
       },
       "coles": {
         "name": "Coles Full Cream Milk | 600mL",
@@ -5954,7 +5954,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 3.7,
+      "saving_per_item": 0.4,
       "alternatives": [
         {
           "name": "Coles Full Cream Milk | 600mL",
@@ -5968,8 +5968,62 @@
       ],
       "match_confidence": "medium",
       "size_warning": false,
-      "per_100_ww": 0.17,
+      "per_100_ww": 0.18,
       "per_100_coles": 0.24,
+      "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Alka Power Alkaline Water Bottle",
+      "last_scraped": "2026-05-20T03:27:25.472167+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 2.95
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.95
+        }
+      ],
+      "category": "Drinks & Alcohol",
+      "woolworths": {
+        "name": "Alka Power Alkaline Water Bottle",
+        "price": 3.5,
+        "unit_price": 2.33,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/507997/alka-power-alkaline-water-bottle",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/507997.jpg"
+      },
+      "coles": {
+        "name": "Alka Power Alkaline Water 12x600ml | 12 Pack",
+        "price": 15.7,
+        "unit_price": 15.7,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/alka-power-alkaline-water-12x600ml-12-pack-1049526",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1049526.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 12.2,
+      "alternatives": [
+        {
+          "name": "Alka Power Ionic Alkaline Spring Water Ph9-10 With 5 Natural Electrolytes | 1.5L",
+          "price": 2.95,
+          "unit_price": 1.97,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/alka-power-ionic-alkaline-spring-water-ph9-10-with-5-natural-electrolytes-1.5l-3528712",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3528712.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.23,
+      "per_100_coles": 2.62,
       "per_100_unit": "100ml"
     },
     {
@@ -6026,60 +6080,6 @@
       "per_100_ww": 0.47,
       "per_100_coles": 0.19,
       "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Alka Power Alkaline Water Bottle",
-      "last_scraped": "2026-05-20T03:12:23.703597+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-03-11",
-          "price": 2.95
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.5
-        },
-        {
-          "date": "2026-05-06",
-          "price": 2.95
-        }
-      ],
-      "category": "Drinks & Alcohol",
-      "woolworths": {
-        "name": "Alka Power Alkaline Water Bottle",
-        "price": 3.5,
-        "unit_price": 2.33,
-        "unit": "1L",
-        "url": "https://www.woolworths.com.au/shop/productdetails/507997/alka-power-alkaline-water-bottle",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/507997.jpg"
-      },
-      "coles": {
-        "name": "Alka Power Alkaline Water 12x600ml | 12 Pack",
-        "price": 15.7,
-        "unit_price": 15.7,
-        "unit": "1L",
-        "url": "https://www.coles.com.au/product/alka-power-alkaline-water-12x600ml-12-pack-1049526",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1049526.jpg&w=640&q=90"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 12.2,
-      "alternatives": [
-        {
-          "name": "Alka Power Ionic Alkaline Spring Water Ph9-10 With 5 Natural Electrolytes | 1.5L",
-          "price": 2.95,
-          "unit_price": 1.97,
-          "unit": "1L",
-          "url": "https://www.coles.com.au/product/alka-power-ionic-alkaline-spring-water-ph9-10-with-5-natural-electrolytes-1.5l-3528712",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3528712.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 0.23,
-      "per_100_coles": 2.62,
-      "per_100_unit": "100ml"
     },
     {
       "list_item": "Aptamil Gold+ 2 Baby Follow-On Formula From 6 To 12 Months",
@@ -14109,16 +14109,16 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 1335.69,
+    "total_woolworths": 1332.39,
     "total_coles": 1336.29,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 0.6,
+    "total_saving": 3.9,
     "items_compared": 211,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 60,
+    "done": 65,
     "total": 211
   }
 }
