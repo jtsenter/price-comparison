@@ -884,16 +884,27 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                 async with sem:
                     ww_page = await ww_pool.get()
                     co_page = await co_pool.get()
+                    timed_out = False
                     try:
                         idx = completed[0] + 1
                         print(f"[{idx}/{total_to_scrape}] {name}")
-                        result, is_nf = await _scrape_single_item(
-                            name, purchase_history, ww_page, co_page, "", "", existing_data,
+                        result, is_nf = await asyncio.wait_for(
+                            _scrape_single_item(
+                                name, purchase_history, ww_page, co_page, "", "", existing_data,
+                            ),
+                            timeout=120,
                         )
                         if result:
                             items_output.append(result)
                         else:
                             not_found.append(name)
+                    except asyncio.TimeoutError:
+                        print(f"  [TIMEOUT] {name} exceeded 120s — skipping")
+                        not_found.append(name)
+                        timed_out = True
+                    except Exception as e:
+                        print(f"  Error scraping {name}: {e}")
+                    finally:
                         completed[0] += 1
                         if completed[0] % 5 == 0:
                             push_progress_bg(
@@ -902,10 +913,13 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                                 total_all, trigger,
                                 existing_items=list(existing_map.values()),
                             )
-                    except Exception as e:
-                        print(f"  Error scraping {name}: {e}")
-                        completed[0] += 1
-                    finally:
+                        if timed_out:
+                            # Reset pages after mid-navigation cancellation
+                            for _p, _base in [(ww_page, WOOLWORTHS_BASE), (co_page, COLES_BASE)]:
+                                try:
+                                    await _p.goto(_base, wait_until="commit", timeout=5000)
+                                except Exception:
+                                    pass
                         await ww_pool.put(ww_page)
                         await co_pool.put(co_page)
 
