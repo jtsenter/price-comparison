@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T05:23:55.106058+00:00",
+  "last_updated": "2026-05-20T05:24:00.068295+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -13864,7 +13864,7 @@
     },
     {
       "list_item": "Woolworths Water Chestnuts Sliced",
-      "last_scraped": "2026-05-20T04:58:36.333416+00:00",
+      "last_scraped": "2026-05-20T05:23:59.510249+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13896,8 +13896,36 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.35,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Valcom Water Chestnut Slices | 227g",
+          "price": 1.6,
+          "unit_price": 1.6,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/valcom-water-chestnut-slices-227g-5789579",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5789579.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Double Phoenix Whole Water Chestnuts | 567g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/double-phoenix-whole-water-chestnuts-567g-1384190",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1384190.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Tick Fresh Water Chestnuts | 400g",
+          "price": 3.8,
+          "unit_price": 3.8,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/tick-fresh-water-chestnuts-400g-3908054",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3908054.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.56,
       "per_100_coles": 0.7,
@@ -13915,9 +13943,5 @@
     "total_saving": 227.4,
     "items_compared": 210,
     "items_not_found": 1
-  },
-  "scrape_progress": {
-    "done": 210,
-    "total": 211
   }
 }
