@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T03:32:05.348082+00:00",
+  "last_updated": "2026-05-20T03:32:14.099318+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12234,7 +12234,7 @@
     },
     {
       "list_item": "Obela Hommus Dip With Garlic Smashed Falafel",
-      "last_scraped": "2026-05-20T02:48:49.162844+00:00",
+      "last_scraped": "2026-05-20T03:32:06.715997+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12266,7 +12266,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 1.5,
       "alternatives": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.82,
       "per_100_coles": 2.5,
@@ -12274,7 +12274,7 @@
     },
     {
       "list_item": "Orange Navel",
-      "last_scraped": "2026-05-20T02:48:50.239084+00:00",
+      "last_scraped": "2026-05-20T03:32:09.355075+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12306,7 +12306,7 @@
       "cheaper_store": "coles",
       "saving_per_item": 0.28,
       "alternatives": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.35,
@@ -12314,7 +12314,7 @@
     },
     {
       "list_item": "Osem Snacks Bamba With Peanuts",
-      "last_scraped": "2026-05-20T02:48:53.927573+00:00",
+      "last_scraped": "2026-05-20T03:32:10.899852+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12338,17 +12338,7 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": null,
-      "alternatives": [
-        {
-          "name": "Osem Bamba Peanut Snack KB | 25g",
-          "price": 2.0,
-          "unit_price": 2.0,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/osem-bamba-peanut-snack-kb-25g-5132155",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5132155.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "match_confidence": "none",
       "size_warning": false,
       "per_100_ww": null,
@@ -12357,7 +12347,7 @@
     },
     {
       "list_item": "Rexona Men 48hr Deodorant Stick Sport Defence",
-      "last_scraped": "2026-05-20T02:48:54.863204+00:00",
+      "last_scraped": "2026-05-20T03:32:13.823730+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12389,11 +12379,51 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 0.1,
       "alternatives": [],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 9.42,
       "per_100_coles": 9.62,
       "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Sam's Pantry Caramel Brownie Low Sugar Protein Bars",
+      "last_scraped": "2026-05-20T03:32:14.086343+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-06-06",
+          "price": 4.3
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Sam's Pantry Caramel Brownie Low Sugar Protein Bars",
+        "price": 5.0,
+        "unit_price": 2.63,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/175803/sam-s-pantry-caramel-brownie-low-sugar-protein-bars",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/175803.jpg"
+      },
+      "coles": {
+        "name": "Red Tractor Protein Low Sugar Granola Apple Caramel | 450g",
+        "price": 9.0,
+        "unit_price": 9.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/red-tractor-protein-low-sugar-granola-apple-caramel-450g-4312843",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4312843.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.0,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.63,
+      "per_100_coles": 2.0,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Sam's Pantry Protein Bar Caramel Peanut With Roasted Almonds 12 Pack",
@@ -12454,46 +12484,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 4.25,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Sam's Pantry Caramel Brownie Low Sugar Protein Bars",
-      "last_scraped": "2026-05-20T02:49:00.707127+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-06-06",
-          "price": 4.3
-        },
-        {
-          "date": "2026-03-10",
-          "price": 5.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Sam's Pantry Caramel Brownie Low Sugar Protein Bars",
-        "price": 5.0,
-        "unit_price": 2.63,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/175803/sam-s-pantry-caramel-brownie-low-sugar-protein-bars",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/175803.jpg"
-      },
-      "coles": {
-        "name": "Red Tractor Protein Low Sugar Granola Apple Caramel | 450g",
-        "price": 9.0,
-        "unit_price": 9.0,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/red-tractor-protein-low-sugar-granola-apple-caramel-450g-4312843",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4312843.jpg&w=640&q=90"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 4.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.63,
-      "per_100_coles": 2.0,
       "per_100_unit": "100g"
     },
     {
@@ -13658,7 +13648,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 185,
+    "done": 190,
     "total": 211
   }
 }
