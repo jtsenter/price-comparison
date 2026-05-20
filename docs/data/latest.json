@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T06:14:45.402328+00:00",
+  "last_updated": "2026-05-20T06:14:54.517475+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7508,7 +7508,7 @@
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Spread Tub",
-      "last_scraped": "2026-05-20T05:18:30.225435+00:00",
+      "last_scraped": "2026-05-20T06:14:47.003245+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -7544,15 +7544,69 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.8,
       "per_100_coles": 1.8,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Red Capsicum",
+      "last_scraped": "2026-05-20T06:14:50.760998+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 2.23
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.48
+        },
+        {
+          "date": "2026-02-23",
+          "price": 2.23
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Red Capsicum",
+        "price": 2.48,
+        "unit_price": 2.48,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/135306/red-capsicum",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135306.jpg"
+      },
+      "coles": {
+        "name": "Coles Mini Capsicum | 175g",
+        "price": 3.9,
+        "unit_price": 3.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-mini-capsicum-175g-7296299",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7296299.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.42,
+      "alternatives": [
+        {
+          "name": "Chris' Red Capsicum & Cashew Dip & Spread",
+          "price": 4.5,
+          "unit_price": 2.25,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/82072/chris-red-capsicum-cashew-dip-spread",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/082072.jpg",
+          "retailer": "woolworths"
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 2.23,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Plum Red",
-      "last_scraped": "2026-05-20T05:18:37.258080+00:00",
+      "last_scraped": "2026-05-20T06:14:51.207661+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -7600,126 +7654,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Red Capsicum",
-      "last_scraped": "2026-05-20T05:18:37.538165+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-03-27",
-          "price": 2.23
-        },
-        {
-          "date": "2025-07-10",
-          "price": 1.48
-        },
-        {
-          "date": "2026-02-23",
-          "price": 2.23
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Red Capsicum",
-        "price": 2.48,
-        "unit_price": 2.48,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/135306/red-capsicum",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135306.jpg"
-      },
-      "coles": {
-        "name": "Coles Mini Capsicum | 175g",
-        "price": 3.9,
-        "unit_price": 3.9,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-mini-capsicum-175g-7296299",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7296299.jpg&w=640&q=90"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.42,
-      "alternatives": [
-        {
-          "name": "Chris' Red Capsicum & Cashew Dip & Spread",
-          "price": 4.5,
-          "unit_price": 2.25,
-          "unit": "100G",
-          "url": "https://www.woolworths.com.au/shop/productdetails/82072/chris-red-capsicum-cashew-dip-spread",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/082072.jpg",
-          "retailer": "woolworths"
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 2.23,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Reese's Peanut Butter Cups Miniatures Milk Chocolate",
-      "last_scraped": "2026-05-20T05:18:43.088051+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-06-06",
-          "price": 3.0
-        },
-        {
-          "date": "2025-07-10",
-          "price": 4.5
-        },
-        {
-          "date": "2026-03-10",
-          "price": 3.0
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Reese's Peanut Butter Cups Miniatures Milk Chocolate",
-        "price": 6.0,
-        "unit_price": 4.0,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/348306/reese-s-peanut-butter-cups-miniatures-milk-chocolate",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/348306.jpg"
-      },
-      "coles": {
-        "name": "Reese's Peanut Butter Cups Milk Chocolate 2 pack | 42g",
-        "price": 1.5,
-        "unit_price": 3.57,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/reese's-peanut-butter-cups-milk-chocolate-2-pack-42g-2137550",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2137550.jpg&w=640&q=90",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 4.5,
-      "alternatives": [
-        {
-          "name": "Reese's Miniature Peanut Butter Cups Milk Chocolate Candy 1.58 kg Bulk Pack",
-          "price": 47.95,
-          "unit_price": 3.03,
-          "unit": "100G",
-          "url": "https://www.woolworths.com.au/shop/productdetails/1119946981/reese-s-miniature-peanut-butter-cups-milk-chocolate-candy-1-58-kg-bulk-pack",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/1119946981.jpg",
-          "retailer": "woolworths"
-        },
-        {
-          "name": "Reese's Peanut Butter Cups Milk Chocolate 2 pack | 42g",
-          "price": 1.5,
-          "unit_price": 3.57,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/reese's-peanut-butter-cups-milk-chocolate-2-pack-42g-2137550",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2137550.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 4.0,
-      "per_100_coles": 3.57,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Sam's Pantry Chocolate Brownie with Roasted Almonds Protein Bar",
-      "last_scraped": "2026-05-20T05:18:43.306250+00:00",
+      "last_scraped": "2026-05-20T06:14:54.507903+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -7767,10 +7703,65 @@
       "cheaper_store": "coles",
       "saving_per_item": 6.5,
       "alternatives": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.86,
       "per_100_coles": 5.0,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Reese's Peanut Butter Cups Miniatures Milk Chocolate",
+      "last_scraped": "2026-05-20T06:14:54.508764+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-06-06",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Reese's Peanut Butter Cups Miniatures Milk Chocolate",
+        "price": 6.0,
+        "unit_price": 4.0,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/348306/reese-s-peanut-butter-cups-miniatures-milk-chocolate",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/348306.jpg"
+      },
+      "coles": {
+        "name": "Reese's Peanut Butter Cups Milk Chocolate 2 pack | 42g",
+        "price": 1.5,
+        "unit_price": 3.57,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/reese's-peanut-butter-cups-milk-chocolate-2-pack-42g-2137550",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2137550.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 4.5,
+      "alternatives": [
+        {
+          "name": "Reese's Miniature Peanut Butter Cups Milk Chocolate Candy 1.58 kg Bulk Pack",
+          "price": 47.95,
+          "unit_price": 3.03,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/1119946981/reese-s-miniature-peanut-butter-cups-milk-chocolate-candy-1-58-kg-bulk-pack",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/1119946981.jpg",
+          "retailer": "woolworths"
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 4.0,
+      "per_100_coles": 3.57,
       "per_100_unit": "100g"
     },
     {
@@ -13056,7 +13047,7 @@
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 110,
+    "done": 115,
     "total": 211
   }
 }
