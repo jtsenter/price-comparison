@@ -559,48 +559,34 @@ async def _scrape_single_item(
     _skip_picker_co = False
 
     if ww_url or coles_url:
-        # URL-based fetch (single-item refresh with explicit URLs)
+        # Explicit URL refresh (workflow dispatch) — use the URL; no name-search fallback
         if ww_url and not coles_url:
             print(f"  Fetching WW by URL: {ww_url}")
-            _fetched = await fetch_ww_by_url(ww_page, ww_url)
-            if _fetched:
-                ww_results = [_fetched]
-                _skip_picker_ww = True
-            else:
-                print(f"  WW URL fetch failed, falling back to search for: {item}")
-                ww_results = await search_with_retry(search_woolworths, ww_page, item)
-            _co_carry = existing_item.get("coles")
-            coles_results = [_co_carry] if _co_carry else []
+            _ww = await fetch_ww_by_url(ww_page, ww_url)
+            if not _ww: print(f"  WW URL fetch failed: {ww_url}")
+            ww_results = [_ww] if _ww else []
+            _skip_picker_ww = True
+            coles_results = [existing_item["coles"]] if existing_item.get("coles") else []
             _skip_picker_co = True
         elif coles_url and not ww_url:
             print(f"  Fetching Coles by URL: {coles_url}")
-            _fetched = await fetch_coles_by_url(coles_page, coles_url)
-            if _fetched:
-                coles_results = [_fetched]
-                _skip_picker_co = True
-            else:
-                print(f"  Coles URL fetch failed, falling back to search for: {item}")
-                coles_results = await search_with_retry(search_coles, coles_page, item)
-            _ww_carry = existing_item.get("woolworths")
-            ww_results = [_ww_carry] if _ww_carry else []
+            _co = await fetch_coles_by_url(coles_page, coles_url)
+            if not _co: print(f"  Coles URL fetch failed: {coles_url}")
+            coles_results = [_co] if _co else []
+            _skip_picker_co = True
+            ww_results = [existing_item["woolworths"]] if existing_item.get("woolworths") else []
             _skip_picker_ww = True
         else:
             print(f"  Fetching WW by URL: {ww_url}")
-            _ww_fetched = await fetch_ww_by_url(ww_page, ww_url)
-            if _ww_fetched:
-                ww_results = [_ww_fetched]
-                _skip_picker_ww = True
-            else:
-                print(f"  WW URL fetch failed, falling back to search for: {item}")
-                ww_results = await search_with_retry(search_woolworths, ww_page, item)
+            _ww = await fetch_ww_by_url(ww_page, ww_url)
+            if not _ww: print(f"  WW URL fetch failed: {ww_url}")
+            ww_results = [_ww] if _ww else []
+            _skip_picker_ww = True
             print(f"  Fetching Coles by URL: {coles_url}")
-            _co_fetched = await fetch_coles_by_url(coles_page, coles_url)
-            if _co_fetched:
-                coles_results = [_co_fetched]
-                _skip_picker_co = True
-            else:
-                print(f"  Coles URL fetch failed, falling back to search for: {item}")
-                coles_results = await search_with_retry(search_coles, coles_page, item)
+            _co = await fetch_coles_by_url(coles_page, coles_url)
+            if not _co: print(f"  Coles URL fetch failed: {coles_url}")
+            coles_results = [_co] if _co else []
+            _skip_picker_co = True
     else:
         # Name-based search (normal scrape) — honour url_overrides.json if present
         overrides_path = os.path.join(DATA_DIR, "url_overrides.json")
@@ -615,29 +601,21 @@ async def _scrape_single_item(
         pinned_co  = _url_ov.get(item, {}).get("coles_url", "")
 
         if pinned_ww or pinned_co:
-            # Fetch by pinned URL(s), fall back to search for the unpinned store
+            # Pinned URL — use it directly; no fallback to name-based search
             if pinned_ww:
-                ww_match = await fetch_ww_by_url(ww_page, pinned_ww)
-                if ww_match:
-                    _skip_picker_ww = True
-                else:
-                    res = await search_with_retry(search_woolworths, ww_page, item)
-                    ww_match = res[0] if res else None
+                _ww = await fetch_ww_by_url(ww_page, pinned_ww)
+                if not _ww: print(f"  WW pinned URL fetch failed: {pinned_ww}")
+                ww_results = [_ww] if _ww else []
+                _skip_picker_ww = True
             else:
-                res = await search_with_retry(search_woolworths, ww_page, item)
-                ww_match = res[0] if res else None
+                ww_results = await search_with_retry(search_woolworths, ww_page, item)
             if pinned_co:
-                coles_match = await fetch_coles_by_url(coles_page, pinned_co)
-                if coles_match:
-                    _skip_picker_co = True
-                else:
-                    res = await search_with_retry(search_coles, coles_page, item)
-                    coles_match = res[0] if res else None
+                _co = await fetch_coles_by_url(coles_page, pinned_co)
+                if not _co: print(f"  Coles pinned URL fetch failed: {pinned_co}")
+                coles_results = [_co] if _co else []
+                _skip_picker_co = True
             else:
-                res = await search_with_retry(search_coles, coles_page, item)
-                coles_match = res[0] if res else None
-            ww_results   = [ww_match]    if ww_match    else []
-            coles_results = [coles_match] if coles_match else []
+                coles_results = await search_with_retry(search_coles, coles_page, item)
         else:
             ww_results, coles_results = await asyncio.gather(
                 search_with_retry(search_woolworths, ww_page, item),
@@ -662,20 +640,21 @@ async def _scrape_single_item(
         if coles_match:
             print(f"    Coles match ({co_conf}): {coles_match['name']}")
 
-    # Carry forward existing store data when the search returned nothing.
-    # Prevents wiping prices on temporary Coles/WW failures or blocks.
-    if coles_match is None and not _skip_picker_co:
+    # Carry forward existing store data only when name-based search returned zero results
+    # (e.g. Coles/WW is blocking). Do NOT carry forward when search returned results but
+    # the matcher rejected them all — that means a real mismatch, not a temporary failure.
+    if coles_match is None and not _skip_picker_co and not coles_results:
         existing_co = existing_item.get("coles")
         if existing_co and existing_co.get("price") is not None:
             coles_match = existing_co
             co_conf = "carried"
-            print(f"    Coles: no result, keeping existing ${existing_co.get('price')} ({existing_co.get('name','?')})")
-    if ww_match is None and not _skip_picker_ww:
+            print(f"    Coles: search empty, keeping existing ${existing_co.get('price')} ({existing_co.get('name','?')})")
+    if ww_match is None and not _skip_picker_ww and not ww_results:
         existing_ww = existing_item.get("woolworths")
         if existing_ww and existing_ww.get("price") is not None:
             ww_match = existing_ww
             ww_conf = "carried"
-            print(f"    WW: no result, keeping existing ${existing_ww.get('price')} ({existing_ww.get('name','?')})")
+            print(f"    WW: search empty, keeping existing ${existing_ww.get('price')} ({existing_ww.get('name','?')})")
 
     if not ww_match and not coles_match:
         return None, True
