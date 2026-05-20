@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T03:32:50.514496+00:00",
+  "last_updated": "2026-05-20T03:32:51.419360+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -13280,7 +13280,7 @@
     },
     {
       "list_item": "Woolworths Thyme Leaves",
-      "last_scraped": "2026-05-20T02:49:57.299489+00:00",
+      "last_scraped": "2026-05-20T03:32:50.950504+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13311,18 +13311,8 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [
-        {
-          "name": "Hoyts Thyme | 15g",
-          "price": 1.6,
-          "unit_price": 1.6,
-          "unit": "10g",
-          "url": "https://www.coles.com.au/product/hoyts-thyme-15g-286901",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F286901.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "high",
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 16.7,
       "per_100_coles": 11.11,
@@ -13338,9 +13328,5 @@
     "total_saving": 12.95,
     "items_compared": 211,
     "items_not_found": 0
-  },
-  "scrape_progress": {
-    "done": 210,
-    "total": 211
   }
 }
