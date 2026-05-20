@@ -330,7 +330,7 @@
 
 <div class="deals-hero">
   <div class="deals-hero-title">🔥 Hot Deals</div>
-  <div class="deals-hero-sub">Items currently priced 10%+ below their historical average</div>
+  <div class="deals-hero-sub">Items currently priced at or below their bottom 20th percentile historical price</div>
   <div class="deals-hero-stats" id="heroStats"></div>
 </div>
 
@@ -372,8 +372,7 @@
             <th data-col="coles">
               <span class="store-chip coles sm">C</span> Coles Price <span class="sort-arrow"></span>
             </th>
-            <th data-col="avg" style="text-align:center">Avg Price <span class="sort-arrow"></span></th>
-            <th data-col="category">Category <span class="sort-arrow"></span></th>
+            <th data-col="avg" style="text-align:center">Hist. Avg <span class="sort-arrow"></span></th>
           </tr>
         </thead>
         <tbody id="dealsBody"></tbody>
@@ -382,7 +381,7 @@
     <div id="dealsEmpty" class="deals-empty" style="display:none">
       <div class="deals-empty-icon">🛒</div>
       <div class="deals-empty-title">No hot deals right now</div>
-      <div>Check back after prices are updated — deals appear when a price drops 10%+ below its average.</div>
+      <div>Check back after prices are updated — deals appear when a price drops into the bottom 20% of its recorded history.</div>
     </div>
   </div>
 </main>
@@ -391,6 +390,17 @@
 
 <script>
 // ── Shared utilities ──────────────────────────────────────────────────────────
+
+function resolveImgUrl(imgData) {
+  if (!imgData) return '';
+  if (typeof imgData === 'string') return imgData;
+  if (imgData.uri) return 'https://productimages.coles.com.au/productimages' + imgData.uri;
+  return '';
+}
+
+function loadPriorities() {
+  try { return JSON.parse(localStorage.getItem('pw_priorities_v1') || '{}'); } catch { return {}; }
+}
 
 const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '—';
 const fmtUnit = (price, unit) => {
@@ -466,12 +476,12 @@ function getDealInfo(item) {
   const results = [];
 
   if (ww != null && ww <= threshold) {
-    const pctOff = Math.round((mean - ww) / mean * 100);
+    const pctOff = Math.max(0, Math.round((mean - ww) / mean * 100));
     const isAllTimeLow = ww <= minHistoric;
     results.push({ store: 'woolworths', price: ww, pctOff, mean, minHistoric, isAllTimeLow });
   }
   if (co != null && co <= threshold) {
-    const pctOff = Math.round((mean - co) / mean * 100);
+    const pctOff = Math.max(0, Math.round((mean - co) / mean * 100));
     const isAllTimeLow = co <= minHistoric;
     results.push({ store: 'coles', price: co, pctOff, mean, minHistoric, isAllTimeLow });
   }
@@ -613,7 +623,10 @@ function renderSortBar() {
 function renderDeals() {
   if (!_data) return;
 
-  const items = _data.items || [];
+  const priorities = loadPriorities();
+  const items = ((_data.items || []).filter(item =>
+    !item.archived && priorities[item.list_item] !== 'archive'
+  ));
 
   // Collect all hot-deal items (may have deals at one or both stores)
   const allDeals = items
@@ -629,8 +642,11 @@ function renderDeals() {
   const heroEl = document.getElementById('heroStats');
   if (heroEl) {
     const allTimeLowCount = allDeals.filter(({ deal }) => deal.isAllTimeLow).length;
+    const showingAll = filtered.length === allDeals.length;
     heroEl.innerHTML = [
-      `<div class="deals-hero-stat"><strong>${allDeals.length}</strong> deals found</div>`,
+      showingAll
+        ? `<div class="deals-hero-stat"><strong>${allDeals.length}</strong> deals found</div>`
+        : `<div class="deals-hero-stat"><strong>${filtered.length}</strong> of <strong>${allDeals.length}</strong> deals shown</div>`,
       allTimeLowCount ? `<div class="deals-hero-stat"><strong>${allTimeLowCount}</strong> all-time lows 🏆</div>` : '',
     ].join('');
   }
@@ -671,7 +687,7 @@ function renderDeals() {
     const displayName = ov.displayName || item.list_item;
     const cat = getCategory(item);
 
-    const imgSrc = co?.image_url || ww?.image_url || '';
+    const imgSrc = resolveImgUrl(co?.image_url) || resolveImgUrl(ww?.image_url) || '';
     const imgHtml = imgSrc
       ? `<img class="deal-img" src="${imgSrc}" alt="" loading="lazy" onerror="this.style.display='none'" />`
       : '<div class="deal-img-placeholder"></div>';
@@ -744,7 +760,6 @@ function renderDeals() {
       <td class="${wwClass}">${wwHtml}</td>
       <td class="${coClass}">${coHtml}</td>
       <td>${avgCell}</td>
-      <td style="font-size:12px;color:var(--text-mid)">${cat}</td>
     </tr>`);
   });
 }
