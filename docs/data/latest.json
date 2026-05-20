@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T23:57:20.862163+00:00",
+  "last_updated": "2026-05-20T23:57:31.745544+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9762,7 +9762,7 @@
     },
     {
       "list_item": "Woolworths Wholegrain Wrap 8Pk",
-      "last_scraped": "2026-05-20T11:07:38.977066+00:00",
+      "last_scraped": "2026-05-20T23:57:24.357768+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9810,7 +9810,7 @@
     },
     {
       "list_item": "Yumi's Eggplant Mediterranean Dip",
-      "last_scraped": "2026-05-20T11:07:39.577817+00:00",
+      "last_scraped": "2026-05-20T23:57:24.481868+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9858,8 +9858,48 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "All Smiles Total Care Toothbrush Soft",
+      "last_scraped": "2026-05-20T23:57:27.888813+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 5.3
+        },
+        {
+          "date": "2026-02-03",
+          "price": 5.3
+        }
+      ],
+      "category": "Personal Care",
+      "woolworths": {
+        "name": "All Smiles Total Care Toothbrush Soft",
+        "price": 5.3,
+        "unit_price": 0.88,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/581157/all-smiles-total-care-toothbrush-soft",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/581157.jpg"
+      },
+      "coles": {
+        "name": "Colgate Total Foaming Clean Toothbrush Soft | 3 Pack",
+        "price": 10.5,
+        "unit_price": 3.5,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/colgate-total-foaming-clean-toothbrush-soft-3-pack-1611520",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1611520.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 5.2,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Ajax Antibacterial Wipes Eco Vanilla & Berries 110 Wipes",
-      "last_scraped": "2026-05-20T11:07:44.602041+00:00",
+      "last_scraped": "2026-05-20T23:57:29.016587+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9901,48 +9941,8 @@
       "per_100_unit": "100ml"
     },
     {
-      "list_item": "All Smiles Total Care Toothbrush Soft",
-      "last_scraped": "2026-05-20T11:07:45.316951+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-02-02",
-          "price": 5.3
-        },
-        {
-          "date": "2026-02-03",
-          "price": 5.3
-        }
-      ],
-      "category": "Personal Care",
-      "woolworths": {
-        "name": "All Smiles Total Care Toothbrush Soft",
-        "price": 5.3,
-        "unit_price": 0.88,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/581157/all-smiles-total-care-toothbrush-soft",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/581157.jpg"
-      },
-      "coles": {
-        "name": "Colgate Total Foaming Clean Toothbrush Soft | 3 Pack",
-        "price": 10.5,
-        "unit_price": 3.5,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/colgate-total-foaming-clean-toothbrush-soft-3-pack-1611520",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1611520.jpg&w=640&q=90"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 5.2,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
-      "last_scraped": "2026-05-20T11:07:47.679139+00:00",
+      "last_scraped": "2026-05-20T23:57:31.733572+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12148,7 +12148,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 155,
+    "done": 160,
     "total": 211
   }
 }
