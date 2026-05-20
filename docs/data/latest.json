@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T11:07:28.567183+00:00",
+  "last_updated": "2026-05-20T11:07:35.873425+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9519,7 +9519,7 @@
     },
     {
       "list_item": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In",
-      "last_scraped": "2026-05-20T06:16:00.885119+00:00",
+      "last_scraped": "2026-05-20T11:07:28.743562+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -9575,8 +9575,52 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Rosemary Leaves",
+      "last_scraped": "2026-05-20T11:07:31.940863+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-01-29",
+          "price": 2.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 2.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 2.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Rosemary Leaves",
+        "price": 2.0,
+        "unit_price": 1.11,
+        "unit": "10G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/251141/woolworths-rosemary-leaves",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251141.jpg"
+      },
+      "coles": {
+        "name": "Coles Rosemary Leaves | 28g",
+        "price": 2.8,
+        "unit_price": 2.8,
+        "unit": "10g",
+        "url": "https://www.coles.com.au/product/coles-rosemary-leaves-28g-8984220",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8984220.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.8,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 11.1,
+      "per_100_coles": 10.0,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Red Onions Bag",
-      "last_scraped": "2026-05-20T06:16:04.586051+00:00",
+      "last_scraped": "2026-05-20T11:07:32.747528+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -9627,52 +9671,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Rosemary Leaves",
-      "last_scraped": "2026-05-20T06:16:07.207768+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-01-29",
-          "price": 2.0
-        },
-        {
-          "date": "2025-03-17",
-          "price": 2.0
-        },
-        {
-          "date": "2026-03-02",
-          "price": 2.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Rosemary Leaves",
-        "price": 2.0,
-        "unit_price": 1.11,
-        "unit": "10G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/251141/woolworths-rosemary-leaves",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251141.jpg"
-      },
-      "coles": {
-        "name": "Coles Rosemary Leaves | 28g",
-        "price": 2.8,
-        "unit_price": 2.8,
-        "unit": "10g",
-        "url": "https://www.coles.com.au/product/coles-rosemary-leaves-28g-8984220",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8984220.jpg&w=640&q=90"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.8,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 11.1,
-      "per_100_coles": 10.0,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Thickened Cream",
-      "last_scraped": "2026-05-20T06:16:08.367094+00:00",
+      "last_scraped": "2026-05-20T11:07:35.383225+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -9728,7 +9728,7 @@
     },
     {
       "list_item": "Woolworths Tuna In Springwater",
-      "last_scraped": "2026-05-20T06:16:10.868411+00:00",
+      "last_scraped": "2026-05-20T11:07:35.863582+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -12679,7 +12679,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 150,
+    "done": 155,
     "total": 211
   }
 }
