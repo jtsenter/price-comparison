@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T23:55:34.011537+00:00",
+  "last_updated": "2026-05-20T23:56:58.951908+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9002,7 +9002,7 @@
     },
     {
       "list_item": "Woolworths Cous Cous",
-      "last_scraped": "2026-05-20T11:07:10.152939+00:00",
+      "last_scraped": "2026-05-20T23:55:34.791937+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -9045,8 +9045,56 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Extra Virgin Olive Oil Spray",
+      "last_scraped": "2026-05-20T23:55:42.992273+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 3.7
+        },
+        {
+          "date": "2025-02-02",
+          "price": 3.7
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.7
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.3
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Extra Virgin Olive Oil Spray",
+        "price": 3.3,
+        "unit_price": 2.2,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/260739/woolworths-extra-virgin-olive-oil-spray",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/260739.jpg"
+      },
+      "coles": {
+        "name": "Coles Extra Virgin Olive Oil | 500mL",
+        "price": 9.0,
+        "unit_price": 9.0,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5449504.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 5.7,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.2,
+      "per_100_coles": 1.8,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets",
-      "last_scraped": "2026-05-20T11:07:13.594539+00:00",
+      "last_scraped": "2026-05-20T23:55:43.257036+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9094,56 +9142,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Extra Virgin Olive Oil Spray",
-      "last_scraped": "2026-05-20T11:07:13.600978+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2024-12-02",
-          "price": 3.7
-        },
-        {
-          "date": "2025-02-02",
-          "price": 3.7
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.7
-        },
-        {
-          "date": "2026-03-10",
-          "price": 3.3
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Extra Virgin Olive Oil Spray",
-        "price": 3.3,
-        "unit_price": 2.2,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/260739/woolworths-extra-virgin-olive-oil-spray",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/260739.jpg"
-      },
-      "coles": {
-        "name": "Coles Extra Virgin Olive Oil | 500mL",
-        "price": 9.0,
-        "unit_price": 9.0,
-        "unit": "100mL",
-        "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5449504.jpg&w=640&q=90"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 5.7,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.2,
-      "per_100_coles": 1.8,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Woolworths Green Cabbage Quarter",
-      "last_scraped": "2026-05-20T11:07:17.434681+00:00",
+      "last_scraped": "2026-05-20T23:56:58.775076+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9191,7 +9191,7 @@
     },
     {
       "list_item": "Woolworths Lamb Mince",
-      "last_scraped": "2026-05-20T11:07:17.480941+00:00",
+      "last_scraped": "2026-05-20T23:56:58.943840+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -12148,7 +12148,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 140,
+    "done": 145,
     "total": 211
   }
 }
