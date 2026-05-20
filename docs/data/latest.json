@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T11:09:29.872721+00:00",
+  "last_updated": "2026-05-20T11:23:13.716349+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4397,7 +4397,7 @@
     },
     {
       "list_item": "Woolworths Greek Style Yoghurt",
-      "last_scraped": "2026-05-20T11:03:59.165081+00:00",
+      "last_scraped": "2026-05-20T11:23:13.354908+00:00",
       "trip_count": 33,
       "price_history": [
         {
@@ -4535,27 +4535,31 @@
       ],
       "category": "Dairy & Eggs",
       "woolworths": {
-        "name": "Woolworths Greek Style Yoghurt",
-        "price": 8.0,
-        "unit_price": 0.4,
+        "name": "Woolworths Natural Greek Style Yoghurt",
+        "price": 4.2,
+        "unit_price": 0.42,
         "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/249085/woolworths-greek-style-yoghurt",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/249085.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/571487/woolworths-natural-greek-style-yoghurt",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/571487.jpg"
       },
       "coles": {
-        "name": "Coles Greek Style Natural Yoghurt | 1kg",
+        "name": "Greek Style Natural Yoghurt",
         "price": 4.5,
-        "unit_price": null,
-        "unit": null,
+        "unit_price": 0.45,
+        "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-greek-style-natural-yoghurt-1kg-2273478",
-        "image_url": "https://shop.coles.com.au/wcsstore/Coles-CAS/images/2/2/7/2273478-th.jpg"
+        "image_url": {
+          "altText": "",
+          "type": "default",
+          "uri": "/2/2273478.jpg"
+        }
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 3.5,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.3,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
-      "per_100_ww": 0.4,
+      "per_100_ww": 0.42,
       "per_100_coles": 0.45,
       "per_100_unit": "100g"
     },
@@ -12119,11 +12123,11 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 1106.38,
+    "total_woolworths": 1102.58,
     "total_coles": 1288.71,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 182.33,
+    "total_saving": 186.13,
     "items_compared": 209,
     "items_not_found": 2
   }
