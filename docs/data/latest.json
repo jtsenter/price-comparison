@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T04:52:27.902030+00:00",
+  "last_updated": "2026-05-20T04:52:36.094809+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1022,7 +1022,7 @@
     },
     {
       "list_item": "Fresh Cauliflower Half",
-      "last_scraped": "2026-05-20T03:24:40.538660+00:00",
+      "last_scraped": "2026-05-20T04:52:28.402247+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -1107,26 +1107,84 @@
         }
       ],
       "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Fresh Cauliflower Half",
-        "price": 1.95,
-        "unit_price": 1.95,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/135568/fresh-cauliflower-half",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135568.jpg"
-      },
+      "woolworths": null,
       "coles": {
         "name": "Coles Cauliflower Half | 1 each",
-        "price": 3.9,
-        "unit_price": 3.9,
-        "unit": "1ea",
+        "price": 7.5,
+        "unit_price": null,
+        "unit": null,
         "url": "https://www.coles.com.au/product/coles-cauliflower-half-1-each-4601320",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4601320.jpg&w=640&q=90"
+        "image_url": "https://shop.coles.com.au/wcsstore/Coles-CAS/images/4/6/0/4601320-th.jpg"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.95,
+      "cheaper_store": "coles",
+      "saving_per_item": null,
       "alternatives": [],
-      "match_confidence": "medium",
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Kale Fresh Bunch",
+      "last_scraped": "2026-05-20T04:52:32.623684+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2025-01-29",
+          "price": 3.9
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.9
+        },
+        {
+          "date": "2025-04-05",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.9
+        },
+        {
+          "date": "2025-05-04",
+          "price": 3.9
+        },
+        {
+          "date": "2025-06-13",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.9
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.9
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Kale Fresh Bunch",
+        "price": 4.6,
+        "unit_price": 4.6,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/380338/kale-fresh-bunch",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/380338.jpg"
+      },
+      "coles": {
+        "name": "Coles Kale Bunch Green | 1 Each",
+        "price": 4.5,
+        "unit_price": 4.5,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-kale-bunch-green-1-each-8696598",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8696598.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.1,
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -1134,7 +1192,7 @@
     },
     {
       "list_item": "Hass Avocado",
-      "last_scraped": "2026-05-20T03:24:45.313526+00:00",
+      "last_scraped": "2026-05-20T04:52:33.534150+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1197,196 +1255,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Helga's Wholemeal Bread With Grains",
-      "last_scraped": "2026-05-20T03:24:46.951679+00:00",
-      "trip_count": 15,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 5.0
-        },
-        {
-          "date": "2024-11-12",
-          "price": 5.0
-        },
-        {
-          "date": "2024-12-02",
-          "price": 5.0
-        },
-        {
-          "date": "2025-02-02",
-          "price": 5.0
-        },
-        {
-          "date": "2025-03-17",
-          "price": 5.0
-        },
-        {
-          "date": "2025-04-05",
-          "price": 5.0
-        },
-        {
-          "date": "2025-04-25",
-          "price": 5.0
-        },
-        {
-          "date": "2025-05-12",
-          "price": 5.0
-        },
-        {
-          "date": "2025-05-22",
-          "price": 5.0
-        },
-        {
-          "date": "2025-06-21",
-          "price": 5.0
-        },
-        {
-          "date": "2025-07-03",
-          "price": 5.0
-        },
-        {
-          "date": "2025-07-26",
-          "price": 5.0
-        },
-        {
-          "date": "2026-04-13",
-          "price": 5.2
-        },
-        {
-          "date": "2026-04-21",
-          "price": 5.2
-        },
-        {
-          "date": "2026-04-29",
-          "price": 5.2
-        }
-      ],
-      "category": "Bakery",
-      "woolworths": null,
-      "coles": {
-        "name": "Helga's Traditional Wholemeal Bread | 750g",
-        "price": 5.2,
-        "unit_price": 5.2,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/helga's-traditional-wholemeal-bread-750g-5969435",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5969435.jpg&w=640&q=90"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
-      "alternatives": [
-        {
-          "name": "Helga's Health Plus Protein Wholemeal | 700g",
-          "price": 4.9,
-          "unit_price": 0.7,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/helga's-health-plus-protein-wholemeal-700g-1089906",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1089906.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Helga's Gluten Free Traditional Wholemeal Bread | 500g",
-          "price": 7.1,
-          "unit_price": 1.42,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/helga's-gluten-free-traditional-wholemeal-bread-500g-3237957",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3237957.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Helgas Mini Loaf Traditional Wholemeal | 360g",
-          "price": 4.3,
-          "unit_price": 4.3,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/helgas-mini-loaf-traditional-wholemeal-360g-3860887",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3860887.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 0.69,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Kale Fresh Bunch",
-      "last_scraped": "2026-05-20T03:24:49.384180+00:00",
-      "trip_count": 8,
-      "price_history": [
-        {
-          "date": "2025-01-29",
-          "price": 3.9
-        },
-        {
-          "date": "2025-03-27",
-          "price": 3.9
-        },
-        {
-          "date": "2025-04-05",
-          "price": 3.5
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.9
-        },
-        {
-          "date": "2025-05-04",
-          "price": 3.9
-        },
-        {
-          "date": "2025-06-13",
-          "price": 3.9
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.9
-        },
-        {
-          "date": "2026-02-03",
-          "price": 3.9
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Kale Fresh Bunch",
-        "price": 4.6,
-        "unit_price": 4.6,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/380338/kale-fresh-bunch",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/380338.jpg"
-      },
-      "coles": {
-        "name": "Coles Kale Bunch Green | 1 Each",
-        "price": 4.5,
-        "unit_price": 4.5,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-kale-bunch-green-1-each-8696598",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8696598.jpg&w=640&q=90",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.1,
-      "alternatives": [
-        {
-          "name": "Coles Kale Bunch Green | 1 Each",
-          "price": 4.5,
-          "unit_price": 4.5,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/coles-kale-bunch-green-1-each-8696598",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8696598.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Lebanese Cucumbers",
-      "last_scraped": "2026-05-20T03:24:50.714059+00:00",
+      "last_scraped": "2026-05-20T04:52:36.093573+00:00",
       "trip_count": 27,
       "price_history": [
         {
@@ -1518,7 +1388,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 0.05,
       "alternatives": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.99,
@@ -13312,18 +13182,20 @@
       "per_100_unit": "100g"
     }
   ],
-  "not_found_items": [],
+  "not_found_items": [
+    "Helga's Wholemeal Bread With Grains"
+  ],
   "summary": {
-    "total_woolworths": 1331.62,
-    "total_coles": 1350.57,
+    "total_woolworths": 1329.67,
+    "total_coles": 1348.97,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 18.95,
-    "items_compared": 211,
-    "items_not_found": 0
+    "total_saving": 19.3,
+    "items_compared": 210,
+    "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 10,
+    "done": 15,
     "total": 211
   }
 }
