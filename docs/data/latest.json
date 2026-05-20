@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T06:12:01.041505+00:00",
+  "last_updated": "2026-05-20T06:12:08.979108+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2150,7 +2150,7 @@
     },
     {
       "list_item": "The Dutch Company Confectionary 4 Syrup Wafers",
-      "last_scraped": "2026-05-20T05:13:51.492370+00:00",
+      "last_scraped": "2026-05-20T06:12:01.179945+00:00",
       "trip_count": 11,
       "price_history": [
         {
@@ -2218,7 +2218,7 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.44,
       "per_100_coles": 2.44,
@@ -2226,7 +2226,7 @@
     },
     {
       "list_item": "The Odd Bunch Carrots",
-      "last_scraped": "2026-05-20T05:13:56.619403+00:00",
+      "last_scraped": "2026-05-20T06:12:04.397059+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -2290,7 +2290,7 @@
     },
     {
       "list_item": "The Odd Bunch Lebanese Cucumber Punnet",
-      "last_scraped": "2026-05-20T05:13:57.809919+00:00",
+      "last_scraped": "2026-05-20T06:12:04.552876+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -2345,26 +2345,69 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 3.52,
-      "alternatives": [
-        {
-          "name": "Kvuzat Yavne Pickled Cucumbers In Brine | 540g",
-          "price": 6.0,
-          "unit_price": 6.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/kvuzat-yavne-pickled-cucumbers-in-brine-540g-7878534",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7878534.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.68,
       "per_100_coles": 0.99,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "The Odd Bunch Mango",
+      "last_scraped": "2026-05-20T06:12:08.929375+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 6.4
+        },
+        {
+          "date": "2024-11-12",
+          "price": 6.4
+        },
+        {
+          "date": "2024-11-20",
+          "price": 6.4
+        },
+        {
+          "date": "2024-12-02",
+          "price": 6.4
+        },
+        {
+          "date": "2024-12-09",
+          "price": 7.2
+        },
+        {
+          "date": "2024-12-19",
+          "price": 7.2
+        },
+        {
+          "date": "2025-03-17",
+          "price": 9.6
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": null,
+      "coles": {
+        "name": "Nice & Natural Fruit Oddities Raspberry Mango | 136g",
+        "price": 4.0,
+        "unit_price": 2.94,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/nice-and-natural-fruit-oddities-raspberry-mango-136g-3618178",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3618178.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 2.94,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "The Odd Bunch Lemon Prepacked",
-      "last_scraped": "2026-05-20T05:14:02.069273+00:00",
+      "last_scraped": "2026-05-20T06:12:08.976002+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -2423,74 +2466,11 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 4.0,
-      "alternatives": [
-        {
-          "name": "Strepsils Extra Honey And Lemon Fast Numbing Sore Throat Pain Relief Wi ... 1 Pack",
-          "price": 7.0,
-          "unit_price": 0.44,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/strepsils-extra-honey-and-lemon-fast-numbing-sore-throat-pain-relief-with-anaesthetic-16-lozenges-1-pack-3417981",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3417981.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.7,
       "per_100_coles": 0.75,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "The Odd Bunch Mango",
-      "last_scraped": "2026-05-20T05:14:03.578126+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 6.4
-        },
-        {
-          "date": "2024-11-12",
-          "price": 6.4
-        },
-        {
-          "date": "2024-11-20",
-          "price": 6.4
-        },
-        {
-          "date": "2024-12-02",
-          "price": 6.4
-        },
-        {
-          "date": "2024-12-09",
-          "price": 7.2
-        },
-        {
-          "date": "2024-12-19",
-          "price": 7.2
-        },
-        {
-          "date": "2025-03-17",
-          "price": 9.6
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": null,
-      "coles": {
-        "name": "Nice & Natural Fruit Oddities Raspberry Mango | 136g",
-        "price": 4.0,
-        "unit_price": 2.94,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/nice-and-natural-fruit-oddities-raspberry-mango-136g-3618178",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3618178.jpg&w=640&q=90"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 2.94,
       "per_100_unit": "100g"
     },
     {
@@ -13860,7 +13840,7 @@
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 25,
+    "done": 30,
     "total": 211
   }
 }
