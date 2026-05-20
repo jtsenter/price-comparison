@@ -277,7 +277,7 @@ COLES_EXTRACT_JS = """
         if (!unitPriceText) {
             for (const el of tile.querySelectorAll('span,div,p')) {
                 const t = el.textContent?.trim() || '';
-                if (t.length < 30 && /\$[\d.]+\s*(\/|per\s*)\s*[\d.]*\s*\w+/i.test(t)) {
+                if (t.length < 30 && /\\$[\\d.]+\\s*(\\/|per\\s*)\\s*[\\d.]*\\s*\\w+/i.test(t)) {
                     unitPriceText = t; break;
                 }
             }
@@ -683,7 +683,10 @@ async def _scrape_single_item(
         if not alt.get("retailer"):
             alt["retailer"] = "woolworths" if WOOLWORTHS_BASE in alt.get("url", "") else "coles"
 
-    pair_meta = validate_pair(item, ww_match, coles_match, ww_conf, co_conf)
+    # "carried" is internal only; validate_pair uses the standard confidence vocabulary
+    _vww = "low" if ww_conf == "carried" else ww_conf
+    _vco = "low" if co_conf == "carried" else co_conf
+    pair_meta = validate_pair(item, ww_match, coles_match, _vww, _vco)
 
     return {
         "list_item": item,
