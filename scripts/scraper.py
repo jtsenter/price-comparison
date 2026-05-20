@@ -824,6 +824,8 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         await context.add_init_script(
             "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
         )
+        context.set_default_navigation_timeout(PAGE_TIMEOUT_MS)
+        context.set_default_timeout(PAGE_TIMEOUT_MS)
 
         if single_item:
             # Single-item: one page-pair, sequential
