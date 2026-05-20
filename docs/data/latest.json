@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T23:57:31.745544+00:00",
+  "last_updated": "2026-05-20T23:57:43.485112+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9983,7 +9983,7 @@
     },
     {
       "list_item": "Balconi Mix Max Spgnckes Cocoa",
-      "last_scraped": "2026-05-20T11:07:49.637019+00:00",
+      "last_scraped": "2026-05-20T23:57:33.811294+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10023,7 +10023,7 @@
     },
     {
       "list_item": "Coca-Cola Zero Sugar Soft Drink Bottle",
-      "last_scraped": "2026-05-20T11:07:50.505004+00:00",
+      "last_scraped": "2026-05-20T23:57:35.476404+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10038,11 +10038,11 @@
       "category": "Pantry",
       "woolworths": {
         "name": "Coca-Cola Zero Sugar Soft Drink Bottle",
-        "price": 3.5,
-        "unit_price": 1.75,
+        "price": 4.2,
+        "unit_price": 3.36,
         "unit": "1L",
-        "url": "https://www.woolworths.com.au/shop/productdetails/672966/coca-cola-zero-sugar-soft-drink-bottle",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/672966.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/623034/coca-cola-zero-sugar-soft-drink-bottle",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/623034.jpg"
       },
       "coles": {
         "name": "Coca-Cola Zero Sugar Soft Drink Bottle | 2L",
@@ -10052,18 +10052,68 @@
         "url": "https://www.coles.com.au/product/coca-cola-zero-sugar-soft-drink-bottle-2l-3029790",
         "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3029790.jpg&w=640&q=90"
       },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.7,
+      "alternatives": [
+        {
+          "name": "Coca-Cola Zero Sugar Soft Drink Mini Bottles",
+          "price": 10.5,
+          "unit_price": 2.92,
+          "unit": "1L",
+          "url": "https://www.woolworths.com.au/shop/productdetails/679122/coca-cola-zero-sugar-soft-drink-mini-bottles",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/679122.jpg",
+          "retailer": "woolworths"
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.34,
+      "per_100_coles": 0.17,
+      "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Colman's Ingredients English Mustard",
+      "last_scraped": "2026-05-20T23:57:39.247993+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.6
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Colman's Ingredients English Mustard",
+        "price": 4.5,
+        "unit_price": 4.5,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/88972/colman-s-ingredients-english-mustard",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/088972.jpg"
+      },
+      "coles": {
+        "name": "Colman's Old English Mustard | 100g",
+        "price": 4.5,
+        "unit_price": 4.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/colman's-old-english-mustard-100g-6921434",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6921434.jpg&w=640&q=90"
+      },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 0.17,
-      "per_100_coles": 0.17,
-      "per_100_unit": "100ml"
+      "per_100_ww": 4.5,
+      "per_100_coles": 4.5,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons",
-      "last_scraped": "2026-05-20T11:07:53.821471+00:00",
+      "last_scraped": "2026-05-20T23:57:39.571660+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10103,48 +10153,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Colman's Ingredients English Mustard",
-      "last_scraped": "2026-05-20T11:07:53.883588+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-05-12",
-          "price": 3.0
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.6
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Colman's Ingredients English Mustard",
-        "price": 4.5,
-        "unit_price": 4.5,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/88972/colman-s-ingredients-english-mustard",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/088972.jpg"
-      },
-      "coles": {
-        "name": "Colman's Old English Mustard | 100g",
-        "price": 4.5,
-        "unit_price": 4.5,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/colman's-old-english-mustard-100g-6921434",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6921434.jpg&w=640&q=90"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 4.5,
-      "per_100_coles": 4.5,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Dettol Antibacterial Liquid Hand Wash Hand Soap Pump Aloe Vera",
-      "last_scraped": "2026-05-20T11:07:57.552730+00:00",
+      "last_scraped": "2026-05-20T23:57:43.474724+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12139,16 +12149,16 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 1108.22,
+    "total_woolworths": 1108.92,
     "total_coles": 1122.46,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 14.24,
+    "total_saving": 13.54,
     "items_compared": 210,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 160,
+    "done": 165,
     "total": 211
   }
 }
