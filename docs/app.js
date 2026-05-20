@@ -1556,8 +1556,10 @@ function renderPage(data) {
       strip.style.display = 'flex';
       strip.classList.toggle('stale', isStale);
       $('scrapeStripLabel').textContent = isStale
-        ? `⚠ Stalled at ${prog.done}/${prog.total} — consider retrying`
-        : `Scraping ${prog.done}/${prog.total} items`;
+        ? `⚠ Stalled at ${prog.done} of ${prog.total} — try refreshing`
+        : pct === 0
+          ? `Starting price refresh…`
+          : `Refreshing prices… ${prog.done} of ${prog.total}`;
       $('scrapeStripFill').style.width = `${pct}%`;
       $('scrapeStripPct').textContent = `${pct}%`;
       const retryBtn = $('scrapeStripRetry');
@@ -1712,13 +1714,14 @@ function renderPage(data) {
     const matchConf = item.match_confidence;
     const sizeWarn  = item.size_warning;
     let matchWarnHtml = '';
-    if (matchConf === 'none') {
-      matchWarnHtml = `<span class="match-warn" title="Could not confidently match this item across stores — prices may be for different products">⚠ bad match?</span>`;
-    } else if (matchConf === 'low' || sizeWarn) {
+    const _dismissed = (() => { try { return JSON.parse(localStorage.getItem('pw_dismissed_warns_v1') || '[]'); } catch { return []; } })();
+    if (matchConf === 'none' && !_dismissed.includes(item.list_item)) {
+      matchWarnHtml = `<span class="match-warn match-warn-none" title="Could not confidently match this item across stores — prices may be for different products">⚠ possible mismatch<button class="warn-dismiss" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Dismiss">✕</button></span>`;
+    } else if ((matchConf === 'low' || sizeWarn) && !_dismissed.includes(item.list_item)) {
       const tip = sizeWarn
-        ? 'Pack sizes differ significantly between stores — per-100g comparison may be more useful than price'
-        : 'Low-confidence match — products may not be equivalent';
-      matchWarnHtml = `<span class="match-warn" title="${tip}">⚠</span>`;
+        ? 'Pack sizes differ between stores — per-100g is a better comparison'
+        : 'Low-confidence match — verify these are the same product';
+      matchWarnHtml = `<span class="match-warn match-warn-low" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="${tip}">⚠<button class="warn-dismiss" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Dismiss">✕</button></span>`;
     }
 
     const itemCell = `
@@ -2451,7 +2454,7 @@ async function boot() {
         }
       );
       btn.textContent = '✓ Triggered';
-      setTimeout(() => { btn.disabled = false; btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Scrape Archived'; }, 4000);
+      setTimeout(() => { btn.disabled = false; btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Refresh Archived'; }, 4000);
     } catch (e) {
       alert(`Error: ${e.message}`);
       btn.disabled = false;
@@ -2512,6 +2515,15 @@ async function boot() {
     renderPage(data);
     showNameChangesNotice();
 
+    // Auto-dismiss low-confidence badges after 8 s (not "none" — those need manual action)
+    setTimeout(() => {
+      document.querySelectorAll('.match-warn-low').forEach(el => {
+        el.style.transition = 'opacity 0.5s';
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 500);
+      });
+    }, 8000);
+
     const tbody = $('tableBody');
     if (tbody) {
       tbody.addEventListener('click', (e) => {
@@ -2549,6 +2561,19 @@ async function boot() {
           triggerItemRefresh(refreshBtn.dataset.item, refreshBtn, { wwUrl: ov.wwUrl, colesUrl: ov.colesUrl });
           return;
         }
+        const warnDismiss = e.target.closest('.warn-dismiss');
+        if (warnDismiss) {
+          e.stopPropagation();
+          const itemName = warnDismiss.dataset.item;
+          try {
+            const d = JSON.parse(localStorage.getItem('pw_dismissed_warns_v1') || '[]');
+            if (!d.includes(itemName)) d.push(itemName);
+            localStorage.setItem('pw_dismissed_warns_v1', JSON.stringify(d));
+          } catch {}
+          warnDismiss.closest('.match-warn')?.remove();
+          return;
+        }
+
         const editBtn = e.target.closest('.item-edit-btn');
         if (editBtn && _lastData) {
           const itemName = editBtn.dataset.editItem;
