@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T11:01:48.464644+00:00",
+  "last_updated": "2026-05-20T11:02:07.797395+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -554,7 +554,7 @@
     },
     {
       "list_item": "Capsicum Yellow",
-      "last_scraped": "2026-05-20T06:32:00.903683+00:00",
+      "last_scraped": "2026-05-20T11:01:55.173287+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -608,25 +608,29 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135324.jpg"
       },
       "coles": {
-        "name": "Coles Yellow Capsicum | approx. 220g",
-        "price": 6.9,
-        "unit_price": null,
-        "unit": null,
+        "name": "Yellow Capsicum",
+        "price": 1.73,
+        "unit_price": 7.9,
+        "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-yellow-capsicum-approx.-220g-7215355",
-        "image_url": "https://shop.coles.com.au/wcsstore/Coles-CAS/images/7/2/1/7215355-zm.jpg"
+        "image_url": {
+          "altText": "",
+          "type": "default",
+          "uri": "/7/7215355.jpg"
+        }
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 4.42,
+      "cheaper_store": "coles",
+      "saving_per_item": 0.75,
       "alternatives": [],
       "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
-      "per_100_coles": 3.14,
+      "per_100_coles": 0.79,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Cavendish Bananas",
-      "last_scraped": "2026-05-20T06:32:03.890569+00:00",
+      "last_scraped": "2026-05-20T11:01:58.584977+00:00",
       "trip_count": 30,
       "price_history": [
         {
@@ -771,7 +775,7 @@
     },
     {
       "list_item": "Driscoll's Raspberries Punnet",
-      "last_scraped": "2026-05-20T06:32:07.314357+00:00",
+      "last_scraped": "2026-05-20T11:02:00.774621+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -863,7 +867,7 @@
     },
     {
       "list_item": "Eat Now Hass Avocado",
-      "last_scraped": "2026-05-20T06:32:09.216709+00:00",
+      "last_scraped": "2026-05-20T11:02:03.973345+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -916,7 +920,7 @@
     },
     {
       "list_item": "Fresh Broccoli",
-      "last_scraped": "2026-05-20T06:32:13.421588+00:00",
+      "last_scraped": "2026-05-20T11:02:07.795962+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -13282,15 +13286,15 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 1113.27,
-    "total_coles": 1293.88,
+    "total_coles": 1288.71,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 180.61,
+    "total_saving": 175.44,
     "items_compared": 209,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 5,
+    "done": 10,
     "total": 211
   }
 }
