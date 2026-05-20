@@ -7,7 +7,7 @@ import subprocess
 import sys
 import threading
 from datetime import datetime, timezone
-from urllib.parse import quote
+from urllib.parse import quote, urlparse, parse_qs, unquote
 
 from playwright.async_api import async_playwright
 
@@ -18,6 +18,26 @@ from shopping_list import detect_fuzzy_changes, get_purchase_history
 
 WOOLWORTHS_BASE = "https://www.woolworths.com.au"
 COLES_BASE = "https://www.coles.com.au"
+COLES_CDN = "https://cdn.productimages.coles.com.au/productimages"
+
+
+def _normalise_coles_img(img) -> str:
+    """Return a publicly accessible image URL from whatever Coles gives us."""
+    if not img:
+        return ""
+    if isinstance(img, dict):
+        uri = img.get("uri", "")
+        return (COLES_CDN + uri) if uri else ""
+    if not isinstance(img, str):
+        return ""
+    if "/_next/image" in img:
+        try:
+            inner = parse_qs(urlparse(img).query).get("url", [""])[0]
+            if inner:
+                return unquote(inner)
+        except Exception:
+            pass
+    return img
 MAX_RESULTS = 5
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "docs", "data")
 FLAG_PATH = os.path.join(DATA_DIR, "name_changes_detected.json")
@@ -321,7 +341,7 @@ async def search_coles(page, query: str) -> list[dict]:
                 "unit_price": unit_price,
                 "unit": unit,
                 "url": resolve_url(r["url"], COLES_BASE),
-                "image_url": r.get("image_url", ""),
+                "image_url": _normalise_coles_img(r.get("image_url", "")),
             })
         return results
     except Exception as e:
@@ -347,7 +367,8 @@ COLES_PRODUCT_PAGE_JS = """
                 const price = pricing?.now ?? pricing?.current ?? prod?.priceCalc?.price ?? prod?.unitPrice ?? prod?.price;
                 if (name && price != null && price > 0) {
                     const comparable = pricing?.comparable || pricing?.cupPrice || '';
-                    const img = prod?.imageUris?.[0] || prod?.images?.[0]?.uri || '';
+                    const rawUri = prod?.imageUris?.[0];
+                    const img = (typeof rawUri === 'object' ? rawUri?.uri : rawUri) || prod?.images?.[0]?.uri || '';
                     return { name, price_text: '$' + price, unit_price_text: comparable, image_url: img };
                 }
             }
@@ -437,7 +458,7 @@ async def fetch_coles_by_url(page, url: str) -> dict | None:
                 "unit_price": unit_price,
                 "unit": unit,
                 "url": url,
-                "image_url": raw.get("image_url", ""),
+                "image_url": _normalise_coles_img(raw.get("image_url", "")),
             }
         print(f"  [Coles] Could not extract product (name={name!r}, price={price}) from: {url}")
     except Exception as e:

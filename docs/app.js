@@ -2,6 +2,20 @@
 
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '—';
+
+function resolveImgUrl(imgData) {
+  if (!imgData) return '';
+  if (typeof imgData === 'object' && imgData.uri)
+    return 'https://cdn.productimages.coles.com.au/productimages' + imgData.uri;
+  if (typeof imgData !== 'string') return '';
+  if (imgData.includes('/_next/image')) {
+    try {
+      const inner = new URL(imgData).searchParams.get('url');
+      if (inner) return decodeURIComponent(inner);
+    } catch {}
+  }
+  return imgData;
+}
 const fmtUnit = (price, unit) => {
   if (price == null) return '';
   if (!unit) return `${fmt(price)}/unit`;
@@ -1667,7 +1681,7 @@ function renderPage(data) {
     const coUrl  = ov.colesUrl || co?.url  || null;
     const displayName = ov.displayName || item.list_item;
 
-    const imgSrc = co?.image_url || ww?.image_url || '';
+    const imgSrc = resolveImgUrl(co?.image_url) || resolveImgUrl(ww?.image_url) || '';
     const imgHtml = imgSrc
       ? `<img class="item-img" src="${imgSrc}" alt="" loading="lazy" onerror="this.style.display='none'" />`
       : '<div class="item-img-placeholder"></div>';

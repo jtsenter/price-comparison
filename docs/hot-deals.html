@@ -393,9 +393,16 @@
 
 function resolveImgUrl(imgData) {
   if (!imgData) return '';
-  if (typeof imgData === 'string') return imgData;
-  if (imgData.uri) return 'https://productimages.coles.com.au/productimages' + imgData.uri;
-  return '';
+  if (typeof imgData === 'object' && imgData.uri)
+    return 'https://cdn.productimages.coles.com.au/productimages' + imgData.uri;
+  if (typeof imgData !== 'string') return '';
+  if (imgData.includes('/_next/image')) {
+    try {
+      const inner = new URL(imgData).searchParams.get('url');
+      if (inner) return decodeURIComponent(inner);
+    } catch {}
+  }
+  return imgData;
 }
 
 function loadPriorities() {
