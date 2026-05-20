@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T06:35:04.233021+00:00",
+  "last_updated": "2026-05-20T06:35:20.830733+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5459,7 +5459,7 @@
     },
     {
       "list_item": "Woolworths Sour Cream",
-      "last_scraped": "2026-05-20T06:13:13.304885+00:00",
+      "last_scraped": "2026-05-20T06:35:08.550564+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5515,7 +5515,7 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.1,
       "per_100_coles": 1.1,
@@ -5523,7 +5523,7 @@
     },
     {
       "list_item": "Woolworths Spring Water Bottles",
-      "last_scraped": "2026-05-20T06:13:16.998526+00:00",
+      "last_scraped": "2026-05-20T06:35:09.859758+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5589,15 +5589,90 @@
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.06,
       "per_100_coles": 0.26,
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Woolworths Whole Milk Full Cream Milk",
+      "last_scraped": "2026-05-20T06:35:15.320516+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2026-02-07",
+          "price": 3.2
+        },
+        {
+          "date": "2026-03-02",
+          "price": 3.2
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.2
+        },
+        {
+          "date": "2026-04-02",
+          "price": 3.2
+        },
+        {
+          "date": "2026-04-13",
+          "price": 3.2
+        },
+        {
+          "date": "2026-04-21",
+          "price": 4.65
+        },
+        {
+          "date": "2026-04-29",
+          "price": 5.15
+        },
+        {
+          "date": "2026-05-06",
+          "price": 5.15
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Full Cream Milk",
+        "price": 1.85,
+        "unit_price": 1.85,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/50923/woolworths-full-cream-milk",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/050923.jpg"
+      },
+      "coles": {
+        "name": "Coles Full Cream Milk | 600mL",
+        "price": 1.45,
+        "unit_price": 1.45,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/coles-full-cream-milk-600ml-6759482",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6759482.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.4,
+      "alternatives": [
+        {
+          "name": "Coles Full Cream Milk | 600mL",
+          "price": 1.45,
+          "unit_price": 1.45,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/coles-full-cream-milk-600ml-6759482",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6759482.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 0.18,
+      "per_100_coles": 0.24,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "Woolworths Washed Potato Bag",
-      "last_scraped": "2026-05-20T06:13:17.860947+00:00",
+      "last_scraped": "2026-05-20T06:35:16.726480+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -5649,80 +5724,15 @@
       "cheaper_store": "coles",
       "saving_per_item": 3.2,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.48,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Whole Milk Full Cream Milk",
-      "last_scraped": "2026-05-20T06:13:20.691582+00:00",
-      "trip_count": 8,
-      "price_history": [
-        {
-          "date": "2026-02-07",
-          "price": 3.2
-        },
-        {
-          "date": "2026-03-02",
-          "price": 3.2
-        },
-        {
-          "date": "2026-03-10",
-          "price": 3.2
-        },
-        {
-          "date": "2026-04-02",
-          "price": 3.2
-        },
-        {
-          "date": "2026-04-13",
-          "price": 3.2
-        },
-        {
-          "date": "2026-04-21",
-          "price": 4.65
-        },
-        {
-          "date": "2026-04-29",
-          "price": 5.15
-        },
-        {
-          "date": "2026-05-06",
-          "price": 5.15
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Full Cream Milk",
-        "price": 5.15,
-        "unit_price": 1.72,
-        "unit": "1L",
-        "url": "https://www.woolworths.com.au/shop/productdetails/888140/woolworths-full-cream-milk",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/888140.jpg"
-      },
-      "coles": {
-        "name": "Coles Full Cream Milk | 600mL",
-        "price": 1.45,
-        "unit_price": 1.45,
-        "unit": "1L",
-        "url": "https://www.coles.com.au/product/coles-full-cream-milk-600ml-6759482",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6759482.jpg&w=640&q=90",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 3.7,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.17,
-      "per_100_coles": 0.24,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Alka Power Alkaline Water Bottle",
-      "last_scraped": "2026-05-20T06:13:21.202026+00:00",
+      "last_scraped": "2026-05-20T06:35:20.825973+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -5757,8 +5767,18 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 12.2,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Alka Power Ionic Alkaline Spring Water Ph9-10 With 5 Natural Electrolytes | 1.5L",
+          "price": 2.95,
+          "unit_price": 1.97,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/alka-power-ionic-alkaline-spring-water-ph9-10-with-5-natural-electrolytes-1.5l-3528712",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3528712.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.23,
       "per_100_coles": 2.62,
@@ -13122,16 +13142,16 @@
     "The Odd Bunch Mango"
   ],
   "summary": {
-    "total_woolworths": 1116.57,
+    "total_woolworths": 1113.27,
     "total_coles": 1293.88,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 177.31,
+    "total_saving": 180.61,
     "items_compared": 209,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 60,
+    "done": 65,
     "total": 211
   }
 }
