@@ -675,6 +675,12 @@ async def _scrape_single_item(
                                     print(f"  WW: slug search found stockcode {_sc}")
                                     ww_results = [_sc_hit2]
                                     _skip_picker_ww = True
+                                elif _slug_res:
+                                    # Slug search returned results but not the pinned stockcode
+                                    # (product may have been re-stocked under a different stockcode).
+                                    # Use slug results for the matcher — more specific than item-name search.
+                                    print(f"  WW: using slug search results for matcher (stockcode {_sc} not found)")
+                                    ww_results = _slug_res
             else:
                 ww_results = await search_with_retry(search_woolworths, ww_page, item)
             if pinned_co:
