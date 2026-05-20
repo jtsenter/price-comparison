@@ -605,12 +605,16 @@ async def _scrape_single_item(
         pinned_co  = _url_ov.get(item, {}).get("coles_url", "")
 
         if pinned_ww or pinned_co:
-            # Pinned URL — use it directly; no fallback to name-based search
             if pinned_ww:
                 _ww = await fetch_ww_by_url(ww_page, pinned_ww)
-                if not _ww: print(f"  WW pinned URL fetch failed: {pinned_ww}")
-                ww_results = [_ww] if _ww else []
-                _skip_picker_ww = True
+                if _ww:
+                    ww_results = [_ww]
+                    _skip_picker_ww = True
+                else:
+                    # WW blocks direct page access from GHA — fall back to name search
+                    print(f"  WW pinned URL failed, falling back to name search")
+                    ww_results = await search_with_retry(search_woolworths, ww_page, item)
+                    _skip_picker_ww = False
             else:
                 ww_results = await search_with_retry(search_woolworths, ww_page, item)
             if pinned_co:

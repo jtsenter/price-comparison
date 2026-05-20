@@ -41,12 +41,14 @@ _FORM_RULES: list[tuple[str, list[str]]] = [
     # PROCESSED before COOKED so 'baked beans' is matched before 'baked'
     ('PROCESSED', ['sausage', 'salami', ' ham ', 'bacon', 'mince', 'nuggets',
                    'battered', 'crumbed', 'tinned', 'canned', 'pickled',
-                   'baked beans', 'pasta sauce', 'soup', 'pate', 'terrine']),
+                   'baked beans', 'pasta sauce', 'soup', 'pate', 'terrine',
+                   'jam', ' jelly', 'yoghurt', 'yogurt', 'glace', 'chutney',
+                   'relish', 'spread', 'dip', 'hummus', 'hommus']),
     ('COOKED',    ['cooked', 'roasted', 'baked', 'grilled', 'smoked', 'cured',
                    'deli ', 'shaved', 'sliced ', 'marinated', 'seasoned', ' bbq',
                    'rotisserie', 'pre-cooked', 'precooked', 'ready to eat',
                    'poached', 'steamed', 'chargrilled']),
-    ('FRESH',     ['fresh ', 'bunch', ' raw ']),
+    ('FRESH',     ['fresh ', 'bunch', ' raw ', 'punnet', 'loose']),
 ]
 
 
@@ -64,6 +66,7 @@ def classify_form(name: str) -> str:
 _STRIP_LEADING = [
     'woolworths ', 'coles ', 'macro ', 'odd bunch ', 'homebrand ',
     'select ', 'always fresh ', 'down to earth ', 'community co ',
+    "mckenzie's ", 'driscoll\'s ', 'cottees ', 'edgell ', 'sanitarium ',
 ]
 
 _STRIP_INLINE = re.compile(
@@ -178,7 +181,7 @@ def pick_best_match(query: str, results: list[dict]) -> tuple[dict | None, str]:
     penalised_sim, raw_sim, form_ok, best = scored[0]
 
     # Stricter threshold when both forms are known and incompatible
-    min_sim = 0.50 if not form_ok else 0.28
+    min_sim = 0.65 if not form_ok else 0.47
     if raw_sim < min_sim:
         return None, 'none'
 
