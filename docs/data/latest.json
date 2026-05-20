@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T03:26:38.376434+00:00",
+  "last_updated": "2026-05-20T03:26:55.630894+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4688,7 +4688,7 @@
     },
     {
       "list_item": "Woolworths Frozen Meat Pies",
-      "last_scraped": "2026-05-20T03:11:44.296286+00:00",
+      "last_scraped": "2026-05-20T03:26:41.986635+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -4760,7 +4760,7 @@
     },
     {
       "list_item": "Woolworths Full Cream Milk",
-      "last_scraped": "2026-05-20T03:11:47.255369+00:00",
+      "last_scraped": "2026-05-20T03:26:44.122503+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -4843,7 +4843,7 @@
     },
     {
       "list_item": "Woolworths Garlic Heads CLOVE",
-      "last_scraped": "2026-05-20T03:11:48.743956+00:00",
+      "last_scraped": "2026-05-20T03:26:48.373703+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4936,7 +4936,7 @@
     },
     {
       "list_item": "Woolworths Greek Style Yoghurt",
-      "last_scraped": "2026-05-20T03:11:53.129322+00:00",
+      "last_scraped": "2026-05-20T03:26:49.803471+00:00",
       "trip_count": 33,
       "price_history": [
         {
@@ -5096,6 +5096,102 @@
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.45,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Lean Beef Mince",
+      "last_scraped": "2026-05-20T03:26:55.623318+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 9.0
+        },
+        {
+          "date": "2024-12-19",
+          "price": 15.5
+        },
+        {
+          "date": "2025-05-04",
+          "price": 13.75
+        },
+        {
+          "date": "2025-05-29",
+          "price": 15.5
+        },
+        {
+          "date": "2025-07-03",
+          "price": 16.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 19.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 19.0
+        },
+        {
+          "date": "2026-04-13",
+          "price": 18.75
+        },
+        {
+          "date": "2026-05-06",
+          "price": 19.35
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Lean Beef Mince",
+        "price": 11.0,
+        "unit_price": 22.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/577861/woolworths-lean-beef-mince",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/577861.jpg"
+      },
+      "coles": {
+        "name": "El- Amin's Beef Lean Mince | 500g",
+        "price": 12.5,
+        "unit_price": 12.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/el-amin's-beef-lean-mince-500g-6123116",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6123116.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.5,
+      "alternatives": [
+        {
+          "name": "Coles 5 Star Extra Lean Pork Mince | 500g",
+          "price": 8.0,
+          "unit_price": 8.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-5-star-extra-lean-pork-mince-500g-8781132",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8781132.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles No Added Hormone Beef 4 Star Lean Mince | 500g",
+          "price": 11.0,
+          "unit_price": 11.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-4-star-lean-mince-500g-8112449",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8112449.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles No Added Hormone Beef 5 Star Extra Lean Mince | 500g",
+          "price": 12.0,
+          "unit_price": 12.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-5-star-extra-lean-mince-500g-8112799",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8112799.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 2.2,
+      "per_100_coles": 2.5,
       "per_100_unit": "100g"
     },
     {
@@ -5281,102 +5377,6 @@
       "size_warning": false,
       "per_100_ww": 0.36,
       "per_100_coles": 5.95,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Lean Beef Mince",
-      "last_scraped": "2026-05-20T03:11:59.173890+00:00",
-      "trip_count": 9,
-      "price_history": [
-        {
-          "date": "2024-12-02",
-          "price": 9.0
-        },
-        {
-          "date": "2024-12-19",
-          "price": 15.5
-        },
-        {
-          "date": "2025-05-04",
-          "price": 13.75
-        },
-        {
-          "date": "2025-05-29",
-          "price": 15.5
-        },
-        {
-          "date": "2025-07-03",
-          "price": 16.0
-        },
-        {
-          "date": "2026-02-03",
-          "price": 19.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 19.0
-        },
-        {
-          "date": "2026-04-13",
-          "price": 18.75
-        },
-        {
-          "date": "2026-05-06",
-          "price": 19.35
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths Lean Beef Mince",
-        "price": 11.0,
-        "unit_price": 22.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/577861/woolworths-lean-beef-mince",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/577861.jpg"
-      },
-      "coles": {
-        "name": "El- Amin's Beef Lean Mince | 500g",
-        "price": 12.5,
-        "unit_price": 12.5,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/el-amin's-beef-lean-mince-500g-6123116",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6123116.jpg&w=640&q=90"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.5,
-      "alternatives": [
-        {
-          "name": "Coles 5 Star Extra Lean Pork Mince | 500g",
-          "price": 8.0,
-          "unit_price": 8.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-5-star-extra-lean-pork-mince-500g-8781132",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8781132.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles No Added Hormone Beef 4 Star Lean Mince | 500g",
-          "price": 11.0,
-          "unit_price": 11.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-4-star-lean-mince-500g-8112449",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8112449.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles No Added Hormone Beef 5 Star Extra Lean Mince | 500g",
-          "price": 12.0,
-          "unit_price": 12.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-5-star-extra-lean-mince-500g-8112799",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8112799.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 2.2,
-      "per_100_coles": 2.5,
       "per_100_unit": "100g"
     },
     {
@@ -14118,7 +14118,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 50,
+    "done": 55,
     "total": 211
   }
 }
