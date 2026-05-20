@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T02:49:55.752447+00:00",
+  "last_updated": "2026-05-20T02:49:57.891129+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12609,6 +12609,56 @@
       "per_100_ww": 0.56,
       "per_100_coles": 0.7,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Thyme Leaves",
+      "last_scraped": "2026-05-20T02:49:57.299489+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-07-10",
+          "price": 2.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 2.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Thyme Leaves",
+        "price": 2.0,
+        "unit_price": 1.67,
+        "unit": "10G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/251228/woolworths-thyme-leaves",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251228.jpg"
+      },
+      "coles": {
+        "name": "Coles Thyme Leaves | 18g",
+        "price": 2.0,
+        "unit_price": 2.0,
+        "unit": "10g",
+        "url": "https://www.coles.com.au/product/coles-thyme-leaves-18g-8983046",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8983046.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Hoyts Thyme | 15g",
+          "price": 1.6,
+          "unit_price": 1.6,
+          "unit": "10g",
+          "url": "https://www.coles.com.au/product/hoyts-thyme-15g-286901",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F286901.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 16.7,
+      "per_100_coles": 11.11,
+      "per_100_unit": "100g"
     }
   ],
   "not_found_items": [
@@ -12622,16 +12672,12 @@
     "Woolworths Basa Fillets Boneless With Skin Off"
   ],
   "summary": {
-    "total_woolworths": 1333.69,
-    "total_coles": 1032.75,
+    "total_woolworths": 1335.69,
+    "total_coles": 1034.75,
     "cheaper_store": "coles",
     "ww_data_available": true,
     "total_saving": 300.94,
-    "items_compared": 202,
+    "items_compared": 203,
     "items_not_found": 8
-  },
-  "scrape_progress": {
-    "done": 210,
-    "total": 211
   }
 }
