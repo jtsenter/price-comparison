@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T11:36:34.665638+00:00",
+  "last_updated": "2026-05-20T11:37:34.796064+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1424,7 +1424,7 @@
     },
     {
       "list_item": "Helga's Wholemeal Bread With Grains",
-      "last_scraped": "2026-05-20T11:34:54.036738+00:00",
+      "last_scraped": "2026-05-20T11:37:34.373486+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -1489,7 +1489,14 @@
         }
       ],
       "category": "Bakery",
-      "woolworths": null,
+      "woolworths": {
+        "name": "Helga's Bread Traditional Wholemeal",
+        "price": 5.2,
+        "unit_price": 0.69,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/84129/helga-s-bread-traditional-wholemeal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/084129.jpg"
+      },
       "coles": {
         "name": "Traditional Wholemeal Bread",
         "price": 5.2,
@@ -1502,12 +1509,12 @@
           "uri": "/5/5969435.jpg"
         }
       },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "none",
+      "match_confidence": "high",
       "size_warning": false,
-      "per_100_ww": null,
+      "per_100_ww": 0.69,
       "per_100_coles": 0.69,
       "per_100_unit": "100g"
     },
@@ -12138,11 +12145,11 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 1102.58,
+    "total_woolworths": 1107.78,
     "total_coles": 1289.47,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 186.89,
+    "total_saving": 181.69,
     "items_compared": 209,
     "items_not_found": 2
   }
