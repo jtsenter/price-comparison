@@ -73,6 +73,28 @@ function saveOverrides(obj) {
   localStorage.setItem('pw_overrides_v1', JSON.stringify(obj));
 }
 
+// Write url_overrides.json to the repo so the scraper uses pinned URLs on every run.
+// overrides: the full pw_overrides_v1 localStorage object.
+async function persistUrlOverridesToRepo(s, overrides) {
+  if (!s?.user || !s?.repo || !s?.token) return;
+  // Build scraper format: {item: {ww_url, coles_url}} — skip display-name-only entries
+  const scraperFmt = {};
+  for (const [item, ov] of Object.entries(overrides)) {
+    if (ov.wwUrl || ov.colesUrl) {
+      scraperFmt[item] = {};
+      if (ov.wwUrl)    scraperFmt[item].ww_url    = ov.wwUrl;
+      if (ov.colesUrl) scraperFmt[item].coles_url = ov.colesUrl;
+    }
+  }
+  const path = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/url_overrides.json`;
+  const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
+  const getRes = await fetch(path, { headers });
+  const shaJson = getRes.ok ? await getRes.json() : {};
+  const putBody = { message: 'Update URL overrides', content: btoa(JSON.stringify(scraperFmt, null, 2) + '\n') };
+  if (shaJson.sha) putBody.sha = shaJson.sha;
+  await fetch(path, { method: 'PUT', headers, body: JSON.stringify(putBody) });
+}
+
 // ── Exclusions (price range manager) ────────────────────────────────────────
 
 function loadExclusions() {
@@ -607,7 +629,7 @@ function initEditModal() {
   $('editCancel').addEventListener('click', close);
   modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
 
-  $('editSave').addEventListener('click', () => {
+  $('editSave').addEventListener('click', async () => {
     if (!_editingItem) return;
     const overrides = loadOverrides();
     const prevOv = overrides[_editingItem.list_item] || {};
@@ -631,21 +653,26 @@ function initEditModal() {
     close();
     if (_lastData) renderPage(_lastData);
 
-    // If a URL was added/changed and GitHub is configured, trigger a scrape using the new URLs
+    // If a URL was added/changed and GitHub is configured: persist to repo then trigger scrape
     if (urlChanged && (newWwUrl || newCoUrl)) {
       const s = loadSettings();
       if (s.user && s.repo && s.token) {
+        try { await persistUrlOverridesToRepo(s, overrides); } catch {}
         triggerItemRefresh(item.list_item, null, { wwUrl: newWwUrl, colesUrl: newCoUrl });
         alert(`Scrape triggered for "${item.list_item}" with the new URL.`);
       }
     }
   });
 
-  $('editReset').addEventListener('click', () => {
+  $('editReset').addEventListener('click', async () => {
     if (!_editingItem) return;
     const overrides = loadOverrides();
     delete overrides[_editingItem.list_item];
     saveOverrides(overrides);
+    const s = loadSettings();
+    if (s.user && s.repo && s.token) {
+      try { await persistUrlOverridesToRepo(s, overrides); } catch {}
+    }
     close();
     if (_lastData) renderPage(_lastData);
   });
