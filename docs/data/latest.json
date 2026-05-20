@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T06:34:25.157247+00:00",
+  "last_updated": "2026-05-20T06:34:47.455085+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4473,7 +4473,7 @@
     },
     {
       "list_item": "Woolworths Full Cream Milk",
-      "last_scraped": "2026-05-20T06:12:53.022019+00:00",
+      "last_scraped": "2026-05-20T06:34:31.108226+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -4537,8 +4537,18 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 2.1,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Coles Full Cream Milk | 600mL",
+          "price": 1.45,
+          "unit_price": 1.45,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/coles-full-cream-milk-600ml-6759482",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6759482.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.18,
       "per_100_coles": 0.24,
@@ -4546,7 +4556,7 @@
     },
     {
       "list_item": "Woolworths Frozen Meat Pies",
-      "last_scraped": "2026-05-20T06:12:54.697279+00:00",
+      "last_scraped": "2026-05-20T06:34:34.229679+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -4610,7 +4620,7 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.94,
       "per_100_coles": 0.94,
@@ -4618,7 +4628,7 @@
     },
     {
       "list_item": "Woolworths Garlic Heads CLOVE",
-      "last_scraped": "2026-05-20T06:12:57.190312+00:00",
+      "last_scraped": "2026-05-20T06:34:36.672276+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4663,22 +4673,206 @@
         "url": "https://www.woolworths.com.au/shop/productdetails/253320/woolworths-garlic-cloves",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/253320.jpg"
       },
-      "coles": {
-        "name": "Coles Minced Garlic | 500g",
-        "price": 2.3,
-        "unit_price": 2.3,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-minced-garlic-500g-3765423",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3765423.jpg&w=640&q=90",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.6,
-      "alternatives": [],
-      "match_confidence": "low",
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Coles Minced Garlic | 250g",
+          "price": 1.25,
+          "unit_price": 1.25,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-minced-garlic-250g-5493277",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5493277.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Minced Garlic | 500g",
+          "price": 2.3,
+          "unit_price": 2.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-minced-garlic-500g-3765423",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3765423.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Deli Lemon & Garlic Sicilian Olives | 110g",
+          "price": 3.75,
+          "unit_price": 3.75,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-deli-lemon-and-garlic-sicilian-olives-110g-6484963",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6484963.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "none",
       "size_warning": false,
       "per_100_ww": 4.14,
-      "per_100_coles": 0.46,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Ice Cream Cones Boysenberry",
+      "last_scraped": "2026-05-20T06:34:42.316914+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 4.75
+        },
+        {
+          "date": "2025-02-02",
+          "price": 4.75
+        },
+        {
+          "date": "2025-02-28",
+          "price": 4.75
+        },
+        {
+          "date": "2025-03-11",
+          "price": 4.75
+        },
+        {
+          "date": "2025-04-14",
+          "price": 4.75
+        },
+        {
+          "date": "2025-05-12",
+          "price": 4.75
+        },
+        {
+          "date": "2025-05-22",
+          "price": 3.7
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.7
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.7
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Ice Cream Cones Boysenberry",
+        "price": 3.7,
+        "unit_price": 0.78,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/792235/woolworths-ice-cream-cones-boysenberry",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/792235.jpg"
+      },
+      "coles": {
+        "name": "Coles Irresistible Boysenberry | 1L",
+        "price": 6.5,
+        "unit_price": 6.5,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/coles-irresistible-boysenberry-1l-8556238",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8556238.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.8,
+      "alternatives": [],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 0.78,
+      "per_100_coles": 0.65,
+      "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Woolworths Lean Beef Mince",
+      "last_scraped": "2026-05-20T06:34:47.448293+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 9.0
+        },
+        {
+          "date": "2024-12-19",
+          "price": 15.5
+        },
+        {
+          "date": "2025-05-04",
+          "price": 13.75
+        },
+        {
+          "date": "2025-05-29",
+          "price": 15.5
+        },
+        {
+          "date": "2025-07-03",
+          "price": 16.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 19.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 19.0
+        },
+        {
+          "date": "2026-04-13",
+          "price": 18.75
+        },
+        {
+          "date": "2026-05-06",
+          "price": 19.35
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Lean Beef Mince",
+        "price": 11.0,
+        "unit_price": 22.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/577861/woolworths-lean-beef-mince",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/577861.jpg"
+      },
+      "coles": {
+        "name": "El- Amin's Beef Lean Mince | 500g",
+        "price": 12.5,
+        "unit_price": 12.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/el-amin's-beef-lean-mince-500g-6123116",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6123116.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.5,
+      "alternatives": [
+        {
+          "name": "Coles 5 Star Extra Lean Pork Mince | 500g",
+          "price": 8.0,
+          "unit_price": 8.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-5-star-extra-lean-pork-mince-500g-8781132",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8781132.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles No Added Hormone Beef 4 Star Lean Mince | 500g",
+          "price": 11.0,
+          "unit_price": 11.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-4-star-lean-mince-500g-8112449",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8112449.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles No Added Hormone Beef 5 Star Extra Lean Mince | 500g",
+          "price": 12.0,
+          "unit_price": 12.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-5-star-extra-lean-mince-500g-8112799",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8112799.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 2.2,
+      "per_100_coles": 2.5,
       "per_100_unit": "100g"
     },
     {
@@ -4836,142 +5030,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.7,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Ice Cream Cones Boysenberry",
-      "last_scraped": "2026-05-20T06:13:01.107213+00:00",
-      "trip_count": 9,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 4.75
-        },
-        {
-          "date": "2025-02-02",
-          "price": 4.75
-        },
-        {
-          "date": "2025-02-28",
-          "price": 4.75
-        },
-        {
-          "date": "2025-03-11",
-          "price": 4.75
-        },
-        {
-          "date": "2025-04-14",
-          "price": 4.75
-        },
-        {
-          "date": "2025-05-12",
-          "price": 4.75
-        },
-        {
-          "date": "2025-05-22",
-          "price": 3.7
-        },
-        {
-          "date": "2025-06-06",
-          "price": 3.7
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.7
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Ice Cream Cones Boysenberry",
-        "price": 3.7,
-        "unit_price": 0.78,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/792235/woolworths-ice-cream-cones-boysenberry",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/792235.jpg"
-      },
-      "coles": {
-        "name": "Coles Irresistible Boysenberry | 1L",
-        "price": 6.5,
-        "unit_price": 6.5,
-        "unit": "100mL",
-        "url": "https://www.coles.com.au/product/coles-irresistible-boysenberry-1l-8556238",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8556238.jpg&w=640&q=90"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 2.8,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.78,
-      "per_100_coles": 0.65,
-      "per_100_unit": "100ml"
-    },
-    {
-      "list_item": "Woolworths Lean Beef Mince",
-      "last_scraped": "2026-05-20T06:13:04.511489+00:00",
-      "trip_count": 9,
-      "price_history": [
-        {
-          "date": "2024-12-02",
-          "price": 9.0
-        },
-        {
-          "date": "2024-12-19",
-          "price": 15.5
-        },
-        {
-          "date": "2025-05-04",
-          "price": 13.75
-        },
-        {
-          "date": "2025-05-29",
-          "price": 15.5
-        },
-        {
-          "date": "2025-07-03",
-          "price": 16.0
-        },
-        {
-          "date": "2026-02-03",
-          "price": 19.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 19.0
-        },
-        {
-          "date": "2026-04-13",
-          "price": 18.75
-        },
-        {
-          "date": "2026-05-06",
-          "price": 19.35
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths Lean Beef Mince",
-        "price": 11.0,
-        "unit_price": 22.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/577861/woolworths-lean-beef-mince",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/577861.jpg"
-      },
-      "coles": {
-        "name": "El- Amin's Beef Lean Mince | 500g",
-        "price": 12.5,
-        "unit_price": 12.5,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/el-amin's-beef-lean-mince-500g-6123116",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6123116.jpg&w=640&q=90"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.5,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.2,
-      "per_100_coles": 2.5,
       "per_100_unit": "100g"
     },
     {
@@ -12994,15 +13052,15 @@
   ],
   "summary": {
     "total_woolworths": 1104.97,
-    "total_coles": 1295.78,
+    "total_coles": 1293.48,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 190.81,
+    "total_saving": 188.51,
     "items_compared": 209,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 50,
+    "done": 55,
     "total": 211
   }
 }
