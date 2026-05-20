@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T03:10:49.076748+00:00",
+  "last_updated": "2026-05-20T03:11:01.267572+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2706,8 +2706,117 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "The Odd Bunch Strawberries Punnet",
+      "last_scraped": "2026-05-20T03:10:51.095205+00:00",
+      "trip_count": 14,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 4.8
+        },
+        {
+          "date": "2024-12-02",
+          "price": 4.3
+        },
+        {
+          "date": "2024-12-19",
+          "price": 3.0
+        },
+        {
+          "date": "2025-01-29",
+          "price": 5.5
+        },
+        {
+          "date": "2025-02-02",
+          "price": 5.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 5.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 5.9
+        },
+        {
+          "date": "2025-04-14",
+          "price": 5.9
+        },
+        {
+          "date": "2025-04-25",
+          "price": 6.9
+        },
+        {
+          "date": "2025-05-04",
+          "price": 5.9
+        },
+        {
+          "date": "2025-05-12",
+          "price": 6.4
+        },
+        {
+          "date": "2025-05-29",
+          "price": 7.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 7.5
+        },
+        {
+          "date": "2025-06-13",
+          "price": 7.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": null,
+      "coles": {
+        "name": "Yoplait Berry Punnet Yoghurt Strawberry Mixed Berries | 12 Pack",
+        "price": 8.5,
+        "unit_price": 8.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/yoplait-berry-punnet-yoghurt-strawberry-mixed-berries-12-pack-8877195",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8877195.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Nice & Natural Fruit Oddities Raspberry Mango | 136g",
+          "price": 4.0,
+          "unit_price": 2.94,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/nice-and-natural-fruit-oddities-raspberry-mango-136g-3618178",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3618178.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Organic Strawberries | 250g",
+          "price": 6.9,
+          "unit_price": 6.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-organic-strawberries-250g-5048810",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5048810.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Yoplait Berry Punnet Yoghurt Strawberry Mixed Berries 6x160g | 960g",
+          "price": 7.0,
+          "unit_price": 7.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/yoplait-berry-punnet-yoghurt-strawberry-mixed-berries-6x160g-960g-3619567",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3619567.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 8.5,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "The Odd Bunch Zucchini Prepacked",
-      "last_scraped": "2026-05-20T02:42:37.957912+00:00",
+      "last_scraped": "2026-05-20T03:10:55.134002+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -2800,19 +2909,36 @@
         "url": "https://www.woolworths.com.au/shop/productdetails/825869/the-odd-bunch-zucchini-prepacked",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/825869.jpg"
       },
-      "coles": null,
+      "coles": {
+        "name": "Coles Kitchen Zucchini Slice | 700g",
+        "price": 16.0,
+        "unit_price": 16.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-kitchen-zucchini-slice-700g-4218743",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4218743.jpg&w=640&q=90"
+      },
       "cheaper_store": "woolworths",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
+      "saving_per_item": 12.5,
+      "alternatives": [
+        {
+          "name": "Yumis Zucchini Veggie Fritter | 260g",
+          "price": 6.75,
+          "unit_price": 2.6,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/yumis-zucchini-veggie-fritter-260g-6769169",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6769169.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.47,
-      "per_100_coles": null,
+      "per_100_coles": 2.29,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Truss Tomatoes",
-      "last_scraped": "2026-05-20T02:42:40.726530+00:00",
+      "last_scraped": "2026-05-20T03:10:55.844939+00:00",
       "trip_count": 35,
       "price_history": [
         {
@@ -2965,19 +3091,26 @@
         "url": "https://www.woolworths.com.au/shop/productdetails/169438/truss-tomatoes",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/169438.jpg"
       },
-      "coles": null,
+      "coles": {
+        "name": "Coles Cocktail Truss Tomatoes | 250g",
+        "price": 4.5,
+        "unit_price": 4.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-cocktail-truss-tomatoes-250g-3088176",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3088176.jpg&w=640&q=90"
+      },
       "cheaper_store": "woolworths",
-      "saving_per_item": null,
+      "saving_per_item": 3.39,
       "alternatives": [],
-      "match_confidence": "none",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
-      "per_100_coles": null,
+      "per_100_coles": 1.8,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Weet-Bix Little Kids Breakfast Cereal",
-      "last_scraped": "2026-05-20T02:42:41.489926+00:00",
+      "last_scraped": "2026-05-20T03:10:59.721678+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -3018,14 +3151,110 @@
         "url": "https://www.woolworths.com.au/shop/productdetails/142976/weet-bix-little-kids-breakfast-cereal",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/142976.jpg"
       },
-      "coles": null,
+      "coles": {
+        "name": "Sanitarium Weet-bix Little Kids Essentials Breakfast Cereal | 400g",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/sanitarium-weet-bix-little-kids-essentials-breakfast-cereal-400g-4233292",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4233292.jpg&w=640&q=90"
+      },
       "cheaper_store": "woolworths",
-      "saving_per_item": null,
+      "saving_per_item": 1.0,
       "alternatives": [],
-      "match_confidence": "none",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.0,
-      "per_100_coles": null,
+      "per_100_coles": 1.25,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths 12 Extra Large Free Range Eggs",
+      "last_scraped": "2026-05-20T03:11:01.263552+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 6.1
+        },
+        {
+          "date": "2024-12-19",
+          "price": 6.1
+        },
+        {
+          "date": "2025-07-03",
+          "price": 6.6
+        },
+        {
+          "date": "2026-02-11",
+          "price": 6.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 6.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 6.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 6.5
+        },
+        {
+          "date": "2026-04-13",
+          "price": 6.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 6.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": null,
+      "coles": {
+        "name": "Sunny Queen Free Range Large Eggs 12 Pack | 600g",
+        "price": 8.5,
+        "unit_price": 8.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/sunny-queen-free-range-large-eggs-12-pack-600g-5417778",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5417778.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Coles Free Range Eggs 12 Pack | 600g",
+          "price": 6.2,
+          "unit_price": 6.2,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-free-range-eggs-12-pack-600g-9453456",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9453456.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Free Range Eggs 12 Pack | 700g",
+          "price": 6.5,
+          "unit_price": 6.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-free-range-eggs-12-pack-700g-9453478",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9453478.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Jumbo Free Range Eggs 12 Pack | 800g",
+          "price": 7.25,
+          "unit_price": 7.25,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-jumbo-free-range-eggs-12-pack-800g-1034234",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1034234.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 1.42,
       "per_100_unit": "100g"
     },
     {
@@ -13406,15 +13635,15 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 1335.69,
-    "total_coles": 1162.47,
+    "total_coles": 1204.97,
     "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 173.22,
-    "items_compared": 208,
+    "total_saving": 130.72,
+    "items_compared": 210,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 30,
+    "done": 35,
     "total": 211
   }
 }
