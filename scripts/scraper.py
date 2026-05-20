@@ -486,8 +486,11 @@ def find_alternatives(all_results: list[dict], matched: dict | None, max_alts: i
 REPO_ROOT = os.path.join(os.path.dirname(__file__), "..")
 
 def _build_output(items: list, not_found: list, trigger: str, progress: dict | None = None) -> dict:
-    ww_total = sum(r["woolworths"]["price"] for r in items if r.get("woolworths") and r["woolworths"].get("price") is not None)
-    coles_total = sum(r["coles"]["price"] for r in items if r.get("coles") and r["coles"].get("price") is not None)
+    # Only compare items where both prices are present — avoids single-store items skewing the totals
+    comparable = [r for r in items if r.get("woolworths", {}) and r["woolworths"].get("price") is not None
+                  and r.get("coles", {}) and r["coles"].get("price") is not None]
+    ww_total = sum(r["woolworths"]["price"] for r in comparable)
+    coles_total = sum(r["coles"]["price"] for r in comparable)
     ww_available = ww_total > 0
     if not ww_available:
         cheaper = "coles_only"
