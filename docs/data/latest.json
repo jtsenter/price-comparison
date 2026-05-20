@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T05:20:59.335014+00:00",
+  "last_updated": "2026-05-20T05:21:14.557235+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10967,7 +10967,7 @@
     },
     {
       "list_item": "Woolworths Tuna In Springwater",
-      "last_scraped": "2026-05-20T04:56:55.899228+00:00",
+      "last_scraped": "2026-05-20T05:21:02.126641+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -11003,8 +11003,36 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.6,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Coles Tuna Chunks in Springwater | 95g",
+          "price": 1.1,
+          "unit_price": 1.1,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tuna-chunks-in-springwater-95g-8675281",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8675281.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Simply Tuna In Springwater | 185g",
+          "price": 1.7,
+          "unit_price": 1.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-simply-tuna-in-springwater-185g-3544130",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3544130.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Tuna Chunks In Springwater | 185g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tuna-chunks-in-springwater-185g-8675270",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8675270.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.16,
       "per_100_coles": 0.92,
@@ -11012,7 +11040,7 @@
     },
     {
       "list_item": "Yumi's Eggplant Mediterranean Dip",
-      "last_scraped": "2026-05-20T04:56:59.488825+00:00",
+      "last_scraped": "2026-05-20T05:21:03.898317+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -11052,8 +11080,18 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 1.25,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Yumi's Mediterranean Eggplant Dip | 200g",
+          "price": 3.75,
+          "unit_price": 1.88,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/yumi's-mediterranean-eggplant-dip-200g-8670878",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8670878.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.5,
       "per_100_coles": 1.88,
@@ -11061,7 +11099,7 @@
     },
     {
       "list_item": "Ajax Antibacterial Wipes Eco Vanilla & Berries 110 Wipes",
-      "last_scraped": "2026-05-20T04:57:02.552324+00:00",
+      "last_scraped": "2026-05-20T05:21:07.843198+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11092,7 +11130,35 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.99,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Ajax Eco Antibacterial Multipurpose Disinfectant Wipes Vanilla & Be ... 110 pack",
+          "price": 6.6,
+          "unit_price": 0.06,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/ajax-eco-antibacterial-multipurpose-disinfectant-wipes-vanilla-and-berries-110-pack-3741844",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3741844.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Ajax Eco Antibacterial Multipurpose Disinfectant Wipes Fresh Lemon | 110 pack",
+          "price": 6.6,
+          "unit_price": 0.06,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/ajax-eco-antibacterial-multipurpose-disinfectant-wipes-fresh-lemon-110-pack-3741800",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3741800.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Ajax Spray N Wipe Divine Blends Vanilla & Berries | 475mL",
+          "price": 3.5,
+          "unit_price": 3.5,
+          "unit": "100mL",
+          "url": "https://www.coles.com.au/product/ajax-spray-n-wipe-divine-blends-vanilla-and-berries-475ml-3059848",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3059848.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
@@ -11101,7 +11167,7 @@
     },
     {
       "list_item": "All Smiles Total Care Toothbrush Soft",
-      "last_scraped": "2026-05-20T04:57:03.183072+00:00",
+      "last_scraped": "2026-05-20T05:21:09.455404+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11133,7 +11199,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 5.2,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -11141,7 +11207,7 @@
     },
     {
       "list_item": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
-      "last_scraped": "2026-05-20T04:57:06.134925+00:00",
+      "last_scraped": "2026-05-20T05:21:14.540460+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11173,8 +11239,18 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Baby Mum-mum Rice Rusk Organic Blueberry & Carrot +8 Months | 36g",
+          "price": 3.85,
+          "unit_price": 3.85,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/baby-mum-mum-rice-rusk-organic-blueberry-and-carrot-+8-months-36g-2800347",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2800347.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 10.69,
       "per_100_coles": 10.69,
@@ -13302,7 +13378,7 @@
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 155,
+    "done": 160,
     "total": 211
   }
 }
