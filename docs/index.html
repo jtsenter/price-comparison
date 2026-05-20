@@ -43,6 +43,9 @@
           </button>
         </div>
       </div>
+      <button class="btn btn-ghost btn-icon view-toggle-btn" id="viewToggleBtn" title="Switch to card view">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      </button>
       <div class="col-chooser-wrap">
         <button class="btn btn-ghost" id="colChooserBtn">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
@@ -180,12 +183,12 @@
         <thead id="tableHead">
           <tr>
             <th data-col="name" class="sortable">Item <span class="sort-arrow"></span></th>
-            <th data-col="ww" class="sortable"><span class="store-chip ww sm">W</span> WW <span class="sort-arrow"></span></th>
-            <th data-col="coles" class="sortable"><span class="store-chip coles sm">C</span> Coles <span class="sort-arrow"></span></th>
-            <th data-col="cheaper" class="sortable center-th">Cheaper <span class="sort-arrow"></span></th>
-            <th data-col="pct" class="sortable center-th">% Off <span class="sort-arrow"></span></th>
-            <th data-col="saving" class="sortable">Savings <span class="sort-arrow"></span></th>
-            <th data-col="trips" class="sortable center-th">Trips <span class="sort-arrow"></span></th>
+            <th data-col="ww" class="sortable" title="Current Woolworths price"><span class="store-chip ww sm">W</span> WW <span class="sort-arrow"></span></th>
+            <th data-col="coles" class="sortable" title="Current Coles price"><span class="store-chip coles sm">C</span> Coles <span class="sort-arrow"></span></th>
+            <th data-col="cheaper" class="sortable center-th" title="Which store is cheaper for this item">Best <span class="sort-arrow"></span></th>
+            <th data-col="pct" class="sortable center-th" title="Price difference between stores as a percentage">Difference <span class="sort-arrow"></span></th>
+            <th data-col="saving" class="sortable" title="How much you save per shop by choosing the cheaper store">Savings <span class="sort-arrow"></span></th>
+            <th data-col="trips" class="sortable center-th" title="Number of shopping trips this item has been tracked across">Trips <span class="sort-arrow"></span></th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
@@ -203,6 +206,8 @@
       </table>
     </div>
   </div>
+
+  <div id="cardGrid" class="card-grid" style="display:none"></div>
 
   <div id="notFoundSection" class="not-found-section" style="display:none">
     <h3>Not found on either store</h3>
@@ -232,6 +237,7 @@
       <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxx" />
     </div>
     <div class="modal-actions">
+      <button class="btn btn-ghost" id="resetWarningsBtn" title="Show all dismissed match warnings again">Reset warnings</button>
       <button class="btn btn-ghost" id="modalCancel">Cancel</button>
       <button class="btn btn-primary" id="modalSave">Save Settings</button>
     </div>

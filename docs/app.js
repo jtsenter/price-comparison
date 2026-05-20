@@ -237,6 +237,7 @@ let _activePriority = 'all';
 let _showHotOnly = false;
 let _storeFilter = 'all';
 let _showPricesOnly = false;
+let _viewMode = localStorage.getItem('pw_view_mode') || 'table'; // 'table' | 'card'
 
 // ── Bulk selection ────────────────────────────────────────────────────────────
 
@@ -1476,6 +1477,115 @@ function isHotDeal(item) {
   return current <= threshold;
 }
 
+// ── Card view ─────────────────────────────────────────────────────────────────
+
+function renderCards(items) {
+  const grid = $('cardGrid');
+  if (!grid) return;
+  const overrides = loadOverrides();
+  const dismissed = (() => { try { return JSON.parse(localStorage.getItem('pw_dismissed_warns_v1') || '[]'); } catch { return []; } })();
+  const parts = [];
+
+  items.forEach(item => {
+    const ww = item.woolworths;
+    const co = item.coles;
+    const cheaper = item.cheaper_store;
+    const ov = overrides[item.list_item] || {};
+    const displayName = ov.displayName || item.list_item;
+    const cat = getCategory(item);
+    const p = getPriority(item.list_item);
+    const hotDeal = isHotDeal(item);
+    const wwUrl  = ov.wwUrl    || ww?.url || '';
+    const coUrl  = ov.colesUrl || co?.url || '';
+    const safeKey = item.list_item.replace(/"/g, '&quot;');
+
+    const imgSrc = resolveImgUrl(co?.image_url) || resolveImgUrl(ww?.image_url) || '';
+    const imgHtml = imgSrc
+      ? `<img class="card-img" src="${imgSrc}" alt="" loading="lazy" onerror="this.style.display='none'">`
+      : '<div class="card-img-placeholder"></div>';
+
+    const prioOptions = ['weekly','monthly','rare'].map(v =>
+      `<option value="${v}"${p===v?' selected':''}>${v[0].toUpperCase()+v.slice(1)}</option>`
+    ).join('');
+
+    // Prices
+    const wwP100 = clientPer100(ww);
+    const coP100 = clientPer100(co);
+    const hotBadge = hotDeal ? ' <span class="hot-badge" title="Hot deal — in bottom 20% of historical prices">🔥</span>' : '';
+
+    let wwHtml;
+    if (ww) {
+      const pv = wwUrl ? `<a href="${wwUrl}" target="_blank" class="price-link">${fmt(ww.price)}</a>` : fmt(ww.price);
+      const fire = hotDeal && cheaper === 'woolworths' ? hotBadge : '';
+      const unit = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : fmtUnit(ww.unit_price, ww.unit);
+      wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}</div>`;
+    } else {
+      wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span> <a href="https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}" target="_blank" class="search-link">Find →</a></div>`;
+    }
+
+    let coHtml;
+    if (co) {
+      const pv = coUrl ? `<a href="${coUrl}" target="_blank" class="price-link">${fmt(co.price)}</a>` : fmt(co.price);
+      const fire = hotDeal && cheaper === 'coles' ? hotBadge : '';
+      const unit = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : fmtUnit(co.unit_price, co.unit);
+      coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}</div>`;
+    } else {
+      coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span> <a href="https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}" target="_blank" class="search-link">Find →</a></div>`;
+    }
+
+    const wwClass   = cheaper === 'woolworths' ? 'winner-ww' : '';
+    const coClass   = cheaper === 'coles'      ? 'winner-coles' : '';
+    const units     = getUnits(item.list_item);
+    const savingAmt = item.saving_per_item != null && item.saving_per_item > 0
+      ? fmt(item.saving_per_item * units) : null;
+    const savingHtml = savingAmt
+      ? `<div class="card-saving">${cheaper==='woolworths'?'<span class="store-chip ww sm">W</span>':'<span class="store-chip coles sm">C</span>'} Save ${savingAmt}</div>`
+      : '';
+
+    // Match warning
+    let warnHtml = '';
+    const mc = item.match_confidence;
+    if (mc === 'none' && !dismissed.includes(item.list_item)) {
+      warnHtml = ` <span class="match-warn match-warn-none" title="Could not match this item">⚠<button class="warn-dismiss" data-item="${safeKey}">✕</button></span>`;
+    } else if ((mc === 'low' || item.size_warning) && !dismissed.includes(item.list_item)) {
+      warnHtml = ` <span class="match-warn match-warn-low" title="Low-confidence match — verify these are the same product">⚠<button class="warn-dismiss" data-item="${safeKey}">✕</button></span>`;
+    }
+
+    const bar = buildPriceBar(item.list_item, item.price_history, cheaper==='woolworths' ? ww?.price : co?.price);
+    const isChecked = _checkedItems.has(item.list_item);
+    const notFound = !ww && !co;
+
+    parts.push(`<div class="item-card${notFound ? ' card-not-found' : ''}" data-item="${safeKey}">
+      <div class="card-top">
+        <div class="card-img-wrap">${imgHtml}</div>
+        <div class="card-info">
+          <div class="card-name">${displayName}${warnHtml}</div>
+          <div class="card-cat">${cat}</div>
+        </div>
+        <div class="card-right">
+          <input type="checkbox" class="row-check card-check" data-item="${safeKey}"${isChecked?' checked':''}>
+          <select class="priority-select card-priority-sel" data-item="${safeKey}">
+            <option value="">Priority…</option>${prioOptions}
+          </select>
+        </div>
+      </div>
+      <div class="card-prices">
+        <div class="card-store ${wwClass}">${wwHtml}</div>
+        <div class="card-vs">vs</div>
+        <div class="card-store ${coClass}">${coHtml}</div>
+      </div>
+      ${savingHtml}
+      ${bar ? `<div class="card-bar">${bar}</div>` : ''}
+      <div class="card-footer">
+        <button class="item-edit-btn card-btn" data-edit-item="${safeKey}" title="Edit name or URL">✎ Edit</button>
+        <button class="item-refresh-btn card-btn" data-item="${safeKey}" title="Refresh this item's prices">↺ Refresh</button>
+      </div>
+    </div>`);
+  });
+
+  grid.innerHTML = parts.join('');
+}
+
 // ── Index page rendering ─────────────────────────────────────────────────────
 
 function renderPage(data) {
@@ -1575,7 +1685,8 @@ function renderPage(data) {
   const coverageText = missingCount > 0
     ? `${pricedBoth}/${totalNonArchived} priced · ${missingCount} missing`
     : `${totalNonArchived} items`;
-  $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>`;
+  const hotCount = (data.items || []).filter(i => !i.archived && loadPriorities()[i.list_item] !== 'archive' && isHotDeal(i)).length;
+  $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>${hotCount > 0 ? `<a href="hot-deals.html" class="hot-deals-link">🔥 ${hotCount} deal${hotCount !== 1 ? 's' : ''}</a>` : ''}`;
   $('banner').style.display = 'block';
 
   _lastData = data;
@@ -1649,12 +1760,25 @@ function renderPage(data) {
   toggleBtn.textContent = _showPricesOnly ? 'Priced only ✕' : 'Priced only';
   toggleBtn.classList.toggle('active', _showPricesOnly);
 
+  // ── View mode branch ───────────────────────────────────────────
+  const sorted = sortItems(allDisplayItems);
+
+  if (_viewMode === 'card') {
+    $('tableContainer').style.display = 'none';
+    renderTableHead(); // keeps column state consistent
+    renderCards(sorted);
+    const grid = $('cardGrid');
+    if (grid) grid.style.display = sorted.length ? 'grid' : 'none';
+    updateBulkBar();
+    return;
+  }
+
+  $('cardGrid').style.display = 'none';
   renderTableHead();
 
   const tbody = $('tableBody');
   tbody.innerHTML = '';
 
-  const sorted = sortItems(allDisplayItems);
   updateSortHeaders();
 
   if (!sorted.length) {
@@ -2459,6 +2583,81 @@ async function boot() {
       alert(`Error: ${e.message}`);
       btn.disabled = false;
     }
+  });
+
+  // ── View toggle ──────────────────────────────────────────────
+  const viewToggleBtn = $('viewToggleBtn');
+  const TABLE_ICON = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+  const CARD_ICON  = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>`;
+  function syncViewToggleBtn() {
+    if (!viewToggleBtn) return;
+    if (_viewMode === 'card') {
+      viewToggleBtn.innerHTML = TABLE_ICON;
+      viewToggleBtn.title = 'Switch to table view';
+      viewToggleBtn.classList.add('view-active');
+    } else {
+      viewToggleBtn.innerHTML = CARD_ICON;
+      viewToggleBtn.title = 'Switch to card view';
+      viewToggleBtn.classList.remove('view-active');
+    }
+  }
+  syncViewToggleBtn();
+  viewToggleBtn?.addEventListener('click', () => {
+    _viewMode = _viewMode === 'table' ? 'card' : 'table';
+    localStorage.setItem('pw_view_mode', _viewMode);
+    syncViewToggleBtn();
+    if (_lastData) renderPage(_lastData);
+  });
+
+  // ── Card grid event delegation ────────────────────────────────
+  const cardGrid = $('cardGrid');
+  if (cardGrid) {
+    cardGrid.addEventListener('click', (e) => {
+      const warnDismiss = e.target.closest('.warn-dismiss');
+      if (warnDismiss) {
+        e.stopPropagation();
+        const itemName = warnDismiss.dataset.item;
+        try { const d = JSON.parse(localStorage.getItem('pw_dismissed_warns_v1')||'[]'); if (!d.includes(itemName)) d.push(itemName); localStorage.setItem('pw_dismissed_warns_v1', JSON.stringify(d)); } catch {}
+        warnDismiss.closest('.match-warn')?.remove();
+        return;
+      }
+      const rowCheck = e.target.closest('.row-check');
+      if (rowCheck) {
+        const name = rowCheck.dataset.item;
+        if (rowCheck.checked) _checkedItems.add(name); else _checkedItems.delete(name);
+        updateBulkBar();
+        return;
+      }
+      const editBtn = e.target.closest('.item-edit-btn');
+      if (editBtn && _lastData) {
+        const item = _lastData.items.find(i => i.list_item === editBtn.dataset.editItem);
+        if (item) openEditModal(item);
+        return;
+      }
+      const refreshBtn = e.target.closest('.item-refresh-btn');
+      if (refreshBtn) {
+        const ov = loadOverrides()[refreshBtn.dataset.item] || {};
+        triggerItemRefresh(refreshBtn.dataset.item, refreshBtn, { wwUrl: ov.wwUrl, colesUrl: ov.colesUrl });
+        return;
+      }
+    });
+    cardGrid.addEventListener('change', (e) => {
+      const sel = e.target.closest('.priority-select');
+      if (sel) {
+        const pr = loadPriorities();
+        if (sel.value) pr[sel.dataset.item] = sel.value;
+        else delete pr[sel.dataset.item];
+        savePriorities(pr);
+        if (_lastData) renderPage(_lastData);
+      }
+    });
+  }
+
+  // ── Reset dismissed warnings ──────────────────────────────────
+  $('resetWarningsBtn')?.addEventListener('click', () => {
+    localStorage.removeItem('pw_dismissed_warns_v1');
+    if (_lastData) renderPage(_lastData);
+    $('settingsModal').style.display = 'none';
   });
 
   $('scrapeStripDismiss')?.addEventListener('click', () => {
