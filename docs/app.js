@@ -653,11 +653,12 @@ function initEditModal() {
     close();
     if (_lastData) renderPage(_lastData);
 
-    // If a URL was added/changed and GitHub is configured: persist to repo then trigger scrape
-    if (urlChanged && (newWwUrl || newCoUrl)) {
-      const s = loadSettings();
-      if (s.user && s.repo && s.token) {
-        try { await persistUrlOverridesToRepo(s, overrides); } catch {}
+    const s = loadSettings();
+    if (s.user && s.repo && s.token) {
+      // Always sync all URL overrides to repo so the scraper never misses a pinned URL
+      try { await persistUrlOverridesToRepo(s, overrides); } catch {}
+      // If a URL was added/changed, trigger an immediate single-item scrape
+      if (urlChanged && (newWwUrl || newCoUrl)) {
         triggerItemRefresh(item.list_item, null, { wwUrl: newWwUrl, colesUrl: newCoUrl });
         alert(`Scrape triggered for "${item.list_item}" with the new URL.`);
       }
@@ -2354,6 +2355,18 @@ function exportShoppingList(useChecked) {
 // ── Boot ─────────────────────────────────────────────────────────────────────
 
 async function boot() {
+  // Sync any localStorage URL overrides to the repo immediately so the scraper always
+  // uses pinned URLs even if they were set before the persist-on-save fix was deployed.
+  (() => {
+    const s = loadSettings();
+    if (s.user && s.repo && s.token) {
+      const ov = loadOverrides();
+      if (Object.values(ov).some(v => v.wwUrl || v.colesUrl)) {
+        persistUrlOverridesToRepo(s, ov).catch(() => {});
+      }
+    }
+  })();
+
   initSettingsModal();
   initEditModal();
   initPriceHistoryModal();
