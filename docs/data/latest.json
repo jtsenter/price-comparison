@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T06:12:49.508197+00:00",
+  "last_updated": "2026-05-20T06:13:01.111447+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4158,80 +4158,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Frozen Meat Pies",
-      "last_scraped": "2026-05-20T05:15:12.588983+00:00",
-      "trip_count": 10,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 5.5
-        },
-        {
-          "date": "2024-12-19",
-          "price": 5.5
-        },
-        {
-          "date": "2025-02-02",
-          "price": 5.5
-        },
-        {
-          "date": "2025-03-17",
-          "price": 5.5
-        },
-        {
-          "date": "2025-04-05",
-          "price": 5.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 5.5
-        },
-        {
-          "date": "2025-05-29",
-          "price": 5.5
-        },
-        {
-          "date": "2025-06-21",
-          "price": 5.5
-        },
-        {
-          "date": "2025-07-03",
-          "price": 5.5
-        },
-        {
-          "date": "2025-07-26",
-          "price": 5.5
-        }
-      ],
-      "category": "Frozen Foods",
-      "woolworths": {
-        "name": "Woolworths Frozen Meat Pies",
-        "price": 6.6,
-        "unit_price": 0.94,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/779251/woolworths-frozen-meat-pies",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/779251.jpg"
-      },
-      "coles": {
-        "name": "Coles Frozen Meat Pies 4 Pack | 700g",
-        "price": 6.6,
-        "unit_price": 6.6,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-frozen-meat-pies-4-pack-700g-5181729",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5181729.jpg&w=640&q=90"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 0.94,
-      "per_100_coles": 0.94,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Full Cream Milk",
-      "last_scraped": "2026-05-20T05:15:18.180890+00:00",
+      "last_scraped": "2026-05-20T06:12:53.022019+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -4295,26 +4223,88 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 2.1,
-      "alternatives": [
-        {
-          "name": "Coles Full Cream Milk | 600mL",
-          "price": 1.45,
-          "unit_price": 1.45,
-          "unit": "1L",
-          "url": "https://www.coles.com.au/product/coles-full-cream-milk-600ml-6759482",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6759482.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "high",
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.18,
       "per_100_coles": 0.24,
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Woolworths Frozen Meat Pies",
+      "last_scraped": "2026-05-20T06:12:54.697279+00:00",
+      "trip_count": 10,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 5.5
+        },
+        {
+          "date": "2024-12-19",
+          "price": 5.5
+        },
+        {
+          "date": "2025-02-02",
+          "price": 5.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 5.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 5.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.5
+        },
+        {
+          "date": "2025-05-29",
+          "price": 5.5
+        },
+        {
+          "date": "2025-06-21",
+          "price": 5.5
+        },
+        {
+          "date": "2025-07-03",
+          "price": 5.5
+        },
+        {
+          "date": "2025-07-26",
+          "price": 5.5
+        }
+      ],
+      "category": "Frozen Foods",
+      "woolworths": {
+        "name": "Woolworths Frozen Meat Pies",
+        "price": 6.6,
+        "unit_price": 0.94,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/779251/woolworths-frozen-meat-pies",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/779251.jpg"
+      },
+      "coles": {
+        "name": "Coles Frozen Meat Pies 4 Pack | 700g",
+        "price": 6.6,
+        "unit_price": 6.6,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-frozen-meat-pies-4-pack-700g-5181729",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5181729.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.94,
+      "per_100_coles": 0.94,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Garlic Heads CLOVE",
-      "last_scraped": "2026-05-20T05:15:18.734313+00:00",
+      "last_scraped": "2026-05-20T06:12:57.190312+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4370,35 +4360,7 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.6,
-      "alternatives": [
-        {
-          "name": "Coles Minced Garlic | 250g",
-          "price": 1.25,
-          "unit_price": 1.25,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-minced-garlic-250g-5493277",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5493277.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Minced Garlic | 500g",
-          "price": 2.3,
-          "unit_price": 2.3,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-minced-garlic-500g-3765423",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3765423.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Deli Lemon & Garlic Sicilian Olives | 110g",
-          "price": 3.75,
-          "unit_price": 3.75,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-deli-lemon-and-garlic-sicilian-olives-110g-6484963",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6484963.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 4.14,
@@ -4407,7 +4369,7 @@
     },
     {
       "list_item": "Woolworths Greek Style Yoghurt",
-      "last_scraped": "2026-05-20T05:15:24.280379+00:00",
+      "last_scraped": "2026-05-20T06:13:00.845459+00:00",
       "trip_count": 33,
       "price_history": [
         {
@@ -4564,7 +4526,7 @@
     },
     {
       "list_item": "Woolworths Ice Cream Cones Boysenberry",
-      "last_scraped": "2026-05-20T05:15:24.973838+00:00",
+      "last_scraped": "2026-05-20T06:13:01.107213+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -4624,7 +4586,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 2.8,
       "alternatives": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.78,
       "per_100_coles": 0.65,
@@ -13567,7 +13529,7 @@
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 50,
+    "done": 55,
     "total": 211
   }
 }
