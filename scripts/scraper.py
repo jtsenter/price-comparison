@@ -601,8 +601,6 @@ def should_skip_item(ex_data: dict | None, trigger: str) -> bool:
     co = ex_data.get("coles") or {}
     if ww.get("price") is None or co.get("price") is None:
         return False
-    if ex_data.get("_search_failed"):
-        return False
     try:
         age_days = (datetime.now(timezone.utc) - datetime.fromisoformat(last_scraped)).total_seconds() / 86400
         return age_days < SKIP_AGE_DAYS
