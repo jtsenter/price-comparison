@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T11:42:37.505015+00:00",
+  "last_updated": "2026-05-20T13:17:37.736222+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12138,6 +12138,37 @@
       "per_100_ww": 0.56,
       "per_100_coles": 0.7,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Helga's Bread Traditional Wholemeal 750g",
+      "last_scraped": "2026-05-20T13:17:37.482242+00:00",
+      "trip_count": 0,
+      "price_history": [],
+      "category": "Bakery",
+      "woolworths": {
+        "name": "Helga's Bread Traditional Wholemeal",
+        "price": 5.2,
+        "unit_price": 0.69,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/84129/helga-s-bread-traditional-wholemeal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/084129.jpg"
+      },
+      "coles": {
+        "name": "Helga's Traditional Wholemeal Bread | 750g",
+        "price": 5.2,
+        "unit_price": 5.2,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/helga's-traditional-wholemeal-bread-750g-5969435",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5969435.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 0.69,
+      "per_100_coles": 0.69,
+      "per_100_unit": "100g"
     }
   ],
   "not_found_items": [
@@ -12145,12 +12176,12 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 1107.78,
-    "total_coles": 1289.47,
+    "total_woolworths": 1104.92,
+    "total_coles": 1122.41,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 181.69,
-    "items_compared": 209,
+    "total_saving": 17.49,
+    "items_compared": 210,
     "items_not_found": 2
   }
 }
