@@ -633,8 +633,9 @@ function initEditModal() {
     if (!_editingItem) return;
     const overrides = loadOverrides();
     const prevOv = overrides[_editingItem.list_item] || {};
-    const newWwUrl   = $('editWwUrl').value.trim()   || undefined;
-    const newCoUrl   = $('editColesUrl').value.trim() || undefined;
+    const _normaliseUrl = u => { const s = u.trim(); return s && !s.startsWith('http') ? 'https://' + s : s; };
+    const newWwUrl   = _normaliseUrl($('editWwUrl').value)   || undefined;
+    const newCoUrl   = _normaliseUrl($('editColesUrl').value) || undefined;
     const urlChanged = newWwUrl !== (prevOv.wwUrl || _editingItem.woolworths?.url || '')
                     || newCoUrl !== (prevOv.colesUrl || _editingItem.coles?.url || '');
 
