@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T04:58:10.345268+00:00",
+  "last_updated": "2026-05-20T04:58:16.812823+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10833,7 +10833,7 @@
     },
     {
       "list_item": "Twinings Pure Camomile Tea Bags Bags",
-      "last_scraped": "2026-05-20T03:32:23.558103+00:00",
+      "last_scraped": "2026-05-20T04:58:10.485646+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10883,7 +10883,7 @@
     },
     {
       "list_item": "Vanish Napisan Stain Remover Powder",
-      "last_scraped": "2026-05-20T03:32:27.198914+00:00",
+      "last_scraped": "2026-05-20T04:58:13.634545+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10933,7 +10933,7 @@
     },
     {
       "list_item": "Woolworths 4 Angus Quarter Pound Beef Burgers",
-      "last_scraped": "2026-05-20T03:32:28.716078+00:00",
+      "last_scraped": "2026-05-20T04:58:13.649297+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10972,49 +10972,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Beef & Lamb Meatballs",
-      "last_scraped": "2026-05-20T03:32:30.872283+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 8.0
-        },
-        {
-          "date": "2024-11-12",
-          "price": 8.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths Beef & Lamb Meatballs",
-        "price": 8.0,
-        "unit_price": 20.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/764264/woolworths-beef-lamb-meatballs",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/764264.jpg"
-      },
-      "coles": {
-        "name": "Coles Beef & Pork Meatballs | 560g",
-        "price": 8.0,
-        "unit_price": 8.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-beef-and-pork-meatballs-560g-3569447",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3569447.jpg&w=640&q=90",
-        "retailer": "coles"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.0,
-      "per_100_coles": 1.43,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Black Beans",
-      "last_scraped": "2026-05-20T03:32:32.919015+00:00",
+      "last_scraped": "2026-05-20T04:58:16.739239+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11061,6 +11020,47 @@
       "size_warning": false,
       "per_100_ww": 0.24,
       "per_100_coles": 0.24,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Beef & Lamb Meatballs",
+      "last_scraped": "2026-05-20T04:58:16.802004+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 8.0
+        },
+        {
+          "date": "2024-11-12",
+          "price": 8.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Beef & Lamb Meatballs",
+        "price": 8.0,
+        "unit_price": 20.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/764264/woolworths-beef-lamb-meatballs",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/764264.jpg"
+      },
+      "coles": {
+        "name": "Coles Beef & Pork Meatballs | 560g",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-beef-and-pork-meatballs-560g-3569447",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3569447.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.0,
+      "per_100_coles": 1.43,
       "per_100_unit": "100g"
     },
     {
@@ -11538,7 +11538,7 @@
     "items_not_found": 8
   },
   "scrape_progress": {
-    "done": 195,
+    "done": 200,
     "total": 211
   }
 }
