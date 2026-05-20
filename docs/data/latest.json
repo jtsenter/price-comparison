@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T11:02:07.797395+00:00",
+  "last_updated": "2026-05-20T11:02:23.712563+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1032,7 +1032,7 @@
     },
     {
       "list_item": "Hass Avocado",
-      "last_scraped": "2026-05-20T06:32:18.037595+00:00",
+      "last_scraped": "2026-05-20T11:02:12.516983+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1096,7 +1096,7 @@
     },
     {
       "list_item": "Fresh Cauliflower Half",
-      "last_scraped": "2026-05-20T06:32:19.737582+00:00",
+      "last_scraped": "2026-05-20T11:02:15.845828+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -1200,7 +1200,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 1.95,
       "alternatives": [],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -1208,7 +1208,7 @@
     },
     {
       "list_item": "Kale Fresh Bunch",
-      "last_scraped": "2026-05-20T06:32:24.939641+00:00",
+      "last_scraped": "2026-05-20T11:02:19.563354+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1264,17 +1264,7 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.1,
-      "alternatives": [
-        {
-          "name": "Coles Kale Bunch Green | 1 Each",
-          "price": 4.5,
-          "unit_price": 4.5,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/coles-kale-bunch-green-1-each-8696598",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8696598.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
@@ -1283,7 +1273,7 @@
     },
     {
       "list_item": "Lebanese Cucumbers",
-      "last_scraped": "2026-05-20T06:32:29.287615+00:00",
+      "last_scraped": "2026-05-20T11:02:23.665561+00:00",
       "trip_count": 27,
       "price_history": [
         {
@@ -1415,7 +1405,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 0.05,
       "alternatives": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.99,
@@ -1423,7 +1413,7 @@
     },
     {
       "list_item": "Helga's Wholemeal Bread With Grains",
-      "last_scraped": "2026-05-20T06:32:29.609288+00:00",
+      "last_scraped": "2026-05-20T11:02:23.710613+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -13294,7 +13284,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 10,
+    "done": 15,
     "total": 211
   }
 }
