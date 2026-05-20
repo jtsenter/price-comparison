@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T05:17:04.562734+00:00",
+  "last_updated": "2026-05-20T05:17:17.414650+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6934,7 +6934,7 @@
     },
     {
       "list_item": "Fox's Chocolatey Milk Chocolate Rounds",
-      "last_scraped": "2026-05-20T04:54:47.538922+00:00",
+      "last_scraped": "2026-05-20T05:17:05.601655+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -6962,7 +6962,17 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": null,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Cadbury Dairy Milk Furry Friends Chocolate Multipack | 100g",
+          "price": 4.3,
+          "unit_price": 4.3,
+          "unit": null,
+          "url": "https://www.coles.com.au/product/cadbury-dairy-milk-furry-friends-chocolate-multipack-100g-3273338",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3273338.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
       "match_confidence": "none",
       "size_warning": false,
       "per_100_ww": null,
@@ -6970,8 +6980,49 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Golden Palm Medjool Dates Punnet",
+      "last_scraped": "2026-05-20T05:17:10.840577+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 10.0
+        },
+        {
+          "date": "2025-06-13",
+          "price": 11.9
+        },
+        {
+          "date": "2026-02-03",
+          "price": 10.9
+        },
+        {
+          "date": "2026-05-06",
+          "price": 12.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": null,
+      "coles": {
+        "name": "Coles Medjool Dates | 454g",
+        "price": 2.45,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-medjool-dates-454g-5142013",
+        "image_url": "https://shop.coles.com.au/wcsstore/Coles-CAS/images/5/1/4/5142013-th.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 0.54,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Hedy's Fresh Quiche Lorraine Chilled Meal",
-      "last_scraped": "2026-05-20T04:54:52.611481+00:00",
+      "last_scraped": "2026-05-20T05:17:11.151000+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -7015,7 +7066,7 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.32,
       "per_100_coles": 1.32,
@@ -7023,7 +7074,7 @@
     },
     {
       "list_item": "Hedy's Fresh Quiche Spinach & Feta Chilled Meal",
-      "last_scraped": "2026-05-20T04:54:55.899639+00:00",
+      "last_scraped": "2026-05-20T05:17:16.565452+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -7068,7 +7119,7 @@
     },
     {
       "list_item": "Hellmann's Real Mayonnaise Squeeze",
-      "last_scraped": "2026-05-20T04:54:56.289383+00:00",
+      "last_scraped": "2026-05-20T05:17:17.400274+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7108,8 +7159,18 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 1.0,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Hellmann's Squeeze Real Mayonnaise | 400g",
+          "price": 7.0,
+          "unit_price": 1.75,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/hellmann's-squeeze-real-mayonnaise-400g-3025755",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3025755.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.0,
       "per_100_coles": 1.75,
@@ -12684,15 +12745,15 @@
   ],
   "summary": {
     "total_woolworths": 1092.56,
-    "total_coles": 1329.21,
+    "total_coles": 1331.66,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 236.65,
-    "items_compared": 207,
+    "total_saving": 239.1,
+    "items_compared": 208,
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 85,
+    "done": 90,
     "total": 211
   }
 }
