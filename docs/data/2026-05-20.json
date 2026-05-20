@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T11:34:54.409740+00:00",
+  "last_updated": "2026-05-20T11:36:34.665638+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -630,7 +630,7 @@
     },
     {
       "list_item": "Cavendish Bananas",
-      "last_scraped": "2026-05-20T11:01:58.584977+00:00",
+      "last_scraped": "2026-05-20T11:36:34.359649+00:00",
       "trip_count": 30,
       "price_history": [
         {
@@ -763,14 +763,25 @@
         "url": "https://www.woolworths.com.au/shop/productdetails/133211/cavendish-bananas",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/133211.jpg"
       },
-      "coles": null,
-      "cheaper_store": "woolworths",
-      "saving_per_item": null,
+      "coles": {
+        "name": "Bananas",
+        "price": 0.76,
+        "unit_price": 4.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-bananas-approx.-170g-409499",
+        "image_url": {
+          "altText": "",
+          "type": "default",
+          "uri": "/4/409499.jpg"
+        }
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.01,
       "alternatives": [],
-      "match_confidence": "none",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
-      "per_100_coles": null,
+      "per_100_coles": 0.45,
       "per_100_unit": "100g"
     },
     {
@@ -12128,10 +12139,10 @@
   ],
   "summary": {
     "total_woolworths": 1102.58,
-    "total_coles": 1288.71,
+    "total_coles": 1289.47,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 186.13,
+    "total_saving": 186.89,
     "items_compared": 209,
     "items_not_found": 2
   }
