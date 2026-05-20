@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T23:52:57.058472+00:00",
+  "last_updated": "2026-05-20T23:53:03.854751+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6035,7 +6035,7 @@
     },
     {
       "list_item": "Continental Classics Cup A Soup Chicken With Lots Of Noodles",
-      "last_scraped": "2026-05-20T11:04:51.530909+00:00",
+      "last_scraped": "2026-05-20T23:52:57.376748+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -6080,7 +6080,7 @@
     },
     {
       "list_item": "Ecostore Ultra Sensitive Fragrance Free Laundry Liquid",
-      "last_scraped": "2026-05-20T11:04:54.767368+00:00",
+      "last_scraped": "2026-05-20T23:53:00.257473+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -6136,7 +6136,7 @@
     },
     {
       "list_item": "Essentials Salted Butter",
-      "last_scraped": "2026-05-20T11:04:58.127689+00:00",
+      "last_scraped": "2026-05-20T23:53:00.612857+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -6180,7 +6180,7 @@
     },
     {
       "list_item": "Essentials White Vinegar",
-      "last_scraped": "2026-05-20T11:04:58.467525+00:00",
+      "last_scraped": "2026-05-20T23:53:03.648972+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6227,6 +6227,43 @@
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Fox's Chocolatey Milk Chocolate Rounds",
+      "last_scraped": "2026-05-20T23:53:03.849561+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 5.5
+        },
+        {
+          "date": "2024-12-02",
+          "price": 5.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 5.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": null,
+      "coles": {
+        "name": "Darrell Lea Milk Chocolate Double Chocolate Brownie | 160g",
+        "price": 7.0,
+        "unit_price": 7.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/darrell-lea-milk-chocolate-double-chocolate-brownie-160g-8484975",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8484975.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 4.38,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Fresh Radish Bunch",
       "last_scraped": "2026-05-20T11:05:01.822894+00:00",
       "trip_count": 3,
@@ -6269,43 +6306,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Fox's Chocolatey Milk Chocolate Rounds",
-      "last_scraped": "2026-05-20T11:05:02.442638+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 5.5
-        },
-        {
-          "date": "2024-12-02",
-          "price": 5.5
-        },
-        {
-          "date": "2024-12-09",
-          "price": 5.5
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": null,
-      "coles": {
-        "name": "Darrell Lea Milk Chocolate Double Chocolate Brownie | 160g",
-        "price": 7.0,
-        "unit_price": 7.0,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/darrell-lea-milk-chocolate-double-chocolate-brownie-160g-8484975",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8484975.jpg&w=640&q=90"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 4.38,
       "per_100_unit": "100g"
     },
     {
@@ -12177,7 +12177,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 80,
+    "done": 85,
     "total": 211
   }
 }
