@@ -444,6 +444,11 @@ function getCategory(item) {
 
 // ── Deal computation ──────────────────────────────────────────────────────────
 
+function pricePercentile(prices, pct) {
+  const sorted = [...prices].sort((a, b) => a - b);
+  return sorted[Math.floor(sorted.length * pct)];
+}
+
 function getDealInfo(item) {
   const history = item.price_history;
   if (!history || history.length < 3) return null;
@@ -452,6 +457,7 @@ function getDealInfo(item) {
 
   const mean = prices.reduce((s, p) => s + p, 0) / prices.length;
   const minHistoric = Math.min(...prices);
+  const threshold = pricePercentile(prices, 0.20);
 
   const ww = item.woolworths?.price;
   const co = item.coles?.price;
@@ -459,12 +465,12 @@ function getDealInfo(item) {
   // Check each store separately
   const results = [];
 
-  if (ww != null && ww < mean * 0.90) {
+  if (ww != null && ww <= threshold) {
     const pctOff = Math.round((mean - ww) / mean * 100);
     const isAllTimeLow = ww <= minHistoric;
     results.push({ store: 'woolworths', price: ww, pctOff, mean, minHistoric, isAllTimeLow });
   }
-  if (co != null && co < mean * 0.90) {
+  if (co != null && co <= threshold) {
     const pctOff = Math.round((mean - co) / mean * 100);
     const isAllTimeLow = co <= minHistoric;
     results.push({ store: 'coles', price: co, pctOff, mean, minHistoric, isAllTimeLow });

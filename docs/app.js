@@ -58,7 +58,7 @@ function formatDate(isoString) {
 
 // ── Thresholds ────────────────────────────────────────────────────────────────
 
-const HOT_DEAL_THRESHOLD       = 0.9;    // current price must be below this × historical mean
+const HOT_DEAL_PERCENTILE      = 0.20;   // current price must be ≤ bottom 20th percentile of history
 const DISCREPANCY_WARN_THRESHOLD = 0.31; // price diff % above which ⚠ is shown
 const STALE_DATA_DAYS          = 5;      // days before "data is stale" banner appears
 const STALE_PROGRESS_MS        = 3 * 60 * 1000; // ms with no progress update → ⚠ Stalled
@@ -1444,18 +1444,22 @@ function applyColSort(col) {
 
 // ── Weekly special detection ─────────────────────────────────────────────────
 
+function pricePercentile(prices, pct) {
+  const sorted = [...prices].sort((a, b) => a - b);
+  return sorted[Math.floor(sorted.length * pct)];
+}
+
 function isHotDeal(item) {
   const history = item.price_history;
   if (!history || history.length < 3) return false;
   const prices = history.map(h => h.price).filter(p => p > 0);
   if (prices.length < 3) return false;
-  const mean = prices.reduce((s, p) => s + p, 0) / prices.length;
-  // Use cheapest available price for comparison
+  const threshold = pricePercentile(prices, HOT_DEAL_PERCENTILE);
   const ww = item.woolworths?.price;
   const co = item.coles?.price;
   const current = item.cheaper_store === 'woolworths' ? ww : (item.cheaper_store === 'coles' ? co : (co ?? ww));
   if (current == null) return false;
-  return current < mean * HOT_DEAL_THRESHOLD;
+  return current <= threshold;
 }
 
 // ── Index page rendering ─────────────────────────────────────────────────────
@@ -1714,7 +1718,7 @@ function renderPage(data) {
 
     // Hot deal: fire goes on the cheaper store's price cell
     const hotDeal = isHotDeal(item);
-    const hotBadge = `<span class="hot-badge" title="Current price is 10%+ below historical average">🔥</span>`;
+    const hotBadge = `<span class="hot-badge" title="Current price is in the bottom 20% of historical prices">🔥</span>`;
 
     // Per-100g/ml — computed from product name (reliable for packs); falls back to scraped cup price
     const wwP100 = clientPer100(ww);
