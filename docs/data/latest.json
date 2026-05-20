@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T03:26:55.630894+00:00",
+  "last_updated": "2026-05-20T03:27:10.822650+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5196,7 +5196,7 @@
     },
     {
       "list_item": "Woolworths Ice Cream Cones Boysenberry",
-      "last_scraped": "2026-05-20T03:11:53.177798+00:00",
+      "last_scraped": "2026-05-20T03:26:55.868768+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -5264,7 +5264,7 @@
     },
     {
       "list_item": "Woolworths Onion Brown Bag",
-      "last_scraped": "2026-05-20T03:11:57.631159+00:00",
+      "last_scraped": "2026-05-20T03:27:01.758053+00:00",
       "trip_count": 14,
       "price_history": [
         {
@@ -5381,7 +5381,7 @@
     },
     {
       "list_item": "Woolworths RSPCA Approved Chicken Breast Fillet",
-      "last_scraped": "2026-05-20T03:12:03.665050+00:00",
+      "last_scraped": "2026-05-20T03:27:03.270610+00:00",
       "trip_count": 23,
       "price_history": [
         {
@@ -5484,32 +5484,32 @@
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Woolworths RSPCA Approved Chicken Breast Fillet",
-        "price": 18.7,
-        "unit_price": 11.0,
+        "price": 9.0,
+        "unit_price": 9.0,
         "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/969723/woolworths-rspca-approved-chicken-breast-fillet",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/969723.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/710953/woolworths-rspca-approved-chicken-breast-fillet",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/710953.jpg"
       },
       "coles": {
         "name": "Coles RSPCA Approved Chicken Breast Fillets Large Pack | approx. 1.4kg",
-        "price": 2.45,
+        "price": 8.7,
         "unit_price": null,
         "unit": null,
         "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-breast-fillets-large-pack-approx.-1.4kg-2263179",
         "image_url": "https://shop.coles.com.au/wcsstore/Coles-CAS/images/2/2/6/2263179-th.jpg"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 16.25,
+      "saving_per_item": 0.3,
       "alternatives": [],
       "match_confidence": "high",
       "size_warning": false,
-      "per_100_ww": 1.1,
-      "per_100_coles": 0.18,
+      "per_100_ww": 0.9,
+      "per_100_coles": 0.62,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Red Watermelon Cut Quarter",
-      "last_scraped": "2026-05-20T03:12:05.681166+00:00",
+      "last_scraped": "2026-05-20T03:27:08.210893+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5593,7 +5593,7 @@
     },
     {
       "list_item": "Woolworths Salmon Portions Skin On",
-      "last_scraped": "2026-05-20T03:12:08.642405+00:00",
+      "last_scraped": "2026-05-20T03:27:10.816087+00:00",
       "trip_count": 12,
       "price_history": [
         {
@@ -14109,16 +14109,16 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 1345.39,
-    "total_coles": 1330.04,
-    "cheaper_store": "coles",
+    "total_woolworths": 1335.69,
+    "total_coles": 1336.29,
+    "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 15.35,
+    "total_saving": 0.6,
     "items_compared": 211,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 55,
+    "done": 60,
     "total": 211
   }
 }
