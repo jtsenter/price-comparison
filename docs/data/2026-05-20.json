@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T02:33:40.833802+00:00",
+  "last_updated": "2026-05-20T02:34:55.086158+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5294,7 +5294,7 @@
     },
     {
       "list_item": "Woolworths Onion Brown Bag",
-      "last_scraped": "2026-05-19T12:20:05.873957+00:00",
+      "last_scraped": "2026-05-20T02:34:54.692676+00:00",
       "trip_count": 14,
       "price_history": [
         {
@@ -5364,49 +5364,30 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144336.jpg"
       },
       "coles": {
-        "name": "Coles Onion Powder | 42g",
-        "price": 2.5,
-        "unit_price": 2.5,
-        "unit": "10g",
-        "url": "https://www.coles.com.au/product/coles-onion-powder-42g-5070863",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5070863.jpg&w=640&q=90",
-        "retailer": "coles"
+        "name": "Coles Brown Onions | 1kg",
+        "price": 3.7,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
+        "image_url": "https://shop.coles.com.au/wcsstore/Coles-CAS/images/4/8/0/4803991-th.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.1,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.1,
       "alternatives": [
         {
-          "name": "Coles Simply Soup Packet French Onion | 40g",
-          "price": 0.55,
-          "unit_price": 0.55,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-simply-soup-packet-french-onion-40g-129619",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F129619.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Brown Onions | 1kg",
-          "price": 2.5,
-          "unit_price": 2.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4803991.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Onion Powder | 42g",
-          "price": 2.5,
-          "unit_price": 2.5,
-          "unit": "10g",
-          "url": "https://www.coles.com.au/product/coles-onion-powder-42g-5070863",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5070863.jpg&w=640&q=90",
-          "retailer": "coles"
+          "name": "Woolworths Brown Onions Bag",
+          "price": 5.9,
+          "unit_price": 2.95,
+          "unit": "1KG",
+          "url": "https://www.woolworths.com.au/shop/productdetails/144427/woolworths-brown-onions-bag",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144427.jpg",
+          "retailer": "woolworths"
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.36,
-      "per_100_coles": 5.95,
+      "per_100_coles": 0.37,
       "per_100_unit": "100g"
     },
     {
@@ -13226,10 +13207,10 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 1234.52,
-    "total_coles": 1254.78,
+    "total_coles": 1255.98,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 20.26,
+    "total_saving": 21.46,
     "items_compared": 195,
     "items_not_found": 0
   }
