@@ -2329,7 +2329,8 @@ function renderCfdValues(search, resetScroll = true) {
   container.innerHTML = visible.map(v => {
     const checked = _cfdTempValues.has(v) ? ' checked' : '';
     const safe = v.replace(/"/g, '&quot;');
-    return `<label class="cfd-item"><input type="checkbox" value="${safe}"${checked}> ${safe}</label>`;
+    const label = (_cfdCol === 'cheaper' && v === 'equal') ? '=' : safe;
+    return `<label class="cfd-item"><input type="checkbox" value="${safe}"${checked}> ${label}</label>`;
   }).join('');
 
   if (resetScroll) container.scrollTop = 0;
