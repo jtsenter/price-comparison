@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T05:15:41.446978+00:00",
+  "last_updated": "2026-05-20T05:16:01.483381+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5506,82 +5506,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Sour Cream",
-      "last_scraped": "2026-05-20T04:54:02.395367+00:00",
-      "trip_count": 8,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 3.25
-        },
-        {
-          "date": "2024-11-20",
-          "price": 3.25
-        },
-        {
-          "date": "2025-03-27",
-          "price": 3.4
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.4
-        },
-        {
-          "date": "2025-05-12",
-          "price": 3.4
-        },
-        {
-          "date": "2025-06-13",
-          "price": 3.3
-        },
-        {
-          "date": "2025-06-21",
-          "price": 3.3
-        },
-        {
-          "date": "2026-04-13",
-          "price": 3.3
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Sour Cream",
-        "price": 3.3,
-        "unit_price": 1.1,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/105609/woolworths-sour-cream",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/105609.jpg"
-      },
-      "coles": {
-        "name": "Coles Sour Cream | 300g",
-        "price": 3.3,
-        "unit_price": 3.3,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-sour-cream-300g-3676946",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3676946.jpg&w=640&q=90"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [
-        {
-          "name": "Woolworths Thickened Cream",
-          "price": 5.2,
-          "unit_price": 0.87,
-          "unit": "100ML",
-          "url": "https://www.woolworths.com.au/shop/productdetails/48720/woolworths-thickened-cream",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/048720.jpg",
-          "retailer": "woolworths"
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.1,
-      "per_100_coles": 1.1,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Woolworths Spring Water Bottles",
-      "last_scraped": "2026-05-20T04:54:04.947438+00:00",
+      "last_scraped": "2026-05-20T05:15:48.570926+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5647,15 +5573,89 @@
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.06,
       "per_100_coles": 0.26,
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Woolworths Sour Cream",
+      "last_scraped": "2026-05-20T05:15:49.234901+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 3.25
+        },
+        {
+          "date": "2024-11-20",
+          "price": 3.25
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.4
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.4
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.4
+        },
+        {
+          "date": "2025-06-13",
+          "price": 3.3
+        },
+        {
+          "date": "2025-06-21",
+          "price": 3.3
+        },
+        {
+          "date": "2026-04-13",
+          "price": 3.3
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Sour Cream",
+        "price": 3.3,
+        "unit_price": 1.1,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/105609/woolworths-sour-cream",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/105609.jpg"
+      },
+      "coles": {
+        "name": "Coles Sour Cream | 300g",
+        "price": 3.3,
+        "unit_price": 3.3,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-sour-cream-300g-3676946",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3676946.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Woolworths Thickened Cream",
+          "price": 5.2,
+          "unit_price": 0.87,
+          "unit": "100ML",
+          "url": "https://www.woolworths.com.au/shop/productdetails/48720/woolworths-thickened-cream",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/048720.jpg",
+          "retailer": "woolworths"
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 1.1,
+      "per_100_coles": 1.1,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "Woolworths Washed Potato Bag",
-      "last_scraped": "2026-05-20T04:54:05.924351+00:00",
+      "last_scraped": "2026-05-20T05:15:55.941127+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -5707,7 +5707,7 @@
       "cheaper_store": "coles",
       "saving_per_item": 3.2,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.48,
@@ -5715,7 +5715,7 @@
     },
     {
       "list_item": "Woolworths Whole Milk Full Cream Milk",
-      "last_scraped": "2026-05-20T04:54:08.852643+00:00",
+      "last_scraped": "2026-05-20T05:15:56.047548+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5754,11 +5754,11 @@
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Woolworths Full Cream Milk",
-        "price": 5.15,
-        "unit_price": 1.72,
+        "price": 1.85,
+        "unit_price": 1.85,
         "unit": "1L",
-        "url": "https://www.woolworths.com.au/shop/productdetails/888140/woolworths-full-cream-milk",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/888140.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/50923/woolworths-full-cream-milk",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/050923.jpg"
       },
       "coles": {
         "name": "Coles Full Cream Milk | 600mL",
@@ -5770,13 +5770,78 @@
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 3.7,
-      "alternatives": [],
-      "match_confidence": "low",
+      "saving_per_item": 0.4,
+      "alternatives": [
+        {
+          "name": "Coles Full Cream Milk | 600mL",
+          "price": 1.45,
+          "unit_price": 1.45,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/coles-full-cream-milk-600ml-6759482",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6759482.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
-      "per_100_ww": 0.17,
+      "per_100_ww": 0.18,
       "per_100_coles": 0.24,
       "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Annalisa Chickpeas",
+      "last_scraped": "2026-05-20T05:16:01.474687+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 1.4
+        },
+        {
+          "date": "2025-05-29",
+          "price": 1.4
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.4
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Annalisa Chickpeas",
+        "price": 1.9,
+        "unit_price": 4.75,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/178262/annalisa-chickpeas",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/178262.jpg"
+      },
+      "coles": {
+        "name": "Carmelina Chick Peas | 400 GRAM",
+        "price": 1.9,
+        "unit_price": 1.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8855498.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Carmelina Chick Peas | 400 GRAM",
+          "price": 1.9,
+          "unit_price": 1.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8855498.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 0.47,
+      "per_100_coles": 0.19,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Alka Power Alkaline Water Bottle",
@@ -5821,51 +5886,6 @@
       "per_100_ww": 0.23,
       "per_100_coles": 2.62,
       "per_100_unit": "100ml"
-    },
-    {
-      "list_item": "Annalisa Chickpeas",
-      "last_scraped": "2026-05-20T04:54:12.921644+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-05-04",
-          "price": 1.4
-        },
-        {
-          "date": "2025-05-29",
-          "price": 1.4
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.4
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Annalisa Chickpeas",
-        "price": 1.9,
-        "unit_price": 4.75,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/178262/annalisa-chickpeas",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/178262.jpg"
-      },
-      "coles": {
-        "name": "Carmelina Chick Peas | 400 GRAM",
-        "price": 1.9,
-        "unit_price": 1.9,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8855498.jpg&w=640&q=90",
-        "retailer": "coles"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.47,
-      "per_100_coles": 0.19,
-      "per_100_unit": "100g"
     },
     {
       "list_item": "Aptamil Gold+ 2 Baby Follow-On Formula From 6 To 12 Months",
@@ -12521,16 +12541,16 @@
     "Helga's Wholemeal Bread With Grains"
   ],
   "summary": {
-    "total_woolworths": 1095.86,
+    "total_woolworths": 1092.56,
     "total_coles": 1329.21,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 233.35,
+    "total_saving": 236.65,
     "items_compared": 207,
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 60,
+    "done": 65,
     "total": 211
   }
 }
