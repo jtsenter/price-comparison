@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T23:51:18.226039+00:00",
+  "last_updated": "2026-05-20T23:51:28.672103+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4137,7 +4137,7 @@
     },
     {
       "list_item": "Woolworths Fresh Continental Parsley Bunch",
-      "last_scraped": "2026-05-20T11:03:45.110517+00:00",
+      "last_scraped": "2026-05-20T23:51:18.297858+00:00",
       "trip_count": 11,
       "price_history": [
         {
@@ -4212,8 +4212,65 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Garlic Heads CLOVE",
+      "last_scraped": "2026-05-20T23:51:22.034329+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 3.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.5
+        }
+      ],
+      "category": "Other",
+      "woolworths": {
+        "name": "Woolworths Garlic Cloves",
+        "price": 2.9,
+        "unit_price": 41.43,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/253320/woolworths-garlic-cloves",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/253320.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": [],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": 4.14,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Full Cream Milk",
-      "last_scraped": "2026-05-20T11:03:48.663796+00:00",
+      "last_scraped": "2026-05-20T23:51:22.142438+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -4285,65 +4342,8 @@
       "per_100_unit": "100ml"
     },
     {
-      "list_item": "Woolworths Garlic Heads CLOVE",
-      "last_scraped": "2026-05-20T11:03:52.034148+00:00",
-      "trip_count": 8,
-      "price_history": [
-        {
-          "date": "2025-03-11",
-          "price": 3.5
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 3.5
-        },
-        {
-          "date": "2025-06-06",
-          "price": 3.5
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.5
-        },
-        {
-          "date": "2026-03-10",
-          "price": 3.5
-        },
-        {
-          "date": "2026-04-02",
-          "price": 3.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 3.5
-        }
-      ],
-      "category": "Other",
-      "woolworths": {
-        "name": "Woolworths Garlic Cloves",
-        "price": 2.9,
-        "unit_price": 41.43,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/253320/woolworths-garlic-cloves",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/253320.jpg"
-      },
-      "coles": null,
-      "cheaper_store": "woolworths",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": 4.14,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Ice Cream Cones Boysenberry",
-      "last_scraped": "2026-05-20T11:03:56.519520+00:00",
+      "last_scraped": "2026-05-20T23:51:25.801409+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -4408,6 +4408,74 @@
       "per_100_ww": 0.78,
       "per_100_coles": 0.65,
       "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Woolworths Lean Beef Mince",
+      "last_scraped": "2026-05-20T23:51:28.667811+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 9.0
+        },
+        {
+          "date": "2024-12-19",
+          "price": 15.5
+        },
+        {
+          "date": "2025-05-04",
+          "price": 13.75
+        },
+        {
+          "date": "2025-05-29",
+          "price": 15.5
+        },
+        {
+          "date": "2025-07-03",
+          "price": 16.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 19.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 19.0
+        },
+        {
+          "date": "2026-04-13",
+          "price": 18.75
+        },
+        {
+          "date": "2026-05-06",
+          "price": 19.35
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Lean Beef Mince",
+        "price": 11.0,
+        "unit_price": 22.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/577861/woolworths-lean-beef-mince",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/577861.jpg"
+      },
+      "coles": {
+        "name": "El- Amin's Beef Lean Mince | 500g",
+        "price": 12.5,
+        "unit_price": 12.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/el-amin's-beef-lean-mince-500g-6123116",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6123116.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.5,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.2,
+      "per_100_coles": 2.5,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Greek Style Yoghurt",
@@ -4575,74 +4643,6 @@
       "size_warning": false,
       "per_100_ww": 0.42,
       "per_100_coles": 0.45,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Lean Beef Mince",
-      "last_scraped": "2026-05-20T11:04:00.108579+00:00",
-      "trip_count": 9,
-      "price_history": [
-        {
-          "date": "2024-12-02",
-          "price": 9.0
-        },
-        {
-          "date": "2024-12-19",
-          "price": 15.5
-        },
-        {
-          "date": "2025-05-04",
-          "price": 13.75
-        },
-        {
-          "date": "2025-05-29",
-          "price": 15.5
-        },
-        {
-          "date": "2025-07-03",
-          "price": 16.0
-        },
-        {
-          "date": "2026-02-03",
-          "price": 19.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 19.0
-        },
-        {
-          "date": "2026-04-13",
-          "price": 18.75
-        },
-        {
-          "date": "2026-05-06",
-          "price": 19.35
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths Lean Beef Mince",
-        "price": 11.0,
-        "unit_price": 22.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/577861/woolworths-lean-beef-mince",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/577861.jpg"
-      },
-      "coles": {
-        "name": "El- Amin's Beef Lean Mince | 500g",
-        "price": 12.5,
-        "unit_price": 12.5,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/el-amin's-beef-lean-mince-500g-6123116",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6123116.jpg&w=640&q=90"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.5,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.2,
-      "per_100_coles": 2.5,
       "per_100_unit": "100g"
     },
     {
@@ -12177,7 +12177,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 50,
+    "done": 55,
     "total": 211
   }
 }
