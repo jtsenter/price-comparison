@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T02:44:45.163039+00:00",
+  "last_updated": "2026-05-20T02:44:58.393403+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5866,7 +5866,7 @@
     },
     {
       "list_item": "Ingham's Turkey Breast Shaved From The Deli",
-      "last_scraped": "2026-05-19T12:22:36.731609+00:00",
+      "last_scraped": "2026-05-20T02:44:49.421034+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -5897,7 +5897,8 @@
         "unit_price": 5.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/the-deli-turkey-breast-sliced-150g-1466910",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1466910.jpg&w=640&q=90"
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1466910.jpg&w=640&q=90",
+        "retailer": "coles"
       },
       "cheaper_store": "coles",
       "saving_per_item": 25.0,
@@ -5912,21 +5913,21 @@
           "retailer": "coles"
         },
         {
-          "name": "Don Deli Cuts Roast Turkey Shaved | 80g",
-          "price": 4.3,
-          "unit_price": 4.3,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/don-deli-cuts-roast-turkey-shaved-80g-8087578",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8087578.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
           "name": "The Deli Shredded Turkey Breast | 150g",
           "price": 5.0,
           "unit_price": 5.0,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/the-deli-shredded-turkey-breast-150g-1497469",
           "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1497469.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "The Deli Turkey Breast Sliced | 150g",
+          "price": 5.0,
+          "unit_price": 5.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/the-deli-turkey-breast-sliced-150g-1466910",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1466910.jpg&w=640&q=90",
           "retailer": "coles"
         }
       ],
@@ -5938,7 +5939,7 @@
     },
     {
       "list_item": "Jordans Simply Granola Crunchy Oat & Honey",
-      "last_scraped": "2026-05-19T12:22:42.880450+00:00",
+      "last_scraped": "2026-05-20T02:44:51.427395+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -5982,7 +5983,7 @@
     },
     {
       "list_item": "Katoomba Ingredients Red Lentils",
-      "last_scraped": "2026-05-19T12:22:46.354370+00:00",
+      "last_scraped": "2026-05-20T02:44:54.512688+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -6038,7 +6039,7 @@
     },
     {
       "list_item": "KitKat Milk Chocolate Mini Bars Share Pack",
-      "last_scraped": "2026-05-19T12:22:48.216275+00:00",
+      "last_scraped": "2026-05-20T02:44:57.445983+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6061,11 +6062,11 @@
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "KitKat Milk Chocolate Mini Bars Share Pack",
-        "price": 8.0,
-        "unit_price": 3.17,
+        "price": 7.5,
+        "unit_price": 4.87,
         "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/347540/kitkat-milk-chocolate-mini-bars-share-pack",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/347540.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/348593/kitkat-milk-chocolate-mini-bars-share-pack",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/348593.jpg"
       },
       "coles": {
         "name": "KitKat Milk Chocolate Value Share Pack 18 Pieces | 252g",
@@ -6075,31 +6076,22 @@
         "url": "https://www.coles.com.au/product/kitkat-milk-chocolate-value-share-pack-18-pieces-252g-7018864",
         "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7018864.jpg&w=640&q=90"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.5,
       "alternatives": [
         {
-          "name": "KitKat Packed With Milo Milk Chocolate Block | 165g",
-          "price": 3.5,
-          "unit_price": 2.12,
+          "name": "KitKat Milk Milk Chocolate Share Pack 11 Pieces | 154g",
+          "price": 5.25,
+          "unit_price": 3.41,
           "unit": "100g",
-          "url": "https://www.coles.com.au/product/kitkat-packed-with-milo-milk-chocolate-block-165g-5389720",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5389720.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "KitKat Milk Chocolate Block | 160g",
-          "price": 3.5,
-          "unit_price": 2.19,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/kitkat-milk-chocolate-block-160g-5872479",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5872479.jpg&w=640&q=90",
+          "url": "https://www.coles.com.au/product/kitkat-milk-milk-chocolate-share-pack-11-pieces-154g-7018853",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7018853.jpg&w=640&q=90",
           "retailer": "coles"
         },
         {
           "name": "Nestle Kit Kat Chocolate Milk 4 Finger Bar | 42g",
-          "price": 3.0,
-          "unit_price": 3.0,
+          "price": 1.5,
+          "unit_price": 3.57,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/nestle-kit-kat-chocolate-milk-4-finger-bar-42g-9229441",
           "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9229441.jpg&w=640&q=90",
@@ -6108,13 +6100,13 @@
       ],
       "match_confidence": "medium",
       "size_warning": false,
-      "per_100_ww": 3.17,
+      "per_100_ww": 4.87,
       "per_100_coles": 3.17,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Kiwi Fruit Green",
-      "last_scraped": "2026-05-19T12:22:50.034152+00:00",
+      "last_scraped": "2026-05-20T02:44:58.388898+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -6149,14 +6141,14 @@
       },
       "coles": {
         "name": "Coles Green Kiwifruit Prepacked | 8 pack",
-        "price": 5.9,
-        "unit_price": 5.9,
+        "price": 6.9,
+        "unit_price": 6.9,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-green-kiwifruit-prepacked-8-pack-1778560",
         "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1778560.jpg&w=640&q=90"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 4.88,
+      "saving_per_item": 5.88,
       "alternatives": [
         {
           "name": "Woolworths Kiwifruit Green Kids",
@@ -11752,16 +11744,16 @@
     "Woolworths Basa Fillets Boneless With Skin Off"
   ],
   "summary": {
-    "total_woolworths": 1227.5,
-    "total_coles": 935.56,
+    "total_woolworths": 1227.0,
+    "total_coles": 936.56,
     "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 291.94,
+    "total_saving": 290.44,
     "items_compared": 187,
     "items_not_found": 8
   },
   "scrape_progress": {
-    "done": 90,
+    "done": 95,
     "total": 211
   }
 }
