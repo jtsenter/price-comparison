@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T11:09:11.226934+00:00",
+  "last_updated": "2026-05-20T11:09:18.627916+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11678,7 +11678,7 @@
     },
     {
       "list_item": "Woolworths Butternut Pumpkin Cut",
-      "last_scraped": "2026-05-20T05:23:24.855388+00:00",
+      "last_scraped": "2026-05-20T11:09:12.288598+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11710,7 +11710,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 2.45,
       "alternatives": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 1.57,
@@ -11718,7 +11718,7 @@
     },
     {
       "list_item": "Woolworths Chickpeas",
-      "last_scraped": "2026-05-20T05:23:27.345052+00:00",
+      "last_scraped": "2026-05-20T11:09:15.062039+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11731,14 +11731,7 @@
         }
       ],
       "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Lebanese Style Grains & Chickpeas",
-        "price": 3.5,
-        "unit_price": 14.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/935491/woolworths-lebanese-style-grains-chickpeas",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/935491.jpg"
-      },
+      "woolworths": null,
       "coles": {
         "name": "McKenzie's Chickpeas | 375g",
         "price": 1.6,
@@ -11748,45 +11741,17 @@
         "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F405986.jpg&w=640&q=90"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 1.9,
-      "alternatives": [
-        {
-          "name": "Edgell Australian Grown Chick Peas | 400g",
-          "price": 2.2,
-          "unit_price": 2.2,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/edgell-australian-grown-chick-peas-400g-9701489",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9701489.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Cortas Chickpea Whole | 400 GRAM",
-          "price": 2.5,
-          "unit_price": 2.5,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/cortas-chickpea-whole-400-gram-9888765",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9888765.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Cortas Hummos Tahina Chick Pea Dip | 380g",
-          "price": 3.0,
-          "unit_price": 3.0,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/cortas-hummos-tahina-chick-pea-dip-380g-9888801",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9888801.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "low",
+      "saving_per_item": null,
+      "alternatives": [],
+      "match_confidence": "none",
       "size_warning": false,
-      "per_100_ww": 1.4,
+      "per_100_ww": null,
       "per_100_coles": 0.43,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Corn Sweet Kernels",
-      "last_scraped": "2026-05-20T05:23:30.288147+00:00",
+      "last_scraped": "2026-05-20T11:09:15.249780+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11818,27 +11783,8 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [
-        {
-          "name": "Coles Corn Kernels | 420g",
-          "price": 1.05,
-          "unit_price": 1.05,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4774066.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Popping Corn Kernels | 400g",
-          "price": 1.8,
-          "unit_price": 1.8,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-popping-corn-kernels-400g-5374675",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5374675.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.25,
       "per_100_coles": 0.25,
@@ -11846,7 +11792,7 @@
     },
     {
       "list_item": "Woolworths Greek Style Fetta",
-      "last_scraped": "2026-05-20T05:23:35.505794+00:00",
+      "last_scraped": "2026-05-20T11:09:18.326973+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11878,36 +11824,8 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 3.55,
-      "alternatives": [
-        {
-          "name": "Castello Greek Style Feta Cubes | 410g",
-          "price": 6.0,
-          "unit_price": 6.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/castello-greek-style-feta-cubes-410g-1096832",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1096832.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "South Cape Greek Style Fetta | 200g",
-          "price": 6.75,
-          "unit_price": 6.75,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/south-cape-greek-style-fetta-200g-6416861",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6416861.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "South Cape Greek Style Fetta Reduced Fat | 200g",
-          "price": 6.75,
-          "unit_price": 6.75,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/south-cape-greek-style-fetta-reduced-fat-200g-6416883",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6416883.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.6,
       "per_100_coles": 3.38,
@@ -11915,7 +11833,7 @@
     },
     {
       "list_item": "Woolworths Green Asparagus Bunch Green",
-      "last_scraped": "2026-05-20T05:23:36.033500+00:00",
+      "last_scraped": "2026-05-20T11:09:18.615653+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11946,27 +11864,8 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.2,
-      "alternatives": [
-        {
-          "name": "Coles Asparagus Spears | 425g",
-          "price": 3.0,
-          "unit_price": 3.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-asparagus-spears-425g-5841817",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5841817.jpg&w=640&q=90",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Asparagus Entertainer Large | 1 Bunch",
-          "price": 4.4,
-          "unit_price": 4.4,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/coles-asparagus-entertainer-large-1-bunch-8809049",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8809049.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -12296,16 +12195,16 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 1109.88,
+    "total_woolworths": 1106.38,
     "total_coles": 1288.71,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 178.83,
+    "total_saving": 182.33,
     "items_compared": 209,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 200,
+    "done": 205,
     "total": 211
   }
 }
