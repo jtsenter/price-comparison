@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T06:35:20.830733+00:00",
+  "last_updated": "2026-05-20T06:35:34.198878+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5786,7 +5786,7 @@
     },
     {
       "list_item": "Annalisa Chickpeas",
-      "last_scraped": "2026-05-20T06:13:24.161672+00:00",
+      "last_scraped": "2026-05-20T06:35:21.908315+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -5822,8 +5822,18 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Carmelina Chick Peas | 400 GRAM",
+          "price": 1.9,
+          "unit_price": 1.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8855498.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.47,
       "per_100_coles": 0.19,
@@ -5831,7 +5841,7 @@
     },
     {
       "list_item": "Aptamil Gold+ 2 Baby Follow-On Formula From 6 To 12 Months",
-      "last_scraped": "2026-05-20T06:13:25.119367+00:00",
+      "last_scraped": "2026-05-20T06:35:25.645860+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5880,7 +5890,7 @@
     },
     {
       "list_item": "Armada Evergreen Garbage Bags Extra Large",
-      "last_scraped": "2026-05-20T06:13:27.607162+00:00",
+      "last_scraped": "2026-05-20T06:35:28.149647+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5932,7 +5942,7 @@
     },
     {
       "list_item": "Armada Small Kitchen Tidy Bag",
-      "last_scraped": "2026-05-20T06:13:28.690993+00:00",
+      "last_scraped": "2026-05-20T06:35:30.699903+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5976,7 +5986,7 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -5984,7 +5994,7 @@
     },
     {
       "list_item": "Arnold's Farm Granola Pink Lady Apple & Cinnamon",
-      "last_scraped": "2026-05-20T06:13:31.446669+00:00",
+      "last_scraped": "2026-05-20T06:35:34.191957+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -6012,7 +6022,26 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": null,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Carman's Pink Lady Apple & Blueberry Granola | 450g",
+          "price": 8.9,
+          "unit_price": 8.9,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/carman's-pink-lady-apple-and-blueberry-granola-450g-3500382",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3500382.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Red Tractor Protein Low Sugar Granola Apple Caramel | 450g",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/red-tractor-protein-low-sugar-granola-apple-caramel-450g-4312843",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4312843.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
       "match_confidence": "none",
       "size_warning": false,
       "per_100_ww": null,
@@ -13151,7 +13180,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 65,
+    "done": 70,
     "total": 211
   }
 }
