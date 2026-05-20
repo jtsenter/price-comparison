@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T03:24:40.539612+00:00",
+  "last_updated": "2026-05-20T03:24:50.718707+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1029,7 +1029,7 @@
     },
     {
       "list_item": "Fresh Broccoli",
-      "last_scraped": "2026-05-20T03:10:00.339304+00:00",
+      "last_scraped": "2026-05-20T03:24:40.923565+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -1141,7 +1141,7 @@
     },
     {
       "list_item": "Hass Avocado",
-      "last_scraped": "2026-05-20T03:10:04.914502+00:00",
+      "last_scraped": "2026-05-20T03:24:45.313526+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1205,7 +1205,7 @@
     },
     {
       "list_item": "Helga's Wholemeal Bread With Grains",
-      "last_scraped": "2026-05-20T03:10:07.898034+00:00",
+      "last_scraped": "2026-05-20T03:24:46.951679+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -1318,7 +1318,7 @@
     },
     {
       "list_item": "Kale Fresh Bunch",
-      "last_scraped": "2026-05-20T03:10:08.591480+00:00",
+      "last_scraped": "2026-05-20T03:24:49.384180+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1392,78 +1392,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Lurpak Butter Spreadable",
-      "last_scraped": "2026-05-20T03:10:12.928102+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 7.5
-        },
-        {
-          "date": "2025-03-11",
-          "price": 8.2
-        },
-        {
-          "date": "2025-04-14",
-          "price": 8.2
-        },
-        {
-          "date": "2025-07-10",
-          "price": 8.2
-        },
-        {
-          "date": "2026-02-03",
-          "price": 9.0
-        },
-        {
-          "date": "2026-04-29",
-          "price": 8.3
-        },
-        {
-          "date": "2026-05-06",
-          "price": 8.3
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Lurpak Butter Spreadable",
-        "price": 8.3,
-        "unit_price": 2.08,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/87702/lurpak-butter-spreadable",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087702.jpg"
-      },
-      "coles": {
-        "name": "Lurpak Butter Spreadable Slightly Salted | 400g",
-        "price": 8.3,
-        "unit_price": null,
-        "unit": null,
-        "url": "https://www.coles.com.au/product/lurpak-butter-spreadable-slightly-salted-400g-5376659",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5376659.jpg&w=640&q=90"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [
-        {
-          "name": "Lurpak Plant Based Spreadable",
-          "price": 4.9,
-          "unit_price": 1.23,
-          "unit": "100G",
-          "url": "https://www.woolworths.com.au/shop/productdetails/6026771/lurpak-plant-based-spreadable",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6026771.jpg",
-          "retailer": "woolworths"
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 2.08,
-      "per_100_coles": 2.08,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Lebanese Cucumbers",
-      "last_scraped": "2026-05-20T03:10:13.581935+00:00",
+      "last_scraped": "2026-05-20T03:24:50.714059+00:00",
       "trip_count": 27,
       "price_history": [
         {
@@ -1599,6 +1529,76 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.99,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Lurpak Butter Spreadable",
+      "last_scraped": "2026-05-20T03:10:12.928102+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 7.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 8.2
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.2
+        },
+        {
+          "date": "2025-07-10",
+          "price": 8.2
+        },
+        {
+          "date": "2026-02-03",
+          "price": 9.0
+        },
+        {
+          "date": "2026-04-29",
+          "price": 8.3
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.3
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Lurpak Butter Spreadable",
+        "price": 8.3,
+        "unit_price": 2.08,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/87702/lurpak-butter-spreadable",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087702.jpg"
+      },
+      "coles": {
+        "name": "Lurpak Butter Spreadable Slightly Salted | 400g",
+        "price": 8.3,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/lurpak-butter-spreadable-slightly-salted-400g-5376659",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5376659.jpg&w=640&q=90"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Lurpak Plant Based Spreadable",
+          "price": 4.9,
+          "unit_price": 1.23,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/6026771/lurpak-plant-based-spreadable",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6026771.jpg",
+          "retailer": "woolworths"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 2.08,
+      "per_100_coles": 2.08,
       "per_100_unit": "100g"
     },
     {
@@ -14061,7 +14061,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 10,
+    "done": 15,
     "total": 211
   }
 }
