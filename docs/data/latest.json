@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T11:07:35.873425+00:00",
+  "last_updated": "2026-05-20T11:07:47.691668+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9773,7 +9773,7 @@
     },
     {
       "list_item": "Woolworths Wholegrain Wrap 8Pk",
-      "last_scraped": "2026-05-20T06:16:11.595266+00:00",
+      "last_scraped": "2026-05-20T11:07:38.977066+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9821,7 +9821,7 @@
     },
     {
       "list_item": "Yumi's Eggplant Mediterranean Dip",
-      "last_scraped": "2026-05-20T06:16:14.796001+00:00",
+      "last_scraped": "2026-05-20T11:07:39.577817+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9870,7 +9870,7 @@
     },
     {
       "list_item": "Ajax Antibacterial Wipes Eco Vanilla & Berries 110 Wipes",
-      "last_scraped": "2026-05-20T06:16:14.920658+00:00",
+      "last_scraped": "2026-05-20T11:07:44.602041+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9883,14 +9883,7 @@
         }
       ],
       "category": "Household",
-      "woolworths": {
-        "name": "Ajax Eco Antibacterial Disinfectant Surface Cleaning Wipes, Bulk 110 Pack, Vanilla and Berries, Multipurpose, Biodegradable and Compostable, Made with Bamboo Fibres",
-        "price": 20.99,
-        "unit_price": 19.08,
-        "unit": "100EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/1116998665/ajax-eco-antibacterial-disinfectant-surface-cleaning-wipes-bulk-110-pack-vanilla-and-berries-multipurpose-biodegradable-and-compostable-made-with-bamboo-fibres",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/1116998665.jpg"
-      },
+      "woolworths": null,
       "coles": {
         "name": "Bulk Ajax Spray N Wipe Vanilla Berries | 5L",
         "price": 20.0,
@@ -9900,9 +9893,19 @@
         "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8476004.jpg&w=640&q=90"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 0.99,
-      "alternatives": [],
-      "match_confidence": "low",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Ajax Eco Antibacterial Disinfectant Surface Cleaning Wipes, Bulk 110 Pack, Vanilla and Berries, Multipurpose, Biodegradable and Compostable, Made with Bamboo Fibres",
+          "price": 20.99,
+          "unit_price": 19.08,
+          "unit": "100EA",
+          "url": "https://www.woolworths.com.au/shop/productdetails/1116998665/ajax-eco-antibacterial-disinfectant-surface-cleaning-wipes-bulk-110-pack-vanilla-and-berries-multipurpose-biodegradable-and-compostable-made-with-bamboo-fibres",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/1116998665.jpg",
+          "retailer": "woolworths"
+        }
+      ],
+      "match_confidence": "none",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.4,
@@ -9910,7 +9913,7 @@
     },
     {
       "list_item": "All Smiles Total Care Toothbrush Soft",
-      "last_scraped": "2026-05-20T06:16:18.174031+00:00",
+      "last_scraped": "2026-05-20T11:07:45.316951+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9950,7 +9953,7 @@
     },
     {
       "list_item": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
-      "last_scraped": "2026-05-20T06:16:18.468640+00:00",
+      "last_scraped": "2026-05-20T11:07:47.679139+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12670,16 +12673,16 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 1124.17,
+    "total_woolworths": 1103.18,
     "total_coles": 1288.71,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 164.54,
+    "total_saving": 185.53,
     "items_compared": 209,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 155,
+    "done": 160,
     "total": 211
   }
 }
