@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T02:43:34.731998+00:00",
+  "last_updated": "2026-05-20T02:43:47.610574+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4188,7 +4188,7 @@
     },
     {
       "list_item": "Woolworths Sour Cream",
-      "last_scraped": "2026-05-19T12:20:18.044552+00:00",
+      "last_scraped": "2026-05-20T02:43:35.726947+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4243,7 +4243,17 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Woolworths Thickened Cream",
+          "price": 5.2,
+          "unit_price": 0.87,
+          "unit": "100ML",
+          "url": "https://www.woolworths.com.au/shop/productdetails/48720/woolworths-thickened-cream",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/048720.jpg",
+          "retailer": "woolworths"
+        }
+      ],
       "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.1,
@@ -4252,7 +4262,7 @@
     },
     {
       "list_item": "Woolworths Spring Water Bottles",
-      "last_scraped": "2026-05-19T12:20:19.393337+00:00",
+      "last_scraped": "2026-05-20T02:43:39.499291+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4326,7 +4336,7 @@
     },
     {
       "list_item": "Woolworths Washed Potato Bag",
-      "last_scraped": "2026-05-19T12:20:23.716444+00:00",
+      "last_scraped": "2026-05-20T02:43:42.585886+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -4386,7 +4396,7 @@
     },
     {
       "list_item": "Woolworths Whole Milk Full Cream Milk",
-      "last_scraped": "2026-05-19T12:20:23.778019+00:00",
+      "last_scraped": "2026-05-20T02:43:43.645193+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4425,11 +4435,11 @@
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Woolworths Full Cream Milk",
-        "price": 1.85,
-        "unit_price": 1.85,
+        "price": 5.15,
+        "unit_price": 1.72,
         "unit": "1L",
-        "url": "https://www.woolworths.com.au/shop/productdetails/50923/woolworths-full-cream-milk",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/050923.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/888140/woolworths-full-cream-milk",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/888140.jpg"
       },
       "coles": {
         "name": "Coles Full Cream Milk | 600mL",
@@ -4441,7 +4451,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 0.4,
+      "saving_per_item": 3.7,
       "alternatives": [
         {
           "name": "Coles Full Cream Milk | 600mL",
@@ -4455,13 +4465,13 @@
       ],
       "match_confidence": "medium",
       "size_warning": false,
-      "per_100_ww": 0.18,
+      "per_100_ww": 0.17,
       "per_100_coles": 0.24,
       "per_100_unit": "100ml"
     },
     {
       "list_item": "Annalisa Chickpeas",
-      "last_scraped": "2026-05-19T12:20:28.252330+00:00",
+      "last_scraped": "2026-05-20T02:43:47.606229+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -11690,16 +11700,16 @@
     "Woolworths Basa Fillets Boneless With Skin Off"
   ],
   "summary": {
-    "total_woolworths": 1233.15,
+    "total_woolworths": 1236.45,
     "total_coles": 941.93,
     "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 291.22,
+    "total_saving": 294.52,
     "items_compared": 187,
     "items_not_found": 8
   },
   "scrape_progress": {
-    "done": 60,
+    "done": 65,
     "total": 211
   }
 }
