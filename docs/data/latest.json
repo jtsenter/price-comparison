@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-20T02:46:39.336781+00:00",
+  "last_updated": "2026-05-20T02:46:51.258069+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8519,7 +8519,7 @@
     },
     {
       "list_item": "Woolworths Baked Beans In Tomato Sauce",
-      "last_scraped": "2026-05-19T12:24:51.605541+00:00",
+      "last_scraped": "2026-05-20T02:46:39.389235+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -8584,8 +8584,80 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Beef Chuck Steak Medium",
+      "last_scraped": "2026-05-20T02:46:44.194345+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-07-10",
+          "price": 12.4
+        },
+        {
+          "date": "2026-02-23",
+          "price": 16.0
+        },
+        {
+          "date": "2026-04-21",
+          "price": 16.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Beef Chuck Steak Medium",
+        "price": 16.0,
+        "unit_price": 20.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/675632/woolworths-beef-chuck-steak-medium",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/675632.jpg"
+      },
+      "coles": {
+        "name": "Coles Beef Chuck Casserole Steak | 1kg",
+        "price": 20.0,
+        "unit_price": 20.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-beef-chuck-casserole-steak-1kg-1773726",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1773726.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.0,
+      "alternatives": [
+        {
+          "name": "Coles Beef Chuck Casserole Steak | 850g",
+          "price": 17.0,
+          "unit_price": 17.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-chuck-casserole-steak-850g-6332331",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6332331.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Beef Slow Cook Chuck Roast | approx. 1.3kg",
+          "price": 23.4,
+          "unit_price": 18.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-slow-cook-chuck-roast-approx.-1.3kg-7820986",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7820986.jpg&w=640&q=90",
+          "retailer": "coles"
+        },
+        {
+          "name": "Drovers Choice Slow Cook Chuck Steaks | approx. 1.15kg",
+          "price": 21.85,
+          "unit_price": 19.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/drovers-choice-slow-cook-chuck-steaks-approx.-1.15kg-5041107",
+          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5041107.jpg&w=640&q=90",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 2.0,
+      "per_100_coles": 2.0,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Basmati Rice",
-      "last_scraped": "2026-05-19T12:24:54.337096+00:00",
+      "last_scraped": "2026-05-20T02:46:45.239780+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -8628,62 +8700,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Beef Chuck Steak Medium",
-      "last_scraped": "2026-05-19T12:24:56.788907+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-07-10",
-          "price": 12.4
-        },
-        {
-          "date": "2026-02-23",
-          "price": 16.0
-        },
-        {
-          "date": "2026-04-21",
-          "price": 16.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths Beef Chuck Steak Medium",
-        "price": 14.4,
-        "unit_price": 18.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/675632/woolworths-beef-chuck-steak-medium",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/675632.jpg"
-      },
-      "coles": {
-        "name": "Coles Beef Chuck Casserole Steak | 1kg",
-        "price": 20.0,
-        "unit_price": 20.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-beef-chuck-casserole-steak-1kg-1773726",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1773726.jpg&w=640&q=90"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 5.6,
-      "alternatives": [
-        {
-          "name": "Coles Beef Chuck Casserole Steak | 850g",
-          "price": 17.0,
-          "unit_price": 17.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-beef-chuck-casserole-steak-850g-6332331",
-          "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6332331.jpg&w=640&q=90",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 1.8,
-      "per_100_coles": 2.0,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Capsicum Green",
-      "last_scraped": "2026-05-19T12:25:01.746663+00:00",
+      "last_scraped": "2026-05-20T02:46:48.415445+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8731,7 +8749,7 @@
     },
     {
       "list_item": "Woolworths Celery Heart",
-      "last_scraped": "2026-05-19T12:25:01.832183+00:00",
+      "last_scraped": "2026-05-20T02:46:51.252216+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -8770,8 +8788,8 @@
       "alternatives": [
         {
           "name": "Coles Lettuce Cos Baby Hearts | 2 Pack",
-          "price": 3.9,
-          "unit_price": 3.9,
+          "price": 2.9,
+          "unit_price": 2.9,
           "unit": "1ea",
           "url": "https://www.coles.com.au/product/coles-lettuce-cos-baby-hearts-2-pack-4646485",
           "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4646485.jpg&w=640&q=90",
@@ -11645,16 +11663,16 @@
     "Woolworths Basa Fillets Boneless With Skin Off"
   ],
   "summary": {
-    "total_woolworths": 1224.5,
+    "total_woolworths": 1226.1,
     "total_coles": 936.81,
     "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 287.69,
+    "total_saving": 289.29,
     "items_compared": 187,
     "items_not_found": 8
   },
   "scrape_progress": {
-    "done": 135,
+    "done": 140,
     "total": 211
   }
 }
