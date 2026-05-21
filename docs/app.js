@@ -475,7 +475,15 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
 
   const minP = Math.min(...prices);
   const maxP = Math.max(...prices);
-  if (minP === maxP) return '';
+  if (minP === maxP) {
+    const safeItemName = itemName.replace(/"/g, '&quot;');
+    return `
+    <div class="price-bar-outer">
+      <div class="price-bar price-bar-flat"><div class="price-marker" style="left:50%"></div></div>
+      <div class="price-bar-labels price-bar-labels-flat"><span class="price-bar-always">always ${fmt(minP)}</span></div>
+    </div>
+    <button class="price-bar-manage" data-manage-item="${safeItemName}">Manage</button>`;
+  }
 
   const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
   const pos = Math.max(0, Math.min(100, rawPos));
@@ -2509,11 +2517,23 @@ function openColFilter(col, btn) {
 
   _cfdTempValues = existing ? new Set(existing) : new Set(_cfdAllValues);
 
-  // Update sort labels
+  // Update sort labels — context-aware per column type
   const asc = dd.querySelector('.cfd-sort-asc');
   const desc = dd.querySelector('.cfd-sort-desc');
-  if (asc) asc.textContent = 'Sort A → Z';
-  if (desc) desc.textContent = 'Sort Z → A';
+  const sortLabel = (() => {
+    if (col === 'trend')        return { asc: 'Best value first',   desc: 'Worst value first' };
+    if (col === 'name')         return { asc: 'A → Z',              desc: 'Z → A' };
+    if (col === 'category')     return { asc: 'A → Z',              desc: 'Z → A' };
+    if (col === 'cheaper')      return { asc: 'A → Z',              desc: 'Z → A' };
+    if (col === 'priority')     return { asc: 'Weekly first',        desc: 'Rare first' };
+    if (col === 'last_scraped') return { asc: 'Oldest first',        desc: 'Newest first' };
+    if (col === 'trips')        return { asc: 'Fewest buys first',   desc: 'Most bought first' };
+    if (col === 'saving')       return { asc: 'Least savings first', desc: 'Most savings first' };
+    if (NUMERIC_COLS.has(col))  return { asc: 'Low → High',          desc: 'High → Low' };
+    return { asc: 'A → Z', desc: 'Z → A' };
+  })();
+  if (asc)  asc.textContent  = sortLabel.asc;
+  if (desc) desc.textContent = sortLabel.desc;
 
   // Show/hide and populate numeric filter section
   const numSec = $('cfdNumFilter');
@@ -2528,8 +2548,15 @@ function openColFilter(col, btn) {
     }
   }
 
+  // Columns with no meaningful discrete values — hide search/values section
+  const NO_VALUE_FILTER_COLS = new Set(['trend', 'last_scraped']);
+  const showValueFilter = !NO_VALUE_FILTER_COLS.has(col);
+  dd.querySelector('.cfd-search-wrap').style.display  = showValueFilter ? '' : 'none';
+  dd.querySelector('.cfd-select-all-row').style.display = showValueFilter ? '' : 'none';
+  dd.querySelector('.cfd-values').style.display       = showValueFilter ? '' : 'none';
+
   dd.querySelector('.cfd-search').value = '';
-  renderCfdValues('');
+  if (showValueFilter) renderCfdValues('');
 
   // Position dropdown under button
   const rect = btn.getBoundingClientRect();

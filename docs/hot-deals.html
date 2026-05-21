@@ -507,7 +507,13 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   if (prices.length < 2) return '';
   const minP = Math.min(...prices);
   const maxP = Math.max(...prices);
-  if (minP === maxP) return '';
+  if (minP === maxP) {
+    return `
+    <div class="price-bar-outer">
+      <div class="price-bar price-bar-flat"><div class="price-marker" style="left:50%"></div></div>
+      <div class="price-bar-labels price-bar-labels-flat"><span class="price-bar-always">always ${fmt(minP)}</span></div>
+    </div>`;
+  }
   const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
   const pos = Math.max(0, Math.min(100, rawPos));
 
