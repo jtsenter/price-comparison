@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T10:33:07.251618+00:00",
+  "last_updated": "2026-05-21T10:33:17.717755+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12813,7 +12813,7 @@
     },
     {
       "list_item": "Twinings Pure Peppermint Tea Bags Tea Bags",
-      "last_scraped": "2026-05-20T11:09:02.783133+00:00",
+      "last_scraped": "2026-05-21T10:33:08.791960+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12873,7 +12873,7 @@
     },
     {
       "list_item": "Vanish Napisan Stain Remover Powder",
-      "last_scraped": "2026-05-20T11:09:05.235859+00:00",
+      "last_scraped": "2026-05-21T10:33:10.760204+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12888,11 +12888,11 @@
       "category": "Household",
       "woolworths": {
         "name": "Vanish Napisan Stain Remover Powder",
-        "price": 10.0,
-        "unit_price": 10.0,
+        "price": 19.0,
+        "unit_price": 9.5,
         "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/179663/vanish-napisan-stain-remover-powder",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/179663.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/192217/vanish-napisan-stain-remover-powder",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/192217.jpg"
       },
       "coles": {
         "name": "Vanish Napisan Oxi Action Fabric Stain Remover Powder | 2kg",
@@ -12902,28 +12902,18 @@
         "url": "https://www.coles.com.au/product/vanish-napisan-oxi-action-fabric-stain-remover-powder-2kg-9506348",
         "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9506348.jpg&w=640&q=90"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 9.0,
-      "alternatives": [
-        {
-          "name": "Vanish Napisan White Stain Remover Remover Powder",
-          "price": 19.0,
-          "unit_price": 9.5,
-          "unit": "1KG",
-          "url": "https://www.woolworths.com.au/shop/productdetails/353185/vanish-napisan-white-stain-remover-remover-powder",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/353185.jpg",
-          "retailer": "woolworths"
-        }
-      ],
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 1.0,
+      "per_100_ww": 0.95,
       "per_100_coles": 0.95,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths 4 Angus Quarter Pound Beef Burgers",
-      "last_scraped": "2026-05-20T11:09:06.741240+00:00",
+      "last_scraped": "2026-05-21T10:33:13.100651+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12963,7 +12953,7 @@
     },
     {
       "list_item": "Woolworths Beef & Lamb Meatballs",
-      "last_scraped": "2026-05-20T11:09:08.537005+00:00",
+      "last_scraped": "2026-05-21T10:33:14.265273+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13000,6 +12990,46 @@
       "size_warning": false,
       "per_100_ww": 2.0,
       "per_100_coles": 1.43,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Butternut Pumpkin Cut",
+      "last_scraped": "2026-05-21T10:33:17.696734+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 2.03
+        },
+        {
+          "date": "2025-04-25",
+          "price": 2.45
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Butternut Pumpkin Cut",
+        "price": 2.25,
+        "unit_price": 2.25,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/147197/woolworths-butternut-pumpkin-cut",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147197.jpg"
+      },
+      "coles": {
+        "name": "Coles Kitchen Butternut Pumpkin Soup | 300g",
+        "price": 4.7,
+        "unit_price": 4.7,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-kitchen-butternut-pumpkin-soup-300g-3467447",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3467447.jpg&w=640&q=90"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.45,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 1.57,
       "per_100_unit": "100g"
     },
     {
@@ -13051,46 +13081,6 @@
       "size_warning": false,
       "per_100_ww": 0.24,
       "per_100_coles": 0.24,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Butternut Pumpkin Cut",
-      "last_scraped": "2026-05-20T11:09:12.288598+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-03-27",
-          "price": 2.03
-        },
-        {
-          "date": "2025-04-25",
-          "price": 2.45
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Butternut Pumpkin Cut",
-        "price": 2.25,
-        "unit_price": 2.25,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/147197/woolworths-butternut-pumpkin-cut",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147197.jpg"
-      },
-      "coles": {
-        "name": "Coles Kitchen Butternut Pumpkin Soup | 300g",
-        "price": 4.7,
-        "unit_price": 4.7,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-kitchen-butternut-pumpkin-soup-300g-3467447",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3467447.jpg&w=640&q=90"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 2.45,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 1.57,
       "per_100_unit": "100g"
     },
     {
@@ -13527,16 +13517,16 @@
     "The Odd Bunch Mango"
   ],
   "summary": {
-    "total_woolworths": 1129.12,
+    "total_woolworths": 1138.12,
     "total_coles": 1152.95,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 23.83,
+    "total_saving": 14.83,
     "items_compared": 210,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 195,
+    "done": 200,
     "total": 211
   }
 }
