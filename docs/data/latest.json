@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T23:49:48.840397+00:00",
+  "last_updated": "2026-05-21T23:50:08.851027+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3073,7 +3073,7 @@
     },
     {
       "list_item": "Woolworths Baby Leaf Spinach",
-      "last_scraped": "2026-05-21T23:24:48.707988+00:00",
+      "last_scraped": "2026-05-21T23:49:54.143818+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -3167,7 +3167,7 @@
     },
     {
       "list_item": "Woolworths 12 Extra Large Free Range Eggs",
-      "last_scraped": "2026-05-21T23:24:52.553586+00:00",
+      "last_scraped": "2026-05-21T23:49:54.778535+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -3246,7 +3246,7 @@
     },
     {
       "list_item": "Woolworths Beef Porterhouse Steak & Butter",
-      "last_scraped": "2026-05-21T23:24:57.746019+00:00",
+      "last_scraped": "2026-05-21T23:50:00.617150+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -3342,68 +3342,8 @@
       "_ww_price_factor": 0.45
     },
     {
-      "list_item": "Woolworths Basa Fillets Boneless With Skin Off",
-      "last_scraped": "2026-05-21T23:25:01.411019+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 8.0
-        },
-        {
-          "date": "2025-03-17",
-          "price": 11.0
-        },
-        {
-          "date": "2025-05-04",
-          "price": 7.5
-        },
-        {
-          "date": "2025-05-22",
-          "price": 8.0
-        },
-        {
-          "date": "2025-06-06",
-          "price": 11.0
-        },
-        {
-          "date": "2025-07-03",
-          "price": 11.0
-        },
-        {
-          "date": "2025-07-26",
-          "price": 11.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Basa Thawed Freshwater Basa Fillets",
-        "price": 11.0,
-        "unit_price": 11.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/87465/basa-thawed-freshwater-basa-fillets",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087465.jpg"
-      },
-      "coles": {
-        "name": "Basa Portions Skin Off 2 Pack",
-        "price": 5.4,
-        "unit_price": 20.77,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-basa-portions-skin-off-2-pack-260g-1567000",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1567000.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 5.6,
-      "alternatives": [],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 1.1,
-      "per_100_coles": 2.08,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Broccolini Bunch",
-      "last_scraped": "2026-05-21T23:25:03.121147+00:00",
+      "last_scraped": "2026-05-21T23:50:06.218933+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -3510,6 +3450,66 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Basa Fillets Boneless With Skin Off",
+      "last_scraped": "2026-05-21T23:50:08.846279+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 8.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 11.0
+        },
+        {
+          "date": "2025-05-04",
+          "price": 7.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 8.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 11.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 11.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 11.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Basa Thawed Freshwater Basa Fillets",
+        "price": 11.0,
+        "unit_price": 11.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/87465/basa-thawed-freshwater-basa-fillets",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087465.jpg"
+      },
+      "coles": {
+        "name": "Basa Portions Skin Off 2 Pack",
+        "price": 5.4,
+        "unit_price": 20.77,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-basa-portions-skin-off-2-pack-260g-1567000",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1567000.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 5.6,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 1.1,
+      "per_100_coles": 2.08,
       "per_100_unit": "100g"
     },
     {
@@ -13419,7 +13419,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 35,
+    "done": 40,
     "total": 211
   }
 }
