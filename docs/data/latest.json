@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T23:50:43.242121+00:00",
+  "last_updated": "2026-05-21T23:51:00.050009+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4444,7 +4444,7 @@
     },
     {
       "list_item": "Woolworths Extra Virgin Spanish Olive Oil",
-      "last_scraped": "2026-05-21T23:25:33.430773+00:00",
+      "last_scraped": "2026-05-21T23:50:43.554746+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -4504,7 +4504,7 @@
     },
     {
       "list_item": "Woolworths Full Cream Milk",
-      "last_scraped": "2026-05-21T23:25:43.770630+00:00",
+      "last_scraped": "2026-05-21T23:50:48.827762+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -4587,7 +4587,7 @@
     },
     {
       "list_item": "Woolworths Garlic Heads CLOVE",
-      "last_scraped": "2026-05-21T23:25:49.628069+00:00",
+      "last_scraped": "2026-05-21T23:50:53.227787+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4661,76 +4661,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Ice Cream Cones Boysenberry",
-      "last_scraped": "2026-05-21T23:25:54.409681+00:00",
-      "trip_count": 9,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 4.75
-        },
-        {
-          "date": "2025-02-02",
-          "price": 4.75
-        },
-        {
-          "date": "2025-02-28",
-          "price": 4.75
-        },
-        {
-          "date": "2025-03-11",
-          "price": 4.75
-        },
-        {
-          "date": "2025-04-14",
-          "price": 4.75
-        },
-        {
-          "date": "2025-05-12",
-          "price": 4.75
-        },
-        {
-          "date": "2025-05-22",
-          "price": 3.7
-        },
-        {
-          "date": "2025-06-06",
-          "price": 3.7
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.7
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Ice Cream Cones Boysenberry",
-        "price": 3.7,
-        "unit_price": 0.78,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/792235/woolworths-ice-cream-cones-boysenberry",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/792235.jpg"
-      },
-      "coles": {
-        "name": "Coles Irresistible Boysenberry | 1L",
-        "price": 6.5,
-        "unit_price": 6.5,
-        "unit": "100mL",
-        "url": "https://www.coles.com.au/product/coles-irresistible-boysenberry-1l-8556238",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8556238.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 2.8,
-      "alternatives": [],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 0.78,
-      "per_100_coles": 0.65,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Woolworths Greek Style Yoghurt",
-      "last_scraped": "2026-05-21T23:25:56.619221+00:00",
+      "last_scraped": "2026-05-21T23:50:58.538669+00:00",
       "trip_count": 33,
       "price_history": [
         {
@@ -4891,6 +4823,74 @@
       "per_100_ww": 0.42,
       "per_100_coles": 0.45,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Ice Cream Cones Boysenberry",
+      "last_scraped": "2026-05-21T23:51:00.043933+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 4.75
+        },
+        {
+          "date": "2025-02-02",
+          "price": 4.75
+        },
+        {
+          "date": "2025-02-28",
+          "price": 4.75
+        },
+        {
+          "date": "2025-03-11",
+          "price": 4.75
+        },
+        {
+          "date": "2025-04-14",
+          "price": 4.75
+        },
+        {
+          "date": "2025-05-12",
+          "price": 4.75
+        },
+        {
+          "date": "2025-05-22",
+          "price": 3.7
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.7
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.7
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Ice Cream Cones Boysenberry",
+        "price": 3.7,
+        "unit_price": 0.78,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/792235/woolworths-ice-cream-cones-boysenberry",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/792235.jpg"
+      },
+      "coles": {
+        "name": "Coles Irresistible Boysenberry | 1L",
+        "price": 6.5,
+        "unit_price": 6.5,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/coles-irresistible-boysenberry-1l-8556238",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8556238.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.8,
+      "alternatives": [],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 0.78,
+      "per_100_coles": 0.65,
+      "per_100_unit": "100ml"
     },
     {
       "list_item": "Woolworths Lean Beef Mince",
@@ -13419,7 +13419,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 50,
+    "done": 55,
     "total": 211
   }
 }
