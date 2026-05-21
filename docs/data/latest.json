@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T10:24:32.928651+00:00",
+  "last_updated": "2026-05-21T10:24:47.636379+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1517,61 +1517,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Macro Organic Black Bean No Added Salt",
-      "last_scraped": "2026-05-20T11:02:28.015099+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2025-03-27",
-          "price": 1.5
-        },
-        {
-          "date": "2025-04-14",
-          "price": 1.5
-        },
-        {
-          "date": "2025-05-04",
-          "price": 1.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 1.5
-        },
-        {
-          "date": "2025-05-22",
-          "price": 1.5
-        },
-        {
-          "date": "2025-06-06",
-          "price": 1.5
-        },
-        {
-          "date": "2025-07-26",
-          "price": 1.5
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": null,
-      "coles": {
-        "name": "Edgell Organic Black Beans No Added Salt | 400g",
-        "price": 2.0,
-        "unit_price": 5.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/edgell-organic-black-beans-no-added-salt-400g-5071232",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5071232.jpg&w=640&q=90"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 0.5,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Lurpak Butter Spreadable",
-      "last_scraped": "2026-05-20T11:02:28.648499+00:00",
+      "last_scraped": "2026-05-21T10:24:36.829464+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -1618,7 +1565,7 @@
         "unit_price": null,
         "unit": null,
         "url": "https://www.coles.com.au/product/lurpak-butter-spreadable-slightly-salted-400g-5376659",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5376659.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5376659.jpg"
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
@@ -1633,15 +1580,87 @@
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.08,
       "per_100_coles": 2.08,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Macro Organic Black Bean No Added Salt",
+      "last_scraped": "2026-05-21T10:24:38.949399+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 1.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.5
+        },
+        {
+          "date": "2025-05-04",
+          "price": 1.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 1.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.5
+        },
+        {
+          "date": "2025-07-26",
+          "price": 1.5
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": null,
+      "coles": {
+        "name": "Edgell Organic Black Beans No Added Salt | 400g",
+        "price": 2.0,
+        "unit_price": 5.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/edgell-organic-black-beans-no-added-salt-400g-5071232",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5071232.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Old El Paso Black Beans | 425g",
+          "price": 3.6,
+          "unit_price": 0.85,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/old-el-paso-black-beans-425g-1868287",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1868287.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Edgell Beans Red Kidney No Added Salt | 400g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/edgell-beans-red-kidney-no-added-salt-400g-6095939",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6095939.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 0.5,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Mushrooms Cups Loose",
-      "last_scraped": "2026-05-20T11:02:34.754557+00:00",
+      "last_scraped": "2026-05-21T10:24:42.759526+00:00",
       "trip_count": 17,
       "price_history": [
         {
@@ -1728,22 +1747,40 @@
         "unit_price": 4.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-mushrooms-cup-200g-4829860",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4829860.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4829860.jpg"
       },
       "cheaper_store": "coles",
       "saving_per_item": 8.5,
       "alternatives": [
         {
-          "name": "Woolworths Mushrooms Cups Punnet",
-          "price": 5.0,
-          "unit_price": 10.0,
-          "unit": "1KG",
-          "url": "https://www.woolworths.com.au/shop/productdetails/149963/woolworths-mushrooms-cups-punnet",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/149963.jpg",
-          "retailer": "woolworths"
+          "name": "Chef's World Straw Mushrooms Medium | 425g",
+          "price": 2.3,
+          "unit_price": 2.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/chef's-world-straw-mushrooms-medium-425g-6592762",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6592762.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Continental Cup A Soup Pepper Steak & Mushroom With Croutons Serves 2 | 52g",
+          "price": 1.4,
+          "unit_price": 2.69,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/continental-cup-a-soup-pepper-steak-and-mushroom-with-croutons-serves-2-52g-2286516",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2286516.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Continental Cup A Soup Creamy Mushroom With Croutons 2 Pack | 50g",
+          "price": 1.4,
+          "unit_price": 2.8,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/continental-cup-a-soup-creamy-mushroom-with-croutons-2-pack-50g-9151424",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9151424.jpg",
+          "retailer": "coles"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.25,
       "per_100_coles": 2.0,
@@ -1751,7 +1788,7 @@
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Portions Snacks",
-      "last_scraped": "2026-05-20T11:02:34.909638+00:00",
+      "last_scraped": "2026-05-21T10:24:43.987430+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -1810,13 +1847,41 @@
         "unit_price": 5.7,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/philadelphia-original-cream-cheese-block-250g-192502",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F192502.jpg&w=640&q=90",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/192502.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.7,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Philadelphia Original Cream Cheese Block | 250g",
+          "price": 5.7,
+          "unit_price": 5.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-original-cream-cheese-block-250g-192502",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/192502.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Philadelphia Cream Cheese Original Block 2 Pack | 500g",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-cream-cheese-original-block-2-pack-500g-5081291",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5081291.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Philadelphia Original Soft Cream Cheese Tub | 250g",
+          "price": 4.5,
+          "unit_price": 18.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-original-soft-cream-cheese-tub-250g-5196114",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5196114.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.67,
       "per_100_coles": 2.28,
@@ -1824,7 +1889,7 @@
     },
     {
       "list_item": "Pringles Sour Cream & Onion Potato Chips",
-      "last_scraped": "2026-05-20T11:02:38.596473+00:00",
+      "last_scraped": "2026-05-21T10:24:47.632599+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -1871,12 +1936,12 @@
         "unit_price": 5.5,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-134g-2784058",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2784058.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2784058.jpg"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.7,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.84,
       "per_100_coles": 4.1,
@@ -12180,7 +12245,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 15,
+    "done": 20,
     "total": 211
   }
 }
