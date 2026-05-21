@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T23:53:45.059897+00:00",
+  "last_updated": "2026-05-21T23:53:57.551854+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7981,7 +7981,7 @@
     },
     {
       "list_item": "Mon Ami French Camembert Cheese",
-      "last_scraped": "2026-05-21T23:28:33.053553+00:00",
+      "last_scraped": "2026-05-21T23:53:48.027877+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -8066,7 +8066,7 @@
     },
     {
       "list_item": "Mutti Tomato Paste Double Concentrate",
-      "last_scraped": "2026-05-21T23:28:36.090265+00:00",
+      "last_scraped": "2026-05-21T23:53:50.867928+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8114,7 +8114,7 @@
     },
     {
       "list_item": "Old El Paso Fajita Spice Mix Mexican Style",
-      "last_scraped": "2026-05-21T23:28:39.303391+00:00",
+      "last_scraped": "2026-05-21T23:53:53.794838+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8191,7 +8191,7 @@
     },
     {
       "list_item": "Parsnip Fresh",
-      "last_scraped": "2026-05-21T23:28:40.354342+00:00",
+      "last_scraped": "2026-05-21T23:53:56.429820+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8238,53 +8238,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Philadelphia Original Cream Cheese Spread Tub",
-      "last_scraped": "2026-05-21T23:28:44.421949+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-02-28",
-          "price": 4.5
-        },
-        {
-          "date": "2025-04-05",
-          "price": 5.7
-        },
-        {
-          "date": "2026-04-21",
-          "price": 5.7
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Philadelphia Original Cream Cheese Spread Tub",
-        "price": 1.12,
-        "unit_price": 18.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/79223/philadelphia-original-cream-cheese-spread-tub",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/079223.jpg"
-      },
-      "coles": {
-        "name": "Philadelphia Original Soft Cream Cheese Tub | 250g",
-        "price": 4.5,
-        "unit_price": 18.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/philadelphia-original-soft-cream-cheese-tub-250g-5196114",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5196114.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 3.38,
-      "alternatives": [],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 1.8,
-      "per_100_coles": 1.8,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.25
-    },
-    {
       "list_item": "Philadelphia Original Cream Cheese Block",
-      "last_scraped": "2026-05-21T23:28:44.594227+00:00",
+      "last_scraped": "2026-05-21T23:53:57.543700+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -8344,6 +8299,51 @@
       "size_warning": false,
       "per_100_ww": 1.8,
       "per_100_coles": 2.28,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.25
+    },
+    {
+      "list_item": "Philadelphia Original Cream Cheese Spread Tub",
+      "last_scraped": "2026-05-21T23:28:44.421949+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 4.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 5.7
+        },
+        {
+          "date": "2026-04-21",
+          "price": 5.7
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Philadelphia Original Cream Cheese Spread Tub",
+        "price": 1.12,
+        "unit_price": 18.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/79223/philadelphia-original-cream-cheese-spread-tub",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/079223.jpg"
+      },
+      "coles": {
+        "name": "Philadelphia Original Soft Cream Cheese Tub | 250g",
+        "price": 4.5,
+        "unit_price": 18.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/philadelphia-original-soft-cream-cheese-tub-250g-5196114",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5196114.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.38,
+      "alternatives": [],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 1.8,
+      "per_100_coles": 1.8,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.25
     },
@@ -13419,7 +13419,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 105,
+    "done": 110,
     "total": 211
   }
 }
