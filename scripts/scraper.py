@@ -720,11 +720,9 @@ async def _scrape_single_item(
                 _co = await fetch_coles_by_url(coles_page, pinned_co)
                 if _co:
                     coles_results = [_co]
-                    _skip_picker_co = True
                 else:
-                    print(f"  Coles pinned URL failed, falling back to name search")
-                    coles_results = await search_with_retry(search_coles, coles_page, item)
-                    _skip_picker_co = False
+                    print(f"  Coles pinned URL failed, will carry forward existing data")
+                _skip_picker_co = True
             else:
                 coles_results = await search_with_retry(search_coles, coles_page, item)
         else:
