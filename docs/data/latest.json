@@ -1,10 +1,10 @@
 {
-  "last_updated": "2026-05-21T10:33:38.826420+00:00",
+  "last_updated": "2026-05-21T10:39:57.856325+00:00",
   "trigger": "manual",
   "items": [
     {
       "list_item": "Beans Round",
-      "last_scraped": "2026-05-21T10:23:49.728903+00:00",
+      "last_scraped": "2026-05-21T10:39:48.696668+00:00",
       "trip_count": 14,
       "price_history": [
         {
@@ -120,7 +120,7 @@
     },
     {
       "list_item": "Baby Mum-Mum Snack Vegetable Rice Rusk",
-      "last_scraped": "2026-05-21T10:23:50.241604+00:00",
+      "last_scraped": "2026-05-21T10:39:51.267095+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -209,7 +209,7 @@
     },
     {
       "list_item": "Blueberries Punnet",
-      "last_scraped": "2026-05-21T10:23:54.928645+00:00",
+      "last_scraped": "2026-05-21T10:39:53.065425+00:00",
       "trip_count": 21,
       "price_history": [
         {
@@ -353,7 +353,7 @@
     },
     {
       "list_item": "Cadbury Dairy Milk Large Chocolate Block",
-      "last_scraped": "2026-05-21T10:23:55.457988+00:00",
+      "last_scraped": "2026-05-21T10:39:55.879843+00:00",
       "trip_count": 11,
       "price_history": [
         {
@@ -457,7 +457,7 @@
     },
     {
       "list_item": "Cadbury Dairy Milk Top Deck Chocolate Block",
-      "last_scraped": "2026-05-21T10:23:59.204999+00:00",
+      "last_scraped": "2026-05-21T10:39:57.853579+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -13481,10 +13481,7 @@
       "per_100_unit": "100g"
     }
   ],
-  "not_found_items": [
-    "The Odd Bunch Strawberries Punnet",
-    "The Odd Bunch Mango"
-  ],
+  "not_found_items": [],
   "summary": {
     "total_woolworths": 1132.92,
     "total_coles": 1147.75,
@@ -13492,6 +13489,10 @@
     "ww_data_available": true,
     "total_saving": 14.83,
     "items_compared": 209,
-    "items_not_found": 2
+    "items_not_found": 0
+  },
+  "scrape_progress": {
+    "done": 5,
+    "total": 211
   }
 }
