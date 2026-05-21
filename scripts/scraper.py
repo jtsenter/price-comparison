@@ -13,7 +13,7 @@ from playwright.async_api import async_playwright
 
 sys.path.insert(0, os.path.dirname(__file__))
 from categories import guess_category
-from matcher import pick_best_match, validate_pair
+from matcher import pick_best_match, validate_pair, extract_weight_g
 from shopping_list import detect_fuzzy_changes, get_purchase_history
 
 WOOLWORTHS_BASE = "https://www.woolworths.com.au"
@@ -782,6 +782,21 @@ async def _scrape_single_item(
     if not ww_match and not coles_match:
         return None, True
 
+    # Normalise WW per-kg loose price to match Coles fixed-pack size.
+    # WW sells loose produce (e.g. mushrooms) at $/kg; Coles sells fixed packs (e.g. 200g).
+    # Comparing $12.50 (1kg) vs $4.00 (200g) is misleading — normalise WW to the same
+    # pack size so basket totals are comparable and cheaper_store is correct.
+    _ww_price_factor = 1.0  # stored in JSON so isHotDeal can normalise price_history too
+    if ww_match and coles_match:
+        _ww_unit = (ww_match.get("unit") or "").strip().upper()
+        if _ww_unit in ("KG", "1KG"):
+            _co_size_g = extract_weight_g(coles_match.get("name", ""))
+            if _co_size_g and _co_size_g < 900:  # Coles pack < 900g → not a per-kg item
+                _ww_price_factor = round(_co_size_g / 1000, 4)
+                ww_match = dict(ww_match)
+                ww_match["price"] = round(ww_match["price"] * _ww_price_factor, 2)
+                print(f"    WW price normalised to {_co_size_g}g: ${ww_match['price']}")
+
     ww_price = ww_match["price"] if ww_match else None
     coles_price = coles_match["price"] if coles_match else None
 
@@ -811,7 +826,7 @@ async def _scrape_single_item(
     _vco = "low" if co_conf == "carried" else co_conf
     pair_meta = validate_pair(item, ww_match, coles_match, _vww, _vco)
 
-    return {
+    result = {
         "list_item": item,
         "last_scraped": datetime.now(timezone.utc).isoformat(),
         "trip_count": history.get("trip_count", 0),
@@ -823,7 +838,10 @@ async def _scrape_single_item(
         "saving_per_item": saving,
         "alternatives": alternatives,
         **pair_meta,
-    }, False
+    }
+    if _ww_price_factor != 1.0:
+        result["_ww_price_factor"] = _ww_price_factor
+    return result, False
 
 
 async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str = "", coles_url: str = ""):

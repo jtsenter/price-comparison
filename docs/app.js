@@ -1514,8 +1514,12 @@ function pricePercentile(prices, pct) {
 function isHotDeal(item) {
   const history = item.price_history;
   if (!history || history.length < 3) return false;
-  const prices = history.map(h => h.price).filter(p => p > 0);
-  if (prices.length < 3) return false;
+  const rawPrices = history.map(h => h.price).filter(p => p > 0);
+  if (rawPrices.length < 3) return false;
+  // If WW price was normalised to a pack size (e.g. $/200g instead of $/kg),
+  // scale the price history the same way so the comparison is meaningful.
+  const factor = item._ww_price_factor ?? 1;
+  const prices = factor !== 1 ? rawPrices.map(p => p * factor) : rawPrices;
   const threshold = pricePercentile(prices, HOT_DEAL_PERCENTILE);
   const ww = item.woolworths?.price;
   const co = item.coles?.price;
