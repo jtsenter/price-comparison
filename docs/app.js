@@ -1816,7 +1816,11 @@ function renderPage(data) {
     allDisplayItems = [...data.items, ...notFoundAsItems];
   }
 
-  buildCategoryTabs(allDisplayItems);
+  const priorities = loadPriorities();
+  const categoryTabItems = _activePriority === 'archive'
+    ? allDisplayItems.filter(i => i.archived || priorities[i.list_item] === 'archive')
+    : allDisplayItems.filter(i => !i.archived && priorities[i.list_item] !== 'archive');
+  buildCategoryTabs(categoryTabItems);
 
   // Prices-only toggle button
   let toggleBtn = $('pricesOnlyBtn');
