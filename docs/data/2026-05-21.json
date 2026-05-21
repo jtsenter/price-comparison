@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T10:12:35.008414+00:00",
+  "last_updated": "2026-05-21T10:14:37.438866+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4283,7 +4283,7 @@
     },
     {
       "list_item": "Woolworths Garlic Heads CLOVE",
-      "last_scraped": "2026-05-21T10:07:44.184153+00:00",
+      "last_scraped": "2026-05-21T10:14:37.158642+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4328,11 +4328,29 @@
         "url": "https://www.woolworths.com.au/shop/productdetails/253320/woolworths-garlic-cloves",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/253320.jpg"
       },
-      "coles": null,
+      "coles": {
+        "name": "Garlic Prepack",
+        "price": 4.2,
+        "unit_price": 1.4,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-garlic-prepack-3-pack-8433238",
+        "image_url": "/8/8433238.jpg",
+        "retailer": "coles"
+      },
       "cheaper_store": "woolworths",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
+      "saving_per_item": 1.3,
+      "alternatives": [
+        {
+          "name": "Garlic Prepack",
+          "price": 4.2,
+          "unit_price": 1.4,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-garlic-prepack-3-pack-8433238",
+          "image_url": "/8/8433238.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 4.14,
       "per_100_coles": null,
@@ -12142,11 +12160,11 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 1121.52,
-    "total_coles": 1122.26,
+    "total_woolworths": 1124.42,
+    "total_coles": 1126.46,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 0.74,
+    "total_saving": 2.04,
     "items_compared": 209,
     "items_not_found": 2
   }
