@@ -326,6 +326,16 @@
       </button>
     </div>
   </div>
+  <!-- Scrape progress strip -->
+  <div id="scrapeStrip" class="scrape-strip" style="display:none">
+    <span id="scrapeStripLabel" class="scrape-strip-label">Scraping…</span>
+    <div class="scrape-strip-track">
+      <div class="scrape-strip-fill" id="scrapeStripFill" style="width:0%"></div>
+    </div>
+    <span id="scrapeStripPct" class="scrape-strip-pct">0%</span>
+    <button id="scrapeStripRetry" class="scrape-strip-retry" style="display:none" title="Trigger a new scrape run">↺ Retry</button>
+    <button id="scrapeStripDismiss" class="scrape-strip-dismiss" title="Dismiss">✕</button>
+  </div>
 </header>
 
 <div class="deals-hero">
@@ -487,13 +497,17 @@ function getDealInfo(item) {
 
   if (ww != null && ww <= threshold) {
     const pctOff = Math.max(0, Math.round((mean - ww) / mean * 100));
-    const isAllTimeLow = ww <= minHistoric;
-    results.push({ store: 'woolworths', price: ww, pctOff, mean, minHistoric, isAllTimeLow });
+    if (pctOff > 0) {
+      const isAllTimeLow = ww <= minHistoric;
+      results.push({ store: 'woolworths', price: ww, pctOff, mean, minHistoric, isAllTimeLow });
+    }
   }
   if (co != null && co <= threshold) {
     const pctOff = Math.max(0, Math.round((mean - co) / mean * 100));
-    const isAllTimeLow = co <= minHistoric;
-    results.push({ store: 'coles', price: co, pctOff, mean, minHistoric, isAllTimeLow });
+    if (pctOff > 0) {
+      const isAllTimeLow = co <= minHistoric;
+      results.push({ store: 'coles', price: co, pctOff, mean, minHistoric, isAllTimeLow });
+    }
   }
 
   if (!results.length) return null;
@@ -550,6 +564,9 @@ let _activeCategory = 'All';
 let _storeFilter = 'all';
 let _data = null;
 let _archivedSet = new Set();
+let _progressDismissed = false;
+let _progressLastDone = null;
+let _progressLastChangeTime = null;
 
 const COL_LABELS = {
   name: 'Product', deal: 'Deal %', ww: 'WW Price', coles: 'Coles Price',
@@ -564,7 +581,19 @@ function getSortValue(col, item, dealInfo) {
     case 'deal':     return dealInfo?.pctOff ?? -Infinity;
     case 'ww':       return item.woolworths?.price ?? Infinity;
     case 'coles':    return item.coles?.price ?? Infinity;
-    case 'avg':      return dealInfo?.mean ?? Infinity;
+    case 'avg': {
+      // Same logic as main page Trend sort: 0=cheapest ever, 1=most expensive ever
+      const history = item.price_history;
+      if (!history?.length) return Infinity;
+      const factor = item._ww_price_factor ?? 1;
+      const prices = history.map(p => p.price * factor).filter(p => p > 0);
+      if (prices.length < 2) return Infinity;
+      const minP = Math.min(...prices), maxP = Math.max(...prices);
+      if (minP === maxP) return Infinity;
+      const ref = dealInfo?.price ?? Infinity;
+      if (ref == null) return Infinity;
+      return (ref - minP) / (maxP - minP);
+    }
     case 'category': return getCategory(item).toLowerCase();
     default:         return 0;
   }
@@ -592,7 +621,7 @@ function onColClick(col) {
     sortKeys[0] = { col, dir: sortKeys[0].dir === 'asc' ? 'desc' : 'asc' };
   } else {
     // Prepend as new primary key; keep others as secondary (remove duplicate if present)
-    const defaultDir = (col === 'name' || col === 'category') ? 'asc' : 'desc';
+    const defaultDir = (col === 'name' || col === 'category' || col === 'avg') ? 'asc' : 'desc';
     const filtered = sortKeys.filter(k => k.col !== col);
     sortKeys = [{ col, dir: defaultDir }, ...filtered];
   }
@@ -837,6 +866,37 @@ function initSortHeaders() {
   });
 }
 
+// ── Scrape progress strip ─────────────────────────────────────────────────────
+
+function renderScrapeStrip(data) {
+  const strip = document.getElementById('scrapeStrip');
+  if (!strip) return;
+  const prog = data?.scrape_progress;
+  if (prog && prog.total > 0 && !_progressDismissed) {
+    if (_progressLastDone == null) {
+      _progressLastDone = prog.done;
+      _progressLastChangeTime = Date.now();
+    } else if (prog.done !== _progressLastDone) {
+      _progressLastDone = prog.done;
+      _progressLastChangeTime = Date.now();
+    }
+    const pct = Math.round((prog.done / prog.total) * 100);
+    const isStale = _progressLastChangeTime && (Date.now() - _progressLastChangeTime > STALE_PROGRESS_MS);
+    strip.style.display = 'flex';
+    strip.classList.toggle('stale', isStale);
+    document.getElementById('scrapeStripLabel').textContent = isStale
+      ? `⚠ Stalled at ${prog.done} of ${prog.total} — try refreshing`
+      : pct === 0 ? `Starting price refresh…` : `Refreshing prices… ${prog.done} of ${prog.total}`;
+    document.getElementById('scrapeStripFill').style.width = `${pct}%`;
+    document.getElementById('scrapeStripPct').textContent = `${pct}%`;
+    const retryBtn = document.getElementById('scrapeStripRetry');
+    if (retryBtn) retryBtn.style.display = isStale ? 'inline-block' : 'none';
+  } else {
+    strip.style.display = 'none';
+    if (!prog) { _progressLastDone = null; _progressLastChangeTime = null; _progressDismissed = false; }
+  }
+}
+
 // ── Update Prices button ──────────────────────────────────────────────────────
 
 function initRefreshBtn() {
@@ -884,7 +944,37 @@ function initRefreshBtn() {
   initStoreFilter();
   initTooltip();
   initRefreshBtn();
+
+  // Scrape strip dismiss/retry
+  document.getElementById('scrapeStripDismiss')?.addEventListener('click', () => {
+    _progressDismissed = true;
+    renderScrapeStrip(_data);
+  });
+  document.getElementById('scrapeStripRetry')?.addEventListener('click', () => {
+    _progressDismissed = false;
+    document.getElementById('refreshBtn')?.click();
+  });
+
+  renderScrapeStrip(_data);
   renderDeals();
+
+  // Poll while scraping
+  if (_data.scrape_progress) {
+    window._hdProgressTimer = setInterval(async () => {
+      try {
+        const r = await fetch(`data/latest.json?t=${Date.now()}`);
+        if (!r.ok) return;
+        const fresh = await r.json();
+        _data = fresh;
+        renderScrapeStrip(fresh);
+        if (!fresh.scrape_progress) {
+          clearInterval(window._hdProgressTimer);
+          window._hdProgressTimer = null;
+          renderDeals();
+        }
+      } catch {}
+    }, 7000);
+  }
 })();
 </script>
 </body>
