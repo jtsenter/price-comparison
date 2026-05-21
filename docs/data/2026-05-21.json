@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T10:14:37.438866+00:00",
+  "last_updated": "2026-05-21T10:16:02.767766+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5231,7 +5231,7 @@
     },
     {
       "list_item": "Woolworths Whole Milk Full Cream Milk",
-      "last_scraped": "2026-05-21T10:08:10.669092+00:00",
+      "last_scraped": "2026-05-21T10:16:02.409419+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5277,21 +5277,20 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/888140.jpg"
       },
       "coles": {
-        "name": "Coles Full Cream Milk | 600mL",
-        "price": 1.45,
-        "unit_price": 1.45,
+        "name": "Full Cream Milk",
+        "price": 5.15,
+        "unit_price": 1.72,
         "unit": "1L",
-        "url": "https://www.coles.com.au/product/coles-full-cream-milk-600ml-6759482",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6759482.jpg&w=640&q=90",
-        "retailer": "coles"
+        "url": "https://www.coles.com.au/product/coles-full-cream-milk-3l-8150288",
+        "image_url": "/8/8150288.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 3.7,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.17,
-      "per_100_coles": 0.24,
+      "per_100_coles": 0.17,
       "per_100_unit": "100ml"
     },
     {
@@ -12161,10 +12160,10 @@
   ],
   "summary": {
     "total_woolworths": 1124.42,
-    "total_coles": 1126.46,
+    "total_coles": 1130.16,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 2.04,
+    "total_saving": 5.74,
     "items_compared": 209,
     "items_not_found": 2
   }
