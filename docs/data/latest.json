@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T10:07:39.110356+00:00",
+  "last_updated": "2026-05-21T10:07:50.725615+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4138,7 +4138,7 @@
     },
     {
       "list_item": "Woolworths Frozen Meat Pies",
-      "last_scraped": "2026-05-20T23:51:18.220751+00:00",
+      "last_scraped": "2026-05-21T10:07:40.391362+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -4209,65 +4209,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Garlic Heads CLOVE",
-      "last_scraped": "2026-05-20T23:51:22.034329+00:00",
-      "trip_count": 8,
-      "price_history": [
-        {
-          "date": "2025-03-11",
-          "price": 3.5
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 3.5
-        },
-        {
-          "date": "2025-06-06",
-          "price": 3.5
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.5
-        },
-        {
-          "date": "2026-03-10",
-          "price": 3.5
-        },
-        {
-          "date": "2026-04-02",
-          "price": 3.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 3.5
-        }
-      ],
-      "category": "Other",
-      "woolworths": {
-        "name": "Woolworths Garlic Cloves",
-        "price": 2.9,
-        "unit_price": 41.43,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/253320/woolworths-garlic-cloves",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/253320.jpg"
-      },
-      "coles": null,
-      "cheaper_store": "woolworths",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": 4.14,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Full Cream Milk",
-      "last_scraped": "2026-05-20T23:51:22.142438+00:00",
+      "last_scraped": "2026-05-21T10:07:42.953381+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -4339,8 +4282,65 @@
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Woolworths Garlic Heads CLOVE",
+      "last_scraped": "2026-05-21T10:07:44.184153+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 3.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.5
+        }
+      ],
+      "category": "Other",
+      "woolworths": {
+        "name": "Woolworths Garlic Cloves",
+        "price": 2.9,
+        "unit_price": 41.43,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/253320/woolworths-garlic-cloves",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/253320.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": [],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": 4.14,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Ice Cream Cones Boysenberry",
-      "last_scraped": "2026-05-20T23:51:25.801409+00:00",
+      "last_scraped": "2026-05-21T10:07:47.234199+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -4408,7 +4408,7 @@
     },
     {
       "list_item": "Woolworths Lean Beef Mince",
-      "last_scraped": "2026-05-20T23:51:28.667811+00:00",
+      "last_scraped": "2026-05-21T10:07:50.717869+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -12115,7 +12115,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 50,
+    "done": 55,
     "total": 211
   }
 }
