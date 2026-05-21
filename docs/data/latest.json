@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T23:25:56.622371+00:00",
+  "last_updated": "2026-05-21T23:26:11.944108+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4894,7 +4894,7 @@
     },
     {
       "list_item": "Woolworths Lean Beef Mince",
-      "last_scraped": "2026-05-21T23:19:51.109046+00:00",
+      "last_scraped": "2026-05-21T23:25:59.057051+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -4990,96 +4990,8 @@
       "_ww_price_factor": 0.5
     },
     {
-      "list_item": "Woolworths Onion Brown Bag",
-      "last_scraped": "2026-05-21T23:19:58.263623+00:00",
-      "trip_count": 14,
-      "price_history": [
-        {
-          "date": "2024-12-09",
-          "price": 3.6
-        },
-        {
-          "date": "2025-02-28",
-          "price": 3.6
-        },
-        {
-          "date": "2025-03-27",
-          "price": 2.0
-        },
-        {
-          "date": "2025-04-14",
-          "price": 1.8
-        },
-        {
-          "date": "2025-04-25",
-          "price": 2.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 3.6
-        },
-        {
-          "date": "2025-06-06",
-          "price": 2.0
-        },
-        {
-          "date": "2025-07-10",
-          "price": 1.8
-        },
-        {
-          "date": "2025-07-26",
-          "price": 3.6
-        },
-        {
-          "date": "2026-02-03",
-          "price": 2.5
-        },
-        {
-          "date": "2026-02-23",
-          "price": 2.5
-        },
-        {
-          "date": "2026-03-10",
-          "price": 2.5
-        },
-        {
-          "date": "2026-04-02",
-          "price": 2.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 2.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Onion Brown Bag",
-        "price": 3.6,
-        "unit_price": 3.6,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/144336/woolworths-onion-brown-bag",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144336.jpg"
-      },
-      "coles": {
-        "name": "Brown Onions",
-        "price": 4.0,
-        "unit_price": 4.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4803991.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.4,
-      "alternatives": [],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 0.36,
-      "per_100_coles": 0.4,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths RSPCA Approved Chicken Breast Fillet",
-      "last_scraped": "2026-05-21T23:19:58.900565+00:00",
+      "last_scraped": "2026-05-21T23:26:04.677648+00:00",
       "trip_count": 23,
       "price_history": [
         {
@@ -5207,8 +5119,96 @@
       "_ww_price_factor": 0.6
     },
     {
+      "list_item": "Woolworths Onion Brown Bag",
+      "last_scraped": "2026-05-21T23:26:06.402697+00:00",
+      "trip_count": 14,
+      "price_history": [
+        {
+          "date": "2024-12-09",
+          "price": 3.6
+        },
+        {
+          "date": "2025-02-28",
+          "price": 3.6
+        },
+        {
+          "date": "2025-03-27",
+          "price": 2.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.8
+        },
+        {
+          "date": "2025-04-25",
+          "price": 2.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.6
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.8
+        },
+        {
+          "date": "2025-07-26",
+          "price": 3.6
+        },
+        {
+          "date": "2026-02-03",
+          "price": 2.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 2.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Onion Brown Bag",
+        "price": 3.6,
+        "unit_price": 3.6,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/144336/woolworths-onion-brown-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144336.jpg"
+      },
+      "coles": {
+        "name": "Brown Onions",
+        "price": 4.0,
+        "unit_price": 4.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4803991.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.4,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.36,
+      "per_100_coles": 0.4,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Red Watermelon Cut Quarter",
-      "last_scraped": "2026-05-21T23:20:04.020674+00:00",
+      "last_scraped": "2026-05-21T23:26:10.436819+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5292,7 +5292,7 @@
     },
     {
       "list_item": "Woolworths Salmon Portions Skin On",
-      "last_scraped": "2026-05-21T23:20:08.350141+00:00",
+      "last_scraped": "2026-05-21T23:26:11.939729+00:00",
       "trip_count": 12,
       "price_history": [
         {
@@ -12631,7 +12631,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 55,
+    "done": 60,
     "total": 211
   }
 }
