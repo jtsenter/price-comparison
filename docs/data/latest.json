@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T10:18:33.828851+00:00",
+  "last_updated": "2026-05-21T10:19:17.497918+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5171,7 +5171,7 @@
     },
     {
       "list_item": "Woolworths Washed Potato Bag",
-      "last_scraped": "2026-05-21T10:08:10.094349+00:00",
+      "last_scraped": "2026-05-21T10:19:17.184245+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -5213,20 +5213,31 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/262783.jpg"
       },
       "coles": {
-        "name": "Coles Baby Washed Potatoes | 1Kg",
-        "price": 4.8,
-        "unit_price": 4.8,
+        "name": "Potatoes Washed",
+        "price": 6.0,
+        "unit_price": 3.0,
         "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-baby-washed-potatoes-1kg-2488485",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2488485.jpg&w=640&q=90"
+        "url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
+        "image_url": "/1/1206748.jpg",
+        "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 3.2,
-      "alternatives": [],
+      "saving_per_item": 2.0,
+      "alternatives": [
+        {
+          "name": "Potatoes Washed",
+          "price": 6.0,
+          "unit_price": 3.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
+          "image_url": "/1/1206748.jpg",
+          "retailer": "coles"
+        }
+      ],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.4,
-      "per_100_coles": 0.48,
+      "per_100_coles": 0.3,
       "per_100_unit": "100g"
     },
     {
@@ -12160,10 +12171,10 @@
   ],
   "summary": {
     "total_woolworths": 1124.42,
-    "total_coles": 1135.16,
+    "total_coles": 1136.36,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 10.74,
+    "total_saving": 11.94,
     "items_compared": 209,
     "items_not_found": 2
   }
