@@ -1245,6 +1245,7 @@ td.priority-cell { text-align: center; }
   width: 36px; min-width: 36px; max-width: 36px;
   text-align: center; padding: 0 8px; vertical-align: middle;
 }
+#tableHead th.check-cell { vertical-align: middle; padding: 0 8px; text-align: center; }
 .check-cell input[type="checkbox"] { cursor: pointer; accent-color: var(--ww); width: 15px; height: 15px; }
 
 /* ── Bulk action bar ─────────────────────────────────────────── */
