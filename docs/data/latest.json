@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T10:17:42.079549+00:00",
+  "last_updated": "2026-05-21T10:18:33.828851+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4002,7 +4002,7 @@
     },
     {
       "list_item": "Woolworths Extra Virgin Spanish Olive Oil",
-      "last_scraped": "2026-05-21T10:07:36.386492+00:00",
+      "last_scraped": "2026-05-21T10:18:33.564039+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -4044,20 +4044,20 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/698868.jpg"
       },
       "coles": {
-        "name": "Coles Extra Virgin Olive Oil | 500mL",
-        "price": 9.0,
-        "unit_price": 9.0,
+        "name": "Extra Virgin Olive Oil",
+        "price": 14.0,
+        "unit_price": 1.4,
         "unit": "100mL",
-        "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5449504.jpg&w=640&q=90"
+        "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-1l-5607376",
+        "image_url": "/5/5607376.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 5.0,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.4,
-      "per_100_coles": 1.8,
+      "per_100_coles": 1.4,
       "per_100_unit": "100ml"
     },
     {
@@ -12160,10 +12160,10 @@
   ],
   "summary": {
     "total_woolworths": 1124.42,
-    "total_coles": 1130.16,
+    "total_coles": 1135.16,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 5.74,
+    "total_saving": 10.74,
     "items_compared": 209,
     "items_not_found": 2
   }
