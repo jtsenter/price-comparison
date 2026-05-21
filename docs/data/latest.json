@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T10:51:16.050078+00:00",
+  "last_updated": "2026-05-21T10:51:38.476088+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3063,8 +3063,87 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths 12 Extra Large Free Range Eggs",
+      "last_scraped": "2026-05-21T10:51:20.673747+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 6.1
+        },
+        {
+          "date": "2024-12-19",
+          "price": 6.1
+        },
+        {
+          "date": "2025-07-03",
+          "price": 6.6
+        },
+        {
+          "date": "2026-02-11",
+          "price": 6.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 6.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 6.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 6.5
+        },
+        {
+          "date": "2026-04-13",
+          "price": 6.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 6.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths 12 X-Large Free Range Eggs",
+        "price": 6.5,
+        "unit_price": 0.93,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/224763/woolworths-12-x-large-free-range-eggs",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/224763.jpg"
+      },
+      "coles": {
+        "name": "Free Range Eggs 12 Pack",
+        "price": 6.4,
+        "unit_price": 0.91,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/sunrise-free-range-eggs-12-pack-700g-6339534",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6339534.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.1,
+      "alternatives": [
+        {
+          "name": "Free Range Eggs 12 Pack",
+          "price": 6.4,
+          "unit_price": 0.91,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/sunrise-free-range-eggs-12-pack-700g-6339534",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6339534.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.93,
+      "per_100_coles": 0.91,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Baby Leaf Spinach",
-      "last_scraped": "2026-05-21T10:41:41.876080+00:00",
+      "last_scraped": "2026-05-21T10:51:23.773395+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -3156,87 +3235,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths 12 Extra Large Free Range Eggs",
-      "last_scraped": "2026-05-21T10:41:42.911054+00:00",
-      "trip_count": 9,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 6.1
-        },
-        {
-          "date": "2024-12-19",
-          "price": 6.1
-        },
-        {
-          "date": "2025-07-03",
-          "price": 6.6
-        },
-        {
-          "date": "2026-02-11",
-          "price": 6.5
-        },
-        {
-          "date": "2026-02-23",
-          "price": 6.5
-        },
-        {
-          "date": "2026-03-10",
-          "price": 6.5
-        },
-        {
-          "date": "2026-04-02",
-          "price": 6.5
-        },
-        {
-          "date": "2026-04-13",
-          "price": 6.5
-        },
-        {
-          "date": "2026-05-06",
-          "price": 6.5
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths 12 X-Large Free Range Eggs",
-        "price": 6.5,
-        "unit_price": 0.93,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/224763/woolworths-12-x-large-free-range-eggs",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/224763.jpg"
-      },
-      "coles": {
-        "name": "Free Range Eggs 12 Pack",
-        "price": 6.4,
-        "unit_price": 0.91,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/sunrise-free-range-eggs-12-pack-700g-6339534",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6339534.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.1,
-      "alternatives": [
-        {
-          "name": "Free Range Eggs 12 Pack",
-          "price": 6.4,
-          "unit_price": 0.91,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/sunrise-free-range-eggs-12-pack-700g-6339534",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6339534.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 0.93,
-      "per_100_coles": 0.91,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Beef Porterhouse Steak & Butter",
-      "last_scraped": "2026-05-21T10:41:49.787580+00:00",
+      "last_scraped": "2026-05-21T10:51:32.026106+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -3331,8 +3331,68 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Basa Fillets Boneless With Skin Off",
+      "last_scraped": "2026-05-21T10:51:34.954122+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 8.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 11.0
+        },
+        {
+          "date": "2025-05-04",
+          "price": 7.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 8.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 11.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 11.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 11.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Basa Thawed Freshwater Basa Fillets",
+        "price": 11.0,
+        "unit_price": 11.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/87465/basa-thawed-freshwater-basa-fillets",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087465.jpg"
+      },
+      "coles": {
+        "name": "Basa Portions Skin Off 2 Pack",
+        "price": 5.4,
+        "unit_price": 20.77,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-basa-portions-skin-off-2-pack-260g-1567000",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1567000.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 5.6,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 1.1,
+      "per_100_coles": 2.08,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Broccolini Bunch",
-      "last_scraped": "2026-05-21T10:41:56.138508+00:00",
+      "last_scraped": "2026-05-21T10:51:38.465799+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -3439,66 +3499,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Basa Fillets Boneless With Skin Off",
-      "last_scraped": "2026-05-21T10:41:58.886199+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 8.0
-        },
-        {
-          "date": "2025-03-17",
-          "price": 11.0
-        },
-        {
-          "date": "2025-05-04",
-          "price": 7.5
-        },
-        {
-          "date": "2025-05-22",
-          "price": 8.0
-        },
-        {
-          "date": "2025-06-06",
-          "price": 11.0
-        },
-        {
-          "date": "2025-07-03",
-          "price": 11.0
-        },
-        {
-          "date": "2025-07-26",
-          "price": 11.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Basa Thawed Freshwater Basa Fillets",
-        "price": 11.0,
-        "unit_price": 11.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/87465/basa-thawed-freshwater-basa-fillets",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087465.jpg"
-      },
-      "coles": {
-        "name": "Basa Portions Skin Off 2 Pack",
-        "price": 5.4,
-        "unit_price": 20.77,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-basa-portions-skin-off-2-pack-260g-1567000",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1567000.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 5.6,
-      "alternatives": [],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 1.1,
-      "per_100_coles": 2.08,
       "per_100_unit": "100g"
     },
     {
@@ -13477,7 +13477,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 35,
+    "done": 40,
     "total": 211
   }
 }
