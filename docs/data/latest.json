@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T10:27:54.299739+00:00",
+  "last_updated": "2026-05-21T10:28:06.617979+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6564,7 +6564,7 @@
     },
     {
       "list_item": "Dolmio Extra Bolognese Tomato Pasta Sauce",
-      "last_scraped": "2026-05-20T11:04:54.486567+00:00",
+      "last_scraped": "2026-05-21T10:27:54.812130+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -6595,20 +6595,64 @@
         "unit_price": 0.6,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/dolmio-extra-italian-herb-pasta-sauce-500g-1274420",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1274420.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1274420.jpg"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.25,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.55,
       "per_100_coles": 0.6,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Essentials Salted Butter",
+      "last_scraped": "2026-05-21T10:27:59.757074+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 7.0
+        },
+        {
+          "date": "2025-03-27",
+          "price": 7.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 7.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Essentials Unsalted Butter",
+        "price": 7.0,
+        "unit_price": 1.4,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/688962/essentials-unsalted-butter",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/688962.jpg"
+      },
+      "coles": {
+        "name": "Westgold Salted Butter | 400g",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/westgold-salted-butter-400g-7075278",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7075278.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.0,
+      "alternatives": [],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 1.4,
+      "per_100_coles": 2.0,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Ecostore Ultra Sensitive Fragrance Free Laundry Liquid",
-      "last_scraped": "2026-05-20T11:04:54.767368+00:00",
+      "last_scraped": "2026-05-21T10:28:00.546236+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -6651,64 +6695,48 @@
         "unit_price": 30.0,
         "unit": "1L",
         "url": "https://www.coles.com.au/product/omo-ultimate-sensitive-laundry-liquid-detergent-80-washes-4l-1015987",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1015987.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1015987.jpg"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 19.0,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Earthwise Laundry Liquid Sensitive | 2L",
+          "price": 10.0,
+          "unit_price": 5.0,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/earthwise-laundry-liquid-sensitive-2l-8020293",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8020293.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "OMO Ultimate Laundry Liquid Detergent Sensitive 40 Washes | 2L",
+          "price": 18.0,
+          "unit_price": 9.0,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/omo-ultimate-laundry-liquid-detergent-sensitive-40-washes-2l-5091637",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5091637.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "OMO Ultimate Laundry Liquid Detergent 40 Washes | 2L",
+          "price": 18.0,
+          "unit_price": 9.0,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/omo-ultimate-laundry-liquid-detergent-40-washes-2l-5004891",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5004891.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.1,
       "per_100_coles": 0.75,
       "per_100_unit": "100ml"
     },
     {
-      "list_item": "Essentials Salted Butter",
-      "last_scraped": "2026-05-20T11:04:58.127689+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 7.0
-        },
-        {
-          "date": "2025-03-27",
-          "price": 7.0
-        },
-        {
-          "date": "2025-05-12",
-          "price": 7.0
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Essentials Unsalted Butter",
-        "price": 7.0,
-        "unit_price": 1.4,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/688962/essentials-unsalted-butter",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/688962.jpg"
-      },
-      "coles": {
-        "name": "Westgold Salted Butter | 400g",
-        "price": 8.0,
-        "unit_price": 8.0,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/westgold-salted-butter-400g-7075278",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7075278.jpg&w=640&q=90"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.4,
-      "per_100_coles": 2.0,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Essentials White Vinegar",
-      "last_scraped": "2026-05-20T11:04:58.467525+00:00",
+      "last_scraped": "2026-05-21T10:28:04.869043+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6743,16 +6771,63 @@
         "unit_price": 2.5,
         "unit": "100mL",
         "url": "https://www.coles.com.au/product/cornwell's-white-vinegar-375ml-432763",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F432763.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/432763.jpg"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.65,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.09,
       "per_100_coles": 0.67,
       "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Fox's Chocolatey Milk Chocolate Rounds",
+      "last_scraped": "2026-05-21T10:28:06.607805+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 5.5
+        },
+        {
+          "date": "2024-12-02",
+          "price": 5.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 5.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": null,
+      "coles": {
+        "name": "Darrell Lea Milk Chocolate Double Chocolate Brownie | 160g",
+        "price": 7.0,
+        "unit_price": 7.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/darrell-lea-milk-chocolate-double-chocolate-brownie-160g-8484975",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8484975.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Cadbury Dairy Milk Furry Friends Chocolate Multipack | 100g",
+          "price": 4.3,
+          "unit_price": 4.3,
+          "unit": null,
+          "url": "https://www.coles.com.au/product/cadbury-dairy-milk-furry-friends-chocolate-multipack-100g-3273338",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3273338.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 4.38,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Fresh Radish Bunch",
@@ -6797,43 +6872,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Fox's Chocolatey Milk Chocolate Rounds",
-      "last_scraped": "2026-05-20T11:05:02.442638+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 5.5
-        },
-        {
-          "date": "2024-12-02",
-          "price": 5.5
-        },
-        {
-          "date": "2024-12-09",
-          "price": 5.5
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": null,
-      "coles": {
-        "name": "Darrell Lea Milk Chocolate Double Chocolate Brownie | 160g",
-        "price": 7.0,
-        "unit_price": 7.0,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/darrell-lea-milk-chocolate-double-chocolate-brownie-160g-8484975",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8484975.jpg&w=640&q=90"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 4.38,
       "per_100_unit": "100g"
     },
     {
@@ -12705,7 +12743,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 80,
+    "done": 85,
     "total": 211
   }
 }
