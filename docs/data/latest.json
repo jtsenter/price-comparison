@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T23:30:36.847693+00:00",
+  "last_updated": "2026-05-21T23:30:55.051117+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10313,7 +10313,7 @@
     },
     {
       "list_item": "Woolworths Mashing Potatoes Bag",
-      "last_scraped": "2026-05-21T23:01:50.993374+00:00",
+      "last_scraped": "2026-05-21T23:30:40.063587+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -10353,7 +10353,7 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.5,
       "per_100_coles": 0.5,
@@ -10361,7 +10361,7 @@
     },
     {
       "list_item": "Woolworths Mild Salsa",
-      "last_scraped": "2026-05-21T23:01:54.997187+00:00",
+      "last_scraped": "2026-05-21T23:30:42.135745+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -10410,7 +10410,7 @@
     },
     {
       "list_item": "Woolworths Pesto Basil",
-      "last_scraped": "2026-05-21T23:01:56.751595+00:00",
+      "last_scraped": "2026-05-21T23:30:46.239239+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -10450,7 +10450,7 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.03,
       "per_100_coles": 1.03,
@@ -10458,7 +10458,7 @@
     },
     {
       "list_item": "Woolworths RSPCA Approved Chicken Drumsticks",
-      "last_scraped": "2026-05-21T23:02:00.379526+00:00",
+      "last_scraped": "2026-05-21T23:30:47.494687+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -10516,7 +10516,7 @@
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.48,
       "per_100_coles": 0.4,
@@ -10524,7 +10524,7 @@
     },
     {
       "list_item": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In",
-      "last_scraped": "2026-05-21T23:02:01.738473+00:00",
+      "last_scraped": "2026-05-21T23:30:55.042706+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -10572,8 +10572,18 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 3.07,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Coles RSPCA Approved Chicken Thigh Cutlets | approx. 1.1kg",
+          "price": 9.9,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-thigh-cutlets-approx.-1.1kg-2268365",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2268365.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.05,
       "per_100_coles": 0.9,
@@ -13160,7 +13170,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 145,
+    "done": 150,
     "total": 211
   }
 }
