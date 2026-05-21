@@ -3,6 +3,10 @@
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '—';
 
+// Strip "Woolworths " prefix for display. The underlying list_item key stays
+// unchanged so price history and localStorage keys keep working.
+const stripWW = (name) => name.replace(/^Woolworths\s+/i, '');
+
 const COLES_CDN = 'https://cdn.productimages.coles.com.au/productimages';
 
 function resolveImgUrl(imgData) {
@@ -777,7 +781,7 @@ function initPriceHistoryModal() {
 
 function openPriceHistoryModal(item) {
   _historyItem = item;
-  $('priceHistoryTitle').textContent = `Price History — ${item.list_item}`;
+  $('priceHistoryTitle').textContent = `Price History — ${stripWW(item.list_item)}`;
 
   const excl = loadExclusions();
   const excludedPrices = new Set((excl[item.list_item] || []).map(p => Number(p).toFixed(2)));
@@ -1573,7 +1577,7 @@ function renderCards(items) {
     const co = item.coles;
     const cheaper = item.cheaper_store;
     const ov = overrides[item.list_item] || {};
-    const displayName = ov.displayName || item.list_item;
+    const displayName = ov.displayName || stripWW(item.list_item);
     const cat = getCategory(item);
     const p = getPriority(item.list_item);
     const hotDeal = isHotDeal(item);
@@ -1894,7 +1898,7 @@ function renderPage(data) {
 
     const wwUrl  = ov.wwUrl    || ww?.url  || null;
     const coUrl  = ov.colesUrl || co?.url  || null;
-    const displayName = ov.displayName || item.list_item;
+    const displayName = ov.displayName || stripWW(item.list_item);
 
     const coImgSrc = resolveImgUrl(co?.image_url) || '';
     const wwImgSrc = resolveImgUrl(ww?.image_url) || '';
