@@ -3,18 +3,37 @@
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '—';
 
+const COLES_CDN = 'https://cdn.productimages.coles.com.au/productimages';
+
 function resolveImgUrl(imgData) {
   if (!imgData) return '';
   if (typeof imgData === 'object' && imgData.uri)
-    return 'https://cdn.productimages.coles.com.au/productimages' + imgData.uri;
+    return COLES_CDN + imgData.uri;
   if (typeof imgData !== 'string') return '';
   if (imgData.includes('/_next/image')) {
     try {
       const inner = new URL(imgData).searchParams.get('url');
-      if (inner) return decodeURIComponent(inner);
+      if (inner) {
+        const decoded = decodeURIComponent(inner);
+        return (decoded.startsWith('/') && !decoded.includes('://')) ? COLES_CDN + decoded : decoded;
+      }
     } catch {}
   }
+  // Bare CDN path stored by scraper (e.g. /4/409499.jpg)
+  if (imgData.startsWith('/') && !imgData.includes('://')) return COLES_CDN + imgData;
   return imgData;
+}
+
+function imgError(el, fallbackSrc) {
+  if (fallbackSrc && el.src !== fallbackSrc) {
+    el.onerror = () => imgError(el, '');
+    el.src = fallbackSrc;
+  } else {
+    el.onerror = null;
+    el.outerHTML = el.classList.contains('card-img')
+      ? '<div class="card-img-placeholder"></div>'
+      : '<div class="item-img-placeholder"></div>';
+  }
 }
 const fmtUnit = (price, unit) => {
   if (price == null) return '';
@@ -1316,6 +1335,11 @@ async function pollForCompletion(s) {
         }
         return;
       }
+      // Run still in progress — fetch latest.json to show the progress bar
+      if (run?.status === 'in_progress' || run?.status === 'queued') {
+        const fresh = await loadData();
+        if (fresh) renderPage(fresh);
+      }
     } catch (_) {}
     setTimeout(poll, 15000);
   };
@@ -1509,9 +1533,12 @@ function renderCards(items) {
     const coUrl  = ov.colesUrl || co?.url || '';
     const safeKey = item.list_item.replace(/"/g, '&quot;');
 
-    const imgSrc = resolveImgUrl(co?.image_url) || resolveImgUrl(ww?.image_url) || '';
+    const coImgSrc = resolveImgUrl(co?.image_url) || '';
+    const wwImgSrc = resolveImgUrl(ww?.image_url) || '';
+    const imgSrc = coImgSrc || wwImgSrc;
+    const imgFallback = coImgSrc && wwImgSrc ? wwImgSrc : '';
     const imgHtml = imgSrc
-      ? `<img class="card-img" src="${imgSrc}" alt="" loading="lazy" onerror="this.style.display='none'">`
+      ? `<img class="card-img" src="${imgSrc}" alt="" loading="lazy" onerror="imgError(this,'${imgFallback}')">`
       : '<div class="card-img-placeholder"></div>';
 
     const prioOptions = ['weekly','monthly','rare'].map(v =>
@@ -1817,9 +1844,12 @@ function renderPage(data) {
     const coUrl  = ov.colesUrl || co?.url  || null;
     const displayName = ov.displayName || item.list_item;
 
-    const imgSrc = resolveImgUrl(co?.image_url) || resolveImgUrl(ww?.image_url) || '';
+    const coImgSrc = resolveImgUrl(co?.image_url) || '';
+    const wwImgSrc = resolveImgUrl(ww?.image_url) || '';
+    const imgSrc = coImgSrc || wwImgSrc;
+    const imgFallback = coImgSrc && wwImgSrc ? wwImgSrc : '';
     const imgHtml = imgSrc
-      ? `<img class="item-img" src="${imgSrc}" alt="" loading="lazy" onerror="this.style.display='none'" />`
+      ? `<img class="item-img" src="${imgSrc}" alt="" loading="lazy" onerror="imgError(this,'${imgFallback}')" />`
       : '<div class="item-img-placeholder"></div>';
 
     const safeKey = item.list_item.replace(/"/g, '&quot;');
