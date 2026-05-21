@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T10:28:06.617979+00:00",
+  "last_updated": "2026-05-21T10:28:21.542143+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6831,7 +6831,7 @@
     },
     {
       "list_item": "Fresh Radish Bunch",
-      "last_scraped": "2026-05-20T11:05:01.822894+00:00",
+      "last_scraped": "2026-05-21T10:28:08.826927+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -6862,13 +6862,23 @@
         "unit_price": 3.8,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-radish-bunch-1-each-4911870",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4911870.jpg&w=640&q=90",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4911870.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.1,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Coles Radish Bunch | 1 Each",
+          "price": 3.8,
+          "unit_price": 3.8,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-radish-bunch-1-each-4911870",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4911870.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -6876,7 +6886,7 @@
     },
     {
       "list_item": "Hedy's Fresh Quiche Lorraine Chilled Meal",
-      "last_scraped": "2026-05-20T11:05:06.860843+00:00",
+      "last_scraped": "2026-05-21T10:28:14.114036+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -6915,65 +6925,20 @@
         "unit_price": 14.5,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/hedys-quiche-lorraine-1.1kg-7388070",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7388070.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7388070.jpg"
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.32,
       "per_100_coles": 1.32,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Hedy's Fresh Quiche Spinach & Feta Chilled Meal",
-      "last_scraped": "2026-05-20T11:05:09.981155+00:00",
-      "trip_count": 5,
-      "price_history": [
-        {
-          "date": "2024-12-19",
-          "price": 10.5
-        },
-        {
-          "date": "2025-05-29",
-          "price": 14.5
-        },
-        {
-          "date": "2025-06-06",
-          "price": 14.5
-        },
-        {
-          "date": "2025-07-03",
-          "price": 14.5
-        },
-        {
-          "date": "2026-02-11",
-          "price": 14.5
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": null,
-      "coles": {
-        "name": "Home Chef Quiche Spinach & Feta | 200g",
-        "price": 5.0,
-        "unit_price": null,
-        "unit": null,
-        "url": "https://www.coles.com.au/product/home-chef-quiche-spinach-and-feta-200g-7829379",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F7%2F7829379.jpg&w=640&q=90"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 2.5,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Golden Palm Medjool Dates Punnet",
-      "last_scraped": "2026-05-20T11:05:12.999405+00:00",
+      "last_scraped": "2026-05-21T10:28:16.620399+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7003,25 +6968,77 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/774695.jpg"
       },
       "coles": {
-        "name": "Coles Medjool Dates | 454g",
-        "price": 2.45,
-        "unit_price": null,
-        "unit": null,
+        "name": "Medjool Dates",
+        "price": 14.0,
+        "unit_price": 30.84,
+        "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-medjool-dates-454g-5142013",
-        "image_url": "https://shop.coles.com.au/wcsstore/Coles-CAS/images/5/1/4/5142013-th.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5142013.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 8.45,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.1,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.42,
-      "per_100_coles": 0.54,
+      "per_100_coles": 3.08,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Hedy's Fresh Quiche Spinach & Feta Chilled Meal",
+      "last_scraped": "2026-05-21T10:28:19.914330+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 10.5
+        },
+        {
+          "date": "2025-05-29",
+          "price": 14.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 14.5
+        },
+        {
+          "date": "2025-07-03",
+          "price": 14.5
+        },
+        {
+          "date": "2026-02-11",
+          "price": 14.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Hedy's Fresh Quiche Spinach & Feta Chilled Meal",
+        "price": 14.5,
+        "unit_price": 1.32,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/669044/hedy-s-fresh-quiche-spinach-feta-chilled-meal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/669044.jpg"
+      },
+      "coles": {
+        "name": "Home Chef Quiche Spinach & Feta | 200g",
+        "price": 5.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/home-chef-quiche-spinach-and-feta-200g-7829379",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7829379.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 9.5,
+      "alternatives": [],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 1.32,
+      "per_100_coles": 2.5,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Hellmann's Real Mayonnaise Squeeze",
-      "last_scraped": "2026-05-20T11:05:14.150802+00:00",
+      "last_scraped": "2026-05-21T10:28:21.533802+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7056,13 +7073,23 @@
         "unit_price": 1.75,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/hellmann's-squeeze-real-mayonnaise-400g-3025755",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3025755.jpg&w=640&q=90",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3025755.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "coles",
       "saving_per_item": 1.0,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Hellmann's Squeeze Real Mayonnaise | 400g",
+          "price": 7.0,
+          "unit_price": 1.75,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/hellmann's-squeeze-real-mayonnaise-400g-3025755",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3025755.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.0,
       "per_100_coles": 1.75,
@@ -12734,16 +12761,16 @@
     "The Odd Bunch Mango"
   ],
   "summary": {
-    "total_woolworths": 1138.32,
-    "total_coles": 1150.3,
+    "total_woolworths": 1152.82,
+    "total_coles": 1166.85,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 11.98,
+    "total_saving": 14.03,
     "items_compared": 210,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 85,
+    "done": 90,
     "total": 211
   }
 }
