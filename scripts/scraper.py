@@ -34,9 +34,16 @@ def _normalise_coles_img(img) -> str:
         try:
             inner = parse_qs(urlparse(img).query).get("url", [""])[0]
             if inner:
-                return unquote(inner)
+                decoded = unquote(inner)
+                # CDN-relative path (e.g. /4/409499.jpg) → prefix with CDN base
+                if decoded.startswith("/") and "://" not in decoded:
+                    return COLES_CDN + decoded
+                return decoded
         except Exception:
             pass
+    # Bare CDN path stored from a previous scrape (e.g. /4/409499.jpg)
+    if img.startswith("/") and "://" not in img:
+        return COLES_CDN + img
     return img
 MAX_RESULTS = 5
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "docs", "data")
