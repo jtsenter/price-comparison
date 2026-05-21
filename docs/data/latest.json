@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T23:28:44.429060+00:00",
+  "last_updated": "2026-05-21T23:29:09.527675+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8284,7 +8284,7 @@
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Block",
-      "last_scraped": "2026-05-21T23:00:29.376148+00:00",
+      "last_scraped": "2026-05-21T23:28:44.594227+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -8320,8 +8320,27 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 4.58,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Philadelphia Original Cream Cheese Block | 250g",
+          "price": 5.7,
+          "unit_price": 5.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-original-cream-cheese-block-250g-192502",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/192502.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Philadelphia Cream Cheese Original Block 2 Pack | 500g",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-cream-cheese-original-block-2-pack-500g-5081291",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5081291.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.8,
       "per_100_coles": 2.28,
@@ -8330,7 +8349,7 @@
     },
     {
       "list_item": "Red Capsicum",
-      "last_scraped": "2026-05-21T23:00:34.401350+00:00",
+      "last_scraped": "2026-05-21T23:28:49.986762+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -8376,7 +8395,7 @@
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 2.23,
@@ -8384,7 +8403,7 @@
     },
     {
       "list_item": "Reese's Peanut Butter Cups Miniatures Milk Chocolate",
-      "last_scraped": "2026-05-21T23:00:38.978026+00:00",
+      "last_scraped": "2026-05-21T23:28:56.279462+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -8429,9 +8448,18 @@
           "url": "https://www.woolworths.com.au/shop/productdetails/1119946981/reese-s-miniature-peanut-butter-cups-milk-chocolate-candy-1-58-kg-bulk-pack",
           "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/1119946981.jpg",
           "retailer": "woolworths"
+        },
+        {
+          "name": "Reese's Peanut Butter Cups Milk Chocolate 2 pack | 42g",
+          "price": 1.5,
+          "unit_price": 3.57,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/reese's-peanut-butter-cups-milk-chocolate-2-pack-42g-2137550",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2137550.jpg",
+          "retailer": "coles"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 4.0,
       "per_100_coles": 3.57,
@@ -8439,7 +8467,7 @@
     },
     {
       "list_item": "Sam's Pantry Chocolate Brownie with Roasted Almonds Protein Bar",
-      "last_scraped": "2026-05-21T23:00:45.819477+00:00",
+      "last_scraped": "2026-05-21T23:29:02.677100+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -8487,7 +8515,7 @@
       "cheaper_store": "coles",
       "saving_per_item": 6.5,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.86,
       "per_100_coles": 5.0,
@@ -8495,7 +8523,7 @@
     },
     {
       "list_item": "Sam's Pantry Granola Pink Lady Apple & Cinnamon",
-      "last_scraped": "2026-05-21T23:00:49.041253+00:00",
+      "last_scraped": "2026-05-21T23:29:09.517833+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -8531,7 +8559,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 1.9,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.09,
       "per_100_coles": 2.38,
@@ -12828,7 +12856,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 110,
+    "done": 115,
     "total": 211
   }
 }
