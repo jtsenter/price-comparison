@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T10:25:15.809075+00:00",
+  "last_updated": "2026-05-21T10:25:34.175702+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2632,7 +2632,7 @@
     },
     {
       "list_item": "The Odd Bunch Zucchini Prepacked",
-      "last_scraped": "2026-05-20T11:03:09.062022+00:00",
+      "last_scraped": "2026-05-21T10:25:25.203085+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -2726,25 +2726,25 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/825869.jpg"
       },
       "coles": {
-        "name": "Coles Organic Zucchini | 500g",
-        "price": 2.65,
-        "unit_price": null,
-        "unit": null,
+        "name": "Zucchini",
+        "price": 7.5,
+        "unit_price": 15.0,
+        "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-organic-zucchini-500g-5032219",
-        "image_url": "https://shop.coles.com.au/wcsstore/Coles-CAS/images/5/0/3/5032219-zm.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5032219.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.85,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.47,
-      "per_100_coles": 0.53,
+      "per_100_coles": 1.5,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Truss Tomatoes",
-      "last_scraped": "2026-05-20T11:03:09.971129+00:00",
+      "last_scraped": "2026-05-21T10:25:26.851407+00:00",
       "trip_count": 35,
       "price_history": [
         {
@@ -2898,17 +2898,17 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/169438.jpg"
       },
       "coles": {
-        "name": "Coles Tomatoes Greenhouse Truss | approx. 130g",
-        "price": 1.11,
-        "unit_price": null,
-        "unit": null,
+        "name": "Tomatoes Greenhouse Truss",
+        "price": 1.1,
+        "unit_price": 8.5,
+        "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-tomatoes-greenhouse-truss-approx.-130g-4628676",
-        "image_url": "https://shop.coles.com.au/wcsstore/Coles-CAS/images/4/6/2/4628676-zm.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4628676.jpg"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "cheaper_store": "coles",
+      "saving_per_item": 0.01,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.85,
@@ -2916,7 +2916,7 @@
     },
     {
       "list_item": "Weet-Bix Little Kids Breakfast Cereal",
-      "last_scraped": "2026-05-20T11:03:13.081824+00:00",
+      "last_scraped": "2026-05-21T10:25:28.896088+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -2963,15 +2963,103 @@
         "unit_price": 5.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/sanitarium-weet-bix-little-kids-essentials-breakfast-cereal-400g-4233292",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4233292.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4233292.jpg"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.0,
       "per_100_coles": 1.25,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths BBQ Lamb Kebabs With Mint & Honey",
+      "last_scraped": "2026-05-21T10:25:34.172340+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 8.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 8.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 8.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 8.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 8.5
+        },
+        {
+          "date": "2025-06-21",
+          "price": 8.5
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths BBQ Australian Lamb Koftas Honey & Mint",
+        "price": 8.5,
+        "unit_price": 18.89,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/6024489/woolworths-bbq-australian-lamb-koftas-honey-mint",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6024489.jpg"
+      },
+      "coles": {
+        "name": "Coles Lamb Kebabs | 450g",
+        "price": 7.5,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-lamb-kebabs-450g-3900020",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3900020.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.0,
+      "alternatives": [
+        {
+          "name": "Coles Pork Scotch Steak With Rosemary & Honey Butter | 280g",
+          "price": 8.0,
+          "unit_price": 8.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-pork-scotch-steak-with-rosemary-and-honey-butter-280g-5886429",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5886429.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles RSPCA Approved Chicken Kebabs Honey & Soy | 375g",
+          "price": 8.5,
+          "unit_price": 8.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-kebabs-honey-and-soy-375g-3745710",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3745710.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles RSPCA Approved Chicken Kebabs Honey & Soy | 750g",
+          "price": 12.0,
+          "unit_price": 12.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-kebabs-honey-and-soy-750g-3745878",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3745878.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 1.89,
+      "per_100_coles": 1.67,
       "per_100_unit": "100g"
     },
     {
@@ -3033,66 +3121,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 1.42,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths BBQ Lamb Kebabs With Mint & Honey",
-      "last_scraped": "2026-05-20T11:03:17.831685+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 8.5
-        },
-        {
-          "date": "2024-12-09",
-          "price": 8.5
-        },
-        {
-          "date": "2025-03-11",
-          "price": 8.5
-        },
-        {
-          "date": "2025-04-14",
-          "price": 8.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 8.5
-        },
-        {
-          "date": "2025-05-22",
-          "price": 8.5
-        },
-        {
-          "date": "2025-06-21",
-          "price": 8.5
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths BBQ Australian Lamb Koftas Honey & Mint",
-        "price": 8.5,
-        "unit_price": 18.89,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/6024489/woolworths-bbq-australian-lamb-koftas-honey-mint",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6024489.jpg"
-      },
-      "coles": {
-        "name": "Coles Lamb Kebabs | 450g",
-        "price": 7.5,
-        "unit_price": null,
-        "unit": null,
-        "url": "https://www.coles.com.au/product/coles-lamb-kebabs-450g-3900020",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3900020.jpg&w=640&q=90"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.89,
-      "per_100_coles": 1.67,
       "per_100_unit": "100g"
     },
     {
@@ -12265,19 +12293,20 @@
     }
   ],
   "not_found_items": [
-    "The Odd Bunch Strawberries Punnet"
+    "The Odd Bunch Strawberries Punnet",
+    "The Odd Bunch Mango"
   ],
   "summary": {
     "total_woolworths": 1104.92,
-    "total_coles": 1122.46,
+    "total_coles": 1127.3,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 17.54,
+    "total_saving": 22.38,
     "items_compared": 210,
-    "items_not_found": 1
+    "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 30,
+    "done": 35,
     "total": 211
   }
 }
