@@ -1464,7 +1464,8 @@ function sortItems(items) {
       case 'trend': {
         const history = item.price_history;
         if (!history?.length) return Infinity;
-        const prices = history.map(p => p.price).filter(p => p > 0);
+        const factor = item._ww_price_factor ?? 1;
+        const prices = history.map(p => p.price * factor).filter(p => p > 0);
         if (prices.length < 2) return Infinity;
         const minP = Math.min(...prices), maxP = Math.max(...prices);
         if (minP === maxP) return Infinity;
