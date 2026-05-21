@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T23:57:23.460822+00:00",
+  "last_updated": "2026-05-21T23:57:34.538400+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12050,8 +12050,41 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Sam's Pantry Protein Bar Caramel Peanut With Roasted Almonds 12 Pack",
+      "last_scraped": "2026-05-21T23:57:26.132462+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 7.8
+        },
+        {
+          "date": "2025-05-12",
+          "price": 7.8
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": null,
+      "coles": {
+        "name": "Carman's Protein Bars Salted Caramel Nut Butter 5 Pack | 200g",
+        "price": 8.5,
+        "unit_price": 8.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/carman's-protein-bars-salted-caramel-nut-butter-5-pack-200g-3387869",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3387869.jpg&w=640&q=90"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 4.25,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Shine Dishwashing Tablets",
-      "last_scraped": "2026-05-21T23:32:35.988184+00:00",
+      "last_scraped": "2026-05-21T23:57:28.701698+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12090,41 +12123,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Sam's Pantry Protein Bar Caramel Peanut With Roasted Almonds 12 Pack",
-      "last_scraped": "2026-05-21T23:32:36.220637+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-04-14",
-          "price": 7.8
-        },
-        {
-          "date": "2025-05-12",
-          "price": 7.8
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": null,
-      "coles": {
-        "name": "Carman's Protein Bars Salted Caramel Nut Butter 5 Pack | 200g",
-        "price": 8.5,
-        "unit_price": 8.5,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/carman's-protein-bars-salted-caramel-nut-butter-5-pack-200g-3387869",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3387869.jpg&w=640&q=90"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 4.25,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Snickers Milk Chocolate Party Share Bag",
-      "last_scraped": "2026-05-21T23:32:40.197106+00:00",
+      "last_scraped": "2026-05-21T23:57:29.675929+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12165,7 +12165,7 @@
     },
     {
       "list_item": "The Odd Bunch Cherries Punnet",
-      "last_scraped": "2026-05-21T23:32:40.505575+00:00",
+      "last_scraped": "2026-05-21T23:57:32.923308+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12198,7 +12198,7 @@
     },
     {
       "list_item": "Twinings Pure Camomile Tea Bags Bags",
-      "last_scraped": "2026-05-21T23:32:43.988106+00:00",
+      "last_scraped": "2026-05-21T23:57:34.526706+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12949,7 +12949,7 @@
     "items_not_found": 4
   },
   "scrape_progress": {
-    "done": 190,
+    "done": 195,
     "total": 211
   }
 }
