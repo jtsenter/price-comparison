@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T10:54:19.751158+00:00",
+  "last_updated": "2026-05-21T10:54:34.820024+00:00",
   "trigger": "scheduled",
   "items": [
     {
@@ -13182,8 +13182,41 @@
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "KitKat Gold Crush Block",
+      "last_scraped": "2026-05-21T10:54:25.236570+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 4.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 5.0
+        }
+      ],
+      "category": "Sweets",
+      "woolworths": null,
+      "coles": {
+        "name": "KitKat Milkybar White Choc Block | 160g",
+        "price": 7.5,
+        "unit_price": 7.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/kitkat-milkybar-white-choc-block-160g-6339283",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6339283.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 4.69,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Dettol Tru Clean Antibacterial Multipurpose Wipes Citrus",
-      "last_scraped": "2026-05-21T10:31:58.554280+00:00",
+      "last_scraped": "2026-05-21T10:54:26.355364+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13222,41 +13255,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "KitKat Gold Crush Block",
-      "last_scraped": "2026-05-21T10:32:18.505203+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 4.5
-        },
-        {
-          "date": "2025-04-14",
-          "price": 5.0
-        }
-      ],
-      "category": "Sweets",
-      "woolworths": null,
-      "coles": {
-        "name": "KitKat Milkybar White Choc Block | 160g",
-        "price": 7.5,
-        "unit_price": 7.5,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/kitkat-milkybar-white-choc-block-160g-6339283",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6339283.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 4.69,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Little One's Size 4 Ultra Dry Nappies Toddler 10-15Kg Boys & Girls",
-      "last_scraped": "2026-05-21T10:32:24.735721+00:00",
+      "last_scraped": "2026-05-21T10:54:30.719870+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13299,7 +13299,7 @@
     },
     {
       "list_item": "Market Value Scotch Fillet",
-      "last_scraped": "2026-05-21T10:32:37.429415+00:00",
+      "last_scraped": "2026-05-21T10:54:33.772480+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13319,11 +13319,30 @@
         "unit_price": 23.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-beef-scotch-steak-fillet-2-pack-480g-4997220",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4997220.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4997220.jpg"
       },
       "cheaper_store": "coles",
       "saving_per_item": null,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Drovers Choice Beef Scotch Fillet Steaks | 170g",
+          "price": 8.5,
+          "unit_price": 8.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/drovers-choice-beef-scotch-fillet-steaks-170g-1476957",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1476957.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Beef Scotch Fillet Thin Cut | 400g",
+          "price": 21.0,
+          "unit_price": 21.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-scotch-fillet-thin-cut-400g-5629540",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5629540.jpg",
+          "retailer": "coles"
+        }
+      ],
       "match_confidence": "none",
       "size_warning": false,
       "per_100_ww": null,
@@ -13332,7 +13351,7 @@
     },
     {
       "list_item": "Osem Snacks Bamba With Peanuts",
-      "last_scraped": "2026-05-21T10:32:54.480879+00:00",
+      "last_scraped": "2026-05-21T10:54:34.805319+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13352,11 +13371,21 @@
         "unit_price": 4.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/osem-bamba-peanut-snack-100g-9542909",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9542909.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9542909.jpg"
       },
       "cheaper_store": "coles",
       "saving_per_item": null,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Osem Bamba Peanut Snack KB | 25g",
+          "price": 2.0,
+          "unit_price": 2.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/osem-bamba-peanut-snack-kb-25g-5132155",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5132155.jpg",
+          "retailer": "coles"
+        }
+      ],
       "match_confidence": "none",
       "size_warning": false,
       "per_100_ww": null,
@@ -13477,7 +13506,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 391,
+    "done": 396,
     "total": 211
   }
 }
