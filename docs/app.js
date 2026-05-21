@@ -279,14 +279,22 @@ function updateBulkBar() {
 
 // ── Column order & widths ────────────────────────────────────────────────────
 
-const DEFAULT_COL_ORDER = ['name', 'priority', 'ww', 'coles', 'cheaper', 'pct', 'saving', 'units', 'trips', 'category', 'last_scraped', 'ww_total', 'coles_total'];
+const DEFAULT_COL_ORDER = ['name', 'trend', 'priority', 'ww', 'coles', 'cheaper', 'pct', 'saving', 'units', 'trips', 'category', 'last_scraped', 'ww_total', 'coles_total'];
 
 let _colOrder = (() => {
   try {
     const saved = JSON.parse(localStorage.getItem('pw_col_order'));
     if (Array.isArray(saved) && saved.every(c => DEFAULT_COL_ORDER.includes(c))) {
       const newCols = DEFAULT_COL_ORDER.filter(c => !saved.includes(c));
-      return newCols.length ? [...saved, ...newCols] : saved;
+      if (!newCols.length) return saved;
+      const result = [...saved];
+      // Insert 'trend' after 'name' rather than appending to end
+      if (newCols.includes('trend')) {
+        const nameIdx = result.indexOf('name');
+        result.splice(nameIdx >= 0 ? nameIdx + 1 : 0, 0, 'trend');
+        newCols.splice(newCols.indexOf('trend'), 1);
+      }
+      return newCols.length ? [...result, ...newCols] : result;
     }
   } catch {}
   return [...DEFAULT_COL_ORDER];
@@ -309,7 +317,7 @@ const DEFAULT_COL_WIDTHS = {
 };
 
 const DEFAULT_COL_VISIBILITY = {
-  name: true, priority: true, ww: true, coles: true,
+  name: true, trend: true, priority: true, ww: true, coles: true,
   cheaper: true, pct: true, saving: true, units: true, trips: false,
   category: false, last_scraped: false, ww_total: false, coles_total: false,
 };
@@ -436,6 +444,7 @@ function colHeadHtml(col) {
   }
   switch (col) {
     case 'name':         return th('name', '', 'Product');
+    case 'trend':        return th('trend', '', 'Trend');
     case 'ww':           return th('ww', '', '<span class="store-chip ww sm">W</span> WW');
     case 'coles':        return th('coles', '', '<span class="store-chip coles sm">C</span> Coles');
     case 'cheaper':      return th('cheaper', 'center-th', 'Best');
@@ -1444,6 +1453,19 @@ function sortItems(items) {
         const ww = item.woolworths?.price, co = item.coles?.price;
         return (ww != null && co != null) ? Math.abs(ww - co) / Math.max(ww, co) : -Infinity;
       }
+      case 'trend': {
+        const history = item.price_history;
+        if (!history?.length) return Infinity;
+        const prices = history.map(p => p.price).filter(p => p > 0);
+        if (prices.length < 2) return Infinity;
+        const minP = Math.min(...prices), maxP = Math.max(...prices);
+        if (minP === maxP) return Infinity;
+        const ref = item.cheaper_store === 'woolworths' ? item.woolworths?.price
+                  : item.cheaper_store === 'coles'      ? item.coles?.price
+                  : (item.coles?.price ?? item.woolworths?.price);
+        if (ref == null) return Infinity;
+        return (ref - minP) / (maxP - minP);
+      }
       case 'category':     return getCategory(item).toLowerCase();
       case 'last_scraped': return item.last_scraped || '';
       case 'ww_total':     return (item.woolworths?.price ?? 0) * getUnits(item.list_item);
@@ -1498,7 +1520,7 @@ function applyColSort(col) {
   if (sortKeys[0]?.col === col) {
     sortKeys[0] = { col, dir: sortKeys[0].dir === 'asc' ? 'desc' : 'asc' };
   } else {
-    const defaultDir = col === 'name' || col === 'category' ? 'asc' : 'desc';
+    const defaultDir = col === 'name' || col === 'category' || col === 'trend' ? 'asc' : 'desc';
     sortKeys = [{ col, dir: defaultDir }, ...sortKeys.filter(k => k.col !== col)];
   }
   if (_lastData) renderPage(_lastData);
@@ -1910,7 +1932,6 @@ function renderPage(data) {
         ${imgHtml}
         <div class="item-info">
           <div class="item-title-row">${displayName}${discrepancyWarning}${matchWarnHtml}${editBtn}</div>
-          ${bar}
         </div>
       </div>`;
 
@@ -2004,6 +2025,7 @@ function renderPage(data) {
     // Build cell map keyed by col id
     const tdMap = {
       name:         `<td class="item-name">${itemCell}</td>`,
+      trend:        `<td class="trend-cell">${bar}</td>`,
       priority:     priorityCell,
       units:        unitsCell,
       ww:           `<td class="price-cell ${wwClass}">${wwCellContent}</td>`,
@@ -2035,6 +2057,7 @@ function renderPage(data) {
   if (tfootRow) {
     const footMap = {
       name:         `<td><div style="font-weight:700;white-space:nowrap">Total basket</div><div style="font-size:11px;color:var(--text-soft);margin-top:3px;white-space:nowrap">${sorted.length} product${sorted.length !== 1 ? 's' : ''}</div></td>`,
+      trend:        `<td></td>`,
       priority:     `<td></td>`,
       units:        `<td></td>`,
       ww:           `<td id="footWW">${s.ww_data_available ? fmt(s.total_woolworths) : '—'}</td>`,
