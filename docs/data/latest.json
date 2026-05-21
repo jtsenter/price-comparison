@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T22:58:23.182910+00:00",
+  "last_updated": "2026-05-21T22:58:36.553788+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3402,6 +3402,147 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Full Cream Milk",
+      "last_scraped": "2026-05-21T22:58:28.054635+00:00",
+      "trip_count": 10,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 1.55
+        },
+        {
+          "date": "2024-12-02",
+          "price": 1.55
+        },
+        {
+          "date": "2025-01-29",
+          "price": 1.55
+        },
+        {
+          "date": "2025-02-28",
+          "price": 1.55
+        },
+        {
+          "date": "2025-03-11",
+          "price": 1.55
+        },
+        {
+          "date": "2025-03-27",
+          "price": 1.55
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.55
+        },
+        {
+          "date": "2025-07-26",
+          "price": 1.55
+        },
+        {
+          "date": "2026-02-03",
+          "price": 1.65
+        },
+        {
+          "date": "2026-02-11",
+          "price": 1.65
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Full Cream Milk",
+        "price": 3.55,
+        "unit_price": 1.78,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/888137/woolworths-full-cream-milk",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/888137.jpg"
+      },
+      "coles": {
+        "name": "Coles Full Cream Milk | 600mL",
+        "price": 1.45,
+        "unit_price": 1.45,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/coles-full-cream-milk-600ml-6759482",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6759482.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 2.1,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.18,
+      "per_100_coles": 0.24,
+      "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Woolworths Ice Cream Cones Boysenberry",
+      "last_scraped": "2026-05-21T22:58:36.548716+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 4.75
+        },
+        {
+          "date": "2025-02-02",
+          "price": 4.75
+        },
+        {
+          "date": "2025-02-28",
+          "price": 4.75
+        },
+        {
+          "date": "2025-03-11",
+          "price": 4.75
+        },
+        {
+          "date": "2025-04-14",
+          "price": 4.75
+        },
+        {
+          "date": "2025-05-12",
+          "price": 4.75
+        },
+        {
+          "date": "2025-05-22",
+          "price": 3.7
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.7
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.7
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Ice Cream Cones Boysenberry",
+        "price": 3.7,
+        "unit_price": 0.78,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/792235/woolworths-ice-cream-cones-boysenberry",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/792235.jpg"
+      },
+      "coles": {
+        "name": "Coles Irresistible Boysenberry | 1L",
+        "price": 6.5,
+        "unit_price": 6.5,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/coles-irresistible-boysenberry-1l-8556238",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8556238.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.8,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.78,
+      "per_100_coles": 0.65,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "Helga's Wholemeal Bread With Grains",
       "last_scraped": "2026-05-21T10:40:31.381015+00:00",
       "trip_count": 15,
@@ -4239,89 +4380,6 @@
       "per_100_unit": "100ml"
     },
     {
-      "list_item": "Woolworths Full Cream Milk",
-      "last_scraped": "2026-05-21T10:26:30.059510+00:00",
-      "trip_count": 10,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 1.55
-        },
-        {
-          "date": "2024-12-02",
-          "price": 1.55
-        },
-        {
-          "date": "2025-01-29",
-          "price": 1.55
-        },
-        {
-          "date": "2025-02-28",
-          "price": 1.55
-        },
-        {
-          "date": "2025-03-11",
-          "price": 1.55
-        },
-        {
-          "date": "2025-03-27",
-          "price": 1.55
-        },
-        {
-          "date": "2025-06-06",
-          "price": 1.55
-        },
-        {
-          "date": "2025-07-26",
-          "price": 1.55
-        },
-        {
-          "date": "2026-02-03",
-          "price": 1.65
-        },
-        {
-          "date": "2026-02-11",
-          "price": 1.65
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Full Cream Milk",
-        "price": 3.55,
-        "unit_price": 1.78,
-        "unit": "1L",
-        "url": "https://www.woolworths.com.au/shop/productdetails/888137/woolworths-full-cream-milk",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/888137.jpg"
-      },
-      "coles": {
-        "name": "Coles Full Cream Milk | 600mL",
-        "price": 1.45,
-        "unit_price": 1.45,
-        "unit": "1L",
-        "url": "https://www.coles.com.au/product/coles-full-cream-milk-600ml-6759482",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6759482.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 2.1,
-      "alternatives": [
-        {
-          "name": "Coles Full Cream Milk | 600mL",
-          "price": 1.45,
-          "unit_price": 1.45,
-          "unit": "1L",
-          "url": "https://www.coles.com.au/product/coles-full-cream-milk-600ml-6759482",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6759482.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 0.18,
-      "per_100_coles": 0.24,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Woolworths Garlic Heads CLOVE",
       "last_scraped": "2026-05-21T10:26:37.952578+00:00",
       "trip_count": 8,
@@ -4559,74 +4617,6 @@
       "per_100_ww": 0.42,
       "per_100_coles": 0.45,
       "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Ice Cream Cones Boysenberry",
-      "last_scraped": "2026-05-21T10:26:43.406386+00:00",
-      "trip_count": 9,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 4.75
-        },
-        {
-          "date": "2025-02-02",
-          "price": 4.75
-        },
-        {
-          "date": "2025-02-28",
-          "price": 4.75
-        },
-        {
-          "date": "2025-03-11",
-          "price": 4.75
-        },
-        {
-          "date": "2025-04-14",
-          "price": 4.75
-        },
-        {
-          "date": "2025-05-12",
-          "price": 4.75
-        },
-        {
-          "date": "2025-05-22",
-          "price": 3.7
-        },
-        {
-          "date": "2025-06-06",
-          "price": 3.7
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.7
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Ice Cream Cones Boysenberry",
-        "price": 3.7,
-        "unit_price": 0.78,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/792235/woolworths-ice-cream-cones-boysenberry",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/792235.jpg"
-      },
-      "coles": {
-        "name": "Coles Irresistible Boysenberry | 1L",
-        "price": 6.5,
-        "unit_price": 6.5,
-        "unit": "100mL",
-        "url": "https://www.coles.com.au/product/coles-irresistible-boysenberry-1l-8556238",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8556238.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 2.8,
-      "alternatives": [],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 0.78,
-      "per_100_coles": 0.65,
-      "per_100_unit": "100ml"
     },
     {
       "list_item": "Woolworths Lean Beef Mince",
@@ -13207,7 +13197,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 42,
+    "done": 44,
     "total": 211
   }
 }
