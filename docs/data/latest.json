@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T10:26:57.429154+00:00",
+  "last_updated": "2026-05-21T10:27:16.040687+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5412,7 +5412,7 @@
     },
     {
       "list_item": "Woolworths Sour Cream",
-      "last_scraped": "2026-05-20T11:04:14.309346+00:00",
+      "last_scraped": "2026-05-21T10:27:02.505888+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5463,12 +5463,22 @@
         "unit_price": 3.3,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-sour-cream-300g-3676946",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3676946.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3676946.jpg"
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Woolworths Thickened Cream",
+          "price": 5.2,
+          "unit_price": 0.87,
+          "unit": "100ML",
+          "url": "https://www.woolworths.com.au/shop/productdetails/48720/woolworths-thickened-cream",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/048720.jpg",
+          "retailer": "woolworths"
+        }
+      ],
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.1,
       "per_100_coles": 1.1,
@@ -5476,7 +5486,7 @@
     },
     {
       "list_item": "Woolworths Spring Water Bottles",
-      "last_scraped": "2026-05-20T11:04:15.344753+00:00",
+      "last_scraped": "2026-05-21T10:27:02.904003+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5527,7 +5537,7 @@
         "unit_price": 3.3,
         "unit": "1L",
         "url": "https://www.coles.com.au/product/pump-spring-water-bottle-1.25l-8973472",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8973472.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8973472.jpg"
       },
       "cheaper_store": "coles",
       "saving_per_item": 4.7,
@@ -5542,7 +5552,7 @@
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.06,
       "per_100_coles": 0.26,
@@ -5550,7 +5560,7 @@
     },
     {
       "list_item": "Woolworths Washed Potato Bag",
-      "last_scraped": "2026-05-20T11:04:17.514889+00:00",
+      "last_scraped": "2026-05-21T10:27:11.277936+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -5592,25 +5602,36 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/262783.jpg"
       },
       "coles": {
-        "name": "Coles Baby Washed Potatoes | 1Kg",
-        "price": 4.8,
-        "unit_price": 4.8,
+        "name": "Potatoes Washed",
+        "price": 6.0,
+        "unit_price": 3.0,
         "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-baby-washed-potatoes-1kg-2488485",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F2%2F2488485.jpg&w=640&q=90"
+        "url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1206748.jpg",
+        "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 3.2,
-      "alternatives": [],
-      "match_confidence": "low",
+      "saving_per_item": 2.0,
+      "alternatives": [
+        {
+          "name": "Potatoes Washed",
+          "price": 6.0,
+          "unit_price": 3.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1206748.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.4,
-      "per_100_coles": 0.48,
+      "per_100_coles": 0.3,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Whole Milk Full Cream Milk",
-      "last_scraped": "2026-05-20T11:04:19.517523+00:00",
+      "last_scraped": "2026-05-21T10:27:11.963800+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5649,29 +5670,83 @@
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Woolworths Full Cream Milk",
-        "price": 1.85,
-        "unit_price": 1.85,
+        "price": 5.15,
+        "unit_price": 1.72,
         "unit": "1L",
-        "url": "https://www.woolworths.com.au/shop/productdetails/50923/woolworths-full-cream-milk",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/050923.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/888140/woolworths-full-cream-milk",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/888140.jpg"
       },
       "coles": {
-        "name": "Coles Full Cream Milk | 600mL",
-        "price": 1.45,
-        "unit_price": 1.45,
+        "name": "Full Cream Milk",
+        "price": 5.15,
+        "unit_price": 1.72,
         "unit": "1L",
-        "url": "https://www.coles.com.au/product/coles-full-cream-milk-600ml-6759482",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6759482.jpg&w=640&q=90",
+        "url": "https://www.coles.com.au/product/coles-full-cream-milk-3l-8150288",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8150288.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.17,
+      "per_100_coles": 0.17,
+      "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Annalisa Chickpeas",
+      "last_scraped": "2026-05-21T10:27:16.035868+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 1.4
+        },
+        {
+          "date": "2025-05-29",
+          "price": 1.4
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.4
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Annalisa Chickpeas",
+        "price": 1.9,
+        "unit_price": 4.75,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/178262/annalisa-chickpeas",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/178262.jpg"
+      },
+      "coles": {
+        "name": "Carmelina Chick Peas | 400 GRAM",
+        "price": 1.9,
+        "unit_price": 1.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
         "retailer": "coles"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.4,
-      "alternatives": [],
-      "match_confidence": "low",
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Carmelina Chick Peas | 400 GRAM",
+          "price": 1.9,
+          "unit_price": 1.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
-      "per_100_ww": 0.18,
-      "per_100_coles": 0.24,
-      "per_100_unit": "100ml"
+      "per_100_ww": 0.47,
+      "per_100_coles": 0.19,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Alka Power Alkaline Water Bottle",
@@ -5716,51 +5791,6 @@
       "per_100_ww": 0.23,
       "per_100_coles": 2.62,
       "per_100_unit": "100ml"
-    },
-    {
-      "list_item": "Annalisa Chickpeas",
-      "last_scraped": "2026-05-20T11:04:24.737000+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-05-04",
-          "price": 1.4
-        },
-        {
-          "date": "2025-05-29",
-          "price": 1.4
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.4
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Annalisa Chickpeas",
-        "price": 1.9,
-        "unit_price": 4.75,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/178262/annalisa-chickpeas",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/178262.jpg"
-      },
-      "coles": {
-        "name": "Carmelina Chick Peas | 400 GRAM",
-        "price": 1.9,
-        "unit_price": 1.9,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8855498.jpg&w=640&q=90",
-        "retailer": "coles"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.47,
-      "per_100_coles": 0.19,
-      "per_100_unit": "100g"
     },
     {
       "list_item": "Aptamil Gold+ 2 Baby Follow-On Formula From 6 To 12 Months",
@@ -12562,16 +12592,16 @@
     "The Odd Bunch Mango"
   ],
   "summary": {
-    "total_woolworths": 1135.02,
-    "total_coles": 1145.4,
+    "total_woolworths": 1138.32,
+    "total_coles": 1150.3,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 10.38,
+    "total_saving": 11.98,
     "items_compared": 210,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 60,
+    "done": 65,
     "total": 211
   }
 }
