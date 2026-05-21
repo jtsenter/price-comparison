@@ -2056,7 +2056,7 @@ function renderPage(data) {
   const tfootRow = document.querySelector('tfoot tr');
   if (tfootRow) {
     const footMap = {
-      name:         `<td><div style="font-weight:700;white-space:nowrap">Total basket</div><div style="font-size:11px;color:var(--text-soft);margin-top:3px;white-space:nowrap">${sorted.length} product${sorted.length !== 1 ? 's' : ''}</div></td>`,
+      name:         `<td><div style="font-weight:700;white-space:nowrap">${sorted.length} product${sorted.length !== 1 ? 's' : ''}</div></td>`,
       trend:        `<td></td>`,
       priority:     `<td></td>`,
       units:        `<td></td>`,
