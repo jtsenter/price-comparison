@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T23:48:01.216264+00:00",
+  "last_updated": "2026-05-21T23:48:20.660016+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -546,7 +546,7 @@
     },
     {
       "list_item": "Capsicum Yellow",
-      "last_scraped": "2026-05-21T23:23:05.878605+00:00",
+      "last_scraped": "2026-05-21T23:48:09.402539+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -618,7 +618,7 @@
     },
     {
       "list_item": "Cavendish Bananas",
-      "last_scraped": "2026-05-21T23:23:10.394689+00:00",
+      "last_scraped": "2026-05-21T23:48:10.154172+00:00",
       "trip_count": 30,
       "price_history": [
         {
@@ -769,8 +769,61 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Eat Now Hass Avocado",
+      "last_scraped": "2026-05-21T23:48:14.778994+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2026-02-03",
+          "price": 2.2
+        },
+        {
+          "date": "2026-02-07",
+          "price": 1.7
+        },
+        {
+          "date": "2026-02-11",
+          "price": 2.2
+        },
+        {
+          "date": "2026-03-02",
+          "price": 1.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.5
+        },
+        {
+          "date": "2026-04-21",
+          "price": 1.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.0
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": null,
+      "coles": {
+        "name": "Coles Hass Avocados | 1 Each",
+        "price": 2.2,
+        "unit_price": 2.2,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-hass-avocados-1-each-5900530",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5900530.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Driscoll's Raspberries Punnet",
-      "last_scraped": "2026-05-21T23:23:11.434434+00:00",
+      "last_scraped": "2026-05-21T23:48:15.701064+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -862,61 +915,8 @@
       "_ww_price_factor": 0.22
     },
     {
-      "list_item": "Eat Now Hass Avocado",
-      "last_scraped": "2026-05-21T23:23:16.189865+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2026-02-03",
-          "price": 2.2
-        },
-        {
-          "date": "2026-02-07",
-          "price": 1.7
-        },
-        {
-          "date": "2026-02-11",
-          "price": 2.2
-        },
-        {
-          "date": "2026-03-02",
-          "price": 1.5
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.5
-        },
-        {
-          "date": "2026-04-21",
-          "price": 1.5
-        },
-        {
-          "date": "2026-05-06",
-          "price": 2.0
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": null,
-      "coles": {
-        "name": "Coles Hass Avocados | 1 Each",
-        "price": 2.2,
-        "unit_price": 2.2,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-hass-avocados-1-each-5900530",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5900530.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Fresh Broccoli",
-      "last_scraped": "2026-05-21T23:23:18.838619+00:00",
+      "last_scraped": "2026-05-21T23:48:20.657833+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -13416,7 +13416,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 5,
+    "done": 10,
     "total": 211
   }
 }
