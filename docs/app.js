@@ -1311,6 +1311,18 @@ async function triggerRefresh() {
     );
 
     if (res.status === 204) {
+      // Show progress strip immediately — don't wait for scraper to push data
+      _progressDismissed = false;
+      const strip = $('scrapeStrip');
+      if (strip) {
+        strip.style.display = 'flex';
+        strip.classList.remove('stale');
+        $('scrapeStripLabel').textContent = 'Waiting for scraper to start…';
+        $('scrapeStripFill').style.width = '0%';
+        $('scrapeStripPct').textContent = '0%';
+        const retryBtn = $('scrapeStripRetry');
+        if (retryBtn) retryBtn.style.display = 'none';
+      }
       btn.innerHTML = '✓ Triggered — polling…';
       pollForCompletion(s);
       refreshCooldown = true;
@@ -1332,13 +1344,12 @@ async function pollForCompletion(s) {
   const btn = $('refreshBtn');
   let done = false;
 
-  // Fast data poll: checks latest.json every 10s to show the progress bar
-  // as soon as the scraper pushes its first update (~2 min after dispatch).
+  // Fast data poll: checks latest.json every 5s to show the progress bar.
   const dataPollTimer = setInterval(async () => {
     if (done) { clearInterval(dataPollTimer); return; }
     const fresh = await loadData();
     if (fresh) renderPage(fresh);
-  }, 10000);
+  }, 5000);
 
   // GitHub API poll: checks run status every 20s to detect completion.
   let attempts = 0;

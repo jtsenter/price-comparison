@@ -916,24 +916,107 @@ function renderScrapeStrip(data) {
 
 // ── Update Prices button ──────────────────────────────────────────────────────
 
-function initRefreshBtn() {
-  document.getElementById('refreshBtn')?.addEventListener('click', () => {
-    const user  = localStorage.getItem('gh_user') || '';
-    const repo  = localStorage.getItem('gh_repo') || '';
-    const token = localStorage.getItem('gh_token') || '';
-    if (!user || !repo || !token) {
-      alert('Please configure GitHub settings on the main page (Auto-update Setup) first.');
-      return;
-    }
-    fetch(`https://api.github.com/repos/${user}/${repo}/actions/workflows/scrape.yml/dispatches`, {
+let _hdRefreshCooldown = false;
+
+async function triggerRefreshHD() {
+  const user  = localStorage.getItem('gh_user') || '';
+  const repo  = localStorage.getItem('gh_repo') || '';
+  const token = localStorage.getItem('gh_token') || '';
+  if (!user || !repo || !token) {
+    alert('Please configure GitHub settings on the main page (Auto-update Setup) first.');
+    return;
+  }
+  if (_hdRefreshCooldown) return;
+
+  const btn = document.getElementById('refreshBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = 'Triggering…'; }
+
+  let res;
+  try {
+    res = await fetch(`https://api.github.com/repos/${user}/${repo}/actions/workflows/scrape.yml/dispatches`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
       body: JSON.stringify({ ref: 'main' }),
-    }).then(r => {
-      if (r.status === 204) alert('Scrape triggered! Prices will update in a few minutes.');
-      else alert(`GitHub API error ${r.status}`);
-    }).catch(e => alert(`Network error: ${e.message}`));
-  });
+    });
+  } catch (e) {
+    alert(`Network error: ${e.message}`);
+    if (btn) { btn.disabled = false; btn.innerHTML = '↻ Update Prices'; }
+    return;
+  }
+
+  if (res.status === 204) {
+    _progressDismissed = false;
+    const strip = document.getElementById('scrapeStrip');
+    if (strip) {
+      strip.style.display = 'flex';
+      strip.classList.remove('stale');
+      document.getElementById('scrapeStripLabel').textContent = 'Waiting for scraper to start…';
+      document.getElementById('scrapeStripFill').style.width = '0%';
+      document.getElementById('scrapeStripPct').textContent = '0%';
+      const retryBtn = document.getElementById('scrapeStripRetry');
+      if (retryBtn) retryBtn.style.display = 'none';
+    }
+    if (btn) btn.innerHTML = '✓ Triggered — polling…';
+    pollForCompletionHD(user, repo, token);
+    _hdRefreshCooldown = true;
+    setTimeout(() => { _hdRefreshCooldown = false; }, 10 * 60 * 1000);
+  } else {
+    alert(`GitHub API error ${res.status}`);
+    if (btn) { btn.disabled = false; btn.innerHTML = '↻ Update Prices'; }
+  }
+}
+
+async function pollForCompletionHD(user, repo, token) {
+  const btn = document.getElementById('refreshBtn');
+  let done = false;
+
+  const dataPollTimer = setInterval(async () => {
+    if (done) { clearInterval(dataPollTimer); return; }
+    try {
+      const r = await fetch(`data/latest.json?t=${Date.now()}`);
+      if (r.ok) {
+        _data = await r.json();
+        renderScrapeStrip(_data);
+        renderDeals();
+      }
+    } catch {}
+  }, 5000);
+
+  let attempts = 0;
+  const runPollTimer = setInterval(async () => {
+    if (done) return;
+    if (++attempts > 60) {
+      done = true;
+      clearInterval(dataPollTimer);
+      clearInterval(runPollTimer);
+      if (btn) { btn.innerHTML = '↻ Update Prices'; btn.disabled = false; }
+      return;
+    }
+    try {
+      const r = await fetch(
+        `https://api.github.com/repos/${user}/${repo}/actions/runs?per_page=1`,
+        { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' } }
+      );
+      if (!r.ok) return;
+      const data = await r.json();
+      const run = data.workflow_runs?.[0];
+      if (run?.status === 'completed') {
+        done = true;
+        clearInterval(dataPollTimer);
+        clearInterval(runPollTimer);
+        if (run.conclusion === 'success') {
+          if (btn) btn.innerHTML = '✓ Done — reloading…';
+          setTimeout(() => location.reload(), 2000);
+        } else {
+          if (btn) { btn.innerHTML = '↻ Update Prices'; btn.disabled = false; }
+        }
+      }
+    } catch {}
+  }, 30000);
+}
+
+function initRefreshBtn() {
+  document.getElementById('refreshBtn')?.addEventListener('click', triggerRefreshHD);
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────────
