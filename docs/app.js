@@ -31,8 +31,8 @@ function imgError(el, fallbackSrc) {
   } else {
     el.onerror = null;
     el.outerHTML = el.classList.contains('card-img')
-      ? '<div class="card-img-placeholder"></div>'
-      : '<div class="item-img-placeholder"></div>';
+      ? '<div class="card-img-placeholder">No Photo</div>'
+      : '<div class="item-img-placeholder">No Photo</div>';
   }
 }
 const fmtUnit = (price, unit) => {
@@ -1539,7 +1539,7 @@ function renderCards(items) {
     const imgFallback = coImgSrc && wwImgSrc ? wwImgSrc : '';
     const imgHtml = imgSrc
       ? `<img class="card-img" src="${imgSrc}" alt="" loading="lazy" onerror="imgError(this,'${imgFallback}')">`
-      : '<div class="card-img-placeholder"></div>';
+      : '<div class="card-img-placeholder">No Photo</div>';
 
     const prioOptions = ['weekly','monthly','rare'].map(v =>
       `<option value="${v}"${p===v?' selected':''}>${v[0].toUpperCase()+v.slice(1)}</option>`
@@ -1850,7 +1850,7 @@ function renderPage(data) {
     const imgFallback = coImgSrc && wwImgSrc ? wwImgSrc : '';
     const imgHtml = imgSrc
       ? `<img class="item-img" src="${imgSrc}" alt="" loading="lazy" onerror="imgError(this,'${imgFallback}')" />`
-      : '<div class="item-img-placeholder"></div>';
+      : '<div class="item-img-placeholder">No Photo</div>';
 
     const safeKey = item.list_item.replace(/"/g, '&quot;');
     const editBtn = `<button class="item-edit-btn" data-edit-item="${safeKey}" title="Edit name/URL">✎</button>`;
@@ -2017,7 +2017,7 @@ function renderPage(data) {
   const tfootRow = document.querySelector('tfoot tr');
   if (tfootRow) {
     const footMap = {
-      name:         `<td>Total basket</td>`,
+      name:         `<td>Total basket<span style="display:block;font-size:11px;font-weight:400;color:var(--text-soft);margin-top:2px">${sorted.length} product${sorted.length !== 1 ? 's' : ''}</span></td>`,
       priority:     `<td></td>`,
       units:        `<td></td>`,
       ww:           `<td id="footWW">${s.ww_data_available ? fmt(s.total_woolworths) : '—'}</td>`,
