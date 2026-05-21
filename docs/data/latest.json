@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T23:32:44.002174+00:00",
+  "last_updated": "2026-05-21T23:32:51.832780+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12720,7 +12720,7 @@
     },
     {
       "list_item": "Twinings Pure Peppermint Tea Bags Tea Bags",
-      "last_scraped": "2026-05-21T23:03:31.175617+00:00",
+      "last_scraped": "2026-05-21T23:32:44.685913+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12780,7 +12780,7 @@
     },
     {
       "list_item": "Vanish Napisan Stain Remover Powder",
-      "last_scraped": "2026-05-21T23:03:33.176550+00:00",
+      "last_scraped": "2026-05-21T23:32:47.362386+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12830,7 +12830,7 @@
     },
     {
       "list_item": "Woolworths 4 Angus Quarter Pound Beef Burgers",
-      "last_scraped": "2026-05-21T23:03:34.292991+00:00",
+      "last_scraped": "2026-05-21T23:32:47.920548+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12870,50 +12870,8 @@
       "_ww_price_factor": 0.3
     },
     {
-      "list_item": "Woolworths Beef & Lamb Meatballs",
-      "last_scraped": "2026-05-21T23:03:37.118227+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 8.0
-        },
-        {
-          "date": "2024-11-12",
-          "price": 8.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths Beef & Lamb Meatballs",
-        "price": 4.48,
-        "unit_price": 20.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/764264/woolworths-beef-lamb-meatballs",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/764264.jpg"
-      },
-      "coles": {
-        "name": "Coles Beef & Pork Meatballs | 560g",
-        "price": 8.0,
-        "unit_price": 8.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-beef-and-pork-meatballs-560g-3569447",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3569447.jpg&w=640&q=90",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 3.52,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.0,
-      "per_100_coles": 1.43,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.56
-    },
-    {
       "list_item": "Woolworths Black Beans",
-      "last_scraped": "2026-05-21T23:03:37.505541+00:00",
+      "last_scraped": "2026-05-21T23:32:51.637310+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12962,6 +12920,48 @@
       "per_100_coles": 0.24,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.42
+    },
+    {
+      "list_item": "Woolworths Beef & Lamb Meatballs",
+      "last_scraped": "2026-05-21T23:32:51.822054+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 8.0
+        },
+        {
+          "date": "2024-11-12",
+          "price": 8.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Beef & Lamb Meatballs",
+        "price": 4.48,
+        "unit_price": 20.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/764264/woolworths-beef-lamb-meatballs",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/764264.jpg"
+      },
+      "coles": {
+        "name": "Coles Beef & Pork Meatballs | 560g",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-beef-and-pork-meatballs-560g-3569447",
+        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3569447.jpg&w=640&q=90",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.52,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.0,
+      "per_100_coles": 1.43,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.56
     },
     {
       "list_item": "Woolworths Butternut Pumpkin Cut",
@@ -13420,7 +13420,7 @@
     "items_not_found": 3
   },
   "scrape_progress": {
-    "done": 195,
+    "done": 200,
     "total": 211
   }
 }
