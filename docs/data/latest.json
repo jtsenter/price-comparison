@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T10:50:36.154877+00:00",
+  "last_updated": "2026-05-21T10:50:54.001539+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2314,7 +2314,7 @@
     },
     {
       "list_item": "The Odd Bunch Capsicum Prepacked",
-      "last_scraped": "2026-05-21T10:41:02.627826+00:00",
+      "last_scraped": "2026-05-21T10:50:39.360313+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -2416,7 +2416,7 @@
     },
     {
       "list_item": "The Odd Bunch Carrots",
-      "last_scraped": "2026-05-21T10:41:05.308176+00:00",
+      "last_scraped": "2026-05-21T10:50:44.829177+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -2480,7 +2480,7 @@
     },
     {
       "list_item": "The Odd Bunch Lebanese Cucumber Punnet",
-      "last_scraped": "2026-05-21T10:41:09.460736+00:00",
+      "last_scraped": "2026-05-21T10:50:45.105458+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -2554,7 +2554,7 @@
     },
     {
       "list_item": "The Odd Bunch Lemon Prepacked",
-      "last_scraped": "2026-05-21T10:41:10.363301+00:00",
+      "last_scraped": "2026-05-21T10:50:53.998452+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -13463,7 +13463,9 @@
       "per_100_unit": "100g"
     }
   ],
-  "not_found_items": [],
+  "not_found_items": [
+    "The Odd Bunch Mango"
+  ],
   "summary": {
     "total_woolworths": 1132.92,
     "total_coles": 1141.6,
@@ -13471,10 +13473,10 @@
     "ww_data_available": true,
     "total_saving": 8.68,
     "items_compared": 209,
-    "items_not_found": 0
+    "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 25,
+    "done": 30,
     "total": 211
   }
 }
