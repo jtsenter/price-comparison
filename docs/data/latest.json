@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T10:59:11.488460+00:00",
+  "last_updated": "2026-05-21T11:03:49.737649+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2399,7 +2399,7 @@
     },
     {
       "list_item": "The Odd Bunch Carrots",
-      "last_scraped": "2026-05-21T10:41:05.308176+00:00",
+      "last_scraped": "2026-05-21T11:03:49.462875+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -2445,20 +2445,31 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/288440.jpg"
       },
       "coles": {
-        "name": "Coles Dutch Carrots | 1 each",
-        "price": 5.8,
-        "unit_price": 5.8,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-dutch-carrots-1-each-4924034",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4924034.jpg"
+        "name": "I'm Perfect Carrots Prepacked",
+        "price": 2.6,
+        "unit_price": 1.73,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-i'm-perfect-carrots-prepacked-1.5kg-3609392",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3609392.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 3.0,
-      "alternatives": [],
+      "cheaper_store": "coles",
+      "saving_per_item": 0.2,
+      "alternatives": [
+        {
+          "name": "I'm Perfect Carrots Prepacked",
+          "price": 2.6,
+          "unit_price": 1.73,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-i'm-perfect-carrots-prepacked-1.5kg-3609392",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3609392.jpg",
+          "retailer": "coles"
+        }
+      ],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.19,
-      "per_100_coles": null,
+      "per_100_coles": 0.17,
       "per_100_unit": "100g"
     },
     {
@@ -13470,10 +13481,10 @@
   ],
   "summary": {
     "total_woolworths": 1122.92,
-    "total_coles": 1138.75,
+    "total_coles": 1135.55,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 15.83,
+    "total_saving": 12.63,
     "items_compared": 209,
     "items_not_found": 2
   }
