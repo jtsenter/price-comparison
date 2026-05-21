@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T23:58:10.428837+00:00",
+  "last_updated": "2026-05-21T23:58:12.936698+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12892,7 +12892,7 @@
     },
     {
       "list_item": "Woolworths Water Chestnuts Sliced",
-      "last_scraped": "2026-05-21T23:33:12.965936+00:00",
+      "last_scraped": "2026-05-21T23:58:12.471095+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12931,25 +12931,64 @@
       "per_100_coles": 0.7,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.227
+    },
+    {
+      "list_item": "Woolworths Basmati Rice",
+      "last_scraped": "2026-05-21T23:30:14.740237+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 4.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Basmati Rice",
+        "price": 4.0,
+        "unit_price": 0.4,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/694550/woolworths-basmati-rice",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/694550.jpg"
+      },
+      "coles": {
+        "name": "Basmati Rice",
+        "price": 4.0,
+        "unit_price": 0.4,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-basmati-rice-1kg-8703059",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8703059.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.4,
+      "per_100_coles": 0.4,
+      "per_100_unit": "100g"
     }
   ],
   "not_found_items": [
     "The Odd Bunch Mango",
     "The Odd Bunch Strawberries Punnet",
-    "Woolworths Basmati Rice",
     "Nutella Hazelnut Chocolate Spread Spread"
   ],
   "summary": {
-    "total_woolworths": 874.89,
-    "total_coles": 1120.1,
+    "total_woolworths": 878.89,
+    "total_coles": 1124.1,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
     "total_saving": 245.21,
-    "items_compared": 207,
-    "items_not_found": 4
-  },
-  "scrape_progress": {
-    "done": 210,
-    "total": 211
+    "items_compared": 208,
+    "items_not_found": 3
   }
 }
