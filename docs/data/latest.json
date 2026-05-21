@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T11:06:42.542139+00:00",
+  "last_updated": "2026-05-21T11:35:35.369167+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7536,7 +7536,7 @@
     },
     {
       "list_item": "Mainland Extra Tasty Cheese Block",
-      "last_scraped": "2026-05-21T10:28:45.178630+00:00",
+      "last_scraped": "2026-05-21T11:35:35.103853+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -7574,40 +7574,20 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/807870.jpg"
       },
       "coles": {
-        "name": "Mainland Extra Tasty Cheese Block | 250g",
-        "price": 7.5,
-        "unit_price": 7.5,
+        "name": "Extra Tasty Cheddar Cheese Block",
+        "price": 11.8,
+        "unit_price": 23.6,
         "unit": "1kg",
-        "url": "https://www.coles.com.au/product/mainland-extra-tasty-cheese-block-250g-3274148",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3274148.jpg",
-        "retailer": "coles"
+        "url": "https://www.coles.com.au/product/mainland-extra-tasty-cheddar-cheese-block-500g-3308421",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3308421.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 4.3,
-      "alternatives": [
-        {
-          "name": "Mainland Extra Tasty Cheese Block | 250g",
-          "price": 7.5,
-          "unit_price": 7.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/mainland-extra-tasty-cheese-block-250g-3274148",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3274148.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Mainland Extra Tasty Cheddar Cheese Block | 500g",
-          "price": 11.8,
-          "unit_price": 11.8,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/mainland-extra-tasty-cheddar-cheese-block-500g-3308421",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3308421.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "high",
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.36,
-      "per_100_coles": 3.0,
+      "per_100_coles": 2.36,
       "per_100_unit": "100g"
     },
     {
@@ -13463,10 +13443,10 @@
   ],
   "summary": {
     "total_woolworths": 1122.92,
-    "total_coles": 1138.4,
+    "total_coles": 1142.7,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 15.48,
+    "total_saving": 19.78,
     "items_compared": 209,
     "items_not_found": 2
   }
