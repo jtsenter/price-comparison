@@ -1309,10 +1309,26 @@ async function triggerRefresh() {
 
 async function pollForCompletion(s) {
   const btn = $('refreshBtn');
-  let attempts = 0;
+  let done = false;
 
+  // Fast data poll: checks latest.json every 10s to show the progress bar
+  // as soon as the scraper pushes its first update (~2 min after dispatch).
+  const dataPollTimer = setInterval(async () => {
+    if (done) { clearInterval(dataPollTimer); return; }
+    const fresh = await loadData();
+    if (fresh) renderPage(fresh);
+  }, 10000);
+
+  // GitHub API poll: checks run status every 20s to detect completion.
+  let attempts = 0;
   const poll = async () => {
-    if (++attempts > 40) { btn.innerHTML = '↻ Refresh Now'; btn.disabled = false; return; }
+    if (done) return;
+    if (++attempts > 60) {
+      done = true;
+      clearInterval(dataPollTimer);
+      btn.innerHTML = '↻ Refresh Now'; btn.disabled = false;
+      return;
+    }
     try {
       const res = await fetch(
         `https://api.github.com/repos/${s.user}/${s.repo}/actions/workflows/scrape.yml/runs?per_page=1`,
@@ -1321,6 +1337,8 @@ async function pollForCompletion(s) {
       const data = await res.json();
       const run = data.workflow_runs?.[0];
       if (run?.status === 'completed') {
+        done = true;
+        clearInterval(dataPollTimer);
         if (run.conclusion === 'success') {
           btn.innerHTML = '✓ Done — reloading…';
           setTimeout(() => {
@@ -1335,15 +1353,10 @@ async function pollForCompletion(s) {
         }
         return;
       }
-      // Run still in progress — fetch latest.json to show the progress bar
-      if (run?.status === 'in_progress' || run?.status === 'queued') {
-        const fresh = await loadData();
-        if (fresh) renderPage(fresh);
-      }
     } catch (_) {}
-    setTimeout(poll, 15000);
+    setTimeout(poll, 20000);
   };
-  setTimeout(poll, 15000);
+  setTimeout(poll, 20000);
 }
 
 // ── Data loading ─────────────────────────────────────────────────────────────
@@ -2017,7 +2030,7 @@ function renderPage(data) {
   const tfootRow = document.querySelector('tfoot tr');
   if (tfootRow) {
     const footMap = {
-      name:         `<td>Total basket<span style="display:block;font-size:11px;font-weight:400;color:var(--text-soft);margin-top:2px">${sorted.length} product${sorted.length !== 1 ? 's' : ''}</span></td>`,
+      name:         `<td><div style="font-weight:700;white-space:nowrap">Total basket</div><div style="font-size:11px;color:var(--text-soft);margin-top:3px;white-space:nowrap">${sorted.length} product${sorted.length !== 1 ? 's' : ''}</div></td>`,
       priority:     `<td></td>`,
       units:        `<td></td>`,
       ww:           `<td id="footWW">${s.ww_data_available ? fmt(s.total_woolworths) : '—'}</td>`,
