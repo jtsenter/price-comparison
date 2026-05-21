@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T23:20:08.355856+00:00",
+  "last_updated": "2026-05-21T23:20:27.019398+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5093,6 +5093,343 @@
       "_ww_price_factor": 0.3
     },
     {
+      "list_item": "Woolworths Sour Cream",
+      "last_scraped": "2026-05-21T23:20:09.553313+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 3.25
+        },
+        {
+          "date": "2024-11-20",
+          "price": 3.25
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.4
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.4
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.4
+        },
+        {
+          "date": "2025-06-13",
+          "price": 3.3
+        },
+        {
+          "date": "2025-06-21",
+          "price": 3.3
+        },
+        {
+          "date": "2026-04-13",
+          "price": 3.3
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Sour Cream",
+        "price": 3.3,
+        "unit_price": 1.1,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/105609/woolworths-sour-cream",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/105609.jpg"
+      },
+      "coles": {
+        "name": "Coles Sour Cream | 300g",
+        "price": 3.3,
+        "unit_price": 3.3,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-sour-cream-300g-3676946",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3676946.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Woolworths Thickened Cream",
+          "price": 5.2,
+          "unit_price": 0.87,
+          "unit": "100ML",
+          "url": "https://www.woolworths.com.au/shop/productdetails/48720/woolworths-thickened-cream",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/048720.jpg",
+          "retailer": "woolworths"
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 1.1,
+      "per_100_coles": 1.1,
+      "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Woolworths Spring Water Bottles",
+      "last_scraped": "2026-05-21T23:20:14.536846+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 5.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 4.9
+        },
+        {
+          "date": "2025-04-14",
+          "price": 4.9
+        },
+        {
+          "date": "2025-05-12",
+          "price": 4.9
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.9
+        },
+        {
+          "date": "2025-07-03",
+          "price": 4.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.9
+        },
+        {
+          "date": "2026-04-02",
+          "price": 4.9
+        }
+      ],
+      "category": "Drinks & Alcohol",
+      "woolworths": {
+        "name": "Woolworths Spring Water Bottles",
+        "price": 8.0,
+        "unit_price": 0.56,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/116784/woolworths-spring-water-bottles",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/116784.jpg"
+      },
+      "coles": {
+        "name": "Pump Spring Water Bottle | 1.25L",
+        "price": 3.3,
+        "unit_price": 3.3,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/pump-spring-water-bottle-1.25l-8973472",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8973472.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 4.7,
+      "alternatives": [
+        {
+          "name": "Woolworths Spring Water Bottle",
+          "price": 0.8,
+          "unit_price": 0.53,
+          "unit": "1L",
+          "url": "https://www.woolworths.com.au/shop/productdetails/749793/woolworths-spring-water-bottle",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/749793.jpg",
+          "retailer": "woolworths"
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.06,
+      "per_100_coles": 0.26,
+      "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Woolworths Washed Potato Bag",
+      "last_scraped": "2026-05-21T23:20:19.582397+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 7.9
+        },
+        {
+          "date": "2025-05-12",
+          "price": 9.9
+        },
+        {
+          "date": "2025-06-06",
+          "price": 9.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 9.9
+        },
+        {
+          "date": "2025-07-26",
+          "price": 9.9
+        },
+        {
+          "date": "2026-02-03",
+          "price": 12.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 12.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Washed Potatoes Bag",
+        "price": 8.0,
+        "unit_price": 4.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/262783/woolworths-washed-potatoes-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/262783.jpg"
+      },
+      "coles": {
+        "name": "Potatoes Washed",
+        "price": 6.0,
+        "unit_price": 3.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1206748.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 2.0,
+      "alternatives": [
+        {
+          "name": "Potatoes Washed",
+          "price": 6.0,
+          "unit_price": 3.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1206748.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.4,
+      "per_100_coles": 0.3,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Alka Power Alkaline Water Bottle",
+      "last_scraped": "2026-05-21T23:20:25.316237+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 2.95
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.95
+        }
+      ],
+      "category": "Drinks & Alcohol",
+      "woolworths": {
+        "name": "Alka Power Alkaline Water Bottle",
+        "price": 3.5,
+        "unit_price": 2.33,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/507997/alka-power-alkaline-water-bottle",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/507997.jpg"
+      },
+      "coles": {
+        "name": "Alka Power Alkaline Water 12x600ml | 12 Pack",
+        "price": 15.7,
+        "unit_price": 15.7,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/alka-power-alkaline-water-12x600ml-12-pack-1049526",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1049526.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 12.2,
+      "alternatives": [
+        {
+          "name": "Alka Power Ionic Alkaline Spring Water Ph9-10 With 5 Natural Electrolytes | 1.5L",
+          "price": 2.95,
+          "unit_price": 1.97,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/alka-power-ionic-alkaline-spring-water-ph9-10-with-5-natural-electrolytes-1.5l-3528712",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3528712.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.23,
+      "per_100_coles": 2.62,
+      "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Woolworths Whole Milk Full Cream Milk",
+      "last_scraped": "2026-05-21T23:20:27.010095+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2026-02-07",
+          "price": 3.2
+        },
+        {
+          "date": "2026-03-02",
+          "price": 3.2
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.2
+        },
+        {
+          "date": "2026-04-02",
+          "price": 3.2
+        },
+        {
+          "date": "2026-04-13",
+          "price": 3.2
+        },
+        {
+          "date": "2026-04-21",
+          "price": 4.65
+        },
+        {
+          "date": "2026-04-29",
+          "price": 5.15
+        },
+        {
+          "date": "2026-05-06",
+          "price": 5.15
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Full Cream Milk",
+        "price": 5.15,
+        "unit_price": 1.72,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/888140/woolworths-full-cream-milk",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/888140.jpg"
+      },
+      "coles": {
+        "name": "Full Cream Milk",
+        "price": 5.15,
+        "unit_price": 1.72,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/coles-full-cream-milk-3l-8150288",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8150288.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.17,
+      "per_100_coles": 0.17,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "Cavendish Bananas",
       "last_scraped": "2026-05-21T22:56:29.763927+00:00",
       "trip_count": 30,
@@ -5315,198 +5652,6 @@
       "per_100_ww": null,
       "per_100_coles": 0.79,
       "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Sour Cream",
-      "last_scraped": "2026-05-21T22:58:52.260171+00:00",
-      "trip_count": 8,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 3.25
-        },
-        {
-          "date": "2024-11-20",
-          "price": 3.25
-        },
-        {
-          "date": "2025-03-27",
-          "price": 3.4
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.4
-        },
-        {
-          "date": "2025-05-12",
-          "price": 3.4
-        },
-        {
-          "date": "2025-06-13",
-          "price": 3.3
-        },
-        {
-          "date": "2025-06-21",
-          "price": 3.3
-        },
-        {
-          "date": "2026-04-13",
-          "price": 3.3
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Sour Cream",
-        "price": 3.3,
-        "unit_price": 1.1,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/105609/woolworths-sour-cream",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/105609.jpg"
-      },
-      "coles": {
-        "name": "Coles Sour Cream | 300g",
-        "price": 3.3,
-        "unit_price": 3.3,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-sour-cream-300g-3676946",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3676946.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [
-        {
-          "name": "Woolworths Thickened Cream",
-          "price": 5.2,
-          "unit_price": 0.87,
-          "unit": "100ML",
-          "url": "https://www.woolworths.com.au/shop/productdetails/48720/woolworths-thickened-cream",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/048720.jpg",
-          "retailer": "woolworths"
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.1,
-      "per_100_coles": 1.1,
-      "per_100_unit": "100ml"
-    },
-    {
-      "list_item": "Woolworths Spring Water Bottles",
-      "last_scraped": "2026-05-21T22:58:53.264861+00:00",
-      "trip_count": 8,
-      "price_history": [
-        {
-          "date": "2025-02-02",
-          "price": 5.0
-        },
-        {
-          "date": "2025-03-11",
-          "price": 4.9
-        },
-        {
-          "date": "2025-04-14",
-          "price": 4.9
-        },
-        {
-          "date": "2025-05-12",
-          "price": 4.9
-        },
-        {
-          "date": "2025-06-06",
-          "price": 4.9
-        },
-        {
-          "date": "2025-07-03",
-          "price": 4.9
-        },
-        {
-          "date": "2025-07-10",
-          "price": 4.9
-        },
-        {
-          "date": "2026-04-02",
-          "price": 4.9
-        }
-      ],
-      "category": "Drinks & Alcohol",
-      "woolworths": {
-        "name": "Woolworths Spring Water Bottles",
-        "price": 8.0,
-        "unit_price": 0.56,
-        "unit": "1L",
-        "url": "https://www.woolworths.com.au/shop/productdetails/116784/woolworths-spring-water-bottles",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/116784.jpg"
-      },
-      "coles": {
-        "name": "Pump Spring Water Bottle | 1.25L",
-        "price": 3.3,
-        "unit_price": 3.3,
-        "unit": "1L",
-        "url": "https://www.coles.com.au/product/pump-spring-water-bottle-1.25l-8973472",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8973472.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 4.7,
-      "alternatives": [
-        {
-          "name": "Woolworths Spring Water Bottle",
-          "price": 0.8,
-          "unit_price": 0.53,
-          "unit": "1L",
-          "url": "https://www.woolworths.com.au/shop/productdetails/749793/woolworths-spring-water-bottle",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/749793.jpg",
-          "retailer": "woolworths"
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.06,
-      "per_100_coles": 0.26,
-      "per_100_unit": "100ml"
-    },
-    {
-      "list_item": "Alka Power Alkaline Water Bottle",
-      "last_scraped": "2026-05-21T22:59:04.091249+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-03-11",
-          "price": 2.95
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.5
-        },
-        {
-          "date": "2026-05-06",
-          "price": 2.95
-        }
-      ],
-      "category": "Drinks & Alcohol",
-      "woolworths": {
-        "name": "Alka Power Alkaline Water Bottle",
-        "price": 3.5,
-        "unit_price": 2.33,
-        "unit": "1L",
-        "url": "https://www.woolworths.com.au/shop/productdetails/507997/alka-power-alkaline-water-bottle",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/507997.jpg"
-      },
-      "coles": {
-        "name": "Alka Power Alkaline Water 12x600ml | 12 Pack",
-        "price": 15.7,
-        "unit_price": 15.7,
-        "unit": "1L",
-        "url": "https://www.coles.com.au/product/alka-power-alkaline-water-12x600ml-12-pack-1049526",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1049526.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 12.2,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.23,
-      "per_100_coles": 2.62,
-      "per_100_unit": "100ml"
     },
     {
       "list_item": "Annalisa Chickpeas",
@@ -12147,16 +12292,16 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 842.34,
-    "total_coles": 1086.15,
+    "total_woolworths": 855.49,
+    "total_coles": 1097.3,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 243.81,
-    "items_compared": 203,
+    "total_saving": 241.81,
+    "items_compared": 205,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 58,
+    "done": 63,
     "total": 211
   }
 }
