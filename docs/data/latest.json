@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21T23:29:23.434116+00:00",
+  "last_updated": "2026-05-21T23:29:36.512114+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8837,7 +8837,7 @@
     },
     {
       "list_item": "Strawberries Punnet",
-      "last_scraped": "2026-05-21T23:00:57.763385+00:00",
+      "last_scraped": "2026-05-21T23:29:26.284531+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -8877,7 +8877,26 @@
       "coles": null,
       "cheaper_store": "woolworths",
       "saving_per_item": null,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Yoplait Berry Punnet Yoghurt Strawberry Mixed Berries 6x160g | 960g",
+          "price": 7.0,
+          "unit_price": 7.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/yoplait-berry-punnet-yoghurt-strawberry-mixed-berries-6x160g-960g-3619567",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3619567.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Yoplait Berry Punnet Yoghurt Strawberry Mixed Berries | 12 Pack",
+          "price": 8.5,
+          "unit_price": 8.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/yoplait-berry-punnet-yoghurt-strawberry-mixed-berries-12-pack-8877195",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8877195.jpg",
+          "retailer": "coles"
+        }
+      ],
       "match_confidence": "none",
       "size_warning": false,
       "per_100_ww": 2.2,
@@ -8886,7 +8905,7 @@
     },
     {
       "list_item": "Strike 2 Ply Paper Towel 2 Ply",
-      "last_scraped": "2026-05-21T23:01:00.153890+00:00",
+      "last_scraped": "2026-05-21T23:29:28.974001+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8926,7 +8945,7 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -8934,7 +8953,7 @@
     },
     {
       "list_item": "Strike Paper Towels Embossed 2 Ply",
-      "last_scraped": "2026-05-21T23:01:01.972381+00:00",
+      "last_scraped": "2026-05-21T23:29:32.058857+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -8982,7 +9001,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 0.05,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -8990,7 +9009,7 @@
     },
     {
       "list_item": "The Odd Bunch Mandarin Prepacked",
-      "last_scraped": "2026-05-21T23:01:03.739709+00:00",
+      "last_scraped": "2026-05-21T23:29:34.531216+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -9033,8 +9052,18 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.5,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Coles Mandarin Segments in Syrup 4 Pack | 480g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-mandarin-segments-in-syrup-4-pack-480g-9837753",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9837753.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.24,
       "per_100_coles": 0.39,
@@ -9042,7 +9071,7 @@
     },
     {
       "list_item": "Twinings Honeybush, Orange & Mandarin",
-      "last_scraped": "2026-05-21T23:01:05.928098+00:00",
+      "last_scraped": "2026-05-21T23:29:36.497866+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9082,7 +9111,7 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -12933,7 +12962,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 120,
+    "done": 125,
     "total": 211
   }
 }
