@@ -463,14 +463,14 @@ function colHeadHtml(col) {
 
 // ── Price history bar ────────────────────────────────────────────────────────
 
-function buildPriceBar(itemName, priceHistory, currentPrice) {
+function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   if (!priceHistory?.length || currentPrice == null) return '';
 
   const exclusions = loadExclusions();
   const excluded = new Set((exclusions[itemName] || []).map(p => Number(p).toFixed(2)));
   const prices = priceHistory
-    .map(p => p.price)
-    .filter(p => p > 0 && !excluded.has(Number(p).toFixed(2)));
+    .map(p => p.price * factor)
+    .filter((p, i) => p > 0 && !excluded.has(Number(priceHistory[i].price).toFixed(2)));
   if (prices.length < 2) return '';
 
   const minP = Math.min(...prices);
@@ -1627,7 +1627,7 @@ function renderCards(items) {
       warnHtml = ` <span class="match-warn match-warn-low" title="Low-confidence match — verify these are the same product">⚠<button class="warn-dismiss" data-item="${safeKey}">✕</button></span>`;
     }
 
-    const bar = buildPriceBar(item.list_item, item.price_history, cheaper==='woolworths' ? ww?.price : co?.price);
+    const bar = buildPriceBar(item.list_item, item.price_history, cheaper==='woolworths' ? ww?.price : co?.price, item._ww_price_factor ?? 1);
     const isChecked = _checkedItems.has(item.list_item);
     const notFound = !ww && !co;
 
@@ -1900,7 +1900,7 @@ function renderPage(data) {
 
     // Price bar uses cheaper store's price as reference (or fallback)
     const currentRef = cheaper === 'woolworths' ? ww?.price : (cheaper === 'coles' ? co?.price : (co?.price ?? ww?.price));
-    const bar = Array.isArray(item.price_history) ? buildPriceBar(item.list_item, item.price_history, currentRef) : '';
+    const bar = Array.isArray(item.price_history) ? buildPriceBar(item.list_item, item.price_history, currentRef, item._ww_price_factor ?? 1) : '';
 
     // % Cheaper + discrepancy warning (must be before itemCell)
     const wwPrice = ww?.price;

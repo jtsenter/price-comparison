@@ -501,9 +501,9 @@ function getDealInfo(item) {
 
 // ── Price bar ──────────────────────────────────────────────────────────────────
 
-function buildPriceBar(itemName, priceHistory, currentPrice) {
+function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   if (!priceHistory?.length || currentPrice == null) return '';
-  const prices = priceHistory.map(p => p.price).filter(p => p > 0);
+  const prices = priceHistory.map(p => p.price * factor).filter(p => p > 0);
   if (prices.length < 2) return '';
   const minP = Math.min(...prices);
   const maxP = Math.max(...prices);
@@ -743,7 +743,7 @@ function renderDeals() {
 
     // Avg price cell with price bar
     const currentPrice = deal.store === 'woolworths' ? ww?.price : co?.price;
-    const bar = buildPriceBar(item.list_item, item.price_history, currentPrice);
+    const bar = buildPriceBar(item.list_item, item.price_history, currentPrice, item._ww_price_factor ?? 1);
     const avgCell = `<div style="text-align:center">
       <div style="font-size:12px;color:var(--text-soft)">${fmt(deal.mean)}</div>
       ${bar}
