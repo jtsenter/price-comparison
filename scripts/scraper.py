@@ -750,12 +750,10 @@ async def _scrape_single_item(
             print(f"    Coles match ({co_conf}): {coles_match['name']}")
 
     # Carry forward existing store data when no fresh result is available.
-    # URL fetch failed (URL path, _skip_picker=True, empty results): always carry forward —
-    #   WW is blocked from GHA; a Coles URL failure may be transient.
-    # Name-based search returned zero results (_skip_picker=False, empty results): carry forward —
-    #   store is blocked/unavailable.
-    # Name-based search returned results that were all rejected by the matcher: do NOT carry
-    #   forward — real mismatch, old data would perpetuate the wrong product.
+    # Always carry forward when the matcher produced no usable result — whether because
+    # the search returned nothing, the URL fetch failed, or the matcher rejected all
+    # candidates. Losing existing price data is always worse than briefly keeping a
+    # slightly stale match; the next successful scrape will correct it.
     def _carry(existing_key, conf_label, tag):
         existing = existing_item.get(existing_key)
         if existing and existing.get("price") is not None:
@@ -764,18 +762,10 @@ async def _scrape_single_item(
         return None, "none"
 
     if coles_match is None:
-        if _skip_picker_co and not coles_results:          # URL was set but fetch failed
-            coles_match, co_conf = _carry("coles", "carried", "Coles")
-        elif not _skip_picker_co and not coles_results:    # name search returned empty
-            coles_match, co_conf = _carry("coles", "carried", "Coles")
+        coles_match, co_conf = _carry("coles", "carried", "Coles")
 
     if ww_match is None:
-        if _had_pinned_ww:                                 # pinned URL existed → always prefer carry-forward
-            ww_match, ww_conf = _carry("woolworths", "carried", "WW")
-        elif _skip_picker_ww and not ww_results:           # URL was set but fetch failed
-            ww_match, ww_conf = _carry("woolworths", "carried", "WW")
-        elif not _skip_picker_ww and not ww_results:       # name search returned empty
-            ww_match, ww_conf = _carry("woolworths", "carried", "WW")
+        ww_match, ww_conf = _carry("woolworths", "carried", "WW")
 
     if not ww_match and not coles_match:
         return None, True
@@ -983,6 +973,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                         timed_out = True
                     except Exception as e:
                         print(f"  Error scraping {name}: {e}")
+                        not_found.append(name)   # keep item visible; final pass will carry forward
                     finally:
                         completed[0] += 1
                         if completed[0] % 5 == 0:
@@ -1007,6 +998,22 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         await browser.close()
 
     os.makedirs(DATA_DIR, exist_ok=True)
+
+    if not single_item:
+        # Final carry-forward: for any item that failed scraping (in not_found) but has
+        # existing data, restore it into items_output so it isn't lost from the JSON.
+        # This mirrors the push_progress_bg carry-forward but for the final write.
+        scraped_names = {i["list_item"] for i in items_output}
+        still_not_found = []
+        for name in not_found:
+            ex = existing_map.get(name)
+            if ex and (ex.get("woolworths", {}) or {}).get("price") is not None \
+                   or ex and (ex.get("coles", {}) or {}).get("price") is not None:
+                print(f"  [carry-forward] Restoring existing data for failed item: {name}")
+                items_output.append(ex)
+            else:
+                still_not_found.append(name)
+        not_found = still_not_found
 
     if single_item:
         existing = {}
