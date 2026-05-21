@@ -371,7 +371,7 @@
             <th data-col="coles">
               <span class="store-chip coles sm">C</span> Coles Price <span class="sort-arrow"></span>
             </th>
-            <th data-col="avg" style="text-align:center">Hist. Avg <span class="sort-arrow"></span></th>
+            <th data-col="avg" style="min-width:160px">Trend <span class="sort-arrow"></span></th>
           </tr>
         </thead>
         <tbody id="dealsBody"></tbody>
@@ -406,6 +406,9 @@ function resolveImgUrl(imgData) {
 
 function loadPriorities() {
   try { return JSON.parse(localStorage.getItem('pw_priorities_v1') || '{}'); } catch { return {}; }
+}
+function loadExclusions() {
+  try { return JSON.parse(localStorage.getItem('pw_excl_v1') || '{}'); } catch { return {}; }
 }
 
 const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '—';
@@ -468,7 +471,8 @@ function pricePercentile(prices, pct) {
 function getDealInfo(item) {
   const history = item.price_history;
   if (!history || history.length < 3) return null;
-  const prices = history.map(h => h.price).filter(p => p > 0);
+  const factor = item._ww_price_factor ?? 1;
+  const prices = history.map(h => h.price * factor).filter(p => p > 0);
   if (prices.length < 3) return null;
 
   const mean = prices.reduce((s, p) => s + p, 0) / prices.length;
@@ -503,7 +507,11 @@ function getDealInfo(item) {
 
 function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   if (!priceHistory?.length || currentPrice == null) return '';
-  const prices = priceHistory.map(p => p.price * factor).filter(p => p > 0);
+  const exclusions = loadExclusions();
+  const excluded = new Set((exclusions[itemName] || []).map(p => Number(p).toFixed(2)));
+  const prices = priceHistory
+    .map(p => p.price * factor)
+    .filter((p, i) => p > 0 && !excluded.has(Number(priceHistory[i].price).toFixed(2)));
   if (prices.length < 2) return '';
   const minP = Math.min(...prices);
   const maxP = Math.max(...prices);
@@ -516,6 +524,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   }
   const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
   const pos = Math.max(0, Math.min(100, rawPos));
+  const outRange = rawPos < 0 || rawPos > 100;
 
   const counts = {};
   prices.forEach(p => { const k = p.toFixed(2); counts[k] = (counts[k] || 0) + 1; });
@@ -528,7 +537,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   const tooltip = lines.join('\n').replace(/"/g, '&quot;');
 
   return `<div class="price-bar-outer" data-tooltip="${tooltip}">
-    <div class="price-bar"><div class="price-marker" style="left:${pos.toFixed(1)}%"></div></div>
+    <div class="price-bar"><div class="price-marker${outRange ? ' out-range' : ''}" style="left:${pos.toFixed(1)}%"></div></div>
     <div class="price-bar-labels"><span>${fmt(minP)}</span><span>${fmt(maxP)}</span></div>
   </div>`;
 }
@@ -540,6 +549,7 @@ let sortKeys = [{ col: 'deal', dir: 'desc' }];
 let _activeCategory = 'All';
 let _storeFilter = 'all';
 let _data = null;
+let _archivedSet = new Set();
 
 const COL_LABELS = {
   name: 'Product', deal: 'Deal %', ww: 'WW Price', coles: 'Coles Price',
@@ -636,9 +646,11 @@ function renderDeals() {
   if (!_data) return;
 
   const priorities = loadPriorities();
-  const items = ((_data.items || []).filter(item =>
-    !item.archived && priorities[item.list_item] !== 'archive'
-  ));
+  const items = (_data.items || []).filter(item =>
+    !item.archived &&
+    priorities[item.list_item] !== 'archive' &&
+    !_archivedSet.has(item.list_item)
+  );
 
   // Collect all hot-deal items (may have deals at one or both stores)
   const allDeals = items
@@ -747,13 +759,9 @@ function renderDeals() {
       coHtml = `<a href="https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}" target="_blank" class="search-link">Find →</a>`;
     }
 
-    // Avg price cell with price bar
+    // Trend cell — price bar only, same as main page
     const currentPrice = deal.store === 'woolworths' ? ww?.price : co?.price;
-    const bar = buildPriceBar(item.list_item, item.price_history, currentPrice, item._ww_price_factor ?? 1);
-    const avgCell = `<div style="text-align:center">
-      <div style="font-size:12px;color:var(--text-soft)">${fmt(deal.mean)}</div>
-      ${bar}
-    </div>`;
+    const avgCell = buildPriceBar(item.list_item, item.price_history, currentPrice, item._ww_price_factor ?? 1) || '—';
 
     const wwClass  = deal.store === 'woolworths' ? 'cell-deal-ww' : '';
     const coClass  = deal.store === 'coles'      ? 'cell-deal-coles' : '';
@@ -855,9 +863,15 @@ function initRefreshBtn() {
 
 (async () => {
   try {
-    const res = await fetch(`data/latest.json?t=${Date.now()}`);
-    if (!res.ok) throw new Error('not found');
-    _data = await res.json();
+    const [dataRes, archRes] = await Promise.all([
+      fetch(`data/latest.json?t=${Date.now()}`),
+      fetch(`data/archived_items.json?t=${Date.now()}`).catch(() => null),
+    ]);
+    if (!dataRes.ok) throw new Error('not found');
+    _data = await dataRes.json();
+    if (archRes?.ok) {
+      try { _archivedSet = new Set(await archRes.json()); } catch {}
+    }
   } catch {
     document.getElementById('loading').textContent = 'Could not load price data. Try refreshing.';
     return;
