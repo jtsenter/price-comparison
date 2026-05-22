@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T02:55:46.497646+00:00",
+  "last_updated": "2026-05-22T02:55:59.940089+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12922,7 +12922,7 @@
     },
     {
       "list_item": "Twinings Pure Peppermint Tea Bags Tea Bags",
-      "last_scraped": "2026-05-21T23:57:36.896608+00:00",
+      "last_scraped": "2026-05-22T02:55:48.649420+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12949,7 +12949,7 @@
         "unit_price": 0.18,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/twinings-pure-peppermint-herbal-infusions-tea-bags-40-pack-80g-6811254",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6811254.jpg&w=640&q=90",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6811254.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "woolworths",
@@ -12965,6 +12965,15 @@
           "retailer": "woolworths"
         },
         {
+          "name": "Twinings Pure Peppermint Herbal Infusions Tea Bags 40 Pack | 80g",
+          "price": 7.0,
+          "unit_price": 0.18,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/twinings-pure-peppermint-herbal-infusions-tea-bags-40-pack-80g-6811254",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6811254.jpg",
+          "retailer": "coles"
+        },
+        {
           "name": "Twinings Pure Peppermint Tea Bags",
           "price": 8.5,
           "unit_price": 0.21,
@@ -12974,7 +12983,7 @@
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 8.75,
@@ -12982,7 +12991,7 @@
     },
     {
       "list_item": "Vanish Napisan Stain Remover Powder",
-      "last_scraped": "2026-05-21T23:57:39.669809+00:00",
+      "last_scraped": "2026-05-22T02:55:53.478574+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13004,15 +13013,15 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/179663.jpg"
       },
       "coles": {
-        "name": "Vanish Napisan Oxi Action Fabric Stain Remover Powder | 2kg",
-        "price": 19.0,
-        "unit_price": 19.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/vanish-napisan-oxi-action-fabric-stain-remover-powder-2kg-9506348",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9506348.jpg&w=640&q=90"
+        "name": "Vanish Napisan Oxi Action Fabric Stain Remover Powder | 1kg",
+        "price": 10.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/vanish-napisan-oxi-action-fabric-stain-remover-powder-1kg-9392023",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9392023.jpg"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 9.0,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [
         {
           "name": "Vanish Napisan White Stain Remover Remover Powder",
@@ -13022,17 +13031,26 @@
           "url": "https://www.woolworths.com.au/shop/productdetails/353185/vanish-napisan-white-stain-remover-remover-powder",
           "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/353185.jpg",
           "retailer": "woolworths"
+        },
+        {
+          "name": "Vanish Napisan Gold Colours Stain Remover | 3kg",
+          "price": 29.4,
+          "unit_price": 9.8,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/vanish-napisan-gold-colours-stain-remover-3kg-5066753",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5066753.jpg",
+          "retailer": "coles"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.0,
-      "per_100_coles": 0.95,
+      "per_100_coles": 1.0,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths 4 Angus Quarter Pound Beef Burgers",
-      "last_scraped": "2026-05-21T23:57:40.706632+00:00",
+      "last_scraped": "2026-05-22T02:55:53.907802+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13059,12 +13077,40 @@
         "unit_price": 26.67,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-finest-angus-beef-burgers-300g-1327877",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F1%2F1327877.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1327877.jpg"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 5.3,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Four'N Twenty Angus Beef Pies 4 Pack | 700g",
+          "price": 8.9,
+          "unit_price": 1.27,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/four'n-twenty-angus-beef-pies-4-pack-700g-4227336",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4227336.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Lamb Burgers With Rosemary And Garlic 4 Pack | 400g",
+          "price": 8.5,
+          "unit_price": 8.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-lamb-burgers-with-rosemary-and-garlic-4-pack-400g-5132541",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5132541.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Simply Australian Beef Burgers | 800g",
+          "price": 9.3,
+          "unit_price": 9.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-simply-australian-beef-burgers-800g-2700580",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2700580.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.98,
       "per_100_coles": 2.67,
@@ -13072,50 +13118,8 @@
       "_ww_price_factor": 0.3
     },
     {
-      "list_item": "Woolworths Beef & Lamb Meatballs",
-      "last_scraped": "2026-05-21T23:57:43.336300+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 8.0
-        },
-        {
-          "date": "2024-11-12",
-          "price": 8.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths Beef & Lamb Meatballs",
-        "price": 4.48,
-        "unit_price": 20.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/764264/woolworths-beef-lamb-meatballs",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/764264.jpg"
-      },
-      "coles": {
-        "name": "Coles Beef & Pork Meatballs | 560g",
-        "price": 8.0,
-        "unit_price": 8.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-beef-and-pork-meatballs-560g-3569447",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3569447.jpg&w=640&q=90",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 3.52,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.0,
-      "per_100_coles": 1.43,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.56
-    },
-    {
       "list_item": "Woolworths Black Beans",
-      "last_scraped": "2026-05-21T23:57:45.531136+00:00",
+      "last_scraped": "2026-05-22T02:55:59.551298+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13142,12 +13146,30 @@
         "unit_price": 1.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3812975.jpg&w=640&q=90",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3812975.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.58,
       "alternatives": [
+        {
+          "name": "Coles Black Beans | 420g",
+          "price": 1.0,
+          "unit_price": 1.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3812975.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Carmelina Black Beans | 400 GRAM",
+          "price": 1.9,
+          "unit_price": 1.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/carmelina-black-beans-400-gram-8855589",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855589.jpg",
+          "retailer": "coles"
+        },
         {
           "name": "Woolworths Beef & Black Bean With Rice",
           "price": 8.0,
@@ -13158,12 +13180,82 @@
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.24,
       "per_100_coles": 0.24,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.42
+    },
+    {
+      "list_item": "Woolworths Beef & Lamb Meatballs",
+      "last_scraped": "2026-05-22T02:55:59.925163+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 8.0
+        },
+        {
+          "date": "2024-11-12",
+          "price": 8.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Beef & Lamb Meatballs",
+        "price": 4.48,
+        "unit_price": 20.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/764264/woolworths-beef-lamb-meatballs",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/764264.jpg"
+      },
+      "coles": {
+        "name": "Coles Beef & Pork Meatballs | 560g",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-beef-and-pork-meatballs-560g-3569447",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3569447.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.52,
+      "alternatives": [
+        {
+          "name": "V.I.P Dog Chunkers Meatballs Lamb | 1Kg",
+          "price": 6.5,
+          "unit_price": 6.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/v.i.p-dog-chunkers-meatballs-lamb-1kg-1649159",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1649159.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Beef & Pork Meatballs | 560g",
+          "price": 8.0,
+          "unit_price": 8.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-and-pork-meatballs-560g-3569447",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3569447.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Lamb Burgers With Rosemary And Garlic 4 Pack | 400g",
+          "price": 8.5,
+          "unit_price": 8.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-lamb-burgers-with-rosemary-and-garlic-4-pack-400g-5132541",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5132541.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 2.0,
+      "per_100_coles": 1.43,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.56
     },
     {
       "list_item": "Woolworths Butternut Pumpkin Cut",
@@ -13613,15 +13705,15 @@
   ],
   "summary": {
     "total_woolworths": 909.41,
-    "total_coles": 1154.25,
+    "total_coles": 1145.25,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 244.84,
+    "total_saving": 235.84,
     "items_compared": 209,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 195,
+    "done": 200,
     "total": 211
   }
 }
