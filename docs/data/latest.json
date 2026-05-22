@@ -1,10 +1,10 @@
 {
-  "last_updated": "2026-05-22T05:55:43.448142+00:00",
+  "last_updated": "2026-05-22T06:03:12.949734+00:00",
   "trigger": "manual",
   "items": [
     {
       "list_item": "Beans Round",
-      "last_scraped": "2026-05-22T05:50:12.650053+00:00",
+      "last_scraped": "2026-05-22T06:03:04.300672+00:00",
       "trip_count": 14,
       "price_history": [
         {
@@ -120,7 +120,7 @@
     },
     {
       "list_item": "Baby Mum-Mum Snack Vegetable Rice Rusk",
-      "last_scraped": "2026-05-22T05:50:15.243165+00:00",
+      "last_scraped": "2026-05-22T06:03:05.066959+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -209,7 +209,7 @@
     },
     {
       "list_item": "Blueberries Punnet",
-      "last_scraped": "2026-05-22T05:50:19.232486+00:00",
+      "last_scraped": "2026-05-22T06:03:08.909160+00:00",
       "trip_count": 21,
       "price_history": [
         {
@@ -354,7 +354,7 @@
     },
     {
       "list_item": "Cadbury Dairy Milk Large Chocolate Block",
-      "last_scraped": "2026-05-22T05:50:21.173082+00:00",
+      "last_scraped": "2026-05-22T06:03:09.217349+00:00",
       "trip_count": 11,
       "price_history": [
         {
@@ -441,12 +441,12 @@
           "retailer": "woolworths"
         },
         {
-          "name": "Cadbury Dairy Milk Large Top Deck Chocolate Block",
+          "name": "Cadbury Dairy Milk Large Fruit & Nut Chocolate Block",
           "price": 8.5,
           "unit_price": 2.5,
           "unit": "100G",
-          "url": "https://www.woolworths.com.au/shop/productdetails/165352/cadbury-dairy-milk-large-top-deck-chocolate-block",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/165352.jpg",
+          "url": "https://www.woolworths.com.au/shop/productdetails/6022301/cadbury-dairy-milk-large-fruit-nut-chocolate-block",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6022301.jpg",
           "retailer": "woolworths"
         }
       ],
@@ -458,7 +458,7 @@
     },
     {
       "list_item": "Cadbury Dairy Milk Top Deck Chocolate Block",
-      "last_scraped": "2026-05-22T05:50:23.945168+00:00",
+      "last_scraped": "2026-05-22T06:03:12.946435+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -13029,10 +13029,7 @@
       "per_100_unit": "100g"
     }
   ],
-  "not_found_items": [
-    "The Odd Bunch Mango",
-    "The Odd Bunch Strawberries Punnet"
-  ],
+  "not_found_items": [],
   "summary": {
     "total_woolworths": 988.65,
     "total_coles": 1153.35,
@@ -13040,6 +13037,10 @@
     "ww_data_available": true,
     "total_saving": 164.7,
     "items_compared": 209,
-    "items_not_found": 2
+    "items_not_found": 0
+  },
+  "scrape_progress": {
+    "done": 5,
+    "total": 211
   }
 }
