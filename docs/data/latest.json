@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T06:13:02.778100+00:00",
+  "last_updated": "2026-05-22T06:13:18.329971+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12192,7 +12192,7 @@
     },
     {
       "list_item": "Manning Valley 12 Extra Large Free Range Eggs",
-      "last_scraped": "2026-05-21T23:57:02.857410+00:00",
+      "last_scraped": "2026-05-22T06:13:04.234575+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12219,12 +12219,31 @@
         "unit_price": 8.5,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/sunny-queen-free-range-large-eggs-12-pack-600g-5417778",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5417778.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5417778.jpg"
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.2,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Sunrise Free Range Eggs 12 Pack | 700g",
+          "price": 6.4,
+          "unit_price": 0.91,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/sunrise-free-range-eggs-12-pack-700g-6339534",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6339534.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Yarra Valley Free Range Eggs 12 Pack | 700g",
+          "price": 6.5,
+          "unit_price": 0.93,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/yarra-valley-free-range-eggs-12-pack-700g-6804769",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6804769.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.24,
       "per_100_coles": 1.42,
@@ -12232,7 +12251,7 @@
     },
     {
       "list_item": "Market Value Scotch Fillet",
-      "last_scraped": "2026-05-21T23:57:04.644988+00:00",
+      "last_scraped": "2026-05-22T06:13:09.045571+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12252,11 +12271,30 @@
         "unit_price": 23.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-beef-scotch-steak-fillet-2-pack-480g-4997220",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4997220.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4997220.jpg"
       },
       "cheaper_store": "coles",
       "saving_per_item": null,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Drovers Choice Beef Scotch Fillet Steaks | 170g",
+          "price": 8.5,
+          "unit_price": 8.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/drovers-choice-beef-scotch-fillet-steaks-170g-1476957",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1476957.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Beef Scotch Fillet Thin Cut | 400g",
+          "price": 21.0,
+          "unit_price": 21.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-scotch-fillet-thin-cut-400g-5629540",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5629540.jpg",
+          "retailer": "coles"
+        }
+      ],
       "match_confidence": "none",
       "size_warning": false,
       "per_100_ww": null,
@@ -12265,7 +12303,7 @@
     },
     {
       "list_item": "Munchkin Miracle 360 Trainer Cup Assorted",
-      "last_scraped": "2026-05-21T23:57:06.688984+00:00",
+      "last_scraped": "2026-05-22T06:13:09.393651+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12305,7 +12343,7 @@
     },
     {
       "list_item": "Mushrooms Flat Large Loose",
-      "last_scraped": "2026-05-21T23:57:08.524157+00:00",
+      "last_scraped": "2026-05-22T06:13:15.656667+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12320,7 +12358,7 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Mushrooms Flat Large Loose",
-        "price": 2.7,
+        "price": 13.5,
         "unit_price": 13.5,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/145028/mushrooms-flat-large-loose",
@@ -12335,35 +12373,35 @@
         "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6467068.jpg&w=640&q=90",
         "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 3.0,
+      "cheaper_store": "coles",
+      "saving_per_item": 7.8,
       "alternatives": [
         {
-          "name": "Woolworths Mushrooms Cups Punnet",
-          "price": 5.0,
-          "unit_price": 10.0,
-          "unit": "1KG",
-          "url": "https://www.woolworths.com.au/shop/productdetails/149963/woolworths-mushrooms-cups-punnet",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/149963.jpg",
-          "retailer": "woolworths"
+          "name": "Chef's World Straw Mushrooms Medium | 425g",
+          "price": 2.3,
+          "unit_price": 2.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/chef's-world-straw-mushrooms-medium-425g-6592762",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6592762.jpg",
+          "retailer": "coles"
         },
         {
-          "name": "Mushroom Portobello Flat Large Loose",
-          "price": 12.5,
-          "unit_price": 12.5,
-          "unit": "1KG",
-          "url": "https://www.woolworths.com.au/shop/productdetails/124011/mushroom-portobello-flat-large-loose",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124011.jpg",
-          "retailer": "woolworths"
+          "name": "Jade Phoenix Shitake Mushrooms Whole | 50g",
+          "price": 3.95,
+          "unit_price": 3.95,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/jade-phoenix-shitake-mushrooms-whole-50g-8374784",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8374784.jpg",
+          "retailer": "coles"
         },
         {
-          "name": "Mushrooms Cups Loose",
-          "price": 12.5,
-          "unit_price": 12.5,
-          "unit": "1KG",
-          "url": "https://www.woolworths.com.au/shop/productdetails/143109/mushrooms-cups-loose",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/143109.jpg",
-          "retailer": "woolworths"
+          "name": "Coles Mushrooms Sliced Brown | 200g",
+          "price": 5.7,
+          "unit_price": 5.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-mushrooms-sliced-brown-200g-6467068",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6467068.jpg",
+          "retailer": "coles"
         }
       ],
       "match_confidence": "low",
@@ -12372,6 +12410,46 @@
       "per_100_coles": 2.85,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.2
+    },
+    {
+      "list_item": "Nutella Hazelnut Chocolate Spread Spread",
+      "last_scraped": "2026-05-22T06:13:18.316210+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-03-10",
+          "price": 14.8
+        },
+        {
+          "date": "2026-05-06",
+          "price": 14.8
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Nutella Hazelnut Chocolate Spread Spread",
+        "price": 10.0,
+        "unit_price": 1.33,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/147314/nutella-hazelnut-chocolate-spread-spread",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147314.jpg"
+      },
+      "coles": {
+        "name": "Spread Choc Hazelnut",
+        "price": 10.0,
+        "unit_price": 1.33,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/nutella-spread-choc-hazelnut-750g-6690772",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6690772.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 1.33,
+      "per_100_coles": 1.33,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Obela Hommus Dip With Garlic Smashed Falafel",
@@ -13510,16 +13588,16 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 1081.62,
-    "total_coles": 1153.35,
+    "total_woolworths": 1102.42,
+    "total_coles": 1163.35,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 71.73,
-    "items_compared": 209,
+    "total_saving": 60.93,
+    "items_compared": 210,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 180,
+    "done": 185,
     "total": 211
   }
 }
