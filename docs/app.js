@@ -1500,24 +1500,31 @@ function sortItems(items) {
       }
       case 'trend': {
         const history = item.price_history;
-        if (!history?.length) return Infinity;
+        if (!history?.length) return null;
         // Apply same exclusions as buildPriceBar so sort matches the visual bar
         const _excl = loadExclusions();
         const _excluded = new Set((_excl[item.list_item] || []).map(p => Number(p).toFixed(2)));
         const prices = history
           .map(p => p.price)
           .filter((p, i) => p > 0 && !_excluded.has(Number(history[i].price).toFixed(2)));
-        if (prices.length < 2) return Infinity;
+        if (prices.length < 2) return null;
         const minP = Math.min(...prices), maxP = Math.max(...prices);
-        // Flat history: trendPosition is 0/0 = undefined — sort last alongside no-data
-        if (minP === maxP) return Infinity;
         const ref = item.cheaper_store === 'woolworths' ? item.woolworths?.price
                   : item.cheaper_store === 'coles'      ? item.coles?.price
                   : (item.coles?.price ?? item.woolworths?.price);
-        if (ref == null) return Infinity;
-        // Raw trendPosition: <0 = below min, 0–1 = in range, >1 = above max.
-        // No cap — items above max must remain distinguishable from each other.
-        return (ref - minP) / (maxP - minP);
+        if (ref == null) return null;
+        // Flat history: classify by position relative to the flat line
+        // Buckets: 0=below-range, 1=flat-below, 2=in-range, 3=flat-at, 4=above-range, 5=flat-above, null=no-data
+        if (minP === maxP) {
+          if (ref < minP) return [1, ref];  // below flat line → after below-range items
+          if (ref > minP) return [5, ref];  // above flat line → after above-range items
+          return [3, 0];                     // at flat line    → after in-range items
+        }
+        // Normal range: bucket by zone, value for within-bucket ordering
+        const pos = (ref - minP) / (maxP - minP);
+        if (pos < 0) return [0, pos];  // below range
+        if (pos > 1) return [4, pos];  // above range
+        return [2, pos];               // in range
       }
       case 'category':     return getCategory(item).toLowerCase();
       case 'last_scraped': return item.last_scraped || '';
@@ -1537,17 +1544,23 @@ function sortItems(items) {
       const { col, dir } = sortKeys[i];
       const mul = dir === 'asc' ? 1 : -1;
       const ai = av[i], bi = bv[i];
-      // Trend: no-data / flat items (Infinity) always sort last in BOTH directions
+      // Trend: [bucket, value] pairs; null = no-data → always last
       if (col === 'trend') {
-        const aInf = ai === Infinity, bInf = bi === Infinity;
-        if (aInf && bInf) continue;
-        if (aInf) return 1;
-        if (bInf) return -1;
+        const aNul = ai === null, bNul = bi === null;
+        if (aNul && bNul) continue;
+        if (aNul) return 1;
+        if (bNul) return -1;
+        const [aBucket, aVal] = ai;
+        const [bBucket, bVal] = bi;
+        if (aBucket !== bBucket) return (aBucket - bBucket) * mul;
+        if (aVal !== bVal) return (aVal - bVal) * mul;
+        continue;
       }
       if (ai < bi) return -1 * mul;
       if (ai > bi) return  1 * mul;
     }
-    return 0;
+    // Name tiebreaker: ensures identical sort values produce a stable, deterministic order
+    return a.list_item.localeCompare(b.list_item);
   });
 }
 

@@ -613,17 +613,24 @@ function getSortValue(col, item, dealInfo) {
     case 'ww':       return item.woolworths?.price ?? Infinity;
     case 'coles':    return item.coles?.price ?? Infinity;
     case 'avg': {
-      // Same logic as main page Trend sort: trendPosition = (ref - min) / (max - min)
+      // Same bucket logic as main page Trend sort
       const history = item.price_history;
-      if (!history?.length) return Infinity;
+      if (!history?.length) return null;
       const prices = history.map(p => p.price).filter(p => p > 0);
-      if (prices.length < 2) return Infinity;
+      if (prices.length < 2) return null;
       const minP = Math.min(...prices), maxP = Math.max(...prices);
-      // Flat history: trendPosition is 0/0 = undefined — sort last alongside no-data
-      if (minP === maxP) return Infinity;
       const ref = dealInfo?.price;
-      if (ref == null) return Infinity;
-      return (ref - minP) / (maxP - minP);
+      if (ref == null) return null;
+      // Flat history: classify by position relative to flat line
+      if (minP === maxP) {
+        if (ref < minP) return [1, ref];
+        if (ref > minP) return [5, ref];
+        return [3, 0];
+      }
+      const pos = (ref - minP) / (maxP - minP);
+      if (pos < 0) return [0, pos];
+      if (pos > 1) return [4, pos];
+      return [2, pos];
     }
     case 'category': return getCategory(item).toLowerCase();
     default:         return 0;
@@ -638,17 +645,23 @@ function sortDeals(items) {
       const mul = dir === 'asc' ? 1 : -1;
       const av = getSortValue(col, a, da);
       const bv = getSortValue(col, b, db);
-      // Avg (trend): no-data / flat items (Infinity) always sort last in BOTH directions
+      // Avg (trend): [bucket, value] pairs; null = no-data → always last
       if (col === 'avg') {
-        const aInf = av === Infinity, bInf = bv === Infinity;
-        if (aInf && bInf) continue;
-        if (aInf) return 1;
-        if (bInf) return -1;
+        const aNul = av === null, bNul = bv === null;
+        if (aNul && bNul) continue;
+        if (aNul) return 1;
+        if (bNul) return -1;
+        const [aBucket, aVal] = av;
+        const [bBucket, bVal] = bv;
+        if (aBucket !== bBucket) return (aBucket - bBucket) * mul;
+        if (aVal !== bVal) return (aVal - bVal) * mul;
+        continue;
       }
       if (av < bv) return -1 * mul;
       if (av > bv) return  1 * mul;
     }
-    return 0;
+    // Name tiebreaker: ensures identical sort values produce a stable, deterministic order
+    return a.list_item.localeCompare(b.list_item);
   });
 }
 
