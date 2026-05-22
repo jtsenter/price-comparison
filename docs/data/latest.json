@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T05:31:04.158750+00:00",
+  "last_updated": "2026-05-22T05:31:30.944357+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8288,7 +8288,7 @@
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Spread Tub",
-      "last_scraped": "2026-05-21T23:54:02.144248+00:00",
+      "last_scraped": "2026-05-22T05:31:08.499578+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -8333,7 +8333,7 @@
     },
     {
       "list_item": "Red Capsicum",
-      "last_scraped": "2026-05-21T23:54:07.324407+00:00",
+      "last_scraped": "2026-05-22T05:31:15.032282+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -8386,8 +8386,57 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Plum Red",
+      "last_scraped": "2026-05-22T05:31:22.530207+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 0.31
+        },
+        {
+          "date": "2025-04-05",
+          "price": 0.47
+        },
+        {
+          "date": "2025-04-14",
+          "price": 0.47
+        },
+        {
+          "date": "2026-02-11",
+          "price": 0.47
+        },
+        {
+          "date": "2026-03-02",
+          "price": 0.31
+        },
+        {
+          "date": "2026-04-02",
+          "price": 0.47
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": null,
+      "coles": {
+        "name": "Plums Red",
+        "price": 0.75,
+        "unit_price": 6.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/fresh-plums-red-approx.-110g-156382",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/156382.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 0.69,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Reese's Peanut Butter Cups Miniatures Milk Chocolate",
-      "last_scraped": "2026-05-21T23:54:14.918904+00:00",
+      "last_scraped": "2026-05-22T05:31:23.628818+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -8450,57 +8499,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Plum Red",
-      "last_scraped": "2026-05-21T23:54:15.319302+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2025-02-02",
-          "price": 0.31
-        },
-        {
-          "date": "2025-04-05",
-          "price": 0.47
-        },
-        {
-          "date": "2025-04-14",
-          "price": 0.47
-        },
-        {
-          "date": "2026-02-11",
-          "price": 0.47
-        },
-        {
-          "date": "2026-03-02",
-          "price": 0.31
-        },
-        {
-          "date": "2026-04-02",
-          "price": 0.47
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": null,
-      "coles": {
-        "name": "Plums Red",
-        "price": 0.75,
-        "unit_price": 6.9,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/fresh-plums-red-approx.-110g-156382",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/156382.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 0.69,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Sam's Pantry Granola Pink Lady Apple & Cinnamon",
-      "last_scraped": "2026-05-21T23:54:20.163419+00:00",
+      "last_scraped": "2026-05-22T05:31:30.926294+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -12978,7 +12978,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 110,
+    "done": 115,
     "total": 211
   }
 }
