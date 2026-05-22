@@ -856,14 +856,16 @@ async def _scrape_single_item(
 
     ww_price = ww_match["price"] if ww_match else None
     coles_price = coles_match["price"] if coles_match else None
+    # For per-kg WW items, use normalised price so comparison is apples-to-apples
+    ww_norm = round(ww_price * _ww_price_factor, 2) if ww_price is not None else None
 
     cheaper_store = None
     saving = None
-    if ww_price is not None and coles_price is not None:
-        if ww_price < coles_price:
-            cheaper_store, saving = "woolworths", round(coles_price - ww_price, 2)
-        elif coles_price < ww_price:
-            cheaper_store, saving = "coles", round(ww_price - coles_price, 2)
+    if ww_norm is not None and coles_price is not None:
+        if ww_norm < coles_price:
+            cheaper_store, saving = "woolworths", round(coles_price - ww_norm, 2)
+        elif coles_price < ww_norm:
+            cheaper_store, saving = "coles", round(ww_norm - coles_price, 2)
         else:
             cheaper_store, saving = "equal", 0.0
     elif coles_price is not None:

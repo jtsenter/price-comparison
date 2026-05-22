@@ -392,7 +392,7 @@
     <div id="dealsEmpty" class="deals-empty" style="display:none">
       <div class="deals-empty-icon">🛒</div>
       <div class="deals-empty-title">No hot deals right now</div>
-      <div>Check back after prices are updated — deals appear when a price drops into the bottom 20% of its recorded history.</div>
+      <div>Check back after prices are updated — deals appear when an item's current price is a Hot Deal (bottom 20% of its price history).</div>
     </div>
   </div>
 </main>
@@ -501,10 +501,12 @@ function getDealInfo(item) {
   // Check each store separately
   const results = [];
 
-  if (ww != null && ww <= threshold) {
-    const pctOff = Math.max(0, Math.round((mean - ww) / mean * 100));
+  // For per-kg WW items, normalize price so it compares against normalized history
+  const wwNorm = ww != null ? ww * factor : null;
+  if (wwNorm != null && wwNorm <= threshold) {
+    const pctOff = Math.max(0, Math.round((mean - wwNorm) / mean * 100));
     if (pctOff > 0) {
-      const isAllTimeLow = ww <= minHistoric;
+      const isAllTimeLow = wwNorm <= minHistoric;
       results.push({ store: 'woolworths', price: ww, pctOff, mean, minHistoric, isAllTimeLow });
     }
   }
@@ -535,8 +537,10 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   if (prices.length < 2) return '';
   const minP = Math.min(...prices);
   const maxP = Math.max(...prices);
+  const normCurrent = currentPrice * factor;
+
   if (minP === maxP) {
-    if (Math.abs(currentPrice - minP) < 0.005) {
+    if (Math.abs(normCurrent - minP) < 0.005) {
       // Truly same price — flat bar (shouldn't reach here since getDealInfo requires pctOff > 0)
       return `
       <div class="price-bar-outer">
@@ -544,12 +548,11 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
         <div class="price-bar-labels price-bar-labels-flat"><span class="price-bar-always">${fmt(minP)}</span></div>
       </div>`;
     }
-    // Deal price differs from stable WW price — show a range bar so the
-    // position of the deal vs. WW's stable price is visually clear.
-    const barMin = Math.min(currentPrice, minP);
-    const barMax = Math.max(currentPrice, minP);
-    const rawPos2 = ((currentPrice - barMin) / (barMax - barMin)) * 100;
-    const tooltip = `WW stable: ${fmt(minP)}&#10;Deal: ${fmt(currentPrice)}&#10;${currentPrice < minP ? 'Now cheaper than WW stable price ✓' : 'Now above WW stable price'}`;
+    // Deal price differs from stable historical price — show a range bar
+    const barMin = Math.min(normCurrent, minP);
+    const barMax = Math.max(normCurrent, minP);
+    const rawPos2 = ((normCurrent - barMin) / (barMax - barMin)) * 100;
+    const tooltip = `Stable: ${fmt(minP)}&#10;Deal: ${fmt(normCurrent)}&#10;${normCurrent < minP ? 'Now cheaper than stable price ✓' : 'Now above stable price'}`;
     const track2 = rawPos2 < 0
       ? `<div class="price-bar-track-wrap"><div class="price-marker-off-left"></div><div class="price-bar"></div></div>`
       : `<div class="price-bar"><div class="price-marker" style="left:${rawPos2.toFixed(1)}%"></div></div>`;
@@ -558,7 +561,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
       <div class="price-bar-labels"><span>${fmt(barMin)}</span><span>${fmt(barMax)}</span></div>
     </div>`;
   }
-  const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
+  const rawPos = ((normCurrent - minP) / (maxP - minP)) * 100;
   const pos = Math.max(0, Math.min(100, rawPos));
 
   const counts = {};
@@ -566,7 +569,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   const total = prices.length;
   const lines = Object.entries(counts).sort(([a], [b]) => +a - +b)
     .map(([p, c]) => { const pct = Math.round(c / total * 100); return `$${p}  ${'█'.repeat(Math.round(pct / 10)).padEnd(10)}  ${pct}% (${c}×)`; });
-  const cheaperPct = Math.round(prices.filter(p => p > currentPrice).length / total * 100);
+  const cheaperPct = Math.round(prices.filter(p => p > normCurrent).length / total * 100);
   lines.push('');
   lines.push(cheaperPct > 0 ? `Now cheaper than ${cheaperPct}% of past prices ✓` : `Now at all-time low ✓`);
   const tooltip = lines.join('\n').replace(/"/g, '&quot;');

@@ -479,17 +479,29 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
 
   const minP = Math.min(...prices);
   const maxP = Math.max(...prices);
+  const normCurrent = currentPrice * factor;
+
   if (minP === maxP) {
     const safeItemName = itemName.replace(/"/g, '&quot;');
+    let flatTrack;
+    if (normCurrent < minP - 0.005) {
+      // Current price is below all historical prices — green circle left
+      flatTrack = `<div class="price-bar-track-wrap"><div class="price-marker-off-left"></div><div class="price-bar price-bar-flat"></div></div>`;
+    } else if (normCurrent > minP + 0.005) {
+      // Current price is above all historical prices — red circle right
+      flatTrack = `<div class="price-bar-track-wrap"><div class="price-bar price-bar-flat"></div><div class="price-marker-off-right"></div></div>`;
+    } else {
+      flatTrack = `<div class="price-bar price-bar-flat"><div class="price-marker" style="left:50%"></div></div>`;
+    }
     return `
     <div class="price-bar-outer">
-      <div class="price-bar price-bar-flat"><div class="price-marker" style="left:50%"></div></div>
+      ${flatTrack}
       <div class="price-bar-labels price-bar-labels-flat"><span class="price-bar-always">${fmt(minP)}</span></div>
     </div>
     <button class="price-bar-manage" data-manage-item="${safeItemName}">Manage</button>`;
   }
 
-  const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
+  const rawPos = ((normCurrent - minP) / (maxP - minP)) * 100;
   const pos = Math.max(0, Math.min(100, rawPos));
 
   const counts = {};
@@ -504,7 +516,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
       return `$${p}  ${bar.padEnd(10)}  ${pct}% (${c}×)`;
     });
 
-  const cheaperPct = Math.round(prices.filter(p => p > currentPrice).length / total * 100);
+  const cheaperPct = Math.round(prices.filter(p => p > normCurrent).length / total * 100);
   lines.push('');
   lines.push(cheaperPct > 0
     ? `Now cheaper than ${cheaperPct}% of past prices ✓`
@@ -1498,10 +1510,12 @@ function sortItems(items) {
         if (prices.length < 2) return Infinity;
         const minP = Math.min(...prices), maxP = Math.max(...prices);
         if (minP === maxP) return 1.5; // flat price — sort after all range items (0–1), before no-data (Infinity)
-        const ref = item.cheaper_store === 'woolworths' ? item.woolworths?.price
-                  : item.cheaper_store === 'coles'      ? item.coles?.price
-                  : (item.coles?.price ?? item.woolworths?.price);
+        let ref = item.cheaper_store === 'woolworths' ? item.woolworths?.price
+                : item.cheaper_store === 'coles'      ? item.coles?.price
+                : (item.coles?.price ?? item.woolworths?.price);
         if (ref == null) return Infinity;
+        // For per-kg WW items, normalize so the ref matches the scale of the history bars
+        if (item.cheaper_store === 'woolworths') ref = ref * factor;
         // Cap at 1.49 so above-max items never reach the flat-price bucket (1.5)
         // and gradient-bar items always sort separately from flat gray-bar items.
         return Math.min((ref - minP) / (maxP - minP), 1.49);
@@ -1585,8 +1599,10 @@ function isHotDeal(item) {
   const threshold = pricePercentile(prices, HOT_DEAL_PERCENTILE);
   const ww = item.woolworths?.price;
   const co = item.coles?.price;
-  const current = item.cheaper_store === 'woolworths' ? ww : (item.cheaper_store === 'coles' ? co : (co ?? ww));
+  let current = item.cheaper_store === 'woolworths' ? ww : (item.cheaper_store === 'coles' ? co : (co ?? ww));
   if (current == null) return false;
+  // Apply price factor so per-kg WW prices compare correctly against normalized history
+  if (item.cheaper_store === 'woolworths') current = current * factor;
   return current <= threshold;
 }
 
@@ -1627,7 +1643,7 @@ function renderCards(items) {
     // Prices
     const wwP100 = clientPer100(ww);
     const coP100 = clientPer100(co);
-    const hotBadge = hotDeal ? ' <span class="hot-badge" title="Hot deal — in bottom 20% of historical prices">🔥</span>' : '';
+    const hotBadge = hotDeal ? ' <span class="hot-badge" title="Hot Deal!">🔥</span>' : '';
 
     let wwHtml;
     if (ww) {
@@ -1993,7 +2009,7 @@ function renderPage(data) {
 
     // Hot deal: fire goes on the cheaper store's price cell
     const hotDeal = isHotDeal(item);
-    const hotBadge = `<span class="hot-badge" title="Current price is in the bottom 20% of historical prices">🔥</span>`;
+    const hotBadge = `<span class="hot-badge" title="Hot Deal!">🔥</span>`;
 
     // Per-100g/ml — computed from product name (reliable for packs); falls back to scraped cup price
     const wwP100 = clientPer100(ww);
