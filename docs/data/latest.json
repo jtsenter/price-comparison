@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T02:48:52.578132+00:00",
+  "last_updated": "2026-05-22T02:49:10.202918+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4908,7 +4908,7 @@
     },
     {
       "list_item": "Woolworths Lean Beef Mince",
-      "last_scraped": "2026-05-21T23:51:03.878834+00:00",
+      "last_scraped": "2026-05-22T02:48:55.027946+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -5005,7 +5005,7 @@
     },
     {
       "list_item": "Woolworths RSPCA Approved Chicken Breast Fillet",
-      "last_scraped": "2026-05-21T23:51:08.913528+00:00",
+      "last_scraped": "2026-05-22T02:49:00.500446+00:00",
       "trip_count": 23,
       "price_history": [
         {
@@ -5108,11 +5108,11 @@
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Woolworths RSPCA Approved Chicken Breast Fillet",
-        "price": 5.4,
-        "unit_price": 9.0,
+        "price": 11.22,
+        "unit_price": 11.0,
         "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/710953/woolworths-rspca-approved-chicken-breast-fillet",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/710953.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/969723/woolworths-rspca-approved-chicken-breast-fillet",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/969723.jpg"
       },
       "coles": {
         "name": "Coles RSPCA Approved Free Range Chicken Breast Fillet Small Pack | approx. 600g",
@@ -5122,19 +5122,29 @@
         "url": "https://www.coles.com.au/product/coles-rspca-approved-free-range-chicken-breast-fillet-small-pack-approx.-600g-3228730",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3228730.jpg"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 5.4,
-      "alternatives": [],
+      "cheaper_store": "coles",
+      "saving_per_item": 0.42,
+      "alternatives": [
+        {
+          "name": "Coles RSPCA Approved Chicken Breast Fillet Crumb Sage & Rosemary | 400g",
+          "price": 10.0,
+          "unit_price": 10.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-breast-fillet-crumb-sage-and-rosemary-400g-2903871",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2903871.jpg",
+          "retailer": "coles"
+        }
+      ],
       "match_confidence": "medium",
       "size_warning": false,
-      "per_100_ww": 0.9,
+      "per_100_ww": 1.1,
       "per_100_coles": 1.8,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.6
     },
     {
       "list_item": "Woolworths Onion Brown Bag",
-      "last_scraped": "2026-05-21T23:51:12.021480+00:00",
+      "last_scraped": "2026-05-22T02:49:03.578327+00:00",
       "trip_count": 14,
       "price_history": [
         {
@@ -5222,7 +5232,7 @@
     },
     {
       "list_item": "Woolworths Red Watermelon Cut Quarter",
-      "last_scraped": "2026-05-21T23:51:14.038895+00:00",
+      "last_scraped": "2026-05-22T02:49:06.674719+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5306,7 +5316,7 @@
     },
     {
       "list_item": "Woolworths Salmon Portions Skin On",
-      "last_scraped": "2026-05-21T23:51:18.014475+00:00",
+      "last_scraped": "2026-05-22T02:49:10.196548+00:00",
       "trip_count": 12,
       "price_history": [
         {
@@ -12977,16 +12987,16 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 883.69,
+    "total_woolworths": 889.51,
     "total_coles": 1129.85,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 246.16,
+    "total_saving": 240.34,
     "items_compared": 208,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 55,
+    "done": 60,
     "total": 211
   }
 }
