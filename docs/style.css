@@ -382,6 +382,7 @@ table { width: max-content; min-width: 100%; border-collapse: collapse; }
 #tableHead th:active { cursor: grabbing; }
 #tableHead th .store-chip { vertical-align: middle; margin-right: 5px; }
 .center-th { text-align: center !important; }
+.right-th  { text-align: right  !important; }
 
 /* ── Sticky ghost header (JS-driven, bypasses overflow:hidden) */
 .sticky-header-ghost {
@@ -409,6 +410,7 @@ table { width: max-content; min-width: 100%; border-collapse: collapse; }
   text-overflow: ellipsis;
 }
 .sticky-header-ghost th.center-th { text-align: center; }
+.sticky-header-ghost th.right-th  { text-align: right; }
 .sticky-header-ghost th.sort-active { color: var(--text); }
 .sticky-header-ghost th:hover { background: var(--border); }
 

@@ -453,7 +453,7 @@ function colHeadHtml(col) {
     case 'coles':        return th('coles', '', '<span class="store-chip coles sm">C</span> Coles');
     case 'cheaper':      return th('cheaper', 'center-th', 'Best');
     case 'pct':          return th('pct', 'center-th', 'Diff');
-    case 'saving':       return th('saving', '', 'Savings');
+    case 'saving':       return th('saving', 'right-th', 'Savings');
     case 'trips':        return th('trips', 'center-th', 'Buys');
     case 'priority':     return th('priority', 'center-th', 'Priority');
     case 'units':        return th('units', 'center-th', 'Qty');
@@ -2071,9 +2071,16 @@ function renderPage(data) {
     // Units cell (declared before unitsSaving so it's in scope)
     const units = getUnits(item.list_item);
 
-    const unitsSaving = item.saving_per_item > 0 ? item.saving_per_item * units : 0;
-    const savingHtml = unitsSaving > 0
-      ? `<span class="saving-cell">${fmt(unitsSaving)}</span>` : '';
+    const hasBothPrices = ww?.price != null && co?.price != null;
+    let savingContent;
+    if (!hasBothPrices) {
+      savingContent = `<span class="no-data">—</span>`;
+    } else {
+      const unitsSaving = (item.saving_per_item ?? 0) * units;
+      savingContent = unitsSaving > 0
+        ? `<span class="saving-cell">${fmt(unitsSaving)}</span>`
+        : `<span class="no-data">$0.00</span>`;
+    }
 
     const tripsHtml = item.trip_count != null ? `<span class="trips-cell">${item.trip_count}</span>` : '';
 
@@ -2115,7 +2122,7 @@ function renderPage(data) {
       coles:        `<td class="price-cell ${coClass}">${coCellContent}</td>`,
       cheaper:      `<td class="cheaper-cell">${badgeHtml}</td>`,
       pct:          `<td class="pct-cell">${pctHtml}</td>`,
-      saving:       `<td><div class="saving-row">${savingHtml}</div></td>`,
+      saving:       `<td><div class="saving-row">${savingContent}</div></td>`,
       trips:        `<td class="trips-cell">${tripsHtml}</td>`,
       category:     `<td style="font-size:12px;color:var(--text-mid)">${getCategory(item)}</td>`,
       last_scraped: `<td style="font-size:11px;color:var(--text-soft);white-space:nowrap">${scrapedDate}</td>`,
@@ -2136,6 +2143,14 @@ function renderPage(data) {
   });
 
   // Tfoot — dynamic to match column order
+  // Footer savings = sum of per-item savings for rows where both prices exist
+  // (matches exactly what the individual cells show, unlike s.total_saving which
+  //  treats missing-price items as $0 and uses basket-level diff instead)
+  const footerSaving = Math.round(sorted.reduce((sum, item) => {
+    if (item.woolworths?.price == null || item.coles?.price == null) return sum;
+    return sum + (item.saving_per_item ?? 0) * getUnits(item.list_item);
+  }, 0) * 100) / 100;
+
   const tfootRow = document.querySelector('tfoot tr');
   if (tfootRow) {
     const footMap = {
@@ -2147,7 +2162,7 @@ function renderPage(data) {
       coles:        `<td id="footColes">${fmt(s.total_coles)}</td>`,
       cheaper:      `<td></td>`,
       pct:          `<td></td>`,
-      saving:       `<td id="footSaving">${s.ww_data_available ? `<span class="saving-cell">${fmt(s.total_saving)}</span>` : ''}</td>`,
+      saving:       `<td id="footSaving" style="text-align:right" title="Total savings vs most expensive store"><span class="saving-cell">${fmt(footerSaving)}</span><div style="font-size:11px;color:var(--text-soft);font-weight:400">saved</div></td>`,
       trips:        `<td></td>`,
       category:     `<td></td>`,
       last_scraped: `<td></td>`,
