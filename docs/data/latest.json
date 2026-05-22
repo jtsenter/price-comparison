@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T05:54:46.314087+00:00",
+  "last_updated": "2026-05-22T05:54:59.970855+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5978,7 +5978,7 @@
     },
     {
       "list_item": "Arnold's Farm Granola Pink Lady Apple & Cinnamon",
-      "last_scraped": "2026-05-21T23:51:52.320110+00:00",
+      "last_scraped": "2026-05-22T05:54:47.960961+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -6033,8 +6033,82 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Basa Thawed Freshwater Basa Fillets",
+      "last_scraped": "2026-05-22T05:54:52.139710+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2026-02-07",
+          "price": 11.0
+        },
+        {
+          "date": "2026-04-21",
+          "price": 11.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Basa Thawed Freshwater Basa Fillets",
+        "price": 11.0,
+        "unit_price": 11.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/87465/basa-thawed-freshwater-basa-fillets",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087465.jpg"
+      },
+      "coles": {
+        "name": "I&j Frozen Basa Fillets | 750g",
+        "price": 10.0,
+        "unit_price": 10.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/iandj-frozen-basa-fillets-750g-7108785",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7108785.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.0,
+      "alternatives": [
+        {
+          "name": "Kb's Basa Fillets | 1kg",
+          "price": 7.0,
+          "unit_price": 7.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/kb's-basa-fillets-1kg-3984460",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3984460.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Dagim Frozen Premium Tilapia Fish Fillets | 454g",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/dagim-frozen-premium-tilapia-fish-fillets-454g-6636766",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6636766.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "I&j Frozen Basa Fillets | 750g",
+          "price": 10.0,
+          "unit_price": 10.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/iandj-frozen-basa-fillets-750g-7108785",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7108785.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 1.1,
+      "per_100_coles": 1.33,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.75
+    },
+    {
       "list_item": "Beechworth 100% Pure Australian Honey Jar",
-      "last_scraped": "2026-05-21T23:51:57.105352+00:00",
+      "last_scraped": "2026-05-22T05:54:54.368140+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -6085,82 +6159,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Basa Thawed Freshwater Basa Fillets",
-      "last_scraped": "2026-05-21T23:51:57.833299+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2026-02-07",
-          "price": 11.0
-        },
-        {
-          "date": "2026-04-21",
-          "price": 11.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 8.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Basa Thawed Freshwater Basa Fillets",
-        "price": 8.25,
-        "unit_price": 11.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/87465/basa-thawed-freshwater-basa-fillets",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087465.jpg"
-      },
-      "coles": {
-        "name": "I&j Frozen Basa Fillets | 750g",
-        "price": 10.0,
-        "unit_price": 10.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/iandj-frozen-basa-fillets-750g-7108785",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7108785.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.75,
-      "alternatives": [
-        {
-          "name": "Kb's Basa Fillets | 1kg",
-          "price": 7.0,
-          "unit_price": 7.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/kb's-basa-fillets-1kg-3984460",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3984460.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Dagim Frozen Premium Tilapia Fish Fillets | 454g",
-          "price": 9.0,
-          "unit_price": 9.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/dagim-frozen-premium-tilapia-fish-fillets-454g-6636766",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6636766.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "I&j Frozen Basa Fillets | 750g",
-          "price": 10.0,
-          "unit_price": 10.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/iandj-frozen-basa-fillets-750g-7108785",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7108785.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 1.1,
-      "per_100_coles": 1.33,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.75
-    },
-    {
       "list_item": "Ben & Jerry's Ice Cream Tub Chocolate Chip Cookie Dough",
-      "last_scraped": "2026-05-21T23:52:02.762122+00:00",
+      "last_scraped": "2026-05-22T05:54:56.191608+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -6232,7 +6232,7 @@
     },
     {
       "list_item": "Bulla Creme Fraiche Creme Fraiche",
-      "last_scraped": "2026-05-21T23:52:03.473020+00:00",
+      "last_scraped": "2026-05-22T05:54:59.963044+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -13044,16 +13044,16 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 976.9,
+    "total_woolworths": 979.65,
     "total_coles": 1145.35,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 168.45,
+    "total_saving": 165.7,
     "items_compared": 209,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 70,
+    "done": 75,
     "total": 211
   }
 }
