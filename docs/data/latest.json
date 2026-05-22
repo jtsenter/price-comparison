@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T02:56:37.045935+00:00",
+  "last_updated": "2026-05-22T04:50:12.981458+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3080,7 +3080,7 @@
     },
     {
       "list_item": "Woolworths Baby Leaf Spinach",
-      "last_scraped": "2026-05-22T02:47:47.668956+00:00",
+      "last_scraped": "2026-05-22T04:50:12.647864+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -3126,51 +3126,21 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/524322.jpg"
       },
       "coles": {
-        "name": "Coles Baby Spinach | 60g",
-        "price": 2.2,
-        "unit_price": 2.2,
+        "name": "Baby Spinach",
+        "price": 3.3,
+        "unit_price": 27.5,
         "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-baby-spinach-60g-1499486",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1499486.jpg",
-        "retailer": "coles"
+        "url": "https://www.coles.com.au/product/coles-baby-spinach-120g-1499340",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1499340.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 2.04,
-      "alternatives": [
-        {
-          "name": "Coles Baby Spinach | 60g",
-          "price": 2.2,
-          "unit_price": 2.2,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-baby-spinach-60g-1499486",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1499486.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Baby Spinach | 120g",
-          "price": 3.3,
-          "unit_price": 3.3,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-baby-spinach-120g-1499340",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1499340.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Salad Baby Leaf Spinach & Rocket | 120g",
-          "price": 3.3,
-          "unit_price": 3.3,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-salad-baby-leaf-spinach-and-rocket-120g-5464290",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5464290.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "medium",
+      "saving_per_item": 3.14,
+      "alternatives": [],
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.25,
-      "per_100_coles": 3.67,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.06
+      "per_100_coles": 2.75,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths 12 Extra Large Free Range Eggs",
@@ -13847,10 +13817,10 @@
   ],
   "summary": {
     "total_woolworths": 909.41,
-    "total_coles": 1145.25,
+    "total_coles": 1146.35,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 235.84,
+    "total_saving": 236.94,
     "items_compared": 209,
     "items_not_found": 2
   }
