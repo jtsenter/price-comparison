@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T05:52:49.651039+00:00",
+  "last_updated": "2026-05-22T05:53:09.402000+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3490,8 +3490,104 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Cook Chicken Roasting Portions Italian Style",
+      "last_scraped": "2026-05-22T05:52:55.860058+00:00",
+      "trip_count": 11,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 18.0
+        },
+        {
+          "date": "2024-12-09",
+          "price": 18.0
+        },
+        {
+          "date": "2025-02-28",
+          "price": 18.0
+        },
+        {
+          "date": "2025-04-05",
+          "price": 18.0
+        },
+        {
+          "date": "2025-04-25",
+          "price": 18.0
+        },
+        {
+          "date": "2025-06-13",
+          "price": 18.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 18.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 18.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 16.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 14.0
+        },
+        {
+          "date": "2026-04-29",
+          "price": 16.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Cook Chicken Roasting Portions Italian Style",
+        "price": 14.0,
+        "unit_price": 7.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/83172/woolworths-cook-chicken-roasting-portions-italian-style",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/083172.jpg"
+      },
+      "coles": {
+        "name": "Coles Kitchen Chicken Parma & Roast Potatoes | 330g",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-kitchen-chicken-parma-and-roast-potatoes-330g-7750337",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7750337.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 6.0,
+      "alternatives": [
+        {
+          "name": "Coles Roast Chicken With Noodles Serves 2 | 75g",
+          "price": 1.15,
+          "unit_price": 1.15,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-roast-chicken-with-noodles-serves-2-75g-2894566",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2894566.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Sliced Greek Inspired Roast Chicken Breast | 150g",
+          "price": 6.5,
+          "unit_price": 6.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-sliced-greek-inspired-roast-chicken-breast-150g-1105795",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1105795.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.7,
+      "per_100_coles": 2.42,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.33
+    },
+    {
       "list_item": "Woolworths Cherry Tomatoes Punnet",
-      "last_scraped": "2026-05-21T23:50:12.999704+00:00",
+      "last_scraped": "2026-05-22T05:52:56.049520+00:00",
       "trip_count": 21,
       "price_history": [
         {
@@ -3582,7 +3678,7 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Cherry Tomatoes Punnet",
-        "price": 0.8,
+        "price": 3.2,
         "unit_price": 12.8,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/149620/woolworths-cherry-tomatoes-punnet",
@@ -3597,8 +3693,8 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4834736.jpg",
         "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 2.4,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [
         {
           "name": "Coles Cherry Tomatoes | 250g",
@@ -3636,104 +3732,8 @@
       "_ww_price_factor": 0.25
     },
     {
-      "list_item": "Woolworths Cook Chicken Roasting Portions Italian Style",
-      "last_scraped": "2026-05-21T23:50:14.277984+00:00",
-      "trip_count": 11,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 18.0
-        },
-        {
-          "date": "2024-12-09",
-          "price": 18.0
-        },
-        {
-          "date": "2025-02-28",
-          "price": 18.0
-        },
-        {
-          "date": "2025-04-05",
-          "price": 18.0
-        },
-        {
-          "date": "2025-04-25",
-          "price": 18.0
-        },
-        {
-          "date": "2025-06-13",
-          "price": 18.0
-        },
-        {
-          "date": "2025-07-10",
-          "price": 18.0
-        },
-        {
-          "date": "2025-07-26",
-          "price": 18.0
-        },
-        {
-          "date": "2026-02-11",
-          "price": 16.0
-        },
-        {
-          "date": "2026-04-02",
-          "price": 14.0
-        },
-        {
-          "date": "2026-04-29",
-          "price": 16.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths Cook Chicken Roasting Portions Italian Style",
-        "price": 4.62,
-        "unit_price": 7.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/83172/woolworths-cook-chicken-roasting-portions-italian-style",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/083172.jpg"
-      },
-      "coles": {
-        "name": "Coles Kitchen Chicken Parma & Roast Potatoes | 330g",
-        "price": 8.0,
-        "unit_price": 8.0,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-kitchen-chicken-parma-and-roast-potatoes-330g-7750337",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7750337.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 3.38,
-      "alternatives": [
-        {
-          "name": "Coles Roast Chicken With Noodles Serves 2 | 75g",
-          "price": 1.15,
-          "unit_price": 1.15,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-roast-chicken-with-noodles-serves-2-75g-2894566",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2894566.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Sliced Greek Inspired Roast Chicken Breast | 150g",
-          "price": 6.5,
-          "unit_price": 6.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-sliced-greek-inspired-roast-chicken-breast-150g-1105795",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1105795.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.7,
-      "per_100_coles": 2.42,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.33
-    },
-    {
       "list_item": "Woolworths Cookie Caramel Bar Slice",
-      "last_scraped": "2026-05-21T23:50:18.918565+00:00",
+      "last_scraped": "2026-05-22T05:53:02.201542+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -3804,8 +3804,128 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Cos Hearts Lettuce",
+      "last_scraped": "2026-05-22T05:53:08.531793+00:00",
+      "trip_count": 22,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 3.5
+        },
+        {
+          "date": "2024-12-02",
+          "price": 2.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 3.5
+        },
+        {
+          "date": "2025-01-29",
+          "price": 3.5
+        },
+        {
+          "date": "2025-02-28",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-04",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.9
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-03",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.9
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.5
+        },
+        {
+          "date": "2026-02-07",
+          "price": 3.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 3.5
+        },
+        {
+          "date": "2026-03-02",
+          "price": 3.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.5
+        },
+        {
+          "date": "2026-04-29",
+          "price": 3.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Cos Hearts Lettuce",
+        "price": 2.5,
+        "unit_price": 1.25,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/141496/woolworths-cos-hearts-lettuce",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/141496.jpg"
+      },
+      "coles": {
+        "name": "Coles Lettuce Cos Baby Hearts | 2 Pack",
+        "price": 2.9,
+        "unit_price": 2.9,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-lettuce-cos-baby-hearts-2-pack-4646485",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4646485.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.4,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Corn Sweet",
-      "last_scraped": "2026-05-21T23:50:23.543337+00:00",
+      "last_scraped": "2026-05-22T05:53:09.352420+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -3923,126 +4043,6 @@
       "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.1,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Cos Hearts Lettuce",
-      "last_scraped": "2026-05-21T23:50:26.151545+00:00",
-      "trip_count": 22,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 3.5
-        },
-        {
-          "date": "2024-12-02",
-          "price": 2.5
-        },
-        {
-          "date": "2024-12-09",
-          "price": 3.5
-        },
-        {
-          "date": "2025-01-29",
-          "price": 3.5
-        },
-        {
-          "date": "2025-02-28",
-          "price": 3.5
-        },
-        {
-          "date": "2025-03-11",
-          "price": 3.5
-        },
-        {
-          "date": "2025-03-17",
-          "price": 3.5
-        },
-        {
-          "date": "2025-04-05",
-          "price": 3.5
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.5
-        },
-        {
-          "date": "2025-05-04",
-          "price": 3.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 3.9
-        },
-        {
-          "date": "2025-06-06",
-          "price": 3.9
-        },
-        {
-          "date": "2025-07-03",
-          "price": 3.9
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.9
-        },
-        {
-          "date": "2026-02-03",
-          "price": 3.5
-        },
-        {
-          "date": "2026-02-07",
-          "price": 3.5
-        },
-        {
-          "date": "2026-02-23",
-          "price": 3.5
-        },
-        {
-          "date": "2026-03-02",
-          "price": 3.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 3.5
-        },
-        {
-          "date": "2026-04-02",
-          "price": 2.5
-        },
-        {
-          "date": "2026-04-29",
-          "price": 3.5
-        },
-        {
-          "date": "2026-05-06",
-          "price": 2.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Cos Hearts Lettuce",
-        "price": 2.5,
-        "unit_price": 1.25,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/141496/woolworths-cos-hearts-lettuce",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/141496.jpg"
-      },
-      "coles": {
-        "name": "Coles Lettuce Cos Baby Hearts | 2 Pack",
-        "price": 2.9,
-        "unit_price": 2.9,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-lettuce-cos-baby-hearts-2-pack-4646485",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4646485.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.4,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
       "per_100_coles": null,
       "per_100_unit": "100g"
     },
@@ -13044,16 +13044,16 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 943.47,
+    "total_woolworths": 955.25,
     "total_coles": 1145.35,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 201.88,
+    "total_saving": 190.1,
     "items_compared": 209,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 40,
+    "done": 45,
     "total": 211
   }
 }
