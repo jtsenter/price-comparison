@@ -1513,18 +1513,14 @@ function sortItems(items) {
                   : item.cheaper_store === 'coles'      ? item.coles?.price
                   : (item.coles?.price ?? item.woolworths?.price);
         if (ref == null) return null;
-        // Flat history: classify by position relative to the flat line
-        // Buckets: 0=below-range, 1=flat-below, 2=in-range, 3=flat-at, 4=above-range, 5=flat-above, null=no-data
-        if (minP === maxP) {
-          if (ref < minP) return [1, ref];  // below flat line → after below-range items
-          if (ref > minP) return [5, ref];  // above flat line → after above-range items
-          return [3, 0];                     // at flat line    → after in-range items
-        }
-        // Normal range: bucket by zone, value for within-bucket ordering
+        // Bucket scheme: 0=below-range, 1=in-range(<0.5), 2=flat, 3=in-range(≥0.5), 4=above-range, null=no-data
+        // Flat items sit at the 0.5 midpoint, between the below-centre and above-centre in-range halves
+        if (minP === maxP) return [2, 0];  // all flat items → midpoint bucket, name tiebreaker for stability
         const pos = (ref - minP) / (maxP - minP);
-        if (pos < 0) return [0, pos];  // below range
-        if (pos > 1) return [4, pos];  // above range
-        return [2, pos];               // in range
+        if (pos < 0)   return [0, pos];  // below range
+        if (pos < 0.5) return [1, pos];  // in range, below midpoint
+        if (pos > 1)   return [4, pos];  // above range
+        return [3, pos];                  // in range, at/above midpoint (includes pos === 0.5 and pos === 1.0)
       }
       case 'category':     return getCategory(item).toLowerCase();
       case 'last_scraped': return item.last_scraped || '';

@@ -621,16 +621,13 @@ function getSortValue(col, item, dealInfo) {
       const minP = Math.min(...prices), maxP = Math.max(...prices);
       const ref = dealInfo?.price;
       if (ref == null) return null;
-      // Flat history: classify by position relative to flat line
-      if (minP === maxP) {
-        if (ref < minP) return [1, ref];
-        if (ref > minP) return [5, ref];
-        return [3, 0];
-      }
+      // Bucket scheme: 0=below-range, 1=in-range(<0.5), 2=flat, 3=in-range(≥0.5), 4=above-range, null=no-data
+      if (minP === maxP) return [2, 0];  // all flat items → midpoint bucket, name tiebreaker for stability
       const pos = (ref - minP) / (maxP - minP);
-      if (pos < 0) return [0, pos];
-      if (pos > 1) return [4, pos];
-      return [2, pos];
+      if (pos < 0)   return [0, pos];
+      if (pos < 0.5) return [1, pos];
+      if (pos > 1)   return [4, pos];
+      return [3, pos];
     }
     case 'category': return getCategory(item).toLowerCase();
     default:         return 0;
