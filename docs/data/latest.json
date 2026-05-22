@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T05:51:44.888005+00:00",
+  "last_updated": "2026-05-22T05:52:02.345883+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2316,7 +2316,7 @@
     },
     {
       "list_item": "The Odd Bunch Capsicum Prepacked",
-      "last_scraped": "2026-05-21T23:49:10.310835+00:00",
+      "last_scraped": "2026-05-22T05:51:47.385311+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -2383,7 +2383,7 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "The Odd Bunch Capsicum Prepacked",
-        "price": 3.15,
+        "price": 6.3,
         "unit_price": 6.3,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/825870/the-odd-bunch-capsicum-prepacked",
@@ -2398,7 +2398,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4841072.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 5.75,
+      "saving_per_item": 2.6,
       "alternatives": [
         {
           "name": "Coles Deli Roast Capsicum Strips | 130g",
@@ -2419,7 +2419,7 @@
     },
     {
       "list_item": "The Odd Bunch Lebanese Cucumber Punnet",
-      "last_scraped": "2026-05-21T23:49:15.974542+00:00",
+      "last_scraped": "2026-05-22T05:51:54.457772+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -2458,7 +2458,7 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "The Odd Bunch Lebanese Cucumber Punnet",
-        "price": 0.82,
+        "price": 5.1,
         "unit_price": 6.8,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/24364/the-odd-bunch-lebanese-cucumber-punnet",
@@ -2472,8 +2472,8 @@
         "url": "https://www.coles.com.au/product/coles-lebanese-cucumbers-approx.-160g-4575208",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4575208.jpg"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.76,
+      "cheaper_store": "coles",
+      "saving_per_item": 3.52,
       "alternatives": [
         {
           "name": "Kvuzat Yavne Pickled Cucumbers In Brine | 540g",
@@ -2494,7 +2494,7 @@
     },
     {
       "list_item": "The Odd Bunch Carrots",
-      "last_scraped": "2026-05-21T23:49:19.446138+00:00",
+      "last_scraped": "2026-05-22T05:51:55.599162+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -2569,7 +2569,7 @@
     },
     {
       "list_item": "The Odd Bunch Lemon Prepacked",
-      "last_scraped": "2026-05-21T23:49:21.712147+00:00",
+      "last_scraped": "2026-05-22T05:52:02.341577+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -13011,18 +13011,20 @@
       "per_100_unit": "100g"
     }
   ],
-  "not_found_items": [],
+  "not_found_items": [
+    "The Odd Bunch Mango"
+  ],
   "summary": {
-    "total_woolworths": 931.37,
+    "total_woolworths": 938.8,
     "total_coles": 1145.35,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 213.98,
+    "total_saving": 206.55,
     "items_compared": 209,
-    "items_not_found": 0
+    "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 25,
+    "done": 30,
     "total": 211
   }
 }
