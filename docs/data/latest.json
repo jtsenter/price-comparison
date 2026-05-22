@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T05:36:05.913496+00:00",
+  "last_updated": "2026-05-22T05:36:20.484273+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12424,8 +12424,91 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Nutella Hazelnut Chocolate Spread Spread",
+      "last_scraped": "2026-05-22T05:36:07.383259+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-03-10",
+          "price": 14.8
+        },
+        {
+          "date": "2026-05-06",
+          "price": 14.8
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Nutella Hazelnut Chocolate Spread Spread",
+        "price": 10.0,
+        "unit_price": 1.33,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/147314/nutella-hazelnut-chocolate-spread-spread",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147314.jpg"
+      },
+      "coles": {
+        "name": "Spread Choc Hazelnut",
+        "price": 10.0,
+        "unit_price": 1.33,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/nutella-spread-choc-hazelnut-750g-6690772",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6690772.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 1.33,
+      "per_100_coles": 1.33,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Osem Snacks Bamba With Peanuts",
+      "last_scraped": "2026-05-22T05:36:13.751857+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-02-03",
+          "price": 1.75
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.75
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": null,
+      "coles": {
+        "name": "Osem Bamba Peanut Snack | 100g",
+        "price": 4.0,
+        "unit_price": 4.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/osem-bamba-peanut-snack-100g-9542909",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9542909.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Osem Bamba Peanut Snack KB | 25g",
+          "price": 2.0,
+          "unit_price": 2.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/osem-bamba-peanut-snack-kb-25g-5132155",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5132155.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 4.0,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Orange Navel",
-      "last_scraped": "2026-05-21T23:57:16.136525+00:00",
+      "last_scraped": "2026-05-22T05:36:13.815342+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12452,53 +12535,20 @@
         "unit_price": 3.5,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-orange-navel-approx.-250g-4255717",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4255717.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4255717.jpg"
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.28,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.35,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Osem Snacks Bamba With Peanuts",
-      "last_scraped": "2026-05-21T23:57:18.903649+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2026-02-03",
-          "price": 1.75
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.75
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": null,
-      "coles": {
-        "name": "Osem Bamba Peanut Snack | 100g",
-        "price": 4.0,
-        "unit_price": 4.0,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/osem-bamba-peanut-snack-100g-9542909",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F9%2F9542909.jpg&w=640&q=90"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 4.0,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Rexona Men 48hr Deodorant Stick Sport Defence",
-      "last_scraped": "2026-05-21T23:57:21.407282+00:00",
+      "last_scraped": "2026-05-22T05:36:18.403740+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12525,12 +12575,12 @@
         "unit_price": null,
         "unit": null,
         "url": "https://www.coles.com.au/product/rexona-men-deodorant-48hr-stick-sport-defence-52g-8448304",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F8%2F8448304.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8448304.jpg"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.1,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 9.42,
       "per_100_coles": 9.62,
@@ -12538,7 +12588,7 @@
     },
     {
       "list_item": "Sam's Pantry Caramel Brownie Low Sugar Protein Bars",
-      "last_scraped": "2026-05-21T23:57:23.374094+00:00",
+      "last_scraped": "2026-05-22T05:36:20.461168+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13455,16 +13505,16 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 896.13,
-    "total_coles": 1136.35,
+    "total_woolworths": 906.13,
+    "total_coles": 1146.35,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
     "total_saving": 240.22,
-    "items_compared": 208,
+    "items_compared": 209,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 185,
+    "done": 190,
     "total": 211
   }
 }
