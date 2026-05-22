@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T06:07:37.317739+00:00",
+  "last_updated": "2026-05-22T06:07:54.378946+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6538,7 +6538,7 @@
     },
     {
       "list_item": "Dolmio Extra Bolognese Tomato Pasta Sauce",
-      "last_scraped": "2026-05-21T23:52:21.781319+00:00",
+      "last_scraped": "2026-05-22T06:07:40.779467+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -6582,7 +6582,7 @@
     },
     {
       "list_item": "Ecostore Ultra Sensitive Fragrance Free Laundry Liquid",
-      "last_scraped": "2026-05-21T23:52:26.121623+00:00",
+      "last_scraped": "2026-05-22T06:07:43.617021+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -6666,7 +6666,7 @@
     },
     {
       "list_item": "Essentials Salted Butter",
-      "last_scraped": "2026-05-21T23:52:28.336924+00:00",
+      "last_scraped": "2026-05-22T06:07:47.566028+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -6710,7 +6710,7 @@
     },
     {
       "list_item": "Essentials White Vinegar",
-      "last_scraped": "2026-05-21T23:52:31.565518+00:00",
+      "last_scraped": "2026-05-22T06:07:50.143710+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6755,6 +6755,53 @@
       "per_100_ww": 0.09,
       "per_100_coles": 0.67,
       "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Fox's Chocolatey Milk Chocolate Rounds",
+      "last_scraped": "2026-05-22T06:07:54.365585+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 5.5
+        },
+        {
+          "date": "2024-12-02",
+          "price": 5.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 5.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": null,
+      "coles": {
+        "name": "Darrell Lea Milk Chocolate Double Chocolate Brownie | 160g",
+        "price": 7.0,
+        "unit_price": 7.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/darrell-lea-milk-chocolate-double-chocolate-brownie-160g-8484975",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8484975.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": null,
+      "alternatives": [
+        {
+          "name": "Cadbury Dairy Milk Furry Friends Chocolate Multipack | 100g",
+          "price": 4.3,
+          "unit_price": 4.3,
+          "unit": null,
+          "url": "https://www.coles.com.au/product/cadbury-dairy-milk-furry-friends-chocolate-multipack-100g-3273338",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3273338.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 4.38,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Fresh Radish Bunch",
@@ -6809,53 +6856,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Fox's Chocolatey Milk Chocolate Rounds",
-      "last_scraped": "2026-05-21T23:52:40.169021+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 5.5
-        },
-        {
-          "date": "2024-12-02",
-          "price": 5.5
-        },
-        {
-          "date": "2024-12-09",
-          "price": 5.5
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": null,
-      "coles": {
-        "name": "Darrell Lea Milk Chocolate Double Chocolate Brownie | 160g",
-        "price": 7.0,
-        "unit_price": 7.0,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/darrell-lea-milk-chocolate-double-chocolate-brownie-160g-8484975",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8484975.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
-      "alternatives": [
-        {
-          "name": "Cadbury Dairy Milk Furry Friends Chocolate Multipack | 100g",
-          "price": 4.3,
-          "unit_price": 4.3,
-          "unit": null,
-          "url": "https://www.coles.com.au/product/cadbury-dairy-milk-furry-friends-chocolate-multipack-100g-3273338",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3273338.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 4.38,
       "per_100_unit": "100g"
     },
     {
@@ -13043,7 +13043,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 80,
+    "done": 85,
     "total": 211
   }
 }
