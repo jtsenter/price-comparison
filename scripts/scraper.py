@@ -647,9 +647,12 @@ async def _scrape_single_item(
         elif coles_url and not ww_url:
             print(f"  Fetching Coles by URL: {coles_url}")
             _co = await fetch_coles_by_url(coles_page, coles_url)
-            if not _co: print(f"  Coles URL fetch failed: {coles_url}")
-            coles_results = [_co] if _co else []
-            _skip_picker_co = True
+            if _co:
+                coles_results = [_co]
+                _skip_picker_co = True
+            else:
+                print(f"  Coles URL fetch failed, falling back to name search")
+                coles_results = await search_with_retry(search_coles, coles_page, item)
             ww_results = [existing_item["woolworths"]] if existing_item.get("woolworths") else []
             _skip_picker_ww = True
         else:
@@ -660,9 +663,12 @@ async def _scrape_single_item(
             _skip_picker_ww = True
             print(f"  Fetching Coles by URL: {coles_url}")
             _co = await fetch_coles_by_url(coles_page, coles_url)
-            if not _co: print(f"  Coles URL fetch failed: {coles_url}")
-            coles_results = [_co] if _co else []
-            _skip_picker_co = True
+            if _co:
+                coles_results = [_co]
+                _skip_picker_co = True
+            else:
+                print(f"  Coles URL fetch failed, falling back to name search")
+                coles_results = await search_with_retry(search_coles, coles_page, item)
     else:
         # Name-based search (normal scrape) — honour url_overrides.json if present
         overrides_path = os.path.join(DATA_DIR, "url_overrides.json")
@@ -720,9 +726,21 @@ async def _scrape_single_item(
                 _co = await fetch_coles_by_url(coles_page, pinned_co)
                 if _co:
                     coles_results = [_co]
+                    _skip_picker_co = True
                 else:
-                    print(f"  Coles pinned URL failed, will carry forward existing data")
-                _skip_picker_co = True
+                    # Coles product page failed — fall back to name search so we still
+                    # get a price rather than silently carrying forward None.
+                    print(f"  Coles pinned URL failed, falling back to name search")
+                    coles_results = await search_with_retry(search_coles, coles_page, item)
+                    # Try to prefer the product whose URL slug matches the pinned URL
+                    _slug_m = re.search(r'/product/([^/?]+)', pinned_co)
+                    if _slug_m:
+                        _pinned_slug = _slug_m.group(1)
+                        _co_hit = next((r for r in coles_results if _pinned_slug in r.get('url', '')), None)
+                        if _co_hit:
+                            print(f"  Coles: matched by pinned slug")
+                            coles_results = [_co_hit]
+                            _skip_picker_co = True
             else:
                 coles_results = await search_with_retry(search_coles, coles_page, item)
         else:
