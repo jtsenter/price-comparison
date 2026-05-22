@@ -1487,10 +1487,15 @@ function sortItems(items) {
         const history = item.price_history;
         if (!history?.length) return Infinity;
         const factor = item._ww_price_factor ?? 1;
-        const prices = history.map(p => p.price * factor).filter(p => p > 0);
+        // Apply same exclusions as buildPriceBar so sort matches the visual bar
+        const _excl = loadExclusions();
+        const _excluded = new Set((_excl[item.list_item] || []).map(p => Number(p).toFixed(2)));
+        const prices = history
+          .map(p => p.price * factor)
+          .filter((p, i) => p > 0 && !_excluded.has(Number(history[i].price).toFixed(2)));
         if (prices.length < 2) return Infinity;
         const minP = Math.min(...prices), maxP = Math.max(...prices);
-        if (minP === maxP) return Infinity;
+        if (minP === maxP) return 0.5; // flat after exclusions — treat as mid-range
         const ref = item.cheaper_store === 'woolworths' ? item.woolworths?.price
                   : item.cheaper_store === 'coles'      ? item.coles?.price
                   : (item.coles?.price ?? item.woolworths?.price);
