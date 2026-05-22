@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T05:26:41.014744+00:00",
+  "last_updated": "2026-05-22T05:27:07.438507+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4048,7 +4048,7 @@
     },
     {
       "list_item": "Woolworths Diced Italian Tomatoes",
-      "last_scraped": "2026-05-21T23:50:28.767765+00:00",
+      "last_scraped": "2026-05-22T05:26:49.312515+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -4091,11 +4091,11 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Diced Italian Tomatoes",
-        "price": 0.8,
-        "unit_price": 2.5,
+        "price": 0.44,
+        "unit_price": 2.75,
         "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/236393/woolworths-diced-italian-tomatoes",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/236393.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/770320/woolworths-diced-italian-tomatoes",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/770320.jpg"
       },
       "coles": {
         "name": "Coles Australian Diced Tomatoes | 400g",
@@ -4107,7 +4107,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 0.5,
+      "saving_per_item": 0.86,
       "alternatives": [
         {
           "name": "Coles Italian Diced Tomatoes | 400g",
@@ -4139,14 +4139,14 @@
       ],
       "match_confidence": "medium",
       "size_warning": false,
-      "per_100_ww": 0.25,
+      "per_100_ww": 0.28,
       "per_100_coles": 0.33,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.4
     },
     {
       "list_item": "Woolworths Dill Fresh Herb",
-      "last_scraped": "2026-05-22T02:26:32.187176+00:00",
+      "last_scraped": "2026-05-22T05:26:53.381033+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -4206,7 +4206,7 @@
     },
     {
       "list_item": "Woolworths Dreamy Choc Chip Cookies",
-      "last_scraped": "2026-05-21T23:50:33.517369+00:00",
+      "last_scraped": "2026-05-22T05:26:55.271747+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4270,7 +4270,7 @@
     },
     {
       "list_item": "Woolworths Fresh Continental Parsley Bunch",
-      "last_scraped": "2026-05-21T23:50:38.466223+00:00",
+      "last_scraped": "2026-05-22T05:27:03.402853+00:00",
       "trip_count": 11,
       "price_history": [
         {
@@ -4355,6 +4355,66 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Extra Virgin Spanish Olive Oil",
+      "last_scraped": "2026-05-22T05:27:07.405516+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 18.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 14.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 14.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 18.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 15.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 14.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 14.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Extra Virgin Spanish Olive Oil",
+        "price": 14.0,
+        "unit_price": 1.4,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/698868/woolworths-extra-virgin-spanish-olive-oil",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/698868.jpg"
+      },
+      "coles": {
+        "name": "Extra Virgin Olive Oil",
+        "price": 14.0,
+        "unit_price": 1.4,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-1l-5607376",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5607376.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 1.4,
+      "per_100_coles": 1.4,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "Woolworths Frozen Meat Pies",
       "last_scraped": "2026-05-21T23:50:43.236388+00:00",
       "trip_count": 10,
@@ -4425,66 +4485,6 @@
       "per_100_ww": 0.94,
       "per_100_coles": 0.94,
       "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Extra Virgin Spanish Olive Oil",
-      "last_scraped": "2026-05-21T23:50:43.554746+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2025-02-02",
-          "price": 18.0
-        },
-        {
-          "date": "2025-03-11",
-          "price": 14.0
-        },
-        {
-          "date": "2025-05-12",
-          "price": 14.0
-        },
-        {
-          "date": "2025-06-06",
-          "price": 18.0
-        },
-        {
-          "date": "2026-02-03",
-          "price": 15.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 14.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 14.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Extra Virgin Spanish Olive Oil",
-        "price": 14.0,
-        "unit_price": 1.4,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/698868/woolworths-extra-virgin-spanish-olive-oil",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/698868.jpg"
-      },
-      "coles": {
-        "name": "Extra Virgin Olive Oil",
-        "price": 14.0,
-        "unit_price": 1.4,
-        "unit": "100mL",
-        "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-1l-5607376",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5607376.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 1.4,
-      "per_100_coles": 1.4,
-      "per_100_unit": "100ml"
     },
     {
       "list_item": "Woolworths Full Cream Milk",
@@ -12969,16 +12969,16 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 898.99,
+    "total_woolworths": 898.63,
     "total_coles": 1136.35,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 237.36,
+    "total_saving": 237.72,
     "items_compared": 208,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 45,
+    "done": 50,
     "total": 211
   }
 }
