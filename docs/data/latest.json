@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T05:54:59.970855+00:00",
+  "last_updated": "2026-05-22T05:55:43.448142+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12975,7 +12975,7 @@
     },
     {
       "list_item": "Lamb Mince",
-      "last_scraped": "2026-05-22T05:42:26.301288+00:00",
+      "last_scraped": "2026-05-22T05:55:43.188884+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -13000,42 +13000,32 @@
         "url": "https://www.woolworths.com.au/shop/productdetails/582607/woolworths-lamb-mince",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/582607.jpg"
       },
-      "coles": null,
-      "cheaper_store": "woolworths",
-      "saving_per_item": null,
+      "coles": {
+        "name": "3 Star Lamb Mince",
+        "price": 8.0,
+        "unit_price": 16.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8850461.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.0,
       "alternatives": [
         {
-          "name": "Ultimates Indulge Wet Dog Food Lamb Mince In Gravy",
-          "price": 2.0,
-          "unit_price": 0.5,
-          "unit": "100G",
-          "url": "https://www.woolworths.com.au/shop/productdetails/55061/ultimates-indulge-wet-dog-food-lamb-mince-in-gravy",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/055061.jpg",
-          "retailer": "woolworths"
-        },
-        {
-          "name": "Whiskas 1+ Years Wet Cat Food Lamb Mince",
-          "price": 2.65,
-          "unit_price": 0.66,
-          "unit": "100G",
-          "url": "https://www.woolworths.com.au/shop/productdetails/78609/whiskas-1-years-wet-cat-food-lamb-mince",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/078609.jpg",
-          "retailer": "woolworths"
-        },
-        {
-          "name": "Ultimates Indulge Wet Dog Food Lamb Mince In Gravy",
-          "price": 1.6,
-          "unit_price": 1.6,
-          "unit": "100G",
-          "url": "https://www.woolworths.com.au/shop/productdetails/524912/ultimates-indulge-wet-dog-food-lamb-mince-in-gravy",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/524912.jpg",
-          "retailer": "woolworths"
+          "name": "3 Star Lamb Mince",
+          "price": 8.0,
+          "unit_price": 16.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8850461.jpg",
+          "retailer": "coles"
         }
       ],
-      "match_confidence": "none",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.8,
-      "per_100_coles": null,
+      "per_100_coles": 1.6,
       "per_100_unit": "100g"
     }
   ],
@@ -13044,16 +13034,12 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 979.65,
-    "total_coles": 1145.35,
+    "total_woolworths": 988.65,
+    "total_coles": 1153.35,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 165.7,
+    "total_saving": 164.7,
     "items_compared": 209,
     "items_not_found": 2
-  },
-  "scrape_progress": {
-    "done": 75,
-    "total": 211
   }
 }
