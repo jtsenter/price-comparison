@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T05:53:50.499273+00:00",
+  "last_updated": "2026-05-22T05:54:08.458857+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4878,7 +4878,7 @@
     },
     {
       "list_item": "Woolworths Lean Beef Mince",
-      "last_scraped": "2026-05-21T23:51:03.878834+00:00",
+      "last_scraped": "2026-05-22T05:53:52.365413+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -4921,7 +4921,7 @@
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Woolworths Lean Beef Mince",
-        "price": 5.5,
+        "price": 11.0,
         "unit_price": 22.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/577861/woolworths-lean-beef-mince",
@@ -4936,7 +4936,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6123116.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 7.0,
+      "saving_per_item": 1.5,
       "alternatives": [
         {
           "name": "Coles 5 Star Extra Lean Pork Mince | 500g",
@@ -4975,7 +4975,7 @@
     },
     {
       "list_item": "Woolworths RSPCA Approved Chicken Breast Fillet",
-      "last_scraped": "2026-05-21T23:51:08.913528+00:00",
+      "last_scraped": "2026-05-22T05:53:58.389360+00:00",
       "trip_count": 23,
       "price_history": [
         {
@@ -5078,7 +5078,7 @@
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Woolworths RSPCA Approved Chicken Breast Fillet",
-        "price": 5.4,
+        "price": 9.0,
         "unit_price": 9.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/710953/woolworths-rspca-approved-chicken-breast-fillet",
@@ -5093,7 +5093,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3228730.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 5.4,
+      "saving_per_item": 1.8,
       "alternatives": [],
       "match_confidence": "medium",
       "size_warning": false,
@@ -5104,7 +5104,7 @@
     },
     {
       "list_item": "Woolworths Onion Brown Bag",
-      "last_scraped": "2026-05-21T23:51:12.021480+00:00",
+      "last_scraped": "2026-05-22T05:54:00.156576+00:00",
       "trip_count": 14,
       "price_history": [
         {
@@ -5192,7 +5192,7 @@
     },
     {
       "list_item": "Woolworths Red Watermelon Cut Quarter",
-      "last_scraped": "2026-05-21T23:51:14.038895+00:00",
+      "last_scraped": "2026-05-22T05:54:03.967612+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5276,7 +5276,7 @@
     },
     {
       "list_item": "Woolworths Salmon Portions Skin On",
-      "last_scraped": "2026-05-21T23:51:18.014475+00:00",
+      "last_scraped": "2026-05-22T05:54:08.451728+00:00",
       "trip_count": 12,
       "price_history": [
         {
@@ -5331,7 +5331,7 @@
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Woolworths Salmon Portions Skin On",
-        "price": 5.25,
+        "price": 17.5,
         "unit_price": 38.04,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/157054/woolworths-salmon-portions-skin-on",
@@ -5345,8 +5345,8 @@
         "url": "https://www.coles.com.au/product/tassal-salmon-portions-skin-on-300g-5285371",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5285371.jpg"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 8.75,
+      "cheaper_store": "coles",
+      "saving_per_item": 3.5,
       "alternatives": [
         {
           "name": "Coles Tasmanian Salmon Portion Skin On | 200g",
@@ -13044,16 +13044,16 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 955.55,
+    "total_woolworths": 976.9,
     "total_coles": 1145.35,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 189.8,
+    "total_saving": 168.45,
     "items_compared": 209,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 55,
+    "done": 60,
     "total": 211
   }
 }
