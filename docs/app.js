@@ -944,6 +944,7 @@ function initBulkBar() {
     savePriorities(pr);
     $('bulkPrioritySelect').value = '';
     if (_lastData) renderPage(_lastData);
+    scheduleArchiveSync();
   });
 
   $('bulkArchiveBtn')?.addEventListener('click', () => {
@@ -953,6 +954,7 @@ function initBulkBar() {
     _checkedItems.clear();
     updateBulkBar();
     if (_lastData) renderPage(_lastData);
+    scheduleArchiveSync();
   });
 
   $('bulkDeselectBtn')?.addEventListener('click', () => {
@@ -2673,6 +2675,37 @@ async function boot() {
   $('shopListBtn')?.addEventListener('click', () => exportShoppingList(false));
   $('bulkExportBtn')?.addEventListener('click', () => exportShoppingList(true));
 
+  // Auto-sync archived_items.json to GitHub whenever archive state changes (debounced 2s)
+  let _archiveSyncTimer = null;
+  async function syncArchivedToGitHub() {
+    const s = loadSettings();
+    if (!s.user || !s.repo || !s.token) return; // no credentials configured, skip silently
+    const pr = loadPriorities();
+    const archivedNames = Object.keys(pr).filter(k => pr[k] === 'archive');
+    try {
+      const content = btoa(JSON.stringify(archivedNames, null, 2) + '\n');
+      const getRes = await fetch(
+        `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/archived_items.json`,
+        { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
+      );
+      const shaJson = getRes.ok ? (await getRes.json()) : {};
+      const putBody = { message: 'chore: sync archived items list', content };
+      if (shaJson.sha) putBody.sha = shaJson.sha;
+      await fetch(
+        `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/archived_items.json`,
+        {
+          method: 'PUT',
+          headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify(putBody),
+        }
+      );
+    } catch (_) { /* silently ignore — user can still use Scrape Archived button */ }
+  }
+  function scheduleArchiveSync() {
+    clearTimeout(_archiveSyncTimer);
+    _archiveSyncTimer = setTimeout(syncArchivedToGitHub, 2000);
+  }
+
   // Scrape strip dismiss & retry
   // Scrape Archived button — persists archived list to GitHub then dispatches workflow
   $('scrapeArchivedBtn')?.addEventListener('click', async () => {
@@ -2790,6 +2823,7 @@ async function boot() {
         else delete pr[sel.dataset.item];
         savePriorities(pr);
         if (_lastData) renderPage(_lastData);
+        scheduleArchiveSync();
       }
     });
   }
@@ -2938,9 +2972,17 @@ async function boot() {
           p[sel.dataset.item] = sel.value;
           savePriorities(p);
           if (_lastData) renderPage(_lastData);
+          scheduleArchiveSync();
         }
       });
     }
+  }
+
+  // One-time sync on load: push current archived items to archived_items.json
+  // Fixes case where localStorage has archived items but the repo file was empty/stale.
+  const _initPr = loadPriorities();
+  if (Object.values(_initPr).includes('archive')) {
+    syncArchivedToGitHub();
   }
 }
 
