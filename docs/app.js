@@ -2143,13 +2143,27 @@ function renderPage(data) {
   });
 
   // Tfoot — dynamic to match column order
-  // Footer savings = sum of per-item savings for rows where both prices exist
-  // (matches exactly what the individual cells show, unlike s.total_saving which
-  //  treats missing-price items as $0 and uses basket-level diff instead)
-  const footerSaving = Math.round(sorted.reduce((sum, item) => {
-    if (item.woolworths?.price == null || item.coles?.price == null) return sum;
-    return sum + (item.saving_per_item ?? 0) * getUnits(item.list_item);
-  }, 0) * 100) / 100;
+  // Single pass over sorted visible rows: base totals (qty=1) for the price columns,
+  // qty-adjusted totals for the total columns, and per-item savings for the savings cell.
+  let _fWWBase = 0, _fCoBase = 0, _fWWQty = 0, _fCoQty = 0, _fSaving = 0;
+  let _fWWAvail = false, _fCoAvail = false;
+  for (const item of sorted) {
+    const wwP = item.woolworths?.price ?? 0;
+    const coP = item.coles?.price ?? 0;
+    const qty = getUnits(item.list_item);
+    if (item.woolworths?.price != null) _fWWAvail = true;
+    if (item.coles?.price    != null)   _fCoAvail = true;
+    _fWWBase += wwP;
+    _fCoBase += coP;
+    _fWWQty  += wwP * qty;
+    _fCoQty  += coP * qty;
+    _fSaving += (item.saving_per_item ?? 0) * qty;
+  }
+  const footWWBase   = Math.round(_fWWBase  * 100) / 100;
+  const footCoBase   = Math.round(_fCoBase  * 100) / 100;
+  const footWWQty    = Math.round(_fWWQty   * 100) / 100;
+  const footCoQty    = Math.round(_fCoQty   * 100) / 100;
+  const footerSaving = Math.round(_fSaving  * 100) / 100;
 
   const tfootRow = document.querySelector('tfoot tr');
   if (tfootRow) {
@@ -2158,16 +2172,16 @@ function renderPage(data) {
       trend:        `<td></td>`,
       priority:     `<td></td>`,
       units:        `<td></td>`,
-      ww:           `<td id="footWW">${s.ww_data_available ? fmt(s.total_woolworths) : '—'}</td>`,
-      coles:        `<td id="footColes">${fmt(s.total_coles)}</td>`,
+      ww:           `<td id="footWW">${_fWWAvail ? fmt(footWWBase) : '—'}</td>`,
+      coles:        `<td id="footColes">${_fCoAvail ? fmt(footCoBase) : '—'}</td>`,
       cheaper:      `<td></td>`,
       pct:          `<td></td>`,
       saving:       `<td id="footSaving" style="text-align:right" title="Total savings vs most expensive store"><span class="saving-cell">${fmt(footerSaving)}</span><div style="font-size:11px;color:var(--text-soft);font-weight:400">saved</div></td>`,
       trips:        `<td></td>`,
       category:     `<td></td>`,
       last_scraped: `<td></td>`,
-      ww_total:     `<td style="font-weight:700">${s.ww_data_available ? fmt(s.total_woolworths) : '—'}</td>`,
-      coles_total:  `<td style="font-weight:700">${fmt(s.total_coles)}</td>`,
+      ww_total:     `<td style="font-weight:700">${_fWWAvail ? fmt(footWWQty) : '—'}</td>`,
+      coles_total:  `<td style="font-weight:700">${_fCoAvail ? fmt(footCoQty) : '—'}</td>`,
     };
     tfootRow.innerHTML = '<td></td>' + getVisibleCols().map(col => footMap[col] || '<td></td>').join('') + '<td></td>';
   }
