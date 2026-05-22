@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --ww: #00843D; --ww-light: #E8F5EE;
+  --coles: #CC0000;
+  --bg: #F0F4F8; --card: #FFFFFF;
+  --border: #E2E8F0; --border-strong: #CBD5E1;
+  --text: #1A1F2E; --text-mid: #475569; --text-soft: #94A3B8;
+  --radius: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+       background: var(--bg); color: var(--text); padding: 24px; }
+
+h3 { font-size: 13px; color: var(--text-soft); margin-bottom: 6px; letter-spacing: .04em; text-transform: uppercase; }
+.sub { font-size: 12px; color: var(--text-soft); margin-bottom: 12px; }
+
+.panel { background: var(--card); border-radius: var(--radius); overflow: hidden;
+         box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom: 32px; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+thead th {
+  padding: 9px 12px;
+  background: var(--bg);
+  border-bottom: 2px solid var(--border-strong);
+  font-size: 11px; font-weight: 600; color: var(--text-mid);
+  text-align: left; white-space: nowrap; cursor: pointer; user-select: none;
+}
+thead th.center-th { text-align: center; }
+thead th.sort-active { color: var(--text); }
+.sort-arrow { font-style: normal; font-size: 11px; opacity: 0.7; margin-left: 2px; }
+
+.store-chip { display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; font-size: 11px; border-radius: 5px;
+  font-weight: 700; color: #fff; vertical-align: middle; margin-right: 4px; }
+.store-chip.ww   { background: var(--ww); }
+.store-chip.coles { background: var(--coles); }
+
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody td { padding: 10px 12px; font-size: 13px; color: var(--text-mid); vertical-align: middle; }
+
+/* product cell — image + name only, NO heatmap */
+.product-cell { display: flex; align-items: center; gap: 10px; }
+.prod-img { width: 44px; height: 44px; border-radius: 6px; flex-shrink: 0;
+            background: var(--bg); border: 1px solid var(--border); }
+.prod-name { font-size: 13px; font-weight: 500; color: var(--text); }
+
+/* heatmap bar — now lives in its own column */
+.heatmap-wrap { display: flex; flex-direction: column; gap: 3px; width: 130px; }
+.heatmap-bar {
+  height: 8px; border-radius: 4px; position: relative;
+  background: linear-gradient(to right, #22c55e, #a3e635, #facc15, #fb923c, #ef4444);
+}
+.heatmap-dot {
+  position: absolute; top: 50%; transform: translate(-50%, -50%);
+  width: 14px; height: 14px; border-radius: 50%;
+  background: #fff; border: 2px solid #475569;
+  box-shadow: 0 1px 3px rgba(0,0,0,.25);
+}
+.heatmap-labels { display: flex; justify-content: space-between;
+                  font-size: 10px; color: var(--text-soft); }
+
+/* new column highlight */
+th.new-col {
+  background: var(--ww-light) !important;
+  color: var(--text) !important;
+  outline: 2px solid var(--ww);
+  outline-offset: -2px;
+}
+
+.store-badge { padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.store-badge.coles { background:#dcfce7; color:#166534; }
+
+.legend { padding: 10px 14px; font-size: 11px; color: var(--text-soft);
+          border-top: 1px solid var(--border); }
+
+/* name option tabs */
+.name-tabs { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.name-tab { padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 600;
+            border: 1.5px solid var(--border-strong); color: var(--text-mid);
+            background: var(--card); cursor: default; }
+.name-tab.shown { background: var(--ww-light); border-color: var(--ww); color: #14532d; }
+</style>
+</head>
+<body>
+
+<!-- name option selector (visual only) -->
+<p class="sub" style="margin-bottom:8px;font-size:12px;font-weight:600;color:var(--text)">Proposed column header name options — each table below shows one:</p>
+<div class="name-tabs">
+  <div class="name-tab shown">Range</div>
+  <div class="name-tab">History</div>
+  <div class="name-tab">Hist.</div>
+  <div class="name-tab">Trend</div>
+  <div class="name-tab">Track</div>
+</div>
+
+<!-- ── "Range" ── -->
+<h3>"Range"</h3>
+<div class="panel">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:32px"><input type="checkbox" style="margin:0"></th>
+        <th>Product <span class="sort-arrow">↕</span></th>
+        <th class="new-col sort-active" style="min-width:155px">Range <span class="sort-arrow">↑</span></th>
+        <th><span class="store-chip ww">W</span> WW <span class="sort-arrow">↕</span></th>
+        <th><span class="store-chip coles">C</span> Coles <span class="sort-arrow">↕</span></th>
+        <th class="center-th">Best <span class="sort-arrow">↕</span></th>
+        <th class="center-th">Diff <span class="sort-arrow">↕</span></th>
+        <th>Savings <span class="sort-arrow">↕</span></th>
+        <th class="center-th">Buys <span class="sort-arrow">↕</span></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">Fresh Cauliflower Half ⚠️</div>
+        </div></td>
+        <td>
+          <div class="heatmap-wrap">
+            <div class="heatmap-bar"><div class="heatmap-dot" style="left:12%"></div></div>
+            <div class="heatmap-labels"><span>$1.50</span><span>$3.95</span></div>
+          </div>
+        </td>
+        <td>$2.50</td><td>$2.00</td>
+        <td style="text-align:center"><span class="store-badge coles">Coles</span></td>
+        <td style="text-align:center;color:#166534;font-weight:600">–20%</td>
+        <td>$0.50</td><td style="text-align:center">12</td><td></td>
+      </tr>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">The Odd Bunch Zucchini Prepacked ⚠️</div>
+        </div></td>
+        <td>
+          <div class="heatmap-wrap">
+            <div class="heatmap-bar"><div class="heatmap-dot" style="left:58%"></div></div>
+            <div class="heatmap-labels"><span>$2.30</span><span>$4.00</span></div>
+          </div>
+        </td>
+        <td>$4.00</td><td>$3.50</td>
+        <td style="text-align:center"><span class="store-badge coles">Coles</span></td>
+        <td style="text-align:center;color:#166534;font-weight:600">–13%</td>
+        <td>$0.50</td><td style="text-align:center">8</td><td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── "History" ── -->
+<h3>"History"</h3>
+<div class="panel">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:32px"><input type="checkbox" style="margin:0"></th>
+        <th>Product <span class="sort-arrow">↕</span></th>
+        <th class="new-col sort-active" style="min-width:155px">History <span class="sort-arrow">↑</span></th>
+        <th><span class="store-chip ww">W</span> WW <span class="sort-arrow">↕</span></th>
+        <th><span class="store-chip coles">C</span> Coles <span class="sort-arrow">↕</span></th>
+        <th class="center-th">Best <span class="sort-arrow">↕</span></th>
+        <th class="center-th">Diff <span class="sort-arrow">↕</span></th>
+        <th>Savings <span class="sort-arrow">↕</span></th>
+        <th class="center-th">Buys <span class="sort-arrow">↕</span></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">Fresh Cauliflower Half ⚠️</div>
+        </div></td>
+        <td>
+          <div class="heatmap-wrap">
+            <div class="heatmap-bar"><div class="heatmap-dot" style="left:12%"></div></div>
+            <div class="heatmap-labels"><span>$1.50</span><span>$3.95</span></div>
+          </div>
+        </td>
+        <td>$2.50</td><td>$2.00</td>
+        <td style="text-align:center"><span class="store-badge coles">Coles</span></td>
+        <td style="text-align:center;color:#166534;font-weight:600">–20%</td>
+        <td>$0.50</td><td style="text-align:center">12</td><td></td>
+      </tr>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">The Odd Bunch Zucchini Prepacked ⚠️</div>
+        </div></td>
+        <td>
+          <div class="heatmap-wrap">
+            <div class="heatmap-bar"><div class="heatmap-dot" style="left:58%"></div></div>
+            <div class="heatmap-labels"><span>$2.30</span><span>$4.00</span></div>
+          </div>
+        </td>
+        <td>$4.00</td><td>$3.50</td>
+        <td style="text-align:center"><span class="store-badge coles">Coles</span></td>
+        <td style="text-align:center;color:#166534;font-weight:600">–13%</td>
+        <td>$0.50</td><td style="text-align:center">8</td><td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── "Hist." ── -->
+<h3>"Hist."</h3>
+<div class="panel">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:32px"><input type="checkbox" style="margin:0"></th>
+        <th>Product <span class="sort-arrow">↕</span></th>
+        <th class="new-col sort-active" style="min-width:155px">Hist. <span class="sort-arrow">↑</span></th>
+        <th><span class="store-chip ww">W</span> WW <span class="sort-arrow">↕</span></th>
+        <th><span class="store-chip coles">C</span> Coles <span class="sort-arrow">↕</span></th>
+        <th class="center-th">Best <span class="sort-arrow">↕</span></th>
+        <th class="center-th">Diff <span class="sort-arrow">↕</span></th>
+        <th>Savings <span class="sort-arrow">↕</span></th>
+        <th class="center-th">Buys <span class="sort-arrow">↕</span></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">Fresh Cauliflower Half ⚠️</div>
+        </div></td>
+        <td>
+          <div class="heatmap-wrap">
+            <div class="heatmap-bar"><div class="heatmap-dot" style="left:12%"></div></div>
+            <div class="heatmap-labels"><span>$1.50</span><span>$3.95</span></div>
+          </div>
+        </td>
+        <td>$2.50</td><td>$2.00</td>
+        <td style="text-align:center"><span class="store-badge coles">Coles</span></td>
+        <td style="text-align:center;color:#166534;font-weight:600">–20%</td>
+        <td>$0.50</td><td style="text-align:center">12</td><td></td>
+      </tr>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">The Odd Bunch Zucchini Prepacked ⚠️</div>
+        </div></td>
+        <td>
+          <div class="heatmap-wrap">
+            <div class="heatmap-bar"><div class="heatmap-dot" style="left:58%"></div></div>
+            <div class="heatmap-labels"><span>$2.30</span><span>$4.00</span></div>
+          </div>
+        </td>
+        <td>$4.00</td><td>$3.50</td>
+        <td style="text-align:center"><span class="store-badge coles">Coles</span></td>
+        <td style="text-align:center;color:#166534;font-weight:600">–13%</td>
+        <td>$0.50</td><td style="text-align:center">8</td><td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── "Trend" ── -->
+<h3>"Trend"</h3>
+<div class="panel">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:32px"><input type="checkbox" style="margin:0"></th>
+        <th>Product <span class="sort-arrow">↕</span></th>
+        <th class="new-col sort-active" style="min-width:155px">Trend <span class="sort-arrow">↑</span></th>
+        <th><span class="store-chip ww">W</span> WW <span class="sort-arrow">↕</span></th>
+        <th><span class="store-chip coles">C</span> Coles <span class="sort-arrow">↕</span></th>
+        <th class="center-th">Best <span class="sort-arrow">↕</span></th>
+        <th class="center-th">Diff <span class="sort-arrow">↕</span></th>
+        <th>Savings <span class="sort-arrow">↕</span></th>
+        <th class="center-th">Buys <span class="sort-arrow">↕</span></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">Fresh Cauliflower Half ⚠️</div>
+        </div></td>
+        <td>
+          <div class="heatmap-wrap">
+            <div class="heatmap-bar"><div class="heatmap-dot" style="left:12%"></div></div>
+            <div class="heatmap-labels"><span>$1.50</span><span>$3.95</span></div>
+          </div>
+        </td>
+        <td>$2.50</td><td>$2.00</td>
+        <td style="text-align:center"><span class="store-badge coles">Coles</span></td>
+        <td style="text-align:center;color:#166534;font-weight:600">–20%</td>
+        <td>$0.50</td><td style="text-align:center">12</td><td></td>
+      </tr>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">The Odd Bunch Zucchini Prepacked ⚠️</div>
+        </div></td>
+        <td>
+          <div class="heatmap-wrap">
+            <div class="heatmap-bar"><div class="heatmap-dot" style="left:58%"></div></div>
+            <div class="heatmap-labels"><span>$2.30</span><span>$4.00</span></div>
+          </div>
+        </td>
+        <td>$4.00</td><td>$3.50</td>
+        <td style="text-align:center"><span class="store-badge coles">Coles</span></td>
+        <td style="text-align:center;color:#166534;font-weight:600">–13%</td>
+        <td>$0.50</td><td style="text-align:center">8</td><td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── "Track" ── -->
+<h3>"Track"</h3>
+<div class="panel">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:32px"><input type="checkbox" style="margin:0"></th>
+        <th>Product <span class="sort-arrow">↕</span></th>
+        <th class="new-col sort-active" style="min-width:155px">Track <span class="sort-arrow">↑</span></th>
+        <th><span class="store-chip ww">W</span> WW <span class="sort-arrow">↕</span></th>
+        <th><span class="store-chip coles">C</span> Coles <span class="sort-arrow">↕</span></th>
+        <th class="center-th">Best <span class="sort-arrow">↕</span></th>
+        <th class="center-th">Diff <span class="sort-arrow">↕</span></th>
+        <th>Savings <span class="sort-arrow">↕</span></th>
+        <th class="center-th">Buys <span class="sort-arrow">↕</span></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">Fresh Cauliflower Half ⚠️</div>
+        </div></td>
+        <td>
+          <div class="heatmap-wrap">
+            <div class="heatmap-bar"><div class="heatmap-dot" style="left:12%"></div></div>
+            <div class="heatmap-labels"><span>$1.50</span><span>$3.95</span></div>
+          </div>
+        </td>
+        <td>$2.50</td><td>$2.00</td>
+        <td style="text-align:center"><span class="store-badge coles">Coles</span></td>
+        <td style="text-align:center;color:#166534;font-weight:600">–20%</td>
+        <td>$0.50</td><td style="text-align:center">12</td><td></td>
+      </tr>
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">The Odd Bunch Zucchini Prepacked ⚠️</div>
+        </div></td>
+        <td>
+          <div class="heatmap-wrap">
+            <div class="heatmap-bar"><div class="heatmap-dot" style="left:58%"></div></div>
+            <div class="heatmap-labels"><span>$2.30</span><span>$4.00</span></div>
+          </div>
+        </td>
+        <td>$4.00</td><td>$3.50</td>
+        <td style="text-align:center"><span class="store-badge coles">Coles</span></td>
+        <td style="text-align:center;color:#166534;font-weight:600">–13%</td>
+        <td>$0.50</td><td style="text-align:center">8</td><td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

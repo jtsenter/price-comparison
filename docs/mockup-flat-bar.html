@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+:root {
+  --ww: #00843D; --ww-light: #E8F5EE;
+  --coles: #CC0000;
+  --bg: #F0F4F8; --card: #FFFFFF;
+  --border: #E2E8F0; --border-strong: #CBD5E1;
+  --text: #1A1F2E; --text-mid: #475569; --text-soft: #94A3B8;
+  --radius: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+       background: var(--bg); color: var(--text); padding: 24px; }
+
+h3 { font-size: 13px; color: var(--text-soft); margin-bottom: 8px;
+     letter-spacing: .04em; text-transform: uppercase; }
+.desc { font-size: 12px; color: var(--text-mid); margin-bottom: 14px; }
+
+.panel { background: var(--card); border-radius: var(--radius);
+         box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom: 28px; overflow: hidden; }
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th {
+  padding: 9px 12px; background: var(--bg);
+  border-bottom: 2px solid var(--border-strong);
+  font-size: 11px; font-weight: 600; color: var(--text-mid); text-align: left;
+}
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody td { padding: 10px 12px; vertical-align: middle; }
+
+.store-chip { display:inline-flex;align-items:center;justify-content:center;
+  width:20px;height:20px;font-size:11px;border-radius:5px;font-weight:700;
+  color:#fff;vertical-align:middle;margin-right:4px; }
+.store-chip.ww { background: var(--ww); }
+.store-chip.coles { background: var(--coles); }
+
+/* product cell */
+.product-cell { display:flex;align-items:center;gap:10px; }
+.prod-img { width:44px;height:44px;border-radius:6px;flex-shrink:0;
+            background:var(--bg);border:1px solid var(--border); }
+.prod-name { font-size:13px;font-weight:500;color:var(--text); }
+
+/* ── existing normal bar (for reference) ── */
+.price-bar-outer { position:relative; padding-top:6px; cursor:default; }
+.price-bar {
+  height:5px; border-radius:3px; position:relative;
+  background: linear-gradient(to right, #22C55E, #FACC15, #EF4444);
+}
+.price-marker {
+  position:absolute; top:-5px; width:14px; height:14px; border-radius:50%;
+  background:#fff; border:2.5px solid #334155; transform:translateX(-50%);
+  box-shadow:0 1px 4px rgba(0,0,0,.2);
+}
+.price-bar-labels { display:flex; justify-content:space-between;
+  font-size:11px; color:var(--text-mid); font-weight:600; margin-top:4px; }
+
+/* ── Option A: grey flat line, dot centred, same price both ends ── */
+.flat-bar-a .price-bar {
+  background: #CBD5E1; /* plain grey, no gradient */
+}
+
+/* ── Option B: grey flat line, single centred label ── */
+.flat-bar-b .price-bar {
+  background: #CBD5E1;
+}
+.flat-bar-b .price-bar-labels {
+  justify-content: center;
+  gap: 4px;
+}
+.flat-bar-b .price-bar-labels .stable-label {
+  font-size: 10px; font-weight: 600; color: var(--text-soft);
+  font-style: italic;
+}
+
+/* ── Option C: green full bar, "Stable" badge, dot centred ── */
+.flat-bar-c .price-bar {
+  background: linear-gradient(to right, #86efac, #22c55e, #86efac);
+}
+.stable-badge {
+  display: inline-block; font-size: 10px; font-weight: 600;
+  padding: 1px 5px; border-radius: 4px;
+  background: #dcfce7; color: #166534;
+  margin-left: 6px; vertical-align: middle;
+}
+
+/* ── Option D: no bar, just a pill badge ── */
+.stable-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: 20px;
+  background: var(--bg); border: 1px solid var(--border-strong);
+  font-size: 11px; font-weight: 600; color: var(--text-mid);
+}
+.stable-pill .eq { font-size: 13px; color: var(--text-soft); }
+
+.label-row { display:flex;justify-content:space-between;
+  font-size:11px;color:var(--text-mid);font-weight:600;margin-top:4px; }
+</style>
+</head>
+<body>
+
+<!-- reference: what a normal bar looks like -->
+<h3>Reference — normal item with price range</h3>
+<p class="desc">Fresh Cauliflower Half: has varied between $1.50 and $3.95 historically.</p>
+<div class="panel">
+  <table>
+    <thead><tr>
+      <th>Product</th>
+      <th style="min-width:180px">Trend</th>
+      <th><span class="store-chip ww">W</span> WW</th>
+      <th><span class="store-chip coles">C</span> Coles</th>
+    </tr></thead>
+    <tbody><tr>
+      <td><div class="product-cell">
+        <div class="prod-img"></div>
+        <div class="prod-name">Fresh Cauliflower Half</div>
+      </div></td>
+      <td>
+        <div class="price-bar-outer">
+          <div class="price-bar"><div class="price-marker" style="left:12%"></div></div>
+          <div class="price-bar-labels"><span>$1.50</span><span>$3.95</span></div>
+        </div>
+      </td>
+      <td>$2.50</td><td>$2.00</td>
+    </tr></tbody>
+  </table>
+</div>
+
+<!-- OPTION A -->
+<h3>Option A — grey flat bar, same price on both ends</h3>
+<p class="desc">Neutral grey bar communicates "no range". Dot sits at 50%. Both labels show the single price so it's clear.</p>
+<div class="panel">
+  <table>
+    <thead><tr>
+      <th>Product</th>
+      <th style="min-width:180px">Trend</th>
+      <th><span class="store-chip ww">W</span> WW</th>
+      <th><span class="store-chip coles">C</span> Coles</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">Woolworths Fresh Continental Parsley</div>
+        </div></td>
+        <td>
+          <div class="price-bar-outer flat-bar-a">
+            <div class="price-bar"><div class="price-marker" style="left:50%"></div></div>
+            <div class="price-bar-labels"><span>$3.20</span><span>$3.20</span></div>
+          </div>
+        </td>
+        <td>$3.20</td><td>$2.90</td>
+      </tr>
+      <tr>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">Woolworths Diced Italian Tomatoes</div>
+        </div></td>
+        <td>
+          <div class="price-bar-outer flat-bar-a">
+            <div class="price-bar"><div class="price-marker" style="left:50%"></div></div>
+            <div class="price-bar-labels"><span>$1.10</span><span>$1.10</span></div>
+          </div>
+        </td>
+        <td>$1.10</td><td>$1.20</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- OPTION B -->
+<h3>Option B — grey flat bar, centred "always $X.XX" label</h3>
+<p class="desc">Single label centred below the bar explicitly states stability. Cleaner than two identical numbers.</p>
+<div class="panel">
+  <table>
+    <thead><tr>
+      <th>Product</th>
+      <th style="min-width:180px">Trend</th>
+      <th><span class="store-chip ww">W</span> WW</th>
+      <th><span class="store-chip coles">C</span> Coles</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">Woolworths Fresh Continental Parsley</div>
+        </div></td>
+        <td>
+          <div class="price-bar-outer flat-bar-b">
+            <div class="price-bar"><div class="price-marker" style="left:50%"></div></div>
+            <div class="price-bar-labels">
+              <span class="stable-label">always $3.20</span>
+            </div>
+          </div>
+        </td>
+        <td>$3.20</td><td>$2.90</td>
+      </tr>
+      <tr>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">Woolworths Diced Italian Tomatoes</div>
+        </div></td>
+        <td>
+          <div class="price-bar-outer flat-bar-b">
+            <div class="price-bar"><div class="price-marker" style="left:50%"></div></div>
+            <div class="price-bar-labels">
+              <span class="stable-label">always $1.10</span>
+            </div>
+          </div>
+        </td>
+        <td>$1.10</td><td>$1.20</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- OPTION C -->
+<h3>Option C — green bar + "Stable" badge</h3>
+<p class="desc">Green signals a consistently priced item (not bad news). A small "Stable" badge next to the price label adds context.</p>
+<div class="panel">
+  <table>
+    <thead><tr>
+      <th>Product</th>
+      <th style="min-width:180px">Trend</th>
+      <th><span class="store-chip ww">W</span> WW</th>
+      <th><span class="store-chip coles">C</span> Coles</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">Woolworths Fresh Continental Parsley</div>
+        </div></td>
+        <td>
+          <div class="price-bar-outer flat-bar-c">
+            <div class="price-bar"><div class="price-marker" style="left:50%"></div></div>
+            <div class="price-bar-labels">
+              <span>$3.20 <span class="stable-badge">Stable</span></span>
+            </div>
+          </div>
+        </td>
+        <td>$3.20</td><td>$2.90</td>
+      </tr>
+      <tr>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">Woolworths Diced Italian Tomatoes</div>
+        </div></td>
+        <td>
+          <div class="price-bar-outer flat-bar-c">
+            <div class="price-bar"><div class="price-marker" style="left:50%"></div></div>
+            <div class="price-bar-labels">
+              <span>$1.10 <span class="stable-badge">Stable</span></span>
+            </div>
+          </div>
+        </td>
+        <td>$1.10</td><td>$1.20</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- OPTION D -->
+<h3>Option D — no bar, pill badge only</h3>
+<p class="desc">Replaces the bar entirely with a compact badge. Minimal — no bar geometry to misread.</p>
+<div class="panel">
+  <table>
+    <thead><tr>
+      <th>Product</th>
+      <th style="min-width:180px">Trend</th>
+      <th><span class="store-chip ww">W</span> WW</th>
+      <th><span class="store-chip coles">C</span> Coles</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">Woolworths Fresh Continental Parsley</div>
+        </div></td>
+        <td>
+          <span class="stable-pill">
+            <span class="eq">=</span> always $3.20
+          </span>
+        </td>
+        <td>$3.20</td><td>$2.90</td>
+      </tr>
+      <tr>
+        <td><div class="product-cell">
+          <div class="prod-img"></div>
+          <div class="prod-name">Woolworths Diced Italian Tomatoes</div>
+        </div></td>
+        <td>
+          <span class="stable-pill">
+            <span class="eq">=</span> always $1.10
+          </span>
+        </td>
+        <td>$1.10</td><td>$1.20</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

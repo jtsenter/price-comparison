@@ -639,6 +639,12 @@ async def _scrape_single_item(
     """Scrape one item. Returns (result_dict | None, is_not_found)."""
     category = guess_category(item)
     history = purchase_history.get(item, {})
+    # Fallback: if exact match fails, try substring match (e.g. "Lamb Mince" → "Woolworths Lamb Mince")
+    if not history and purchase_history:
+        for excel_name, hist_data in purchase_history.items():
+            if item.lower() in excel_name.lower() and hist_data.get("price_history"):
+                history = hist_data
+                break
     existing_item = next((ex for ex in existing_data.get("items", []) if ex["list_item"] == item), {})
 
     # Tracks whether each side was fetched directly (skip name-based picker)
@@ -815,20 +821,18 @@ async def _scrape_single_item(
     if not ww_match and not coles_match:
         return None, True
 
-    # Normalise WW per-kg loose price to match Coles fixed-pack size.
+    # Compute _ww_price_factor for per-kg items (used by UI for price_history normalisation).
     # WW sells loose produce (e.g. mushrooms) at $/kg; Coles sells fixed packs (e.g. 200g).
-    # Comparing $12.50 (1kg) vs $4.00 (200g) is misleading — normalise WW to the same
-    # pack size so basket totals are comparable and cheaper_store is correct.
-    _ww_price_factor = 1.0  # stored in JSON so isHotDeal can normalise price_history too
+    # Store the factor so the UI can normalise price_history and trend bars accordingly.
+    # The displayed WW price remains the actual shelf price (per-kg), not a sub-pack equivalent.
+    _ww_price_factor = 1.0  # stored in JSON so buildPriceBar & isHotDeal can normalise price_history
     if ww_match and coles_match:
         _ww_unit = (ww_match.get("unit") or "").strip().upper()
         if _ww_unit in ("KG", "1KG"):
             _co_size_g = extract_weight_g(coles_match.get("name", ""))
             if _co_size_g and _co_size_g < 900:  # Coles pack < 900g → not a per-kg item
                 _ww_price_factor = round(_co_size_g / 1000, 4)
-                ww_match = dict(ww_match)
-                ww_match["price"] = round(ww_match["price"] * _ww_price_factor, 2)
-                print(f"    WW price normalised to {_co_size_g}g: ${ww_match['price']}")
+                print(f"    WW per-kg price: ${ww_match['price']}, factor for {_co_size_g}g: {_ww_price_factor}")
 
     ww_price = ww_match["price"] if ww_match else None
     coles_price = coles_match["price"] if coles_match else None
