@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T05:34:00.326473+00:00",
+  "last_updated": "2026-05-22T05:34:18.344656+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10586,7 +10586,7 @@
     },
     {
       "list_item": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In",
-      "last_scraped": "2026-05-21T23:55:55.876593+00:00",
+      "last_scraped": "2026-05-22T05:34:01.614660+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -10634,8 +10634,18 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 3.07,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Coles RSPCA Approved Chicken Thigh Cutlets | approx. 1.1kg",
+          "price": 9.9,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-thigh-cutlets-approx.-1.1kg-2268365",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2268365.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.05,
       "per_100_coles": 0.9,
@@ -10643,7 +10653,7 @@
     },
     {
       "list_item": "Woolworths Red Onions Bag",
-      "last_scraped": "2026-05-21T23:55:59.331925+00:00",
+      "last_scraped": "2026-05-22T05:34:06.184539+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -10686,8 +10696,18 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Coles Brown Onions | 1kg",
+          "price": 4.0,
+          "unit_price": 4.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4803991.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.51,
       "per_100_coles": 0.51,
@@ -10695,7 +10715,7 @@
     },
     {
       "list_item": "Woolworths Rosemary Leaves",
-      "last_scraped": "2026-05-21T23:56:03.769390+00:00",
+      "last_scraped": "2026-05-22T05:34:10.997766+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -10731,7 +10751,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 0.8,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 11.1,
       "per_100_coles": 10.0,
@@ -10739,7 +10759,7 @@
     },
     {
       "list_item": "Woolworths Thickened Cream",
-      "last_scraped": "2026-05-21T23:56:04.048252+00:00",
+      "last_scraped": "2026-05-22T05:34:13.917532+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -10770,11 +10790,11 @@
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Woolworths Thickened Cream",
-        "price": 5.2,
-        "unit_price": 0.87,
+        "price": 3.4,
+        "unit_price": 1.13,
         "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/48720/woolworths-thickened-cream",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/048720.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/44317/woolworths-thickened-cream",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/044317.jpg"
       },
       "coles": {
         "name": "Coles Thickened Cream | 300mL",
@@ -10784,14 +10804,98 @@
         "url": "https://www.coles.com.au/product/coles-thickened-cream-300ml-246973",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/2/246973.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.8,
-      "alternatives": [],
-      "match_confidence": "low",
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Woolworths Light Thickened Cream",
+          "price": 5.2,
+          "unit_price": 0.87,
+          "unit": "100ML",
+          "url": "https://www.woolworths.com.au/shop/productdetails/838738/woolworths-light-thickened-cream",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/838738.jpg",
+          "retailer": "woolworths"
+        }
+      ],
+      "match_confidence": "high",
       "size_warning": false,
-      "per_100_ww": 0.87,
+      "per_100_ww": 1.13,
       "per_100_coles": 1.13,
       "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Woolworths Tuna In Springwater",
+      "last_scraped": "2026-05-22T05:34:18.329670+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 1.1
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.1
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.1
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Tuna In Springwater",
+        "price": 0.2,
+        "unit_price": 11.58,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/476700/woolworths-tuna-in-springwater",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/476700.jpg"
+      },
+      "coles": {
+        "name": "Coles Simply Tuna In Springwater | 185g",
+        "price": 1.7,
+        "unit_price": 1.7,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-simply-tuna-in-springwater-185g-3544130",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3544130.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.5,
+      "alternatives": [
+        {
+          "name": "Coles Tuna Chunks in Springwater | 95g",
+          "price": 1.1,
+          "unit_price": 1.1,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tuna-chunks-in-springwater-95g-8675281",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8675281.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Simply Tuna In Springwater | 185g",
+          "price": 1.7,
+          "unit_price": 1.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-simply-tuna-in-springwater-185g-3544130",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3544130.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Tuna Chunks In Springwater | 185g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tuna-chunks-in-springwater-185g-8675270",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8675270.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 1.16,
+      "per_100_coles": 0.92,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.185
     },
     {
       "list_item": "Woolworths Wholegrain Wrap 8Pk",
@@ -10840,52 +10944,6 @@
       "per_100_ww": 0.61,
       "per_100_coles": 0.61,
       "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Tuna In Springwater",
-      "last_scraped": "2026-05-21T23:56:07.501411+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-05-12",
-          "price": 1.1
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.1
-        },
-        {
-          "date": "2026-05-06",
-          "price": 1.1
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Tuna In Springwater",
-        "price": 0.2,
-        "unit_price": 11.58,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/476700/woolworths-tuna-in-springwater",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/476700.jpg"
-      },
-      "coles": {
-        "name": "Coles Simply Tuna In Springwater | 185g",
-        "price": 1.7,
-        "unit_price": 1.7,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-simply-tuna-in-springwater-185g-3544130",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3544130.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.5,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.16,
-      "per_100_coles": 0.92,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.185
     },
     {
       "list_item": "Yumi's Eggplant Mediterranean Dip",
@@ -13156,16 +13214,16 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 898.63,
+    "total_woolworths": 896.83,
     "total_coles": 1136.35,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 237.72,
+    "total_saving": 239.52,
     "items_compared": 208,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 150,
+    "done": 155,
     "total": 211
   }
 }
