@@ -484,8 +484,7 @@ function pricePercentile(prices, pct) {
 function getDealInfo(item) {
   const history = item.price_history;
   if (!history || history.length < 3) return null;
-  const factor = item._ww_price_factor ?? 1;
-  const prices = history.map(h => h.price * factor).filter(p => p > 0);
+  const prices = history.map(h => h.price).filter(p => p > 0);
   if (prices.length < 3) return null;
 
   const mean = prices.reduce((s, p) => s + p, 0) / prices.length;
@@ -501,12 +500,10 @@ function getDealInfo(item) {
   // Check each store separately
   const results = [];
 
-  // For per-kg WW items, normalize price so it compares against normalized history
-  const wwNorm = ww != null ? ww * factor : null;
-  if (wwNorm != null && wwNorm <= threshold) {
-    const pctOff = Math.max(0, Math.round((mean - wwNorm) / mean * 100));
+  if (ww != null && ww <= threshold) {
+    const pctOff = Math.max(0, Math.round((mean - ww) / mean * 100));
     if (pctOff > 0) {
-      const isAllTimeLow = wwNorm <= minHistoric;
+      const isAllTimeLow = ww <= minHistoric;
       results.push({ store: 'woolworths', price: ww, pctOff, mean, minHistoric, isAllTimeLow });
     }
   }
@@ -531,16 +528,17 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   if (!priceHistory?.length || currentPrice == null) return '';
   const exclusions = loadExclusions();
   const excluded = new Set((exclusions[itemName] || []).map(p => Number(p).toFixed(2)));
+  // Use raw history prices — they are already actual shelf prices.
+  // _ww_price_factor is only used for cheaper_store comparison in the scraper.
   const prices = priceHistory
-    .map(p => p.price * factor)
+    .map(p => p.price)
     .filter((p, i) => p > 0 && !excluded.has(Number(priceHistory[i].price).toFixed(2)));
   if (prices.length < 2) return '';
   const minP = Math.min(...prices);
   const maxP = Math.max(...prices);
-  const normCurrent = currentPrice * factor;
 
   if (minP === maxP) {
-    if (Math.abs(normCurrent - minP) < 0.005) {
+    if (Math.abs(currentPrice - minP) < 0.005) {
       // Truly same price — flat bar (shouldn't reach here since getDealInfo requires pctOff > 0)
       return `
       <div class="price-bar-outer">
@@ -549,10 +547,10 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
       </div>`;
     }
     // Deal price differs from stable historical price — show a range bar
-    const barMin = Math.min(normCurrent, minP);
-    const barMax = Math.max(normCurrent, minP);
-    const rawPos2 = ((normCurrent - barMin) / (barMax - barMin)) * 100;
-    const tooltip = `Stable: ${fmt(minP)}&#10;Deal: ${fmt(normCurrent)}&#10;${normCurrent < minP ? 'Now cheaper than stable price ✓' : 'Now above stable price'}`;
+    const barMin = Math.min(currentPrice, minP);
+    const barMax = Math.max(currentPrice, minP);
+    const rawPos2 = ((currentPrice - barMin) / (barMax - barMin)) * 100;
+    const tooltip = `Stable: ${fmt(minP)}&#10;Deal: ${fmt(currentPrice)}&#10;${currentPrice < minP ? 'Now cheaper than stable price ✓' : 'Now above stable price'}`;
     const track2 = rawPos2 < 0
       ? `<div class="price-bar-track-wrap"><div class="price-marker-off-left"></div><div class="price-bar"></div></div>`
       : `<div class="price-bar"><div class="price-marker" style="left:${rawPos2.toFixed(1)}%"></div></div>`;
@@ -561,7 +559,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
       <div class="price-bar-labels"><span>${fmt(barMin)}</span><span>${fmt(barMax)}</span></div>
     </div>`;
   }
-  const rawPos = ((normCurrent - minP) / (maxP - minP)) * 100;
+  const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
   const pos = Math.max(0, Math.min(100, rawPos));
 
   const counts = {};
@@ -569,7 +567,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   const total = prices.length;
   const lines = Object.entries(counts).sort(([a], [b]) => +a - +b)
     .map(([p, c]) => { const pct = Math.round(c / total * 100); return `$${p}  ${'█'.repeat(Math.round(pct / 10)).padEnd(10)}  ${pct}% (${c}×)`; });
-  const cheaperPct = Math.round(prices.filter(p => p > normCurrent).length / total * 100);
+  const cheaperPct = Math.round(prices.filter(p => p > currentPrice).length / total * 100);
   lines.push('');
   lines.push(cheaperPct > 0 ? `Now cheaper than ${cheaperPct}% of past prices ✓` : `Now at all-time low ✓`);
   const tooltip = lines.join('\n').replace(/"/g, '&quot;');
@@ -618,16 +616,13 @@ function getSortValue(col, item, dealInfo) {
       // Same logic as main page Trend sort: trendPosition = (ref - min) / (max - min)
       const history = item.price_history;
       if (!history?.length) return Infinity;
-      const factor = item._ww_price_factor ?? 1;
-      const prices = history.map(p => p.price * factor).filter(p => p > 0);
+      const prices = history.map(p => p.price).filter(p => p > 0);
       if (prices.length < 2) return Infinity;
       const minP = Math.min(...prices), maxP = Math.max(...prices);
       // Flat history: trendPosition is 0/0 = undefined — sort last alongside no-data
       if (minP === maxP) return Infinity;
-      const rawRef = dealInfo?.price;
-      if (rawRef == null) return Infinity;
-      // Normalize WW per-kg price so it compares against the factor-scaled history
-      const ref = (dealInfo?.store === 'woolworths') ? rawRef * factor : rawRef;
+      const ref = dealInfo?.price;
+      if (ref == null) return Infinity;
       return (ref - minP) / (maxP - minP);
     }
     case 'category': return getCategory(item).toLowerCase();

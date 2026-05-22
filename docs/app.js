@@ -472,22 +472,23 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
 
   const exclusions = loadExclusions();
   const excluded = new Set((exclusions[itemName] || []).map(p => Number(p).toFixed(2)));
+  // Use raw history prices — they are already in the same monetary units (pack/shelf price)
+  // as currentPrice. _ww_price_factor is only used for cheaper_store comparison in the scraper.
   const prices = priceHistory
-    .map(p => p.price * factor)
+    .map(p => p.price)
     .filter((p, i) => p > 0 && !excluded.has(Number(priceHistory[i].price).toFixed(2)));
   if (prices.length < 2) return '';
 
   const minP = Math.min(...prices);
   const maxP = Math.max(...prices);
-  const normCurrent = currentPrice * factor;
 
   if (minP === maxP) {
     const safeItemName = itemName.replace(/"/g, '&quot;');
     let flatTrack;
-    if (normCurrent < minP - 0.005) {
+    if (currentPrice < minP - 0.005) {
       // Current price is below all historical prices — green circle left
       flatTrack = `<div class="price-bar-track-wrap"><div class="price-marker-off-left"></div><div class="price-bar price-bar-flat"></div></div>`;
-    } else if (normCurrent > minP + 0.005) {
+    } else if (currentPrice > minP + 0.005) {
       // Current price is above all historical prices — red circle right
       flatTrack = `<div class="price-bar-track-wrap"><div class="price-bar price-bar-flat"></div><div class="price-marker-off-right"></div></div>`;
     } else {
@@ -501,7 +502,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
     <button class="price-bar-manage" data-manage-item="${safeItemName}">Manage</button>`;
   }
 
-  const rawPos = ((normCurrent - minP) / (maxP - minP)) * 100;
+  const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
   const pos = Math.max(0, Math.min(100, rawPos));
 
   const counts = {};
@@ -516,7 +517,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
       return `$${p}  ${bar.padEnd(10)}  ${pct}% (${c}×)`;
     });
 
-  const cheaperPct = Math.round(prices.filter(p => p > normCurrent).length / total * 100);
+  const cheaperPct = Math.round(prices.filter(p => p > currentPrice).length / total * 100);
   lines.push('');
   lines.push(cheaperPct > 0
     ? `Now cheaper than ${cheaperPct}% of past prices ✓`
@@ -1500,23 +1501,20 @@ function sortItems(items) {
       case 'trend': {
         const history = item.price_history;
         if (!history?.length) return Infinity;
-        const factor = item._ww_price_factor ?? 1;
         // Apply same exclusions as buildPriceBar so sort matches the visual bar
         const _excl = loadExclusions();
         const _excluded = new Set((_excl[item.list_item] || []).map(p => Number(p).toFixed(2)));
         const prices = history
-          .map(p => p.price * factor)
+          .map(p => p.price)
           .filter((p, i) => p > 0 && !_excluded.has(Number(history[i].price).toFixed(2)));
         if (prices.length < 2) return Infinity;
         const minP = Math.min(...prices), maxP = Math.max(...prices);
         // Flat history: trendPosition is 0/0 = undefined — sort last alongside no-data
         if (minP === maxP) return Infinity;
-        let ref = item.cheaper_store === 'woolworths' ? item.woolworths?.price
-                : item.cheaper_store === 'coles'      ? item.coles?.price
-                : (item.coles?.price ?? item.woolworths?.price);
+        const ref = item.cheaper_store === 'woolworths' ? item.woolworths?.price
+                  : item.cheaper_store === 'coles'      ? item.coles?.price
+                  : (item.coles?.price ?? item.woolworths?.price);
         if (ref == null) return Infinity;
-        // For per-kg WW items, normalize so the ref matches the scale of the history bars
-        if (item.cheaper_store === 'woolworths') ref = ref * factor;
         // Raw trendPosition: <0 = below min, 0–1 = in range, >1 = above max.
         // No cap — items above max must remain distinguishable from each other.
         return (ref - minP) / (maxP - minP);
@@ -1600,19 +1598,13 @@ function pricePercentile(prices, pct) {
 function isHotDeal(item) {
   const history = item.price_history;
   if (!history || history.length < 3) return false;
-  const rawPrices = history.map(h => h.price).filter(p => p > 0);
-  if (rawPrices.length < 3) return false;
-  // If WW price was normalised to a pack size (e.g. $/200g instead of $/kg),
-  // scale the price history the same way so the comparison is meaningful.
-  const factor = item._ww_price_factor ?? 1;
-  const prices = factor !== 1 ? rawPrices.map(p => p * factor) : rawPrices;
+  const prices = history.map(h => h.price).filter(p => p > 0);
+  if (prices.length < 3) return false;
   const threshold = pricePercentile(prices, HOT_DEAL_PERCENTILE);
   const ww = item.woolworths?.price;
   const co = item.coles?.price;
-  let current = item.cheaper_store === 'woolworths' ? ww : (item.cheaper_store === 'coles' ? co : (co ?? ww));
+  const current = item.cheaper_store === 'woolworths' ? ww : (item.cheaper_store === 'coles' ? co : (co ?? ww));
   if (current == null) return false;
-  // Apply price factor so per-kg WW prices compare correctly against normalized history
-  if (item.cheaper_store === 'woolworths') current = current * factor;
   return current <= threshold;
 }
 
