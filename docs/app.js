@@ -1509,16 +1509,17 @@ function sortItems(items) {
           .filter((p, i) => p > 0 && !_excluded.has(Number(history[i].price).toFixed(2)));
         if (prices.length < 2) return Infinity;
         const minP = Math.min(...prices), maxP = Math.max(...prices);
-        if (minP === maxP) return 1.5; // flat price — sort after all range items (0–1), before no-data (Infinity)
+        // Flat history: trendPosition is 0/0 = undefined — sort last alongside no-data
+        if (minP === maxP) return Infinity;
         let ref = item.cheaper_store === 'woolworths' ? item.woolworths?.price
                 : item.cheaper_store === 'coles'      ? item.coles?.price
                 : (item.coles?.price ?? item.woolworths?.price);
         if (ref == null) return Infinity;
         // For per-kg WW items, normalize so the ref matches the scale of the history bars
         if (item.cheaper_store === 'woolworths') ref = ref * factor;
-        // Cap at 1.49 so above-max items never reach the flat-price bucket (1.5)
-        // and gradient-bar items always sort separately from flat gray-bar items.
-        return Math.min((ref - minP) / (maxP - minP), 1.49);
+        // Raw trendPosition: <0 = below min, 0–1 = in range, >1 = above max.
+        // No cap — items above max must remain distinguishable from each other.
+        return (ref - minP) / (maxP - minP);
       }
       case 'category':     return getCategory(item).toLowerCase();
       case 'last_scraped': return item.last_scraped || '';
@@ -1535,9 +1536,18 @@ function sortItems(items) {
     const av = sortCache.get(a);
     const bv = sortCache.get(b);
     for (let i = 0; i < sortKeys.length; i++) {
-      const mul = sortKeys[i].dir === 'asc' ? 1 : -1;
-      if (av[i] < bv[i]) return -1 * mul;
-      if (av[i] > bv[i]) return  1 * mul;
+      const { col, dir } = sortKeys[i];
+      const mul = dir === 'asc' ? 1 : -1;
+      const ai = av[i], bi = bv[i];
+      // Trend: no-data / flat items (Infinity) always sort last in BOTH directions
+      if (col === 'trend') {
+        const aInf = ai === Infinity, bInf = bi === Infinity;
+        if (aInf && bInf) continue;
+        if (aInf) return 1;
+        if (bInf) return -1;
+      }
+      if (ai < bi) return -1 * mul;
+      if (ai > bi) return  1 * mul;
     }
     return 0;
   });

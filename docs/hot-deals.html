@@ -615,19 +615,19 @@ function getSortValue(col, item, dealInfo) {
     case 'ww':       return item.woolworths?.price ?? Infinity;
     case 'coles':    return item.coles?.price ?? Infinity;
     case 'avg': {
-      // Same logic as main page Trend sort: 0=cheapest ever, 1=most expensive ever
+      // Same logic as main page Trend sort: trendPosition = (ref - min) / (max - min)
       const history = item.price_history;
       if (!history?.length) return Infinity;
       const factor = item._ww_price_factor ?? 1;
       const prices = history.map(p => p.price * factor).filter(p => p > 0);
       if (prices.length < 2) return Infinity;
       const minP = Math.min(...prices), maxP = Math.max(...prices);
-      const ref = dealInfo?.price;
-      if (ref == null) return Infinity;
-      if (minP === maxP) {
-        // Flat WW history — position based on deal price vs stable price
-        return ref <= minP ? 0 : 1;
-      }
+      // Flat history: trendPosition is 0/0 = undefined — sort last alongside no-data
+      if (minP === maxP) return Infinity;
+      const rawRef = dealInfo?.price;
+      if (rawRef == null) return Infinity;
+      // Normalize WW per-kg price so it compares against the factor-scaled history
+      const ref = (dealInfo?.store === 'woolworths') ? rawRef * factor : rawRef;
       return (ref - minP) / (maxP - minP);
     }
     case 'category': return getCategory(item).toLowerCase();
@@ -643,6 +643,13 @@ function sortDeals(items) {
       const mul = dir === 'asc' ? 1 : -1;
       const av = getSortValue(col, a, da);
       const bv = getSortValue(col, b, db);
+      // Avg (trend): no-data / flat items (Infinity) always sort last in BOTH directions
+      if (col === 'avg') {
+        const aInf = av === Infinity, bInf = bv === Infinity;
+        if (aInf && bInf) continue;
+        if (aInf) return 1;
+        if (bInf) return -1;
+      }
       if (av < bv) return -1 * mul;
       if (av > bv) return  1 * mul;
     }
