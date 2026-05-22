@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T02:52:48.562173+00:00",
+  "last_updated": "2026-05-22T02:53:05.952148+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9750,7 +9750,7 @@
     },
     {
       "list_item": "Woolworths Baked Beans In Tomato Sauce",
-      "last_scraped": "2026-05-21T23:55:15.596662+00:00",
+      "last_scraped": "2026-05-22T02:52:51.906481+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -9808,15 +9808,59 @@
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.26,
       "per_100_coles": 2.0,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Basmati Rice",
+      "last_scraped": "2026-05-22T02:52:58.114412+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 4.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Basmati Rice",
+        "price": 4.0,
+        "unit_price": 0.4,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/694550/woolworths-basmati-rice",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/694550.jpg"
+      },
+      "coles": {
+        "name": "Basmati Rice",
+        "price": 4.0,
+        "unit_price": 0.4,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-basmati-rice-1kg-8703059",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8703059.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.4,
+      "per_100_coles": 0.4,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Beef Chuck Steak Medium",
-      "last_scraped": "2026-05-21T23:55:19.527597+00:00",
+      "last_scraped": "2026-05-22T02:52:58.149600+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -9851,8 +9895,36 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 4.0,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Coles Beef Chuck Casserole Steak | 850g",
+          "price": 17.0,
+          "unit_price": 17.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-chuck-casserole-steak-850g-6332331",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6332331.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Beef Slow Cook Chuck Roast | approx. 1.3kg",
+          "price": 23.4,
+          "unit_price": 18.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-beef-slow-cook-chuck-roast-approx.-1.3kg-7820986",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7820986.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Drovers Choice Slow Cook Chuck Steaks | approx. 1.15kg",
+          "price": 21.85,
+          "unit_price": 19.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/drovers-choice-slow-cook-chuck-steaks-approx.-1.15kg-5041107",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5041107.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.0,
       "per_100_coles": 2.0,
@@ -9860,7 +9932,7 @@
     },
     {
       "list_item": "Woolworths Capsicum Green",
-      "last_scraped": "2026-05-21T23:55:22.923967+00:00",
+      "last_scraped": "2026-05-22T02:53:03.993265+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9900,7 +9972,7 @@
       "cheaper_store": "coles",
       "saving_per_item": 0.24,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.79,
@@ -9908,7 +9980,7 @@
     },
     {
       "list_item": "Woolworths Celery Heart",
-      "last_scraped": "2026-05-21T23:55:26.156398+00:00",
+      "last_scraped": "2026-05-22T02:53:05.941119+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -9944,8 +10016,27 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.3,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Coles Lettuce Cos Baby Hearts | 2 Pack",
+          "price": 2.9,
+          "unit_price": 2.9,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-lettuce-cos-baby-hearts-2-pack-4646485",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4646485.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Celery Bunch | 1 Each",
+          "price": 4.2,
+          "unit_price": 4.2,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-celery-bunch-1-each-4845732",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4845732.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -13029,50 +13120,6 @@
       "per_100_coles": 0.7,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.227
-    },
-    {
-      "list_item": "Woolworths Basmati Rice",
-      "last_scraped": "2026-05-21T23:30:14.740237+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-05-04",
-          "price": 4.0
-        },
-        {
-          "date": "2026-02-03",
-          "price": 4.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 4.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Basmati Rice",
-        "price": 4.0,
-        "unit_price": 0.4,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/694550/woolworths-basmati-rice",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/694550.jpg"
-      },
-      "coles": {
-        "name": "Basmati Rice",
-        "price": 4.0,
-        "unit_price": 0.4,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-basmati-rice-1kg-8703059",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8703059.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 0.4,
-      "per_100_coles": 0.4,
-      "per_100_unit": "100g"
     }
   ],
   "not_found_items": [
@@ -13089,7 +13136,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 135,
+    "done": 140,
     "total": 211
   }
 }
