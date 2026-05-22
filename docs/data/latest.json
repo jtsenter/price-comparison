@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T06:14:32.595515+00:00",
+  "last_updated": "2026-05-22T06:14:36.563999+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -13741,7 +13741,7 @@
     },
     {
       "list_item": "Woolworths Water Chestnuts Sliced",
-      "last_scraped": "2026-05-21T23:58:12.471095+00:00",
+      "last_scraped": "2026-05-22T06:14:35.945352+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13756,7 +13756,7 @@
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Water Chestnuts Sliced",
-        "price": 0.28,
+        "price": 1.25,
         "unit_price": 5.56,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/492077/woolworths-water-chestnuts-sliced",
@@ -13768,73 +13768,46 @@
         "unit_price": 1.6,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/valcom-water-chestnut-slices-227g-5789579",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F5%2F5789579.jpg&w=640&q=90",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5789579.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 1.32,
-      "alternatives": [],
-      "match_confidence": "low",
+      "saving_per_item": 0.35,
+      "alternatives": [
+        {
+          "name": "Valcom Water Chestnut Slices | 227g",
+          "price": 1.6,
+          "unit_price": 1.6,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/valcom-water-chestnut-slices-227g-5789579",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5789579.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Double Phoenix Whole Water Chestnuts | 567g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/double-phoenix-whole-water-chestnuts-567g-1384190",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1384190.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Tick Fresh Water Chestnuts | 400g",
+          "price": 3.8,
+          "unit_price": 3.8,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/tick-fresh-water-chestnuts-400g-3908054",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3908054.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.56,
       "per_100_coles": 0.7,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.227
-    },
-    {
-      "list_item": "Lamb Mince",
-      "last_scraped": "2026-05-22T05:55:43.188884+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 7.5
-        },
-        {
-          "date": "2025-03-17",
-          "price": 8.0
-        },
-        {
-          "date": "2025-04-14",
-          "price": 8.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths Lamb Mince",
-        "price": 9.0,
-        "unit_price": 18.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/582607/woolworths-lamb-mince",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/582607.jpg"
-      },
-      "coles": {
-        "name": "3 Star Lamb Mince",
-        "price": 8.0,
-        "unit_price": 16.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8850461.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.0,
-      "alternatives": [
-        {
-          "name": "3 Star Lamb Mince",
-          "price": 8.0,
-          "unit_price": 16.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8850461.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.8,
-      "per_100_coles": 1.6,
-      "per_100_unit": "100g"
     }
   ],
   "not_found_items": [
@@ -13842,16 +13815,12 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 1136.51,
-    "total_coles": 1154.35,
+    "total_woolworths": 1128.48,
+    "total_coles": 1146.35,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 17.84,
-    "items_compared": 210,
+    "total_saving": 17.87,
+    "items_compared": 209,
     "items_not_found": 2
-  },
-  "scrape_progress": {
-    "done": 210,
-    "total": 211
   }
 }
