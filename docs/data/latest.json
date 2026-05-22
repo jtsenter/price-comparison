@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T02:52:19.788574+00:00",
+  "last_updated": "2026-05-22T02:52:32.073010+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9142,7 +9142,7 @@
     },
     {
       "list_item": "Twinings Orange & Cinnamon Tea Bags Tea",
-      "last_scraped": "2026-05-21T23:54:50.979446+00:00",
+      "last_scraped": "2026-05-22T02:52:20.474372+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -9194,7 +9194,7 @@
     },
     {
       "list_item": "Vevelle 2 Ply White Toilet Tissue",
-      "last_scraped": "2026-05-21T23:54:54.633698+00:00",
+      "last_scraped": "2026-05-22T02:52:25.678302+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -9260,7 +9260,7 @@
     },
     {
       "list_item": "Vevelle White 2 Ply Toilet Tissue",
-      "last_scraped": "2026-05-21T23:54:56.359268+00:00",
+      "last_scraped": "2026-05-22T02:52:25.986506+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9317,8 +9317,56 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths 100% Canadian Maple Syrup",
+      "last_scraped": "2026-05-22T02:52:31.565215+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 6.6
+        },
+        {
+          "date": "2025-04-14",
+          "price": 6.6
+        },
+        {
+          "date": "2025-06-06",
+          "price": 6.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 6.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths 100% Canadian Maple Syrup",
+        "price": 6.0,
+        "unit_price": 2.4,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/298476/woolworths-100-canadian-maple-syrup",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/298476.jpg"
+      },
+      "coles": {
+        "name": "Coles Finest Pure Canadian Maple Syrup | 250mL",
+        "price": 6.0,
+        "unit_price": 6.0,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/coles-finest-pure-canadian-maple-syrup-250ml-1790270",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1790270.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 2.4,
+      "per_100_coles": 2.4,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "White Seedless Grapes Bag Approx. 900g",
-      "last_scraped": "2026-05-21T23:55:00.930905+00:00",
+      "last_scraped": "2026-05-22T02:52:32.060359+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -9367,54 +9415,6 @@
       "per_100_ww": 0.61,
       "per_100_coles": 0.55,
       "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths 100% Canadian Maple Syrup",
-      "last_scraped": "2026-05-21T23:55:02.277941+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 6.6
-        },
-        {
-          "date": "2025-04-14",
-          "price": 6.6
-        },
-        {
-          "date": "2025-06-06",
-          "price": 6.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 6.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths 100% Canadian Maple Syrup",
-        "price": 6.0,
-        "unit_price": 2.4,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/298476/woolworths-100-canadian-maple-syrup",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/298476.jpg"
-      },
-      "coles": {
-        "name": "Coles Finest Pure Canadian Maple Syrup | 250mL",
-        "price": 6.0,
-        "unit_price": 6.0,
-        "unit": "100mL",
-        "url": "https://www.coles.com.au/product/coles-finest-pure-canadian-maple-syrup-250ml-1790270",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1790270.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 2.4,
-      "per_100_coles": 2.4,
-      "per_100_unit": "100ml"
     },
     {
       "list_item": "Woolworths 12 Extra Large Cage Free Eggs",
@@ -13014,7 +13014,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 125,
+    "done": 130,
     "total": 211
   }
 }
