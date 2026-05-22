@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T05:34:51.058246+00:00",
+  "last_updated": "2026-05-22T05:35:10.180079+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11444,7 +11444,7 @@
     },
     {
       "list_item": "Dettol Antibacterial Liquid Hand Wash Hand Soap Pump Aloe Vera",
-      "last_scraped": "2026-05-21T23:56:27.780334+00:00",
+      "last_scraped": "2026-05-22T05:34:56.755213+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11477,6 +11477,15 @@
       "saving_per_item": 1.7,
       "alternatives": [
         {
+          "name": "Dettol Antibacterial Liquid Hand Wash Aloe Vera And Vitamin E Refill | 950mL",
+          "price": 5.5,
+          "unit_price": 0.58,
+          "unit": "100mL",
+          "url": "https://www.coles.com.au/product/dettol-antibacterial-liquid-hand-wash-aloe-vera-and-vitamin-e-refill-950ml-1878848",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1878848.jpg",
+          "retailer": "coles"
+        },
+        {
           "name": "Dettol Antibacterial Liquid Hand Wash Pump Aloe Vera & Vitamin E",
           "price": 4.5,
           "unit_price": 0.9,
@@ -11486,7 +11495,7 @@
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.12,
       "per_100_coles": 0.9,
@@ -11494,7 +11503,7 @@
     },
     {
       "list_item": "Dettol Tru Clean Antibacterial Multipurpose Wipes Citrus",
-      "last_scraped": "2026-05-21T23:56:28.872460+00:00",
+      "last_scraped": "2026-05-22T05:34:57.536498+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11515,61 +11524,26 @@
         "url": "https://www.woolworths.com.au/shop/productdetails/219677/dettol-tru-clean-antibacterial-multipurpose-wipes-citrus",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/219677.jpg"
       },
-      "coles": null,
+      "coles": {
+        "name": "Dettol Multipurpose Wipes Lemon Burst | 100 Pack",
+        "price": null,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/dettol-multipurpose-wipes-lemon-burst-100-pack-1591740",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1591740.jpg"
+      },
       "cheaper_store": "woolworths",
       "saving_per_item": null,
       "alternatives": [],
-      "match_confidence": "none",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Don Premium Real Diced Bacon",
-      "last_scraped": "2026-05-21T23:56:31.091324+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-04-05",
-          "price": 5.7
-        },
-        {
-          "date": "2025-04-14",
-          "price": 5.7
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Don Premium Real Diced Bacon",
-        "price": 1.14,
-        "unit_price": 28.5,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/128269/don-premium-real-diced-bacon",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/128269.jpg"
-      },
-      "coles": {
-        "name": "Primo Cook & Create Diced Bacon | 200g",
-        "price": 6.5,
-        "unit_price": 6.5,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/primo-cook-and-create-diced-bacon-200g-2739199",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2739199.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 5.36,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.85,
-      "per_100_coles": 3.25,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.2
-    },
-    {
       "list_item": "Ecostore Dish Liquid Ultrasensitive",
-      "last_scraped": "2026-05-21T23:56:33.369957+00:00",
+      "last_scraped": "2026-05-22T05:35:03.870508+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11601,15 +11575,85 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 5.7,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.7,
       "per_100_coles": 0.92,
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Don Premium Real Diced Bacon",
+      "last_scraped": "2026-05-22T05:35:07.397122+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-05",
+          "price": 5.7
+        },
+        {
+          "date": "2025-04-14",
+          "price": 5.7
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Don Premium Real Diced Bacon",
+        "price": 1.14,
+        "unit_price": 28.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/128269/don-premium-real-diced-bacon",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/128269.jpg"
+      },
+      "coles": {
+        "name": "Primo Cook & Create Diced Bacon | 200g",
+        "price": 6.5,
+        "unit_price": 6.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/primo-cook-and-create-diced-bacon-200g-2739199",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2739199.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 5.36,
+      "alternatives": [
+        {
+          "name": "Black Swan Crafted Crispy Bacon And Caramelised Onion Dip | 170g",
+          "price": 4.0,
+          "unit_price": 2.35,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/black-swan-crafted-crispy-bacon-and-caramelised-onion-dip-170g-5559502",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5559502.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Thomson's Deli Short Cut Bacon | 200g",
+          "price": 4.4,
+          "unit_price": 4.4,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/thomson's-deli-short-cut-bacon-200g-3930440",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3930440.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Primo Cook & Create Diced Bacon | 200g",
+          "price": 6.5,
+          "unit_price": 6.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/primo-cook-and-create-diced-bacon-200g-2739199",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2739199.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 2.85,
+      "per_100_coles": 3.25,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.2
+    },
+    {
       "list_item": "Essentials Domestic Wipes Roll",
-      "last_scraped": "2026-05-21T23:56:35.544050+00:00",
+      "last_scraped": "2026-05-22T05:35:10.165174+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13335,7 +13379,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 165,
+    "done": 170,
     "total": 211
   }
 }
