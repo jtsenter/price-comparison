@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T02:54:36.228956+00:00",
+  "last_updated": "2026-05-22T02:54:52.477259+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11733,7 +11733,7 @@
     },
     {
       "list_item": "Essentials Domestic Wipes Roll",
-      "last_scraped": "2026-05-21T23:56:35.544050+00:00",
+      "last_scraped": "2026-05-22T02:54:37.145874+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11773,7 +11773,7 @@
     },
     {
       "list_item": "Green Zucchini",
-      "last_scraped": "2026-05-21T23:56:40.070485+00:00",
+      "last_scraped": "2026-05-22T02:54:41.025910+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11805,7 +11805,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 0.2,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.69,
@@ -11813,7 +11813,7 @@
     },
     {
       "list_item": "Kinder Chocolate Sharepack",
-      "last_scraped": "2026-05-21T23:56:42.835819+00:00",
+      "last_scraped": "2026-05-22T02:54:42.272349+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11854,50 +11854,26 @@
           "url": "https://www.woolworths.com.au/shop/productdetails/21197/kinder-chocolate-little-ones",
           "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/021197.jpg",
           "retailer": "woolworths"
+        },
+        {
+          "name": "Kinder Choc Little Ones Share Pack 16 Pack | 200g",
+          "price": 6.0,
+          "unit_price": 3.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/kinder-choc-little-ones-share-pack-16-pack-200g-2528761",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2528761.jpg",
+          "retailer": "coles"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 3.75,
       "per_100_coles": 3.0,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "KitKat Gold Crush Block",
-      "last_scraped": "2026-05-22T00:29:54.910518+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 4.5
-        },
-        {
-          "date": "2025-04-14",
-          "price": 5.0
-        }
-      ],
-      "category": "Sweets",
-      "woolworths": null,
-      "coles": {
-        "name": "KitKat Milkybar White Choc Block | 160g",
-        "price": 7.5,
-        "unit_price": 7.5,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/kitkat-milkybar-white-choc-block-160g-6339283",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6339283.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": null,
-      "alternatives": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 4.69,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Little One's Size 3 Ultra Dry Nappies Crawler 6-11Kg Boys & Girls",
-      "last_scraped": "2026-05-21T23:56:49.154936+00:00",
+      "last_scraped": "2026-05-22T02:54:47.780741+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11933,6 +11909,46 @@
       "size_warning": false,
       "per_100_ww": 0.1,
       "per_100_coles": 0.22,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "KitKat Gold Crush Block",
+      "last_scraped": "2026-05-22T02:54:52.458799+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 4.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 5.0
+        }
+      ],
+      "category": "Sweets",
+      "woolworths": {
+        "name": "KitKat Milkybar White Chocolate Block",
+        "price": 5.0,
+        "unit_price": 3.13,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/273964/kitkat-milkybar-white-chocolate-block",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/273964.jpg"
+      },
+      "coles": {
+        "name": "Milkybar White Choc Block",
+        "price": 7.5,
+        "unit_price": 4.69,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/kitkat-milkybar-white-choc-block-160g-6339283",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6339283.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.5,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 3.13,
+      "per_100_coles": 4.69,
       "per_100_unit": "100g"
     },
     {
@@ -13413,16 +13429,16 @@
     "The Odd Bunch Strawberries Punnet"
   ],
   "summary": {
-    "total_woolworths": 894.41,
-    "total_coles": 1136.75,
+    "total_woolworths": 899.41,
+    "total_coles": 1144.25,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 242.34,
+    "total_saving": 244.84,
     "items_compared": 208,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 170,
+    "done": 175,
     "total": 211
   }
 }
