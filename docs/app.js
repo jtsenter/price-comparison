@@ -1497,7 +1497,7 @@ function sortItems(items) {
           .filter((p, i) => p > 0 && !_excluded.has(Number(history[i].price).toFixed(2)));
         if (prices.length < 2) return Infinity;
         const minP = Math.min(...prices), maxP = Math.max(...prices);
-        if (minP === maxP) return 0.5; // flat after exclusions — treat as mid-range
+        if (minP === maxP) return 1.5; // flat price — sort after all range items (0–1), before no-data (Infinity)
         const ref = item.cheaper_store === 'woolworths' ? item.woolworths?.price
                   : item.cheaper_store === 'coles'      ? item.coles?.price
                   : (item.coles?.price ?? item.woolworths?.price);
@@ -2115,7 +2115,7 @@ function renderPage(data) {
       ww_total:     `<td style="font-weight:700">${s.ww_data_available ? fmt(s.total_woolworths) : '—'}</td>`,
       coles_total:  `<td style="font-weight:700">${fmt(s.total_coles)}</td>`,
     };
-    tfootRow.innerHTML = getVisibleCols().map(col => footMap[col] || '<td></td>').join('') + '<td></td>';
+    tfootRow.innerHTML = '<td></td>' + getVisibleCols().map(col => footMap[col] || '<td></td>').join('') + '<td></td>';
   }
 
   $('tableContainer').style.display = 'block';
