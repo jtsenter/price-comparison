@@ -1809,15 +1809,25 @@ function renderPage(data) {
 
   // Auto-poll progress while scraping
   if (data.scrape_progress) {
+    window._progressNoDataStreak = 0; // reset streak whenever we see progress
     if (!window._progressPollTimer) {
       window._progressPollTimer = setInterval(async () => {
         const fresh = await loadData();
         if (!fresh) return;
         if (!fresh.scrape_progress) {
-          clearInterval(window._progressPollTimer);
-          window._progressPollTimer = null;
+          // Require 3 consecutive no-progress responses before declaring done.
+          // A single missing response could be a CDN hiccup or a between-push window.
+          window._progressNoDataStreak = (window._progressNoDataStreak || 0) + 1;
+          if (window._progressNoDataStreak >= 3) {
+            clearInterval(window._progressPollTimer);
+            window._progressPollTimer = null;
+            window._progressNoDataStreak = 0;
+            renderPage(fresh); // final render to hide bar
+          }
+          return; // don't hide bar yet
         }
-        if (fresh.scrape_progress?.done !== _lastData?.scrape_progress?.done || !fresh.scrape_progress) {
+        window._progressNoDataStreak = 0;
+        if (fresh.scrape_progress?.done !== _lastData?.scrape_progress?.done) {
           renderPage(fresh);
         }
       }, 7000);
