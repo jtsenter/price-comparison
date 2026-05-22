@@ -1502,7 +1502,9 @@ function sortItems(items) {
                   : item.cheaper_store === 'coles'      ? item.coles?.price
                   : (item.coles?.price ?? item.woolworths?.price);
         if (ref == null) return Infinity;
-        return (ref - minP) / (maxP - minP);
+        // Cap at 1.49 so above-max items never reach the flat-price bucket (1.5)
+        // and gradient-bar items always sort separately from flat gray-bar items.
+        return Math.min((ref - minP) / (maxP - minP), 1.49);
       }
       case 'category':     return getCategory(item).toLowerCase();
       case 'last_scraped': return item.last_scraped || '';
