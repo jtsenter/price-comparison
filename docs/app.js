@@ -484,14 +484,13 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
     return `
     <div class="price-bar-outer">
       <div class="price-bar price-bar-flat"><div class="price-marker" style="left:50%"></div></div>
-      <div class="price-bar-labels price-bar-labels-flat"><span class="price-bar-always">always ${fmt(minP)}</span></div>
+      <div class="price-bar-labels price-bar-labels-flat"><span class="price-bar-always">${fmt(minP)}</span></div>
     </div>
     <button class="price-bar-manage" data-manage-item="${safeItemName}">Manage</button>`;
   }
 
   const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
   const pos = Math.max(0, Math.min(100, rawPos));
-  const outRange = rawPos < 0 || rawPos > 100;
 
   const counts = {};
   prices.forEach(p => { const k = p.toFixed(2); counts[k] = (counts[k] || 0) + 1; });
@@ -516,11 +515,19 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   const safeTooltip = tooltip.replace(/"/g, '&quot;');
   const safeItemName = itemName.replace(/"/g, '&quot;');
 
+  // Off-range: green circle LEFT (price below min) or red circle RIGHT (price above max)
+  let trackHtml;
+  if (rawPos < 0) {
+    trackHtml = `<div class="price-bar-track-wrap"><div class="price-marker-off-left"></div><div class="price-bar"></div></div>`;
+  } else if (rawPos > 100) {
+    trackHtml = `<div class="price-bar-track-wrap"><div class="price-bar"></div><div class="price-marker-off-right"></div></div>`;
+  } else {
+    trackHtml = `<div class="price-bar"><div class="price-marker" style="left:${pos.toFixed(1)}%"></div></div>`;
+  }
+
   return `
     <div class="price-bar-outer" data-tooltip="${safeTooltip}">
-      <div class="price-bar">
-        <div class="price-marker${outRange ? ' out-range' : ''}" style="left:${pos.toFixed(1)}%"></div>
-      </div>
+      ${trackHtml}
       <div class="price-bar-labels">
         <span>${fmt(minP)}</span>
         <span>${fmt(maxP)}</span>

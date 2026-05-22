@@ -618,6 +618,20 @@ def should_skip_item(ex_data: dict | None, trigger: str) -> bool:
 CONCURRENCY = 2  # parallel items (1 page-pair each)
 
 
+def _coles_fallback_query(coles_url: str, item: str) -> str:
+    """Derive a search query from a Coles product URL slug.
+
+    'coles-strawberries-250g-5191256' → 'strawberries 250g'
+    Falls back to item name if the URL doesn't match expected pattern.
+    """
+    m = re.search(r'/product/([^/?]+)', coles_url)
+    if m:
+        slug = re.sub(r'^coles-', '', m.group(1))
+        slug = re.sub(r'-\d+$', '', slug)
+        return slug.replace('-', ' ').strip()
+    return item
+
+
 async def _scrape_single_item(
     item: str, purchase_history: dict, ww_page, coles_page,
     ww_url: str, coles_url: str, existing_data: dict
@@ -651,8 +665,9 @@ async def _scrape_single_item(
                 coles_results = [_co]
                 _skip_picker_co = True
             else:
-                print(f"  Coles URL fetch failed, falling back to name search")
-                coles_results = await search_with_retry(search_coles, coles_page, item)
+                _fq = _coles_fallback_query(coles_url, item)
+                print(f"  Coles URL fetch failed, searching by: {_fq!r}")
+                coles_results = await search_with_retry(search_coles, coles_page, _fq)
             ww_results = [existing_item["woolworths"]] if existing_item.get("woolworths") else []
             _skip_picker_ww = True
         else:
@@ -667,8 +682,9 @@ async def _scrape_single_item(
                 coles_results = [_co]
                 _skip_picker_co = True
             else:
-                print(f"  Coles URL fetch failed, falling back to name search")
-                coles_results = await search_with_retry(search_coles, coles_page, item)
+                _fq = _coles_fallback_query(coles_url, item)
+                print(f"  Coles URL fetch failed, searching by: {_fq!r}")
+                coles_results = await search_with_retry(search_coles, coles_page, _fq)
     else:
         # Name-based search (normal scrape) — honour url_overrides.json if present
         overrides_path = os.path.join(DATA_DIR, "url_overrides.json")
@@ -706,20 +722,26 @@ async def _scrape_single_item(
                         else:
                             # Stockcode not in top-5 results — retry search using URL slug
                             _slug_q = _sc_m.group(2).replace('-', ' ').strip()
-                            if _slug_q.lower() != item.lower():
-                                print(f"  WW: retrying with slug query: {_slug_q!r}")
-                                _slug_res = await search_with_retry(search_woolworths, ww_page, _slug_q)
+                            # Also derive a brand-prefix-stripped query (e.g. "woolworths chickpeas"
+                            # → "chickpeas") to try if the slug is identical to the item name.
+                            _slug_stripped = re.sub(r'^woolworths\s+', '', _slug_q, flags=re.IGNORECASE).strip()
+                            _retry_q = _slug_q if _slug_q.lower() != item.lower() else (
+                                _slug_stripped if _slug_stripped.lower() != item.lower() else ""
+                            )
+                            if _retry_q:
+                                print(f"  WW: retrying with slug query: {_retry_q!r}")
+                                _slug_res = await search_with_retry(search_woolworths, ww_page, _retry_q)
                                 _sc_hit2 = next((r for r in _slug_res if _sc in r.get('url', '')), None)
                                 if _sc_hit2:
                                     print(f"  WW: slug search found stockcode {_sc}")
                                     ww_results = [_sc_hit2]
                                     _skip_picker_ww = True
                                 elif _slug_res:
-                                    # Slug search returned results but not the pinned stockcode
-                                    # (product may have been re-stocked under a different stockcode).
-                                    # Use slug results for the matcher — more specific than item-name search.
-                                    print(f"  WW: using slug search results for matcher (stockcode {_sc} not found)")
-                                    ww_results = _slug_res
+                                    # Pinned stockcode not found — don't substitute a different product.
+                                    # Clear results so carry-forward preserves the last known price.
+                                    print(f"  WW: pinned stockcode {_sc} not in results — carrying forward")
+                                    ww_results = []
+                                    _skip_picker_ww = True
             else:
                 ww_results = await search_with_retry(search_woolworths, ww_page, item)
             if pinned_co:
@@ -728,19 +750,24 @@ async def _scrape_single_item(
                     coles_results = [_co]
                     _skip_picker_co = True
                 else:
-                    # Coles product page failed — fall back to name search so we still
-                    # get a price rather than silently carrying forward None.
-                    print(f"  Coles pinned URL failed, falling back to name search")
-                    coles_results = await search_with_retry(search_coles, coles_page, item)
-                    # Try to prefer the product whose URL slug matches the pinned URL
-                    _slug_m = re.search(r'/product/([^/?]+)', pinned_co)
-                    if _slug_m:
-                        _pinned_slug = _slug_m.group(1)
-                        _co_hit = next((r for r in coles_results if _pinned_slug in r.get('url', '')), None)
-                        if _co_hit:
-                            print(f"  Coles: matched by pinned slug")
-                            coles_results = [_co_hit]
-                            _skip_picker_co = True
+                    # Coles product page failed — derive search query from URL slug
+                    # (e.g. "coles-strawberries-250g-5191256" → "strawberries 250g")
+                    _fq = _coles_fallback_query(pinned_co, item)
+                    print(f"  Coles pinned URL failed, searching by: {_fq!r}")
+                    coles_results = await search_with_retry(search_coles, coles_page, _fq)
+                    if coles_results:
+                        # Prefer exact slug match; otherwise trust the user's URL choice
+                        # and use first result (skip the matcher — user already chose this product).
+                        _slug_m = re.search(r'/product/([^/?]+)', pinned_co)
+                        if _slug_m:
+                            _pinned_slug = _slug_m.group(1)
+                            _co_hit = next((r for r in coles_results if _pinned_slug in r.get('url', '')), None)
+                            if _co_hit:
+                                print(f"  Coles: matched by pinned slug")
+                                coles_results = [_co_hit]
+                            else:
+                                print(f"  Coles: using top search result (pinned slug not in results)")
+                        _skip_picker_co = True  # bypass matcher; user chose this product
             else:
                 coles_results = await search_with_retry(search_coles, coles_page, item)
         else:
