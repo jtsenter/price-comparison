@@ -213,31 +213,9 @@
     .cell-deal-ww  { background: var(--ww-light); }
     .cell-deal-coles { background: var(--coles-light); }
 
-    /* ── Price bar (reused from main) ── */
+    /* ── Price bar — style.css provides all bar/dot/label rules.
+         Only override the outer container for this page's layout context. ── */
     .price-bar-outer { cursor: help; margin-top: 4px; }
-    .price-bar {
-      height: 4px;
-      background: linear-gradient(90deg, var(--green-light), #fef9c3, #fee2e2);
-      border-radius: 2px;
-      position: relative;
-      overflow: visible;
-    }
-    .price-marker {
-      position: absolute;
-      top: -3px;
-      width: 8px;
-      height: 10px;
-      background: var(--text);
-      border-radius: 2px;
-      transform: translateX(-50%);
-    }
-    .price-bar-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 10px;
-      color: var(--text-soft);
-      margin-top: 2px;
-    }
 
     /* ── Empty state ── */
     .deals-empty {
