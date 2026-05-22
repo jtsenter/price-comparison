@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T05:37:00.844674+00:00",
+  "last_updated": "2026-05-22T05:37:21.597910+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -13170,7 +13170,7 @@
     },
     {
       "list_item": "Woolworths Black Beans",
-      "last_scraped": "2026-05-21T23:57:45.531136+00:00",
+      "last_scraped": "2026-05-22T05:37:00.947346+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13197,12 +13197,30 @@
         "unit_price": 1.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F3%2F3812975.jpg&w=640&q=90",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3812975.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.58,
       "alternatives": [
+        {
+          "name": "Coles Black Beans | 420g",
+          "price": 1.0,
+          "unit_price": 1.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3812975.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Carmelina Black Beans | 400 GRAM",
+          "price": 1.9,
+          "unit_price": 1.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/carmelina-black-beans-400-gram-8855589",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855589.jpg",
+          "retailer": "coles"
+        },
         {
           "name": "Woolworths Beef & Black Bean With Rice",
           "price": 8.0,
@@ -13213,7 +13231,7 @@
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.24,
       "per_100_coles": 0.24,
@@ -13221,8 +13239,69 @@
       "_ww_price_factor": 0.42
     },
     {
+      "list_item": "Woolworths Corn Sweet Kernels",
+      "last_scraped": "2026-05-22T05:37:07.380412+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 1.2
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.2
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Corn Sweet Kernels",
+        "price": 0.44,
+        "unit_price": 2.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/218926/woolworths-corn-sweet-kernels",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/218926.jpg"
+      },
+      "coles": {
+        "name": "Coles Corn Kernels | 420g",
+        "price": 1.05,
+        "unit_price": 1.05,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4774066.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.61,
+      "alternatives": [
+        {
+          "name": "Coles Corn Kernels | 420g",
+          "price": 1.05,
+          "unit_price": 1.05,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4774066.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Popping Corn Kernels | 400g",
+          "price": 1.8,
+          "unit_price": 1.8,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-popping-corn-kernels-400g-5374675",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5374675.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 0.25,
+      "per_100_coles": 0.25,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.42
+    },
+    {
       "list_item": "Woolworths Chickpeas",
-      "last_scraped": "2026-05-22T04:22:06.485919+00:00",
+      "last_scraped": "2026-05-22T05:37:14.822864+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13254,50 +13333,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Corn Sweet Kernels",
-      "last_scraped": "2026-05-21T23:57:52.939248+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-03-11",
-          "price": 1.2
-        },
-        {
-          "date": "2025-04-14",
-          "price": 1.2
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Corn Sweet Kernels",
-        "price": 0.44,
-        "unit_price": 2.5,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/218926/woolworths-corn-sweet-kernels",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/218926.jpg"
-      },
-      "coles": {
-        "name": "Coles Corn Kernels | 420g",
-        "price": 1.05,
-        "unit_price": 1.05,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4774066.jpg&w=640&q=90",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.61,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.25,
-      "per_100_coles": 0.25,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.42
-    },
-    {
       "list_item": "Woolworths Greek Style Fetta",
-      "last_scraped": "2026-05-21T23:57:55.552428+00:00",
+      "last_scraped": "2026-05-22T05:37:17.074654+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13324,13 +13361,41 @@
         "unit_price": 6.75,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/south-cape-greek-style-fetta-200g-6416861",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F6%2F6416861.jpg&w=640&q=90",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6416861.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 6.11,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Castello Greek Style Feta Cubes | 410g",
+          "price": 6.0,
+          "unit_price": 6.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/castello-greek-style-feta-cubes-410g-1096832",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1096832.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "South Cape Greek Style Fetta | 200g",
+          "price": 6.75,
+          "unit_price": 6.75,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/south-cape-greek-style-fetta-200g-6416861",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6416861.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "South Cape Greek Style Fetta Reduced Fat | 200g",
+          "price": 6.75,
+          "unit_price": 6.75,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/south-cape-greek-style-fetta-reduced-fat-200g-6416883",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6416883.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.6,
       "per_100_coles": 3.38,
@@ -13339,7 +13404,7 @@
     },
     {
       "list_item": "Woolworths Green Asparagus Bunch Green",
-      "last_scraped": "2026-05-21T23:57:58.308961+00:00",
+      "last_scraped": "2026-05-22T05:37:21.577317+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13366,12 +13431,31 @@
         "unit_price": 4.7,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-green-asparagus-1-each-4838737",
-        "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4838737.jpg&w=640&q=90"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4838737.jpg"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.2,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Coles Asparagus Spears | 425g",
+          "price": 3.0,
+          "unit_price": 3.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-asparagus-spears-425g-5841817",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5841817.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Asparagus Entertainer Large | 1 Bunch",
+          "price": 4.4,
+          "unit_price": 4.4,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-asparagus-entertainer-large-1-bunch-8809049",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8809049.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -13636,7 +13720,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 200,
+    "done": 205,
     "total": 211
   }
 }
