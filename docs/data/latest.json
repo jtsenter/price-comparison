@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22T02:50:51.022875+00:00",
+  "last_updated": "2026-05-22T02:51:07.890549+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7423,7 +7423,7 @@
     },
     {
       "list_item": "Macro Natural Sunflower Kernels",
-      "last_scraped": "2026-05-21T23:53:15.560683+00:00",
+      "last_scraped": "2026-05-22T02:50:52.987539+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7500,7 +7500,7 @@
     },
     {
       "list_item": "Macro Organic Natural Pumpkin Kernels",
-      "last_scraped": "2026-05-21T23:53:19.666285+00:00",
+      "last_scraped": "2026-05-22T02:50:58.130395+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7577,7 +7577,7 @@
     },
     {
       "list_item": "Macro Organic Pasta Sauce Chunky Bolognese",
-      "last_scraped": "2026-05-21T23:53:22.434756+00:00",
+      "last_scraped": "2026-05-22T02:50:58.302107+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -7632,7 +7632,7 @@
     },
     {
       "list_item": "McKenzie's Dried Veg Pearl Barley",
-      "last_scraped": "2026-05-21T23:53:29.984284+00:00",
+      "last_scraped": "2026-05-22T02:51:03.697178+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7698,6 +7698,63 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "McKenzie's Green Lentil Whole",
+      "last_scraped": "2026-05-22T02:51:07.884475+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 4.8
+        },
+        {
+          "date": "2025-05-12",
+          "price": 4.8
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.8
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.7
+        },
+        {
+          "date": "2026-03-10",
+          "price": 4.8
+        },
+        {
+          "date": "2026-05-06",
+          "price": 4.8
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "McKenzie's Green Lentil Whole",
+        "price": 1.8,
+        "unit_price": 4.8,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/439264/mckenzie-s-green-lentil-whole",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/439264.jpg"
+      },
+      "coles": {
+        "name": "McKenzie's Whole Green Lentils | 375g",
+        "price": 2.3,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/mckenzie's-whole-green-lentils-375g-130050",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/130050.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.5,
+      "alternatives": [],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 0.48,
+      "per_100_coles": 0.61,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.375
+    },
+    {
       "list_item": "Mainland Extra Tasty Cheese Block",
       "last_scraped": "2026-05-21T23:53:31.538572+00:00",
       "trip_count": 6,
@@ -7752,63 +7809,6 @@
       "per_100_ww": 2.36,
       "per_100_coles": 2.36,
       "per_100_unit": "100g"
-    },
-    {
-      "list_item": "McKenzie's Green Lentil Whole",
-      "last_scraped": "2026-05-21T23:53:35.920643+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2025-04-14",
-          "price": 4.8
-        },
-        {
-          "date": "2025-05-12",
-          "price": 4.8
-        },
-        {
-          "date": "2025-07-10",
-          "price": 4.8
-        },
-        {
-          "date": "2026-02-03",
-          "price": 3.7
-        },
-        {
-          "date": "2026-03-10",
-          "price": 4.8
-        },
-        {
-          "date": "2026-05-06",
-          "price": 4.8
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "McKenzie's Green Lentil Whole",
-        "price": 1.8,
-        "unit_price": 4.8,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/439264/mckenzie-s-green-lentil-whole",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/439264.jpg"
-      },
-      "coles": {
-        "name": "McKenzie's Whole Green Lentils | 375g",
-        "price": 2.3,
-        "unit_price": null,
-        "unit": null,
-        "url": "https://www.coles.com.au/product/mckenzie's-whole-green-lentils-375g-130050",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/130050.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.5,
-      "alternatives": [],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 0.48,
-      "per_100_coles": 0.61,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.375
     },
     {
       "list_item": "McKenzie's Pepper Black Corns Blended",
@@ -12996,7 +12996,7 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 95,
+    "done": 100,
     "total": 211
   }
 }
