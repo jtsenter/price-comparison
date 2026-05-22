@@ -1779,13 +1779,15 @@ function renderPage(data) {
     }
   }
 
-  const totalNonArchived = (data.items || []).filter(i => !i.archived).length;
-  const pricedBoth = (data.items || []).filter(i => !i.archived && i.woolworths?.price != null && i.coles?.price != null).length;
+  const _uiPriorities = loadPriorities();
+  const isUiArchived = (i) => i.archived || _uiPriorities[i.list_item] === 'archive';
+  const totalNonArchived = (data.items || []).filter(i => !isUiArchived(i)).length;
+  const pricedBoth = (data.items || []).filter(i => !isUiArchived(i) && i.woolworths?.price != null && i.coles?.price != null).length;
   const missingCount = totalNonArchived - pricedBoth;
   const coverageText = missingCount > 0
     ? `${pricedBoth}/${totalNonArchived} priced · ${missingCount} missing`
     : `${totalNonArchived} items`;
-  const hotCount = (data.items || []).filter(i => !i.archived && loadPriorities()[i.list_item] !== 'archive' && isHotDeal(i)).length;
+  const hotCount = (data.items || []).filter(i => !isUiArchived(i) && isHotDeal(i)).length;
   $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>${hotCount > 0 ? `<a href="hot-deals.html" class="hot-deals-link">🔥 ${hotCount} deal${hotCount !== 1 ? 's' : ''}</a>` : ''}`;
   $('banner').style.display = 'block';
 
