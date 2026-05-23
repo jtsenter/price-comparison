@@ -24,7 +24,7 @@ on:
         default: ''
 
 concurrency:
-  group: scrape
+  group: scrape-${{ github.event.inputs.item || 'full' }}
   cancel-in-progress: true
 
 permissions:

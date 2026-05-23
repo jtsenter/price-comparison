@@ -624,56 +624,64 @@ async function pollItemRefresh(s, btn, itemName) {
   _pendingRefreshItem = itemName;
   if (_lastData) renderPage(_lastData);
 
-  // Record dispatch time so we only act on runs created after this point
   const dispatchedAt = new Date().toISOString();
+  const apiBase = `https://api.github.com/repos/${s.user}/${s.repo}`;
+  const apiHeaders = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' };
 
-  // Wait a few seconds for the run to be registered, then poll the GitHub Actions API
-  // for completion — same approach as pollForCompletion for the global refresh.
-  // Polling latest.json directly is unreliable because GitHub Pages can take several
-  // minutes to redeploy after a push, longer than any reasonable timeout.
-  let attempts = 0;
-  const poll = async () => {
-    if (++attempts > 90) {
-      // ~7.5 min timeout
-      _pendingRefreshItem = null;
-      if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
-      if (_lastData) renderPage(_lastData);
-      return;
-    }
+  const finish = (fresh) => {
+    _pendingRefreshItem = null;
+    if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
+    if (fresh) renderPage(fresh);
+    else if (_lastData) renderPage(_lastData);
+  };
+
+  // Phase 1: find the run created after dispatchedAt.
+  // Multiple per-item refreshes run concurrently (different concurrency groups),
+  // so we must track the specific run for this item, not just whatever is latest.
+  let findAttempts = 0;
+  const findRun = async () => {
+    if (++findAttempts > 12) { finish(null); return; } // ~1 min to appear
     try {
       const res = await fetch(
-        `https://api.github.com/repos/${s.user}/${s.repo}/actions/workflows/scrape.yml/runs?per_page=1`,
-        { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
+        `${apiBase}/actions/workflows/scrape.yml/runs?per_page=10`,
+        { headers: apiHeaders }
       );
       const data = await res.json();
-      const run = data.workflow_runs?.[0];
-      // Ignore runs that were already completed before we dispatched
-      if (run?.status === 'completed' && run.created_at > dispatchedAt) {
-        if (run.conclusion === 'success') {
-          // Wait 2s for GitHub Pages CDN to pick up the push, then fetch fresh data
-          setTimeout(async () => {
-            _pendingRefreshItem = null;
-            try {
-              const jr = await fetch(`data/latest.json?t=${Date.now()}`);
-              const fresh = await jr.json();
-              if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
-              renderPage(fresh);
-            } catch (_) {
-              if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
-              if (_lastData) renderPage(_lastData);
-            }
-          }, 2000);
-        } else {
-          _pendingRefreshItem = null;
-          if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
-          if (_lastData) renderPage(_lastData);
-        }
-        return;
-      }
+      const run = data.workflow_runs?.find(r => r.created_at >= dispatchedAt);
+      if (run) { setTimeout(() => waitForRun(run.id), 5000); return; }
     } catch (_) {}
-    setTimeout(poll, 5000);
+    setTimeout(findRun, 5000);
   };
-  setTimeout(poll, 8000);
+
+  // Phase 2: poll the specific run by ID until it completes.
+  const waitForRun = async (runId) => {
+    let waitAttempts = 0;
+    const poll = async () => {
+      if (++waitAttempts > 90) { finish(null); return; } // ~7.5 min max
+      try {
+        const res = await fetch(`${apiBase}/actions/runs/${runId}`, { headers: apiHeaders });
+        const run = await res.json();
+        if (run?.status === 'completed') {
+          if (run.conclusion === 'success') {
+            // Wait 2s for GitHub Pages CDN to pick up the push, then re-render
+            setTimeout(async () => {
+              try {
+                const jr = await fetch(`data/latest.json?t=${Date.now()}`);
+                finish(await jr.json());
+              } catch (_) { finish(null); }
+            }, 2000);
+          } else {
+            finish(null);
+          }
+          return;
+        }
+      } catch (_) {}
+      setTimeout(poll, 5000);
+    };
+    poll();
+  };
+
+  setTimeout(findRun, 8000);
 }
 
 // ── LocalStorage settings ────────────────────────────────────────────────────
