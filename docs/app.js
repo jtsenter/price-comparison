@@ -2509,13 +2509,15 @@ async function addItemsToShoppingList(newItems) {
     const priceIdx = header.findIndex(h => String(h).toLowerCase().includes('price') || String(h).toLowerCase().includes('unit'));
 
     const today = new Date().toISOString().split('T')[0];
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
 
     // Add 2 trips per new item (meets min_trips=2 threshold in scraper)
     for (const itemName of newItems) {
+      const tripDates = [yesterday, today];
       for (let t = 0; t < 2; t++) {
         const row = Array(Math.max(header.length, 3)).fill('');
         if (itemIdx >= 0)  row[itemIdx]  = itemName;
-        if (dateIdx >= 0)  row[dateIdx]  = today;
+        if (dateIdx >= 0)  row[dateIdx]  = tripDates[t];
         if (priceIdx >= 0) row[priceIdx] = 0;
         data.push(row);
       }
