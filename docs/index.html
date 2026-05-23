@@ -118,6 +118,12 @@
     ⚠️ Price data is more than 5 days old — click <strong>Update Prices</strong> to refresh.
   </div>
 
+  <div class="stale-banner runner-offline-banner" id="runnerOfflineBanner">
+    ⚠️ Scraper is offline — the Windows runner is not connected. Prices cannot be updated until it restarts.
+    <button class="runner-retry-btn" onclick="retryRunnerCheck()">↺ Retry</button>
+    <button class="runner-dismiss-btn" onclick="document.getElementById('runnerOfflineBanner').classList.remove('visible')">✕</button>
+  </div>
+
   <!-- Comparison banner -->
   <div id="banner" class="comparison-banner" style="display:none">
     <div class="store-cards">

@@ -158,6 +158,15 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
 }
 .stale-banner.visible { display: block; }
 
+.runner-offline-banner { background: #FEF2F2; border-color: #FCA5A5; color: #991B1B; display: flex; align-items: center; gap: 10px; }
+.runner-offline-banner.visible { display: flex; }
+.runner-retry-btn, .runner-dismiss-btn {
+  margin-left: auto; padding: 3px 10px; font-size: 12px; border-radius: var(--radius);
+  border: 1px solid currentColor; background: transparent; color: inherit; cursor: pointer;
+}
+.runner-dismiss-btn { margin-left: 4px; padding: 3px 7px; }
+.runner-retry-btn:hover, .runner-dismiss-btn:hover { background: rgba(0,0,0,0.06); }
+
 /* Notification bell */
 .btn-icon { position: relative; padding: 6px 8px !important; }
 .notif-badge {

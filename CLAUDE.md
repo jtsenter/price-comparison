@@ -115,6 +115,29 @@ All tunable values are defined near the top of `scraper.py`:
   page + one Coles page from pool queues; the `finally` block always returns pages so the
   gather never deadlocks.
 
+## Self-hosted Runner
+
+- **Location:** `C:\actions-runner`
+- **Runner name:** `home-pc` (registered to `jtsenter/price-comparison`)
+- **Installed as:** Windows service — `actions.runner.jtsenter.price-comparison.home-pc`
+- **Starts automatically** on every Windows boot (service StartupType = Automatic)
+- **Restart on failure:** configured to restart after 60 s (×2), then 5 min
+- **Service executable:** `C:\actions-runner\bin\RunnerService.exe`
+
+```powershell
+# Check status
+Get-Service -Name "actions.runner.jtsenter.price-comparison.home-pc"
+
+# Stop / start manually
+Stop-Service  -Name "actions.runner.jtsenter.price-comparison.home-pc"
+Start-Service -Name "actions.runner.jtsenter.price-comparison.home-pc"
+
+# Re-install (run elevated)
+powershell -ExecutionPolicy Bypass -File "C:\actions-runner\install-service.ps1"
+```
+
+Verify online status: https://github.com/jtsenter/price-comparison/settings/actions/runners
+
 ## Known gaps / work in progress
 
 - `clientPer100()` is duplicated in `app.js` and `hot-deals.html` — should be extracted

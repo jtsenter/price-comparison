@@ -593,6 +593,15 @@ async function triggerItemRefresh(itemName, btn, urlOverrides) {
 
   if (btn) { btn.disabled = true; btn.classList.add('spinning'); }
 
+  // Pre-flight: confirm the self-hosted runner is online before dispatching
+  const { anyOnline } = await getRunnerStatus(s);
+  if (!anyOnline) {
+    showRunnerOfflineBanner();
+    if (btn) { btn.disabled = false; btn.classList.remove('spinning'); }
+    return;
+  }
+  hideRunnerOfflineBanner();
+
   const inputs = { trigger: 'manual', item: itemName };
   if (urlOverrides?.wwUrl) inputs.ww_url = urlOverrides.wwUrl;
   if (urlOverrides?.colesUrl) inputs.coles_url = urlOverrides.colesUrl;
@@ -682,6 +691,63 @@ async function pollItemRefresh(s, btn, itemName) {
   };
 
   setTimeout(findRun, 8000);
+}
+
+// ── Runner status ─────────────────────────────────────────────────────────────
+
+/** Returns { anyOnline, runners } for self-hosted runners on the repo. */
+async function getRunnerStatus(s) {
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${s.user}/${s.repo}/actions/runners`,
+      { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
+    );
+    if (!res.ok) return { anyOnline: true, runners: [] }; // fail open — don't block on API error
+    const data = await res.json();
+    const selfHosted = (data.runners || []).filter(r =>
+      r.labels?.some(l => l.name === 'self-hosted')
+    );
+    const anyOnline = selfHosted.length === 0 || selfHosted.some(r => r.status === 'online');
+    return { anyOnline, runners: selfHosted };
+  } catch {
+    return { anyOnline: true, runners: [] }; // network error → fail open
+  }
+}
+
+function showRunnerOfflineBanner() {
+  let banner = $('runnerOfflineBanner');
+  if (!banner) return;
+  banner.classList.add('visible');
+}
+
+function hideRunnerOfflineBanner() {
+  const banner = $('runnerOfflineBanner');
+  if (banner) banner.classList.remove('visible');
+}
+
+/** Updates the stale-data banner text to mention the runner being offline. */
+function updateStaleBannerForRunner(offline) {
+  const banner = $('staleBanner');
+  if (!banner) return;
+  if (offline) {
+    banner.innerHTML = `⚠️ Price data is more than ${STALE_DATA_DAYS} days old — scraper is currently <strong>offline</strong>. Prices cannot be updated until the Windows runner restarts.`;
+  } else {
+    banner.innerHTML = `⚠️ Price data is more than ${STALE_DATA_DAYS} days old — click <strong>Update Prices</strong> to refresh.`;
+  }
+}
+
+/** Called by the ↺ Retry button in the offline banner. Re-checks runner status. */
+async function retryRunnerCheck() {
+  const btn = document.querySelector('.runner-retry-btn');
+  if (btn) { btn.textContent = '…'; btn.disabled = true; }
+  const s = loadSettings();
+  const { anyOnline } = await getRunnerStatus(s);
+  if (anyOnline) {
+    hideRunnerOfflineBanner();
+    updateStaleBannerForRunner(false);
+  } else {
+    if (btn) { btn.textContent = '↺ Retry'; btn.disabled = false; }
+  }
 }
 
 // ── LocalStorage settings ────────────────────────────────────────────────────
@@ -1345,6 +1411,17 @@ async function triggerRefresh() {
 
   const btn = $('refreshBtn');
   btn.disabled = true;
+  btn.innerHTML = '<span class="spin">↻</span> Checking…';
+
+  // Pre-flight: confirm the self-hosted runner is online before dispatching
+  const { anyOnline } = await getRunnerStatus(s);
+  if (!anyOnline) {
+    showRunnerOfflineBanner();
+    btn.disabled = false;
+    btn.innerHTML = '↻ Update Prices';
+    return;
+  }
+  hideRunnerOfflineBanner();
   btn.innerHTML = '<span class="spin">↻</span> Updating…';
 
   try {
@@ -3080,6 +3157,18 @@ async function boot() {
   const _initPr = loadPriorities();
   if (Object.values(_initPr).includes('archive')) {
     syncArchivedToGitHub();
+  }
+
+  // Background runner-status check: silently show the offline banner if the runner
+  // is down, and update the stale-data banner text to match.
+  const _bootSettings = loadSettings();
+  if (_bootSettings.user && _bootSettings.repo && _bootSettings.token) {
+    getRunnerStatus(_bootSettings).then(({ anyOnline }) => {
+      if (!anyOnline) {
+        showRunnerOfflineBanner();
+        updateStaleBannerForRunner(true);
+      }
+    });
   }
 }
 
