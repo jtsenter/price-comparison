@@ -2924,6 +2924,15 @@ async function boot() {
           body: JSON.stringify(putBody),
         }
       );
+      // Pre-flight runner check before dispatching
+      const { anyOnline } = await getRunnerStatus(s);
+      if (!anyOnline) {
+        showRunnerOfflineBanner();
+        alert('Archived list saved, but the scraper is offline — prices will update when the runner restarts.');
+        btn.disabled = false;
+        return;
+      }
+      hideRunnerOfflineBanner();
       // Dispatch scrape_archived workflow
       btn.textContent = 'Dispatching…';
       await fetch(
