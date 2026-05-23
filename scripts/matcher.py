@@ -202,8 +202,8 @@ def compute_per_100(result: dict) -> tuple[float | None, str]:
     Return (price_per_100, unit_label) where unit_label is '100g' or '100ml'.
 
     Priority:
-      1. unit_price + unit  (store-provided cup price, most accurate)
-      2. price ÷ size extracted from product name
+      1. price ÷ size extracted from product name  (reliable for pre-packed goods)
+      2. unit_price + unit  (store cup price, fallback for loose/bulk goods)
     """
     if not result:
         return None, '100g'
