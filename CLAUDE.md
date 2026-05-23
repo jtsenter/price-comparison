@@ -108,7 +108,7 @@ All tunable values are defined near the top of `scraper.py`:
 - **WW blocking**: Woolworths intermittently blocks GitHub Actions IPs. `search_woolworths`
   returns `[]` silently and existing WW data is carried forward. `_ww_debug_done` logs only
   the first blocked response per run.
-- **Git conflicts**: Progress pushes use `git pull --rebase` before pushing. The
+- **Git conflicts**: Progress pushes use `git pull --no-rebase -X ours` before pushing. The
   `_push_lock` in `push_progress_bg` skips a new push if the previous thread is still
   running. Workflow timeout is 90 minutes.
 - **CONCURRENCY = 2** — Coles rate-limits aggressively above 3. Each slot uses one WW
