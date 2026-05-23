@@ -1452,71 +1452,83 @@ async function triggerRefresh() {
         if (retryBtn) retryBtn.style.display = 'none';
       }
       btn.innerHTML = '✓ Triggered — polling…';
-      pollForCompletion(s);
+      const dispatchedAt = new Date().toISOString();
+      pollForCompletion(s, dispatchedAt);
       refreshCooldown = true;
       setTimeout(() => { refreshCooldown = false; }, 10 * 60 * 1000);
     } else {
       const err = await res.json().catch(() => ({}));
       alert(`GitHub API error ${res.status}: ${err.message || 'Unknown error'}`);
       btn.disabled = false;
-      btn.innerHTML = '↻ Refresh Now';
+      btn.innerHTML = '↻ Update Prices';
     }
   } catch (e) {
     alert(`Network error: ${e.message}`);
     btn.disabled = false;
-    btn.innerHTML = '↻ Refresh Now';
+    btn.innerHTML = '↻ Update Prices';
   }
 }
 
-async function pollForCompletion(s) {
+async function pollForCompletion(s, dispatchedAt) {
   const btn = $('refreshBtn');
-  let done = false;
+  const apiBase = `https://api.github.com/repos/${s.user}/${s.repo}`;
+  const apiHeaders = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' };
+  let dataPollTimer;
 
-  // Fast data poll: checks latest.json every 5s to show the progress bar.
-  const dataPollTimer = setInterval(async () => {
-    if (done) { clearInterval(dataPollTimer); return; }
+  const finish = (success) => {
+    clearInterval(dataPollTimer);
+    if (success) {
+      btn.innerHTML = '✓ Done — reloading…';
+      setTimeout(() => {
+        fetch(`data/latest.json?t=${Date.now()}`)
+          .then(r => r.json())
+          .then(d => { renderPage(d); btn.innerHTML = '↻ Update Prices'; btn.disabled = false; })
+          .catch(() => location.reload());
+      }, 2000);
+    } else {
+      btn.innerHTML = '⚠ Run failed';
+      setTimeout(() => { btn.innerHTML = '↻ Update Prices'; btn.disabled = false; }, 4000);
+    }
+  };
+
+  // Live data poll: re-renders the progress bar every 5 s while the scrape runs.
+  dataPollTimer = setInterval(async () => {
     const fresh = await loadData();
     if (fresh) renderPage(fresh);
   }, 5000);
 
-  // GitHub API poll: checks run status every 20s to detect completion.
-  let attempts = 0;
-  const poll = async () => {
-    if (done) return;
-    if (++attempts > 60) {
-      done = true;
-      clearInterval(dataPollTimer);
-      btn.innerHTML = '↻ Refresh Now'; btn.disabled = false;
-      return;
-    }
+  // Phase 1: find the run created after dispatch (~1 min timeout, 5 s polling)
+  let findAttempts = 0;
+  const findRun = async () => {
+    if (++findAttempts > 12) { finish(false); return; }
     try {
-      const res = await fetch(
-        `https://api.github.com/repos/${s.user}/${s.repo}/actions/workflows/scrape.yml/runs?per_page=1`,
-        { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
-      );
-      const data = await res.json();
-      const run = data.workflow_runs?.[0];
-      if (run?.status === 'completed') {
-        done = true;
-        clearInterval(dataPollTimer);
-        if (run.conclusion === 'success') {
-          btn.innerHTML = '✓ Done — reloading…';
-          setTimeout(() => {
-            fetch(`data/latest.json?t=${Date.now()}`)
-              .then(r => r.json())
-              .then(d => { renderPage(d); btn.innerHTML = '↻ Refresh Now'; btn.disabled = false; })
-              .catch(() => location.reload());
-          }, 2000);
-        } else {
-          btn.innerHTML = '⚠ Run failed';
-          setTimeout(() => { btn.innerHTML = '↻ Refresh Now'; btn.disabled = false; }, 4000);
-        }
-        return;
-      }
+      const r = await fetch(`${apiBase}/actions/workflows/scrape.yml/runs?per_page=10`, { headers: apiHeaders });
+      const data = await r.json();
+      const run = data.workflow_runs?.find(r => r.created_at >= dispatchedAt);
+      if (run) { setTimeout(() => waitForRun(run.id), 5000); return; }
     } catch (_) {}
-    setTimeout(poll, 20000);
+    setTimeout(findRun, 5000);
   };
-  setTimeout(poll, 20000);
+
+  // Phase 2: poll the specific run by ID until completion (~7.5 min max)
+  const waitForRun = async (runId) => {
+    let waitAttempts = 0;
+    const poll = async () => {
+      if (++waitAttempts > 90) { finish(false); return; }
+      try {
+        const r = await fetch(`${apiBase}/actions/runs/${runId}`, { headers: apiHeaders });
+        const run = await r.json();
+        if (run?.status === 'completed') {
+          finish(run.conclusion === 'success');
+          return;
+        }
+      } catch (_) {}
+      setTimeout(poll, 5000);
+    };
+    poll();
+  };
+
+  setTimeout(findRun, 8000);
 }
 
 // ── Data loading ─────────────────────────────────────────────────────────────
