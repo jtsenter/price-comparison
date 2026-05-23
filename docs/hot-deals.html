@@ -988,7 +988,8 @@ async function triggerRefreshHD() {
       if (retryBtn) retryBtn.style.display = 'none';
     }
     if (btn) btn.innerHTML = '✓ Triggered — polling…';
-    pollForCompletionHD(user, repo, token);
+    const dispatchedAt = new Date().toISOString();
+    pollForCompletionHD(user, repo, token, dispatchedAt);
     _hdRefreshCooldown = true;
     setTimeout(() => { _hdRefreshCooldown = false; }, 10 * 60 * 1000);
   } else {
@@ -997,53 +998,52 @@ async function triggerRefreshHD() {
   }
 }
 
-async function pollForCompletionHD(user, repo, token) {
+async function pollForCompletionHD(user, repo, token, dispatchedAt) {
   const btn = document.getElementById('refreshBtn');
-  let done = false;
+  const apiBase = `https://api.github.com/repos/${user}/${repo}`;
+  const apiHeaders = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' };
 
-  const dataPollTimer = setInterval(async () => {
-    if (done) { clearInterval(dataPollTimer); return; }
-    try {
-      const r = await fetch(`data/latest.json?t=${Date.now()}`);
-      if (r.ok) {
-        _data = await r.json();
-        renderScrapeStrip(_data);
-        renderDeals();
-      }
-    } catch {}
-  }, 5000);
-
-  let attempts = 0;
-  const runPollTimer = setInterval(async () => {
-    if (done) return;
-    if (++attempts > 60) {
-      done = true;
-      clearInterval(dataPollTimer);
-      clearInterval(runPollTimer);
+  const finish = (success) => {
+    if (success) {
+      if (btn) btn.innerHTML = '✓ Done — reloading…';
+      setTimeout(() => location.reload(), 2000);
+    } else {
       if (btn) { btn.innerHTML = '↻ Update Prices'; btn.disabled = false; }
-      return;
     }
+  };
+
+  // Phase 1: find the run created after dispatch (~1 min timeout, 5s polling)
+  let findAttempts = 0;
+  const findRun = async () => {
+    if (++findAttempts > 12) { finish(false); return; }
     try {
-      const r = await fetch(
-        `https://api.github.com/repos/${user}/${repo}/actions/runs?per_page=1`,
-        { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' } }
-      );
-      if (!r.ok) return;
+      const r = await fetch(`${apiBase}/actions/workflows/scrape.yml/runs?per_page=10`, { headers: apiHeaders });
       const data = await r.json();
-      const run = data.workflow_runs?.[0];
-      if (run?.status === 'completed') {
-        done = true;
-        clearInterval(dataPollTimer);
-        clearInterval(runPollTimer);
-        if (run.conclusion === 'success') {
-          if (btn) btn.innerHTML = '✓ Done — reloading…';
-          setTimeout(() => location.reload(), 2000);
-        } else {
-          if (btn) { btn.innerHTML = '↻ Update Prices'; btn.disabled = false; }
+      const run = data.workflow_runs?.find(r => r.created_at >= dispatchedAt);
+      if (run) { setTimeout(() => waitForRun(run.id), 5000); return; }
+    } catch (_) {}
+    setTimeout(findRun, 5000);
+  };
+
+  // Phase 2: poll the specific run by ID until completion (~7.5 min max)
+  const waitForRun = async (runId) => {
+    let waitAttempts = 0;
+    const poll = async () => {
+      if (++waitAttempts > 90) { finish(false); return; }
+      try {
+        const r = await fetch(`${apiBase}/actions/runs/${runId}`, { headers: apiHeaders });
+        const run = await r.json();
+        if (run?.status === 'completed') {
+          finish(run.conclusion === 'success');
+          return;
         }
-      }
-    } catch {}
-  }, 30000);
+      } catch (_) {}
+      setTimeout(poll, 5000);
+    };
+    poll();
+  };
+
+  setTimeout(findRun, 8000);
 }
 
 function initRefreshBtn() {
