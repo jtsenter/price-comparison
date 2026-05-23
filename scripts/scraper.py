@@ -540,38 +540,17 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
     try:
         subprocess.run(["git", "config", "user.name", "github-actions[bot]"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
         subprocess.run(["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-        # Clean up any stale rebase state BEFORE staging — a previous push's failed
-        # pull --rebase may have left .git/rebase-apply behind, which causes
-        # subsequent git commit calls to fail silently.
-        for stale in [".git/rebase-merge", ".git/rebase-apply"]:
-            if os.path.exists(os.path.join(REPO_ROOT, stale)):
-                subprocess.run(["git", "rebase", "--abort"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-                break
         subprocess.run(["git", "add", "docs/data/"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
         diff = subprocess.run(["git", "diff", "--staged", "--quiet"], cwd=REPO_ROOT, timeout=_GIT_TIMEOUT)
         if diff.returncode != 0:
             commit = subprocess.run(["git", "commit", "-m", f"progress: {done}/{total} items scraped"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
             if commit.returncode == 0:
-                pull = subprocess.run(["git", "pull", "--rebase", "origin", "main"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-                if pull.returncode != 0:
-                    # Rebase conflicted — abort it, re-write our progress data on top of
-                    # the fetched remote HEAD, then force-push so the bar stays visible.
-                    subprocess.run(["git", "rebase", "--abort"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-                    subprocess.run(["git", "fetch", "origin", "main"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-                    subprocess.run(["git", "reset", "--soft", "origin/main"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-                    # Re-write our progress file (reset --soft may have changed working tree)
-                    with open(latest_path, "w") as f:
-                        json.dump(out, f, indent=2)
-                    subprocess.run(["git", "add", "docs/data/"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-                    commit2 = subprocess.run(["git", "commit", "-m", f"progress: {done}/{total} items scraped"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-                    if commit2.returncode == 0:
-                        subprocess.run(["git", "push"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-                        print(f"  -> Pushed progress after conflict recovery ({done}/{total})")
-                    else:
-                        print(f"  -> Conflict recovery commit failed, skipping push")
-                else:
+                pull = subprocess.run(["git", "pull", "--no-rebase", "-X", "ours", "origin", "main"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
+                if pull.returncode == 0:
                     subprocess.run(["git", "push"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
                     print(f"  -> Pushed progress ({done}/{total})")
+                else:
+                    print(f"  -> Pull failed, skipping push")
             else:
                 print(f"  -> Commit failed, skipping push: {commit.stderr.decode(errors='replace').strip()}")
     except subprocess.TimeoutExpired as e:
