@@ -398,7 +398,7 @@ function loadPriorities() {
   try { return JSON.parse(localStorage.getItem('pw_priorities_v1') || '{}'); } catch { return {}; }
 }
 function loadExclusions() {
-  try { return JSON.parse(localStorage.getItem('pw_excl_v1') || '{}'); } catch { return {}; }
+  try { return JSON.parse(localStorage.getItem('pw_exclusions_v1') || '{}'); } catch { return {}; }
 }
 
 const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '—';
