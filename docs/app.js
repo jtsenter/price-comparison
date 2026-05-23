@@ -1075,13 +1075,14 @@ function initBulkBar() {
 // ── Banner stats (priority-aware) ────────────────────────────────────────────
 
 function computeBannerStats(items) {
+  const exclusions = loadExclusions();
   const filtered = items.filter(item => {
     if (item.archived && _activePriority !== 'archive') return false;
     const p = getPriority(item.list_item);
     if (_activePriority !== 'archive' && p === 'archive') return false;
     if (_activePriority !== 'all' && _activePriority !== 'archive' && p !== _activePriority) return false;
     if (_activeCategory !== 'All' && getCategory(item) !== _activeCategory) return false;
-    if (_showHotOnly && !isHotDeal(item)) return false;
+    if (_showHotOnly && !isHotDeal(item, exclusions)) return false;
     // Only include items that have prices at both stores
     if (item.woolworths?.price == null || item.coles?.price == null) return false;
     return true;
@@ -1563,6 +1564,7 @@ let _progressDismissed = false;    // user dismissed the header progress widget
 const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
 
 function sortItems(items) {
+  const exclusions = loadExclusions();
   let filtered = items.filter(item => {
     if (item.archived && _activePriority !== 'archive') return false;
     const p = getPriority(item.list_item);
@@ -1571,7 +1573,7 @@ function sortItems(items) {
     // Priority pill filter
     if (_activePriority !== 'all' && _activePriority !== 'archive' && p !== _activePriority) return false;
     // Hot deals filter
-    if (_showHotOnly && !isHotDeal(item)) return false;
+    if (_showHotOnly && !isHotDeal(item, exclusions)) return false;
     // Store filter (only active when hot filter is on)
     if (_showHotOnly && _storeFilter !== 'all') {
       if (_storeFilter === 'woolworths' && item.cheaper_store !== 'woolworths') return false;
@@ -1722,10 +1724,11 @@ function pricePercentile(prices, pct) {
   return sorted[Math.floor(sorted.length * pct)];
 }
 
-function isHotDeal(item) {
+function isHotDeal(item, exclusions) {
   const history = item.price_history;
   if (!history || history.length < 3) return false;
-  const prices = history.map(h => h.price).filter(p => p > 0);
+  const excluded = new Set((exclusions[item.list_item] || []).map(p => Number(p).toFixed(2)));
+  const prices = history.map(h => h.price).filter((p, i) => p > 0 && !excluded.has(Number(history[i].price).toFixed(2)));
   if (prices.length < 3) return false;
   const threshold = pricePercentile(prices, HOT_DEAL_PERCENTILE);
   const ww = item.woolworths?.price;
@@ -1741,6 +1744,7 @@ function renderCards(items) {
   const grid = $('cardGrid');
   if (!grid) return;
   const overrides = loadOverrides();
+  const exclusions = loadExclusions();
   const dismissed = (() => { try { return JSON.parse(localStorage.getItem('pw_dismissed_warns_v1') || '[]'); } catch { return []; } })();
   const parts = [];
 
@@ -1752,7 +1756,7 @@ function renderCards(items) {
     const displayName = ov.displayName || stripWW(item.list_item);
     const cat = getCategory(item);
     const p = getPriority(item.list_item);
-    const hotDeal = isHotDeal(item);
+    const hotDeal = isHotDeal(item, exclusions);
     const wwUrl  = ov.wwUrl    || ww?.url || '';
     const coUrl  = ov.colesUrl || co?.url || '';
     const safeKey = item.list_item.replace(/"/g, '&quot;');
@@ -1941,6 +1945,7 @@ function renderPage(data) {
   }
 
   const _uiPriorities = loadPriorities();
+  const _renderExclusions = loadExclusions();
   const isUiArchived = (i) => i.archived || _uiPriorities[i.list_item] === 'archive';
   const totalNonArchived = (data.items || []).filter(i => !isUiArchived(i)).length;
   const pricedBoth = (data.items || []).filter(i => !isUiArchived(i) && i.woolworths?.price != null && i.coles?.price != null).length;
@@ -1948,7 +1953,7 @@ function renderPage(data) {
   const coverageText = missingCount > 0
     ? `${pricedBoth}/${totalNonArchived} priced · ${missingCount} missing`
     : `${totalNonArchived} items`;
-  const hotCount = (data.items || []).filter(i => !isUiArchived(i) && isHotDeal(i)).length;
+  const hotCount = (data.items || []).filter(i => !isUiArchived(i) && isHotDeal(i, _renderExclusions)).length;
   $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>${hotCount > 0 ? `<a href="hot-deals.html" class="hot-deals-link">🔥 ${hotCount} deal${hotCount !== 1 ? 's' : ''}</a>` : ''}`;
   $('banner').style.display = 'block';
 
@@ -2137,7 +2142,7 @@ function renderPage(data) {
       </div>`;
 
     // Hot deal: fire goes on the cheaper store's price cell
-    const hotDeal = isHotDeal(item);
+    const hotDeal = isHotDeal(item, _renderExclusions);
     const hotBadge = `<span class="hot-badge" title="Hot Deal!">🔥</span>`;
 
     // Per-100g/ml — computed from product name (reliable for packs); falls back to scraped cup price

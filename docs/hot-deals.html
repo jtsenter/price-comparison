@@ -459,10 +459,11 @@ function pricePercentile(prices, pct) {
   return sorted[Math.floor(sorted.length * pct)];
 }
 
-function getDealInfo(item) {
+function getDealInfo(item, exclusions) {
   const history = item.price_history;
   if (!history || history.length < 3) return null;
-  const prices = history.map(h => h.price).filter(p => p > 0);
+  const excluded = new Set((exclusions[item.list_item] || []).map(p => Number(p).toFixed(2)));
+  const prices = history.map(h => h.price).filter((p, i) => p > 0 && !excluded.has(Number(history[i].price).toFixed(2)));
   if (prices.length < 3) return null;
 
   const mean = prices.reduce((s, p) => s + p, 0) / prices.length;
@@ -616,10 +617,10 @@ function getSortValue(col, item, dealInfo) {
   }
 }
 
-function sortDeals(items) {
+function sortDeals(items, exclusions) {
   return [...items].sort((a, b) => {
-    const da = getDealInfo(a);
-    const db = getDealInfo(b);
+    const da = getDealInfo(a, exclusions);
+    const db = getDealInfo(b, exclusions);
     for (const { col, dir } of sortKeys) {
       const mul = dir === 'asc' ? 1 : -1;
       const av = getSortValue(col, a, da);
@@ -660,16 +661,16 @@ function onColClick(col) {
 
 // ── Filters ───────────────────────────────────────────────────────────────────
 
-function filterDeals(allDeals) {
+function filterDeals(allDeals, exclusions) {
   return allDeals.filter(({ item }) => {
     if (_activeCategory !== 'All' && getCategory(item) !== _activeCategory) return false;
     if (_storeFilter === 'woolworths') {
       // WW must be the hot deal store
-      const d = getDealInfo(item);
+      const d = getDealInfo(item, exclusions);
       if (d?.store !== 'woolworths') return false;
     }
     if (_storeFilter === 'coles') {
-      const d = getDealInfo(item);
+      const d = getDealInfo(item, exclusions);
       if (d?.store !== 'coles') return false;
     }
     return true;
@@ -711,15 +712,17 @@ function renderDeals() {
     !_archivedSet.has(item.list_item)
   );
 
+  const exclusions = loadExclusions();
+
   // Collect all hot-deal items (may have deals at one or both stores)
   const allDeals = items
-    .map(item => ({ item, deal: getDealInfo(item) }))
+    .map(item => ({ item, deal: getDealInfo(item, exclusions) }))
     .filter(({ deal }) => deal != null);
 
   buildCategoryTabs(allDeals.map(d => d.item));
 
-  const filtered = filterDeals(allDeals);
-  const sorted = sortDeals(filtered.map(d => d.item));
+  const filtered = filterDeals(allDeals, exclusions);
+  const sorted = sortDeals(filtered.map(d => d.item), exclusions);
 
   // Hero stats
   const heroEl = document.getElementById('heroStats');
@@ -761,7 +764,7 @@ function renderDeals() {
   const overrides = (() => { try { return JSON.parse(localStorage.getItem('pw_overrides_v1') || '{}'); } catch { return {}; } })();
 
   sorted.forEach(item => {
-    const deal = getDealInfo(item);
+    const deal = getDealInfo(item, exclusions);
     if (!deal) return;
 
     const ww = item.woolworths;
