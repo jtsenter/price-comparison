@@ -45,7 +45,6 @@ def _normalise_coles_img(img) -> str:
     if img.startswith("/") and "://" not in img:
         return COLES_CDN + img
     return img
-MAX_RESULTS = 5
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "docs", "data")
 FLAG_PATH = os.path.join(DATA_DIR, "name_changes_detected.json")
 EXCEL_PATH = os.path.join(os.path.dirname(__file__), "..", "shopping_list.xlsx")
@@ -57,6 +56,7 @@ COLES_SCROLL_WAIT_MS = 800      # post-scroll wait for lazy-loaded tiles
 MAX_PRODUCT_PRICE    = 50.0     # upper bound for plausible product prices
 SKIP_AGE_DAYS        = 4        # items scraped within N days are skipped
 CONCURRENCY          = 2        # parallel page-pairs (don't exceed 3)
+MAX_RESULTS          = 5        # search results fetched per store
 
 _ww_debug_done = False
 
