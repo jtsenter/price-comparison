@@ -66,7 +66,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/data/
           git diff --cached --quiet || git commit -m "chore: update prices"
-          if exist ".git\rebase-merge" git rebase --abort
-          if exist ".git\rebase-apply" git rebase --abort
-          git pull --rebase origin main
+          git pull --no-rebase -X ours origin main
           git push
