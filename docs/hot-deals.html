@@ -942,7 +942,25 @@ async function triggerRefreshHD() {
   if (_hdRefreshCooldown) return;
 
   const btn = document.getElementById('refreshBtn');
-  if (btn) { btn.disabled = true; btn.innerHTML = 'Triggering…'; }
+  if (btn) { btn.disabled = true; btn.innerHTML = 'Checking…'; }
+
+  // Pre-flight: confirm the self-hosted runner is online before dispatching
+  try {
+    const rr = await fetch(`https://api.github.com/repos/${user}/${repo}/actions/runners`,
+      { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' } });
+    if (rr.ok) {
+      const rd = await rr.json();
+      const selfHosted = (rd.runners || []).filter(r => r.labels?.some(l => l.name === 'self-hosted'));
+      const anyOnline = selfHosted.length > 0 && selfHosted.some(r => r.status === 'online');
+      if (!anyOnline) {
+        alert('⚠️ Scraper is offline — the Windows runner is not connected. Prices cannot be updated until it restarts.');
+        if (btn) { btn.disabled = false; btn.innerHTML = '↻ Update Prices'; }
+        return;
+      }
+    }
+  } catch (_) { /* fail open — proceed with dispatch on network error */ }
+
+  if (btn) btn.innerHTML = 'Triggering…';
 
   let res;
   try {
