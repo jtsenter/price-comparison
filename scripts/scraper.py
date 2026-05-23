@@ -56,6 +56,7 @@ COLES_WAIT_MS        = 1_500    # post-navigation wait for Coles pages
 COLES_SCROLL_WAIT_MS = 800      # post-scroll wait for lazy-loaded tiles
 MAX_PRODUCT_PRICE    = 50.0     # upper bound for plausible product prices
 SKIP_AGE_DAYS        = 4        # items scraped within N days are skipped
+CONCURRENCY          = 2        # parallel page-pairs (don't exceed 3)
 
 _ww_debug_done = False
 
@@ -612,9 +613,6 @@ def should_skip_item(ex_data: dict | None, trigger: str) -> bool:
         return age_days < SKIP_AGE_DAYS
     except Exception:
         return False
-
-
-CONCURRENCY = 2  # parallel items (1 page-pair each)
 
 
 def _coles_fallback_query(coles_url: str, item: str) -> str:
