@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-23T05:34:05.356582+00:00",
+  "last_updated": "2026-05-23T05:34:12.310990+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9031,6 +9031,210 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Corn Sweet Kernels",
+      "last_scraped": "2026-05-23T05:34:05.843146+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 1.2
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.2
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Corn Sweet Kernels",
+        "price": 1.05,
+        "unit_price": 2.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/218926/woolworths-corn-sweet-kernels",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/218926.jpg"
+      },
+      "coles": {
+        "name": "Coles Corn Kernels | 420g",
+        "price": 1.05,
+        "unit_price": 1.05,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4774066.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.61,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.25,
+      "per_100_coles": 0.25,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.42
+    },
+    {
+      "list_item": "Woolworths Greek Style Fetta",
+      "last_scraped": "2026-05-23T05:34:08.198187+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.5
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Greek Style Fetta",
+        "price": 3.2,
+        "unit_price": 16.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/452083/woolworths-greek-style-fetta",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/452083.jpg"
+      },
+      "coles": {
+        "name": "South Cape Greek Style Fetta | 200g",
+        "price": 6.75,
+        "unit_price": 6.75,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/south-cape-greek-style-fetta-200g-6416861",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6416861.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 6.11,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 1.6,
+      "per_100_coles": 3.38,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.2
+    },
+    {
+      "list_item": "Woolworths Green Asparagus Bunch Green",
+      "last_scraped": "2026-05-23T05:34:09.152926+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-07-10",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-26",
+          "price": 3.9
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Green Asparagus Bunch Green",
+        "price": 4.5,
+        "unit_price": 4.5,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/305235/woolworths-green-asparagus-bunch-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/305235.jpg"
+      },
+      "coles": {
+        "name": "Coles Green Asparagus | 1 each",
+        "price": 4.7,
+        "unit_price": 4.7,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-green-asparagus-1-each-4838737",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4838737.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.2,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Mixed Herbs Dried",
+      "last_scraped": "2026-05-23T05:34:11.399750+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-17",
+          "price": 2.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 2.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Mixed Herbs Dried",
+        "price": 2.0,
+        "unit_price": 1.67,
+        "unit": "10G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/251120/woolworths-mixed-herbs-dried",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251120.jpg"
+      },
+      "coles": {
+        "name": "Coles Mixed Herbs | 13g",
+        "price": 2.15,
+        "unit_price": 2.15,
+        "unit": "10g",
+        "url": "https://www.coles.com.au/product/coles-mixed-herbs-13g-8987375",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8987375.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.15,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 16.7,
+      "per_100_coles": 16.54,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Red Washed Potatoes Bag",
+      "last_scraped": "2026-05-23T05:34:12.304059+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-04-21",
+          "price": 6.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 6.0
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Red Washed Potatoes Bag",
+        "price": 8.5,
+        "unit_price": 4.25,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/101638/woolworths-red-washed-potatoes-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/101638.jpg"
+      },
+      "coles": {
+        "name": "Coles Red Royale Washed Potatoes | 2Kg",
+        "price": 8.5,
+        "unit_price": 8.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-red-royale-washed-potatoes-2kg-7963859",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7963859.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.42,
+      "per_100_coles": 0.42,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Mushrooms Cups Loose",
       "last_scraped": "2026-05-22T13:04:36.327611+00:00",
       "trip_count": 17,
@@ -9252,210 +9456,6 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Corn Sweet Kernels",
-      "last_scraped": "2026-05-22T13:11:39.066213+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-03-11",
-          "price": 1.2
-        },
-        {
-          "date": "2025-04-14",
-          "price": 1.2
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Corn Sweet Kernels",
-        "price": 1.05,
-        "unit_price": 2.5,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/218926/woolworths-corn-sweet-kernels",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/218926.jpg"
-      },
-      "coles": {
-        "name": "Coles Corn Kernels | 420g",
-        "price": 1.05,
-        "unit_price": 1.05,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4774066.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.61,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.25,
-      "per_100_coles": 0.25,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.42
-    },
-    {
-      "list_item": "Woolworths Greek Style Fetta",
-      "last_scraped": "2026-05-22T13:11:41.114062+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2024-12-19",
-          "price": 3.5
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.5
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Greek Style Fetta",
-        "price": 3.2,
-        "unit_price": 16.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/452083/woolworths-greek-style-fetta",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/452083.jpg"
-      },
-      "coles": {
-        "name": "South Cape Greek Style Fetta | 200g",
-        "price": 6.75,
-        "unit_price": 6.75,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/south-cape-greek-style-fetta-200g-6416861",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6416861.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 6.11,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.6,
-      "per_100_coles": 3.38,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.2
-    },
-    {
-      "list_item": "Woolworths Green Asparagus Bunch Green",
-      "last_scraped": "2026-05-22T13:11:42.603591+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-07-10",
-          "price": 3.9
-        },
-        {
-          "date": "2025-07-26",
-          "price": 3.9
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Green Asparagus Bunch Green",
-        "price": 4.5,
-        "unit_price": 4.5,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/305235/woolworths-green-asparagus-bunch-green",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/305235.jpg"
-      },
-      "coles": {
-        "name": "Coles Green Asparagus | 1 each",
-        "price": 4.7,
-        "unit_price": 4.7,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-green-asparagus-1-each-4838737",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4838737.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.2,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Mixed Herbs Dried",
-      "last_scraped": "2026-05-22T13:11:44.464216+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-03-17",
-          "price": 2.0
-        },
-        {
-          "date": "2026-02-03",
-          "price": 2.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Mixed Herbs Dried",
-        "price": 2.0,
-        "unit_price": 1.67,
-        "unit": "10G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/251120/woolworths-mixed-herbs-dried",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251120.jpg"
-      },
-      "coles": {
-        "name": "Coles Mixed Herbs | 13g",
-        "price": 2.15,
-        "unit_price": 2.15,
-        "unit": "10g",
-        "url": "https://www.coles.com.au/product/coles-mixed-herbs-13g-8987375",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8987375.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.15,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 16.7,
-      "per_100_coles": 16.54,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Red Washed Potatoes Bag",
-      "last_scraped": "2026-05-22T13:11:46.565315+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2026-04-21",
-          "price": 6.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 6.0
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Red Washed Potatoes Bag",
-        "price": 8.5,
-        "unit_price": 4.25,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/101638/woolworths-red-washed-potatoes-bag",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/101638.jpg"
-      },
-      "coles": {
-        "name": "Coles Red Royale Washed Potatoes | 2Kg",
-        "price": 8.5,
-        "unit_price": 8.5,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-red-royale-washed-potatoes-2kg-7963859",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7963859.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.42,
-      "per_100_coles": 0.42,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Rolled Traditional Oats",
       "last_scraped": "2026-05-22T13:11:47.824393+00:00",
       "trip_count": 2,
@@ -9641,7 +9641,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 150,
+    "done": 155,
     "total": 157
   }
 }
