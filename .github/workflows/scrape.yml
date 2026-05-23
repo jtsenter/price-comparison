@@ -45,8 +45,7 @@ jobs:
 
     steps:
       - name: Trust workspace (SYSTEM vs user ownership)
-        shell: powershell
-        run: git config --global --add safe.directory "${{ github.workspace }}"
+        run: git config --global --add safe.directory C:/actions-runner/_work/price-comparison/price-comparison
 
       - name: Checkout repo
         uses: actions/checkout@v4
