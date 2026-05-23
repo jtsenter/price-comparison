@@ -621,38 +621,59 @@ async function triggerItemRefresh(itemName, btn, urlOverrides) {
 }
 
 async function pollItemRefresh(s, btn, itemName) {
-  const origItem = _lastData?.items?.find(i => i.list_item === itemName);
-  const origWw = origItem?.woolworths?.price;
-  const origCo = origItem?.coles?.price;
-  const origScraped = origItem?.last_scraped;
-
   _pendingRefreshItem = itemName;
   if (_lastData) renderPage(_lastData);
 
+  // Record dispatch time so we only act on runs created after this point
+  const dispatchedAt = new Date().toISOString();
+
+  // Wait a few seconds for the run to be registered, then poll the GitHub Actions API
+  // for completion — same approach as pollForCompletion for the global refresh.
+  // Polling latest.json directly is unreliable because GitHub Pages can take several
+  // minutes to redeploy after a push, longer than any reasonable timeout.
   let attempts = 0;
   const poll = async () => {
-    if (++attempts > 60) {
+    if (++attempts > 90) {
+      // ~7.5 min timeout
       _pendingRefreshItem = null;
       if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
       if (_lastData) renderPage(_lastData);
       return;
     }
     try {
-      const res = await fetch(`data/latest.json?t=${Date.now()}`);
-      const fresh = await res.json();
-      const found = fresh?.items?.find(i => i.list_item === itemName);
-      const newWw = found?.woolworths?.price;
-      const newCo = found?.coles?.price;
-      if (newWw !== origWw || newCo !== origCo || found?.last_scraped !== origScraped) {
-        _pendingRefreshItem = null;
-        if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
-        renderPage(fresh);
+      const res = await fetch(
+        `https://api.github.com/repos/${s.user}/${s.repo}/actions/workflows/scrape.yml/runs?per_page=1`,
+        { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
+      );
+      const data = await res.json();
+      const run = data.workflow_runs?.[0];
+      // Ignore runs that were already completed before we dispatched
+      if (run?.status === 'completed' && run.created_at > dispatchedAt) {
+        if (run.conclusion === 'success') {
+          // Wait 2s for GitHub Pages CDN to pick up the push, then fetch fresh data
+          setTimeout(async () => {
+            _pendingRefreshItem = null;
+            try {
+              const jr = await fetch(`data/latest.json?t=${Date.now()}`);
+              const fresh = await jr.json();
+              if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
+              renderPage(fresh);
+            } catch (_) {
+              if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
+              if (_lastData) renderPage(_lastData);
+            }
+          }, 2000);
+        } else {
+          _pendingRefreshItem = null;
+          if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
+          if (_lastData) renderPage(_lastData);
+        }
         return;
       }
     } catch (_) {}
     setTimeout(poll, 5000);
   };
-  setTimeout(poll, 5000);
+  setTimeout(poll, 8000);
 }
 
 // ── LocalStorage settings ────────────────────────────────────────────────────
