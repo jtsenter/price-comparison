@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-23T05:28:44.983787+00:00",
+  "last_updated": "2026-05-23T05:28:58.343057+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1017,7 +1017,7 @@
     },
     {
       "list_item": "Lebanese Cucumbers",
-      "last_scraped": "2026-05-22T13:04:30.010035+00:00",
+      "last_scraped": "2026-05-23T05:28:48.766073+00:00",
       "trip_count": 27,
       "price_history": [
         {
@@ -1149,7 +1149,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 0.05,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.99,
@@ -1157,7 +1157,7 @@
     },
     {
       "list_item": "Helga's Wholemeal Bread With Grains",
-      "last_scraped": "2026-05-22T13:04:31.934909+00:00",
+      "last_scraped": "2026-05-23T05:28:50.824354+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -1241,7 +1241,7 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.69,
       "per_100_coles": 0.69,
@@ -1249,7 +1249,7 @@
     },
     {
       "list_item": "Lurpak Butter Spreadable",
-      "last_scraped": "2026-05-22T13:04:34.645342+00:00",
+      "last_scraped": "2026-05-23T05:28:51.753665+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -1316,6 +1316,134 @@
       "per_100_ww": 2.08,
       "per_100_coles": 2.08,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Pringles Sour Cream & Onion Potato Chips",
+      "last_scraped": "2026-05-23T05:28:54.620834+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 2.75
+        },
+        {
+          "date": "2025-03-27",
+          "price": 5.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 3.3
+        },
+        {
+          "date": "2026-04-29",
+          "price": 2.75
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Pringles Sour Cream & Onion Potato Chips",
+        "price": 3.8,
+        "unit_price": 2.84,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/479502/pringles-sour-cream-onion-potato-chips",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/479502.jpg"
+      },
+      "coles": {
+        "name": "Pringles Potato Chips Sour Cream & Onion | 134g",
+        "price": 5.5,
+        "unit_price": 5.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-134g-2784058",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2784058.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.7,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.84,
+      "per_100_coles": 4.1,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle",
+      "last_scraped": "2026-05-23T05:28:58.340564+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 3.0
+        },
+        {
+          "date": "2024-11-20",
+          "price": 3.0
+        },
+        {
+          "date": "2024-12-19",
+          "price": 3.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 1.8
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.0
+        },
+        {
+          "date": "2025-05-04",
+          "price": 1.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 2.0
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Schweppes Lemon Lime Bitters Soft Drink Mixer Bottle",
+        "price": 1.8,
+        "unit_price": 1.64,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/634290/schweppes-lemon-lime-bitters-soft-drink-mixer-bottle",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634290.jpg"
+      },
+      "coles": {
+        "name": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle | 1.1L",
+        "price": 1.8,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/schweppes-lemon-lime-bitters-soft-drink-classic-mixers-bottle-1.1l-3014839",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3014839.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.16,
+      "per_100_coles": 0.16,
+      "per_100_unit": "100ml"
     },
     {
       "list_item": "Mushrooms Cups Loose",
@@ -1427,134 +1555,6 @@
       "per_100_coles": 2.0,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.2
-    },
-    {
-      "list_item": "Pringles Sour Cream & Onion Potato Chips",
-      "last_scraped": "2026-05-22T13:04:41.271959+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 2.75
-        },
-        {
-          "date": "2025-03-27",
-          "price": 5.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 5.5
-        },
-        {
-          "date": "2025-06-06",
-          "price": 3.5
-        },
-        {
-          "date": "2026-02-03",
-          "price": 3.5
-        },
-        {
-          "date": "2026-02-23",
-          "price": 3.3
-        },
-        {
-          "date": "2026-04-29",
-          "price": 2.75
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Pringles Sour Cream & Onion Potato Chips",
-        "price": 3.8,
-        "unit_price": 2.84,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/479502/pringles-sour-cream-onion-potato-chips",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/479502.jpg"
-      },
-      "coles": {
-        "name": "Pringles Potato Chips Sour Cream & Onion | 134g",
-        "price": 5.5,
-        "unit_price": 5.5,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-134g-2784058",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2784058.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.7,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.84,
-      "per_100_coles": 4.1,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle",
-      "last_scraped": "2026-05-22T13:04:45.941852+00:00",
-      "trip_count": 9,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 3.0
-        },
-        {
-          "date": "2024-11-20",
-          "price": 3.0
-        },
-        {
-          "date": "2024-12-19",
-          "price": 3.0
-        },
-        {
-          "date": "2025-03-11",
-          "price": 1.8
-        },
-        {
-          "date": "2025-03-27",
-          "price": 3.0
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.0
-        },
-        {
-          "date": "2025-05-04",
-          "price": 1.5
-        },
-        {
-          "date": "2025-06-06",
-          "price": 2.0
-        },
-        {
-          "date": "2025-07-10",
-          "price": 2.0
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Schweppes Lemon Lime Bitters Soft Drink Mixer Bottle",
-        "price": 1.8,
-        "unit_price": 1.64,
-        "unit": "1L",
-        "url": "https://www.woolworths.com.au/shop/productdetails/634290/schweppes-lemon-lime-bitters-soft-drink-mixer-bottle",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634290.jpg"
-      },
-      "coles": {
-        "name": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle | 1.1L",
-        "price": 1.8,
-        "unit_price": null,
-        "unit": null,
-        "url": "https://www.coles.com.au/product/schweppes-lemon-lime-bitters-soft-drink-classic-mixers-bottle-1.1l-3014839",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3014839.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.16,
-      "per_100_coles": 0.16,
-      "per_100_unit": "100ml"
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Portions Snacks",
@@ -9671,7 +9671,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 10,
+    "done": 15,
     "total": 157
   }
 }
