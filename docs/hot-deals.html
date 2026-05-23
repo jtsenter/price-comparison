@@ -471,7 +471,7 @@ function getDealInfo(item, exclusions) {
   const maxHistoric = Math.max(...prices);
   // Flat price history — no real deal to compare against, skip
   if (minHistoric === maxHistoric) return null;
-  const threshold = pricePercentile(prices, 0.20);
+  const threshold = pricePercentile(prices, HOT_DEAL_PERCENTILE);
 
   const ww = item.woolworths?.price;
   const co = item.coles?.price;
@@ -568,7 +568,8 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
-const STALE_PROGRESS_MS = 3 * 60 * 1000; // ms with no progress update → ⚠ Stalled
+const STALE_PROGRESS_MS  = 3 * 60 * 1000; // ms with no progress update → ⚠ Stalled
+const HOT_DEAL_PERCENTILE = 0.20;          // current price must be ≤ bottom 20th percentile of history
 
 // ── State ─────────────────────────────────────────────────────────────────────
 
