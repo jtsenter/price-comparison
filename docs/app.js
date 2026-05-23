@@ -2545,6 +2545,13 @@ async function addItemsToShoppingList(newItems) {
     if (!putRes.ok) throw new Error(`GitHub PUT ${putRes.status}: could not update shopping_list.xlsx`);
 
     // Trigger scrape workflow
+    const { anyOnline } = await getRunnerStatus(s);
+    if (!anyOnline) {
+      showRunnerOfflineBanner();
+      alert('Items added to your shopping list, but the scraper is offline — prices will update when the runner restarts.');
+      return;
+    }
+    hideRunnerOfflineBanner();
     await fetch(
       `https://api.github.com/repos/${s.user}/${s.repo}/actions/workflows/scrape.yml/dispatches`,
       {
