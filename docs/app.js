@@ -707,7 +707,9 @@ async function getRunnerStatus(s) {
     const selfHosted = (data.runners || []).filter(r =>
       r.labels?.some(l => l.name === 'self-hosted')
     );
-    const anyOnline = selfHosted.length === 0 || selfHosted.some(r => r.status === 'online');
+    // "offline" is the only explicit offline state — treat anything else (online, idle, busy, etc.) as online.
+    // Also fail open if no self-hosted runners are listed (token may lack runner-read scope).
+    const anyOnline = selfHosted.length === 0 || !selfHosted.every(r => r.status === 'offline');
     return { anyOnline, runners: selfHosted };
   } catch {
     return { anyOnline: true, runners: [] }; // network error → fail open
