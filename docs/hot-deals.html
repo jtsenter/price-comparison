@@ -665,14 +665,9 @@ function onColClick(col) {
 function filterDeals(allDeals, exclusions) {
   return allDeals.filter(({ item }) => {
     if (_activeCategory !== 'All' && getCategory(item) !== _activeCategory) return false;
-    if (_storeFilter === 'woolworths') {
-      // WW must be the hot deal store
+    if (_storeFilter !== 'all') {
       const d = getDealInfo(item, exclusions);
-      if (d?.store !== 'woolworths') return false;
-    }
-    if (_storeFilter === 'coles') {
-      const d = getDealInfo(item, exclusions);
-      if (d?.store !== 'coles') return false;
+      if (d?.store !== _storeFilter) return false;
     }
     return true;
   });
