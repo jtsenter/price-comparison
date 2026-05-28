@@ -1,10 +1,10 @@
 {
-  "last_updated": "2026-05-28T05:00:31.247438+00:00",
+  "last_updated": "2026-05-28T05:35:54.895451+00:00",
   "trigger": "manual",
   "items": [
     {
       "list_item": "Blueberries Punnet",
-      "last_scraped": "2026-05-28T04:30:04.085134+00:00",
+      "last_scraped": "2026-05-28T05:35:40.089910+00:00",
       "trip_count": 21,
       "price_history": [
         {
@@ -149,7 +149,7 @@
     },
     {
       "list_item": "Baby Mum-Mum Snack Vegetable Rice Rusk",
-      "last_scraped": "2026-05-28T04:30:04.938599+00:00",
+      "last_scraped": "2026-05-28T05:35:40.703812+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -238,7 +238,7 @@
     },
     {
       "list_item": "Cadbury Dairy Milk Large Chocolate Block",
-      "last_scraped": "2026-05-28T04:30:07.671990+00:00",
+      "last_scraped": "2026-05-28T05:35:44.630346+00:00",
       "trip_count": 11,
       "price_history": [
         {
@@ -325,16 +325,16 @@
           "retailer": "woolworths"
         },
         {
-          "name": "Cadbury Dairy Milk Large Top Deck Chocolate Block",
+          "name": "Cadbury Dairy Milk Large Fruit & Nut Chocolate Block",
           "price": 8.5,
           "unit_price": 2.5,
           "unit": "100G",
-          "url": "https://www.woolworths.com.au/shop/productdetails/165352/cadbury-dairy-milk-large-top-deck-chocolate-block",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/165352.jpg",
+          "url": "https://www.woolworths.com.au/shop/productdetails/6022301/cadbury-dairy-milk-large-fruit-nut-chocolate-block",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6022301.jpg",
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.7,
       "per_100_coles": 2.5,
@@ -342,7 +342,7 @@
     },
     {
       "list_item": "Cadbury Dairy Milk Top Deck Chocolate Block",
-      "last_scraped": "2026-05-28T04:30:08.662440+00:00",
+      "last_scraped": "2026-05-28T05:35:45.954328+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -393,15 +393,14 @@
       },
       "coles": {
         "name": "Cadbury Dairy Milk Top Deck Chocolate Block | 180g",
-        "price": 4.0,
-        "unit_price": 2.22,
+        "price": 8.0,
+        "unit_price": 10.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/cadbury-dairy-milk-top-deck-chocolate-block-180g-2351607",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2351607.jpg",
-        "retailer": "coles"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2351607.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.8,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.2,
       "alternatives": [
         {
           "name": "Cadbury Dairy Milk Large Top Deck Chocolate Block",
@@ -413,15 +412,15 @@
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.67,
-      "per_100_coles": 2.22,
+      "per_100_coles": 4.44,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Capsicum Yellow",
-      "last_scraped": "2026-05-28T04:30:16.473949+00:00",
+      "last_scraped": "2026-05-28T05:35:54.888921+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -9298,11 +9297,15 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 767.95,
-    "total_coles": 824.45,
+    "total_coles": 828.45,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 56.5,
+    "total_saving": 60.5,
     "items_compared": 157,
     "items_not_found": 0
+  },
+  "scrape_progress": {
+    "done": 5,
+    "total": 157
   }
 }
