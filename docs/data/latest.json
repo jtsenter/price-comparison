@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T23:52:12.230827+00:00",
+  "last_updated": "2026-05-28T23:52:29.815985+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6500,7 +6500,7 @@
     },
     {
       "list_item": "Sam's Pantry Granola Pink Lady Apple & Cinnamon",
-      "last_scraped": "2026-05-28T23:29:56.464138+00:00",
+      "last_scraped": "2026-05-28T23:52:16.324463+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -6536,7 +6536,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 1.9,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.09,
       "per_100_coles": 2.38,
@@ -6544,7 +6544,7 @@
     },
     {
       "list_item": "Snickers Milk Chocolate Party Share Bag 20 Pieces",
-      "last_scraped": "2026-05-28T23:29:57.381205+00:00",
+      "last_scraped": "2026-05-28T23:52:18.107731+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -6592,59 +6592,15 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.67,
       "per_100_coles": 2.67,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "South Island Marlborough Sauvignon Blanc",
-      "last_scraped": "2026-05-28T23:29:59.203344+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-04-14",
-          "price": 17.0
-        },
-        {
-          "date": "2025-05-12",
-          "price": 13.0
-        },
-        {
-          "date": "2025-07-10",
-          "price": 17.0
-        }
-      ],
-      "category": "Drinks & Alcohol",
-      "woolworths": {
-        "name": "South Island Marlborough Sauvignon Blanc",
-        "price": 13.0,
-        "unit_price": null,
-        "unit": null,
-        "url": "https://www.woolworths.com.au/shop/productdetails/906238/south-island-marlborough-sauvignon-blanc",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/906238.jpg"
-      },
-      "coles": {
-        "name": "Oyster Bay Marlborough Sauvignon Blanc 750ml | 1 Each",
-        "price": 23.0,
-        "unit_price": 23.0,
-        "unit": "1L",
-        "url": "https://www.coles.com.au/product/oyster-bay-marlborough-sauvignon-blanc-750ml-1-each-8258681",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8258681.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 10.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 3.07,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Spring Onion Bunch",
-      "last_scraped": "2026-05-28T23:30:00.136900+00:00",
+      "last_scraped": "2026-05-28T23:52:22.004856+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6684,10 +6640,129 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 0.5,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "South Island Marlborough Sauvignon Blanc",
+      "last_scraped": "2026-05-28T23:52:22.882274+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 17.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 13.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 17.0
+        }
+      ],
+      "category": "Drinks & Alcohol",
+      "woolworths": {
+        "name": "South Island Marlborough Sauvignon Blanc",
+        "price": 13.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.woolworths.com.au/shop/productdetails/906238/south-island-marlborough-sauvignon-blanc",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/906238.jpg"
+      },
+      "coles": {
+        "name": "Oyster Bay Marlborough Sauvignon Blanc 750ml | 1 Each",
+        "price": 18.0,
+        "unit_price": 24.0,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/oyster-bay-marlborough-sauvignon-blanc-750ml-1-each-8258681",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8258681.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 5.0,
+      "alternatives": [
+        {
+          "name": "Atiru Marlborough Sauvignon Blanc 375ml | 1 Each",
+          "price": 6.0,
+          "unit_price": 6.0,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/atiru-marlborough-sauvignon-blanc-375ml-1-each-7446482",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7446482.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Atiru Marlborough Sauvignon Blanc 750ml | 1 Each",
+          "price": 10.0,
+          "unit_price": 10.0,
+          "unit": "1L",
+          "url": "https://www.coles.com.au/product/atiru-marlborough-sauvignon-blanc-750ml-1-each-2540563",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2540563.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 2.4,
+      "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Strawberries Punnet",
+      "last_scraped": "2026-05-28T23:52:29.805494+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 4.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 5.9
+        },
+        {
+          "date": "2025-07-26",
+          "price": 5.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Strawberries Punnet",
+        "price": 5.5,
+        "unit_price": 22.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/144607/strawberries-punnet",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144607.jpg"
+      },
+      "coles": {
+        "name": "Strawberries",
+        "price": 5.5,
+        "unit_price": 22.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-strawberries-250g-5191256",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5191256.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 2.2,
+      "per_100_coles": 2.2,
       "per_100_unit": "100g"
     },
     {
@@ -6736,63 +6811,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Strawberries Punnet",
-      "last_scraped": "2026-05-28T23:30:09.171560+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2025-02-28",
-          "price": 3.5
-        },
-        {
-          "date": "2025-03-11",
-          "price": 3.5
-        },
-        {
-          "date": "2025-03-27",
-          "price": 4.5
-        },
-        {
-          "date": "2025-05-22",
-          "price": 5.0
-        },
-        {
-          "date": "2025-07-03",
-          "price": 5.9
-        },
-        {
-          "date": "2025-07-26",
-          "price": 5.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Strawberries Punnet",
-        "price": 5.5,
-        "unit_price": 22.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/144607/strawberries-punnet",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144607.jpg"
-      },
-      "coles": {
-        "name": "Strawberries",
-        "price": 5.0,
-        "unit_price": 20.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-strawberries-250g-5191256",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5191256.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.5,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.2,
-      "per_100_coles": 2.0,
       "per_100_unit": "100g"
     },
     {
@@ -9812,15 +9830,15 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 766.35,
-    "total_coles": 839.57,
+    "total_coles": 835.07,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 73.22,
+    "total_saving": 68.72,
     "items_compared": 157,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 85,
+    "done": 90,
     "total": 157
   }
 }
