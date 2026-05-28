@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T04:31:30.757596+00:00",
+  "last_updated": "2026-05-28T04:31:45.177938+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2315,8 +2315,69 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths BBQ Lamb Kebabs With Mint & Honey",
+      "last_scraped": "2026-05-28T04:31:34.783714+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 8.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 8.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 8.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 8.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 8.5
+        },
+        {
+          "date": "2025-06-21",
+          "price": 8.5
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths BBQ Australian Lamb Koftas Honey & Mint",
+        "price": 8.5,
+        "unit_price": 18.89,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/6024489/woolworths-bbq-australian-lamb-koftas-honey-mint",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6024489.jpg"
+      },
+      "coles": {
+        "name": "Coles Lamb Kebabs | 450g",
+        "price": 7.5,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/coles-lamb-kebabs-450g-3900020",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3900020.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.67,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 1.89,
+      "per_100_coles": 1.67,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.45
+    },
+    {
       "list_item": "Woolworths 12 Extra Large Free Range Eggs",
-      "last_scraped": "2026-05-23T05:29:38.649859+00:00",
+      "last_scraped": "2026-05-28T04:31:38.318368+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -2384,133 +2445,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths BBQ Lamb Kebabs With Mint & Honey",
-      "last_scraped": "2026-05-23T05:29:34.433555+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 8.5
-        },
-        {
-          "date": "2024-12-09",
-          "price": 8.5
-        },
-        {
-          "date": "2025-03-11",
-          "price": 8.5
-        },
-        {
-          "date": "2025-04-14",
-          "price": 8.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 8.5
-        },
-        {
-          "date": "2025-05-22",
-          "price": 8.5
-        },
-        {
-          "date": "2025-06-21",
-          "price": 8.5
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths BBQ Australian Lamb Koftas Honey & Mint",
-        "price": 8.5,
-        "unit_price": 18.89,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/6024489/woolworths-bbq-australian-lamb-koftas-honey-mint",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6024489.jpg"
-      },
-      "coles": {
-        "name": "Coles Lamb Kebabs | 450g",
-        "price": 7.5,
-        "unit_price": null,
-        "unit": null,
-        "url": "https://www.coles.com.au/product/coles-lamb-kebabs-450g-3900020",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3900020.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 3.67,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.89,
-      "per_100_coles": 1.67,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.45
-    },
-    {
-      "list_item": "Woolworths Baby Leaf Spinach",
-      "last_scraped": "2026-05-23T05:29:44.310293+00:00",
-      "trip_count": 8,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 2.5
-        },
-        {
-          "date": "2024-11-20",
-          "price": 2.5
-        },
-        {
-          "date": "2025-03-11",
-          "price": 2.5
-        },
-        {
-          "date": "2025-03-17",
-          "price": 2.5
-        },
-        {
-          "date": "2025-03-27",
-          "price": 2.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 2.5
-        },
-        {
-          "date": "2026-04-21",
-          "price": 2.7
-        },
-        {
-          "date": "2026-05-06",
-          "price": 2.7
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Baby Leaf Spinach",
-        "price": 2.7,
-        "unit_price": 22.5,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/524322/woolworths-baby-leaf-spinach",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/524322.jpg"
-      },
-      "coles": {
-        "name": "Baby Spinach",
-        "price": 3.3,
-        "unit_price": 27.5,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-baby-spinach-120g-1499340",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1499340.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.6,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.25,
-      "per_100_coles": 2.75,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Beef Porterhouse Steak & Butter",
-      "last_scraped": "2026-05-23T05:29:41.547781+00:00",
+      "last_scraped": "2026-05-28T04:31:41.269766+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -2579,7 +2515,7 @@
     },
     {
       "list_item": "Woolworths Broccolini Bunch",
-      "last_scraped": "2026-05-23T05:29:44.502422+00:00",
+      "last_scraped": "2026-05-28T04:31:44.525157+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -2646,8 +2582,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Broccolini Bunch",
-        "price": 3.7,
-        "unit_price": 3.7,
+        "price": 2.3,
+        "unit_price": 2.3,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/187314/woolworths-broccolini-bunch",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/187314.jpg"
@@ -2661,12 +2597,76 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4841775.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 1.6,
+      "saving_per_item": 3.0,
       "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Baby Leaf Spinach",
+      "last_scraped": "2026-05-28T04:31:45.173548+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 2.5
+        },
+        {
+          "date": "2024-11-20",
+          "price": 2.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 2.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 2.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 2.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 2.5
+        },
+        {
+          "date": "2026-04-21",
+          "price": 2.7
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.7
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Baby Leaf Spinach",
+        "price": 3.3,
+        "unit_price": 27.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/524322/woolworths-baby-leaf-spinach",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/524322.jpg"
+      },
+      "coles": {
+        "name": "Baby Spinach",
+        "price": 3.3,
+        "unit_price": 27.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-baby-spinach-120g-1499340",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1499340.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.75,
+      "per_100_coles": 2.75,
       "per_100_unit": "100g"
     },
     {
@@ -9308,16 +9308,16 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 783.9,
+    "total_woolworths": 783.1,
     "total_coles": 823.25,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 39.35,
+    "total_saving": 40.15,
     "items_compared": 157,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 25,
+    "done": 30,
     "total": 157
   }
 }
