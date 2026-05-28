@@ -1071,6 +1071,19 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                 await p.goto(COLES_BASE, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
                 await co_pool.put(p)
 
+            # Push an initial progress marker before scraping begins so the UI
+            # can show the progress bar immediately.  At this point _push_thread_ref[0]
+            # is None (no previous push), so the lock check never fires and the
+            # background thread starts without delay.
+            if total_to_scrape > 0:
+                push_progress_bg(
+                    items_output, not_found,
+                    skipped,            # items already handled via carry-forward
+                    total_all, trigger,
+                    existing_items=list(existing_map.values()),
+                    pending_validation=existing_pv if existing_pv else None,
+                )
+
             sem = asyncio.Semaphore(CONCURRENCY)
             completed = [0]
 
