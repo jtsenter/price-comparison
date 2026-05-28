@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T23:30:31.957235+00:00",
+  "last_updated": "2026-05-28T23:30:44.108854+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6924,7 +6924,7 @@
     },
     {
       "list_item": "Woolworths Celery Heart",
-      "last_scraped": "2026-05-28T23:22:33.630131+00:00",
+      "last_scraped": "2026-05-28T23:30:34.872486+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -6968,52 +6968,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Basmati Rice",
-      "last_scraped": "2026-05-28T23:22:34.758714+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-05-04",
-          "price": 4.0
-        },
-        {
-          "date": "2026-02-03",
-          "price": 4.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 4.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Basmati Rice",
-        "price": 4.0,
-        "unit_price": 0.4,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/694550/woolworths-basmati-rice",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/694550.jpg"
-      },
-      "coles": {
-        "name": "Basmati Rice",
-        "price": 4.0,
-        "unit_price": 0.4,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-basmati-rice-1kg-8703059",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8703059.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.4,
-      "per_100_coles": 0.4,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Cous Cous",
-      "last_scraped": "2026-05-28T23:22:36.755400+00:00",
+      "last_scraped": "2026-05-28T23:30:37.801761+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -7056,8 +7012,52 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Basmati Rice",
+      "last_scraped": "2026-05-28T23:30:38.050040+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 4.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Basmati Rice",
+        "price": 4.0,
+        "unit_price": 0.4,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/694550/woolworths-basmati-rice",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/694550.jpg"
+      },
+      "coles": {
+        "name": "Basmati Rice",
+        "price": 4.0,
+        "unit_price": 0.4,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-basmati-rice-1kg-8703059",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8703059.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.4,
+      "per_100_coles": 0.4,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Green Cabbage Quarter",
-      "last_scraped": "2026-05-28T23:22:39.765734+00:00",
+      "last_scraped": "2026-05-28T23:30:41.056766+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7105,7 +7105,7 @@
     },
     {
       "list_item": "Woolworths Lamb Mince",
-      "last_scraped": "2026-05-28T23:22:43.066998+00:00",
+      "last_scraped": "2026-05-28T23:30:44.100491+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -9230,7 +9230,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 105,
+    "done": 110,
     "total": 157
   }
 }
