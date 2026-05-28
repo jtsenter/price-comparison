@@ -1,71 +1,10 @@
 {
-  "last_updated": "2026-05-28T14:43:51.914144+00:00",
-  "trigger": "scheduled",
+  "last_updated": "2026-05-28T23:18:22.899697+00:00",
+  "trigger": "manual",
   "items": [
     {
-      "list_item": "Baby Mum-Mum Snack Vegetable Rice Rusk",
-      "last_scraped": "2026-05-28T05:40:04.579394+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2025-02-02",
-          "price": 3.85
-        },
-        {
-          "date": "2025-04-05",
-          "price": 3.85
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.85
-        },
-        {
-          "date": "2025-06-06",
-          "price": 3.85
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.85
-        },
-        {
-          "date": "2026-02-03",
-          "price": 2.3
-        },
-        {
-          "date": "2026-05-06",
-          "price": 3.85
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Baby Mum-Mum Snack Vegetable Rice Rusk",
-        "price": 3.85,
-        "unit_price": 10.69,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/323375/baby-mum-mum-snack-vegetable-rice-rusk",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/323375.jpg"
-      },
-      "coles": {
-        "name": "Baby Mum-mum First Rice Rusk Vegetable +6 Months | 36g",
-        "price": 2.85,
-        "unit_price": 7.92,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/baby-mum-mum-first-rice-rusk-vegetable-+6-months-36g-8953861",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8953861.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 10.69,
-      "per_100_coles": 7.92,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Blueberries Punnet",
-      "last_scraped": "2026-05-28T05:40:04.704532+00:00",
+      "last_scraped": "2026-05-28T23:18:09.468612+00:00",
       "trip_count": 21,
       "price_history": [
         {
@@ -172,8 +111,36 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 6.12,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Coles Blueberries In Syrup | 415g",
+          "price": 3.8,
+          "unit_price": 3.8,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-blueberries-in-syrup-415g-4164961",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4164961.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "St Dalfour Wild Blueberry Spread | 284g",
+          "price": 6.2,
+          "unit_price": 6.2,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/st-dalfour-wild-blueberry-spread-284g-5704420",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5704420.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Yoplait Berry Punnet Yoghurt Strawberry Mixed Berries 6x160g | 960g",
+          "price": 7.0,
+          "unit_price": 7.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/yoplait-berry-punnet-yoghurt-strawberry-mixed-berries-6x160g-960g-3619567",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3619567.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 5.6,
       "per_100_coles": 5.6,
@@ -181,8 +148,97 @@
       "_ww_price_factor": 0.125
     },
     {
+      "list_item": "Baby Mum-Mum Snack Vegetable Rice Rusk",
+      "last_scraped": "2026-05-28T23:18:10.888881+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 3.85
+        },
+        {
+          "date": "2025-04-05",
+          "price": 3.85
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.85
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.85
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.85
+        },
+        {
+          "date": "2026-02-03",
+          "price": 2.3
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.85
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Baby Mum-Mum Snack Vegetable Rice Rusk",
+        "price": 3.85,
+        "unit_price": 10.69,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/323375/baby-mum-mum-snack-vegetable-rice-rusk",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/323375.jpg"
+      },
+      "coles": {
+        "name": "Baby Mum-mum First Rice Rusk Vegetable +6 Months | 36g",
+        "price": 2.85,
+        "unit_price": 7.92,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/baby-mum-mum-first-rice-rusk-vegetable-+6-months-36g-8953861",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8953861.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.0,
+      "alternatives": [
+        {
+          "name": "Baby Mum-mum First Rice Rusk Vegetable +6 Months | 36g",
+          "price": 2.85,
+          "unit_price": 7.92,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/baby-mum-mum-first-rice-rusk-vegetable-+6-months-36g-8953861",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8953861.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Baby Mum Mum Organic Sweet Potato & Carrot Rice Rusks | 36g",
+          "price": 2.85,
+          "unit_price": 7.92,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/baby-mum-mum-organic-sweet-potato-and-carrot-rice-rusks-36g-1383437",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1383437.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Baby Mum Mum Strawberry & Beet First Rice Rusks | 36g",
+          "price": 2.85,
+          "unit_price": 7.92,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/baby-mum-mum-strawberry-and-beet-first-rice-rusks-36g-1383062",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1383062.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 10.69,
+      "per_100_coles": 7.92,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Cadbury Dairy Milk Large Chocolate Block",
-      "last_scraped": "2026-05-28T05:40:08.216189+00:00",
+      "last_scraped": "2026-05-28T23:18:13.263349+00:00",
       "trip_count": 11,
       "price_history": [
         {
@@ -278,7 +334,7 @@
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.7,
       "per_100_coles": 2.5,
@@ -286,7 +342,7 @@
     },
     {
       "list_item": "Cadbury Dairy Milk Top Deck Chocolate Block",
-      "last_scraped": "2026-05-28T05:40:08.573023+00:00",
+      "last_scraped": "2026-05-28T23:18:15.564929+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -356,7 +412,7 @@
           "retailer": "woolworths"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.67,
       "per_100_coles": 4.44,
@@ -364,7 +420,7 @@
     },
     {
       "list_item": "Capsicum Yellow",
-      "last_scraped": "2026-05-28T05:40:19.054983+00:00",
+      "last_scraped": "2026-05-28T23:18:22.892365+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -428,7 +484,7 @@
       "cheaper_store": "coles",
       "saving_per_item": 0.69,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.59,
@@ -9199,5 +9255,9 @@
     "total_saving": 62.1,
     "items_compared": 157,
     "items_not_found": 0
+  },
+  "scrape_progress": {
+    "done": 5,
+    "total": 157
   }
 }
