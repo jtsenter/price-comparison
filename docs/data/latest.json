@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T23:55:56.492129+00:00",
+  "last_updated": "2026-05-28T23:56:03.130981+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10329,7 +10329,7 @@
     },
     {
       "list_item": "Woolworths Thyme Leaves",
-      "last_scraped": "2026-05-28T23:32:17.621653+00:00",
+      "last_scraped": "2026-05-28T23:56:01.611699+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10360,8 +10360,18 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Hoyts Thyme | 15g",
+          "price": 1.6,
+          "unit_price": 1.6,
+          "unit": "10g",
+          "url": "https://www.coles.com.au/product/hoyts-thyme-15g-286901",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/286901.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 16.7,
       "per_100_coles": 11.11,
@@ -10369,7 +10379,7 @@
     },
     {
       "list_item": "Woolworths Water Chestnuts Sliced",
-      "last_scraped": "2026-05-28T23:32:18.336566+00:00",
+      "last_scraped": "2026-05-28T23:56:02.515843+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10401,8 +10411,36 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.32,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Valcom Water Chestnut Slices | 227g",
+          "price": 1.6,
+          "unit_price": 1.6,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/valcom-water-chestnut-slices-227g-5789579",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5789579.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Double Phoenix Whole Water Chestnuts | 567g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/double-phoenix-whole-water-chestnuts-567g-1384190",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1384190.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Tick Fresh Water Chestnuts | 400g",
+          "price": 3.8,
+          "unit_price": 3.8,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/tick-fresh-water-chestnuts-400g-3908054",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3908054.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.56,
       "per_100_coles": 0.7,
@@ -10419,9 +10457,5 @@
     "total_saving": 75.59,
     "items_compared": 157,
     "items_not_found": 0
-  },
-  "scrape_progress": {
-    "done": 155,
-    "total": 157
   }
 }
