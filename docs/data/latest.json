@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T23:47:47.856104+00:00",
+  "last_updated": "2026-05-28T23:48:05.200743+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -492,7 +492,7 @@
     },
     {
       "list_item": "Cavendish Bananas",
-      "last_scraped": "2026-05-28T23:26:31.112249+00:00",
+      "last_scraped": "2026-05-28T23:47:52.412841+00:00",
       "trip_count": 30,
       "price_history": [
         {
@@ -636,7 +636,7 @@
       "cheaper_store": "coles",
       "saving_per_item": 0.05,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.49,
@@ -644,7 +644,7 @@
     },
     {
       "list_item": "Fresh Broccoli",
-      "last_scraped": "2026-05-28T23:26:33.299569+00:00",
+      "last_scraped": "2026-05-28T23:47:52.672789+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -756,7 +756,7 @@
     },
     {
       "list_item": "Hass Avocado",
-      "last_scraped": "2026-05-28T23:26:36.125323+00:00",
+      "last_scraped": "2026-05-28T23:47:56.403463+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -812,7 +812,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 0.3,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -820,7 +820,7 @@
     },
     {
       "list_item": "Fresh Cauliflower Half",
-      "last_scraped": "2026-05-28T23:26:40.035119+00:00",
+      "last_scraped": "2026-05-28T23:48:01.143699+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -924,7 +924,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 0.95,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -932,7 +932,7 @@
     },
     {
       "list_item": "Kale Fresh Bunch",
-      "last_scraped": "2026-05-28T23:26:43.955487+00:00",
+      "last_scraped": "2026-05-28T23:48:05.199681+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -988,7 +988,17 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.1,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Kale Bunch Green | 1 Each",
+          "price": 4.5,
+          "unit_price": 4.5,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-kale-bunch-green-1-each-8696598",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8696598.jpg",
+          "retailer": "coles"
+        }
+      ],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
@@ -9258,7 +9268,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 5,
+    "done": 10,
     "total": 157
   }
 }
