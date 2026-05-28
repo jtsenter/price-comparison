@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T04:35:38.432419+00:00",
+  "last_updated": "2026-05-28T04:35:53.034987+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8154,7 +8154,7 @@
     },
     {
       "list_item": "Dettol Antibacterial Liquid Hand Wash Hand Soap Pump Aloe Vera",
-      "last_scraped": "2026-05-23T05:33:21.493400+00:00",
+      "last_scraped": "2026-05-28T04:35:40.599058+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8203,48 +8203,8 @@
       "per_100_unit": "100ml"
     },
     {
-      "list_item": "Ecostore Dish Liquid Ultrasensitive",
-      "last_scraped": "2026-05-23T05:33:31.689329+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-04-14",
-          "price": 3.35
-        },
-        {
-          "date": "2025-07-10",
-          "price": 4.8
-        }
-      ],
-      "category": "Household",
-      "woolworths": {
-        "name": "Ecostore Dishwashing Liquid Lemon",
-        "price": 9.2,
-        "unit_price": 0.92,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/796646/ecostore-dishwashing-liquid-lemon",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/796646.jpg"
-      },
-      "coles": {
-        "name": "Ecostore Dishwashing Liquid Lemon | 1L",
-        "price": 9.2,
-        "unit_price": 9.2,
-        "unit": "100mL",
-        "url": "https://www.coles.com.au/product/ecostore-dishwashing-liquid-lemon-1l-7752300",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7752300.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.92,
-      "per_100_coles": 0.92,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Essentials Domestic Wipes Roll",
-      "last_scraped": "2026-05-23T05:33:25.450449+00:00",
+      "last_scraped": "2026-05-28T04:35:44.527878+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8284,7 +8244,7 @@
     },
     {
       "list_item": "Green Zucchini",
-      "last_scraped": "2026-05-23T05:33:28.636521+00:00",
+      "last_scraped": "2026-05-28T04:35:48.076108+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8324,7 +8284,7 @@
     },
     {
       "list_item": "Kinder Chocolate Sharepack",
-      "last_scraped": "2026-05-23T05:33:32.241339+00:00",
+      "last_scraped": "2026-05-28T04:35:51.893758+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8339,8 +8299,8 @@
       "category": "Sweets",
       "woolworths": {
         "name": "Kinder Chocolate Treats",
-        "price": 7.5,
-        "unit_price": 3.75,
+        "price": 3.75,
+        "unit_price": 1.88,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/839689/kinder-chocolate-treats",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/839689.jpg"
@@ -8354,24 +8314,54 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2528761.jpg",
         "retailer": "coles"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.5,
-      "alternatives": [
-        {
-          "name": "Kinder Chocolate Little Ones",
-          "price": 1.4,
-          "unit_price": 2.8,
-          "unit": "100G",
-          "url": "https://www.woolworths.com.au/shop/productdetails/21197/kinder-chocolate-little-ones",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/021197.jpg",
-          "retailer": "woolworths"
-        }
-      ],
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.25,
+      "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 3.75,
+      "per_100_ww": 1.88,
       "per_100_coles": 3.0,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Ecostore Dish Liquid Ultrasensitive",
+      "last_scraped": "2026-05-28T04:35:53.025269+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 3.35
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.8
+        }
+      ],
+      "category": "Household",
+      "woolworths": {
+        "name": "Ecostore Dishwashing Liquid Lemon",
+        "price": 9.2,
+        "unit_price": 0.92,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/796646/ecostore-dishwashing-liquid-lemon",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/796646.jpg"
+      },
+      "coles": {
+        "name": "Ecostore Dishwashing Liquid Lemon | 1L",
+        "price": 9.2,
+        "unit_price": 9.2,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/ecostore-dishwashing-liquid-lemon-1l-7752300",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7752300.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.92,
+      "per_100_coles": 0.92,
+      "per_100_unit": "100ml"
     },
     {
       "list_item": "KitKat Gold Crush Block",
@@ -9298,16 +9288,16 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 773.31,
+    "total_woolworths": 769.56,
     "total_coles": 823.25,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 49.94,
+    "total_saving": 53.69,
     "items_compared": 157,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 130,
+    "done": 135,
     "total": 157
   }
 }
