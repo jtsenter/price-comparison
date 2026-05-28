@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T04:36:08.217791+00:00",
+  "last_updated": "2026-05-28T04:36:16.582609+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8566,7 +8566,7 @@
     },
     {
       "list_item": "Obela Hommus Dip With Garlic Smashed Falafel",
-      "last_scraped": "2026-05-23T05:33:47.465235+00:00",
+      "last_scraped": "2026-05-28T04:36:09.549642+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8581,8 +8581,8 @@
       "category": "Pantry",
       "woolworths": {
         "name": "Obela Hommus Dip With Garlic Smashed Falafel",
-        "price": 4.0,
-        "unit_price": 1.82,
+        "price": 5.5,
+        "unit_price": 2.5,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/6038199/obela-hommus-dip-with-garlic-smashed-falafel",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6038199.jpg"
@@ -8595,18 +8595,18 @@
         "url": "https://www.coles.com.au/product/obela-garnished-dip-garlic-hommus-with-smashed-falafel-220g-1048818",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1048818.jpg"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.5,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 1.82,
+      "per_100_ww": 2.5,
       "per_100_coles": 2.5,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Orange Navel",
-      "last_scraped": "2026-05-23T05:33:48.515887+00:00",
+      "last_scraped": "2026-05-28T04:36:12.271536+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8621,8 +8621,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Orange Navel",
-        "price": 1.16,
-        "unit_price": 1.16,
+        "price": 1.29,
+        "unit_price": 1.29,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/259450/orange-navel",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/259450.jpg"
@@ -8636,7 +8636,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4255717.jpg"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 0.28,
+      "saving_per_item": 0.41,
       "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
@@ -8646,7 +8646,7 @@
     },
     {
       "list_item": "Rexona Men 48hr Deodorant Stick Sport Defence",
-      "last_scraped": "2026-05-23T05:33:50.490998+00:00",
+      "last_scraped": "2026-05-28T04:36:13.136225+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8686,7 +8686,7 @@
     },
     {
       "list_item": "Sam's Pantry Caramel Brownie Low Sugar Protein Bars",
-      "last_scraped": "2026-05-23T05:33:53.284691+00:00",
+      "last_scraped": "2026-05-28T04:36:15.758442+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8726,7 +8726,7 @@
     },
     {
       "list_item": "Snickers Milk Chocolate Party Share Bag",
-      "last_scraped": "2026-05-23T05:33:53.264887+00:00",
+      "last_scraped": "2026-05-28T04:36:16.577205+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8741,8 +8741,8 @@
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Snickers Milk Chocolate Party Share Bag",
-        "price": 7.5,
-        "unit_price": 4.17,
+        "price": 4.5,
+        "unit_price": 2.5,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/206889/snickers-milk-chocolate-party-share-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/206889.jpg"
@@ -8756,12 +8756,12 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5369879.jpg",
         "retailer": "coles"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 2.5,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.5,
       "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 4.17,
+      "per_100_ww": 2.5,
       "per_100_coles": 2.78,
       "per_100_unit": "100g"
     },
@@ -9269,16 +9269,16 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 768.66,
+    "total_woolworths": 767.29,
     "total_coles": 823.25,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 54.59,
+    "total_saving": 55.96,
     "items_compared": 157,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 140,
+    "done": 145,
     "total": 157
   }
 }
