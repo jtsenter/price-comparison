@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T23:50:42.547949+00:00",
+  "last_updated": "2026-05-28T23:50:57.909473+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4742,8 +4742,89 @@
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Cadbury Old Gold Dark 70% Cocoa Chocolate Block",
+      "last_scraped": "2026-05-28T23:50:48.139164+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-05-22",
+          "price": 4.0
+        },
+        {
+          "date": "2025-05-29",
+          "price": 8.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 5.5
+        },
+        {
+          "date": "2025-06-13",
+          "price": 8.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 5.5
+        }
+      ],
+      "category": "Sweets",
+      "woolworths": {
+        "name": "Cadbury Old Gold 70% Cocoa Dark Chocolate Block",
+        "price": 8.0,
+        "unit_price": 4.85,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/6064244/cadbury-old-gold-70-cocoa-dark-chocolate-block",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6064244.jpg"
+      },
+      "coles": {
+        "name": "Cadbury Old Gold Peppermint Dark Chocolate Block | 180g",
+        "price": 4.0,
+        "unit_price": 2.22,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/cadbury-old-gold-peppermint-dark-chocolate-block-180g-2350546",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2350546.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 4.0,
+      "alternatives": [
+        {
+          "name": "Cadbury Old Gold Peppermint Dark Chocolate Block | 180g",
+          "price": 4.0,
+          "unit_price": 2.22,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/cadbury-old-gold-peppermint-dark-chocolate-block-180g-2350546",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2350546.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Cadbury Old Gold Espresso Affogato Dark Chocolate Block | 180g",
+          "price": 4.0,
+          "unit_price": 2.22,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/cadbury-old-gold-espresso-affogato-dark-chocolate-block-180g-1038144",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1038144.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Cadbury Old Gold Peanut Brittle Dark Chocolate Block | 175g",
+          "price": 4.0,
+          "unit_price": 2.29,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/cadbury-old-gold-peanut-brittle-dark-chocolate-block-175g-5856541",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5856541.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 4.85,
+      "per_100_coles": 2.22,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Cabbage Red Quarter",
-      "last_scraped": "2026-05-28T23:28:53.751743+00:00",
+      "last_scraped": "2026-05-28T23:50:48.305599+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -4779,67 +4860,15 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 2.4,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Cadbury Old Gold Dark 70% Cocoa Chocolate Block",
-      "last_scraped": "2026-05-28T23:28:55.980370+00:00",
-      "trip_count": 5,
-      "price_history": [
-        {
-          "date": "2025-05-22",
-          "price": 4.0
-        },
-        {
-          "date": "2025-05-29",
-          "price": 8.0
-        },
-        {
-          "date": "2025-06-06",
-          "price": 5.5
-        },
-        {
-          "date": "2025-06-13",
-          "price": 8.0
-        },
-        {
-          "date": "2026-02-03",
-          "price": 5.5
-        }
-      ],
-      "category": "Sweets",
-      "woolworths": {
-        "name": "Cadbury Old Gold 70% Cocoa Dark Chocolate Block",
-        "price": 8.0,
-        "unit_price": 4.85,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/6064244/cadbury-old-gold-70-cocoa-dark-chocolate-block",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6064244.jpg"
-      },
-      "coles": {
-        "name": "Cadbury Old Gold 70% Cocoa Dark Chocolate Block | 180g",
-        "price": 8.0,
-        "unit_price": 8.0,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/cadbury-old-gold-70percent-cocoa-dark-chocolate-block-180g-2350579",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2350579.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 4.85,
-      "per_100_coles": 4.44,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Capsicum Green",
-      "last_scraped": "2026-05-28T23:28:57.146845+00:00",
+      "last_scraped": "2026-05-28T23:50:52.191279+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -4874,24 +4903,44 @@
       },
       "coles": {
         "name": "Coles Capsicum Green Loose | approx. 220g",
-        "price": 1.74,
-        "unit_price": 7.9,
+        "price": 1.96,
+        "unit_price": 1.96,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7214862.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7214862.jpg",
+        "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 0.24,
-      "alternatives": [],
-      "match_confidence": "low",
+      "saving_per_item": 0.02,
+      "alternatives": [
+        {
+          "name": "Coles Organic Green Capsicum | approx. 200g",
+          "price": 1.7,
+          "unit_price": 1.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-organic-green-capsicum-approx.-200g-each-7238350",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7238350.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Capsicum Green Loose | approx. 220g",
+          "price": 1.96,
+          "unit_price": 1.96,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7214862.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
-      "per_100_coles": 0.79,
+      "per_100_coles": 0.89,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Continental Classics Cup A Soup Chicken With Lots Of Noodles",
-      "last_scraped": "2026-05-28T23:28:59.192452+00:00",
+      "last_scraped": "2026-05-28T23:50:57.012850+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -4918,25 +4967,34 @@
       },
       "coles": {
         "name": "Continental Cup A Soup Chicken With Lots of Noodles Serves 2 | 60g",
-        "price": 1.4,
-        "unit_price": 2.33,
+        "price": 2.8,
+        "unit_price": 6.6,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/continental-cup-a-soup-chicken-with-lots-of-noodles-serves-2-60g-356472",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/356472.jpg",
-        "retailer": "coles"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/356472.jpg"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.4,
+      "alternatives": [
+        {
+          "name": "Continental Chicken Noodle Soup Serves 4 | 45g",
+          "price": 1.2,
+          "unit_price": 1.2,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/continental-chicken-noodle-soup-serves-4-45g-129335",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/129335.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.33,
-      "per_100_coles": 2.33,
+      "per_100_coles": 4.67,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Dolmio Extra Bolognese Tomato Pasta Sauce",
-      "last_scraped": "2026-05-28T23:29:00.504560+00:00",
+      "last_scraped": "2026-05-28T23:50:57.902261+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -4963,19 +5021,19 @@
       },
       "coles": {
         "name": "Dolmio Extra Italian Herb Pasta Sauce | 500g",
-        "price": 3.0,
-        "unit_price": 0.6,
+        "price": 4.6,
+        "unit_price": 6.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/dolmio-extra-italian-herb-pasta-sauce-500g-1274420",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1274420.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.6,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.92,
-      "per_100_coles": 0.6,
+      "per_100_coles": 0.92,
       "per_100_unit": "100g"
     },
     {
@@ -9545,15 +9603,15 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 766.35,
-    "total_coles": 838.55,
+    "total_coles": 837.77,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 72.2,
+    "total_saving": 71.42,
     "items_compared": 157,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 55,
+    "done": 60,
     "total": 157
   }
 }
