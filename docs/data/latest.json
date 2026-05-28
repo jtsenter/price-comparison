@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T04:32:36.902429+00:00",
+  "last_updated": "2026-05-28T04:32:51.170315+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3951,7 +3951,7 @@
     },
     {
       "list_item": "Woolworths Washed Potato Bag",
-      "last_scraped": "2026-05-23T05:30:38.230219+00:00",
+      "last_scraped": "2026-05-28T04:32:44.528762+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -3986,8 +3986,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Washed Potatoes Bag",
-        "price": 8.0,
-        "unit_price": 4.0,
+        "price": 5.5,
+        "unit_price": 2.75,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/262783/woolworths-washed-potatoes-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/262783.jpg"
@@ -4001,18 +4001,18 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1206748.jpg",
         "retailer": "coles"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 2.0,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.5,
       "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 0.4,
+      "per_100_ww": 0.28,
       "per_100_coles": 0.3,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Whole Milk Full Cream Milk",
-      "last_scraped": "2026-05-23T05:30:40.807272+00:00",
+      "last_scraped": "2026-05-28T04:32:47.168291+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4076,7 +4076,7 @@
     },
     {
       "list_item": "Annalisa Chickpeas",
-      "last_scraped": "2026-05-23T05:30:41.888313+00:00",
+      "last_scraped": "2026-05-28T04:32:47.618547+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -4121,7 +4121,7 @@
     },
     {
       "list_item": "Armada Evergreen Garbage Bags Extra Large",
-      "last_scraped": "2026-05-23T05:30:44.318175+00:00",
+      "last_scraped": "2026-05-28T04:32:50.208276+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -4173,7 +4173,7 @@
     },
     {
       "list_item": "Armada Small Kitchen Tidy Bag",
-      "last_scraped": "2026-05-23T05:30:46.281397+00:00",
+      "last_scraped": "2026-05-28T04:32:51.162720+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -4199,12 +4199,12 @@
       ],
       "category": "Household",
       "woolworths": {
-        "name": "Armada Small Kitchen Tidy Bag",
+        "name": "Armada Small Kitchen Tidy Bags Lavender/Lemon Scented",
         "price": 2.5,
         "unit_price": 0.06,
         "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/684102/armada-small-kitchen-tidy-bag",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/684102.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/517049/armada-small-kitchen-tidy-bags-lavender-lemon-scented",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/517049.jpg"
       },
       "coles": {
         "name": "Coles Kitchen Tidy Bag Small | 40 pack",
@@ -9308,16 +9308,16 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 784.72,
+    "total_woolworths": 782.22,
     "total_coles": 823.25,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 38.53,
+    "total_saving": 41.03,
     "items_compared": 157,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 45,
+    "done": 50,
     "total": 157
   }
 }
