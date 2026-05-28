@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T23:53:17.000671+00:00",
+  "last_updated": "2026-05-28T23:53:34.255940+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7613,7 +7613,7 @@
     },
     {
       "list_item": "Woolworths Capsicum Green",
-      "last_scraped": "2026-05-28T23:30:31.950400+00:00",
+      "last_scraped": "2026-05-28T23:53:19.903808+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7644,24 +7644,44 @@
       },
       "coles": {
         "name": "Coles Capsicum Green Loose | approx. 220g",
-        "price": 1.74,
-        "unit_price": 7.9,
+        "price": 1.96,
+        "unit_price": 1.96,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7214862.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7214862.jpg",
+        "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 0.24,
-      "alternatives": [],
-      "match_confidence": "low",
+      "saving_per_item": 0.02,
+      "alternatives": [
+        {
+          "name": "Coles Organic Green Capsicum | approx. 200g",
+          "price": 1.7,
+          "unit_price": 1.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-organic-green-capsicum-approx.-200g-each-7238350",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7238350.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Capsicum Green Loose | approx. 220g",
+          "price": 1.96,
+          "unit_price": 1.96,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7214862.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
-      "per_100_coles": 0.79,
+      "per_100_coles": 0.89,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Celery Heart",
-      "last_scraped": "2026-05-28T23:30:34.872486+00:00",
+      "last_scraped": "2026-05-28T23:53:22.276057+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -7688,17 +7708,45 @@
       },
       "coles": {
         "name": "Coles Celery Bunch | 1 Each",
-        "price": 4.2,
-        "unit_price": 4.2,
+        "price": 4.0,
+        "unit_price": 4.0,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-celery-bunch-1-each-4845732",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4845732.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 0.3,
-      "alternatives": [],
-      "match_confidence": "low",
+      "saving_per_item": 0.5,
+      "alternatives": [
+        {
+          "name": "Coles Lettuce Cos Baby Hearts | 2 Pack",
+          "price": 2.9,
+          "unit_price": 2.9,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-lettuce-cos-baby-hearts-2-pack-4646485",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4646485.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Lamb Hearts | approx. 530g",
+          "price": 3.71,
+          "unit_price": 3.71,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-lamb-hearts-approx.-530g-9476316",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9476316.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Celery Bunch | 1 Each",
+          "price": 4.0,
+          "unit_price": 4.0,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-celery-bunch-1-each-4845732",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4845732.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -7706,7 +7754,7 @@
     },
     {
       "list_item": "Woolworths Cous Cous",
-      "last_scraped": "2026-05-28T23:30:37.801761+00:00",
+      "last_scraped": "2026-05-28T23:53:27.011829+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -7742,15 +7790,74 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.4,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Extra Virgin Olive Oil Spray",
+      "last_scraped": "2026-05-28T23:53:31.139291+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 3.7
+        },
+        {
+          "date": "2025-02-02",
+          "price": 3.7
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.7
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.3
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Extra Virgin Olive Oil Spray",
+        "price": 3.3,
+        "unit_price": 2.2,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/260739/woolworths-extra-virgin-olive-oil-spray",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/260739.jpg"
+      },
+      "coles": {
+        "name": "Extra Virgin Olive Oil",
+        "price": 9.0,
+        "unit_price": 1.8,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5449504.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 5.7,
+      "alternatives": [
+        {
+          "name": "Extra Virgin Olive Oil",
+          "price": 9.0,
+          "unit_price": 1.8,
+          "unit": "100mL",
+          "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5449504.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 2.2,
+      "per_100_coles": 1.8,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "Woolworths Green Cabbage Quarter",
-      "last_scraped": "2026-05-28T23:30:41.056766+00:00",
+      "last_scraped": "2026-05-28T23:53:34.247464+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7841,55 +7948,6 @@
       "per_100_coles": 1.6,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.5
-    },
-    {
-      "list_item": "Woolworths Extra Virgin Olive Oil Spray",
-      "last_scraped": "2026-05-28T23:30:46.894171+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2024-12-02",
-          "price": 3.7
-        },
-        {
-          "date": "2025-02-02",
-          "price": 3.7
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.7
-        },
-        {
-          "date": "2026-03-10",
-          "price": 3.3
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Extra Virgin Olive Oil Spray",
-        "price": 3.3,
-        "unit_price": 2.2,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/260739/woolworths-extra-virgin-olive-oil-spray",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/260739.jpg"
-      },
-      "coles": {
-        "name": "Extra Virgin Olive Oil",
-        "price": 9.0,
-        "unit_price": 1.8,
-        "unit": "100mL",
-        "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5449504.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 5.7,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.2,
-      "per_100_coles": 1.8,
-      "per_100_unit": "100ml"
     },
     {
       "list_item": "Woolworths Mashing Potatoes Bag",
@@ -9915,15 +9973,15 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 766.35,
-    "total_coles": 834.07,
+    "total_coles": 834.09,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 67.72,
+    "total_saving": 67.74,
     "items_compared": 157,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 105,
+    "done": 110,
     "total": 157
   }
 }
