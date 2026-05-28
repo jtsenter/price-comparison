@@ -35,11 +35,8 @@ def detect_fuzzy_changes(items: list[str], flag_path: str) -> dict:
             score = fuzz.token_sort_ratio(a, b)
             if score >= FUZZY_THRESHOLD and a != b:
                 flagged[f"{a} → {b}"] = score
-    if flagged:
-        with open(flag_path, "w") as f:
-            json.dump(flagged, f, indent=2)
-    elif os.path.exists(flag_path):
-        os.remove(flag_path)
+    with open(flag_path, "w") as f:
+        json.dump(flagged, f, indent=2)
     return flagged
 
 
