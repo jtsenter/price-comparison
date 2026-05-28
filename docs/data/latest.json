@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T23:49:35.554760+00:00",
+  "last_updated": "2026-05-28T23:49:58.231022+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3326,7 +3326,7 @@
     },
     {
       "list_item": "Woolworths Dreamy Choc Chip Cookies",
-      "last_scraped": "2026-05-28T23:27:59.984918+00:00",
+      "last_scraped": "2026-05-28T23:49:35.599649+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -3381,8 +3381,27 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.8,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Coles Bakery Indulgent Choc 40% Choc Chip Cookie | 6 Pack",
+          "price": 3.0,
+          "unit_price": 0.5,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-bakery-indulgent-choc-40percent-choc-chip-cookie-6-pack-2592079",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2592079.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Bakery Indulgent White 40% Choc Chip Cookie | 6 Pack",
+          "price": 3.0,
+          "unit_price": 0.5,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-bakery-indulgent-white-40percent-choc-chip-cookie-6-pack-2759913",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2759913.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.6,
@@ -3390,7 +3409,7 @@
     },
     {
       "list_item": "Woolworths Extra Virgin Spanish Olive Oil",
-      "last_scraped": "2026-05-28T23:28:10.080294+00:00",
+      "last_scraped": "2026-05-28T23:49:45.855489+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -3433,24 +3452,24 @@
       },
       "coles": {
         "name": "Extra Virgin Olive Oil",
-        "price": 14.0,
-        "unit_price": 1.4,
+        "price": 15.0,
+        "unit_price": 1.5,
         "unit": "100mL",
         "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-1l-5607376",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5607376.jpg"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.4,
-      "per_100_coles": 1.4,
+      "per_100_coles": 1.5,
       "per_100_unit": "100ml"
     },
     {
       "list_item": "Woolworths Fresh Continental Parsley Bunch",
-      "last_scraped": "2026-05-28T23:28:11.588117+00:00",
+      "last_scraped": "2026-05-28T23:49:49.265233+00:00",
       "trip_count": 11,
       "price_history": [
         {
@@ -3508,17 +3527,17 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144785.jpg"
       },
       "coles": {
-        "name": "Natoora Continental Parsley | 1 Bunch",
-        "price": 4.5,
-        "unit_price": 4.5,
+        "name": "Sleeved Herbs Parsley Continental",
+        "price": 3.2,
+        "unit_price": 3.2,
         "unit": "1ea",
-        "url": "https://www.coles.com.au/product/natoora-continental-parsley-1-bunch-1867900",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1867900.jpg"
+        "url": "https://www.coles.com.au/product/coles-sleeved-herbs-parsley-continental-1-bunch-4575161",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4575161.jpg"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.3,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -3526,7 +3545,7 @@
     },
     {
       "list_item": "Woolworths Frozen Meat Pies",
-      "last_scraped": "2026-05-28T23:28:13.039784+00:00",
+      "last_scraped": "2026-05-28T23:49:52.103520+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -3590,7 +3609,7 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.94,
       "per_100_coles": 0.94,
@@ -3598,7 +3617,7 @@
     },
     {
       "list_item": "Woolworths Garlic Heads CLOVE",
-      "last_scraped": "2026-05-28T23:28:20.856194+00:00",
+      "last_scraped": "2026-05-28T23:49:58.223708+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -3654,8 +3673,18 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.3,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Garlic Prepack",
+          "price": 4.2,
+          "unit_price": 1.4,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-garlic-prepack-3-pack-8433238",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8433238.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 4.14,
       "per_100_coles": null,
@@ -9442,15 +9471,15 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 766.35,
-    "total_coles": 831.05,
+    "total_coles": 830.75,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 64.7,
+    "total_saving": 64.4,
     "items_compared": 157,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 35,
+    "done": 40,
     "total": 157
   }
 }
