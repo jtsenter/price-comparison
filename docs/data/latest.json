@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T23:29:53.581060+00:00",
+  "last_updated": "2026-05-28T23:30:03.748374+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5910,7 +5910,7 @@
     },
     {
       "list_item": "Sam's Pantry Granola Pink Lady Apple & Cinnamon",
-      "last_scraped": "2026-05-28T23:21:55.917569+00:00",
+      "last_scraped": "2026-05-28T23:29:56.464138+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -5954,7 +5954,7 @@
     },
     {
       "list_item": "Snickers Milk Chocolate Party Share Bag 20 Pieces",
-      "last_scraped": "2026-05-28T23:21:56.005123+00:00",
+      "last_scraped": "2026-05-28T23:29:57.381205+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -6009,8 +6009,52 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "South Island Marlborough Sauvignon Blanc",
+      "last_scraped": "2026-05-28T23:29:59.203344+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 17.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 13.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 17.0
+        }
+      ],
+      "category": "Drinks & Alcohol",
+      "woolworths": {
+        "name": "South Island Marlborough Sauvignon Blanc",
+        "price": 13.0,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.woolworths.com.au/shop/productdetails/906238/south-island-marlborough-sauvignon-blanc",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/906238.jpg"
+      },
+      "coles": {
+        "name": "Oyster Bay Marlborough Sauvignon Blanc 750ml | 1 Each",
+        "price": 23.0,
+        "unit_price": 23.0,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/oyster-bay-marlborough-sauvignon-blanc-750ml-1-each-8258681",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8258681.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 10.0,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 3.07,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "Spring Onion Bunch",
-      "last_scraped": "2026-05-28T23:21:58.935338+00:00",
+      "last_scraped": "2026-05-28T23:30:00.136900+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6057,52 +6101,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "South Island Marlborough Sauvignon Blanc",
-      "last_scraped": "2026-05-28T23:21:59.028332+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-04-14",
-          "price": 17.0
-        },
-        {
-          "date": "2025-05-12",
-          "price": 13.0
-        },
-        {
-          "date": "2025-07-10",
-          "price": 17.0
-        }
-      ],
-      "category": "Drinks & Alcohol",
-      "woolworths": {
-        "name": "South Island Marlborough Sauvignon Blanc",
-        "price": 13.0,
-        "unit_price": null,
-        "unit": null,
-        "url": "https://www.woolworths.com.au/shop/productdetails/906238/south-island-marlborough-sauvignon-blanc",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/906238.jpg"
-      },
-      "coles": {
-        "name": "Oyster Bay Marlborough Sauvignon Blanc 750ml | 1 Each",
-        "price": 23.0,
-        "unit_price": 23.0,
-        "unit": "1L",
-        "url": "https://www.coles.com.au/product/oyster-bay-marlborough-sauvignon-blanc-750ml-1-each-8258681",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8258681.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 10.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 3.07,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Strike 2 Ply Paper Towel 2 Ply",
-      "last_scraped": "2026-05-28T23:22:02.897574+00:00",
+      "last_scraped": "2026-05-28T23:30:03.740461+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9230,7 +9230,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 85,
+    "done": 90,
     "total": 157
   }
 }
