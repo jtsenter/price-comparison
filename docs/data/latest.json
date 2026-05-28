@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T04:32:51.170315+00:00",
+  "last_updated": "2026-05-28T04:33:01.833135+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4225,7 +4225,7 @@
     },
     {
       "list_item": "Balconi Mix Max Cake Cocoa 350g",
-      "last_scraped": "2026-05-23T05:30:47.880320+00:00",
+      "last_scraped": "2026-05-28T04:32:53.740742+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -4273,7 +4273,7 @@
     },
     {
       "list_item": "Basa Thawed Freshwater Basa Fillets",
-      "last_scraped": "2026-05-23T05:30:49.715284+00:00",
+      "last_scraped": "2026-05-28T04:32:54.794839+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -4292,8 +4292,8 @@
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Basa Thawed Freshwater Basa Fillets",
-        "price": 11.0,
-        "unit_price": 11.0,
+        "price": 8.0,
+        "unit_price": 8.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/87465/basa-thawed-freshwater-basa-fillets",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087465.jpg"
@@ -4308,18 +4308,18 @@
         "retailer": "coles"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 1.75,
+      "saving_per_item": 4.0,
       "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 1.1,
+      "per_100_ww": 0.8,
       "per_100_coles": 1.33,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.75
     },
     {
       "list_item": "Beechworth 100% Pure Australian Honey Jar",
-      "last_scraped": "2026-05-23T05:30:51.246120+00:00",
+      "last_scraped": "2026-05-28T04:32:57.806835+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -4371,7 +4371,7 @@
     },
     {
       "list_item": "Ben & Jerry's Ice Cream Tub Chocolate Chip Cookie Dough",
-      "last_scraped": "2026-05-23T05:30:53.388989+00:00",
+      "last_scraped": "2026-05-28T04:32:58.749410+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -4398,8 +4398,8 @@
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Ben & Jerry's Dairy Free Chocolate Chip Cookie Dough Tub",
-        "price": 14.5,
-        "unit_price": 3.17,
+        "price": 7.25,
+        "unit_price": 1.58,
         "unit": "100ML",
         "url": "https://www.woolworths.com.au/shop/productdetails/911420/ben-jerry-s-dairy-free-chocolate-chip-cookie-dough-tub",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/911420.jpg"
@@ -4413,18 +4413,18 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7806125.jpg",
         "retailer": "coles"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 5.0,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.25,
       "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 3.17,
+      "per_100_ww": 1.58,
       "per_100_coles": 2.07,
       "per_100_unit": "100ml"
     },
     {
       "list_item": "Bulla Creme Fraiche Creme Fraiche",
-      "last_scraped": "2026-05-23T05:30:54.893535+00:00",
+      "last_scraped": "2026-05-28T04:33:01.827432+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -9308,16 +9308,16 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 782.22,
+    "total_woolworths": 771.97,
     "total_coles": 823.25,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 41.03,
+    "total_saving": 51.28,
     "items_compared": 157,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 50,
+    "done": 55,
     "total": 157
   }
 }
