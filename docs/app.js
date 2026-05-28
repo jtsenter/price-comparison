@@ -1409,6 +1409,7 @@ async function triggerRefresh() {
     return;
   }
   if (refreshCooldown) return;
+  _progressSeenThisSession = false;
 
   const btn = $('refreshBtn');
   btn.disabled = true;
@@ -1493,9 +1494,16 @@ async function pollForCompletion(s, dispatchedAt) {
   };
 
   // Live data poll: re-renders the progress bar every 5 s while the scrape runs.
+  // Skip renderPage until scrape_progress first appears — calling renderPage before
+  // that would hide the manually-set "Waiting to start" strip (no scrape_progress
+  // field in latest.json yet). Once seen, always call renderPage so completion
+  // state renders correctly even when scrape_progress later disappears.
   dataPollTimer = setInterval(async () => {
     const fresh = await loadData();
-    if (fresh) renderPage(fresh);
+    if (!fresh) return;
+    if (fresh.scrape_progress) _progressSeenThisSession = true;
+    if (!_progressSeenThisSession) return;
+    renderPage(fresh);
   }, 5000);
 
   // Phase 1: find the run created after dispatch (~1 min timeout, 5 s polling)
@@ -1556,10 +1564,11 @@ let sortKeys = [{ col: 'trips', dir: 'desc' }];
 let _lastData = null;
 let _prevPrices = {};
 let _pendingRefreshItem = null;
-let _preScrapeData = null;         // snapshot of data when scrape started
-let _progressLastDone = null;      // last seen done count
+let _preScrapeData = null;          // snapshot of data when scrape started
+let _progressLastDone = null;       // last seen done count
 let _progressLastChangeTime = null; // timestamp of last progress change
-let _progressDismissed = false;    // user dismissed the header progress widget
+let _progressDismissed = false;     // user dismissed the header progress widget
+let _progressSeenThisSession = false; // true once scrape_progress first appeared this trigger
 
 const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
 
