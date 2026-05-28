@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T23:55:40.109325+00:00",
+  "last_updated": "2026-05-28T23:55:56.492129+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10048,7 +10048,7 @@
     },
     {
       "list_item": "Woolworths Corn Sweet Kernels",
-      "last_scraped": "2026-05-28T23:32:09.179088+00:00",
+      "last_scraped": "2026-05-28T23:55:45.113576+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10080,8 +10080,27 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.61,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Coles Corn Kernels | 420g",
+          "price": 1.05,
+          "unit_price": 1.05,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4774066.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Popping Corn Kernels | 400g",
+          "price": 1.8,
+          "unit_price": 1.8,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-popping-corn-kernels-400g-5374675",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5374675.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.25,
       "per_100_coles": 0.25,
@@ -10090,7 +10109,7 @@
     },
     {
       "list_item": "Woolworths Greek Style Fetta",
-      "last_scraped": "2026-05-28T23:32:11.631920+00:00",
+      "last_scraped": "2026-05-28T23:55:45.252924+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10122,8 +10141,36 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 6.11,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Riverina Fetta Greek Style | 200g",
+          "price": 5.3,
+          "unit_price": 5.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/riverina-fetta-greek-style-200g-4360879",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4360879.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Castello Greek Style Feta Cubes | 410g",
+          "price": 6.0,
+          "unit_price": 6.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/castello-greek-style-feta-cubes-410g-1096832",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1096832.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "South Cape Greek Style Fetta | 200g",
+          "price": 6.75,
+          "unit_price": 6.75,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/south-cape-greek-style-fetta-200g-6416861",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6416861.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.6,
       "per_100_coles": 3.38,
@@ -10131,48 +10178,8 @@
       "_ww_price_factor": 0.2
     },
     {
-      "list_item": "Woolworths Green Asparagus Bunch Green",
-      "last_scraped": "2026-05-28T23:32:12.293518+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-07-10",
-          "price": 3.9
-        },
-        {
-          "date": "2025-07-26",
-          "price": 3.9
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Green Asparagus Bunch Green",
-        "price": 3.9,
-        "unit_price": 3.9,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/305235/woolworths-green-asparagus-bunch-green",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/305235.jpg"
-      },
-      "coles": {
-        "name": "Coles Green Asparagus | 1 each",
-        "price": 4.7,
-        "unit_price": 4.7,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-green-asparagus-1-each-4838737",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4838737.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.8,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Mixed Herbs Dried",
-      "last_scraped": "2026-05-28T23:32:14.520336+00:00",
+      "last_scraped": "2026-05-28T23:55:51.068023+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10203,16 +10210,76 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.15,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Coles Mixed Herb Crushed Tomatoes | 400g",
+          "price": 1.3,
+          "unit_price": 1.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-mixed-herb-crushed-tomatoes-400g-8675678",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8675678.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 16.7,
       "per_100_coles": 16.54,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Green Asparagus Bunch Green",
+      "last_scraped": "2026-05-28T23:55:53.455207+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-07-10",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-26",
+          "price": 3.9
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Green Asparagus Bunch Green",
+        "price": 3.9,
+        "unit_price": 3.9,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/305235/woolworths-green-asparagus-bunch-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/305235.jpg"
+      },
+      "coles": {
+        "name": "Coles Green Asparagus | 1 each",
+        "price": 3.9,
+        "unit_price": 3.9,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-green-asparagus-1-each-4838737",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4838737.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Coles Asparagus Spears | 425g",
+          "price": 3.0,
+          "unit_price": 3.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-asparagus-spears-425g-5841817",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5841817.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Red Washed Potatoes Bag",
-      "last_scraped": "2026-05-28T23:32:15.151398+00:00",
+      "last_scraped": "2026-05-28T23:55:56.472004+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10243,8 +10310,18 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Coles Red Royale Potatoes Loose | approx. 170g",
+          "price": 0.9,
+          "unit_price": 0.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-red-royale-potatoes-loose-approx.-170g-1181308",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1181308.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.42,
       "per_100_coles": 0.42,
@@ -10336,15 +10413,15 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 766.35,
-    "total_coles": 842.74,
+    "total_coles": 841.94,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 76.39,
+    "total_saving": 75.59,
     "items_compared": 157,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 150,
+    "done": 155,
     "total": 157
   }
 }
