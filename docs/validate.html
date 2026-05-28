@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚠️ Validate Prices — PriceWatch</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="style.css?v=3" />
+  <style>
+    /* ── Validate page overrides ── */
+    .validate-hero {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border-bottom: 1px solid #fde68a;
+      padding: 20px 24px 16px;
+    }
+    .validate-hero-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .validate-hero-sub {
+      font-size: 13px;
+      color: var(--text-mid);
+    }
+
+    .validate-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-soft);
+    }
+    .validate-empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .validate-empty-msg { font-size: 15px; font-weight: 600; color: var(--text-mid); }
+    .validate-empty-sub { font-size: 13px; margin-top: 4px; }
+
+    .validate-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .validate-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .validate-card-header {
+      padding: 14px 18px 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .validate-item-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .validate-meta {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-top: 3px;
+    }
+    .validate-reasons {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .reason-tag {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .reason-tag.conflict   { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+    .reason-tag.change     { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
+    .reason-tag.range      { background: #EDE9FE; color: #5B21B6; border: 1px solid #DDD6FE; }
+
+    .validate-stores {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .validate-store-col {
+      padding: 14px 18px 16px;
+    }
+    .validate-store-col:first-child {
+      border-right: 1px solid var(--border);
+    }
+    .validate-store-col.not-suspicious {
+      opacity: 0.5;
+    }
+    .validate-store-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+    }
+    .validate-store-label.ww-label  { color: var(--ww); }
+    .validate-store-label.co-label  { color: var(--coles); }
+
+    .price-comparison-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .price-new {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .price-arrow {
+      font-size: 13px;
+      color: var(--text-soft);
+    }
+    .price-prev {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-mid);
+    }
+    .price-change-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+    }
+    .price-change-badge.up   { background: #FEE2E2; color: #991B1B; }
+    .price-change-badge.down { background: #D1FAE5; color: #065F46; }
+
+    .validate-url {
+      font-size: 11px;
+      color: var(--text-soft);
+      word-break: break-all;
+      margin-bottom: 10px;
+    }
+    .validate-url a { color: var(--accent); text-decoration: underline; }
+
+    .validate-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn-confirm {
+      background: var(--green-light);
+      color: var(--green);
+      border: 1px solid #A7F3D0;
+      font-size: 12px;
+      padding: 6px 14px;
+    }
+    .btn-confirm:hover:not(:disabled) { background: #D1FAE5; }
+    .btn-confirm.done { background: var(--green); color: #fff; cursor: default; }
+
+    .btn-reject {
+      background: #FEF2F2;
+      color: var(--coles);
+      border: 1px solid #FECACA;
+      font-size: 12px;
+      padding: 6px 14px;
+    }
+    .btn-reject:hover:not(:disabled) { background: #FEE2E2; }
+    .btn-reject.done { background: var(--coles); color: #fff; cursor: default; }
+
+    .validate-status-row {
+      padding: 10px 18px 12px;
+      border-top: 1px solid var(--border);
+      background: #F8FAFC;
+      font-size: 12px;
+      color: var(--text-mid);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .validate-status-row.resolved {
+      background: var(--green-light);
+      color: var(--green);
+      font-weight: 600;
+    }
+    .validate-status-row.error {
+      background: #FEF2F2;
+      color: var(--coles);
+    }
+
+    #globalStatus {
+      position: sticky;
+      top: 62px;
+      z-index: 90;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      display: none;
+    }
+    #globalStatus.saving { background: #FEF3C7; color: #92400E; display: block; }
+    #globalStatus.error  { background: #FEE2E2; color: #991B1B; display: block; }
+
+    .no-settings-banner {
+      background: #FEF3C7;
+      border: 1px solid #FDE68A;
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      font-size: 13px;
+      color: #92400E;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .validate-stores { grid-template-columns: 1fr; }
+      .validate-store-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <a href="index.html" class="brand">
+        <span class="store-chip ww">W</span>
+        <span class="store-chip coles">C</span>
+        <span class="brand-name">PriceWatch</span>
+      </a>
+      <nav>
+        <a href="index.html">My Shopping List</a>
+        <a href="hot-deals.html">🔥 Hot Deals</a>
+        <a href="validate.html" id="validateNavLink" class="active">⚠️ Validate</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<div id="globalStatus"></div>
+
+<div class="validate-hero">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="validate-hero-title">⚠️ Price Validation</div>
+    <div class="validate-hero-sub">
+      Review flagged prices before they are added to per-store history.
+      Confirm to accept a new price; reject to discard it and keep the history unchanged.
+    </div>
+  </div>
+</div>
+
+<main style="max-width:1200px;">
+  <div id="noSettingsBanner" class="no-settings-banner" style="display:none">
+    GitHub settings (user, repo, token) are not configured — changes cannot be saved.
+    Open <a href="index.html">My Shopping List</a>, click ⚙ Settings and enter your details first.
+  </div>
+
+  <div id="loading" style="padding:40px;text-align:center;color:var(--text-soft);">Loading…</div>
+  <div id="validateList" class="validate-list" style="display:none"></div>
+  <div id="emptyState" class="validate-empty" style="display:none">
+    <div class="validate-empty-icon">✅</div>
+    <div class="validate-empty-msg">No prices to validate</div>
+    <div class="validate-empty-sub">All prices have been reviewed, or no suspicious changes were detected in the latest scrape.</div>
+  </div>
+</main>
+
+<script>
+'use strict';
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function loadSettings() {
+  return {
+    user:  localStorage.getItem('gh_user')  || '',
+    repo:  localStorage.getItem('gh_repo')  || '',
+    token: localStorage.getItem('gh_token') || '',
+  };
+}
+
+function fmtPrice(p) {
+  if (p == null) return '—';
+  return '$' + Number(p).toFixed(2);
+}
+
+function pctChange(newP, oldP) {
+  if (oldP == null || oldP === 0 || newP == null) return null;
+  return (newP - oldP) / oldP;
+}
+
+function reasonLabel(r) {
+  if (r === 'week_conflict')           return { text: 'Same-week conflict', cls: 'conflict' };
+  if (r === '30pct_change')            return { text: '>30% price change',   cls: 'change'   };
+  if (r === 'outside_historical_range') return { text: 'Outside history',     cls: 'range'    };
+  return { text: r, cls: 'conflict' };
+}
+
+// ── State per card: { ww: null|'confirmed'|'rejected', coles: null|'confirmed'|'rejected' } ──
+
+const _decisions = {};   // key = entry.item
+
+// ── Write lock ────────────────────────────────────────────────────────────────
+
+let _writing = false;
+
+function setWriteLock(on) {
+  _writing = on;
+  const status = document.getElementById('globalStatus');
+  if (on) {
+    status.className = 'saving';
+    status.textContent = '⏳ Saving…';
+  } else {
+    status.className = '';
+    status.style.display = 'none';
+  }
+  // Disable/enable all action buttons
+  document.querySelectorAll('.validate-actions .btn').forEach(b => {
+    if (!b.classList.contains('done')) b.disabled = on;
+  });
+}
+
+function showGlobalError(msg) {
+  const status = document.getElementById('globalStatus');
+  status.className = 'error';
+  status.textContent = '⚠ ' + msg;
+  status.style.display = 'block';
+  setTimeout(() => { status.className = ''; status.style.display = 'none'; }, 6000);
+}
+
+// ── GitHub API write ──────────────────────────────────────────────────────────
+
+async function githubPut(s, path, content, commitMsg) {
+  const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/${path}`;
+  const headers = {
+    Authorization: `Bearer ${s.token}`,
+    Accept: 'application/vnd.github+json',
+    'Content-Type': 'application/json',
+  };
+  // Always re-fetch SHA fresh — never use a cached value
+  const getRes = await fetch(apiPath, { headers });
+  const existing = getRes.ok ? await getRes.json() : {};
+  const encoded = btoa(unescape(encodeURIComponent(content)));
+  const body = { message: commitMsg, content: encoded };
+  if (existing.sha) body.sha = existing.sha;
+  const putRes = await fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
+  if (!putRes.ok) {
+    const err = await putRes.json().catch(() => ({}));
+    throw new Error(err.message || `HTTP ${putRes.status}`);
+  }
+  return putRes;
+}
+
+// ── Data ──────────────────────────────────────────────────────────────────────
+
+let _latestData = null;
+
+async function loadLatest() {
+  const res = await fetch(`data/latest.json?t=${Date.now()}`);
+  if (!res.ok) throw new Error('Could not load latest.json');
+  return res.json();
+}
+
+// ── Action handler ────────────────────────────────────────────────────────────
+
+async function handleAction(entry, store, action, cardEl) {
+  if (_writing) return;
+
+  const s = loadSettings();
+  if (!s.token || !s.user || !s.repo) {
+    showGlobalError('GitHub settings not configured — cannot save.');
+    return;
+  }
+
+  // Record the decision locally
+  if (!_decisions[entry.item]) _decisions[entry.item] = { ww: null, coles: null };
+  _decisions[entry.item][store] = action;
+
+  // Update button state immediately (optimistic UI)
+  const col = cardEl.querySelector(`.store-col-${store}`);
+  col?.querySelectorAll('.validate-actions .btn').forEach(b => {
+    b.disabled = true;
+    b.classList.remove('done');
+  });
+  const activeBtn = col?.querySelector(`.btn-${action}`);
+  if (activeBtn) { activeBtn.classList.add('done'); activeBtn.textContent = action === 'confirm' ? '✓ Confirmed' : '✗ Rejected'; }
+
+  // Check if both stores have been decided (or only one is suspicious)
+  const dec = _decisions[entry.item];
+  const wwNeeds    = entry.ww_suspicious;
+  const colesNeeds = entry.coles_suspicious;
+  const wwDone     = !wwNeeds    || dec.ww    != null;
+  const colesDone  = !colesNeeds || dec.coles != null;
+
+  if (!wwDone || !colesDone) {
+    // Partial — wait for the other store
+    updateCardStatus(cardEl, 'Waiting for the other store decision…', '');
+    return;
+  }
+
+  // Both decided — write to GitHub
+  setWriteLock(true);
+  updateCardStatus(cardEl, '⏳ Saving to GitHub…', '');
+
+  try {
+    // Re-fetch latest.json to get current state
+    const fresh = await loadLatest();
+    _latestData = fresh;
+
+    // Find the matching item in items[]
+    const itemEntry = fresh.items?.find(i => i.list_item === entry.item);
+
+    // Build updated per-store histories
+    let newWwHist    = itemEntry?.ww_price_history    ?? [];
+    let newCoHist    = itemEntry?.coles_price_history ?? [];
+
+    if (wwNeeds && dec.ww === 'confirm' && entry.ww_price != null) {
+      newWwHist = [...newWwHist, { date: entry.flagged_date, price: Math.round(entry.ww_price * 100) / 100 }];
+    }
+    if (colesNeeds && dec.coles === 'confirm' && entry.coles_price != null) {
+      newCoHist = [...newCoHist, { date: entry.flagged_date, price: Math.round(entry.coles_price * 100) / 100 }];
+    }
+
+    // Update the item in the items array
+    const updatedItems = (fresh.items || []).map(i => {
+      if (i.list_item !== entry.item) return i;
+      return { ...i, ww_price_history: newWwHist, coles_price_history: newCoHist };
+    });
+
+    // Remove this entry from pending_validation
+    const updatedPV = (fresh.pending_validation || []).filter(e => e.item !== entry.item);
+
+    const updated = { ...fresh, items: updatedItems, pending_validation: updatedPV.length ? updatedPV : undefined };
+    // Remove key if empty
+    if (!updatedPV.length) delete updated.pending_validation;
+
+    const content = JSON.stringify(updated, null, 2) + '\n';
+    await githubPut(s, 'docs/data/latest.json', content,
+      `validate: ${entry.item} — ww:${dec.ww ?? 'n/a'} coles:${dec.coles ?? 'n/a'}`);
+
+    _latestData = updated;
+    updateCardStatus(cardEl, '✅ Saved', 'resolved');
+    markCardResolved(cardEl);
+
+    // Update nav badge count
+    updateValidateNavBadge(updatedPV.length);
+
+  } catch (err) {
+    console.error(err);
+    showGlobalError(`Save failed: ${err.message}`);
+    updateCardStatus(cardEl, `⚠ Save failed: ${err.message}`, 'error');
+    // Re-enable undone buttons
+    cardEl.querySelectorAll('.validate-actions .btn:not(.done)').forEach(b => { b.disabled = false; });
+  } finally {
+    setWriteLock(false);
+  }
+}
+
+function updateCardStatus(cardEl, msg, cls) {
+  let row = cardEl.querySelector('.validate-status-row');
+  if (!row) {
+    row = document.createElement('div');
+    row.className = 'validate-status-row';
+    cardEl.appendChild(row);
+  }
+  row.className = 'validate-status-row' + (cls ? ' ' + cls : '');
+  row.textContent = msg;
+}
+
+function markCardResolved(cardEl) {
+  cardEl.style.opacity = '0.6';
+  cardEl.querySelectorAll('.validate-actions .btn').forEach(b => { b.disabled = true; });
+}
+
+// ── Validate nav badge ────────────────────────────────────────────────────────
+
+function updateValidateNavBadge(count) {
+  const link = document.getElementById('validateNavLink');
+  if (!link) return;
+  // On the validate page itself the link is always visible/active
+  link.textContent = count > 0 ? `⚠️ Validate (${count})` : '⚠️ Validate';
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+
+function buildStoreCol(entry, store, suspicious, newPrice, prevPrice, url) {
+  const isWw = store === 'ww';
+  const labelCls  = isWw ? 'ww-label' : 'co-label';
+  const chipCls   = isWw ? 'ww' : 'coles';
+  const storeName = isWw ? 'Woolworths' : 'Coles';
+
+  const pct = pctChange(newPrice, prevPrice);
+  const pctStr = pct != null
+    ? `<span class="price-change-badge ${pct >= 0 ? 'up' : 'down'}">${pct >= 0 ? '+' : ''}${(pct * 100).toFixed(1)}%</span>`
+    : '';
+
+  const urlHtml = url
+    ? `<div class="validate-url"><a href="${url}" target="_blank" rel="noopener">View product ↗</a></div>`
+    : '';
+
+  const notSuspClass = suspicious ? '' : ' not-suspicious';
+
+  // Buttons only for suspicious stores
+  let actionsHtml = '';
+  if (suspicious) {
+    actionsHtml = `
+      <div class="validate-actions">
+        <button class="btn btn-confirm" data-store="${store}" data-action="confirm">✓ Confirm</button>
+        <button class="btn btn-reject"  data-store="${store}" data-action="reject">✗ Reject</button>
+      </div>`;
+  } else {
+    actionsHtml = `<div style="font-size:12px;color:var(--text-soft);margin-top:4px;">No changes flagged</div>`;
+  }
+
+  return `
+    <div class="validate-store-col store-col-${store}${notSuspClass}">
+      <div class="validate-store-label ${labelCls}">
+        <span class="store-chip sm ${chipCls}">${isWw ? 'W' : 'C'}</span>
+        ${storeName}${suspicious ? '' : ' <span style="font-weight:400;font-size:11px;opacity:.7">(unchanged)</span>'}
+      </div>
+      <div class="price-comparison-row">
+        <span class="price-new">${fmtPrice(newPrice)}</span>
+        ${prevPrice != null ? `<span class="price-arrow">←</span><span class="price-prev">${fmtPrice(prevPrice)}</span>${pctStr}` : ''}
+      </div>
+      ${urlHtml}
+      ${actionsHtml}
+    </div>`;
+}
+
+function renderEntry(entry) {
+  const card = document.createElement('div');
+  card.className = 'validate-card';
+  card.dataset.item = entry.item;
+
+  const reasonsHtml = (entry.reason || []).map(r => {
+    const { text, cls } = reasonLabel(r);
+    return `<span class="reason-tag ${cls}">${text}</span>`;
+  }).join('');
+
+  const date = entry.flagged_date
+    ? new Date(entry.flagged_date).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
+    : '';
+
+  card.innerHTML = `
+    <div class="validate-card-header">
+      <div>
+        <div class="validate-item-name">${entry.item}</div>
+        <div class="validate-meta">Flagged ${date}</div>
+      </div>
+      <div class="validate-reasons">${reasonsHtml}</div>
+    </div>
+    <div class="validate-stores">
+      ${buildStoreCol(entry, 'ww',    entry.ww_suspicious,    entry.ww_price,    entry.ww_prev_price,    entry.ww_url)}
+      ${buildStoreCol(entry, 'coles', entry.coles_suspicious, entry.coles_price, entry.coles_prev_price, entry.coles_url)}
+    </div>`;
+
+  // Wire up action buttons
+  card.querySelectorAll('.validate-actions .btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (_writing || btn.classList.contains('done')) return;
+      handleAction(entry, btn.dataset.store, btn.dataset.action, card);
+    });
+  });
+
+  return card;
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+
+(async () => {
+  const s = loadSettings();
+  const noSettingsBanner = document.getElementById('noSettingsBanner');
+  if (!s.token || !s.user || !s.repo) {
+    noSettingsBanner.style.display = 'block';
+  }
+
+  try {
+    _latestData = await loadLatest();
+  } catch (err) {
+    document.getElementById('loading').textContent = 'Failed to load data.';
+    return;
+  }
+
+  document.getElementById('loading').style.display = 'none';
+
+  const pending = _latestData.pending_validation || [];
+  updateValidateNavBadge(pending.length);
+
+  const listEl = document.getElementById('validateList');
+  const emptyEl = document.getElementById('emptyState');
+
+  if (pending.length === 0) {
+    emptyEl.style.display = 'block';
+    return;
+  }
+
+  listEl.style.display = 'flex';
+  pending.forEach(entry => {
+    listEl.appendChild(renderEntry(entry));
+  });
+})();
+</script>
+</body>
+</html>
