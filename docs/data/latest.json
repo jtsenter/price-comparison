@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T23:21:23.284821+00:00",
+  "last_updated": "2026-05-28T23:21:36.655577+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5193,7 +5193,7 @@
     },
     {
       "list_item": "Kiwi Fruit Green",
-      "last_scraped": "2026-05-28T05:43:26.829920+00:00",
+      "last_scraped": "2026-05-28T23:21:23.823808+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5246,7 +5246,7 @@
     },
     {
       "list_item": "Macro Organic Pasta Sauce Chunky Bolognese",
-      "last_scraped": "2026-05-28T05:43:27.413336+00:00",
+      "last_scraped": "2026-05-28T23:21:26.335960+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -5291,7 +5291,7 @@
     },
     {
       "list_item": "Mainland Extra Tasty Cheese Block",
-      "last_scraped": "2026-05-28T05:43:37.413850+00:00",
+      "last_scraped": "2026-05-28T23:21:33.054183+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -5346,56 +5346,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "McKenzie's Dried Veg Pearl Barley",
-      "last_scraped": "2026-05-28T05:43:37.628265+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2025-01-29",
-          "price": 1.9
-        },
-        {
-          "date": "2025-04-14",
-          "price": 1.9
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.6
-        },
-        {
-          "date": "2026-05-06",
-          "price": 1.6
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "McKenzie's Dried Veg Pearl Barley",
-        "price": 1.9,
-        "unit_price": 3.8,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/27298/mckenzie-s-dried-veg-pearl-barley",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/027298.jpg"
-      },
-      "coles": {
-        "name": "Royal Fields Pearl Barley | 1kg",
-        "price": 3.75,
-        "unit_price": 3.75,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/royal-fields-pearl-barley-1kg-9880322",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9880322.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.85,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.38,
-      "per_100_coles": 0.38,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "McKenzie's Green Lentil Whole",
-      "last_scraped": "2026-05-28T05:43:40.382370+00:00",
+      "last_scraped": "2026-05-28T23:21:36.021511+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -5449,6 +5401,54 @@
       "per_100_coles": 0.61,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.375
+    },
+    {
+      "list_item": "McKenzie's Dried Veg Pearl Barley",
+      "last_scraped": "2026-05-28T23:21:36.651433+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-01-29",
+          "price": 1.9
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.9
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.6
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.6
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "McKenzie's Dried Veg Pearl Barley",
+        "price": 1.9,
+        "unit_price": 3.8,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/27298/mckenzie-s-dried-veg-pearl-barley",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/027298.jpg"
+      },
+      "coles": {
+        "name": "Royal Fields Pearl Barley | 1kg",
+        "price": 3.75,
+        "unit_price": 3.75,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/royal-fields-pearl-barley-1kg-9880322",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9880322.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.85,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.38,
+      "per_100_coles": 0.38,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "McKenzie's Red Lentils",
@@ -9278,7 +9278,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 70,
+    "done": 75,
     "total": 157
   }
 }
