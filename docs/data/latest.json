@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T23:54:20.280616+00:00",
+  "last_updated": "2026-05-28T23:54:34.988366+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8758,7 +8758,7 @@
     },
     {
       "list_item": "Balconi Mix Max Spgnckes Cocoa",
-      "last_scraped": "2026-05-28T23:31:12.899361+00:00",
+      "last_scraped": "2026-05-28T23:54:24.159337+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8790,7 +8790,7 @@
       "cheaper_store": "coles",
       "saving_per_item": 1.9,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.2,
       "per_100_coles": 1.66,
@@ -8798,7 +8798,7 @@
     },
     {
       "list_item": "Coca-Cola Zero Sugar Soft Drink Bottle",
-      "last_scraped": "2026-05-28T23:31:14.930448+00:00",
+      "last_scraped": "2026-05-28T23:54:27.859201+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8830,7 +8830,7 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.17,
       "per_100_coles": 0.17,
@@ -8838,7 +8838,7 @@
     },
     {
       "list_item": "Colman's Ingredients English Mustard",
-      "last_scraped": "2026-05-28T23:31:16.086152+00:00",
+      "last_scraped": "2026-05-28T23:54:29.476501+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8869,8 +8869,36 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.5,
-      "alternatives": [],
-      "match_confidence": "low",
+      "alternatives": [
+        {
+          "name": "Colman's Mint Sauce | 165g",
+          "price": 4.5,
+          "unit_price": 2.73,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/colman's-mint-sauce-165g-2931946",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2931946.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Mild American Mustard | 260g",
+          "price": 2.8,
+          "unit_price": 2.8,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-mild-american-mustard-260g-6733092",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6733092.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Hot English Mustard | 200g",
+          "price": 2.9,
+          "unit_price": 2.9,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-hot-english-mustard-200g-3762924",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3762924.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 5.0,
       "per_100_coles": 4.5,
@@ -8878,7 +8906,7 @@
     },
     {
       "list_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons",
-      "last_scraped": "2026-05-28T23:31:18.131281+00:00",
+      "last_scraped": "2026-05-28T23:54:33.949399+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8900,26 +8928,25 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/166232.jpg"
       },
       "coles": {
-        "name": "Continental Cup A Soup Creamy Chicken With Croutons Serves 2 | 60g",
-        "price": 1.4,
-        "unit_price": 2.33,
+        "name": "Continental Cup A Soup Creamy Chicken with Croutons Serves 2 | 60g",
+        "price": 2.8,
+        "unit_price": 6.6,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/continental-cup-a-soup-creamy-chicken-with-croutons-serves-2-60g-9151344",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9151344.jpg",
-        "retailer": "coles"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9151344.jpg"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.4,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.33,
-      "per_100_coles": 2.33,
+      "per_100_coles": 4.67,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Continental Classics Cup A Soup Italian Minestrone With Pasta",
-      "last_scraped": "2026-05-28T23:31:18.839885+00:00",
+      "last_scraped": "2026-05-28T23:54:34.979122+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8942,20 +8969,29 @@
       },
       "coles": {
         "name": "Continental Cup A Soup Italian Minestrone Serves 2 | 75g",
-        "price": 1.4,
-        "unit_price": 1.87,
+        "price": 2.8,
+        "unit_price": 6.6,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/continental-cup-a-soup-italian-minestrone-serves-2-75g-5342920",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5342920.jpg",
-        "retailer": "coles"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5342920.jpg"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.4,
+      "alternatives": [
+        {
+          "name": "Continental Cup A Pasta Bolognese | 59g",
+          "price": 1.0,
+          "unit_price": 1.69,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/continental-cup-a-pasta-bolognese-59g-1089600",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1089600.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.87,
-      "per_100_coles": 1.87,
+      "per_100_coles": 3.73,
       "per_100_unit": "100g"
     },
     {
@@ -10076,15 +10112,15 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 766.35,
-    "total_coles": 837.74,
+    "total_coles": 840.54,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 71.39,
+    "total_saving": 74.19,
     "items_compared": 157,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 125,
+    "done": 130,
     "total": 157
   }
 }
