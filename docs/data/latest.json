@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T05:42:16.865227+00:00",
+  "last_updated": "2026-05-28T05:42:29.663197+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3413,8 +3413,77 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Lean Beef Mince",
+      "last_scraped": "2026-05-28T05:42:20.376660+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 9.0
+        },
+        {
+          "date": "2024-12-19",
+          "price": 15.5
+        },
+        {
+          "date": "2025-05-04",
+          "price": 13.75
+        },
+        {
+          "date": "2025-05-29",
+          "price": 15.5
+        },
+        {
+          "date": "2025-07-03",
+          "price": 16.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 19.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 19.0
+        },
+        {
+          "date": "2026-04-13",
+          "price": 18.75
+        },
+        {
+          "date": "2026-05-06",
+          "price": 19.35
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Lean Beef Mince",
+        "price": 11.0,
+        "unit_price": 22.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/577861/woolworths-lean-beef-mince",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/577861.jpg"
+      },
+      "coles": {
+        "name": "El- Amin's Beef Lean Mince | 500g",
+        "price": 12.5,
+        "unit_price": 12.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/el-amin's-beef-lean-mince-500g-6123116",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6123116.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 7.0,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.2,
+      "per_100_coles": 2.5,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.5
+    },
+    {
       "list_item": "Woolworths Greek Style Yoghurt",
-      "last_scraped": "2026-05-28T05:38:01.829843+00:00",
+      "last_scraped": "2026-05-28T05:42:20.515314+00:00",
       "trip_count": 33,
       "price_history": [
         {
@@ -3577,77 +3646,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Lean Beef Mince",
-      "last_scraped": "2026-05-28T05:38:03.121838+00:00",
-      "trip_count": 9,
-      "price_history": [
-        {
-          "date": "2024-12-02",
-          "price": 9.0
-        },
-        {
-          "date": "2024-12-19",
-          "price": 15.5
-        },
-        {
-          "date": "2025-05-04",
-          "price": 13.75
-        },
-        {
-          "date": "2025-05-29",
-          "price": 15.5
-        },
-        {
-          "date": "2025-07-03",
-          "price": 16.0
-        },
-        {
-          "date": "2026-02-03",
-          "price": 19.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 19.0
-        },
-        {
-          "date": "2026-04-13",
-          "price": 18.75
-        },
-        {
-          "date": "2026-05-06",
-          "price": 19.35
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths Lean Beef Mince",
-        "price": 11.0,
-        "unit_price": 22.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/577861/woolworths-lean-beef-mince",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/577861.jpg"
-      },
-      "coles": {
-        "name": "El- Amin's Beef Lean Mince | 500g",
-        "price": 12.5,
-        "unit_price": 12.5,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/el-amin's-beef-lean-mince-500g-6123116",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6123116.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 7.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.2,
-      "per_100_coles": 2.5,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.5
-    },
-    {
       "list_item": "Woolworths Red Watermelon Cut Quarter",
-      "last_scraped": "2026-05-28T05:38:06.680954+00:00",
+      "last_scraped": "2026-05-28T05:42:23.788936+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -3712,7 +3712,7 @@
     },
     {
       "list_item": "Woolworths Sour Cream",
-      "last_scraped": "2026-05-28T05:38:09.909791+00:00",
+      "last_scraped": "2026-05-28T05:42:27.024700+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -3786,7 +3786,7 @@
     },
     {
       "list_item": "Woolworths Onion Brown Bag",
-      "last_scraped": "2026-05-28T05:38:13.856660+00:00",
+      "last_scraped": "2026-05-28T05:42:29.660505+00:00",
       "trip_count": 14,
       "price_history": [
         {
@@ -9201,7 +9201,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 40,
+    "done": 45,
     "total": 157
   }
 }
