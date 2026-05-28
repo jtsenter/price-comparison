@@ -6,7 +6,7 @@ import re
 import subprocess
 import sys
 import threading
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
 from urllib.parse import quote, urlparse, parse_qs, unquote
 
 from playwright.async_api import async_playwright
@@ -57,8 +57,41 @@ MAX_PRODUCT_PRICE    = 50.0     # upper bound for plausible product prices
 SKIP_AGE_DAYS        = 4        # items scraped within N days are skipped
 CONCURRENCY          = 2        # parallel page-pairs (don't exceed 3)
 MAX_RESULTS          = 5        # search results fetched per store
+SUSPICIOUS_CHANGE_PCT   = 0.30  # flag if price changed by more than this fraction
+SUSPICIOUS_MIN_HISTORY  = 3     # minimum price_history entries to run suspicion check
 
 _ww_debug_done = False
+
+
+def _iso_week(d) -> tuple[int, int]:
+    if isinstance(d, str):
+        d = date.fromisoformat(d[:10])
+    ic = d.isocalendar()
+    return ic[0], ic[1]
+
+
+def _week_dedup(history: list, new_price: float) -> str:
+    today_week = _iso_week(date.today())
+    for entry in history:
+        if _iso_week(entry['date']) == today_week:
+            return 'skip' if round(entry['price'], 2) == round(new_price, 2) else 'conflict'
+    return 'append'
+
+
+def _suspicious_reasons(new_price, prev_price, price_history) -> list[str]:
+    if new_price is None or new_price <= 0:
+        return []
+    hist_prices = [e['price'] for e in price_history if e.get('price', 0) > 0]
+    if len(hist_prices) < SUSPICIOUS_MIN_HISTORY:
+        return []
+    reasons = []
+    if prev_price is not None and prev_price > 0:
+        if abs(new_price - prev_price) / prev_price > SUSPICIOUS_CHANGE_PCT:
+            reasons.append('30pct_change')
+    hist_min, hist_max = min(hist_prices), max(hist_prices)
+    if new_price < hist_min or new_price > hist_max:
+        reasons.append('outside_historical_range')
+    return reasons
 
 
 # ---------------------------------------------------------------------------
@@ -493,7 +526,7 @@ def find_alternatives(all_results: list[dict], matched: dict | None, max_alts: i
 
 REPO_ROOT = os.path.join(os.path.dirname(__file__), "..")
 
-def _build_output(items: list, not_found: list, trigger: str, progress: dict | None = None) -> dict:
+def _build_output(items: list, not_found: list, trigger: str, progress: dict | None = None, pending_validation: list | None = None) -> dict:
     # Only compare items where both prices are present — avoids single-store items skewing the totals
     comparable = [r for r in items if r.get("woolworths", {}) and r["woolworths"].get("price") is not None
                   and r.get("coles", {}) and r["coles"].get("price") is not None]
@@ -527,13 +560,15 @@ def _build_output(items: list, not_found: list, trigger: str, progress: dict | N
     }
     if progress:
         out["scrape_progress"] = progress
+    if pending_validation is not None:
+        out["pending_validation"] = pending_validation
     return out
 
 
 _GIT_TIMEOUT = 45  # seconds per git subprocess call
 
-def push_progress(items: list, not_found: list, done: int, total: int, trigger: str):
-    out = _build_output(items, not_found, trigger, progress={"done": done, "total": total})
+def push_progress(items: list, not_found: list, done: int, total: int, trigger: str, pending_validation: list | None = None):
+    out = _build_output(items, not_found, trigger, progress={"done": done, "total": total}, pending_validation=pending_validation)
     os.makedirs(DATA_DIR, exist_ok=True)
     latest_path = os.path.join(DATA_DIR, "latest.json")
     with open(latest_path, "w") as f:
@@ -563,7 +598,7 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
 _push_thread_ref = [None]
 _push_lock = threading.Lock()
 
-def push_progress_bg(items, not_found, done, total, trigger, existing_items=None):
+def push_progress_bg(items, not_found, done, total, trigger, existing_items=None, pending_validation=None):
     """Non-blocking progress push — skips if a previous push is still running.
     existing_items: full pre-scrape item list; carry-forward items not yet re-scraped
     so the JSON always shows all products during a scrape.
@@ -581,7 +616,7 @@ def push_progress_bg(items, not_found, done, total, trigger, existing_items=None
             merged = json.loads(json.dumps(items))
         t = threading.Thread(
             target=push_progress,
-            args=(merged, list(not_found), done, total, trigger),
+            args=(merged, list(not_found), done, total, trigger, pending_validation),
             daemon=True,
         )
         _push_thread_ref[0] = t
@@ -632,7 +667,7 @@ def _coles_fallback_query(coles_url: str, item: str) -> str:
 async def _scrape_single_item(
     item: str, purchase_history: dict, ww_page, coles_page,
     ww_url: str, coles_url: str, existing_data: dict
-) -> tuple[dict | None, bool]:
+) -> tuple[dict | None, bool, dict | None]:
     """Scrape one item. Returns (result_dict | None, is_not_found)."""
     category = guess_category(item)
     history = purchase_history.get(item, {})
@@ -816,7 +851,7 @@ async def _scrape_single_item(
         ww_match, ww_conf = _carry("woolworths", "carried", "WW")
 
     if not ww_match and not coles_match:
-        return None, True
+        return None, True, None
 
     # Compute _ww_price_factor for per-kg items (used by UI for price_history normalisation).
     # WW sells loose produce (e.g. mushrooms) at $/kg; Coles sells fixed packs (e.g. 200g).
@@ -862,6 +897,40 @@ async def _scrape_single_item(
     _vco = "low" if co_conf == "carried" else co_conf
     pair_meta = validate_pair(item, ww_match, coles_match, _vww, _vco)
 
+    existing_ww_hist = existing_item.get("ww_price_history",    [])
+    existing_co_hist = existing_item.get("coles_price_history", [])
+    ww_dedup = _week_dedup(existing_ww_hist,  ww_price)    if ww_price    else 'skip'
+    co_dedup = _week_dedup(existing_co_hist,  coles_price) if coles_price else 'skip'
+    item_price_history = history.get("price_history", [])
+    prev_ww    = existing_item.get("woolworths", {}).get("price")
+    prev_coles = existing_item.get("coles",     {}).get("price")
+    ww_reasons    = _suspicious_reasons(ww_price,    prev_ww,    item_price_history)
+    coles_reasons = _suspicious_reasons(coles_price, prev_coles, item_price_history)
+    today_str = date.today().isoformat()
+    new_ww_hist = existing_ww_hist if (ww_dedup != 'append' or ww_reasons) \
+                  else existing_ww_hist + [{"date": today_str, "price": round(ww_price, 2)}]
+    new_co_hist = existing_co_hist if (co_dedup != 'append' or coles_reasons) \
+                  else existing_co_hist + [{"date": today_str, "price": round(coles_price, 2)}]
+    all_reasons = list(dict.fromkeys(
+        (['week_conflict'] if ww_dedup == 'conflict' or co_dedup == 'conflict' else [])
+        + ww_reasons + coles_reasons
+    ))
+    _validation_entry = None
+    if all_reasons:
+        _validation_entry = {
+            "item": item,
+            "ww_price": ww_price,
+            "ww_url": (ww_match or {}).get("url", ""),
+            "ww_prev_price": prev_ww,
+            "ww_suspicious": bool(ww_reasons or ww_dedup == 'conflict'),
+            "coles_price": coles_price,
+            "coles_url": (coles_match or {}).get("url", ""),
+            "coles_prev_price": prev_coles,
+            "coles_suspicious": bool(coles_reasons or co_dedup == 'conflict'),
+            "flagged_date": today_str,
+            "reason": all_reasons,
+        }
+
     result = {
         "list_item": item,
         "last_scraped": datetime.now(timezone.utc).isoformat(),
@@ -873,11 +942,13 @@ async def _scrape_single_item(
         "cheaper_store": cheaper_store,
         "saving_per_item": saving,
         "alternatives": alternatives,
+        "ww_price_history": new_ww_hist,
+        "coles_price_history": new_co_hist,
         **pair_meta,
     }
     if _ww_price_factor != 1.0:
         result["_ww_price_factor"] = _ww_price_factor
-    return result, False
+    return result, False, _validation_entry
 
 
 async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str = "", coles_url: str = ""):
@@ -921,6 +992,11 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
 
     items_output = []
     not_found = []
+    new_validation_entries: list = []
+    single_item_ve = None
+
+    # Load existing pending_validation so new entries are merged in
+    existing_pv: list = existing_data.get("pending_validation", [])
 
     async with async_playwright() as pw:
         browser = await pw.chromium.launch(
@@ -955,7 +1031,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                 await coles_page.goto(COLES_BASE, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
                 await delay()
 
-            result, is_nf = await _scrape_single_item(
+            result, is_nf, _ve = await _scrape_single_item(
                 single_item, purchase_history, ww_page, coles_page,
                 ww_url, coles_url, existing_data,
             )
@@ -963,6 +1039,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                 items_output.append(result)
             else:
                 not_found.append(single_item)
+            single_item_ve = _ve
 
         else:
             # Full scrape: determine which items need re-scraping
@@ -1005,7 +1082,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                     try:
                         idx = completed[0] + 1
                         print(f"[{idx}/{total_to_scrape}] {name}")
-                        result, is_nf = await asyncio.wait_for(
+                        result, is_nf, _ve = await asyncio.wait_for(
                             _scrape_single_item(
                                 name, purchase_history, ww_page, co_page, "", "", existing_data,
                             ),
@@ -1015,6 +1092,8 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                             items_output.append(result)
                         else:
                             not_found.append(name)
+                        if _ve:
+                            new_validation_entries.append(_ve)
                     except asyncio.TimeoutError:
                         print(f"  [TIMEOUT] {name} exceeded 120s — skipping")
                         not_found.append(name)
@@ -1025,11 +1104,13 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                     finally:
                         completed[0] += 1
                         if completed[0] % 5 == 0:
+                            merged_pv = existing_pv + new_validation_entries
                             push_progress_bg(
                                 items_output, not_found,
                                 len(items_output) + len(not_found) + skipped,
                                 total_all, trigger,
                                 existing_items=list(existing_map.values()),
+                                pending_validation=merged_pv if merged_pv else None,
                             )
                         if timed_out:
                             # Reset pages after mid-navigation cancellation
@@ -1078,10 +1159,23 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                     break
             if not replaced:
                 all_items.append(items_output[0])
-        output = _build_output(all_items, existing.get("not_found_items", []), trigger)
+        # Merge single-item validation entry into existing pending_validation
+        merged_pv = existing.get("pending_validation", [])
+        if single_item_ve:
+            # Replace any existing entry for this item, then append
+            merged_pv = [e for e in merged_pv if e.get("item") != single_item]
+            merged_pv.append(single_item_ve)
+        output = _build_output(
+            all_items, existing.get("not_found_items", []), trigger,
+            pending_validation=merged_pv if merged_pv else None,
+        )
         print(f"Patched '{single_item}' into existing data ({len(all_items)} total items).")
     else:
-        output = _build_output(items_output, not_found, trigger)
+        merged_pv = existing_pv + new_validation_entries
+        output = _build_output(
+            items_output, not_found, trigger,
+            pending_validation=merged_pv if merged_pv else None,
+        )
         s = output["summary"]
         print(f"\nDone. {len(items_output)} items compared, {len(not_found)} not found.")
         print(f"Woolworths total: ${s['total_woolworths']:.2f} | Coles total: ${s['total_coles']:.2f}")
