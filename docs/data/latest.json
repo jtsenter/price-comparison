@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T05:46:34.779820+00:00",
+  "last_updated": "2026-05-28T05:46:39.112705+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9108,8 +9108,48 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Thyme Leaves",
+      "last_scraped": "2026-05-28T05:46:38.334930+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-07-10",
+          "price": 2.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 2.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Thyme Leaves",
+        "price": 2.0,
+        "unit_price": 1.67,
+        "unit": "10G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/251228/woolworths-thyme-leaves",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251228.jpg"
+      },
+      "coles": {
+        "name": "Coles Thyme Leaves | 18g",
+        "price": 2.0,
+        "unit_price": 2.0,
+        "unit": "10g",
+        "url": "https://www.coles.com.au/product/coles-thyme-leaves-18g-8983046",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8983046.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 16.7,
+      "per_100_coles": 11.11,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Water Chestnuts Sliced",
-      "last_scraped": "2026-05-28T04:36:43.213579+00:00",
+      "last_scraped": "2026-05-28T05:46:38.831149+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9148,46 +9188,6 @@
       "per_100_coles": 0.7,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.227
-    },
-    {
-      "list_item": "Woolworths Thyme Leaves",
-      "last_scraped": "2026-05-28T04:36:43.540489+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-07-10",
-          "price": 2.0
-        },
-        {
-          "date": "2026-03-02",
-          "price": 2.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Thyme Leaves",
-        "price": 2.0,
-        "unit_price": 1.67,
-        "unit": "10G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/251228/woolworths-thyme-leaves",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251228.jpg"
-      },
-      "coles": {
-        "name": "Coles Thyme Leaves | 18g",
-        "price": 2.0,
-        "unit_price": 2.0,
-        "unit": "10g",
-        "url": "https://www.coles.com.au/product/coles-thyme-leaves-18g-8983046",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8983046.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 16.7,
-      "per_100_coles": 11.11,
-      "per_100_unit": "100g"
     }
   ],
   "not_found_items": [],
@@ -9199,9 +9199,5 @@
     "total_saving": 62.1,
     "items_compared": 157,
     "items_not_found": 0
-  },
-  "scrape_progress": {
-    "done": 155,
-    "total": 157
   }
 }
