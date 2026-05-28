@@ -369,6 +369,7 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   overflow-x: auto;
+  width: 100%;
 }
 table { width: max-content; min-width: 100%; border-collapse: collapse; }
 
@@ -1462,6 +1463,7 @@ td.priority-cell { text-align: center; }
 
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 700px) {
+  body { overflow-x: hidden; }
   .header-inner { padding: 0 14px; }
   .brand-name { display: none; }
   main { padding: 16px 14px 48px; }
