@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T04:33:51.648840+00:00",
+  "last_updated": "2026-05-28T04:33:58.564449+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5452,7 +5452,7 @@
     },
     {
       "list_item": "McKenzie's Red Lentils",
-      "last_scraped": "2026-05-23T05:31:41.453698+00:00",
+      "last_scraped": "2026-05-28T04:33:51.932392+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -5501,7 +5501,7 @@
     },
     {
       "list_item": "McVitie's Digestives Milk Chocolate",
-      "last_scraped": "2026-05-23T05:31:41.706955+00:00",
+      "last_scraped": "2026-05-28T04:33:54.962599+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -5524,8 +5524,8 @@
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "McVitie's Digestives Milk Chocolate",
-        "price": 4.5,
-        "unit_price": 1.69,
+        "price": 5.5,
+        "unit_price": 2.07,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/263373/mcvitie-s-digestives-milk-chocolate",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/263373.jpg"
@@ -5538,18 +5538,28 @@
         "url": "https://www.coles.com.au/product/mcvities-digestives-biscuits-milk-chocolate-266g-5854739",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5854739.jpg"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.0,
-      "alternatives": [],
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "McVitie's Digestives Choc Tops Milk Chocolate",
+          "price": 2.0,
+          "unit_price": 2.0,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/262411/mcvitie-s-digestives-choc-tops-milk-chocolate",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/262411.jpg",
+          "retailer": "woolworths"
+        }
+      ],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 1.69,
+      "per_100_ww": 2.07,
       "per_100_coles": 2.07,
       "per_100_unit": "100g"
     },
     {
       "list_item": "McVitie's Hobnobs Milk Chocolate",
-      "last_scraped": "2026-05-23T05:31:44.476991+00:00",
+      "last_scraped": "2026-05-28T04:33:55.146901+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5576,8 +5586,8 @@
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "McVitie's Hobnobs Milk Chocolate",
-        "price": 4.5,
-        "unit_price": 1.72,
+        "price": 5.5,
+        "unit_price": 2.1,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/260691/mcvitie-s-hobnobs-milk-chocolate",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/260691.jpg"
@@ -5590,18 +5600,66 @@
         "url": "https://www.coles.com.au/product/mcvitie's-milk-chocolate-hobnobs-262g-9221042",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9221042.jpg"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.0,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 1.72,
+      "per_100_ww": 2.1,
       "per_100_coles": 2.1,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Mutti Tomato Paste Double Concentrate",
+      "last_scraped": "2026-05-28T04:33:58.482434+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 2.1
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.1
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.4
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.4
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Mutti Tomato Paste Double Concentrate",
+        "price": 2.4,
+        "unit_price": 1.85,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/290303/mutti-tomato-paste-double-concentrate",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/290303.jpg"
+      },
+      "coles": {
+        "name": "Mutti Tomato Passata With Basil | 700g",
+        "price": 4.8,
+        "unit_price": 4.8,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/mutti-tomato-passata-with-basil-700g-1809277",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1809277.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.4,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 1.85,
+      "per_100_coles": 0.69,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Mon Ami French Camembert Cheese",
-      "last_scraped": "2026-05-23T05:31:44.526785+00:00",
+      "last_scraped": "2026-05-28T04:33:58.559407+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -5655,54 +5713,6 @@
       "per_100_coles": 3.2,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.2
-    },
-    {
-      "list_item": "Mutti Tomato Paste Double Concentrate",
-      "last_scraped": "2026-05-23T05:31:47.439561+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2025-04-14",
-          "price": 2.1
-        },
-        {
-          "date": "2025-06-06",
-          "price": 2.1
-        },
-        {
-          "date": "2026-03-10",
-          "price": 2.4
-        },
-        {
-          "date": "2026-05-06",
-          "price": 2.4
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Mutti Tomato Paste Double Concentrate",
-        "price": 2.4,
-        "unit_price": 1.85,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/290303/mutti-tomato-paste-double-concentrate",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/290303.jpg"
-      },
-      "coles": {
-        "name": "Mutti Tomato Passata With Basil | 700g",
-        "price": 4.8,
-        "unit_price": 4.8,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/mutti-tomato-passata-with-basil-700g-1809277",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1809277.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 2.4,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.85,
-      "per_100_coles": 0.69,
-      "per_100_unit": "100g"
     },
     {
       "list_item": "Old El Paso Fajita Spice Mix Mexican Style",
@@ -9308,16 +9318,16 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 776.66,
+    "total_woolworths": 778.66,
     "total_coles": 823.25,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 46.59,
+    "total_saving": 44.59,
     "items_compared": 157,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 75,
+    "done": 80,
     "total": 157
   }
 }
