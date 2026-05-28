@@ -297,6 +297,7 @@
       <nav>
         <a href="index.html">My Shopping List</a>
         <a href="hot-deals.html" class="active">🔥 Hot Deals</a>
+        <a href="validate.html" id="validateNavLink" style="display:none">⚠️ Validate</a>
       </nav>
     </div>
     <div class="header-right">
@@ -840,6 +841,17 @@ function renderDeals() {
       <td class="trend-cell">${avgCell}</td>
     </tr>`);
   });
+
+  updateValidateNavBadge(_data?.pending_validation?.length ?? 0);
+}
+
+// ── Validate nav badge ────────────────────────────────────────────────────────
+
+function updateValidateNavBadge(count) {
+  const link = document.getElementById('validateNavLink');
+  if (!link) return;
+  link.style.display = count > 0 ? '' : 'none';
+  link.textContent = `⚠️ Validate (${count})`;
 }
 
 // ── Tooltip ───────────────────────────────────────────────────────────────────

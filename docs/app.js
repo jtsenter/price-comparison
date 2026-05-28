@@ -2327,6 +2327,17 @@ function renderPage(data) {
   // Signal sticky header to re-sync next scroll
   _stickyNeedsSync = true;
   onStickyScroll(); // update immediately if already scrolled past thead
+
+  updateValidateNavBadge(data?.pending_validation?.length ?? 0);
+}
+
+// ── Validate nav badge ────────────────────────────────────────────────────────
+
+function updateValidateNavBadge(count) {
+  const link = document.getElementById('validateNavLink');
+  if (!link) return;
+  link.style.display = count > 0 ? '' : 'none';
+  link.textContent = `⚠️ Validate (${count})`;
 }
 
 // ── Name changes notice ───────────────────────────────────────────────────────
