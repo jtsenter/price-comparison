@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T23:54:34.988366+00:00",
+  "last_updated": "2026-05-28T23:54:53.142468+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8996,7 +8996,7 @@
     },
     {
       "list_item": "Dettol Antibacterial Liquid Hand Wash Hand Soap Pump Aloe Vera",
-      "last_scraped": "2026-05-28T23:31:21.306636+00:00",
+      "last_scraped": "2026-05-28T23:54:40.086019+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9029,6 +9029,15 @@
       "saving_per_item": 1.7,
       "alternatives": [
         {
+          "name": "Dettol Antibacterial Liquid Hand Wash Aloe Vera And Vitamin E Refill | 950mL",
+          "price": 5.5,
+          "unit_price": 0.58,
+          "unit": "100mL",
+          "url": "https://www.coles.com.au/product/dettol-antibacterial-liquid-hand-wash-aloe-vera-and-vitamin-e-refill-950ml-1878848",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1878848.jpg",
+          "retailer": "coles"
+        },
+        {
           "name": "Dettol Antibacterial Liquid Hand Wash Pump Aloe Vera & Vitamin E",
           "price": 4.5,
           "unit_price": 0.9,
@@ -9036,17 +9045,66 @@
           "url": "https://www.woolworths.com.au/shop/productdetails/267236/dettol-antibacterial-liquid-hand-wash-pump-aloe-vera-vitamin-e",
           "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/267236.jpg",
           "retailer": "woolworths"
+        },
+        {
+          "name": "Dettol Kids Colour Foaming Hand Wash Aloe Vera | 250mL",
+          "price": 2.5,
+          "unit_price": 1.0,
+          "unit": "100mL",
+          "url": "https://www.coles.com.au/product/dettol-kids-colour-foaming-hand-wash-aloe-vera-250ml-8962793",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8962793.jpg",
+          "retailer": "coles"
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.12,
       "per_100_coles": 0.9,
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Ecostore Dish Liquid Ultrasensitive",
+      "last_scraped": "2026-05-28T23:54:46.660779+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 3.35
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.8
+        }
+      ],
+      "category": "Household",
+      "woolworths": {
+        "name": "Ecostore Dishwashing Liquid Lemon",
+        "price": 9.2,
+        "unit_price": 0.92,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/796646/ecostore-dishwashing-liquid-lemon",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/796646.jpg"
+      },
+      "coles": {
+        "name": "Dishwashing Liquid Lemon",
+        "price": 9.2,
+        "unit_price": 0.92,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/ecostore-dishwashing-liquid-lemon-1l-7752300",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7752300.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.92,
+      "per_100_coles": 0.92,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "Essentials Domestic Wipes Roll",
-      "last_scraped": "2026-05-28T23:31:25.001314+00:00",
+      "last_scraped": "2026-05-28T23:54:47.290822+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9068,15 +9126,15 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/789683.jpg"
       },
       "coles": {
-        "name": "Johnson's Daily Essentials Face Cleansing Wipes for Normal Skin | 25 pack",
-        "price": 5.04,
-        "unit_price": 0.2,
+        "name": "Johnson's Daily Essentials Face Cleansing Wipes For Normal Skin | 25 pack",
+        "price": 7.2,
+        "unit_price": 7.2,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/johnson's-daily-essentials-face-cleansing-wipes-for-normal-skin-25-pack-8480023",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8480023.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 0.24,
+      "saving_per_item": 2.4,
       "alternatives": [],
       "match_confidence": "low",
       "size_warning": false,
@@ -9086,7 +9144,7 @@
     },
     {
       "list_item": "Green Zucchini",
-      "last_scraped": "2026-05-28T23:31:28.095870+00:00",
+      "last_scraped": "2026-05-28T23:54:52.634939+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9109,64 +9167,35 @@
       },
       "coles": {
         "name": "Coles Green Zucchini | approx. 200g",
-        "price": 1.38,
-        "unit_price": 6.9,
+        "price": 0.78,
+        "unit_price": 0.78,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-green-zucchini-approx.-200g-4910506",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4910506.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4910506.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.2,
-      "alternatives": [],
-      "match_confidence": "low",
+      "cheaper_store": "coles",
+      "saving_per_item": 0.4,
+      "alternatives": [
+        {
+          "name": "Coles Green Zucchini | approx. 200g",
+          "price": 0.78,
+          "unit_price": 0.78,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-green-zucchini-approx.-200g-4910506",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4910506.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
-      "per_100_coles": 0.69,
+      "per_100_coles": 0.39,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Ecostore Dish Liquid Ultrasensitive",
-      "last_scraped": "2026-05-28T23:31:30.635694+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-04-14",
-          "price": 3.35
-        },
-        {
-          "date": "2025-07-10",
-          "price": 4.8
-        }
-      ],
-      "category": "Household",
-      "woolworths": {
-        "name": "Ecostore Dishwashing Liquid Lemon",
-        "price": 9.2,
-        "unit_price": 0.92,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/796646/ecostore-dishwashing-liquid-lemon",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/796646.jpg"
-      },
-      "coles": {
-        "name": "Ecostore Dishwashing Liquid Lemon | 1L",
-        "price": 9.2,
-        "unit_price": 9.2,
-        "unit": "100mL",
-        "url": "https://www.coles.com.au/product/ecostore-dishwashing-liquid-lemon-1l-7752300",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7752300.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.92,
-      "per_100_coles": 0.92,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Kinder Chocolate Sharepack",
-      "last_scraped": "2026-05-28T23:31:32.291756+00:00",
+      "last_scraped": "2026-05-28T23:54:53.135074+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9189,20 +9218,19 @@
       },
       "coles": {
         "name": "Kinder Choc Little Ones Share Pack 16 Pack | 200g",
-        "price": 6.0,
-        "unit_price": 3.0,
+        "price": 7.5,
+        "unit_price": 7.5,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/kinder-choc-little-ones-share-pack-16-pack-200g-2528761",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2528761.jpg",
-        "retailer": "coles"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2528761.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 2.25,
+      "saving_per_item": 3.75,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.88,
-      "per_100_coles": 3.0,
+      "per_100_coles": 3.75,
       "per_100_unit": "100g"
     },
     {
@@ -10112,15 +10140,15 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 766.35,
-    "total_coles": 840.54,
+    "total_coles": 843.6,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 74.19,
+    "total_saving": 77.25,
     "items_compared": 157,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 130,
+    "done": 135,
     "total": 157
   }
 }
