@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T05:46:25.723712+00:00",
+  "last_updated": "2026-05-28T05:46:34.779820+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8905,7 +8905,7 @@
     },
     {
       "list_item": "Woolworths Corn Sweet Kernels",
-      "last_scraped": "2026-05-28T04:36:30.701513+00:00",
+      "last_scraped": "2026-05-28T05:46:27.524780+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8946,48 +8946,8 @@
       "_ww_price_factor": 0.42
     },
     {
-      "list_item": "Woolworths Green Asparagus Bunch Green",
-      "last_scraped": "2026-05-28T04:36:34.150361+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-07-10",
-          "price": 3.9
-        },
-        {
-          "date": "2025-07-26",
-          "price": 3.9
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Green Asparagus Bunch Green",
-        "price": 3.9,
-        "unit_price": 3.9,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/305235/woolworths-green-asparagus-bunch-green",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/305235.jpg"
-      },
-      "coles": {
-        "name": "Coles Green Asparagus | 1 each",
-        "price": 4.7,
-        "unit_price": 4.7,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-green-asparagus-1-each-4838737",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4838737.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.8,
-      "alternatives": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Greek Style Fetta",
-      "last_scraped": "2026-05-28T04:36:34.318991+00:00",
+      "last_scraped": "2026-05-28T05:46:30.107279+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9028,8 +8988,48 @@
       "_ww_price_factor": 0.2
     },
     {
+      "list_item": "Woolworths Green Asparagus Bunch Green",
+      "last_scraped": "2026-05-28T05:46:31.491423+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-07-10",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-26",
+          "price": 3.9
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Green Asparagus Bunch Green",
+        "price": 3.9,
+        "unit_price": 3.9,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/305235/woolworths-green-asparagus-bunch-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/305235.jpg"
+      },
+      "coles": {
+        "name": "Coles Green Asparagus | 1 each",
+        "price": 4.7,
+        "unit_price": 4.7,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-green-asparagus-1-each-4838737",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4838737.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.8,
+      "alternatives": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Mixed Herbs Dried",
-      "last_scraped": "2026-05-28T04:36:37.697600+00:00",
+      "last_scraped": "2026-05-28T05:46:33.990330+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9069,7 +9069,7 @@
     },
     {
       "list_item": "Woolworths Red Washed Potatoes Bag",
-      "last_scraped": "2026-05-28T04:36:37.729449+00:00",
+      "last_scraped": "2026-05-28T05:46:34.772623+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9201,7 +9201,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 150,
+    "done": 155,
     "total": 157
   }
 }
