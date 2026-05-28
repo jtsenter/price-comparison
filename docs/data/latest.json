@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T23:55:10.518069+00:00",
+  "last_updated": "2026-05-28T23:55:24.244545+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9506,7 +9506,7 @@
     },
     {
       "list_item": "Obela Hommus Dip With Garlic Smashed Falafel",
-      "last_scraped": "2026-05-28T23:31:48.669643+00:00",
+      "last_scraped": "2026-05-28T23:55:13.838058+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9529,24 +9529,35 @@
       },
       "coles": {
         "name": "Obela Garnished Dip Garlic Hommus With Smashed Falafel | 220g",
-        "price": 5.5,
-        "unit_price": 5.5,
+        "price": 3.85,
+        "unit_price": 1.75,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/obela-garnished-dip-garlic-hommus-with-smashed-falafel-220g-1048818",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1048818.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1048818.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "match_confidence": "low",
+      "cheaper_store": "coles",
+      "saving_per_item": 1.65,
+      "alternatives": [
+        {
+          "name": "Obela Garnished Dip Garlic Hommus With Smashed Falafel | 220g",
+          "price": 3.85,
+          "unit_price": 1.75,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/obela-garnished-dip-garlic-hommus-with-smashed-falafel-220g-1048818",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1048818.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.5,
-      "per_100_coles": 2.5,
+      "per_100_coles": 1.75,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Orange Navel",
-      "last_scraped": "2026-05-28T23:31:50.640728+00:00",
+      "last_scraped": "2026-05-28T23:55:14.470987+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9569,24 +9580,44 @@
       },
       "coles": {
         "name": "Coles Orange Navel | approx. 250g",
-        "price": 0.88,
-        "unit_price": 3.5,
+        "price": 1.12,
+        "unit_price": 1.12,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-orange-navel-approx.-250g-4255717",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4255717.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4255717.jpg",
+        "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 0.41,
-      "alternatives": [],
-      "match_confidence": "low",
+      "saving_per_item": 0.17,
+      "alternatives": [
+        {
+          "name": "Coles Orange Navel | approx. 250g",
+          "price": 1.12,
+          "unit_price": 1.12,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-orange-navel-approx.-250g-4255717",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4255717.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Cara Cara Oranges | approx. 250g",
+          "price": 1.12,
+          "unit_price": 1.12,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-cara-cara-oranges-approx.-250g-each-9599134",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9599134.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
-      "per_100_coles": 0.35,
+      "per_100_coles": 0.45,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Rexona Men 48hr Deodorant Stick Sport Defence",
-      "last_scraped": "2026-05-28T23:31:52.232833+00:00",
+      "last_scraped": "2026-05-28T23:55:17.638379+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9618,7 +9649,7 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 0.1,
       "alternatives": [],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 9.42,
       "per_100_coles": 9.62,
@@ -9626,7 +9657,7 @@
     },
     {
       "list_item": "Sam's Pantry Caramel Brownie Low Sugar Protein Bars",
-      "last_scraped": "2026-05-28T23:31:53.592526+00:00",
+      "last_scraped": "2026-05-28T23:55:20.180772+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9657,7 +9688,17 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 4.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Red Tractor Protein Low Sugar Granola Apple Caramel | 450g",
+          "price": 6.5,
+          "unit_price": 1.44,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/red-tractor-protein-low-sugar-granola-apple-caramel-450g-4312843",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4312843.jpg",
+          "retailer": "coles"
+        }
+      ],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.63,
@@ -9666,7 +9707,7 @@
     },
     {
       "list_item": "Snickers Milk Chocolate Party Share Bag",
-      "last_scraped": "2026-05-28T23:31:55.508405+00:00",
+      "last_scraped": "2026-05-28T23:55:24.234846+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9689,20 +9730,29 @@
       },
       "coles": {
         "name": "Snickers Chocolate Party Share Bag 12 Pieces | 180g",
-        "price": 5.0,
-        "unit_price": 2.78,
+        "price": 7.5,
+        "unit_price": 10.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/snickers-chocolate-party-share-bag-12-pieces-180g-5369879",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5369879.jpg",
-        "retailer": "coles"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5369879.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 0.5,
-      "alternatives": [],
-      "match_confidence": "low",
+      "saving_per_item": 3.0,
+      "alternatives": [
+        {
+          "name": "Pods Snickers Chocolate Snack & Share Party Bag | 160g",
+          "price": 3.5,
+          "unit_price": 2.19,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/pods-snickers-chocolate-snack-and-share-party-bag-160g-5899759",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5899759.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.5,
-      "per_100_coles": 2.78,
+      "per_100_coles": 4.17,
       "per_100_unit": "100g"
     },
     {
@@ -10210,15 +10260,15 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 766.35,
-    "total_coles": 833.35,
+    "total_coles": 834.44,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 67.0,
+    "total_saving": 68.09,
     "items_compared": 157,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 140,
+    "done": 145,
     "total": 157
   }
 }
