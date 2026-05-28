@@ -112,6 +112,7 @@ function saveOverrides(obj) {
 
 // Write url_overrides.json to the repo so the scraper uses pinned URLs on every run.
 // overrides: the full pw_overrides_v1 localStorage object.
+let _overridesSaving = false;
 async function persistUrlOverridesToRepo(s, overrides) {
   if (!s?.user || !s?.repo || !s?.token) return;
   // Build scraper format: {item: {ww_url, coles_url}} — skip display-name-only entries
@@ -123,17 +124,24 @@ async function persistUrlOverridesToRepo(s, overrides) {
       if (ov.colesUrl) scraperFmt[item].coles_url = ov.colesUrl;
     }
   }
-  const path = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/url_overrides.json`;
+  const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/url_overrides.json`;
   const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
-  const getRes = await fetch(path, { headers });
-  const shaJson = getRes.ok ? await getRes.json() : {};
   const content = JSON.stringify(scraperFmt, null, 2) + '\n';
   const encoded = btoa(unescape(encodeURIComponent(content)));
-  const putBody = { message: 'Update URL overrides', content: encoded };
-  if (shaJson.sha) putBody.sha = shaJson.sha;
-  const putRes = await fetch(path, { method: 'PUT', headers, body: JSON.stringify(putBody) });
+
+  // Always re-fetch SHA immediately before PUT; retry once on 409 (stale SHA from concurrent call)
+  const doPut = async () => {
+    const getRes = await fetch(apiPath, { headers });
+    const shaJson = getRes.ok ? await getRes.json() : {};
+    const putBody = { message: 'Update URL overrides', content: encoded };
+    if (shaJson.sha) putBody.sha = shaJson.sha;
+    return fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(putBody) });
+  };
+
+  let putRes = await doPut();
+  if (putRes.status === 409) putRes = await doPut(); // retry with fresh SHA
   if (!putRes.ok) {
-    const msg = await putRes.text().catch(() => putRes.status);
+    const msg = await putRes.text().catch(() => String(putRes.status));
     throw new Error(`GitHub PUT failed (${putRes.status}): ${msg}`);
   }
 }
@@ -832,14 +840,24 @@ function initEditModal() {
 
     const s = loadSettings();
     if (s.user && s.repo && s.token) {
-      // Always sync all URL overrides to repo so the scraper never misses a pinned URL
-      try { await persistUrlOverridesToRepo(s, overrides); } catch (e) {
+      if (_overridesSaving) return; // another PUT is in-flight; skip to avoid SHA race
+      _overridesSaving = true;
+      $('editSave').disabled = true;
+      $('editReset').disabled = true;
+      try {
+        // Always sync all URL overrides to repo so the scraper never misses a pinned URL
+        await persistUrlOverridesToRepo(s, overrides);
+        // If a URL was added/changed, trigger an immediate single-item scrape
+        if (urlChanged && (newWwUrl || newCoUrl)) {
+          triggerItemRefresh(item.list_item, null, { wwUrl: newWwUrl, colesUrl: newCoUrl });
+          alert(`Scrape triggered for "${item.list_item}" with the new URL.`);
+        }
+      } catch (e) {
         alert(`⚠ Could not save URL override to GitHub — check your token.\n${e.message}`);
-      }
-      // If a URL was added/changed, trigger an immediate single-item scrape
-      if (urlChanged && (newWwUrl || newCoUrl)) {
-        triggerItemRefresh(item.list_item, null, { wwUrl: newWwUrl, colesUrl: newCoUrl });
-        alert(`Scrape triggered for "${item.list_item}" with the new URL.`);
+      } finally {
+        _overridesSaving = false;
+        $('editSave').disabled = false;
+        $('editReset').disabled = false;
       }
     }
   });
@@ -851,8 +869,18 @@ function initEditModal() {
     saveOverrides(overrides);
     const s = loadSettings();
     if (s.user && s.repo && s.token) {
-      try { await persistUrlOverridesToRepo(s, overrides); } catch (e) {
+      if (_overridesSaving) { close(); if (_lastData) renderPage(_lastData); return; }
+      _overridesSaving = true;
+      $('editSave').disabled = true;
+      $('editReset').disabled = true;
+      try {
+        await persistUrlOverridesToRepo(s, overrides);
+      } catch (e) {
         alert(`⚠ Could not remove URL override from GitHub — check your token.\n${e.message}`);
+      } finally {
+        _overridesSaving = false;
+        $('editSave').disabled = false;
+        $('editReset').disabled = false;
       }
     }
     close();
@@ -867,6 +895,11 @@ function openEditModal(item) {
   $('editDisplayName').value = ov.displayName || '';
   $('editWwUrl').value = ov.wwUrl || item.woolworths?.url || '';
   $('editColesUrl').value = ov.colesUrl || item.coles?.url || '';
+  // Re-enable in case a previous write completed between modal open/close cycles
+  if (!_overridesSaving) {
+    $('editSave').disabled = false;
+    $('editReset').disabled = false;
+  }
   $('editModal').classList.add('open');
 }
 
