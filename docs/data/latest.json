@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T22:07:26.494629+00:00",
+  "last_updated": "2026-05-29T22:07:43.092579+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4837,9 +4837,38 @@
     },
     {
       "list_item": "Woolworths Washed Potato Bag",
-      "last_scraped": "2026-05-29T21:32:14.248950+00:00",
+      "last_scraped": "2026-05-29T22:07:32.871472+00:00",
       "trip_count": 7,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 7.9
+        },
+        {
+          "date": "2025-05-12",
+          "price": 9.9
+        },
+        {
+          "date": "2025-06-06",
+          "price": 9.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 9.9
+        },
+        {
+          "date": "2025-07-26",
+          "price": 9.9
+        },
+        {
+          "date": "2026-02-03",
+          "price": 12.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 12.5
+        }
+      ],
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Washed Potatoes Bag",
@@ -4851,8 +4880,8 @@
       },
       "coles": {
         "name": "Potatoes Washed",
-        "price": 6,
-        "unit_price": 3,
+        "price": 6.0,
+        "unit_price": 3.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1206748.jpg"
@@ -4880,7 +4909,7 @@
           "price": 6
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.28,
       "per_100_coles": 0.3,
@@ -4888,9 +4917,42 @@
     },
     {
       "list_item": "Woolworths Whole Milk Full Cream Milk",
-      "last_scraped": "2026-05-29T21:32:17.058056+00:00",
+      "last_scraped": "2026-05-29T22:07:35.520317+00:00",
       "trip_count": 8,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2026-02-07",
+          "price": 3.2
+        },
+        {
+          "date": "2026-03-02",
+          "price": 3.2
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.2
+        },
+        {
+          "date": "2026-04-02",
+          "price": 3.2
+        },
+        {
+          "date": "2026-04-13",
+          "price": 3.2
+        },
+        {
+          "date": "2026-04-21",
+          "price": 4.65
+        },
+        {
+          "date": "2026-04-29",
+          "price": 5.15
+        },
+        {
+          "date": "2026-05-06",
+          "price": 5.15
+        }
+      ],
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Woolworths Full Cream Milk",
@@ -4923,7 +4985,7 @@
           "price": 5.15
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.17,
       "per_100_coles": 0.17,
@@ -4931,9 +4993,22 @@
     },
     {
       "list_item": "Annalisa Chickpeas",
-      "last_scraped": "2026-05-29T21:32:17.287771+00:00",
+      "last_scraped": "2026-05-29T22:07:37.074852+00:00",
       "trip_count": 3,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 1.4
+        },
+        {
+          "date": "2025-05-29",
+          "price": 1.4
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.4
+        }
+      ],
       "category": "Pantry",
       "woolworths": {
         "name": "Annalisa Chickpeas",
@@ -4954,7 +5029,17 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Carmelina Chick Peas | 400 GRAM",
+          "price": 1.9,
+          "unit_price": 1.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -4975,7 +5060,7 @@
           "price": 1.9
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.47,
       "per_100_coles": 0.19,
@@ -4983,9 +5068,30 @@
     },
     {
       "list_item": "Armada Evergreen Garbage Bags Extra Large",
-      "last_scraped": "2026-05-29T21:32:20.187257+00:00",
+      "last_scraped": "2026-05-29T22:07:42.970885+00:00",
       "trip_count": 5,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 3.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.9
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.9
+        },
+        {
+          "date": "2026-04-02",
+          "price": 3.9
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.9
+        }
+      ],
       "category": "Household",
       "woolworths": {
         "name": "Armada Evergreen Garbage Bags Extra Large",
@@ -4997,15 +5103,25 @@
       },
       "coles": {
         "name": "Glad Aromatics Kitchen Tidy Bags Sweet Citrus Large | 20 Pack",
-        "price": 5,
-        "unit_price": 5,
+        "price": 5.0,
+        "unit_price": 5.0,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/glad-aromatics-kitchen-tidy-bags-sweet-citrus-large-20-pack-1332458",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1332458.jpg"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.1,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Multix Extra Wide Garbage Bags 85cm x 70cm 56l | 50 pack",
+          "price": 7.2,
+          "unit_price": 0.14,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/multix-extra-wide-garbage-bags-85cm-x-70cm-56l-50-pack-7613857",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7613857.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -5030,9 +5146,30 @@
     },
     {
       "list_item": "Armada Small Kitchen Tidy Bag",
-      "last_scraped": "2026-05-29T21:32:20.278785+00:00",
+      "last_scraped": "2026-05-29T22:07:43.079261+00:00",
       "trip_count": 5,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 2.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 2.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 2.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.5
+        }
+      ],
       "category": "Household",
       "woolworths": {
         "name": "Armada Small Kitchen Tidy Bag",
@@ -5065,7 +5202,7 @@
           "price": 2.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -10014,7 +10151,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 45,
+    "done": 50,
     "total": 158
   },
   "pending_validation": [
@@ -11188,6 +11325,51 @@
       "coles_price": 4.0,
       "coles_url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
       "coles_prev_price": 4,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Washed Potato Bag",
+      "ww_price": 5.5,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/262783/woolworths-washed-potatoes-bag",
+      "ww_prev_price": 5.5,
+      "ww_suspicious": true,
+      "coles_price": 6.0,
+      "coles_url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
+      "coles_prev_price": 6,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Annalisa Chickpeas",
+      "ww_price": 1.9,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/178262/annalisa-chickpeas",
+      "ww_prev_price": 1.9,
+      "ww_suspicious": true,
+      "coles_price": 1.9,
+      "coles_url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
+      "coles_prev_price": 1.9,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Armada Evergreen Garbage Bags Extra Large",
+      "ww_price": 3.9,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/367232/armada-evergreen-garbage-bags-extra-large",
+      "ww_prev_price": 3.9,
+      "ww_suspicious": false,
+      "coles_price": 5.0,
+      "coles_url": "https://www.coles.com.au/product/glad-aromatics-kitchen-tidy-bags-sweet-citrus-large-20-pack-1332458",
+      "coles_prev_price": 5,
       "coles_suspicious": true,
       "flagged_date": "2026-05-30",
       "reason": [
