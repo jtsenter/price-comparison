@@ -701,6 +701,7 @@ async def _scrape_single_item(
                 history = hist_data
                 break
     existing_item = next((ex for ex in existing_data.get("items", []) if ex["list_item"] == item), {})
+    existing_item = existing_item or {}  # guard: next() default is {} but protect any None path
 
     # Tracks whether each side was fetched directly (skip name-based picker)
     _skip_picker_ww = False
@@ -925,8 +926,8 @@ async def _scrape_single_item(
     ww_dedup = _week_dedup(existing_ww_hist,  ww_price)    if ww_price    else 'skip'
     co_dedup = _week_dedup(existing_co_hist,  coles_price) if coles_price else 'skip'
     item_price_history = history.get("price_history", [])
-    prev_ww    = existing_item.get("woolworths", {}).get("price")
-    prev_coles = existing_item.get("coles",     {}).get("price")
+    prev_ww    = (existing_item.get("woolworths") or {}).get("price")
+    prev_coles = (existing_item.get("coles")     or {}).get("price")
     ww_reasons    = _suspicious_reasons(ww_price,    prev_ww,    item_price_history)
     coles_reasons = _suspicious_reasons(coles_price, prev_coles, item_price_history)
     today_str = date.today().isoformat()
