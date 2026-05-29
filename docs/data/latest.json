@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T21:35:04.041000+00:00",
+  "last_updated": "2026-05-29T21:35:20.944849+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10009,15 +10009,15 @@
     },
     {
       "list_item": "Dettol Antibacterial Liquid Hand Wash Hand Soap Pump Aloe Vera",
-      "last_scraped": "2026-05-29T01:05:41.095754+00:00",
+      "last_scraped": "2026-05-29T21:35:06.955099+00:00",
       "trip_count": 2,
       "price_history": [
         {
-          "date": "2025-02-02",
+          "date": "1970-01-01",
           "price": 3.85
         },
         {
-          "date": "2025-05-04",
+          "date": "1970-01-01",
           "price": 2.8
         }
       ],
@@ -10071,15 +10071,15 @@
     },
     {
       "list_item": "Essentials Domestic Wipes Roll",
-      "last_scraped": "2026-05-29T01:05:44.767609+00:00",
+      "last_scraped": "2026-05-29T21:35:10.848168+00:00",
       "trip_count": 2,
       "price_history": [
         {
-          "date": "2025-03-11",
+          "date": "1970-01-01",
           "price": 4.8
         },
         {
-          "date": "2025-04-14",
+          "date": "1970-01-01",
           "price": 4.8
         }
       ],
@@ -10122,16 +10122,47 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Greek Style Yoghurt 2kg",
+      "last_scraped": "2026-05-29T21:35:15.366511+00:00",
+      "trip_count": 2,
+      "price_history": [],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Greek Style Yoghurt",
+        "price": 8.4,
+        "unit_price": 0.42,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/249085/woolworths-greek-style-yoghurt",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/249085.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-30",
+          "price": 8.4
+        }
+      ],
+      "coles_price_history": [],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": 0.42,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Green Zucchini",
-      "last_scraped": "2026-05-29T01:05:47.731490+00:00",
+      "last_scraped": "2026-05-29T21:35:19.482546+00:00",
       "trip_count": 2,
       "price_history": [
         {
-          "date": "2025-04-14",
+          "date": "1970-01-01",
           "price": 0.78
         },
         {
-          "date": "2025-04-25",
+          "date": "1970-01-01",
           "price": 1.18
         }
       ],
@@ -10176,15 +10207,15 @@
     },
     {
       "list_item": "Ecostore Dish Liquid Ultrasensitive",
-      "last_scraped": "2026-05-29T01:05:50.944084+00:00",
+      "last_scraped": "2026-05-29T21:35:20.931796+00:00",
       "trip_count": 2,
       "price_history": [
         {
-          "date": "2025-04-14",
+          "date": "1970-01-01",
           "price": 3.35
         },
         {
-          "date": "2025-07-10",
+          "date": "1970-01-01",
           "price": 4.8
         }
       ],
@@ -10206,7 +10237,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7752300.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -11458,11 +11489,11 @@
     "cheaper_store": "woolworths",
     "ww_data_available": true,
     "total_saving": 65.14,
-    "items_compared": 157,
+    "items_compared": 158,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 130,
+    "done": 135,
     "total": 158
   },
   "pending_validation": [
