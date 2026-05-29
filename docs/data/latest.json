@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T01:03:11.993229+00:00",
+  "last_updated": "2026-05-29T01:03:18.543664+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4912,8 +4912,54 @@
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Cabbage Red Quarter",
+      "last_scraped": "2026-05-29T01:03:12.529182+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 1.7
+        },
+        {
+          "date": "2025-03-11",
+          "price": 1.95
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.95
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Fresh Red Cabbage Quarter",
+        "price": 2.1,
+        "unit_price": 2.1,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/127079/fresh-red-cabbage-quarter",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/127079.jpg"
+      },
+      "coles": {
+        "name": "Coles Cabbage Half Red | 1 each",
+        "price": 4.5,
+        "unit_price": 4.5,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-cabbage-half-red-1-each-4457052",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4457052.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.4,
+      "alternatives": [],
+      "ww_price_history": [],
+      "coles_price_history": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Cadbury Old Gold Dark 70% Cocoa Chocolate Block",
-      "last_scraped": "2026-05-29T00:19:22.872283+00:00",
+      "last_scraped": "2026-05-29T01:03:15.231061+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -4957,35 +5003,7 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 4.0,
-      "alternatives": [
-        {
-          "name": "Cadbury Old Gold Peppermint Dark Chocolate Block | 180g",
-          "price": 4.0,
-          "unit_price": 2.22,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/cadbury-old-gold-peppermint-dark-chocolate-block-180g-2350546",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2350546.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Cadbury Old Gold Espresso Affogato Dark Chocolate Block | 180g",
-          "price": 4.0,
-          "unit_price": 2.22,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/cadbury-old-gold-espresso-affogato-dark-chocolate-block-180g-1038144",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1038144.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Cadbury Old Gold Peanut Brittle Dark Chocolate Block | 175g",
-          "price": 4.0,
-          "unit_price": 2.29,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/cadbury-old-gold-peanut-brittle-dark-chocolate-block-175g-5856541",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5856541.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -4998,61 +5016,15 @@
           "price": 4.0
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 4.85,
       "per_100_coles": 2.22,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Cabbage Red Quarter",
-      "last_scraped": "2026-05-29T00:19:23.175761+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2024-12-19",
-          "price": 1.7
-        },
-        {
-          "date": "2025-03-11",
-          "price": 1.95
-        },
-        {
-          "date": "2025-05-12",
-          "price": 1.95
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Fresh Red Cabbage Quarter",
-        "price": 2.1,
-        "unit_price": 2.1,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/127079/fresh-red-cabbage-quarter",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/127079.jpg"
-      },
-      "coles": {
-        "name": "Coles Cabbage Half Red | 1 each",
-        "price": 4.5,
-        "unit_price": 4.5,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-cabbage-half-red-1-each-4457052",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4457052.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 2.4,
-      "alternatives": [],
-      "ww_price_history": [],
-      "coles_price_history": [],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Capsicum Green",
-      "last_scraped": "2026-05-29T00:19:27.071963+00:00",
+      "last_scraped": "2026-05-29T01:03:15.430161+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5096,26 +5068,7 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.02,
-      "alternatives": [
-        {
-          "name": "Coles Organic Green Capsicum | approx. 200g",
-          "price": 1.7,
-          "unit_price": 1.7,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-organic-green-capsicum-approx.-200g-each-7238350",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7238350.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Capsicum Green Loose | approx. 220g",
-          "price": 1.96,
-          "unit_price": 1.96,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7214862.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -5128,81 +5081,15 @@
           "price": 1.96
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.89,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Continental Classics Cup A Soup Chicken With Lots Of Noodles",
-      "last_scraped": "2026-05-29T00:19:29.279424+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2026-02-03",
-          "price": 2.8
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.4
-        },
-        {
-          "date": "2026-04-21",
-          "price": 1.4
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Continental Classics Cup A Soup Chicken With Lots Of Noodles",
-        "price": 1.4,
-        "unit_price": 2.33,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/32924/continental-classics-cup-a-soup-chicken-with-lots-of-noodles",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/032924.jpg"
-      },
-      "coles": {
-        "name": "Continental Cup A Soup Chicken With Lots of Noodles Serves 2 | 60g",
-        "price": 2.8,
-        "unit_price": 6.6,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/continental-cup-a-soup-chicken-with-lots-of-noodles-serves-2-60g-356472",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/356472.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.4,
-      "alternatives": [
-        {
-          "name": "Continental Chicken Noodle Soup Serves 4 | 45g",
-          "price": 1.2,
-          "unit_price": 1.2,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/continental-chicken-noodle-soup-serves-4-45g-129335",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/129335.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.4
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.8
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 2.33,
-      "per_100_coles": 4.67,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Dolmio Extra Bolognese Tomato Pasta Sauce",
-      "last_scraped": "2026-05-29T00:19:31.863522+00:00",
+      "last_scraped": "2026-05-29T01:03:18.474312+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -5240,10 +5127,66 @@
       "alternatives": [],
       "ww_price_history": [],
       "coles_price_history": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.92,
       "per_100_coles": 0.92,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Continental Classics Cup A Soup Chicken With Lots Of Noodles",
+      "last_scraped": "2026-05-29T01:03:18.539856+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2026-02-03",
+          "price": 2.8
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.4
+        },
+        {
+          "date": "2026-04-21",
+          "price": 1.4
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Continental Classics Cup A Soup Chicken With Lots Of Noodles",
+        "price": 1.4,
+        "unit_price": 2.33,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/32924/continental-classics-cup-a-soup-chicken-with-lots-of-noodles",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/032924.jpg"
+      },
+      "coles": {
+        "name": "Continental Cup A Soup Chicken With Lots of Noodles Serves 2 | 60g",
+        "price": 2.8,
+        "unit_price": 6.6,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/continental-cup-a-soup-chicken-with-lots-of-noodles-serves-2-60g-356472",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/356472.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.4,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.4
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.8
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.33,
+      "per_100_coles": 4.67,
       "per_100_unit": "100g"
     },
     {
@@ -11638,7 +11581,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 55,
+    "done": 60,
     "total": 157
   },
   "pending_validation": [
@@ -12821,6 +12764,36 @@
       "coles_price": 5.4,
       "coles_url": "https://www.coles.com.au/product/bulla-creme-fraiche-200g-8453381",
       "coles_prev_price": 5.4,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Cabbage Red Quarter",
+      "ww_price": 2.1,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/127079/fresh-red-cabbage-quarter",
+      "ww_prev_price": 2.1,
+      "ww_suspicious": true,
+      "coles_price": 4.5,
+      "coles_url": "https://www.coles.com.au/product/coles-cabbage-half-red-1-each-4457052",
+      "coles_prev_price": 4.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Dolmio Extra Bolognese Tomato Pasta Sauce",
+      "ww_price": 4.6,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/758286/dolmio-extra-bolognese-tomato-pasta-sauce",
+      "ww_prev_price": 4.6,
+      "ww_suspicious": true,
+      "coles_price": 4.6,
+      "coles_url": "https://www.coles.com.au/product/dolmio-extra-italian-herb-pasta-sauce-500g-1274420",
+      "coles_prev_price": 4.6,
       "coles_suspicious": true,
       "flagged_date": "2026-05-29",
       "reason": [
