@@ -5,7 +5,8 @@ const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '—';
 
 // Strip "Woolworths " prefix for display. The underlying list_item key stays
 // unchanged so price history and localStorage keys keep working.
-const stripWW = (name) => name.replace(/^Woolworths\s+/i, '');
+const stripWW  = (name) => name.replace(/^Woolworths\s+/i, '');
+const isMobile = () => window.innerWidth < 640;
 
 const COLES_CDN = 'https://cdn.productimages.coles.com.au/productimages';
 
@@ -34,9 +35,9 @@ function imgError(el, fallbackSrc) {
     el.src = fallbackSrc;
   } else {
     el.onerror = null;
-    el.outerHTML = el.classList.contains('card-img')
-      ? '<div class="card-img-placeholder">No Photo</div>'
-      : '<div class="item-img-placeholder">No Photo</div>';
+    if      (el.classList.contains('mc-img'))   el.outerHTML = '<div class="mc-img-placeholder"></div>';
+    else if (el.classList.contains('card-img')) el.outerHTML = '<div class="card-img-placeholder">No Photo</div>';
+    else                                        el.outerHTML = '<div class="item-img-placeholder">No Photo</div>';
   }
 }
 const fmtUnit = (price, unit) => {
@@ -1674,6 +1675,21 @@ async function loadNameChanges() {
 // ── Sort state ───────────────────────────────────────────────────────────────
 
 let sortKeys = [{ col: 'trips', dir: 'desc' }];
+let _mobileSortMode = 'trend-asc'; // 'trend-asc' | 'trend-desc' | 'default'
+
+// Re-render when window crosses the 640px mobile breakpoint (e.g. device rotation)
+let _prevIsMobile = isMobile();
+let _breakpointResizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(_breakpointResizeTimer);
+  _breakpointResizeTimer = setTimeout(() => {
+    const nowMobile = isMobile();
+    if (nowMobile !== _prevIsMobile) {
+      _prevIsMobile = nowMobile;
+      if (_lastData) renderPage(_lastData);
+    }
+  }, 150);
+});
 let _lastData = null;
 let _prevPrices = {};
 let _pendingRefreshItem = null;
@@ -1973,10 +1989,151 @@ function renderCards(items) {
   grid.innerHTML = parts.join('');
 }
 
+// ── Mobile card view (≤640px) ─────────────────────────────────────────────────
+
+function renderMobileCards(items, data) {
+  const container = $('mobileCards');
+  if (!container) return;
+  container.innerHTML = '';
+  container.style.display = 'flex';
+
+  const exclusions = loadExclusions();
+  const overrides  = loadOverrides();
+
+  // Re-sort for mobile sort modes (desktop sortKeys sort already applied via sortItems())
+  let displayItems = [...items];
+  if (_mobileSortMode !== 'default') {
+    const excl = loadExclusions();
+    const getTrendPos = (item) => {
+      const hist = item.price_history;
+      if (!hist?.length) return 9999;
+      const excluded = new Set((excl[item.list_item] || []).map(p => Number(p).toFixed(2)));
+      const prices = hist.map(e => e.price)
+        .filter((p, i) => p > 0 && !excluded.has(Number(hist[i].price).toFixed(2)));
+      if (prices.length < 2) return 9999;
+      const minP = Math.min(...prices), maxP = Math.max(...prices);
+      if (minP === maxP) return 0.5;
+      const ref = item.cheaper_store === 'woolworths' ? item.woolworths?.price
+                : item.cheaper_store === 'coles'      ? item.coles?.price
+                : (item.coles?.price ?? item.woolworths?.price);
+      if (ref == null) return 9999;
+      return (ref - minP) / (maxP - minP);
+    };
+    const mul = _mobileSortMode === 'trend-asc' ? 1 : -1;
+    displayItems.sort((a, b) => mul * (getTrendPos(a) - getTrendPos(b)));
+  }
+
+  // Sort pill
+  const sortLabels = { 'trend-asc': '⬆ Trend', 'trend-desc': '⬇ Trend', 'default': '↕ Default' };
+  const pill = document.createElement('button');
+  pill.id = 'mobileSortPill';
+  pill.textContent = sortLabels[_mobileSortMode];
+  pill.classList.toggle('active', _mobileSortMode !== 'default');
+  pill.addEventListener('click', () => {
+    const modes = ['trend-asc', 'trend-desc', 'default'];
+    _mobileSortMode = modes[(modes.indexOf(_mobileSortMode) + 1) % modes.length];
+    if (_lastData) renderPage(_lastData);
+  });
+  container.appendChild(pill);
+
+  if (!displayItems.length) {
+    const empty = document.createElement('div');
+    empty.style.cssText = 'padding:40px 20px;text-align:center;color:var(--text-soft);font-size:14px;';
+    empty.textContent = 'No items match the current filters.';
+    container.appendChild(empty);
+    return;
+  }
+
+  displayItems.forEach(item => {
+    const ww      = item.woolworths;
+    const co      = item.coles;
+    const cheaper = item.cheaper_store;
+    const ov      = overrides[item.list_item] || {};
+    const displayName = ov.displayName || stripWW(item.list_item);
+    const cat     = getCategory(item);
+    const priority = getPriority(item.list_item);
+    const hotDeal = isHotDeal(item, exclusions);
+
+    const coImgSrc = resolveImgUrl(co?.image_url) || '';
+    const wwImgSrc = resolveImgUrl(ww?.image_url) || '';
+    const imgSrc   = coImgSrc || wwImgSrc;
+    const imgFallback = coImgSrc && wwImgSrc ? wwImgSrc : '';
+    const imgHtml = imgSrc
+      ? `<img class="mc-img" src="${imgSrc}" alt="" loading="lazy" onerror="imgError(this,'${imgFallback}')">`
+      : '<div class="mc-img-placeholder"></div>';
+
+    const currentRef = cheaper === 'woolworths' ? ww?.price
+                     : cheaper === 'coles'      ? co?.price
+                     : (co?.price ?? ww?.price);
+    const barHtml = Array.isArray(item.price_history) && item.price_history.length
+      ? buildPriceBar(item.list_item, item.price_history, currentRef, item._ww_price_factor ?? 1)
+      : '';
+
+    const wwP100 = clientPer100(ww);
+    const coP100 = clientPer100(co);
+    const wwUnit = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : '';
+    const coUnit = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : '';
+
+    const prioLabels = { weekly: 'Weekly', monthly: 'Monthly', rare: 'Rare' };
+    const prioHtml = prioLabels[priority]
+      ? `<span class="mc-priority ${priority}">${prioLabels[priority]}</span>` : '';
+    const catHtml = cat ? `<span class="mc-cat">${cat}</span>` : '';
+
+    const wwCheaper = cheaper === 'woolworths';
+    const coCheaper = cheaper === 'coles';
+    const saving    = item.saving_per_item;
+    const borderCls = wwCheaper ? ' cheaper-ww' : coCheaper ? ' cheaper-coles' : '';
+
+    const card = document.createElement('div');
+    card.className = `mobile-card${borderCls}`;
+    card.dataset.item = item.list_item;
+
+    card.innerHTML = `
+      <div class="mc-top">
+        ${imgHtml}
+        <div class="mc-name-wrap">
+          <div class="mc-name">${displayName}</div>
+          <div class="mc-badges">${catHtml}${prioHtml}</div>
+        </div>
+        ${hotDeal ? '<span class="mc-hot">🔥</span>' : ''}
+      </div>
+      ${barHtml ? `<div class="mc-bar">${barHtml}</div>` : ''}
+      <div class="mc-prices">
+        <div class="mc-store-col">
+          <div class="mc-store-label ww-col"><span class="store-chip sm ww">W</span> Woolworths</div>
+          <div class="mc-price${wwCheaper ? ' cheaper' : ''}">${ww ? fmt(ww.price) : '—'}</div>
+          ${wwUnit ? `<div class="mc-unit">${wwUnit}</div>` : ''}
+        </div>
+        <div class="mc-store-col">
+          <div class="mc-store-label coles-col"><span class="store-chip sm coles">C</span> Coles</div>
+          <div class="mc-price${coCheaper ? ' cheaper-c' : ''}">${co ? fmt(co.price) : '—'}</div>
+          ${coUnit ? `<div class="mc-unit">${coUnit}</div>` : ''}
+        </div>
+      </div>
+      ${ww && co ? `
+      <div class="mc-summary">
+        <span class="mc-winner-badge ${wwCheaper ? 'ww' : coCheaper ? 'coles' : 'equal'}">
+          ${wwCheaper ? '✓ WW cheaper' : coCheaper ? '✓ Coles cheaper' : '= Same price'}
+        </span>
+        ${saving && saving > 0 ? `<span class="mc-saving">Save ${fmt(saving)}</span>` : ''}
+      </div>` : ''}`;
+
+    card.addEventListener('click', () => {
+      const fullItem = (_lastData?.items || []).find(i => i.list_item === item.list_item) || item;
+      openPriceHistoryModal(fullItem);
+    });
+
+    container.appendChild(card);
+  });
+}
+
 // ── Index page rendering ─────────────────────────────────────────────────────
 
 function renderPage(data) {
   $('loading').style.display = 'none';
+  // Reset mobile container on every render; renderMobileCards() re-shows it when on mobile
+  const _mcEl = $('mobileCards');
+  if (_mcEl) _mcEl.style.display = 'none';
 
   if (!data?.items) {
     $('loading').style.display = 'block';
@@ -2166,6 +2323,11 @@ function renderPage(data) {
 
   // ── View mode branch ───────────────────────────────────────────
   const sorted = sortItems(allDisplayItems);
+
+  if (isMobile()) {
+    renderMobileCards(sorted, data);
+    return;
+  }
 
   if (_viewMode === 'card') {
     $('tableContainer').style.display = 'none';
