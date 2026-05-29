@@ -1492,6 +1492,40 @@ td.priority-cell { text-align: center; }
   .price-bar-outer { display: none; }
 }
 
+/* ── Toast notification ───────────────────────────────────────── */
+.toast-notif {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: opacity 0.3s;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ── Different item modal — priority badge ────────────────────── */
+.diff-item-priority-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 10px;
+  background: #F3F4F6;
+  color: #6B7280;
+}
+.diff-item-priority-badge.weekly  { background: #FEF3C7; color: #92400E; }
+.diff-item-priority-badge.monthly { background: #DBEAFE; color: #1E40AF; }
+.diff-item-priority-badge.rare    { background: #F3F4F6; color: #6B7280; }
+.diff-item-priority-badge.archive { background: #F9FAFB; color: #9CA3AF; }
+
 /* ── Search bar ───────────────────────────────────────────────── */
 .search-wrap {
   position: relative;

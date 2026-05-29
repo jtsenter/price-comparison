@@ -324,6 +324,30 @@
   </div>
 </div>
 
+<!-- Different item modal -->
+<div class="modal-overlay" id="diffItemModal">
+  <div class="modal">
+    <button class="modal-close" id="diffItemClose">✕</button>
+    <h2>What is this product actually called?</h2>
+    <p>The <strong id="diffItemPrice"></strong> entry will be removed from the original item's history.</p>
+    <div class="form-group">
+      <label>New item name</label>
+      <input type="text" id="diffItemInput" placeholder="e.g. Woolworths Greek Style Yoghurt 1kg" autocomplete="off" />
+    </div>
+    <div class="form-group">
+      <label>Priority <span class="label-hint">(inherited from original item)</span></label>
+      <span id="diffItemPriorityBadge" class="diff-item-priority-badge"></span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="diffItemCancel">Cancel</button>
+      <button class="btn btn-primary" id="diffItemConfirm" disabled>Add Item &amp; Scrape</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div id="toastNotif" class="toast-notif" style="display:none"></div>
+
 <!-- Column filter dropdown (fixed position, shared across all columns) -->
 <div id="colFilterDropdown" class="col-filter-dropdown" style="display:none">
   <button class="cfd-sort-btn cfd-sort-asc">Sort A → Z</button>

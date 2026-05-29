@@ -139,6 +139,27 @@ async function persistArchivedToRepo(s, archivedNames, message = 'chore: sync ar
   }
 }
 
+async function persistLatestJson(data, message = 'chore: update latest.json') {
+  const s = loadSettings();
+  if (!s.user || !s.repo || !s.token) return;
+  const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/latest.json`;
+  const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2) + '\n')));
+  const doPut = async () => {
+    const getRes = await fetch(apiPath, { headers });
+    const meta = getRes.ok ? await getRes.json() : {};
+    const body = { message, content };
+    if (meta.sha) body.sha = meta.sha;
+    return fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
+  };
+  let putRes = await doPut();
+  if (putRes.status === 409) putRes = await doPut();
+  if (!putRes.ok) {
+    const err = await putRes.json().catch(() => ({}));
+    throw new Error(err.message || `HTTP ${putRes.status}`);
+  }
+}
+
 async function persistUrlOverridesToRepo(s, overrides) {
   if (!s?.user || !s?.repo || !s?.token) return;
   // Build scraper format: {item: {ww_url, coles_url}} — skip display-name-only entries
@@ -1035,41 +1056,8 @@ function openPriceHistoryModal(item) {
         if (_lastData) renderPage(_lastData);
       });
 
-      row.querySelector('.price-diff-btn').addEventListener('click', async () => {
-        const newName = window.prompt(
-          `This ${fmt(entry.ww)} entry belongs to a different item.\nWhat is its name?`,
-          ''
-        );
-        if (!newName?.trim()) return;
-        const trimmed = newName.trim();
-
-        const ex = loadExclusions();
-        const list = ex[item.list_item] || [];
-        const priceNum = Number(wwKey);
-        if (!list.some(p => Number(p).toFixed(2) === wwKey)) {
-          ex[item.list_item] = [...list, priceNum];
-          saveExclusions(ex);
-        }
-
-        const s = loadSettings();
-        if (s.user && s.repo && s.token) {
-          await addItemsToShoppingList([trimmed]);
-        } else {
-          const pending = loadPending();
-          pending.push({
-            name: trimmed,
-            price: entry.ww,
-            date: entry.date || new Date().toISOString(),
-            from_item: item.list_item,
-            added_at: new Date().toISOString(),
-          });
-          savePending(pending);
-          updateImportBadge();
-          alert(`"${trimmed}" saved to pending items. Configure GitHub settings to add it to your list.`);
-        }
-
-        openPriceHistoryModal(item);
-        if (_lastData) renderPage(_lastData);
+      row.querySelector('.price-diff-btn').addEventListener('click', () => {
+        openDiffItemModal(item, wwKey);
       });
     }
 
@@ -1080,6 +1068,166 @@ function openPriceHistoryModal(item) {
 }
 
 // ── Priority filter ──────────────────────────────────────────────────────────
+
+function showToast(msg, durationMs = 3000) {
+  const toast = $('toastNotif');
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.style.display = 'block';
+  toast.style.opacity = '1';
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => { toast.style.display = 'none'; }, 300);
+  }, durationMs);
+}
+
+// ── Different Item modal ─────────────────────────────────────────────────────
+
+let _diffItemContext = null; // { item, priceKey, priority }
+
+function initDiffItemModal() {
+  const modal = $('diffItemModal');
+  if (!modal) return;
+  const close = () => { modal.classList.remove('open'); _diffItemContext = null; };
+  $('diffItemClose').addEventListener('click', close);
+  $('diffItemCancel').addEventListener('click', close);
+  modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+  $('diffItemInput').addEventListener('input', () => {
+    $('diffItemConfirm').disabled = $('diffItemInput').value.trim().length < 3;
+  });
+  $('diffItemConfirm').addEventListener('click', async () => {
+    if (!_diffItemContext) return;
+    const newName = $('diffItemInput').value.trim();
+    if (newName.length < 3) return;
+    const btn = $('diffItemConfirm');
+    btn.disabled = true;
+    btn.textContent = 'Adding…';
+    try {
+      await doDiffItemAdd(newName, _diffItemContext);
+      close();
+    } catch (e) {
+      showToast(`⚠ Error: ${e.message}`);
+      btn.disabled = false;
+      btn.textContent = 'Add Item & Scrape';
+    }
+  });
+}
+
+async function openDiffItemModal(item, priceKey) {
+  // Step 1: mutate _lastData in memory — delete all entries with this price
+  const priceNum = Number(priceKey);
+  const liveItem = _lastData?.items?.find(i => i.list_item === item.list_item);
+  if (liveItem) {
+    liveItem.price_history       = (liveItem.price_history       || []).filter(e => e.price !== priceNum);
+    liveItem.ww_price_history    = (liveItem.ww_price_history    || []).filter(e => e.price !== priceNum);
+    liveItem.coles_price_history = (liveItem.coles_price_history || []).filter(e => e.price !== priceNum);
+  }
+  // Clean up exclusions for this price (no longer in history)
+  const ex = loadExclusions();
+  if (ex[item.list_item]) {
+    ex[item.list_item] = ex[item.list_item].filter(p => Number(p).toFixed(2) !== priceKey);
+    saveExclusions(ex);
+  }
+
+  // Step 1 cont: persist to GitHub — must succeed before dialog opens
+  const s = loadSettings();
+  if (s.user && s.repo && s.token) {
+    try {
+      await persistLatestJson(_lastData, `fix: remove misidentified price entries for "${item.list_item}"`);
+    } catch (_e) {
+      showToast('⚠ Could not save changes — check your GitHub token');
+      if (_lastData) renderPage(_lastData);
+      return; // do NOT open modal
+    }
+  }
+
+  // Re-render table with cleaned history
+  if (_lastData) renderPage(_lastData);
+  const cleanItem = _lastData?.items?.find(i => i.list_item === item.list_item) || item;
+
+  // Step 2: close price history modal, open diff-item modal
+  $('priceHistoryModal').classList.remove('open');
+
+  const priority = getPriority(item.list_item);
+  _diffItemContext = { item: cleanItem, priceKey, priority };
+
+  const badge = $('diffItemPriorityBadge');
+  if (badge) {
+    badge.textContent = priority.charAt(0).toUpperCase() + priority.slice(1);
+    badge.className = `diff-item-priority-badge ${priority}`;
+  }
+  const priceEl = $('diffItemPrice');
+  if (priceEl) priceEl.textContent = fmt(priceNum);
+
+  $('diffItemInput').value = '';
+  $('diffItemConfirm').disabled = true;
+  $('diffItemConfirm').textContent = 'Add Item & Scrape';
+  $('diffItemModal').classList.add('open');
+  setTimeout(() => $('diffItemInput')?.focus(), 80);
+}
+
+async function doDiffItemAdd(newName, ctx) {
+  const s = loadSettings();
+
+  // Duplicate check
+  const exists = _lastData?.items?.some(i => i.list_item.toLowerCase() === newName.toLowerCase());
+  if (exists) {
+    const proceed = window.confirm(`"${newName}" already exists in your list. Add it anyway?`);
+    if (!proceed) return;
+  }
+
+  // Step 3a: add stub to _lastData so item appears immediately
+  const stub = {
+    list_item: newName,
+    woolworths: null, coles: null,
+    cheaper_store: null, saving_per_item: null,
+    trip_count: 2,
+    price_history: [], ww_price_history: [], coles_price_history: [],
+    last_scraped: null, category: '',
+  };
+  if (_lastData?.items) _lastData.items.push(stub);
+
+  // Step 3b: write to shopping_list.xlsx (no scrape triggered here)
+  if (s.user && s.repo && s.token) {
+    await writeNewItemToExcel(newName); // throws on failure, caught by caller
+  }
+
+  // Persist latest.json (now includes the new stub)
+  if (s.user && s.repo && s.token) {
+    await persistLatestJson(_lastData, `feat: add "${newName}" from different-item flow`);
+  }
+
+  if (_lastData) renderPage(_lastData);
+
+  // Step 4: single-item scrape
+  if (!s.user || !s.repo || !s.token) {
+    showToast(`✓ "${newName}" saved locally — configure GitHub settings to scrape prices`);
+    return;
+  }
+  const { anyOnline } = await getRunnerStatus(s);
+  if (!anyOnline) {
+    showRunnerOfflineBanner();
+    showToast(`✓ "${newName}" added — update prices when runner is back online`);
+    return;
+  }
+  hideRunnerOfflineBanner();
+
+  const dispRes = await fetch(
+    `https://api.github.com/repos/${s.user}/${s.repo}/actions/workflows/scrape.yml/dispatches`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ref: 'main', inputs: { trigger: 'manual', item: newName } }),
+    }
+  );
+  if (dispRes.status === 204) {
+    showToast(`✓ "${newName}" added — scraping prices now…`);
+    pollItemRefresh(s, null, newName);
+  } else {
+    showToast(`✓ "${newName}" added — trigger a scrape manually when ready`);
+  }
+}
 
 function initSearch() {
   const input = $('searchInput');
@@ -2821,6 +2969,70 @@ async function processUploadFile(file) {
   }
 }
 
+async function writeNewItemToExcel(itemName) {
+  if (!window.XLSX) throw new Error('SheetJS not loaded');
+  const s = loadSettings();
+  if (!s.user || !s.repo || !s.token) throw new Error('GitHub settings not configured');
+
+  // GET current file + SHA
+  const getRes = await fetch(
+    `https://api.github.com/repos/${s.user}/${s.repo}/contents/shopping_list.xlsx`,
+    { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
+  );
+  if (!getRes.ok) throw new Error(`GitHub ${getRes.status}: could not read shopping_list.xlsx`);
+  let { content, sha } = await getRes.json();
+
+  // Decode base64 → Uint8Array → XLSX workbook
+  const binaryStr = atob(content.replace(/\s/g, ''));
+  const bytes = new Uint8Array(binaryStr.length);
+  for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+
+  const wb = XLSX.read(bytes, { type: 'array' });
+  const sheetName = wb.SheetNames.includes('Data') ? 'Data' : wb.SheetNames[0];
+  const ws = wb.Sheets[sheetName];
+  const data = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+  if (!data.length) throw new Error('shopping_list.xlsx has no data');
+
+  const header   = data[0];
+  const itemIdx  = header.findIndex(h => String(h).toLowerCase().includes('item'));
+  const dateIdx  = header.findIndex(h => String(h).toLowerCase().includes('date'));
+  const priceIdx = header.findIndex(h => String(h).toLowerCase().includes('price') || String(h).toLowerCase().includes('unit'));
+  const today     = new Date().toISOString().split('T')[0];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+
+  // Add 2 trips (meets min_trips=2 threshold in scraper)
+  for (const d of [yesterday, today]) {
+    const row = Array(Math.max(header.length, 3)).fill('');
+    if (itemIdx  >= 0) row[itemIdx]  = itemName;
+    if (dateIdx  >= 0) row[dateIdx]  = d;
+    if (priceIdx >= 0) row[priceIdx] = 0;
+    data.push(row);
+  }
+  wb.Sheets[sheetName] = XLSX.utils.aoa_to_sheet(data);
+  const newContent = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
+
+  // PUT — retry once on 409 with freshly fetched SHA
+  const doPut = async (currentSha) => fetch(
+    `https://api.github.com/repos/${s.user}/${s.repo}/contents/shopping_list.xlsx`,
+    {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: `Add "${itemName}" via different-item flow`, content: newContent, sha: currentSha }),
+    }
+  );
+  let putRes = await doPut(sha);
+  if (putRes.status === 409) {
+    // Stale SHA — re-fetch and retry once
+    const retryGet = await fetch(
+      `https://api.github.com/repos/${s.user}/${s.repo}/contents/shopping_list.xlsx`,
+      { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
+    );
+    if (retryGet.ok) ({ sha } = await retryGet.json());
+    putRes = await doPut(sha);
+  }
+  if (!putRes.ok) throw new Error(`GitHub PUT ${putRes.status}: could not update shopping_list.xlsx`);
+}
+
 async function addItemsToShoppingList(newItems) {
   if (!window.XLSX) { alert('SheetJS not loaded.'); return; }
   const s = loadSettings();
@@ -3196,6 +3408,7 @@ async function boot() {
   initStickyHeader();
   initUploadModal();
   initSearch();
+  initDiffItemModal();
   initPriorityFilter();
   initBulkBar();
   initColumnChooser();
