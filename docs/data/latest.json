@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T01:03:18.543664+00:00",
+  "last_updated": "2026-05-29T01:03:31.438753+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5191,7 +5191,7 @@
     },
     {
       "list_item": "Essentials Salted Butter",
-      "last_scraped": "2026-05-29T00:19:35.012765+00:00",
+      "last_scraped": "2026-05-29T01:03:21.788947+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -5234,7 +5234,7 @@
         }
       ],
       "coles_price_history": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.4,
       "per_100_coles": 2.0,
@@ -5242,7 +5242,7 @@
     },
     {
       "list_item": "Essentials White Vinegar",
-      "last_scraped": "2026-05-29T00:19:36.639114+00:00",
+      "last_scraped": "2026-05-29T01:03:21.789747+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -5289,7 +5289,7 @@
         }
       ],
       "coles_price_history": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.09,
       "per_100_coles": 0.67,
@@ -5297,7 +5297,7 @@
     },
     {
       "list_item": "Fresh Radish Bunch",
-      "last_scraped": "2026-05-29T00:19:38.974416+00:00",
+      "last_scraped": "2026-05-29T01:03:24.626605+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -5333,17 +5333,7 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.1,
-      "alternatives": [
-        {
-          "name": "Coles Radish Bunch | 1 Each",
-          "price": 3.8,
-          "unit_price": 3.8,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/coles-radish-bunch-1-each-4911870",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4911870.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -5351,7 +5341,7 @@
         }
       ],
       "coles_price_history": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -5359,7 +5349,7 @@
     },
     {
       "list_item": "Hedy's Fresh Quiche Lorraine Chilled Meal",
-      "last_scraped": "2026-05-29T00:19:44.817850+00:00",
+      "last_scraped": "2026-05-29T01:03:28.081961+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5415,10 +5405,70 @@
           "price": 14.5
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.32,
       "per_100_coles": 1.32,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Hellmann's Real Mayonnaise Squeeze",
+      "last_scraped": "2026-05-29T01:03:31.436197+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-06-06",
+          "price": 8.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 8.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 8.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Hellmann's Real Mayonnaise Squeeze",
+        "price": 8.0,
+        "unit_price": 2.0,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/529030/hellmann-s-real-mayonnaise-squeeze",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/529030.jpg"
+      },
+      "coles": {
+        "name": "Hellmann's Squeeze Real Mayonnaise | 400g",
+        "price": 8.0,
+        "unit_price": 14.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/hellmann's-squeeze-real-mayonnaise-400g-3025755",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3025755.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8.0
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8.0
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.0,
+      "per_100_coles": 2.0,
       "per_100_unit": "100g"
     },
     {
@@ -5474,66 +5524,6 @@
       "size_warning": false,
       "per_100_ww": 2.42,
       "per_100_coles": 3.08,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Hellmann's Real Mayonnaise Squeeze",
-      "last_scraped": "2026-05-29T00:19:48.788665+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2025-06-06",
-          "price": 8.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 8.0
-        },
-        {
-          "date": "2026-04-02",
-          "price": 8.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 8.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Hellmann's Real Mayonnaise Squeeze",
-        "price": 8.0,
-        "unit_price": 2.0,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/529030/hellmann-s-real-mayonnaise-squeeze",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/529030.jpg"
-      },
-      "coles": {
-        "name": "Hellmann's Squeeze Real Mayonnaise | 400g",
-        "price": 8.0,
-        "unit_price": 14.0,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/hellmann's-squeeze-real-mayonnaise-400g-3025755",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3025755.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8.0
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8.0
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 2.0,
-      "per_100_coles": 2.0,
       "per_100_unit": "100g"
     },
     {
@@ -11581,7 +11571,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 60,
+    "done": 65,
     "total": 157
   },
   "pending_validation": [
@@ -12794,6 +12784,51 @@
       "coles_price": 4.6,
       "coles_url": "https://www.coles.com.au/product/dolmio-extra-italian-herb-pasta-sauce-500g-1274420",
       "coles_prev_price": 4.6,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Essentials Salted Butter",
+      "ww_price": 7.0,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/688962/essentials-unsalted-butter",
+      "ww_prev_price": 7.0,
+      "ww_suspicious": false,
+      "coles_price": 8.0,
+      "coles_url": "https://www.coles.com.au/product/westgold-salted-butter-400g-7075278",
+      "coles_prev_price": 8.0,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Essentials White Vinegar",
+      "ww_price": 1.85,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/94706/essentials-white-vinegar",
+      "ww_prev_price": 1.85,
+      "ww_suspicious": false,
+      "coles_price": 2.5,
+      "coles_url": "https://www.coles.com.au/product/cornwell's-white-vinegar-375ml-432763",
+      "coles_prev_price": 2.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Fresh Radish Bunch",
+      "ww_price": 3.9,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/147319/fresh-radish-bunch",
+      "ww_prev_price": 3.9,
+      "ww_suspicious": false,
+      "coles_price": 3.8,
+      "coles_url": "https://www.coles.com.au/product/coles-radish-bunch-1-each-4911870",
+      "coles_prev_price": 3.8,
       "coles_suspicious": true,
       "flagged_date": "2026-05-29",
       "reason": [
