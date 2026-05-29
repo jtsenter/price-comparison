@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T01:03:02.766842+00:00",
+  "last_updated": "2026-05-29T01:03:11.993229+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4637,7 +4637,7 @@
     },
     {
       "list_item": "Balconi Mix Max Cake Cocoa 350g",
-      "last_scraped": "2026-05-29T00:19:09.767220+00:00",
+      "last_scraped": "2026-05-29T01:03:05.862081+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -4684,7 +4684,7 @@
         }
       ],
       "coles_price_history": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.2,
       "per_100_coles": 1.66,
@@ -4692,7 +4692,7 @@
     },
     {
       "list_item": "Basa Thawed Freshwater Basa Fillets",
-      "last_scraped": "2026-05-29T00:19:13.492147+00:00",
+      "last_scraped": "2026-05-29T01:03:06.077234+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -4740,7 +4740,7 @@
           "price": 10.0
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.8,
       "per_100_coles": 1.33,
@@ -4749,7 +4749,7 @@
     },
     {
       "list_item": "Beechworth 100% Pure Australian Honey Jar",
-      "last_scraped": "2026-05-29T00:19:13.660297+00:00",
+      "last_scraped": "2026-05-29T01:03:09.008621+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -4805,7 +4805,7 @@
           "price": 8.5
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.7,
       "per_100_coles": 1.7,
@@ -4813,7 +4813,7 @@
     },
     {
       "list_item": "Ben & Jerry's Ice Cream Tub Chocolate Chip Cookie Dough",
-      "last_scraped": "2026-05-29T00:19:17.823312+00:00",
+      "last_scraped": "2026-05-29T01:03:09.364138+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -4859,7 +4859,7 @@
       "alternatives": [],
       "ww_price_history": [],
       "coles_price_history": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.58,
       "per_100_coles": 3.17,
@@ -4867,7 +4867,7 @@
     },
     {
       "list_item": "Bulla Creme Fraiche Creme Fraiche",
-      "last_scraped": "2026-05-29T00:19:17.839424+00:00",
+      "last_scraped": "2026-05-29T01:03:11.989121+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -4905,7 +4905,7 @@
       "alternatives": [],
       "ww_price_history": [],
       "coles_price_history": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.7,
       "per_100_coles": 2.7,
@@ -11638,7 +11638,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 50,
+    "done": 55,
     "total": 157
   },
   "pending_validation": [
@@ -12776,6 +12776,51 @@
       "coles_price": 5.0,
       "coles_url": "https://www.coles.com.au/product/glad-aromatics-kitchen-tidy-bags-sweet-citrus-large-20-pack-1332458",
       "coles_prev_price": 5.0,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Balconi Mix Max Cake Cocoa 350g",
+      "ww_price": 7.7,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/88602/balconi-mix-max-cake-cocoa-350g",
+      "ww_prev_price": 7.7,
+      "ww_suspicious": false,
+      "coles_price": 5.8,
+      "coles_url": "https://www.coles.com.au/product/balconi-mix-max-cocoa-cakes-10-pack-350g-5088122",
+      "coles_prev_price": 5.8,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Ben & Jerry's Ice Cream Tub Chocolate Chip Cookie Dough",
+      "ww_price": 7.25,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/911420/ben-jerry-s-dairy-free-chocolate-chip-cookie-dough-tub",
+      "ww_prev_price": 7.25,
+      "ww_suspicious": true,
+      "coles_price": 14.5,
+      "coles_url": "https://www.coles.com.au/product/ben-and-jerry's-chocolate-chip-cookie-dough-ice-cream-tub-458ml-7806125",
+      "coles_prev_price": 14.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Bulla Creme Fraiche Creme Fraiche",
+      "ww_price": 5.4,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/374553/bulla-creme-fraiche-creme-fraiche",
+      "ww_prev_price": 5.4,
+      "ww_suspicious": true,
+      "coles_price": 5.4,
+      "coles_url": "https://www.coles.com.au/product/bulla-creme-fraiche-200g-8453381",
+      "coles_prev_price": 5.4,
       "coles_suspicious": true,
       "flagged_date": "2026-05-29",
       "reason": [
