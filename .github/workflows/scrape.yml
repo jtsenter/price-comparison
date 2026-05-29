@@ -57,6 +57,8 @@ jobs:
         run: '"%PYTHON%" -m playwright install chromium chromium-headless-shell'
 
       - name: Run scraper
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           "%PYTHON%" scripts/scraper.py "${{ github.event.inputs.trigger || 'scheduled' }}" "${{ github.event.inputs.item || '' }}" "${{ github.event.inputs.ww_url || '' }}" "${{ github.event.inputs.coles_url || '' }}"
 
