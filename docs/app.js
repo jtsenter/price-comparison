@@ -300,6 +300,7 @@ let _activePriority = 'all';
 let _showHotOnly = false;
 let _storeFilter = 'all';
 let _showPricesOnly = false;
+let _searchQuery = '';
 let _viewMode = localStorage.getItem('pw_view_mode') || 'table'; // 'table' | 'card'
 
 // ── Bulk selection ────────────────────────────────────────────────────────────
@@ -1080,6 +1081,28 @@ function openPriceHistoryModal(item) {
 
 // ── Priority filter ──────────────────────────────────────────────────────────
 
+function initSearch() {
+  const input = $('searchInput');
+  const clear = $('searchClear');
+  const wrap  = $('searchWrap');
+  if (!input) return;
+  input.addEventListener('input', () => {
+    _searchQuery = input.value.trim();
+    if (clear) clear.style.display = _searchQuery ? 'block' : 'none';
+    if (_lastData) renderPage(_lastData);
+  });
+  if (clear) {
+    clear.addEventListener('click', () => {
+      _searchQuery = '';
+      input.value = '';
+      clear.style.display = 'none';
+      if (_lastData) renderPage(_lastData);
+    });
+  }
+  // Show the search bar (hidden until data loads, revealed in renderPage)
+  if (wrap) wrap._ready = true;
+}
+
 function initPriorityFilter() {
   const container = $('priorityFilter');
   if (!container) return;
@@ -1744,6 +1767,16 @@ function sortItems(items) {
     });
   }
 
+  // Search query filter
+  if (_searchQuery) {
+    const q = _searchQuery.toLowerCase();
+    const ovr = loadOverrides();
+    filtered = filtered.filter(i => {
+      const name = (ovr[i.list_item]?.displayName || i.list_item).toLowerCase();
+      return name.includes(q);
+    });
+  }
+
   function getSortVal(col, item) {
     switch (col) {
       case 'name':     return item.list_item.toLowerCase();
@@ -2237,6 +2270,8 @@ function renderPage(data) {
   const hotCount = (data.items || []).filter(i => !isUiArchived(i) && isHotDeal(i, _renderExclusions)).length;
   $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>${hotCount > 0 ? `<a href="hot-deals.html" class="hot-deals-link">🔥 ${hotCount} deal${hotCount !== 1 ? 's' : ''}</a>` : ''}`;
   $('banner').style.display = 'block';
+  const _sw = $('searchWrap');
+  if (_sw) _sw.style.display = '';
 
   _lastData = data;
 
@@ -3160,6 +3195,7 @@ async function boot() {
   initTooltip();
   initStickyHeader();
   initUploadModal();
+  initSearch();
   initPriorityFilter();
   initBulkBar();
   initColumnChooser();

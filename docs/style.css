@@ -1492,6 +1492,38 @@ td.priority-cell { text-align: center; }
   .price-bar-outer { display: none; }
 }
 
+/* ── Search bar ───────────────────────────────────────────────── */
+.search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0 0 8px;
+}
+#searchInput {
+  width: 100%;
+  padding: 8px 32px 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 14px;
+  background: var(--card);
+  color: var(--text);
+  outline: none;
+  box-sizing: border-box;
+}
+#searchInput:focus { border-color: var(--accent); }
+.search-clear {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  color: var(--text-soft);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  line-height: 1;
+}
+.search-clear:hover { color: var(--text); }
+
 /* ── Mobile card layout (≤640px) ─────────────────────────────── */
 
 /* Hidden by default on all sizes; JS sets display:flex inside renderMobileCards */
@@ -1505,7 +1537,16 @@ td.priority-cell { text-align: center; }
   /* Hide desktop-only controls */
   .col-chooser-wrap, .view-toggle-btn, .prices-only-btn { display: none !important; }
 
+  /* ── Search bar ─────────────────────────────────────────────── */
+  .search-wrap {
+    margin: 0 12px 8px;
+    width: calc(100% - 24px);
+    box-sizing: border-box;
+  }
+
   /* ── Banner: full-width hero stats ──────────────────────────── */
+  .store-cards  { align-items: stretch; }
+  .store-divider { width: 100%; }
   .comparison-banner {
     border-radius: 0;
     border-left: none;
@@ -1527,8 +1568,20 @@ td.priority-cell { text-align: center; }
   .store-divider     { padding: 10px 20px; justify-content: space-between; border-bottom: 1px solid var(--border); }
   .saving-chip       { font-size: 24px; padding: 6px 18px; }
 
+  /* ── Mobile cards container ─────────────────────────────────── */
+  #mobileCards {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    overflow-x: hidden;
+    padding-bottom: 80px;
+    box-sizing: border-box;
+  }
+
   /* ── Item cards ─────────────────────────────────────────────── */
   .mobile-card {
+    width: 100%;
+    box-sizing: border-box;
     background: #fff;
     border-radius: 12px;
     padding: 12px;
