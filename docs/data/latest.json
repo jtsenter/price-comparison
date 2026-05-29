@@ -1,10 +1,10 @@
 {
-  "last_updated": "2026-05-29T01:00:23.847118+00:00",
+  "last_updated": "2026-05-29T01:00:42.179208+00:00",
   "trigger": "manual",
   "items": [
     {
       "list_item": "Baby Mum-Mum Snack Vegetable Rice Rusk",
-      "last_scraped": "2026-05-29T00:16:33.305486+00:00",
+      "last_scraped": "2026-05-29T01:00:28.511120+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -77,7 +77,7 @@
     },
     {
       "list_item": "Blueberries Punnet",
-      "last_scraped": "2026-05-29T00:16:33.582158+00:00",
+      "last_scraped": "2026-05-29T01:00:29.608455+00:00",
       "trip_count": 21,
       "price_history": [
         {
@@ -184,7 +184,35 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 6.12,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Blueberries In Syrup | 415g",
+          "price": 3.8,
+          "unit_price": 3.8,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-blueberries-in-syrup-415g-4164961",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4164961.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "St Dalfour Wild Blueberry Spread | 284g",
+          "price": 6.2,
+          "unit_price": 6.2,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/st-dalfour-wild-blueberry-spread-284g-5704420",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5704420.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Yoplait Berry Punnet Yoghurt Strawberry Mixed Berries 6x160g | 960g",
+          "price": 7.0,
+          "unit_price": 7.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/yoplait-berry-punnet-yoghurt-strawberry-mixed-berries-6x160g-960g-3619567",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3619567.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -197,7 +225,7 @@
           "price": 7.0
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 5.6,
       "per_100_coles": 5.6,
@@ -206,7 +234,7 @@
     },
     {
       "list_item": "Cadbury Dairy Milk Large Chocolate Block",
-      "last_scraped": "2026-05-29T00:16:36.230330+00:00",
+      "last_scraped": "2026-05-29T01:00:32.115201+00:00",
       "trip_count": 11,
       "price_history": [
         {
@@ -322,7 +350,7 @@
     },
     {
       "list_item": "Cadbury Dairy Milk Top Deck Chocolate Block",
-      "last_scraped": "2026-05-29T00:16:37.017501+00:00",
+      "last_scraped": "2026-05-29T01:00:32.686617+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -403,6 +431,85 @@
       "size_warning": false,
       "per_100_ww": 2.67,
       "per_100_coles": 4.44,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Capsicum Yellow",
+      "last_scraped": "2026-05-29T01:00:42.177889+00:00",
+      "trip_count": 10,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 2.73
+        },
+        {
+          "date": "2024-12-09",
+          "price": 2.73
+        },
+        {
+          "date": "2024-12-19",
+          "price": 2.48
+        },
+        {
+          "date": "2025-06-21",
+          "price": 1.73
+        },
+        {
+          "date": "2026-02-03",
+          "price": 2.48
+        },
+        {
+          "date": "2026-02-07",
+          "price": 2.48
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.48
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.48
+        },
+        {
+          "date": "2026-04-13",
+          "price": 2.98
+        },
+        {
+          "date": "2026-04-21",
+          "price": 3.48
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Capsicum Yellow",
+        "price": 1.98,
+        "unit_price": 1.98,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/135324/capsicum-yellow",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135324.jpg"
+      },
+      "coles": {
+        "name": "Yellow Capsicum",
+        "price": 1.29,
+        "unit_price": 5.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-yellow-capsicum-approx.-220g-7215355",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7215355.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.69,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.98
+        }
+      ],
+      "coles_price_history": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 0.59,
       "per_100_unit": "100g"
     },
     {
@@ -567,85 +674,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.49,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Capsicum Yellow",
-      "last_scraped": "2026-05-29T00:16:45.509692+00:00",
-      "trip_count": 10,
-      "price_history": [
-        {
-          "date": "2024-12-02",
-          "price": 2.73
-        },
-        {
-          "date": "2024-12-09",
-          "price": 2.73
-        },
-        {
-          "date": "2024-12-19",
-          "price": 2.48
-        },
-        {
-          "date": "2025-06-21",
-          "price": 1.73
-        },
-        {
-          "date": "2026-02-03",
-          "price": 2.48
-        },
-        {
-          "date": "2026-02-07",
-          "price": 2.48
-        },
-        {
-          "date": "2026-03-10",
-          "price": 2.48
-        },
-        {
-          "date": "2026-04-02",
-          "price": 2.48
-        },
-        {
-          "date": "2026-04-13",
-          "price": 2.98
-        },
-        {
-          "date": "2026-04-21",
-          "price": 3.48
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Capsicum Yellow",
-        "price": 1.98,
-        "unit_price": 1.98,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/135324/capsicum-yellow",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135324.jpg"
-      },
-      "coles": {
-        "name": "Yellow Capsicum",
-        "price": 1.29,
-        "unit_price": 5.9,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-yellow-capsicum-approx.-220g-7215355",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7215355.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.69,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.98
-        }
-      ],
-      "coles_price_history": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 0.59,
       "per_100_unit": "100g"
     },
     {
@@ -11907,7 +11935,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 0,
+    "done": 5,
     "total": 157
   },
   "pending_validation": [
@@ -12745,6 +12773,36 @@
       "coles_price": 1.7,
       "coles_url": "https://www.coles.com.au/product/coles-simply-tuna-in-springwater-185g-3544130",
       "coles_prev_price": 1.7,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Cadbury Dairy Milk Top Deck Chocolate Block",
+      "ww_price": 4.8,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/814624/cadbury-dairy-milk-top-deck-chocolate-block",
+      "ww_prev_price": 4.8,
+      "ww_suspicious": true,
+      "coles_price": 8.0,
+      "coles_url": "https://www.coles.com.au/product/cadbury-dairy-milk-top-deck-chocolate-block-180g-2351607",
+      "coles_prev_price": 8.0,
+      "coles_suspicious": false,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Capsicum Yellow",
+      "ww_price": 1.98,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/135324/capsicum-yellow",
+      "ww_prev_price": 1.98,
+      "ww_suspicious": false,
+      "coles_price": 1.29,
+      "coles_url": "https://www.coles.com.au/product/coles-yellow-capsicum-approx.-220g-7215355",
+      "coles_prev_price": 1.29,
       "coles_suspicious": true,
       "flagged_date": "2026-05-29",
       "reason": [
