@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T22:12:17.802944+00:00",
+  "last_updated": "2026-05-29T22:12:34.134687+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11105,9 +11105,18 @@
     },
     {
       "list_item": "Kinder Chocolate Sharepack",
-      "last_scraped": "2026-05-29T21:35:23.291227+00:00",
+      "last_scraped": "2026-05-29T22:12:21.358763+00:00",
       "trip_count": 2,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 7.0
+        },
+        {
+          "date": "2025-05-04",
+          "price": 7.5
+        }
+      ],
       "category": "Sweets",
       "woolworths": {
         "name": "Kinder Chocolate Treats",
@@ -11140,7 +11149,7 @@
           "price": 7.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.88,
       "per_100_coles": 3.75,
@@ -11148,9 +11157,18 @@
     },
     {
       "list_item": "Lotus Biscoff Spread",
-      "last_scraped": "2026-05-29T21:35:26.897670+00:00",
+      "last_scraped": "2026-05-29T22:12:26.230173+00:00",
       "trip_count": 2,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 6.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 7.5
+        }
+      ],
       "category": "Pantry",
       "woolworths": {
         "name": "Lotus Biscoff Spread",
@@ -11183,17 +11201,89 @@
           "price": 7.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.5,
       "per_100_coles": 1.88,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Macro Grass Fed Australian Stir-Fry Beef",
-      "last_scraped": "2026-05-29T21:35:30.471178+00:00",
+      "list_item": "KitKat Gold Crush Block",
+      "last_scraped": "2026-05-29T22:12:29.608673+00:00",
       "trip_count": 2,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 4.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 5.0
+        }
+      ],
+      "category": "Sweets",
+      "woolworths": {
+        "name": "KitKat Milkybar White Chocolate Block",
+        "price": 7.5,
+        "unit_price": 4.69,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/273964/kitkat-milkybar-white-chocolate-block",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/273964.jpg"
+      },
+      "coles": {
+        "name": "Milkybar White Choc Block",
+        "price": 5.0,
+        "unit_price": 3.13,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/kitkat-milkybar-white-choc-block-160g-6339283",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6339283.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 2.5,
+      "alternatives": [
+        {
+          "name": "Milkybar White Choc Block",
+          "price": 5.0,
+          "unit_price": 3.13,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/kitkat-milkybar-white-choc-block-160g-6339283",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6339283.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 7.5
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 4.69,
+      "per_100_coles": 3.13,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Macro Grass Fed Australian Stir-Fry Beef",
+      "last_scraped": "2026-05-29T22:12:33.681321+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-05-22",
+          "price": 10.25
+        },
+        {
+          "date": "2025-06-13",
+          "price": 13.0
+        }
+      ],
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Macro Grass Fed Australian Stir-Fry Beef",
@@ -11205,8 +11295,8 @@
       },
       "coles": {
         "name": "Coles Graze Grassfed Beef Stir Fry | 500g",
-        "price": 13,
-        "unit_price": 13,
+        "price": 13.0,
+        "unit_price": 13.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-graze-grassfed-beef-stir-fry-500g-2023765",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2023765.jpg",
@@ -11214,7 +11304,35 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 6.5,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Drovers Choice Beef Stir Fry | 500g",
+          "price": 11.5,
+          "unit_price": 11.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/drovers-choice-beef-stir-fry-500g-1093073",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1093073.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Graze Grass Fed No Added Hormone Beef Mince | 500g",
+          "price": 12.5,
+          "unit_price": 12.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-graze-grass-fed-no-added-hormone-beef-mince-500g-2820606",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2820606.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Graze Grassfed Beef Stir Fry | 500g",
+          "price": 13.0,
+          "unit_price": 13.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-graze-grassfed-beef-stir-fry-500g-2023765",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2023765.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -11227,7 +11345,7 @@
           "price": 13
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.6,
       "per_100_coles": 2.6,
@@ -11236,9 +11354,18 @@
     },
     {
       "list_item": "Maltesers Milk Chocolate Party Gift Box",
-      "last_scraped": "2026-05-29T21:35:33.790408+00:00",
+      "last_scraped": "2026-05-29T22:12:34.122968+00:00",
       "trip_count": 2,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2026-03-02",
+          "price": 7.75
+        },
+        {
+          "date": "2026-04-02",
+          "price": 7.75
+        }
+      ],
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Maltesers Milk Chocolate Party Gift Box",
@@ -11259,7 +11386,17 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 3.25,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Maltesers Milk Chocolate Party Gift Box | 400g",
+          "price": 7.75,
+          "unit_price": 1.94,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/maltesers-milk-chocolate-party-gift-box-400g-3609268",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3609268.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -11272,54 +11409,10 @@
           "price": 7.75
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.75,
       "per_100_coles": 1.94,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "KitKat Gold Crush Block",
-      "last_scraped": "2026-05-29T21:35:34.618329+00:00",
-      "trip_count": 2,
-      "price_history": [],
-      "category": "Sweets",
-      "woolworths": {
-        "name": "KitKat Milkybar White Chocolate Block",
-        "price": 7.5,
-        "unit_price": 4.69,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/273964/kitkat-milkybar-white-chocolate-block",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/273964.jpg"
-      },
-      "coles": {
-        "name": "Milkybar White Choc Block",
-        "price": 5,
-        "unit_price": 3.13,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/kitkat-milkybar-white-choc-block-160g-6339283",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6339283.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 2.5,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 7.5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 4.69,
-      "per_100_coles": 3.13,
       "per_100_unit": "100g"
     },
     {
@@ -12134,7 +12227,7 @@
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 135,
+    "done": 140,
     "total": 158
   },
   "pending_validation": [
