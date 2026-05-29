@@ -958,13 +958,48 @@ function openPriceHistoryModal(item) {
 
   const excl = loadExclusions();
   const excludedPrices = new Set((excl[item.list_item] || []).map(p => Number(p).toFixed(2)));
-  const history = item.price_history || [];
+  const history  = item.price_history       || [];
+  const wwHist   = item.ww_price_history    || [];
+  const coHist   = item.coles_price_history || [];
 
   const listEl = $('priceHistoryList');
   listEl.innerHTML = '';
 
+  // Helper: render a read-only row (no Exclude / Different item buttons)
+  const addReadOnlyRow = (entry) => {
+    const row = document.createElement('div');
+    row.className = 'price-history-row';
+    row.innerHTML = `
+      <span class="price-history-date">${entry.date || 'Unknown date'}</span>
+      <span class="price-history-price">${fmt(entry.price)}</span>`;
+    listEl.appendChild(row);
+  };
+
+  const addSection = (label, cls) => {
+    const hdr = document.createElement('div');
+    hdr.className = `price-history-section${cls ? ' ' + cls : ''}`;
+    hdr.textContent = label;
+    listEl.appendChild(hdr);
+  };
+
+  const addEmpty = (msg) => listEl.insertAdjacentHTML('beforeend',
+    `<div style="padding:5px 14px 8px;font-size:12px;color:var(--text-soft);">${msg}</div>`);
+
+  // ── WW scrape history (read-only) ────────────────────────────
+  addSection('WW Price History', 'ww');
+  if (wwHist.length) wwHist.forEach(addReadOnlyRow);
+  else addEmpty('No scrape history yet');
+
+  // ── Coles scrape history (read-only) ─────────────────────────
+  addSection('Coles Price History', 'coles');
+  if (coHist.length) coHist.forEach(addReadOnlyRow);
+  else addEmpty('No scrape history yet');
+
+  // ── Combined history from Excel (Exclude / Different item) ────
+  addSection('Combined History (Excel)', '');
+
   if (!history.length) {
-    listEl.innerHTML = '<div style="padding:16px;color:var(--text-soft);font-size:13px;">No price history available.</div>';
+    listEl.innerHTML += '<div style="padding:16px;color:var(--text-soft);font-size:13px;">No price history available.</div>';
   } else {
     history.forEach((entry) => {
       const key = Number(entry.price).toFixed(2);

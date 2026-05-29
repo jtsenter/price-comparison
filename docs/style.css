@@ -1109,6 +1109,20 @@ td.priority-cell { text-align: center; }
   vertical-align: middle;
 }
 
+/* ── Price history section headers (WW / Coles / Excel) ─────── */
+.price-history-section {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 8px 14px 4px;
+  border-top: 1px solid var(--border);
+  color: var(--text-soft);
+}
+.price-history-section:first-child { border-top: none; }
+.price-history-section.ww    { color: var(--ww); }
+.price-history-section.coles { color: var(--coles); }
+
 /* ── Price history "different item" button ───────────────────── */
 .price-diff-btn {
   font-size: 11px;
