@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T01:03:41.360408+00:00",
+  "last_updated": "2026-05-29T01:03:56.854582+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5758,7 +5758,7 @@
     },
     {
       "list_item": "Kiwi Fruit Green",
-      "last_scraped": "2026-05-29T00:19:58.501900+00:00",
+      "last_scraped": "2026-05-29T01:03:43.750268+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5814,7 +5814,7 @@
           "price": 1.0
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -5822,7 +5822,7 @@
     },
     {
       "list_item": "Macro Organic Pasta Sauce Chunky Bolognese",
-      "last_scraped": "2026-05-29T00:20:06.117258+00:00",
+      "last_scraped": "2026-05-29T01:03:44.633859+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -5858,17 +5858,7 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.5,
-      "alternatives": [
-        {
-          "name": "Coles Organic Bolognese Pasta Sauce | 500g",
-          "price": 2.0,
-          "unit_price": 0.4,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-organic-bolognese-pasta-sauce-500g-3664834",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3664834.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -5884,7 +5874,7 @@
     },
     {
       "list_item": "Mainland Extra Tasty Cheese Block",
-      "last_scraped": "2026-05-29T00:20:12.749819+00:00",
+      "last_scraped": "2026-05-29T01:03:53.545241+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -5934,7 +5924,7 @@
       "alternatives": [],
       "ww_price_history": [],
       "coles_price_history": [],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.36,
       "per_100_coles": 2.36,
@@ -5942,7 +5932,7 @@
     },
     {
       "list_item": "McKenzie's Dried Veg Pearl Barley",
-      "last_scraped": "2026-05-29T00:20:16.778391+00:00",
+      "last_scraped": "2026-05-29T01:03:54.070742+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -5982,17 +5972,7 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.3,
-      "alternatives": [
-        {
-          "name": "Barley Pearl",
-          "price": 1.6,
-          "unit_price": 3.2,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/mckenzie's-barley-pearl-500g-130039",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/130039.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -6005,7 +5985,7 @@
           "price": 1.6
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.38,
       "per_100_coles": 0.32,
@@ -6013,7 +5993,7 @@
     },
     {
       "list_item": "McKenzie's Green Lentil Whole",
-      "last_scraped": "2026-05-29T00:20:17.345318+00:00",
+      "last_scraped": "2026-05-29T01:03:56.849444+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -6068,7 +6048,7 @@
         }
       ],
       "coles_price_history": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.48,
       "per_100_coles": 0.61,
@@ -11496,7 +11476,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 70,
+    "done": 75,
     "total": 157
   },
   "pending_validation": [
@@ -12799,6 +12779,51 @@
       "coles_price": 6.0,
       "coles_url": "https://www.coles.com.au/product/coles-organic-pumpkin-kent-approx.-800g-3119043",
       "coles_prev_price": 6.0,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Macro Organic Pasta Sauce Chunky Bolognese",
+      "ww_price": 2.5,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/791172/macro-organic-pasta-sauce-chunky-bolognese",
+      "ww_prev_price": 2.5,
+      "ww_suspicious": false,
+      "coles_price": 2.0,
+      "coles_url": "https://www.coles.com.au/product/coles-organic-bolognese-pasta-sauce-500g-3664834",
+      "coles_prev_price": 2.0,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Mainland Extra Tasty Cheese Block",
+      "ww_price": 11.8,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/807870/mainland-extra-tasty-cheese-block",
+      "ww_prev_price": 11.8,
+      "ww_suspicious": true,
+      "coles_price": 11.8,
+      "coles_url": "https://www.coles.com.au/product/mainland-extra-tasty-cheddar-cheese-block-500g-3308421",
+      "coles_prev_price": 11.8,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "McKenzie's Green Lentil Whole",
+      "ww_price": 4.8,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/439264/mckenzie-s-green-lentil-whole",
+      "ww_prev_price": 4.8,
+      "ww_suspicious": false,
+      "coles_price": 2.3,
+      "coles_url": "https://www.coles.com.au/product/mckenzie's-whole-green-lentils-375g-130050",
+      "coles_prev_price": 2.3,
       "coles_suspicious": true,
       "flagged_date": "2026-05-29",
       "reason": [
