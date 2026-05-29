@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T23:08:24.581651+00:00",
+  "last_updated": "2026-05-29T23:08:43.944536+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4256,7 +4256,7 @@
     },
     {
       "list_item": "Woolworths Lean Beef Mince",
-      "last_scraped": "2026-05-29T22:07:14.809437+00:00",
+      "last_scraped": "2026-05-29T23:08:30.202330+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -4366,7 +4366,7 @@
     },
     {
       "list_item": "Woolworths Greek Style Yoghurt",
-      "last_scraped": "2026-05-29T22:07:15.300381+00:00",
+      "last_scraped": "2026-05-29T23:08:31.394240+00:00",
       "trip_count": 33,
       "price_history": [
         {
@@ -4542,7 +4542,7 @@
     },
     {
       "list_item": "Woolworths Red Watermelon Cut Quarter",
-      "last_scraped": "2026-05-29T22:07:20.112621+00:00",
+      "last_scraped": "2026-05-29T23:08:37.788726+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4647,7 +4647,7 @@
     },
     {
       "list_item": "Woolworths Onion Brown Bag",
-      "last_scraped": "2026-05-29T22:07:23.634305+00:00",
+      "last_scraped": "2026-05-29T23:08:42.452841+00:00",
       "trip_count": 14,
       "price_history": [
         {
@@ -4751,7 +4751,7 @@
     },
     {
       "list_item": "Woolworths Sour Cream",
-      "last_scraped": "2026-05-29T22:07:26.490615+00:00",
+      "last_scraped": "2026-05-29T23:08:43.938038+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -12676,7 +12676,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 40,
+    "done": 45,
     "total": 158
   },
   "pending_validation": [
@@ -14770,6 +14770,36 @@
       "coles_price": 4.2,
       "coles_url": "https://www.coles.com.au/product/coles-garlic-prepack-3-pack-8433238",
       "coles_prev_price": 4.2,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Lean Beef Mince",
+      "ww_price": 19.35,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/577862/woolworths-lean-beef-mince",
+      "ww_prev_price": 19.35,
+      "ww_suspicious": true,
+      "coles_price": 12.5,
+      "coles_url": "https://www.coles.com.au/product/el-amin's-beef-lean-mince-500g-6123116",
+      "coles_prev_price": 12.5,
+      "coles_suspicious": false,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "week_conflict"
+      ]
+    },
+    {
+      "item": "Woolworths Onion Brown Bag",
+      "ww_price": 3.6,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/144336/woolworths-onion-brown-bag",
+      "ww_prev_price": 3.6,
+      "ww_suspicious": false,
+      "coles_price": 4.0,
+      "coles_url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
+      "coles_prev_price": 4.0,
       "coles_suspicious": true,
       "flagged_date": "2026-05-30",
       "reason": [
