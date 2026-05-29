@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T21:33:23.610148+00:00",
+  "last_updated": "2026-05-29T21:33:31.324696+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6870,23 +6870,23 @@
     },
     {
       "list_item": "Old El Paso Fajita Spice Mix Mexican Style",
-      "last_scraped": "2026-05-29T01:04:07.140318+00:00",
+      "last_scraped": "2026-05-29T21:33:24.805804+00:00",
       "trip_count": 4,
       "price_history": [
         {
-          "date": "2024-11-20",
-          "price": 3
+          "date": "1970-01-01",
+          "price": 3.0
         },
         {
-          "date": "2025-04-14",
-          "price": 3
+          "date": "1970-01-01",
+          "price": 3.0
         },
         {
-          "date": "2025-07-10",
-          "price": 3
+          "date": "1970-01-01",
+          "price": 3.0
         },
         {
-          "date": "2026-03-10",
+          "date": "1970-01-01",
           "price": 2.7
         }
       ],
@@ -6909,7 +6909,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -6931,23 +6931,23 @@
     },
     {
       "list_item": "Parsnip Fresh",
-      "last_scraped": "2026-05-29T01:04:07.385045+00:00",
+      "last_scraped": "2026-05-29T21:33:26.931831+00:00",
       "trip_count": 4,
       "price_history": [
         {
-          "date": "2026-02-07",
+          "date": "1970-01-01",
           "price": 1.68
         },
         {
-          "date": "2026-02-11",
+          "date": "1970-01-01",
           "price": 1.68
         },
         {
-          "date": "2026-04-02",
+          "date": "1970-01-01",
           "price": 1.75
         },
         {
-          "date": "2026-05-06",
+          "date": "1970-01-01",
           "price": 1.75
         }
       ],
@@ -6995,19 +6995,19 @@
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Block",
-      "last_scraped": "2026-05-29T01:04:09.902944+00:00",
+      "last_scraped": "2026-05-29T21:33:27.935057+00:00",
       "trip_count": 3,
       "price_history": [
         {
-          "date": "2024-12-09",
+          "date": "1970-01-01",
           "price": 2.85
         },
         {
-          "date": "2025-03-17",
+          "date": "1970-01-01",
           "price": 4.5
         },
         {
-          "date": "2026-05-06",
+          "date": "1970-01-01",
           "price": 5.7
         }
       ],
@@ -7034,8 +7034,8 @@
       "alternatives": [
         {
           "name": "Philadelphia Original Cream Cheese Twin Block",
-          "price": 9,
-          "unit_price": 18,
+          "price": 9.0,
+          "unit_price": 18.0,
           "unit": "1KG",
           "url": "https://www.woolworths.com.au/shop/productdetails/72546/philadelphia-original-cream-cheese-twin-block",
           "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/072546.jpg",
@@ -7063,19 +7063,19 @@
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Spread Tub",
-      "last_scraped": "2026-05-29T01:04:10.829097+00:00",
+      "last_scraped": "2026-05-29T21:33:29.931265+00:00",
       "trip_count": 3,
       "price_history": [
         {
-          "date": "2025-02-28",
+          "date": "1970-01-01",
           "price": 4.5
         },
         {
-          "date": "2025-04-05",
+          "date": "1970-01-01",
           "price": 5.7
         },
         {
-          "date": "2026-04-21",
+          "date": "1970-01-01",
           "price": 5.7
         }
       ],
@@ -7121,19 +7121,19 @@
     },
     {
       "list_item": "Red Capsicum",
-      "last_scraped": "2026-05-29T01:04:12.606684+00:00",
+      "last_scraped": "2026-05-29T21:33:31.319930+00:00",
       "trip_count": 3,
       "price_history": [
         {
-          "date": "2025-03-27",
+          "date": "1970-01-01",
           "price": 2.23
         },
         {
-          "date": "2025-07-10",
+          "date": "1970-01-01",
           "price": 1.48
         },
         {
-          "date": "2026-02-23",
+          "date": "1970-01-01",
           "price": 2.23
         }
       ],
@@ -11462,7 +11462,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 80,
+    "done": 85,
     "total": 158
   },
   "pending_validation": [
@@ -12005,6 +12005,36 @@
       "coles_price": 4.8,
       "coles_url": "https://www.coles.com.au/product/mutti-tomato-passata-with-basil-700g-1809277",
       "coles_prev_price": 4.8,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Parsnip Fresh",
+      "ww_price": 1.75,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/144793/parsnip-fresh",
+      "ww_prev_price": 1.75,
+      "ww_suspicious": false,
+      "coles_price": 2.4,
+      "coles_url": "https://www.coles.com.au/product/coles-parsnips-loose-approx.-200g-5298748",
+      "coles_prev_price": 2.4,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Red Capsicum",
+      "ww_price": 1.98,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/135306/red-capsicum",
+      "ww_prev_price": 1.98,
+      "ww_suspicious": false,
+      "coles_price": 5.9,
+      "coles_url": "https://www.coles.com.au/product/coles-mini-capsicum-175g-7296299",
+      "coles_prev_price": 5.9,
       "coles_suspicious": true,
       "flagged_date": "2026-05-30",
       "reason": [
