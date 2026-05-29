@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T01:05:02.621755+00:00",
+  "last_updated": "2026-05-29T01:05:14.628381+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8128,7 +8128,7 @@
     },
     {
       "list_item": "Woolworths Extra Virgin Olive Oil Spray",
-      "last_scraped": "2026-05-29T00:22:02.400231+00:00",
+      "last_scraped": "2026-05-29T01:05:05.264419+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8168,17 +8168,7 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 5.7,
-      "alternatives": [
-        {
-          "name": "Extra Virgin Olive Oil",
-          "price": 9.0,
-          "unit_price": 1.8,
-          "unit": "100mL",
-          "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5449504.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -8186,7 +8176,7 @@
         }
       ],
       "coles_price_history": [],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.2,
       "per_100_coles": 1.8,
@@ -8194,7 +8184,7 @@
     },
     {
       "list_item": "Woolworths Mashing Potatoes Bag",
-      "last_scraped": "2026-05-29T00:22:07.585630+00:00",
+      "last_scraped": "2026-05-29T01:05:05.728792+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8236,7 +8226,7 @@
       "alternatives": [],
       "ww_price_history": [],
       "coles_price_history": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.5,
       "per_100_coles": 0.5,
@@ -8244,7 +8234,7 @@
     },
     {
       "list_item": "Woolworths Pesto Basil",
-      "last_scraped": "2026-05-29T00:22:12.338151+00:00",
+      "last_scraped": "2026-05-29T01:05:08.805943+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8296,10 +8286,131 @@
           "price": 1.95
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.03,
       "per_100_coles": 1.03,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths RSPCA Approved Chicken Drumsticks",
+      "last_scraped": "2026-05-29T01:05:11.782185+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-04-25",
+          "price": 4.8
+        },
+        {
+          "date": "2025-05-12",
+          "price": 4.8
+        },
+        {
+          "date": "2025-06-13",
+          "price": 4.3
+        },
+        {
+          "date": "2026-02-07",
+          "price": 5.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 4.3
+        },
+        {
+          "date": "2026-02-23",
+          "price": 5.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths RSPCA Approved Chicken Drumsticks",
+        "price": 4.3,
+        "unit_price": 4.3,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/23208/woolworths-rspca-approved-chicken-drumsticks",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/023208.jpg"
+      },
+      "coles": {
+        "name": "Coles RSPCA Approved Chicken Drumsticks | 2kg",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-drumsticks-2kg-2263260",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2263260.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.7,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4.3
+        }
+      ],
+      "coles_price_history": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.43,
+      "per_100_coles": 0.4,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In",
+      "last_scraped": "2026-05-29T01:05:14.617183+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-05-29",
+          "price": 7.15
+        },
+        {
+          "date": "2025-06-06",
+          "price": 7.15
+        },
+        {
+          "date": "2025-07-03",
+          "price": 7.15
+        },
+        {
+          "date": "2026-02-03",
+          "price": 7.15
+        },
+        {
+          "date": "2026-03-10",
+          "price": 7.51
+        },
+        {
+          "date": "2026-05-06",
+          "price": 7.51
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone In",
+        "price": 6.83,
+        "unit_price": 10.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/119370/woolworths-rspca-approved-chicken-thigh-skinless-cutlets-bone-in",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/119370.jpg"
+      },
+      "coles": {
+        "name": "Coles RSPCA Approved Chicken Thigh Cutlets | approx. 1.1kg",
+        "price": 11.0,
+        "unit_price": 11.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-thigh-cutlets-approx.-1.1kg-2268365",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2268365.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.17,
+      "alternatives": [],
+      "ww_price_history": [],
+      "coles_price_history": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 1.05,
+      "per_100_coles": 1.0,
       "per_100_unit": "100g"
     },
     {
@@ -8368,127 +8479,6 @@
       "size_warning": false,
       "per_100_ww": 0.63,
       "per_100_coles": 0.63,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths RSPCA Approved Chicken Drumsticks",
-      "last_scraped": "2026-05-29T00:22:17.644034+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2025-04-25",
-          "price": 4.8
-        },
-        {
-          "date": "2025-05-12",
-          "price": 4.8
-        },
-        {
-          "date": "2025-06-13",
-          "price": 4.3
-        },
-        {
-          "date": "2026-02-07",
-          "price": 5.0
-        },
-        {
-          "date": "2026-02-11",
-          "price": 4.3
-        },
-        {
-          "date": "2026-02-23",
-          "price": 5.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths RSPCA Approved Chicken Drumsticks",
-        "price": 4.3,
-        "unit_price": 4.3,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/23208/woolworths-rspca-approved-chicken-drumsticks",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/023208.jpg"
-      },
-      "coles": {
-        "name": "Coles RSPCA Approved Chicken Drumsticks | 2kg",
-        "price": 8.0,
-        "unit_price": 8.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-drumsticks-2kg-2263260",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2263260.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 3.7,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4.3
-        }
-      ],
-      "coles_price_history": [],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 0.43,
-      "per_100_coles": 0.4,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In",
-      "last_scraped": "2026-05-29T00:22:21.548116+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2025-05-29",
-          "price": 7.15
-        },
-        {
-          "date": "2025-06-06",
-          "price": 7.15
-        },
-        {
-          "date": "2025-07-03",
-          "price": 7.15
-        },
-        {
-          "date": "2026-02-03",
-          "price": 7.15
-        },
-        {
-          "date": "2026-03-10",
-          "price": 7.51
-        },
-        {
-          "date": "2026-05-06",
-          "price": 7.51
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone In",
-        "price": 6.83,
-        "unit_price": 10.5,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/119370/woolworths-rspca-approved-chicken-thigh-skinless-cutlets-bone-in",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/119370.jpg"
-      },
-      "coles": {
-        "name": "Coles RSPCA Approved Chicken Thigh Cutlets | approx. 1.1kg",
-        "price": 11.0,
-        "unit_price": 11.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-thigh-cutlets-approx.-1.1kg-2268365",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2268365.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 4.17,
-      "alternatives": [],
-      "ww_price_history": [],
-      "coles_price_history": [],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 1.05,
-      "per_100_coles": 1.0,
       "per_100_unit": "100g"
     },
     {
@@ -11191,7 +11181,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 110,
+    "done": 115,
     "total": 157
   },
   "pending_validation": [
@@ -12779,6 +12769,66 @@
       "coles_price": 9.0,
       "coles_url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
       "coles_prev_price": 9.0,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Extra Virgin Olive Oil Spray",
+      "ww_price": 3.3,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/260739/woolworths-extra-virgin-olive-oil-spray",
+      "ww_prev_price": 3.3,
+      "ww_suspicious": false,
+      "coles_price": 9.0,
+      "coles_url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
+      "coles_prev_price": 9.0,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Mashing Potatoes Bag",
+      "ww_price": 7.5,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/177574/woolworths-mashing-potatoes-bag",
+      "ww_prev_price": 7.5,
+      "ww_suspicious": true,
+      "coles_price": 7.5,
+      "coles_url": "https://www.coles.com.au/product/coles-growers-selection-mashing-potatoes-1.5kg-1632586",
+      "coles_prev_price": 7.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths RSPCA Approved Chicken Drumsticks",
+      "ww_price": 4.3,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/23208/woolworths-rspca-approved-chicken-drumsticks",
+      "ww_prev_price": 4.3,
+      "ww_suspicious": false,
+      "coles_price": 8.0,
+      "coles_url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-drumsticks-2kg-2263260",
+      "coles_prev_price": 8.0,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In",
+      "ww_price": 6.83,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/119370/woolworths-rspca-approved-chicken-thigh-skinless-cutlets-bone-in",
+      "ww_prev_price": 6.83,
+      "ww_suspicious": true,
+      "coles_price": 11.0,
+      "coles_url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-thigh-cutlets-approx.-1.1kg-2268365",
+      "coles_prev_price": 11.0,
       "coles_suspicious": true,
       "flagged_date": "2026-05-29",
       "reason": [
