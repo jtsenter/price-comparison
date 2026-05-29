@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T21:34:45.003468+00:00",
+  "last_updated": "2026-05-29T21:34:56.416812+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9462,19 +9462,19 @@
     },
     {
       "list_item": "Woolworths Tuna In Springwater",
-      "last_scraped": "2026-05-29T01:05:24.641729+00:00",
+      "last_scraped": "2026-05-29T21:34:48.464215+00:00",
       "trip_count": 3,
       "price_history": [
         {
-          "date": "2025-05-12",
+          "date": "1970-01-01",
           "price": 1.1
         },
         {
-          "date": "2026-04-02",
+          "date": "1970-01-01",
           "price": 1.1
         },
         {
-          "date": "2026-05-06",
+          "date": "1970-01-01",
           "price": 1.1
         }
       ],
@@ -9524,23 +9524,23 @@
     },
     {
       "list_item": "Woolworths Wholegrain Wrap 8Pk",
-      "last_scraped": "2026-05-29T01:05:26.413959+00:00",
+      "last_scraped": "2026-05-29T21:34:48.605063+00:00",
       "trip_count": 4,
       "price_history": [
         {
-          "date": "2025-05-04",
+          "date": "1970-01-01",
           "price": 2.4
         },
         {
-          "date": "2025-07-10",
+          "date": "1970-01-01",
           "price": 2.2
         },
         {
-          "date": "2026-03-10",
+          "date": "1970-01-01",
           "price": 2.2
         },
         {
-          "date": "2026-05-06",
+          "date": "1970-01-01",
           "price": 2.2
         }
       ],
@@ -9562,7 +9562,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3731716.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9584,23 +9584,23 @@
     },
     {
       "list_item": "Yumi's Eggplant Mediterranean Dip",
-      "last_scraped": "2026-05-29T01:05:28.246973+00:00",
+      "last_scraped": "2026-05-29T21:34:52.095132+00:00",
       "trip_count": 4,
       "price_history": [
         {
-          "date": "2025-06-21",
+          "date": "1970-01-01",
           "price": 4.5
         },
         {
-          "date": "2026-02-03",
-          "price": 5
+          "date": "1970-01-01",
+          "price": 5.0
         },
         {
-          "date": "2026-04-02",
-          "price": 5
+          "date": "1970-01-01",
+          "price": 5.0
         },
         {
-          "date": "2026-05-06",
+          "date": "1970-01-01",
           "price": 3.75
         }
       ],
@@ -9644,15 +9644,15 @@
     },
     {
       "list_item": "All Smiles Total Care Toothbrush Soft",
-      "last_scraped": "2026-05-29T01:05:29.193030+00:00",
+      "last_scraped": "2026-05-29T21:34:52.304684+00:00",
       "trip_count": 2,
       "price_history": [
         {
-          "date": "2025-02-02",
+          "date": "1970-01-01",
           "price": 5.3
         },
         {
-          "date": "2026-02-03",
+          "date": "1970-01-01",
           "price": 5.3
         }
       ],
@@ -9696,15 +9696,15 @@
     },
     {
       "list_item": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
-      "last_scraped": "2026-05-29T01:05:31.603021+00:00",
+      "last_scraped": "2026-05-29T21:34:56.409311+00:00",
       "trip_count": 2,
       "price_history": [
         {
-          "date": "2025-02-02",
+          "date": "1970-01-01",
           "price": 3.85
         },
         {
-          "date": "2025-06-06",
+          "date": "1970-01-01",
           "price": 3.85
         }
       ],
@@ -9727,7 +9727,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 1,
+      "saving_per_item": 1.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -11462,7 +11462,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 120,
+    "done": 125,
     "total": 158
   },
   "pending_validation": [
@@ -12335,6 +12335,21 @@
       "coles_price": 2.8,
       "coles_url": "https://www.coles.com.au/product/coles-rosemary-leaves-28g-8984220",
       "coles_prev_price": 2.8,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Tuna In Springwater",
+      "ww_price": 1.1,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/476700/woolworths-tuna-in-springwater",
+      "ww_prev_price": 1.1,
+      "ww_suspicious": false,
+      "coles_price": 1.7,
+      "coles_url": "https://www.coles.com.au/product/coles-simply-tuna-in-springwater-185g-3544130",
+      "coles_prev_price": 1.7,
       "coles_suspicious": true,
       "flagged_date": "2026-05-30",
       "reason": [
