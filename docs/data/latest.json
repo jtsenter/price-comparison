@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T01:04:40.296659+00:00",
+  "last_updated": "2026-05-29T01:04:49.204353+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7559,82 +7559,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Asparagus Green Bunch",
-      "last_scraped": "2026-05-29T00:21:35.311894+00:00",
-      "trip_count": 5,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 1.5
-        },
-        {
-          "date": "2024-12-02",
-          "price": 2.0
-        },
-        {
-          "date": "2025-02-02",
-          "price": 3.9
-        },
-        {
-          "date": "2025-03-11",
-          "price": 4.5
-        },
-        {
-          "date": "2025-03-27",
-          "price": 3.9
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Green Asparagus Bunch Green",
-        "price": 3.9,
-        "unit_price": 3.9,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/305235/woolworths-green-asparagus-bunch-green",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/305235.jpg"
-      },
-      "coles": {
-        "name": "Coles Asparagus Entertainer Large | 1 Bunch",
-        "price": 4.4,
-        "unit_price": 4.4,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-asparagus-entertainer-large-1-bunch-8809049",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8809049.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.5,
-      "alternatives": [
-        {
-          "name": "Coles Asparagus Spears | 425g",
-          "price": 3.0,
-          "unit_price": 3.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-asparagus-spears-425g-5841817",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5841817.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.9
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4.4
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths 18 Large Cage Free Eggs",
-      "last_scraped": "2026-05-29T00:21:35.398018+00:00",
+      "last_scraped": "2026-05-29T01:04:42.257643+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7686,15 +7612,79 @@
           "price": 8.4
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.93,
       "per_100_coles": 0.93,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Asparagus Green Bunch",
+      "last_scraped": "2026-05-29T01:04:43.233834+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 1.5
+        },
+        {
+          "date": "2024-12-02",
+          "price": 2.0
+        },
+        {
+          "date": "2025-02-02",
+          "price": 3.9
+        },
+        {
+          "date": "2025-03-11",
+          "price": 4.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.9
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Green Asparagus Bunch Green",
+        "price": 3.9,
+        "unit_price": 3.9,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/305235/woolworths-green-asparagus-bunch-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/305235.jpg"
+      },
+      "coles": {
+        "name": "Coles Asparagus Entertainer Large | 1 Bunch",
+        "price": 4.4,
+        "unit_price": 4.4,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-asparagus-entertainer-large-1-bunch-8809049",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8809049.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.5,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3.9
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4.4
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Australian Grown Carrots",
-      "last_scraped": "2026-05-29T00:21:40.657128+00:00",
+      "last_scraped": "2026-05-29T01:04:45.592674+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7746,7 +7736,7 @@
           "price": 1.8
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.17,
       "per_100_coles": 0.43,
@@ -7755,7 +7745,7 @@
     },
     {
       "list_item": "Woolworths Baby Corn Spears",
-      "last_scraped": "2026-05-29T00:21:41.710554+00:00",
+      "last_scraped": "2026-05-29T01:04:46.196404+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -7803,35 +7793,7 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.17,
-      "alternatives": [
-        {
-          "name": "Coles Corn Kernels | 420g",
-          "price": 1.05,
-          "unit_price": 1.05,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4774066.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Popping Corn Kernels | 400g",
-          "price": 1.8,
-          "unit_price": 1.8,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-popping-corn-kernels-400g-5374675",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5374675.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Corn Spears Young | 410g",
-          "price": 1.95,
-          "unit_price": 1.95,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-corn-spears-young-410g-8701042",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8701042.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -7839,7 +7801,7 @@
         }
       ],
       "coles_price_history": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.46,
       "per_100_coles": 0.48,
@@ -7848,7 +7810,7 @@
     },
     {
       "list_item": "Woolworths Capsicum Green",
-      "last_scraped": "2026-05-29T00:21:48.190569+00:00",
+      "last_scraped": "2026-05-29T01:04:49.198210+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7888,29 +7850,10 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.02,
-      "alternatives": [
-        {
-          "name": "Coles Organic Green Capsicum | approx. 200g",
-          "price": 1.7,
-          "unit_price": 1.7,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-organic-green-capsicum-approx.-200g-each-7238350",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7238350.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Capsicum Green Loose | approx. 220g",
-          "price": 1.96,
-          "unit_price": 1.96,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7214862.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [],
       "coles_price_history": [],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.89,
@@ -11304,7 +11247,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 100,
+    "done": 105,
     "total": 157
   },
   "pending_validation": [
@@ -12817,6 +12760,36 @@
       "coles_price": 6.4,
       "coles_url": "https://www.coles.com.au/product/coles-cage-free-eggs-12-pack-800g-5178804",
       "coles_prev_price": 6.4,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Baby Corn Spears",
+      "ww_price": 1.9,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/491829/woolworths-baby-corn-spears",
+      "ww_prev_price": 1.9,
+      "ww_suspicious": false,
+      "coles_price": 1.95,
+      "coles_url": "https://www.coles.com.au/product/coles-corn-spears-young-410g-8701042",
+      "coles_prev_price": 1.95,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Capsicum Green",
+      "ww_price": 1.98,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/135156/woolworths-capsicum-green",
+      "ww_prev_price": 1.98,
+      "ww_suspicious": true,
+      "coles_price": 1.96,
+      "coles_url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
+      "coles_prev_price": 1.96,
       "coles_suspicious": true,
       "flagged_date": "2026-05-29",
       "reason": [
