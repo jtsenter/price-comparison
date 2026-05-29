@@ -1585,15 +1585,19 @@ async function loadData() {
   } catch { return null; }
 }
 
-// Fetch live progress data from the scrape-progress branch via raw.githubusercontent.com.
-// This branch is updated by push_progress() during a scrape via the GitHub Contents API
-// and never triggers a Pages deployment, eliminating the deployment storm on origin/main.
-const _PROGRESS_RAW_URL = 'https://raw.githubusercontent.com/jtsenter/price-comparison/scrape-progress/docs/data/latest.json';
+// Fetch live progress data from the scrape-progress branch via the GitHub Contents API.
+// Authenticated request avoids CDN caching delays that affect raw.githubusercontent.com.
 async function loadProgressData() {
+  const s = loadSettings();
+  if (!s.user || !s.repo || !s.token) return null;
   try {
-    const res = await fetch(`${_PROGRESS_RAW_URL}?t=${Date.now()}`);
-    if (!res.ok) throw new Error('not found');
-    return await res.json();
+    const res = await fetch(
+      `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/latest.json?ref=scrape-progress&t=${Date.now()}`,
+      { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
+    );
+    if (!res.ok) return null;
+    const meta = await res.json();
+    return JSON.parse(atob(meta.content));
   } catch { return null; }
 }
 
