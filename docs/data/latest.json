@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T22:11:58.274454+00:00",
+  "last_updated": "2026-05-29T22:12:17.802944+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10858,9 +10858,18 @@
     },
     {
       "list_item": "Dettol Antibacterial Liquid Hand Wash Hand Soap Pump Aloe Vera",
-      "last_scraped": "2026-05-29T21:35:06.955099+00:00",
+      "last_scraped": "2026-05-29T22:12:04.004175+00:00",
       "trip_count": 2,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 3.85
+        },
+        {
+          "date": "2025-05-04",
+          "price": 2.8
+        }
+      ],
       "category": "Personal Care",
       "woolworths": {
         "name": "Dettol Antibacterial Liquid Hand Wash Soap Pump Aloe Vera",
@@ -10882,6 +10891,15 @@
       "saving_per_item": 1.7,
       "alternatives": [
         {
+          "name": "Dettol Antibacterial Liquid Hand Wash Aloe Vera And Vitamin E Refill | 950mL",
+          "price": 5.5,
+          "unit_price": 0.58,
+          "unit": "100mL",
+          "url": "https://www.coles.com.au/product/dettol-antibacterial-liquid-hand-wash-aloe-vera-and-vitamin-e-refill-950ml-1878848",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1878848.jpg",
+          "retailer": "coles"
+        },
+        {
           "name": "Dettol Antibacterial Liquid Hand Wash Pump Aloe Vera & Vitamin E",
           "price": 4.5,
           "unit_price": 0.9,
@@ -10889,6 +10907,15 @@
           "url": "https://www.woolworths.com.au/shop/productdetails/267236/dettol-antibacterial-liquid-hand-wash-pump-aloe-vera-vitamin-e",
           "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/267236.jpg",
           "retailer": "woolworths"
+        },
+        {
+          "name": "Dettol Kids Colour Foaming Hand Wash Aloe Vera | 250mL",
+          "price": 2.5,
+          "unit_price": 1.0,
+          "unit": "100mL",
+          "url": "https://www.coles.com.au/product/dettol-kids-colour-foaming-hand-wash-aloe-vera-250ml-8962793",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8962793.jpg",
+          "retailer": "coles"
         }
       ],
       "ww_price_history": [
@@ -10903,7 +10930,7 @@
           "price": 4.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.12,
       "per_100_coles": 0.9,
@@ -10911,9 +10938,18 @@
     },
     {
       "list_item": "Essentials Domestic Wipes Roll",
-      "last_scraped": "2026-05-29T21:35:10.848168+00:00",
+      "last_scraped": "2026-05-29T22:12:09.605379+00:00",
       "trip_count": 2,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 4.8
+        },
+        {
+          "date": "2025-04-14",
+          "price": 4.8
+        }
+      ],
       "category": "Bakery",
       "woolworths": {
         "name": "Essentials Domestic Wipes Roll",
@@ -10953,85 +10989,19 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Greek Style Yoghurt 2kg",
-      "last_scraped": "2026-05-29T21:35:15.366511+00:00",
-      "trip_count": 2,
-      "price_history": [],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Greek Style Yoghurt",
-        "price": 8.4,
-        "unit_price": 0.42,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/249085/woolworths-greek-style-yoghurt",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/249085.jpg"
-      },
-      "coles": null,
-      "cheaper_store": "woolworths",
-      "saving_per_item": null,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-30",
-          "price": 8.4
-        }
-      ],
-      "coles_price_history": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": 0.42,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Green Zucchini",
-      "last_scraped": "2026-05-29T21:35:19.482546+00:00",
-      "trip_count": 2,
-      "price_history": [],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Fresh Zucchini Green",
-        "price": 1.18,
-        "unit_price": 1.18,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/170225/fresh-zucchini-green",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/170225.jpg"
-      },
-      "coles": {
-        "name": "Coles Green Zucchini | approx. 200g",
-        "price": 0.78,
-        "unit_price": 0.78,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-green-zucchini-approx.-200g-4910506",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4910506.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.4,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.18
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 0.78
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 0.39,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Ecostore Dish Liquid Ultrasensitive",
-      "last_scraped": "2026-05-29T21:35:20.931796+00:00",
+      "last_scraped": "2026-05-29T22:12:11.838055+00:00",
       "trip_count": 2,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 3.35
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.8
+        }
+      ],
       "category": "Household",
       "woolworths": {
         "name": "Ecostore Dishwashing Liquid Lemon",
@@ -11064,11 +11034,74 @@
           "price": 9.2
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.92,
       "per_100_coles": 0.92,
       "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Green Zucchini",
+      "last_scraped": "2026-05-29T22:12:16.683637+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 0.78
+        },
+        {
+          "date": "2025-04-25",
+          "price": 1.18
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Fresh Zucchini Green",
+        "price": 1.18,
+        "unit_price": 1.18,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/170225/fresh-zucchini-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/170225.jpg"
+      },
+      "coles": {
+        "name": "Coles Green Zucchini | approx. 200g",
+        "price": 0.78,
+        "unit_price": 0.78,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-green-zucchini-approx.-200g-4910506",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4910506.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.4,
+      "alternatives": [
+        {
+          "name": "Coles Green Zucchini | approx. 200g",
+          "price": 0.78,
+          "unit_price": 0.78,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-green-zucchini-approx.-200g-4910506",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4910506.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.18
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 0.78
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 0.39,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Kinder Chocolate Sharepack",
@@ -12088,18 +12121,20 @@
       "_ww_price_factor": 0.227
     }
   ],
-  "not_found_items": [],
+  "not_found_items": [
+    "Greek Style Yoghurt 2kg"
+  ],
   "summary": {
     "total_woolworths": 771.5,
     "total_coles": 840.14,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
     "total_saving": 68.64,
-    "items_compared": 158,
-    "items_not_found": 0
+    "items_compared": 157,
+    "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 130,
+    "done": 135,
     "total": 158
   },
   "pending_validation": [
