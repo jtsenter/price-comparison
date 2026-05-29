@@ -906,20 +906,20 @@ tr:hover .item-refresh-btn { opacity: 1; pointer-events: auto; }
   margin-bottom: 8px;
 }
 .price-history-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 70px 70px auto;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
   padding: 9px 14px;
   border-bottom: 1px solid var(--border);
   font-size: 13px;
-  gap: 10px;
 }
 .price-history-row:last-child { border-bottom: none; }
 .price-history-row.excluded {
   opacity: 0.4;
   text-decoration: line-through;
 }
-.price-history-date { color: var(--text-soft); font-size: 12px; flex: 1; }
+.price-history-date { color: var(--text-soft); font-size: 12px; }
 .price-history-price { font-weight: 700; }
 .price-exclude-btn {
   background: none;
@@ -1114,15 +1114,12 @@ td.priority-cell { text-align: center; }
   display: flex;
   align-items: center;
   gap: 6px;
-  min-width: 60px;
-  flex-shrink: 0;
 }
 .price-history-actions-col {
   display: flex;
   align-items: center;
   gap: 6px;
-  flex-shrink: 0;
-  margin-left: auto;
+  justify-content: flex-end;
 }
 
 /* ── Price history "different item" button ───────────────────── */

@@ -958,7 +958,8 @@ async def _scrape_single_item(
         "list_item": item,
         "last_scraped": datetime.now(timezone.utc).isoformat(),
         "trip_count": history.get("trip_count", 0),
-        "price_history": history.get("price_history", []),
+        "price_history": [e for e in history.get("price_history", [])
+                          if e.get("date", "") not in ("", "1970-01-01", None)],
         "category": category,
         "woolworths": ww_match,
         "coles": coles_match,

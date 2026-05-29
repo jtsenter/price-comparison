@@ -2987,7 +2987,7 @@ async function writeNewItemToExcel(itemName) {
   const bytes = new Uint8Array(binaryStr.length);
   for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
 
-  const wb = XLSX.read(bytes, { type: 'array' });
+  const wb = XLSX.read(bytes, { type: 'array', cellDates: true });
   const sheetName = wb.SheetNames.includes('Data') ? 'Data' : wb.SheetNames[0];
   const ws = wb.Sheets[sheetName];
   const data = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
@@ -3009,7 +3009,7 @@ async function writeNewItemToExcel(itemName) {
     data.push(row);
   }
   wb.Sheets[sheetName] = XLSX.utils.aoa_to_sheet(data);
-  const newContent = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
+  const newContent = XLSX.write(wb, { type: 'base64', bookType: 'xlsx', cellDates: true });
 
   // PUT — retry once on 409 with freshly fetched SHA
   const doPut = async (currentSha) => fetch(
@@ -3055,7 +3055,7 @@ async function addItemsToShoppingList(newItems) {
     const bytes = new Uint8Array(binaryStr.length);
     for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
 
-    const wb = XLSX.read(bytes, { type: 'array' });
+    const wb = XLSX.read(bytes, { type: 'array', cellDates: true });
     const sheetName = wb.SheetNames.includes('Data') ? 'Data' : wb.SheetNames[0];
     const ws = wb.Sheets[sheetName];
     const data = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
@@ -3084,7 +3084,7 @@ async function addItemsToShoppingList(newItems) {
 
     const newWs = XLSX.utils.aoa_to_sheet(data);
     wb.Sheets[sheetName] = newWs;
-    const newContent = XLSX.write(wb, { type: 'base64', bookType: 'xlsx' });
+    const newContent = XLSX.write(wb, { type: 'base64', bookType: 'xlsx', cellDates: true });
 
     // Write back to GitHub
     const putRes = await fetch(

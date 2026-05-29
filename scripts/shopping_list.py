@@ -53,7 +53,26 @@ def get_purchase_history(excel_path: str, min_trips: int = 2) -> dict:
         raise RuntimeError(f"Could not read shopping list ({excel_path}): {e}") from e
     df["Item"] = df["Item"].apply(clean_name)
     df = df[df["Item"] != ""]
-    df["Date"] = pd.to_datetime(df["Date"])
+
+    # SheetJS round-trips strip Excel date cell types, leaving plain floats
+    # (e.g. 46020.0 for a 2026 date).  pd.to_datetime interprets those as
+    # nanoseconds, yielding 1970-01-01.  Convert via the Excel epoch instead.
+    _EXCEL_EPOCH = pd.Timestamp("1899-12-30")
+
+    def _parse_date(val):
+        if pd.isna(val):
+            return pd.NaT
+        if isinstance(val, pd.Timestamp):
+            return val
+        try:
+            n = float(val)
+            if 1.0 <= n <= 73050.0:           # Excel serials: 1900-01-01 … 2099-12-31
+                return _EXCEL_EPOCH + pd.Timedelta(days=n)
+        except (ValueError, TypeError):
+            pass
+        return pd.to_datetime(val, errors="coerce")
+
+    df["Date"] = df["Date"].apply(_parse_date)
 
     trip_counts = df.groupby("Item")["Date"].nunique()
     frequent = trip_counts[trip_counts >= min_trips].index
