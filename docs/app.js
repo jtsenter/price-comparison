@@ -1008,7 +1008,7 @@ function openPriceHistoryModal(item) {
     const coHtml = entry.coles != null
       ? `<span class="price-history-price" style="color:var(--coles)">${fmt(entry.coles)}</span>`
       : `<span style="color:var(--text-soft)">—</span>`;
-    const btnHtml = entry.source === 'excel' && wwKey != null ? `
+    const btnHtml = wwKey != null ? `
       <button class="price-exclude-btn" data-price="${wwKey}">${isExcluded ? 'Include' : 'Exclude'}</button>
       <button class="price-diff-btn"    data-price="${wwKey}">Different item</button>` : '';
 
@@ -1017,7 +1017,7 @@ function openPriceHistoryModal(item) {
       <span class="price-history-store-col">${wwHtml}${btnHtml}</span>
       <span class="price-history-store-col">${coHtml}</span>`;
 
-    if (entry.source === 'excel' && wwKey != null) {
+    if (wwKey != null) {
       row.querySelector('.price-exclude-btn').addEventListener('click', () => {
         const ex = loadExclusions();
         const list = ex[item.list_item] || [];
