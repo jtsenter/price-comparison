@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T23:07:58.561900+00:00",
+  "last_updated": "2026-05-29T23:08:24.581651+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3837,7 +3837,7 @@
     },
     {
       "list_item": "Woolworths Dill Fresh Herb",
-      "last_scraped": "2026-05-29T22:06:50.490547+00:00",
+      "last_scraped": "2026-05-29T23:08:00.011294+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -3909,7 +3909,7 @@
     },
     {
       "list_item": "Woolworths Extra Virgin Spanish Olive Oil",
-      "last_scraped": "2026-05-29T22:06:59.659803+00:00",
+      "last_scraped": "2026-05-29T23:08:09.465723+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -3981,7 +3981,7 @@
     },
     {
       "list_item": "Woolworths Fresh Continental Parsley Bunch",
-      "last_scraped": "2026-05-29T22:06:59.811339+00:00",
+      "last_scraped": "2026-05-29T23:08:09.589398+00:00",
       "trip_count": 11,
       "price_history": [
         {
@@ -4069,7 +4069,7 @@
     },
     {
       "list_item": "Woolworths Frozen Meat Pies",
-      "last_scraped": "2026-05-29T22:07:04.878581+00:00",
+      "last_scraped": "2026-05-29T23:08:18.484868+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -4161,7 +4161,7 @@
     },
     {
       "list_item": "Woolworths Garlic Heads CLOVE",
-      "last_scraped": "2026-05-29T22:07:09.143141+00:00",
+      "last_scraped": "2026-05-29T23:08:24.575666+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -12676,7 +12676,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 35,
+    "done": 40,
     "total": 158
   },
   "pending_validation": [
@@ -14740,6 +14740,36 @@
       "coles_price": 6.75,
       "coles_url": "https://www.coles.com.au/product/coles-cafe-style-cookie-caramel-slice-280g-8962523",
       "coles_prev_price": 6.75,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Frozen Meat Pies",
+      "ww_price": 6.6,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/779251/woolworths-frozen-meat-pies",
+      "ww_prev_price": 6.6,
+      "ww_suspicious": true,
+      "coles_price": 6.6,
+      "coles_url": "https://www.coles.com.au/product/coles-frozen-meat-pies-4-pack-700g-5181729",
+      "coles_prev_price": 6.6,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Garlic Heads CLOVE",
+      "ww_price": 2.9,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/253320/woolworths-garlic-cloves",
+      "ww_prev_price": 2.9,
+      "ww_suspicious": true,
+      "coles_price": 4.2,
+      "coles_url": "https://www.coles.com.au/product/coles-garlic-prepack-3-pack-8433238",
+      "coles_prev_price": 4.2,
       "coles_suspicious": true,
       "flagged_date": "2026-05-30",
       "reason": [
