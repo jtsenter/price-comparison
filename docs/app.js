@@ -113,6 +113,31 @@ function saveOverrides(obj) {
 // Write url_overrides.json to the repo so the scraper uses pinned URLs on every run.
 // overrides: the full pw_overrides_v1 localStorage object.
 let _overridesSaving = false;
+let _archivedSaving = false;
+
+async function persistArchivedToRepo(s, archivedNames, message = 'chore: sync archived items list') {
+  if (!s?.user || !s?.repo || !s?.token) return;
+  const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/archived_items.json`;
+  const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
+  const content = btoa(JSON.stringify(archivedNames, null, 2) + '\n');
+
+  // Always re-fetch SHA immediately before PUT; retry once on 409 (stale SHA from concurrent call)
+  const doPut = async () => {
+    const getRes = await fetch(apiPath, { headers });
+    const shaJson = getRes.ok ? await getRes.json() : {};
+    const putBody = { message, content };
+    if (shaJson.sha) putBody.sha = shaJson.sha;
+    return fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(putBody) });
+  };
+
+  let putRes = await doPut();
+  if (putRes.status === 409) putRes = await doPut(); // retry with fresh SHA
+  if (!putRes.ok) {
+    const msg = await putRes.text().catch(() => String(putRes.status));
+    throw new Error(`GitHub PUT failed (${putRes.status}): ${msg}`);
+  }
+}
+
 async function persistUrlOverridesToRepo(s, overrides) {
   if (!s?.user || !s?.repo || !s?.token) return;
   // Build scraper format: {item: {ww_url, coles_url}} — skip display-name-only entries
@@ -1585,15 +1610,19 @@ async function loadData() {
   } catch { return null; }
 }
 
-// Fetch live progress data from the scrape-progress branch via raw.githubusercontent.com.
-// This branch is updated by push_progress() during a scrape via the GitHub Contents API
-// and never triggers a Pages deployment, eliminating the deployment storm on origin/main.
-const _PROGRESS_RAW_URL = 'https://raw.githubusercontent.com/jtsenter/price-comparison/scrape-progress/docs/data/latest.json';
+// Fetch live progress data from the scrape-progress branch via the GitHub Contents API.
+// Authenticated request avoids CDN caching delays that affect raw.githubusercontent.com.
 async function loadProgressData() {
+  const s = loadSettings();
+  if (!s.user || !s.repo || !s.token) return null;
   try {
-    const res = await fetch(`${_PROGRESS_RAW_URL}?t=${Date.now()}`);
-    if (!res.ok) throw new Error('not found');
-    return await res.json();
+    const res = await fetch(
+      `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/latest.json?ref=scrape-progress&t=${Date.now()}`,
+      { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
+    );
+    if (!res.ok) return null;
+    const meta = await res.json();
+    return JSON.parse(atob(meta.content));
   } catch { return null; }
 }
 
@@ -2947,26 +2976,14 @@ async function boot() {
   async function syncArchivedToGitHub() {
     const s = loadSettings();
     if (!s.user || !s.repo || !s.token) return; // no credentials configured, skip silently
+    if (_archivedSaving) return; // write-lock: skip if button PUT is in-flight
     const pr = loadPriorities();
     const archivedNames = Object.keys(pr).filter(k => pr[k] === 'archive');
+    _archivedSaving = true;
     try {
-      const content = btoa(JSON.stringify(archivedNames, null, 2) + '\n');
-      const getRes = await fetch(
-        `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/archived_items.json`,
-        { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
-      );
-      const shaJson = getRes.ok ? (await getRes.json()) : {};
-      const putBody = { message: 'chore: sync archived items list', content };
-      if (shaJson.sha) putBody.sha = shaJson.sha;
-      await fetch(
-        `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/archived_items.json`,
-        {
-          method: 'PUT',
-          headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
-          body: JSON.stringify(putBody),
-        }
-      );
+      await persistArchivedToRepo(s, archivedNames);
     } catch (_) { /* silently ignore — user can still use Scrape Archived button */ }
+    finally { _archivedSaving = false; }
   }
   function scheduleArchiveSync() {
     clearTimeout(_archiveSyncTimer);
@@ -2992,22 +3009,12 @@ async function boot() {
     btn.textContent = 'Saving…';
     try {
       // Write archived_items.json to repo via GitHub API
-      const content = btoa(JSON.stringify(archivedNames, null, 2) + '\n');
-      const getRes = await fetch(
-        `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/archived_items.json`,
-        { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
-      );
-      const shaJson = getRes.ok ? (await getRes.json()) : {};
-      const putBody = { message: 'Update archived items list', content };
-      if (shaJson.sha) putBody.sha = shaJson.sha;
-      await fetch(
-        `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/archived_items.json`,
-        {
-          method: 'PUT',
-          headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
-          body: JSON.stringify(putBody),
-        }
-      );
+      _archivedSaving = true;
+      try {
+        await persistArchivedToRepo(s, archivedNames, 'Update archived items list');
+      } finally {
+        _archivedSaving = false;
+      }
       // Pre-flight runner check before dispatching
       const { anyOnline } = await getRunnerStatus(s);
       if (!anyOnline) {
