@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T01:02:49.749119+00:00",
+  "last_updated": "2026-05-29T01:03:02.766842+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4329,7 +4329,7 @@
     },
     {
       "list_item": "Woolworths Washed Potato Bag",
-      "last_scraped": "2026-05-29T00:18:56.584378+00:00",
+      "last_scraped": "2026-05-29T01:02:55.934669+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -4383,15 +4383,62 @@
       "alternatives": [],
       "ww_price_history": [],
       "coles_price_history": [],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.28,
       "per_100_coles": 0.3,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Annalisa Chickpeas",
+      "last_scraped": "2026-05-29T01:02:58.909954+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 1.4
+        },
+        {
+          "date": "2025-05-29",
+          "price": 1.4
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.4
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Annalisa Chickpeas",
+        "price": 1.9,
+        "unit_price": 4.75,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/178262/annalisa-chickpeas",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/178262.jpg"
+      },
+      "coles": {
+        "name": "Carmelina Chick Peas | 400 GRAM",
+        "price": 1.9,
+        "unit_price": 1.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [],
+      "coles_price_history": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.47,
+      "per_100_coles": 0.19,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Whole Milk Full Cream Milk",
-      "last_scraped": "2026-05-29T00:19:00.329143+00:00",
+      "last_scraped": "2026-05-29T01:02:59.851370+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4459,72 +4506,15 @@
           "price": 5.15
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.17,
       "per_100_coles": 0.17,
       "per_100_unit": "100ml"
     },
     {
-      "list_item": "Annalisa Chickpeas",
-      "last_scraped": "2026-05-29T00:19:00.454750+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-05-04",
-          "price": 1.4
-        },
-        {
-          "date": "2025-05-29",
-          "price": 1.4
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.4
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Annalisa Chickpeas",
-        "price": 1.9,
-        "unit_price": 4.75,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/178262/annalisa-chickpeas",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/178262.jpg"
-      },
-      "coles": {
-        "name": "Carmelina Chick Peas | 400 GRAM",
-        "price": 1.9,
-        "unit_price": 1.9,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [
-        {
-          "name": "Carmelina Chick Peas | 400 GRAM",
-          "price": 1.9,
-          "unit_price": 1.9,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [],
-      "coles_price_history": [],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 0.47,
-      "per_100_coles": 0.19,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Armada Evergreen Garbage Bags Extra Large",
-      "last_scraped": "2026-05-29T00:19:05.620381+00:00",
+      "last_scraped": "2026-05-29T01:03:02.322827+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -4567,17 +4557,7 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.1,
-      "alternatives": [
-        {
-          "name": "Multix Extra Wide Garbage Bags 85cm x 70cm 56l | 50 pack",
-          "price": 7.2,
-          "unit_price": 0.14,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/multix-extra-wide-garbage-bags-85cm-x-70cm-56l-50-pack-7613857",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7613857.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -4593,7 +4573,7 @@
     },
     {
       "list_item": "Armada Small Kitchen Tidy Bag",
-      "last_scraped": "2026-05-29T00:19:06.886085+00:00",
+      "last_scraped": "2026-05-29T01:03:02.763235+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -4649,7 +4629,7 @@
           "price": 2.5
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -11658,7 +11638,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 45,
+    "done": 50,
     "total": 157
   },
   "pending_validation": [
@@ -12751,6 +12731,51 @@
       "coles_price": 4.0,
       "coles_url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
       "coles_prev_price": 4.0,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Washed Potato Bag",
+      "ww_price": 5.5,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/262783/woolworths-washed-potatoes-bag",
+      "ww_prev_price": 5.5,
+      "ww_suspicious": true,
+      "coles_price": 6.0,
+      "coles_url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
+      "coles_prev_price": 6.0,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Annalisa Chickpeas",
+      "ww_price": 1.9,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/178262/annalisa-chickpeas",
+      "ww_prev_price": 1.9,
+      "ww_suspicious": true,
+      "coles_price": 1.9,
+      "coles_url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
+      "coles_prev_price": 1.9,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Armada Evergreen Garbage Bags Extra Large",
+      "ww_price": 3.9,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/367232/armada-evergreen-garbage-bags-extra-large",
+      "ww_prev_price": 3.9,
+      "ww_suspicious": false,
+      "coles_price": 5.0,
+      "coles_url": "https://www.coles.com.au/product/glad-aromatics-kitchen-tidy-bags-sweet-citrus-large-20-pack-1332458",
+      "coles_prev_price": 5.0,
       "coles_suspicious": true,
       "flagged_date": "2026-05-29",
       "reason": [
