@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T22:10:54.737042+00:00",
+  "last_updated": "2026-05-29T22:11:15.455601+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9481,9 +9481,22 @@
     },
     {
       "list_item": "Woolworths Lamb Mince",
-      "last_scraped": "2026-05-29T21:34:23.014126+00:00",
+      "last_scraped": "2026-05-29T22:10:57.686720+00:00",
       "trip_count": 3,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 7.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 8.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.0
+        }
+      ],
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Woolworths Lamb Mince",
@@ -9495,8 +9508,8 @@
       },
       "coles": {
         "name": "Coles 3 Star Lamb Mince | 500g",
-        "price": 9,
-        "unit_price": 9,
+        "price": 9.0,
+        "unit_price": 9.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8850461.jpg",
@@ -9504,7 +9517,35 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 4.5,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles 3 Star Lamb Mince | 500g",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8850461.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Lamb Leg Steak | 270g",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-lamb-leg-steak-270g-3958405",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3958405.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Lamb Leg Diced | 450g",
+          "price": 13.0,
+          "unit_price": 13.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-lamb-leg-diced-450g-3580600",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3580600.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -9525,7 +9566,7 @@
           "price": 9
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.8,
       "per_100_coles": 1.8,
@@ -9534,9 +9575,26 @@
     },
     {
       "list_item": "Woolworths Mashing Potatoes Bag",
-      "last_scraped": "2026-05-29T21:34:26.770935+00:00",
+      "last_scraped": "2026-05-29T22:11:02.319384+00:00",
       "trip_count": 4,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 7.0
+        },
+        {
+          "date": "2024-11-20",
+          "price": 5.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 4.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 5.5
+        }
+      ],
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Mashing Potatoes Bag",
@@ -9577,17 +9635,102 @@
           "price": 7.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.5,
       "per_100_coles": 0.5,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Mild Salsa",
+      "last_scraped": "2026-05-29T22:11:07.147186+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 1.5
+        },
+        {
+          "date": "2025-01-29",
+          "price": 2.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.9
+        },
+        {
+          "date": "2026-04-13",
+          "price": 1.9
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.9
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Mild Salsa",
+        "price": 1.9,
+        "unit_price": 0.63,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/311121/woolworths-mild-salsa",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/311121.jpg"
+      },
+      "coles": {
+        "name": "Salsa Mild",
+        "price": 1.9,
+        "unit_price": 0.63,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-salsa-mild-300g-5859834",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5859834.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.9
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.9
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.63,
+      "per_100_coles": 0.63,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Pesto Basil",
-      "last_scraped": "2026-05-29T21:34:29.882756+00:00",
+      "last_scraped": "2026-05-29T22:11:07.536852+00:00",
       "trip_count": 4,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 1.85
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.85
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.85
+        },
+        {
+          "date": "2026-02-23",
+          "price": 1.95
+        }
+      ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Pesto Basil",
@@ -9620,10 +9763,86 @@
           "price": 1.95
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.03,
       "per_100_coles": 1.03,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In",
+      "last_scraped": "2026-05-29T22:11:15.442084+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-05-29",
+          "price": 7.15
+        },
+        {
+          "date": "2025-06-06",
+          "price": 7.15
+        },
+        {
+          "date": "2025-07-03",
+          "price": 7.15
+        },
+        {
+          "date": "2026-02-03",
+          "price": 7.15
+        },
+        {
+          "date": "2026-03-10",
+          "price": 7.51
+        },
+        {
+          "date": "2026-05-06",
+          "price": 7.51
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone In",
+        "price": 6.83,
+        "unit_price": 10.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/119370/woolworths-rspca-approved-chicken-thigh-skinless-cutlets-bone-in",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/119370.jpg"
+      },
+      "coles": {
+        "name": "Coles RSPCA Approved Chicken Thigh Cutlets | approx. 1.1kg",
+        "price": 11.0,
+        "unit_price": 11.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-thigh-cutlets-approx.-1.1kg-2268365",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2268365.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.17,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 6.83
+        },
+        {
+          "date": "2026-05-29",
+          "price": 6.83
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 11
+        },
+        {
+          "date": "2026-05-29",
+          "price": 11
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 1.05,
+      "per_100_coles": 1.0,
       "per_100_unit": "100g"
     },
     {
@@ -9671,100 +9890,6 @@
       "size_warning": false,
       "per_100_ww": 0.43,
       "per_100_coles": 0.4,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In",
-      "last_scraped": "2026-05-29T21:34:36.802391+00:00",
-      "trip_count": 6,
-      "price_history": [],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone In",
-        "price": 6.83,
-        "unit_price": 10.5,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/119370/woolworths-rspca-approved-chicken-thigh-skinless-cutlets-bone-in",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/119370.jpg"
-      },
-      "coles": {
-        "name": "Coles RSPCA Approved Chicken Thigh Cutlets | approx. 1.1kg",
-        "price": 11,
-        "unit_price": 11,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-thigh-cutlets-approx.-1.1kg-2268365",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2268365.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 4.17,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 6.83
-        },
-        {
-          "date": "2026-05-29",
-          "price": 6.83
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 11
-        },
-        {
-          "date": "2026-05-29",
-          "price": 11
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.05,
-      "per_100_coles": 1.0,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Mild Salsa",
-      "last_scraped": "2026-05-29T21:34:37.077415+00:00",
-      "trip_count": 6,
-      "price_history": [],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Mild Salsa",
-        "price": 1.9,
-        "unit_price": 0.63,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/311121/woolworths-mild-salsa",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/311121.jpg"
-      },
-      "coles": {
-        "name": "Salsa Mild",
-        "price": 1.9,
-        "unit_price": 0.63,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-salsa-mild-300g-5859834",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5859834.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.9
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.9
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.63,
-      "per_100_coles": 0.63,
       "per_100_unit": "100g"
     },
     {
@@ -11644,7 +11769,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 110,
+    "done": 115,
     "total": 158
   },
   "pending_validation": [
@@ -13331,6 +13456,51 @@
       "coles_price": 4.5,
       "coles_url": "https://www.coles.com.au/product/coles-cabbage-half-red-1-each-4457052",
       "coles_prev_price": 4.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Lamb Mince",
+      "ww_price": 9.0,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/582607/woolworths-lamb-mince",
+      "ww_prev_price": 9.0,
+      "ww_suspicious": true,
+      "coles_price": 9.0,
+      "coles_url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
+      "coles_prev_price": 9,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Mashing Potatoes Bag",
+      "ww_price": 7.5,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/177574/woolworths-mashing-potatoes-bag",
+      "ww_prev_price": 7.5,
+      "ww_suspicious": true,
+      "coles_price": 7.5,
+      "coles_url": "https://www.coles.com.au/product/coles-growers-selection-mashing-potatoes-1.5kg-1632586",
+      "coles_prev_price": 7.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In",
+      "ww_price": 6.83,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/119370/woolworths-rspca-approved-chicken-thigh-skinless-cutlets-bone-in",
+      "ww_prev_price": 6.83,
+      "ww_suspicious": true,
+      "coles_price": 11.0,
+      "coles_url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-thigh-cutlets-approx.-1.1kg-2268365",
+      "coles_prev_price": 11,
       "coles_suspicious": true,
       "flagged_date": "2026-05-30",
       "reason": [
