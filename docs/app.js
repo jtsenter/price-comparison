@@ -1532,9 +1532,11 @@ async function pollForCompletion(s, dispatchedAt) {
   // field in latest.json yet). Once seen, always call renderPage so completion
   // state renders correctly even when scrape_progress later disappears.
   dataPollTimer = setInterval(async () => {
-    const fresh = await loadData();
+    const fresh = await loadProgressData();
     if (!fresh) return;
-    if (fresh.scrape_progress) _progressSeenThisSession = true;
+    // Only accept scrape_progress from this run — stale data on the branch
+    // (from a previous scrape) will have last_updated < dispatchedAt.
+    if (fresh.scrape_progress && fresh.last_updated >= dispatchedAt) _progressSeenThisSession = true;
     if (!_progressSeenThisSession) return;
     renderPage(fresh);
   }, 5000);
@@ -1578,6 +1580,18 @@ async function pollForCompletion(s, dispatchedAt) {
 async function loadData() {
   try {
     const res = await fetch(`data/latest.json?t=${Date.now()}`);
+    if (!res.ok) throw new Error('not found');
+    return await res.json();
+  } catch { return null; }
+}
+
+// Fetch live progress data from the scrape-progress branch via raw.githubusercontent.com.
+// This branch is updated by push_progress() during a scrape via the GitHub Contents API
+// and never triggers a Pages deployment, eliminating the deployment storm on origin/main.
+const _PROGRESS_RAW_URL = 'https://raw.githubusercontent.com/jtsenter/price-comparison/scrape-progress/docs/data/latest.json';
+async function loadProgressData() {
+  try {
+    const res = await fetch(`${_PROGRESS_RAW_URL}?t=${Date.now()}`);
     if (!res.ok) throw new Error('not found');
     return await res.json();
   } catch { return null; }

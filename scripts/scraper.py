@@ -1,11 +1,13 @@
 import asyncio
+import base64
 import json
 import os
 import random
 import re
-import subprocess
 import sys
 import threading
+import urllib.error
+import urllib.request
 from datetime import datetime, timezone, date
 from urllib.parse import quote, urlparse, parse_qs, unquote
 
@@ -524,8 +526,6 @@ def find_alternatives(all_results: list[dict], matched: dict | None, max_alts: i
 # Incremental push helpers
 # ---------------------------------------------------------------------------
 
-REPO_ROOT = os.path.join(os.path.dirname(__file__), "..")
-
 def _build_output(items: list, not_found: list, trigger: str, progress: dict | None = None, pending_validation: list | None = None) -> dict:
     # Only compare items where both prices are present — avoids single-store items skewing the totals
     comparable = [r for r in items if r.get("woolworths", {}) and r["woolworths"].get("price") is not None
@@ -565,7 +565,8 @@ def _build_output(items: list, not_found: list, trigger: str, progress: dict | N
     return out
 
 
-_GIT_TIMEOUT = 45  # seconds per git subprocess call
+_PROGRESS_BRANCH  = "scrape-progress"
+_PROGRESS_API_URL = "https://api.github.com/repos/jtsenter/price-comparison/contents/docs/data/latest.json"
 
 def push_progress(items: list, not_found: list, done: int, total: int, trigger: str, pending_validation: list | None = None):
     out = _build_output(items, not_found, trigger, progress={"done": done, "total": total}, pending_validation=pending_validation)
@@ -573,24 +574,46 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
     latest_path = os.path.join(DATA_DIR, "latest.json")
     with open(latest_path, "w") as f:
         json.dump(out, f, indent=2)
+    token = os.environ.get("GITHUB_TOKEN", "")
+    if not token:
+        print("  -> Progress push skipped (no GITHUB_TOKEN)")
+        return
+    encoded = base64.b64encode(json.dumps(out, indent=2).encode("utf-8")).decode("ascii")
+    headers = {
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+        "Content-Type": "application/json",
+    }
     try:
-        subprocess.run(["git", "config", "user.name", "github-actions[bot]"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-        subprocess.run(["git", "config", "user.email", "github-actions[bot]@users.noreply.github.com"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-        subprocess.run(["git", "add", "docs/data/"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-        diff = subprocess.run(["git", "diff", "--staged", "--quiet"], cwd=REPO_ROOT, timeout=_GIT_TIMEOUT)
-        if diff.returncode != 0:
-            commit = subprocess.run(["git", "commit", "-m", f"progress: {done}/{total} items scraped"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-            if commit.returncode == 0:
-                pull = subprocess.run(["git", "pull", "--no-rebase", "-X", "ours", "origin", "main"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-                if pull.returncode == 0:
-                    subprocess.run(["git", "push"], cwd=REPO_ROOT, check=False, capture_output=True, timeout=_GIT_TIMEOUT)
-                    print(f"  -> Pushed progress ({done}/{total})")
-                else:
-                    print(f"  -> Pull failed, skipping push")
+        # Fetch fresh SHA for the file on scrape-progress (None if file not yet created)
+        get_req = urllib.request.Request(
+            f"{_PROGRESS_API_URL}?ref={_PROGRESS_BRANCH}", headers=headers
+        )
+        try:
+            with urllib.request.urlopen(get_req, timeout=30) as r:
+                sha = json.loads(r.read())["sha"]
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                sha = None   # first write to the branch — no SHA needed
             else:
-                print(f"  -> Commit failed, skipping push: {commit.stderr.decode(errors='replace').strip()}")
-    except subprocess.TimeoutExpired as e:
-        print(f"  -> Progress push timed out: {e}")
+                raise
+        body: dict = {
+            "message": f"progress: {done}/{total} items scraped",
+            "content": encoded,
+            "branch": _PROGRESS_BRANCH,
+        }
+        if sha:
+            body["sha"] = sha
+        put_req = urllib.request.Request(
+            _PROGRESS_API_URL,
+            data=json.dumps(body).encode("utf-8"),
+            headers=headers,
+            method="PUT",
+        )
+        with urllib.request.urlopen(put_req, timeout=30):
+            pass
+        print(f"  -> Pushed progress to {_PROGRESS_BRANCH} ({done}/{total})")
     except Exception as e:
         print(f"  -> Progress push skipped: {e}")
 
