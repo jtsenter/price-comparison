@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T22:13:21.149530+00:00",
+  "last_updated": "2026-05-29T23:04:34.312966+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12429,9 +12429,18 @@
     },
     {
       "list_item": "Woolworths Red Washed Potatoes Bag",
-      "last_scraped": "2026-05-29T21:36:06.156507+00:00",
+      "last_scraped": "2026-05-29T22:13:25.142105+00:00",
       "trip_count": 2,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2026-04-21",
+          "price": 6.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 6.0
+        }
+      ],
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Red Washed Potatoes Bag",
@@ -12451,7 +12460,17 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.5,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Red Royale Potatoes Loose | approx. 170g",
+          "price": 0.9,
+          "unit_price": 0.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-red-royale-potatoes-loose-approx.-170g-1181308",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1181308.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -12464,7 +12483,7 @@
           "price": 8.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.42,
@@ -12472,9 +12491,18 @@
     },
     {
       "list_item": "Woolworths Thyme Leaves",
-      "last_scraped": "2026-05-29T21:36:07.738807+00:00",
+      "last_scraped": "2026-05-29T22:13:28.957433+00:00",
       "trip_count": 2,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-07-10",
+          "price": 2.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 2.0
+        }
+      ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Thyme Leaves",
@@ -12486,15 +12514,25 @@
       },
       "coles": {
         "name": "Coles Thyme Leaves | 18g",
-        "price": 2,
-        "unit_price": 2,
+        "price": 2.0,
+        "unit_price": 2.0,
         "unit": "10g",
         "url": "https://www.coles.com.au/product/coles-thyme-leaves-18g-8983046",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8983046.jpg"
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Hoyts Thyme | 15g",
+          "price": 1.6,
+          "unit_price": 1.6,
+          "unit": "10g",
+          "url": "https://www.coles.com.au/product/hoyts-thyme-15g-286901",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/286901.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -12507,7 +12545,7 @@
           "price": 2
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 16.7,
       "per_100_coles": 11.11,
@@ -12515,9 +12553,18 @@
     },
     {
       "list_item": "Woolworths Water Chestnuts Sliced",
-      "last_scraped": "2026-05-29T21:36:10.212183+00:00",
+      "last_scraped": "2026-05-29T22:13:30.599301+00:00",
       "trip_count": 2,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 1.25
+        },
+        {
+          "date": "2025-04-25",
+          "price": 1.25
+        }
+      ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Water Chestnuts Sliced",
@@ -12538,7 +12585,35 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.32,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Valcom Water Chestnut Slices | 227g",
+          "price": 1.6,
+          "unit_price": 1.6,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/valcom-water-chestnut-slices-227g-5789579",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5789579.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Double Phoenix Whole Water Chestnuts | 567g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/double-phoenix-whole-water-chestnuts-567g-1384190",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1384190.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Tick Fresh Water Chestnuts | 400g",
+          "price": 3.8,
+          "unit_price": 3.8,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/tick-fresh-water-chestnuts-400g-3908054",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3908054.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -12551,28 +12626,57 @@
           "price": 1.6
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.56,
       "per_100_coles": 0.7,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.227
+    },
+    {
+      "list_item": "Greek Style Yoghurt 2kg",
+      "last_scraped": "2026-05-29T21:35:15.366511+00:00",
+      "trip_count": 2,
+      "price_history": [],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Greek Style Yoghurt",
+        "price": 8.4,
+        "unit_price": 0.42,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/249085/woolworths-greek-style-yoghurt",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/249085.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-30",
+          "price": 8.4
+        }
+      ],
+      "coles_price_history": [],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": 0.42,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
     }
   ],
-  "not_found_items": [
-    "Greek Style Yoghurt 2kg"
-  ],
+  "not_found_items": [],
   "summary": {
     "total_woolworths": 771.5,
     "total_coles": 840.14,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
     "total_saving": 68.64,
-    "items_compared": 157,
-    "items_not_found": 1
+    "items_compared": 158,
+    "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 155,
+    "done": 0,
     "total": 158
   },
   "pending_validation": [
@@ -14411,6 +14515,21 @@
       "coles_url": "https://www.coles.com.au/product/coca-cola-zero-sugar-soft-drink-bottle-1.25l-2993706",
       "coles_prev_price": 3.5,
       "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "week_conflict"
+      ]
+    },
+    {
+      "item": "Woolworths Red Washed Potatoes Bag",
+      "ww_price": 8.0,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/101638/woolworths-red-washed-potatoes-bag",
+      "ww_prev_price": 8.0,
+      "ww_suspicious": true,
+      "coles_price": 8.5,
+      "coles_url": "https://www.coles.com.au/product/coles-red-royale-washed-potatoes-2kg-7963859",
+      "coles_prev_price": 8.5,
+      "coles_suspicious": false,
       "flagged_date": "2026-05-30",
       "reason": [
         "week_conflict"
