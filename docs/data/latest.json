@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T22:09:05.458343+00:00",
+  "last_updated": "2026-05-29T22:09:20.228624+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6972,9 +6972,26 @@
     },
     {
       "list_item": "McKenzie's Red Lentils",
-      "last_scraped": "2026-05-29T21:33:16.967032+00:00",
+      "last_scraped": "2026-05-29T22:09:09.141927+00:00",
       "trip_count": 4,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 4.8
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.8
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.8
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.7
+        }
+      ],
       "category": "Pantry",
       "woolworths": {
         "name": "McKenzie's Red Lentils",
@@ -6985,15 +7002,15 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/588066.jpg"
       },
       "coles": {
-        "name": "McKenzie's Split Red Lentils | 1kg",
-        "price": 4.8,
-        "unit_price": 4.8,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/mckenzie's-split-red-lentils-1kg-9190991",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9190991.jpg"
+        "name": "McKenzie's Split Red Lentils | 375g",
+        "price": 2.3,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/mckenzie's-split-red-lentils-375g-130061",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/130061.jpg"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.5,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -7007,17 +7024,35 @@
           "price": 4.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.48,
-      "per_100_coles": 0.48,
-      "per_100_unit": "100g"
+      "per_100_coles": 0.61,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.375
     },
     {
       "list_item": "McVitie's Digestives Milk Chocolate",
-      "last_scraped": "2026-05-29T21:33:18.953244+00:00",
+      "last_scraped": "2026-05-29T22:09:09.223022+00:00",
       "trip_count": 4,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 5.5
+        },
+        {
+          "date": "2025-04-25",
+          "price": 2.75
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.5
+        },
+        {
+          "date": "2026-04-29",
+          "price": 2.75
+        }
+      ],
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "McVitie's Digestives Milk Chocolate",
@@ -7038,6 +7073,15 @@
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
       "alternatives": [
+        {
+          "name": "Mcvities Digestives Tops Biscuits Milk Chocolate | 100g",
+          "price": 1.5,
+          "unit_price": 1.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/mcvities-digestives-tops-biscuits-milk-chocolate-100g-5777536",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5777536.jpg",
+          "retailer": "coles"
+        },
         {
           "name": "McVitie's Digestives Choc Tops Milk Chocolate",
           "price": 2.0,
@@ -7060,7 +7104,7 @@
           "price": 5.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.07,
       "per_100_coles": 2.07,
@@ -7068,9 +7112,30 @@
     },
     {
       "list_item": "McVitie's Hobnobs Milk Chocolate",
-      "last_scraped": "2026-05-29T21:33:20.479774+00:00",
+      "last_scraped": "2026-05-29T22:09:13.435719+00:00",
       "trip_count": 5,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 2.75
+        },
+        {
+          "date": "2025-05-12",
+          "price": 2.75
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.75
+        },
+        {
+          "date": "2026-02-03",
+          "price": 2.75
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.5
+        }
+      ],
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "McVitie's Hobnobs Milk Chocolate",
@@ -7091,7 +7156,17 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 2.75,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Mcvitie's Milk Chocolate Hobnobs | 262g",
+          "price": 2.75,
+          "unit_price": 1.05,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/mcvitie's-milk-chocolate-hobnobs-262g-9221042",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9221042.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -7104,7 +7179,7 @@
           "price": 2.75
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.1,
       "per_100_coles": 1.05,
@@ -7112,9 +7187,34 @@
     },
     {
       "list_item": "Mon Ami French Camembert Cheese",
-      "last_scraped": "2026-05-29T21:33:21.877116+00:00",
+      "last_scraped": "2026-05-29T22:09:14.711409+00:00",
       "trip_count": 6,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 7.2
+        },
+        {
+          "date": "2025-05-04",
+          "price": 6.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 7.2
+        },
+        {
+          "date": "2025-06-06",
+          "price": 7.2
+        },
+        {
+          "date": "2025-07-10",
+          "price": 7.2
+        },
+        {
+          "date": "2026-02-23",
+          "price": 6.0
+        }
+      ],
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Mon Ami French Camembert Cheese",
@@ -7127,14 +7227,33 @@
       "coles": {
         "name": "Emborg French Camembert | 200g",
         "price": 6.4,
-        "unit_price": 32,
+        "unit_price": 32.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/emborg-french-camembert-200g-4360529",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4360529.jpg"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 5.2,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Jindi Camembert | 125g",
+          "price": 5.85,
+          "unit_price": 5.85,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/jindi-camembert-125g-6139320",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6139320.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "South Cape Camembert | 200g",
+          "price": 7.0,
+          "unit_price": 7.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/south-cape-camembert-200g-5269091",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5269091.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -7147,12 +7266,101 @@
           "price": 6.4
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 3.0,
       "per_100_coles": 3.2,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.2
+    },
+    {
+      "list_item": "Old El Paso Fajita Spice Mix Mexican Style",
+      "last_scraped": "2026-05-29T22:09:20.219541+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 3.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.7
+        }
+      ],
+      "category": "Other",
+      "woolworths": {
+        "name": "Old El Paso Fajita Spice Mix Mexican Style",
+        "price": 2.7,
+        "unit_price": 6.75,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/248679/old-el-paso-fajita-spice-mix-mexican-style",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/248679.jpg"
+      },
+      "coles": {
+        "name": "Old El Paso Fajita Spice Mix | 40g",
+        "price": 2.7,
+        "unit_price": 2.7,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/old-el-paso-fajita-spice-mix-40g-5066050",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5066050.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Old El Paso Mild Fajita Kit Mexican Style | 485g",
+          "price": 5.95,
+          "unit_price": 1.23,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/old-el-paso-mild-fajita-kit-mexican-style-485g-5030450",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5030450.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Old El Paso Fajita Spice Mix | 40g",
+          "price": 2.7,
+          "unit_price": 2.7,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/old-el-paso-fajita-spice-mix-40g-5066050",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5066050.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Old El Paso Spice Mix For Tacos Mild | 30g",
+          "price": 2.7,
+          "unit_price": 2.7,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/old-el-paso-spice-mix-for-tacos-mild-30g-291377",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/291377.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.7
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.7
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 6.75,
+      "per_100_coles": 6.75,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Mutti Tomato Paste Double Concentrate",
@@ -7199,50 +7407,6 @@
       "size_warning": false,
       "per_100_ww": 1.85,
       "per_100_coles": 0.69,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Old El Paso Fajita Spice Mix Mexican Style",
-      "last_scraped": "2026-05-29T21:33:24.805804+00:00",
-      "trip_count": 4,
-      "price_history": [],
-      "category": "Other",
-      "woolworths": {
-        "name": "Old El Paso Fajita Spice Mix Mexican Style",
-        "price": 2.7,
-        "unit_price": 6.75,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/248679/old-el-paso-fajita-spice-mix-mexican-style",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/248679.jpg"
-      },
-      "coles": {
-        "name": "Old El Paso Fajita Spice Mix | 40g",
-        "price": 2.7,
-        "unit_price": 2.7,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/old-el-paso-fajita-spice-mix-40g-5066050",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5066050.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.7
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.7
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 6.75,
-      "per_100_coles": 6.75,
       "per_100_unit": "100g"
     },
     {
@@ -10737,15 +10901,15 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 773.3,
-    "total_coles": 841.94,
+    "total_coles": 839.44,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 68.64,
+    "total_saving": 66.14,
     "items_compared": 158,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 75,
+    "done": 80,
     "total": 158
   },
   "pending_validation": [
@@ -12178,6 +12342,23 @@
       "coles_suspicious": true,
       "flagged_date": "2026-05-30",
       "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "McKenzie's Red Lentils",
+      "ww_price": 4.8,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/588066/mckenzie-s-red-lentils",
+      "ww_prev_price": 4.8,
+      "ww_suspicious": false,
+      "coles_price": 2.3,
+      "coles_url": "https://www.coles.com.au/product/mckenzie's-split-red-lentils-375g-130061",
+      "coles_prev_price": 4.8,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "week_conflict",
+        "30pct_change",
         "outside_historical_range"
       ]
     }
