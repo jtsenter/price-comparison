@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T01:02:35.652392+00:00",
+  "last_updated": "2026-05-29T01:02:49.749119+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3813,7 +3813,7 @@
     },
     {
       "list_item": "Woolworths Greek Style Yoghurt",
-      "last_scraped": "2026-05-29T00:18:39.074713+00:00",
+      "last_scraped": "2026-05-29T01:02:38.852678+00:00",
       "trip_count": 33,
       "price_history": [
         {
@@ -3981,7 +3981,7 @@
           "price": 4.5
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.42,
       "per_100_coles": 0.45,
@@ -3989,7 +3989,7 @@
     },
     {
       "list_item": "Woolworths Lean Beef Mince",
-      "last_scraped": "2026-05-29T00:18:42.627498+00:00",
+      "last_scraped": "2026-05-29T01:02:38.883977+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -4049,35 +4049,7 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 7.0,
-      "alternatives": [
-        {
-          "name": "Coles No Added Hormone Beef 4 Star Lean Mince | 500g",
-          "price": 11.0,
-          "unit_price": 11.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-4-star-lean-mince-500g-8112449",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8112449.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "El- Amin's Beef Lean Mince | 500g",
-          "price": 12.5,
-          "unit_price": 12.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/el-amin's-beef-lean-mince-500g-6123116",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6123116.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles 5 Star Extra Lean Pork Mince | 500g",
-          "price": 6.5,
-          "unit_price": 13.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-5-star-extra-lean-pork-mince-500g-8781132",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8781132.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -4090,7 +4062,7 @@
           "price": 12.5
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.2,
       "per_100_coles": 2.5,
@@ -4098,8 +4070,171 @@
       "_ww_price_factor": 0.5
     },
     {
+      "list_item": "Woolworths Red Watermelon Cut Quarter",
+      "last_scraped": "2026-05-29T01:02:42.199165+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 5.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 6.38
+        },
+        {
+          "date": "2025-04-05",
+          "price": 7.7
+        },
+        {
+          "date": "2025-04-14",
+          "price": 7.7
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 6.38
+        },
+        {
+          "date": "2025-06-21",
+          "price": 6.38
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Red Watermelon Cut Quarter",
+        "price": 7.7,
+        "unit_price": 7.7,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/120384/woolworths-red-watermelon-cut-quarter",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120384.jpg"
+      },
+      "coles": {
+        "name": "Coles Seedless Watermelon Cut | approx. 1.8kg",
+        "price": 7.02,
+        "unit_price": 7.02,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-seedless-watermelon-cut-approx.-1.8kg-7508229",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7508229.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.68,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 7.7
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 7.02
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 0.39,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Sour Cream",
+      "last_scraped": "2026-05-29T01:02:45.919472+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 3.25
+        },
+        {
+          "date": "2024-11-20",
+          "price": 3.25
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.4
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.4
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.4
+        },
+        {
+          "date": "2025-06-13",
+          "price": 3.3
+        },
+        {
+          "date": "2025-06-21",
+          "price": 3.3
+        },
+        {
+          "date": "2026-04-13",
+          "price": 3.3
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Sour Cream",
+        "price": 3.3,
+        "unit_price": 1.1,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/105609/woolworths-sour-cream",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/105609.jpg"
+      },
+      "coles": {
+        "name": "Coles Sour Cream | 300g",
+        "price": 3.3,
+        "unit_price": 3.3,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-sour-cream-300g-3676946",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3676946.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Woolworths Thickened Cream",
+          "price": 5.2,
+          "unit_price": 0.87,
+          "unit": "100ML",
+          "url": "https://www.woolworths.com.au/shop/productdetails/48720/woolworths-thickened-cream",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/048720.jpg",
+          "retailer": "woolworths"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3.3
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3.3
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 1.1,
+      "per_100_coles": 1.1,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "Woolworths Onion Brown Bag",
-      "last_scraped": "2026-05-29T00:18:47.019594+00:00",
+      "last_scraped": "2026-05-29T01:02:49.744233+00:00",
       "trip_count": 14,
       "price_history": [
         {
@@ -4186,202 +4321,11 @@
         }
       ],
       "coles_price_history": [],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.36,
       "per_100_coles": 0.4,
       "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Red Watermelon Cut Quarter",
-      "last_scraped": "2026-05-29T00:18:48.272276+00:00",
-      "trip_count": 8,
-      "price_history": [
-        {
-          "date": "2025-02-02",
-          "price": 5.5
-        },
-        {
-          "date": "2025-03-17",
-          "price": 6.38
-        },
-        {
-          "date": "2025-04-05",
-          "price": 7.7
-        },
-        {
-          "date": "2025-04-14",
-          "price": 7.7
-        },
-        {
-          "date": "2025-05-22",
-          "price": 5.5
-        },
-        {
-          "date": "2025-06-06",
-          "price": 6.38
-        },
-        {
-          "date": "2025-06-21",
-          "price": 6.38
-        },
-        {
-          "date": "2026-03-10",
-          "price": 5.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Red Watermelon Cut Quarter",
-        "price": 7.7,
-        "unit_price": 7.7,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/120384/woolworths-red-watermelon-cut-quarter",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120384.jpg"
-      },
-      "coles": {
-        "name": "Coles Seedless Watermelon Cut | approx. 1.8kg",
-        "price": 7.02,
-        "unit_price": 7.02,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-seedless-watermelon-cut-approx.-1.8kg-7508229",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7508229.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.68,
-      "alternatives": [
-        {
-          "name": "Coles Red Split Lentils | 1kg",
-          "price": 4.0,
-          "unit_price": 4.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-red-split-lentils-1kg-9073535",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9073535.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Kitchen Cut Fruit Watermelon | 350g",
-          "price": 6.5,
-          "unit_price": 6.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-kitchen-cut-fruit-watermelon-350g-7864336",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7864336.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Seedless Watermelon Cut | approx. 1.8kg",
-          "price": 7.02,
-          "unit_price": 7.02,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-seedless-watermelon-cut-approx.-1.8kg-7508229",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7508229.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 7.7
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 7.02
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 0.39,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Sour Cream",
-      "last_scraped": "2026-05-29T00:18:52.161456+00:00",
-      "trip_count": 8,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 3.25
-        },
-        {
-          "date": "2024-11-20",
-          "price": 3.25
-        },
-        {
-          "date": "2025-03-27",
-          "price": 3.4
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.4
-        },
-        {
-          "date": "2025-05-12",
-          "price": 3.4
-        },
-        {
-          "date": "2025-06-13",
-          "price": 3.3
-        },
-        {
-          "date": "2025-06-21",
-          "price": 3.3
-        },
-        {
-          "date": "2026-04-13",
-          "price": 3.3
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Sour Cream",
-        "price": 3.3,
-        "unit_price": 1.1,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/105609/woolworths-sour-cream",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/105609.jpg"
-      },
-      "coles": {
-        "name": "Coles Sour Cream | 300g",
-        "price": 3.3,
-        "unit_price": 3.3,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-sour-cream-300g-3676946",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3676946.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [
-        {
-          "name": "Woolworths Thickened Cream",
-          "price": 5.2,
-          "unit_price": 0.87,
-          "unit": "100ML",
-          "url": "https://www.woolworths.com.au/shop/productdetails/48720/woolworths-thickened-cream",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/048720.jpg",
-          "retailer": "woolworths"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.3
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.3
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 1.1,
-      "per_100_coles": 1.1,
-      "per_100_unit": "100ml"
     },
     {
       "list_item": "Woolworths Washed Potato Bag",
@@ -11714,7 +11658,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 40,
+    "done": 45,
     "total": 157
   },
   "pending_validation": [
@@ -12792,6 +12736,21 @@
       "coles_price": 4.2,
       "coles_url": "https://www.coles.com.au/product/coles-garlic-prepack-3-pack-8433238",
       "coles_prev_price": 4.2,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Onion Brown Bag",
+      "ww_price": 3.6,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/144336/woolworths-onion-brown-bag",
+      "ww_prev_price": 3.6,
+      "ww_suspicious": false,
+      "coles_price": 4.0,
+      "coles_url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
+      "coles_prev_price": 4.0,
       "coles_suspicious": true,
       "flagged_date": "2026-05-29",
       "reason": [
