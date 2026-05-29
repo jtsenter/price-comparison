@@ -1477,7 +1477,7 @@ td.priority-cell { text-align: center; }
 
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 700px) {
-  body { overflow-x: hidden; }
+  html, body { overflow-x: hidden; }
   .header-inner { padding: 0 14px; }
   .brand-name { display: none; }
   main { padding: 16px 14px 48px; }
