@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T22:09:20.228624+00:00",
+  "last_updated": "2026-05-29T22:09:31.859105+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7364,9 +7364,26 @@
     },
     {
       "list_item": "Mutti Tomato Paste Double Concentrate",
-      "last_scraped": "2026-05-29T21:33:23.606962+00:00",
+      "last_scraped": "2026-05-29T22:09:20.441663+00:00",
       "trip_count": 4,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 2.1
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.1
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.4
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.4
+        }
+      ],
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Mutti Tomato Paste Double Concentrate",
@@ -7386,7 +7403,17 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 2.4,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Mutti Polpa Tomatoes Finely Chopped | 210g",
+          "price": 1.5,
+          "unit_price": 1.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/mutti-polpa-tomatoes-finely-chopped-210g-6311116",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6311116.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -7411,9 +7438,26 @@
     },
     {
       "list_item": "Parsnip Fresh",
-      "last_scraped": "2026-05-29T21:33:26.931831+00:00",
+      "last_scraped": "2026-05-29T22:09:24.612054+00:00",
       "trip_count": 4,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2026-02-07",
+          "price": 1.68
+        },
+        {
+          "date": "2026-02-11",
+          "price": 1.68
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.75
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.75
+        }
+      ],
       "category": "Other",
       "woolworths": {
         "name": "Parsnip Fresh",
@@ -7458,9 +7502,22 @@
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Block",
-      "last_scraped": "2026-05-29T21:33:27.935057+00:00",
+      "last_scraped": "2026-05-29T22:09:26.394697+00:00",
       "trip_count": 3,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2024-12-09",
+          "price": 2.85
+        },
+        {
+          "date": "2025-03-17",
+          "price": 4.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 5.7
+        }
+      ],
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Philadelphia Original Cream Cheese Block",
@@ -7483,6 +7540,24 @@
       "saving_per_item": 4.27,
       "alternatives": [
         {
+          "name": "Philadelphia Original Cream Cheese Block | 250g",
+          "price": 5.7,
+          "unit_price": 5.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-original-cream-cheese-block-250g-192502",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/192502.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Philadelphia Cream Cheese Original Block 2 Pack | 500g",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-cream-cheese-original-block-2-pack-500g-5081291",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5081291.jpg",
+          "retailer": "coles"
+        },
+        {
           "name": "Philadelphia Original Cream Cheese Twin Block",
           "price": 9.0,
           "unit_price": 18.0,
@@ -7504,7 +7579,7 @@
           "price": 5.7
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.28,
       "per_100_coles": 2.28,
@@ -7513,9 +7588,22 @@
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Spread Tub",
-      "last_scraped": "2026-05-29T21:33:29.931265+00:00",
+      "last_scraped": "2026-05-29T22:09:28.621516+00:00",
       "trip_count": 3,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 4.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 5.7
+        },
+        {
+          "date": "2026-04-21",
+          "price": 5.7
+        }
+      ],
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Philadelphia Original Cream Cheese Spread Tub",
@@ -7536,7 +7624,17 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 4.27,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Philadelphia Original Soft Cream Cheese Tub | 250g",
+          "price": 5.7,
+          "unit_price": 5.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-original-soft-cream-cheese-tub-250g-5196114",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5196114.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -7549,7 +7647,7 @@
           "price": 5.7
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.28,
       "per_100_coles": 2.28,
@@ -7558,9 +7656,22 @@
     },
     {
       "list_item": "Red Capsicum",
-      "last_scraped": "2026-05-29T21:33:31.319930+00:00",
+      "last_scraped": "2026-05-29T22:09:31.852145+00:00",
       "trip_count": 3,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 2.23
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.48
+        },
+        {
+          "date": "2026-02-23",
+          "price": 2.23
+        }
+      ],
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Red Capsicum",
@@ -7597,7 +7708,7 @@
           "price": 5.9
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 3.37,
@@ -10909,7 +11020,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 80,
+    "done": 85,
     "total": 158
   },
   "pending_validation": [
@@ -12359,6 +12470,51 @@
       "reason": [
         "week_conflict",
         "30pct_change",
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Mutti Tomato Paste Double Concentrate",
+      "ww_price": 2.4,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/290303/mutti-tomato-paste-double-concentrate",
+      "ww_prev_price": 2.4,
+      "ww_suspicious": false,
+      "coles_price": 4.8,
+      "coles_url": "https://www.coles.com.au/product/mutti-tomato-passata-with-basil-700g-1809277",
+      "coles_prev_price": 4.8,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Parsnip Fresh",
+      "ww_price": 1.75,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/144793/parsnip-fresh",
+      "ww_prev_price": 1.75,
+      "ww_suspicious": false,
+      "coles_price": 2.4,
+      "coles_url": "https://www.coles.com.au/product/coles-parsnips-loose-approx.-200g-5298748",
+      "coles_prev_price": 2.4,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Red Capsicum",
+      "ww_price": 1.98,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/135306/red-capsicum",
+      "ww_prev_price": 1.98,
+      "ww_suspicious": false,
+      "coles_price": 5.9,
+      "coles_url": "https://www.coles.com.au/product/coles-mini-capsicum-175g-7296299",
+      "coles_prev_price": 5.9,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
         "outside_historical_range"
       ]
     }
