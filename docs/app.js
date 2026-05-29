@@ -958,66 +958,71 @@ function openPriceHistoryModal(item) {
 
   const excl = loadExclusions();
   const excludedPrices = new Set((excl[item.list_item] || []).map(p => Number(p).toFixed(2)));
-  const history  = item.price_history       || [];
-  const wwHist   = item.ww_price_history    || [];
-  const coHist   = item.coles_price_history || [];
+
+  // Build unified timeline.
+  // All price_history entries are WW prices (Coles not tracked historically).
+  const excelEntries = (item.price_history || []).map(e => ({
+    date: e.date, ww: e.price, coles: null, source: 'excel',
+  }));
+
+  // Merge per-scrape WW and Coles by date (always scraped together)
+  const wwMap = new Map((item.ww_price_history    || []).map(e => [e.date, e.price]));
+  const coMap = new Map((item.coles_price_history || []).map(e => [e.date, e.price]));
+  const scrapeDates = new Set([...wwMap.keys(), ...coMap.keys()]);
+  const scrapeEntries = [...scrapeDates].map(d => ({
+    date: d, ww: wwMap.get(d) ?? null, coles: coMap.get(d) ?? null, source: 'scrape',
+  }));
+
+  const allEntries = [...excelEntries, ...scrapeEntries]
+    .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
   const listEl = $('priceHistoryList');
   listEl.innerHTML = '';
 
-  // Helper: render a read-only row (no Exclude / Different item buttons)
-  const addReadOnlyRow = (entry) => {
+  if (!allEntries.length) {
+    listEl.innerHTML = '<div style="padding:16px;color:var(--text-soft);font-size:13px;">No price history available.</div>';
+    $('priceHistoryModal').classList.add('open');
+    return;
+  }
+
+  // Column header
+  const hdr = document.createElement('div');
+  hdr.className = 'price-history-row';
+  hdr.style.cssText = 'background:var(--bg);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;';
+  hdr.innerHTML = `
+    <span class="price-history-date" style="color:var(--text-soft)">Date</span>
+    <span class="price-history-store-col"><span class="store-chip sm ww">W</span></span>
+    <span class="price-history-store-col"><span class="store-chip sm coles">C</span></span>`;
+  listEl.appendChild(hdr);
+
+  allEntries.forEach(entry => {
+    const wwKey    = entry.ww != null ? Number(entry.ww).toFixed(2) : null;
+    const isExcluded = wwKey != null && excludedPrices.has(wwKey);
     const row = document.createElement('div');
-    row.className = 'price-history-row';
+    row.className = `price-history-row${isExcluded ? ' excluded' : ''}`;
+
+    const wwHtml = entry.ww != null
+      ? `<span class="price-history-price">${fmt(entry.ww)}</span>`
+      : `<span style="color:var(--text-soft)">—</span>`;
+    const coHtml = entry.coles != null
+      ? `<span class="price-history-price" style="color:var(--coles)">${fmt(entry.coles)}</span>`
+      : `<span style="color:var(--text-soft)">—</span>`;
+    const btnHtml = entry.source === 'excel' && wwKey != null ? `
+      <button class="price-exclude-btn" data-price="${wwKey}">${isExcluded ? 'Include' : 'Exclude'}</button>
+      <button class="price-diff-btn"    data-price="${wwKey}">Different item</button>` : '';
+
     row.innerHTML = `
       <span class="price-history-date">${entry.date || 'Unknown date'}</span>
-      <span class="price-history-price">${fmt(entry.price)}</span>`;
-    listEl.appendChild(row);
-  };
+      <span class="price-history-store-col">${wwHtml}${btnHtml}</span>
+      <span class="price-history-store-col">${coHtml}</span>`;
 
-  const addSection = (label, cls) => {
-    const hdr = document.createElement('div');
-    hdr.className = `price-history-section${cls ? ' ' + cls : ''}`;
-    hdr.textContent = label;
-    listEl.appendChild(hdr);
-  };
-
-  const addEmpty = (msg) => listEl.insertAdjacentHTML('beforeend',
-    `<div style="padding:5px 14px 8px;font-size:12px;color:var(--text-soft);">${msg}</div>`);
-
-  // ── WW scrape history (read-only) ────────────────────────────
-  addSection('WW Price History', 'ww');
-  if (wwHist.length) wwHist.forEach(addReadOnlyRow);
-  else addEmpty('No scrape history yet');
-
-  // ── Coles scrape history (read-only) ─────────────────────────
-  addSection('Coles Price History', 'coles');
-  if (coHist.length) coHist.forEach(addReadOnlyRow);
-  else addEmpty('No scrape history yet');
-
-  // ── Combined history from Excel (Exclude / Different item) ────
-  addSection('Combined History (Excel)', '');
-
-  if (!history.length) {
-    listEl.innerHTML += '<div style="padding:16px;color:var(--text-soft);font-size:13px;">No price history available.</div>';
-  } else {
-    history.forEach((entry) => {
-      const key = Number(entry.price).toFixed(2);
-      const isExcluded = excludedPrices.has(key);
-      const row = document.createElement('div');
-      row.className = `price-history-row${isExcluded ? ' excluded' : ''}`;
-      row.innerHTML = `
-        <span class="price-history-date">${entry.date || 'Unknown date'}</span>
-        <span class="price-history-price">${fmt(entry.price)}</span>
-        <button class="price-exclude-btn" data-price="${key}">${isExcluded ? 'Include' : 'Exclude'}</button>
-        <button class="price-diff-btn" data-price="${key}">Different item</button>`;
-
+    if (entry.source === 'excel' && wwKey != null) {
       row.querySelector('.price-exclude-btn').addEventListener('click', () => {
         const ex = loadExclusions();
         const list = ex[item.list_item] || [];
-        const priceNum = Number(key);
+        const priceNum = Number(wwKey);
         if (isExcluded) {
-          ex[item.list_item] = list.filter(p => Number(p).toFixed(2) !== key);
+          ex[item.list_item] = list.filter(p => Number(p).toFixed(2) !== wwKey);
         } else {
           ex[item.list_item] = [...list, priceNum];
         }
@@ -1028,31 +1033,28 @@ function openPriceHistoryModal(item) {
 
       row.querySelector('.price-diff-btn').addEventListener('click', async () => {
         const newName = window.prompt(
-          `This ${fmt(entry.price)} entry belongs to a different item.\nWhat is its name?`,
+          `This ${fmt(entry.ww)} entry belongs to a different item.\nWhat is its name?`,
           ''
         );
         if (!newName?.trim()) return;
         const trimmed = newName.trim();
 
-        // Exclude this price from the current item
         const ex = loadExclusions();
         const list = ex[item.list_item] || [];
-        const priceNum = Number(key);
-        if (!list.some(p => Number(p).toFixed(2) === key)) {
+        const priceNum = Number(wwKey);
+        if (!list.some(p => Number(p).toFixed(2) === wwKey)) {
           ex[item.list_item] = [...list, priceNum];
           saveExclusions(ex);
         }
 
-        // Try to add the new item to the shopping list and trigger scrape
         const s = loadSettings();
         if (s.user && s.repo && s.token) {
           await addItemsToShoppingList([trimmed]);
         } else {
-          // Save to pending list for later
           const pending = loadPending();
           pending.push({
             name: trimmed,
-            price: entry.price,
+            price: entry.ww,
             date: entry.date || new Date().toISOString(),
             from_item: item.list_item,
             added_at: new Date().toISOString(),
@@ -1065,10 +1067,10 @@ function openPriceHistoryModal(item) {
         openPriceHistoryModal(item);
         if (_lastData) renderPage(_lastData);
       });
+    }
 
-      listEl.appendChild(row);
-    });
-  }
+    listEl.appendChild(row);
+  });
 
   $('priceHistoryModal').classList.add('open');
 }
