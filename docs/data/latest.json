@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T01:04:49.204353+00:00",
+  "last_updated": "2026-05-29T01:05:02.621755+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7860,8 +7860,60 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Celery Heart",
+      "last_scraped": "2026-05-29T01:04:52.794641+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 4.0
+        },
+        {
+          "date": "2025-06-13",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 4.0
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Celery Heart",
+        "price": 4.5,
+        "unit_price": 4.5,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/748851/woolworths-celery-heart",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/748851.jpg"
+      },
+      "coles": {
+        "name": "Coles Celery Bunch | 1 Each",
+        "price": 4.0,
+        "unit_price": 4.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-celery-bunch-1-each-4845732",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4845732.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.5,
+      "alternatives": [],
+      "ww_price_history": [],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4.0
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Basmati Rice",
-      "last_scraped": "2026-05-29T00:21:48.317303+00:00",
+      "last_scraped": "2026-05-29T01:04:55.624000+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -7909,7 +7961,7 @@
           "price": 4.0
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.4,
@@ -7917,7 +7969,7 @@
     },
     {
       "list_item": "Woolworths Cous Cous",
-      "last_scraped": "2026-05-29T00:21:53.875418+00:00",
+      "last_scraped": "2026-05-29T01:04:56.167608+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -7965,95 +8017,15 @@
           "price": 2.0
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.4,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Celery Heart",
-      "last_scraped": "2026-05-29T00:21:54.381088+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-05-12",
-          "price": 4.0
-        },
-        {
-          "date": "2025-06-13",
-          "price": 4.0
-        },
-        {
-          "date": "2026-02-11",
-          "price": 4.0
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Celery Heart",
-        "price": 4.5,
-        "unit_price": 4.5,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/748851/woolworths-celery-heart",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/748851.jpg"
-      },
-      "coles": {
-        "name": "Coles Celery Bunch | 1 Each",
-        "price": 4.0,
-        "unit_price": 4.0,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-celery-bunch-1-each-4845732",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4845732.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.5,
-      "alternatives": [
-        {
-          "name": "Coles Lettuce Cos Baby Hearts | 2 Pack",
-          "price": 2.9,
-          "unit_price": 2.9,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/coles-lettuce-cos-baby-hearts-2-pack-4646485",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4646485.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Lamb Hearts | approx. 530g",
-          "price": 3.71,
-          "unit_price": 3.71,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-lamb-hearts-approx.-530g-9476316",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9476316.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Celery Bunch | 1 Each",
-          "price": 4.0,
-          "unit_price": 4.0,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/coles-celery-bunch-1-each-4845732",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4845732.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4.0
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Green Cabbage Quarter",
-      "last_scraped": "2026-05-29T00:22:00.394914+00:00",
+      "last_scraped": "2026-05-29T01:04:59.246035+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8105,6 +8077,54 @@
       "per_100_ww": null,
       "per_100_coles": null,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Lamb Mince",
+      "last_scraped": "2026-05-29T01:05:02.607758+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 7.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 8.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Lamb Mince",
+        "price": 9.0,
+        "unit_price": 18.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/582607/woolworths-lamb-mince",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/582607.jpg"
+      },
+      "coles": {
+        "name": "Coles 3 Star Lamb Mince | 500g",
+        "price": 9.0,
+        "unit_price": 9.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8850461.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.5,
+      "alternatives": [],
+      "ww_price_history": [],
+      "coles_price_history": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 1.8,
+      "per_100_coles": 1.8,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.5
     },
     {
       "list_item": "Woolworths Extra Virgin Olive Oil Spray",
@@ -8171,82 +8191,6 @@
       "per_100_ww": 2.2,
       "per_100_coles": 1.8,
       "per_100_unit": "100ml"
-    },
-    {
-      "list_item": "Woolworths Lamb Mince",
-      "last_scraped": "2026-05-29T00:22:06.882789+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 7.5
-        },
-        {
-          "date": "2025-03-17",
-          "price": 8.0
-        },
-        {
-          "date": "2025-04-14",
-          "price": 8.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths Lamb Mince",
-        "price": 9.0,
-        "unit_price": 18.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/582607/woolworths-lamb-mince",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/582607.jpg"
-      },
-      "coles": {
-        "name": "Coles 3 Star Lamb Mince | 500g",
-        "price": 9.0,
-        "unit_price": 9.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8850461.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 4.5,
-      "alternatives": [
-        {
-          "name": "Coles 3 Star Lamb Mince | 500g",
-          "price": 9.0,
-          "unit_price": 9.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8850461.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Lamb Leg Steak | 270g",
-          "price": 9.0,
-          "unit_price": 9.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-lamb-leg-steak-270g-3958405",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3958405.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Lamb Leg Diced | 450g",
-          "price": 13.0,
-          "unit_price": 13.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-lamb-leg-diced-450g-3580600",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3580600.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [],
-      "coles_price_history": [],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 1.8,
-      "per_100_coles": 1.8,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.5
     },
     {
       "list_item": "Woolworths Mashing Potatoes Bag",
@@ -11247,7 +11191,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 105,
+    "done": 110,
     "total": 157
   },
   "pending_validation": [
@@ -12790,6 +12734,51 @@
       "coles_price": 1.96,
       "coles_url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
       "coles_prev_price": 1.96,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Celery Heart",
+      "ww_price": 4.5,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/748851/woolworths-celery-heart",
+      "ww_prev_price": 4.5,
+      "ww_suspicious": true,
+      "coles_price": 4.0,
+      "coles_url": "https://www.coles.com.au/product/coles-celery-bunch-1-each-4845732",
+      "coles_prev_price": 4.0,
+      "coles_suspicious": false,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Green Cabbage Quarter",
+      "ww_price": 2.1,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/134968/woolworths-green-cabbage-quarter",
+      "ww_prev_price": 2.1,
+      "ww_suspicious": false,
+      "coles_price": 4.5,
+      "coles_url": "https://www.coles.com.au/product/coles-cabbage-half-red-1-each-4457052",
+      "coles_prev_price": 4.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-29",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Lamb Mince",
+      "ww_price": 9.0,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/582607/woolworths-lamb-mince",
+      "ww_prev_price": 9.0,
+      "ww_suspicious": true,
+      "coles_price": 9.0,
+      "coles_url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
+      "coles_prev_price": 9.0,
       "coles_suspicious": true,
       "flagged_date": "2026-05-29",
       "reason": [
