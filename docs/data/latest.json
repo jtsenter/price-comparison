@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T21:35:56.840605+00:00",
+  "last_updated": "2026-05-29T21:36:04.020020+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11060,15 +11060,15 @@
     },
     {
       "list_item": "Woolworths Butternut Pumpkin Cut",
-      "last_scraped": "2026-05-29T01:06:25.114944+00:00",
+      "last_scraped": "2026-05-29T21:35:58.168055+00:00",
       "trip_count": 2,
       "price_history": [
         {
-          "date": "2025-03-27",
+          "date": "1970-01-01",
           "price": 2.03
         },
         {
-          "date": "2025-04-25",
+          "date": "1970-01-01",
           "price": 2.45
         }
       ],
@@ -11113,15 +11113,15 @@
     },
     {
       "list_item": "Woolworths Corn Sweet Kernels",
-      "last_scraped": "2026-05-29T01:06:25.461711+00:00",
+      "last_scraped": "2026-05-29T21:35:59.787592+00:00",
       "trip_count": 2,
       "price_history": [
         {
-          "date": "2025-03-11",
+          "date": "1970-01-01",
           "price": 1.2
         },
         {
-          "date": "2025-04-14",
+          "date": "1970-01-01",
           "price": 1.2
         }
       ],
@@ -11167,15 +11167,15 @@
     },
     {
       "list_item": "Woolworths Greek Style Fetta",
-      "last_scraped": "2026-05-29T01:06:28.197048+00:00",
+      "last_scraped": "2026-05-29T21:36:01.227979+00:00",
       "trip_count": 2,
       "price_history": [
         {
-          "date": "2024-12-19",
+          "date": "1970-01-01",
           "price": 3.5
         },
         {
-          "date": "2025-04-14",
+          "date": "1970-01-01",
           "price": 3.5
         }
       ],
@@ -11183,7 +11183,7 @@
       "woolworths": {
         "name": "Woolworths Greek Style Fetta",
         "price": 3.2,
-        "unit_price": 16,
+        "unit_price": 16.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/452083/woolworths-greek-style-fetta",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/452083.jpg"
@@ -11221,15 +11221,15 @@
     },
     {
       "list_item": "Woolworths Green Asparagus Bunch Green",
-      "last_scraped": "2026-05-29T01:06:28.308217+00:00",
+      "last_scraped": "2026-05-29T21:36:02.739514+00:00",
       "trip_count": 2,
       "price_history": [
         {
-          "date": "2025-07-10",
+          "date": "1970-01-01",
           "price": 3.9
         },
         {
-          "date": "2025-07-26",
+          "date": "1970-01-01",
           "price": 3.9
         }
       ],
@@ -11251,7 +11251,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4838737.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -11273,22 +11273,22 @@
     },
     {
       "list_item": "Woolworths Mixed Herbs Dried",
-      "last_scraped": "2026-05-29T01:06:31.374808+00:00",
+      "last_scraped": "2026-05-29T21:36:04.005813+00:00",
       "trip_count": 2,
       "price_history": [
         {
-          "date": "2025-03-17",
-          "price": 2
+          "date": "1970-01-01",
+          "price": 2.0
         },
         {
-          "date": "2026-02-03",
-          "price": 2
+          "date": "1970-01-01",
+          "price": 2.0
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Mixed Herbs Dried",
-        "price": 2,
+        "price": 2.0,
         "unit_price": 1.67,
         "unit": "10G",
         "url": "https://www.woolworths.com.au/shop/productdetails/251120/woolworths-mixed-herbs-dried",
@@ -11493,7 +11493,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 150,
+    "done": 155,
     "total": 158
   },
   "pending_validation": [
