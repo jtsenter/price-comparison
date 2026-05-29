@@ -246,12 +246,15 @@
 <div id="globalStatus"></div>
 
 <div class="validate-hero">
-  <div style="max-width:1200px;margin:0 auto;">
-    <div class="validate-hero-title">⚠️ Price Validation</div>
-    <div class="validate-hero-sub">
-      Review flagged prices before they are added to per-store history.
-      Confirm to accept a new price; reject to discard it and keep the history unchanged.
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+    <div>
+      <div class="validate-hero-title">⚠️ Price Validation</div>
+      <div class="validate-hero-sub">
+        Review flagged prices before they are added to per-store history.
+        Confirm to accept a new price; reject to discard it and keep the history unchanged.
+      </div>
     </div>
+    <button id="confirmAllBtn" class="btn btn-primary" style="display:none;flex-shrink:0;">✓ Confirm All</button>
   </div>
 </div>
 
@@ -318,10 +321,12 @@ function setWriteLock(on) {
     status.className = '';
     status.style.display = 'none';
   }
-  // Disable/enable all action buttons
+  // Disable/enable all action buttons (per-card and confirm-all)
   document.querySelectorAll('.validate-actions .btn').forEach(b => {
     if (!b.classList.contains('done')) b.disabled = on;
   });
+  const cab = document.getElementById('confirmAllBtn');
+  if (cab && !cab.classList.contains('done')) cab.disabled = on;
 }
 
 function showGlobalError(msg) {
@@ -485,6 +490,79 @@ function updateValidateNavBadge(count) {
   link.textContent = count > 0 ? `⚠️ Validate (${count})` : '⚠️ Validate';
 }
 
+// ── Confirm All ───────────────────────────────────────────────────────────────
+
+async function confirmAll() {
+  if (_writing) return;
+  const s = loadSettings();
+  if (!s.token || !s.user || !s.repo) {
+    showGlobalError('GitHub settings not configured — cannot save.');
+    return;
+  }
+
+  const toConfirm = _latestData?.pending_validation;
+  if (!toConfirm?.length) return;
+
+  const btn = document.getElementById('confirmAllBtn');
+  setWriteLock(true);
+  if (btn) btn.textContent = '⏳ Confirming…';
+
+  try {
+    // Re-fetch latest.json to get current state before writing
+    const fresh = await loadLatest();
+    _latestData = fresh;
+
+    // Apply all confirmations in a single pass — one PUT for all entries
+    let updatedItems = [...(fresh.items || [])];
+    for (const entry of toConfirm) {
+      updatedItems = updatedItems.map(i => {
+        if (i.list_item !== entry.item) return i;
+        let wwHist = [...(i.ww_price_history ?? [])];
+        let coHist = [...(i.coles_price_history ?? [])];
+        if (entry.ww_suspicious && entry.ww_price != null)
+          wwHist.push({ date: entry.flagged_date, price: Math.round(entry.ww_price * 100) / 100 });
+        if (entry.coles_suspicious && entry.coles_price != null)
+          coHist.push({ date: entry.flagged_date, price: Math.round(entry.coles_price * 100) / 100 });
+        return { ...i, ww_price_history: wwHist, coles_price_history: coHist };
+      });
+    }
+
+    const updated = { ...fresh, items: updatedItems };
+    delete updated.pending_validation;
+
+    await githubPut(s, 'docs/data/latest.json', JSON.stringify(updated, null, 2) + '\n',
+      `validate: confirm all (${toConfirm.length} item${toConfirm.length !== 1 ? 's' : ''})`);
+
+    _latestData = updated;
+
+    // Mark every card confirmed and resolved
+    toConfirm.forEach(entry => {
+      const card = document.querySelector(`.validate-card[data-item="${CSS.escape(entry.item)}"]`);
+      if (!card) return;
+      card.querySelectorAll('.btn-confirm').forEach(b => { b.classList.add('done'); b.textContent = '✓ Confirmed'; });
+      card.querySelectorAll('.btn-reject').forEach(b => { b.disabled = true; });
+      updateCardStatus(card, '✅ Confirmed', 'resolved');
+      markCardResolved(card);
+    });
+
+    updateValidateNavBadge(0);
+    if (btn) { btn.classList.add('done'); btn.textContent = '✓ All Confirmed'; }
+
+    // Fade to empty state after a moment
+    setTimeout(() => {
+      document.getElementById('validateList').style.display = 'none';
+      document.getElementById('emptyState').style.display = 'block';
+    }, 1200);
+
+  } catch (err) {
+    console.error(err);
+    showGlobalError(`Confirm All failed: ${err.message}`);
+    if (btn) btn.textContent = '✓ Confirm All';
+  } finally {
+    setWriteLock(false);
+  }
+}
+
 // ── Render ────────────────────────────────────────────────────────────────────
 
 function buildStoreCol(entry, store, suspicious, newPrice, prevPrice, url) {
@@ -596,6 +674,12 @@ function renderEntry(entry) {
   if (pending.length === 0) {
     emptyEl.style.display = 'block';
     return;
+  }
+
+  const confirmAllBtn = document.getElementById('confirmAllBtn');
+  if (confirmAllBtn) {
+    confirmAllBtn.style.display = '';
+    confirmAllBtn.addEventListener('click', confirmAll);
   }
 
   listEl.style.display = 'flex';
