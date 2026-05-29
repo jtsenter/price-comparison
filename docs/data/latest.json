@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T22:08:31.236918+00:00",
+  "last_updated": "2026-05-29T22:08:48.136320+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6216,9 +6216,26 @@
     },
     {
       "list_item": "Hellmann's Real Mayonnaise Squeeze",
-      "last_scraped": "2026-05-29T21:32:50.078447+00:00",
+      "last_scraped": "2026-05-29T22:08:34.159331+00:00",
       "trip_count": 4,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-06-06",
+          "price": 8.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 8.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 8.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.0
+        }
+      ],
       "category": "Pantry",
       "woolworths": {
         "name": "Hellmann's Real Mayonnaise Squeeze",
@@ -6230,8 +6247,8 @@
       },
       "coles": {
         "name": "Hellmann's Squeeze Real Mayonnaise | 400g",
-        "price": 8,
-        "unit_price": 14,
+        "price": 8.0,
+        "unit_price": 14.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/hellmann's-squeeze-real-mayonnaise-400g-3025755",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3025755.jpg"
@@ -6251,7 +6268,7 @@
           "price": 8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.0,
       "per_100_coles": 2.0,
@@ -6259,9 +6276,34 @@
     },
     {
       "list_item": "Katoomba Ingredients Red Lentils",
-      "last_scraped": "2026-05-29T21:32:53.144669+00:00",
+      "last_scraped": "2026-05-29T22:08:37.780052+00:00",
       "trip_count": 6,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-03-17",
+          "price": 3.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 4.0
+        },
+        {
+          "date": "2025-04-25",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 4.0
+        }
+      ],
       "category": "Pantry",
       "woolworths": {
         "name": "Katoomba Ingredients Red Lentils",
@@ -6294,7 +6336,7 @@
           "price": 3.6
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.36,
@@ -6302,29 +6344,65 @@
     },
     {
       "list_item": "KitKat Milk Chocolate Mini Bars Share Pack",
-      "last_scraped": "2026-05-29T21:32:53.692266+00:00",
+      "last_scraped": "2026-05-29T22:08:40.425274+00:00",
       "trip_count": 4,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2026-02-07",
+          "price": 7.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 5.25
+        },
+        {
+          "date": "2026-04-21",
+          "price": 5.25
+        },
+        {
+          "date": "2026-05-06",
+          "price": 5.25
+        }
+      ],
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "KitKat Milk Chocolate Mini Bars Share Pack",
-        "price": 8.0,
-        "unit_price": 3.17,
+        "price": 5.0,
+        "unit_price": 3.25,
         "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/347540/kitkat-milk-chocolate-mini-bars-share-pack",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/347540.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/348593/kitkat-milk-chocolate-mini-bars-share-pack",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/348593.jpg"
       },
       "coles": {
         "name": "KitKat Milk Chocolate Value Share Pack 18 Pieces | 252g",
-        "price": 8,
-        "unit_price": 8,
+        "price": 8.0,
+        "unit_price": 8.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/kitkat-milk-chocolate-value-share-pack-18-pieces-252g-7018864",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7018864.jpg"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.0,
+      "alternatives": [
+        {
+          "name": "KitKat Packed With Milo Milk Chocolate Block | 165g",
+          "price": 5.0,
+          "unit_price": 3.03,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/kitkat-packed-with-milo-milk-chocolate-block-165g-5389720",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5389720.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "KitKat Milk Chocolate Block | 160g",
+          "price": 5.0,
+          "unit_price": 3.13,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/kitkat-milk-chocolate-block-160g-5872479",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5872479.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -6345,17 +6423,34 @@
           "price": 8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
-      "per_100_ww": 3.17,
+      "per_100_ww": 3.25,
       "per_100_coles": 3.17,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Macro Natural Sunflower Kernels",
-      "last_scraped": "2026-05-29T21:32:57.375907+00:00",
+      "last_scraped": "2026-05-29T22:08:46.389434+00:00",
       "trip_count": 4,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 5.3
+        },
+        {
+          "date": "2026-02-03",
+          "price": 4.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.0
+        }
+      ],
       "category": "Pantry",
       "woolworths": {
         "name": "Macro Natural Sunflower Kernels",
@@ -6367,15 +6462,43 @@
       },
       "coles": {
         "name": "Wellness Road Sunflower Kernels | 500g",
-        "price": 5,
-        "unit_price": 5,
+        "price": 5.0,
+        "unit_price": 5.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/wellness-road-sunflower-kernels-500g-8669642",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8669642.jpg"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 2.5,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Gaganis Premium Raw Sunflower Kernals | 500g",
+          "price": 4.5,
+          "unit_price": 4.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/gaganis-premium-raw-sunflower-kernals-500g-9781896",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9781896.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Chacha Roasted Sunflower Seeds Coconut | 228g",
+          "price": 4.5,
+          "unit_price": 4.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/chacha-roasted-sunflower-seeds-coconut-228g-4211085",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4211085.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Chacha Roasted Sunflower Seeds Spiced | 228g",
+          "price": 4.5,
+          "unit_price": 4.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/chacha-roasted-sunflower-seeds-spiced-228g-4210989",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4210989.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -6388,12 +6511,76 @@
           "price": 5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.0,
       "per_100_coles": 1.0,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.5
+    },
+    {
+      "list_item": "Kiwi Fruit Green",
+      "last_scraped": "2026-05-29T22:08:48.124138+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-04-25",
+          "price": 0.95
+        },
+        {
+          "date": "2025-05-29",
+          "price": 0.9
+        },
+        {
+          "date": "2025-06-13",
+          "price": 0.95
+        },
+        {
+          "date": "2025-07-03",
+          "price": 0.95
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.02
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Kiwi Fruit Green",
+        "price": 0.96,
+        "unit_price": 0.96,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/139238/kiwi-fruit-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139238.jpg"
+      },
+      "coles": {
+        "name": "Green Kiwifruit",
+        "price": 1.0,
+        "unit_price": 1.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-green-kiwifruit-1-each-4425883",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4425883.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.04,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 0.96
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Macro Organic Natural Pumpkin Kernels",
@@ -6446,49 +6633,6 @@
       "per_100_coles": 0.75,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.8
-    },
-    {
-      "list_item": "Kiwi Fruit Green",
-      "last_scraped": "2026-05-29T21:33:02.965860+00:00",
-      "trip_count": 5,
-      "price_history": [],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Kiwi Fruit Green",
-        "price": 0.96,
-        "unit_price": 0.96,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/139238/kiwi-fruit-green",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139238.jpg"
-      },
-      "coles": {
-        "name": "Green Kiwifruit",
-        "price": 1,
-        "unit_price": 1,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-green-kiwifruit-1-each-4425883",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4425883.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.04,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 0.96
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
     },
     {
       "list_item": "Macro Organic Pasta Sauce Chunky Bolognese",
@@ -10447,16 +10591,16 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 776.3,
+    "total_woolworths": 773.3,
     "total_coles": 841.94,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 65.64,
+    "total_saving": 68.64,
     "items_compared": 158,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 65,
+    "done": 70,
     "total": 158
   },
   "pending_validation": [
@@ -11813,6 +11957,22 @@
       "coles_suspicious": true,
       "flagged_date": "2026-05-30",
       "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "KitKat Milk Chocolate Mini Bars Share Pack",
+      "ww_price": 5.0,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/348593/kitkat-milk-chocolate-mini-bars-share-pack",
+      "ww_prev_price": 8.0,
+      "ww_suspicious": true,
+      "coles_price": 8.0,
+      "coles_url": "https://www.coles.com.au/product/kitkat-milk-chocolate-value-share-pack-18-pieces-252g-7018864",
+      "coles_prev_price": 8,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "30pct_change",
         "outside_historical_range"
       ]
     }
