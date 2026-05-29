@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-29T22:11:29.389255+00:00",
+  "last_updated": "2026-05-29T22:11:45.518417+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10235,9 +10235,22 @@
     },
     {
       "list_item": "Woolworths Tuna In Springwater",
-      "last_scraped": "2026-05-29T21:34:48.464215+00:00",
+      "last_scraped": "2026-05-29T22:11:33.846545+00:00",
       "trip_count": 3,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 1.1
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.1
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.1
+        }
+      ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Tuna In Springwater",
@@ -10258,7 +10271,35 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.5,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Tuna Chunks in Springwater | 95g",
+          "price": 1.1,
+          "unit_price": 1.1,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tuna-chunks-in-springwater-95g-8675281",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8675281.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Simply Tuna In Springwater | 185g",
+          "price": 1.7,
+          "unit_price": 1.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-simply-tuna-in-springwater-185g-3544130",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3544130.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Tuna Chunks In Springwater | 185g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-tuna-chunks-in-springwater-185g-8675270",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8675270.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -10275,7 +10316,7 @@
           "price": 1.7
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.16,
       "per_100_coles": 0.92,
@@ -10284,9 +10325,26 @@
     },
     {
       "list_item": "Woolworths Wholegrain Wrap 8Pk",
-      "last_scraped": "2026-05-29T21:34:48.605063+00:00",
+      "last_scraped": "2026-05-29T22:11:34.919131+00:00",
       "trip_count": 4,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 2.4
+        },
+        {
+          "date": "2025-07-10",
+          "price": 2.2
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.2
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.2
+        }
+      ],
       "category": "Bakery",
       "woolworths": {
         "name": "Woolworths Wholegrain Wrap 8Pk",
@@ -10319,7 +10377,7 @@
           "price": 2.2
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.61,
       "per_100_coles": 0.61,
@@ -10327,9 +10385,26 @@
     },
     {
       "list_item": "Yumi's Eggplant Mediterranean Dip",
-      "last_scraped": "2026-05-29T21:34:52.095132+00:00",
+      "last_scraped": "2026-05-29T22:11:40.268612+00:00",
       "trip_count": 4,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-06-21",
+          "price": 4.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 5.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 5.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.75
+        }
+      ],
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Yumi's Eggplant Mediterranean Dip",
@@ -10341,8 +10416,8 @@
       },
       "coles": {
         "name": "Yumi's Mediterranean Eggplant Dip | 200g",
-        "price": 5,
-        "unit_price": 5,
+        "price": 5.0,
+        "unit_price": 5.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/yumi's-mediterranean-eggplant-dip-200g-8670878",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8670878.jpg"
@@ -10362,7 +10437,7 @@
           "price": 5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.88,
       "per_100_coles": 2.5,
@@ -10370,9 +10445,18 @@
     },
     {
       "list_item": "All Smiles Total Care Toothbrush Soft",
-      "last_scraped": "2026-05-29T21:34:52.304684+00:00",
+      "last_scraped": "2026-05-29T22:11:40.440519+00:00",
       "trip_count": 2,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 5.3
+        },
+        {
+          "date": "2026-02-03",
+          "price": 5.3
+        }
+      ],
       "category": "Personal Care",
       "woolworths": {
         "name": "All Smiles Total Care Toothbrush Soft",
@@ -10384,8 +10468,8 @@
       },
       "coles": {
         "name": "Colgate Total Foaming Clean Toothbrush Soft | 3 Pack",
-        "price": 15,
-        "unit_price": 15,
+        "price": 15.0,
+        "unit_price": 15.0,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/colgate-total-foaming-clean-toothbrush-soft-3-pack-1611520",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1611520.jpg"
@@ -10405,7 +10489,7 @@
           "price": 15
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -10413,9 +10497,18 @@
     },
     {
       "list_item": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
-      "last_scraped": "2026-05-29T21:34:56.409311+00:00",
+      "last_scraped": "2026-05-29T22:11:45.503243+00:00",
       "trip_count": 2,
-      "price_history": [],
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 3.85
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.85
+        }
+      ],
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
@@ -10436,7 +10529,17 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 1.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Baby Mum-mum Rice Rusk Organic Blueberry & Carrot +8 Months | 36g",
+          "price": 2.85,
+          "unit_price": 7.92,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/baby-mum-mum-rice-rusk-organic-blueberry-and-carrot-+8-months-36g-2800347",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2800347.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -10449,7 +10552,7 @@
           "price": 2.85
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 10.69,
       "per_100_coles": 7.92,
@@ -11913,7 +12016,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 120,
+    "done": 125,
     "total": 158
   },
   "pending_validation": [
@@ -13725,6 +13828,21 @@
       "reason": [
         "week_conflict",
         "30pct_change"
+      ]
+    },
+    {
+      "item": "Woolworths Tuna In Springwater",
+      "ww_price": 1.1,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/476700/woolworths-tuna-in-springwater",
+      "ww_prev_price": 1.1,
+      "ww_suspicious": false,
+      "coles_price": 1.7,
+      "coles_url": "https://www.coles.com.au/product/coles-simply-tuna-in-springwater-185g-3544130",
+      "coles_prev_price": 1.7,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
       ]
     }
   ]
