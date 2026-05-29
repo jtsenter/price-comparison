@@ -1114,8 +1114,15 @@ td.priority-cell { text-align: center; }
   display: flex;
   align-items: center;
   gap: 6px;
-  flex-wrap: wrap;
-  min-width: 72px;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+.price-history-actions-col {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 /* ── Price history "different item" button ───────────────────── */

@@ -993,7 +993,8 @@ function openPriceHistoryModal(item) {
   hdr.innerHTML = `
     <span class="price-history-date" style="color:var(--text-soft)">Date</span>
     <span class="price-history-store-col"><span class="store-chip sm ww">W</span></span>
-    <span class="price-history-store-col"><span class="store-chip sm coles">C</span></span>`;
+    <span class="price-history-store-col"><span class="store-chip sm coles">C</span></span>
+    <span class="price-history-actions-col"></span>`;
   listEl.appendChild(hdr);
 
   allEntries.forEach(entry => {
@@ -1014,8 +1015,9 @@ function openPriceHistoryModal(item) {
 
     row.innerHTML = `
       <span class="price-history-date">${entry.date || 'Unknown date'}</span>
-      <span class="price-history-store-col">${wwHtml}${btnHtml}</span>
-      <span class="price-history-store-col">${coHtml}</span>`;
+      <span class="price-history-store-col">${wwHtml}</span>
+      <span class="price-history-store-col">${coHtml}</span>
+      <span class="price-history-actions-col">${btnHtml}</span>`;
 
     if (wwKey != null) {
       row.querySelector('.price-exclude-btn').addEventListener('click', () => {
