@@ -970,16 +970,22 @@ th.sort-active { color: var(--text); }
 .upload-preview-list li.new-item::before { content: '+ '; }
 
 /* ── Prices-only toggle button ───────────────────────────────── */
-.prices-only-btn {
-  font-size: 12px;
-  padding: 4px 12px;
-  margin-bottom: 10px;
-  border-radius: 20px;
-}
 .prices-only-btn.active {
   background: var(--accent);
   color: #fff;
   border-color: var(--accent);
+}
+
+/* ── Filter separator ─────────────────────────────────────────── */
+.filter-separator {
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  margin: 0 4px;
+  vertical-align: middle;
+  opacity: 0.5;
+  flex-shrink: 0;
 }
 
 /* ── Units column ─────────────────────────────────────────────── */
@@ -1605,7 +1611,7 @@ td.priority-cell { text-align: center; }
   #tableContainer, #cardGrid { display: none !important; }
 
   /* Hide desktop-only controls */
-  .col-chooser-wrap, .view-toggle-btn, .prices-only-btn { display: none !important; }
+  .col-chooser-wrap, .view-toggle-btn { display: none !important; }
 
   /* ── Search bar ─────────────────────────────────────────────── */
   .search-wrap {

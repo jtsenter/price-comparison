@@ -1303,15 +1303,21 @@ function initPriorityFilter() {
     btn.addEventListener('click', () => {
       const p = btn.dataset.priority;
       if (p) {
-        _activePriority = p;
-        _showHotOnly = false;
-        container.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        $('hotFilterBtn')?.classList.remove('active');
+        // Watchlist toggles off when clicked while already active
+        if (p === 'watchlist' && _activePriority === 'watchlist') {
+          _activePriority = 'all';
+          container.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
+          container.querySelector('[data-priority="all"]')?.classList.add('active');
+        } else {
+          _activePriority = p;
+          _showHotOnly = false;
+          container.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          $('hotFilterBtn')?.classList.remove('active');
+        }
         $('storeFilter').style.display = 'none';
-        // Show/hide the Scrape Archived button
         const scrapeArchBtn = $('scrapeArchivedBtn');
-        if (scrapeArchBtn) scrapeArchBtn.style.display = p === 'archive' ? 'inline-flex' : 'none';
+        if (scrapeArchBtn) scrapeArchBtn.style.display = _activePriority === 'archive' ? 'inline-flex' : 'none';
       }
       if (_lastData) renderPage(_lastData);
     });
@@ -1339,6 +1345,14 @@ function initPriorityFilter() {
       });
     });
   }
+}
+
+function initPricesOnlyFilter() {
+  $('pricesOnlyBtn')?.addEventListener('click', () => {
+    _showPricesOnly = !_showPricesOnly;
+    $('pricesOnlyBtn')?.classList.toggle('active', _showPricesOnly);
+    if (_lastData) renderPage(_lastData);
+  });
 }
 
 // ── Bulk action bar ───────────────────────────────────────────────────────────
@@ -2563,23 +2577,8 @@ function renderPage(data) {
       : allDisplayItems.filter(i => !i.archived && priorities[i.list_item] !== 'archive');
   buildCategoryTabs(categoryTabItems);
 
-  // Prices-only toggle button
-  let toggleBtn = $('pricesOnlyBtn');
-  if (!toggleBtn) {
-    toggleBtn = document.createElement('button');
-    toggleBtn.id = 'pricesOnlyBtn';
-    toggleBtn.className = 'btn btn-ghost prices-only-btn';
-    toggleBtn.addEventListener('click', () => {
-      _showPricesOnly = !_showPricesOnly;
-      toggleBtn.classList.toggle('active', _showPricesOnly);
-      toggleBtn.textContent = _showPricesOnly ? 'Priced only ✕' : 'Priced only';
-      if (_lastData) renderPage(_lastData);
-    });
-    const tabs = $('categoryTabs');
-    tabs?.parentNode?.insertBefore(toggleBtn, tabs);
-  }
-  toggleBtn.textContent = _showPricesOnly ? 'Priced only ✕' : 'Priced only';
-  toggleBtn.classList.toggle('active', _showPricesOnly);
+  // Sync "Priced only" pill state (button is static HTML; click wired in initPricesOnlyFilter)
+  $('pricesOnlyBtn')?.classList.toggle('active', _showPricesOnly);
 
   // ── View mode branch ───────────────────────────────────────────
   const sorted = sortItems(allDisplayItems);
@@ -3488,6 +3487,7 @@ async function boot() {
   initSearch();
   initDiffItemModal();
   initPriorityFilter();
+  initPricesOnlyFilter();
   initBulkBar();
   initColumnChooser();
   initColFilterDropdown();
