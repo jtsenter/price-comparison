@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-30T10:12:04.756643+00:00",
+  "last_updated": "2026-05-30T10:12:11.545666+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9070,7 +9070,7 @@
     },
     {
       "list_item": "Woolworths Mild Salsa",
-      "last_scraped": "2026-05-29T22:11:07.147186+00:00",
+      "last_scraped": "2026-05-30T10:12:05.229864+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -9079,11 +9079,11 @@
         },
         {
           "date": "2025-01-29",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2025-04-14",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2025-07-10",
@@ -9116,7 +9116,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5859834.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9130,11 +9130,274 @@
           "price": 1.9
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.63,
       "per_100_coles": 0.63,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Red Onions Bag",
+      "last_scraped": "2026-05-30T10:12:08.017226+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-06-06",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 4.9
+        },
+        {
+          "date": "2026-04-02",
+          "price": 4.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 5.1
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Red Onions Bag",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg"
+      },
+      "coles": {
+        "name": "Coles Red Onion 1 Kg | 1kg",
+        "price": 3.5,
+        "unit_price": 3.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-red-onion-1-kg-1kg-8467604",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8467604.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.5,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5.0
+        },
+        {
+          "date": "2026-05-30",
+          "price": 5.0
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3.5
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.5,
+      "per_100_coles": 0.35,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Rosemary Leaves",
+      "last_scraped": "2026-05-30T10:12:08.294542+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-01-29",
+          "price": 2.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 2.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 2.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Rosemary Leaves",
+        "price": 2.0,
+        "unit_price": 1.11,
+        "unit": "10G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/251141/woolworths-rosemary-leaves",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251141.jpg"
+      },
+      "coles": {
+        "name": "Coles Rosemary Leaves | 28g",
+        "price": 2.8,
+        "unit_price": 2.8,
+        "unit": "10g",
+        "url": "https://www.coles.com.au/product/coles-rosemary-leaves-28g-8984220",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8984220.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.8,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.8
+        },
+        {
+          "date": "2026-05-30",
+          "price": 2.8
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 11.1,
+      "per_100_coles": 10.0,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Thickened Cream",
+      "last_scraped": "2026-05-30T10:12:10.760332+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-03-17",
+          "price": 4.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 5.2
+        },
+        {
+          "date": "2026-03-02",
+          "price": 3.4
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.4
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Thickened Cream",
+        "price": 5.2,
+        "unit_price": 0.87,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/48720/woolworths-thickened-cream",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/048720.jpg"
+      },
+      "coles": {
+        "name": "Coles Thickened Cream | 300mL",
+        "price": 3.4,
+        "unit_price": 3.4,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/coles-thickened-cream-300ml-246973",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/246973.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.8,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5.2
+        },
+        {
+          "date": "2026-05-30",
+          "price": 3.4
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3.4
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.87,
+      "per_100_coles": 1.13,
+      "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Woolworths Tuna In Springwater",
+      "last_scraped": "2026-05-30T10:12:11.533311+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 1.1
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.1
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.1
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Tuna In Springwater",
+        "price": 1.1,
+        "unit_price": 11.58,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/476700/woolworths-tuna-in-springwater",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/476700.jpg"
+      },
+      "coles": {
+        "name": "Coles Simply Tuna In Springwater | 185g",
+        "price": 1.7,
+        "unit_price": 1.7,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-simply-tuna-in-springwater-185g-3544130",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3544130.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.5,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.1
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.7
+        },
+        {
+          "date": "2026-05-30",
+          "price": 1.7
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 1.16,
+      "per_100_coles": 0.92,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.185
     },
     {
       "list_item": "Woolworths RSPCA Approved Chicken Drumsticks",
@@ -9207,335 +9470,6 @@
       "per_100_ww": 0.43,
       "per_100_coles": 0.4,
       "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Red Onions Bag",
-      "last_scraped": "2026-05-29T22:11:24.004950+00:00",
-      "trip_count": 5,
-      "price_history": [
-        {
-          "date": "2025-06-06",
-          "price": 3
-        },
-        {
-          "date": "2025-07-10",
-          "price": 4
-        },
-        {
-          "date": "2026-03-10",
-          "price": 4.9
-        },
-        {
-          "date": "2026-04-02",
-          "price": 4
-        },
-        {
-          "date": "2026-05-06",
-          "price": 5.1
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Red Onions Bag",
-        "price": 5,
-        "unit_price": 5,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg"
-      },
-      "coles": {
-        "name": "Coles Red Onion 1 Kg | 1kg",
-        "price": 3.5,
-        "unit_price": 3.5,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-red-onion-1-kg-1kg-8467604",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8467604.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.5,
-      "alternatives": [
-        {
-          "name": "Coles Onions Red Local | approx. 200g",
-          "price": 1.18,
-          "unit_price": 1.18,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-onions-red-local-approx.-200g-4218459",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4218459.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Red Onion 1 Kg | 1kg",
-          "price": 3.5,
-          "unit_price": 3.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-red-onion-1-kg-1kg-8467604",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8467604.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Brown Onions | 1kg",
-          "price": 4,
-          "unit_price": 4,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4803991.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5.1
-        },
-        {
-          "date": "2026-05-30",
-          "price": 5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.5
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 0.5,
-      "per_100_coles": 0.35,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Rosemary Leaves",
-      "last_scraped": "2026-05-29T22:11:27.469800+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-01-29",
-          "price": 2
-        },
-        {
-          "date": "2025-03-17",
-          "price": 2
-        },
-        {
-          "date": "2026-03-02",
-          "price": 2
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Rosemary Leaves",
-        "price": 2,
-        "unit_price": 1.11,
-        "unit": "10G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/251141/woolworths-rosemary-leaves",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251141.jpg"
-      },
-      "coles": {
-        "name": "Coles Rosemary Leaves | 28g",
-        "price": 2.8,
-        "unit_price": 2.8,
-        "unit": "10g",
-        "url": "https://www.coles.com.au/product/coles-rosemary-leaves-28g-8984220",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8984220.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.8,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.8
-        },
-        {
-          "date": "2026-05-30",
-          "price": 2.8
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 11.1,
-      "per_100_coles": 10,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Thickened Cream",
-      "last_scraped": "2026-05-29T22:11:29.379389+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2025-03-17",
-          "price": 4.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 3
-        },
-        {
-          "date": "2025-06-06",
-          "price": 3
-        },
-        {
-          "date": "2026-02-11",
-          "price": 5.2
-        },
-        {
-          "date": "2026-03-02",
-          "price": 3.4
-        },
-        {
-          "date": "2026-05-06",
-          "price": 3.4
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Thickened Cream",
-        "price": 3.4,
-        "unit_price": 1.13,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/44317/woolworths-thickened-cream",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/044317.jpg"
-      },
-      "coles": {
-        "name": "Coles Thickened Cream | 300mL",
-        "price": 3.4,
-        "unit_price": 3.4,
-        "unit": "100mL",
-        "url": "https://www.coles.com.au/product/coles-thickened-cream-300ml-246973",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/246973.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [
-        {
-          "name": "Woolworths Light Thickened Cream",
-          "price": 5.2,
-          "unit_price": 0.87,
-          "unit": "100ML",
-          "url": "https://www.woolworths.com.au/shop/productdetails/838738/woolworths-light-thickened-cream",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/838738.jpg",
-          "retailer": "woolworths"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5.2
-        },
-        {
-          "date": "2026-05-30",
-          "price": 3.4
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.4
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 1.13,
-      "per_100_coles": 1.13,
-      "per_100_unit": "100ml"
-    },
-    {
-      "list_item": "Woolworths Tuna In Springwater",
-      "last_scraped": "2026-05-29T22:11:33.846545+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-05-12",
-          "price": 1.1
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.1
-        },
-        {
-          "date": "2026-05-06",
-          "price": 1.1
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Tuna In Springwater",
-        "price": 1.1,
-        "unit_price": 11.58,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/476700/woolworths-tuna-in-springwater",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/476700.jpg"
-      },
-      "coles": {
-        "name": "Coles Simply Tuna In Springwater | 185g",
-        "price": 1.7,
-        "unit_price": 1.7,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-simply-tuna-in-springwater-185g-3544130",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3544130.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.5,
-      "alternatives": [
-        {
-          "name": "Coles Tuna Chunks in Springwater | 95g",
-          "price": 1.1,
-          "unit_price": 1.1,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-tuna-chunks-in-springwater-95g-8675281",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8675281.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Simply Tuna In Springwater | 185g",
-          "price": 1.7,
-          "unit_price": 1.7,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-simply-tuna-in-springwater-185g-3544130",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3544130.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Tuna Chunks In Springwater | 185g",
-          "price": 2.2,
-          "unit_price": 2.2,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-tuna-chunks-in-springwater-185g-8675270",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8675270.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.1
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.7
-        },
-        {
-          "date": "2026-05-30",
-          "price": 1.7
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 1.16,
-      "per_100_coles": 0.92,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.185
     },
     {
       "list_item": "Woolworths Wholegrain Wrap 8Pk",
@@ -11889,16 +11823,16 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 771.5,
+    "total_woolworths": 773.3,
     "total_coles": 840.14,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 68.64,
+    "total_saving": 66.84,
     "items_compared": 158,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 115,
+    "done": 120,
     "total": 157
   },
   "pending_validation": [
@@ -12706,6 +12640,51 @@
       "coles_price": 11,
       "coles_url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-thigh-cutlets-approx.-1.1kg-2268365",
       "coles_prev_price": 11,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Rosemary Leaves",
+      "ww_price": 2.0,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/251141/woolworths-rosemary-leaves",
+      "ww_prev_price": 2,
+      "ww_suspicious": false,
+      "coles_price": 2.8,
+      "coles_url": "https://www.coles.com.au/product/coles-rosemary-leaves-28g-8984220",
+      "coles_prev_price": 2.8,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Thickened Cream",
+      "ww_price": 5.2,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/48720/woolworths-thickened-cream",
+      "ww_prev_price": 3.4,
+      "ww_suspicious": true,
+      "coles_price": 3.4,
+      "coles_url": "https://www.coles.com.au/product/coles-thickened-cream-300ml-246973",
+      "coles_prev_price": 3.4,
+      "coles_suspicious": false,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "30pct_change"
+      ]
+    },
+    {
+      "item": "Woolworths Tuna In Springwater",
+      "ww_price": 1.1,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/476700/woolworths-tuna-in-springwater",
+      "ww_prev_price": 1.1,
+      "ww_suspicious": false,
+      "coles_price": 1.7,
+      "coles_url": "https://www.coles.com.au/product/coles-simply-tuna-in-springwater-185g-3544130",
+      "coles_prev_price": 1.7,
       "coles_suspicious": true,
       "flagged_date": "2026-05-30",
       "reason": [
