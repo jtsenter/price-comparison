@@ -364,8 +364,9 @@
             <th data-col="coles">
               <span class="store-chip coles sm">C</span> Coles Price <span class="sort-arrow"></span>
             </th>
+            <th data-col="category" style="min-width:110px">Category <span class="sort-arrow"></span></th>
             <th data-col="avg" style="min-width:160px">Trend <span class="sort-arrow"></span></th>
-            <th style="width:32px"></th>
+            <th data-col="watch" style="width:48px;text-align:center">Watch <span class="sort-arrow"></span></th>
           </tr>
         </thead>
         <tbody id="dealsBody"></tbody>
@@ -630,6 +631,7 @@ function getSortValue(col, item, dealInfo) {
       return [3, pos];
     }
     case 'category': return getCategory(item).toLowerCase();
+    case 'watch':    return _watchlistHD.has(item.list_item) ? 0 : 1; // watchlisted first on asc
     default:         return 0;
   }
 }
@@ -669,7 +671,7 @@ function onColClick(col) {
     sortKeys[0] = { col, dir: sortKeys[0].dir === 'asc' ? 'desc' : 'asc' };
   } else {
     // Prepend as new primary key; keep others as secondary (remove duplicate if present)
-    const defaultDir = (col === 'name' || col === 'category' || col === 'avg') ? 'asc' : 'desc';
+    const defaultDir = (col === 'name' || col === 'category' || col === 'avg' || col === 'watch') ? 'asc' : 'desc';
     const filtered = sortKeys.filter(k => k.col !== col);
     sortKeys = [{ col, dir: defaultDir }, ...filtered];
   }
@@ -852,15 +854,13 @@ function renderDeals() {
       <td class="item-name">
         <div class="deal-item-cell">
           ${imgHtml}
-          <div>
-            <div class="deal-item-name">${displayName}</div>
-            <div class="deal-item-cat">${cat}</div>
-          </div>
+          <div><div class="deal-item-name">${displayName}</div></div>
         </div>
       </td>
       <td>${dealCell}</td>
       <td class="${wwClass}">${wwHtml}</td>
       <td class="${coClass}">${coHtml}</td>
+      <td style="font-size:12px;color:var(--text-mid)">${cat}</td>
       <td class="trend-cell">${avgCell}</td>
       <td style="text-align:center">${watchBtnHD}</td>
     </tr>`);
