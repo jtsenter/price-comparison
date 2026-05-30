@@ -357,7 +357,7 @@
         <thead id="dealsHead">
           <tr>
             <th data-col="name">Product <span class="sort-arrow"></span></th>
-            <th data-col="deal" style="text-align:center">Deal <span class="sort-arrow"></span></th>
+            <th data-col="deal" style="text-align:center">Best <span class="sort-arrow"></span></th>
             <th data-col="ww">
               <span class="store-chip ww sm">W</span> WW Price <span class="sort-arrow"></span>
             </th>
@@ -600,8 +600,8 @@ let _progressLastDone = null;
 let _progressLastChangeTime = null;
 
 const COL_LABELS = {
-  name: 'Product', deal: 'Deal', ww: 'WW Price', coles: 'Coles Price',
-  avg: 'Avg Price', category: 'Category',
+  name: 'Product', deal: 'Best', ww: 'WW Price', coles: 'Coles Price',
+  avg: 'Avg Price', category: 'Category', watch: 'Watch',
 };
 
 // ── Sort ───────────────────────────────────────────────────────────────────────
@@ -796,12 +796,9 @@ function renderDeals() {
       ? '<span class="store-chip ww sm">W</span>'
       : '<span class="store-chip coles sm">C</span>';
     const pctClass = deal.store === 'woolworths' ? 'ww' : 'coles';
-    const dealLabel = deal.isAllTimeLow ? '🏆 Low' : '🔥 Hot';
     const dealCell = `
       <div class="deal-score-cell" style="text-align:center">
-        ${storeChip}
-        <div class="deal-pct ${pctClass}">${dealLabel}</div>
-        ${discWarn}
+        ${storeChip}${discWarn}
       </div>`;
 
     // WW cell
