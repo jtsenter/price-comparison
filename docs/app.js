@@ -1890,8 +1890,12 @@ function sortItems(items) {
       if (_storeFilter === 'woolworths' && item.cheaper_store !== 'woolworths') return false;
       if (_storeFilter === 'coles' && item.cheaper_store !== 'coles') return false;
     }
-    // Prices-only filter
-    if (_showPricesOnly && !item.woolworths?.price && !item.coles?.price) return false;
+    // Prices-only filter — require both stores to have a positive price
+    if (_showPricesOnly) {
+      const wwP = item.woolworths?.price;
+      const coP = item.coles?.price;
+      if (!(wwP != null && wwP > 0 && coP != null && coP > 0)) return false;
+    }
     return true;
   });
 
