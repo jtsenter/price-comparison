@@ -96,7 +96,7 @@ function formatDate(isoString) {
 
 // ── Thresholds ────────────────────────────────────────────────────────────────
 
-const HOT_DEAL_PERCENTILE      = 0.20;   // current price must be ≤ bottom 20th percentile of history
+const HOT_DEAL_TREND_THRESHOLD = 0.10;   // current price must be in bottom 10% of historical range
 const DISCREPANCY_WARN_THRESHOLD = 0.31; // price diff % above which ⚠ is shown
 const STALE_DATA_DAYS          = 5;      // days before "data is stale" banner appears
 const STALE_PROGRESS_MS        = 3 * 60 * 1000; // ms with no progress update → ⚠ Stalled
@@ -2061,12 +2061,14 @@ function isHotDeal(item, exclusions) {
   const excluded = new Set((exclusions[item.list_item] || []).map(p => Number(p).toFixed(2)));
   const prices = history.map(h => h.price).filter((p, i) => p > 0 && !excluded.has(Number(history[i].price).toFixed(2)));
   if (prices.length < 3) return false;
-  const threshold = pricePercentile(prices, HOT_DEAL_PERCENTILE);
+  const minP = Math.min(...prices), maxP = Math.max(...prices);
+  if (minP === maxP) return false; // flat history — no real deal signal
   const ww = item.woolworths?.price;
   const co = item.coles?.price;
   const current = item.cheaper_store === 'woolworths' ? ww : (item.cheaper_store === 'coles' ? co : (co ?? ww));
   if (current == null) return false;
-  return current <= threshold;
+  const trendPos = (current - minP) / (maxP - minP);
+  return trendPos < HOT_DEAL_TREND_THRESHOLD;
 }
 
 // ── Card view ─────────────────────────────────────────────────────────────────

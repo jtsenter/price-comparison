@@ -467,38 +467,32 @@ function getDealInfo(item, exclusions) {
   const prices = history.map(h => h.price).filter((p, i) => p > 0 && !excluded.has(Number(history[i].price).toFixed(2)));
   if (prices.length < 3) return null;
 
-  const mean = prices.reduce((s, p) => s + p, 0) / prices.length;
   const minHistoric = Math.min(...prices);
   const maxHistoric = Math.max(...prices);
-  // Flat price history — no real deal to compare against, skip
+  // Flat price history — no real deal signal
   if (minHistoric === maxHistoric) return null;
-  const threshold = pricePercentile(prices, HOT_DEAL_PERCENTILE);
 
   const ww = item.woolworths?.price;
   const co = item.coles?.price;
 
-  // Check each store separately
+  // Check each store: trendPosition must be < threshold
   const results = [];
-
-  if (ww != null && ww <= threshold) {
-    const pctOff = Math.max(0, Math.round((mean - ww) / mean * 100));
-    if (pctOff > 0) {
-      const isAllTimeLow = ww <= minHistoric;
-      results.push({ store: 'woolworths', price: ww, pctOff, mean, minHistoric, isAllTimeLow });
+  if (ww != null) {
+    const pos = (ww - minHistoric) / (maxHistoric - minHistoric);
+    if (pos < HOT_DEAL_TREND_THRESHOLD) {
+      results.push({ store: 'woolworths', price: ww, trendPos: pos, minHistoric, maxHistoric, isAllTimeLow: ww <= minHistoric });
     }
   }
-  if (co != null && co <= threshold) {
-    const pctOff = Math.max(0, Math.round((mean - co) / mean * 100));
-    if (pctOff > 0) {
-      const isAllTimeLow = co <= minHistoric;
-      results.push({ store: 'coles', price: co, pctOff, mean, minHistoric, isAllTimeLow });
+  if (co != null) {
+    const pos = (co - minHistoric) / (maxHistoric - minHistoric);
+    if (pos < HOT_DEAL_TREND_THRESHOLD) {
+      results.push({ store: 'coles', price: co, trendPos: pos, minHistoric, maxHistoric, isAllTimeLow: co <= minHistoric });
     }
   }
 
   if (!results.length) return null;
-
-  // Return the best deal (highest % off)
-  results.sort((a, b) => b.pctOff - a.pctOff);
+  // Return the best deal (lowest trendPosition = deepest in range)
+  results.sort((a, b) => a.trendPos - b.trendPos);
   return results[0];
 }
 
@@ -561,16 +555,17 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
     trackHtml = `<div class="price-bar"><div class="price-marker" style="left:${pos.toFixed(1)}%"></div></div>`;
   }
 
+  const allTimeLowBadge = rawPos === 0 ? ' 🏆' : '';
   return `<div class="price-bar-outer" data-tooltip="${tooltip}">
     ${trackHtml}
-    <div class="price-bar-labels"><span>${fmt(minP)}</span><span>${fmt(maxP)}</span></div>
+    <div class="price-bar-labels"><span>${fmt(minP)}${allTimeLowBadge}</span><span>${fmt(maxP)}</span></div>
   </div>`;
 }
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
 const STALE_PROGRESS_MS  = 3 * 60 * 1000; // ms with no progress update → ⚠ Stalled
-const HOT_DEAL_PERCENTILE = 0.20;          // current price must be ≤ bottom 20th percentile of history
+const HOT_DEAL_TREND_THRESHOLD = 0.10;     // current price must be in bottom 10% of historical range
 
 // ── State ─────────────────────────────────────────────────────────────────────
 
@@ -585,7 +580,7 @@ let _progressLastDone = null;
 let _progressLastChangeTime = null;
 
 const COL_LABELS = {
-  name: 'Product', deal: 'Deal %', ww: 'WW Price', coles: 'Coles Price',
+  name: 'Product', deal: 'Deal', ww: 'WW Price', coles: 'Coles Price',
   avg: 'Avg Price', category: 'Category',
 };
 
@@ -594,7 +589,7 @@ const COL_LABELS = {
 function getSortValue(col, item, dealInfo) {
   switch (col) {
     case 'name':     return item.list_item.toLowerCase();
-    case 'deal':     return dealInfo?.pctOff ?? -Infinity;
+    case 'deal':     return dealInfo != null ? -dealInfo.trendPos : Infinity; // lower trendPos = better deal → negate for desc sort
     case 'ww':       return item.woolworths?.price ?? Infinity;
     case 'coles':    return item.coles?.price ?? Infinity;
     case 'avg': {
@@ -780,14 +775,11 @@ function renderDeals() {
       ? '<span class="store-chip ww sm">W</span>'
       : '<span class="store-chip coles sm">C</span>';
     const pctClass = deal.store === 'woolworths' ? 'ww' : 'coles';
-    const allTimeBadge = deal.isAllTimeLow
-      ? '<div><span class="alltime-badge">all-time low 🏆</span></div>'
-      : '';
+    const dealLabel = deal.isAllTimeLow ? '🏆 Low' : '🔥 Hot';
     const dealCell = `
       <div class="deal-score-cell" style="text-align:center">
         ${storeChip}
-        <div class="deal-pct ${pctClass}">${deal.pctOff}% off</div>
-        ${allTimeBadge}
+        <div class="deal-pct ${pctClass}">${dealLabel}</div>
       </div>`;
 
     // WW cell
