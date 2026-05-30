@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-30T10:08:11.934280+00:00",
+  "last_updated": "2026-05-30T10:08:33.423805+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2010,7 +2010,7 @@
     },
     {
       "list_item": "The Odd Bunch Capsicum Prepacked",
-      "last_scraped": "2026-05-29T22:05:52.100673+00:00",
+      "last_scraped": "2026-05-30T10:08:13.392044+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -2023,7 +2023,7 @@
         },
         {
           "date": "2024-12-09",
-          "price": 7
+          "price": 7.0
         },
         {
           "date": "2025-02-02",
@@ -2039,11 +2039,11 @@
         },
         {
           "date": "2025-04-05",
-          "price": 7
+          "price": 7.0
         },
         {
           "date": "2025-04-14",
-          "price": 7
+          "price": 7.0
         },
         {
           "date": "2025-05-04",
@@ -2051,7 +2051,7 @@
         },
         {
           "date": "2025-05-22",
-          "price": 7
+          "price": 7.0
         },
         {
           "date": "2025-06-06",
@@ -2063,7 +2063,7 @@
         },
         {
           "date": "2025-07-10",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2026-02-23",
@@ -2110,7 +2110,7 @@
           "price": 8.9
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.63,
       "per_100_coles": 1.78,
@@ -2119,7 +2119,7 @@
     },
     {
       "list_item": "The Odd Bunch Carrots",
-      "last_scraped": "2026-05-29T22:05:57.452958+00:00",
+      "last_scraped": "2026-05-30T10:08:23.016815+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -2136,7 +2136,7 @@
         },
         {
           "date": "2025-07-03",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2026-02-03",
@@ -2158,7 +2158,7 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "The Odd Bunch Carrots",
-        "price": 2,
+        "price": 2.0,
         "unit_price": 1.33,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/288440/the-odd-bunch-carrots",
@@ -2191,7 +2191,7 @@
           "price": 2.6
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.13,
       "per_100_coles": 0.17,
@@ -2199,7 +2199,7 @@
     },
     {
       "list_item": "The Odd Bunch Zucchini Prepacked",
-      "last_scraped": "2026-05-29T22:06:02.001705+00:00",
+      "last_scraped": "2026-05-30T10:08:24.313540+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -2224,15 +2224,15 @@
         },
         {
           "date": "2025-02-28",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2025-03-11",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2025-03-17",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2025-03-27",
@@ -2260,7 +2260,7 @@
         },
         {
           "date": "2025-07-10",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2026-02-03",
@@ -2301,7 +2301,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5032219.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 4,
+      "saving_per_item": 4.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -2319,15 +2319,88 @@
           "price": 7.5
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.47,
       "per_100_coles": 1.5,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Weet-Bix Little Kids Breakfast Cereal",
+      "last_scraped": "2026-05-30T10:08:27.486449+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2025-05-22",
+          "price": 3.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 5.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 5.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 4.0
+        }
+      ],
+      "category": "Other",
+      "woolworths": {
+        "name": "Weet-Bix Little Kids Breakfast Cereal",
+        "price": 5.0,
+        "unit_price": 1.25,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/142976/weet-bix-little-kids-breakfast-cereal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/142976.jpg"
+      },
+      "coles": {
+        "name": "Sanitarium Weet-bix Little Kids Essentials Breakfast Cereal | 400g",
+        "price": 4,
+        "unit_price": 1,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/sanitarium-weet-bix-little-kids-essentials-breakfast-cereal-400g-4233292",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4233292.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 1.25,
+      "per_100_coles": 1.0,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Truss Tomatoes",
-      "last_scraped": "2026-05-29T22:06:07.159993+00:00",
+      "last_scraped": "2026-05-30T10:08:33.420829+00:00",
       "trip_count": 35,
       "price_history": [
         {
@@ -2503,93 +2576,10 @@
           "price": 0.76
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.59,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Weet-Bix Little Kids Breakfast Cereal",
-      "last_scraped": "2026-05-29T22:06:07.423501+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2025-05-22",
-          "price": 3
-        },
-        {
-          "date": "2025-06-06",
-          "price": 4.5
-        },
-        {
-          "date": "2025-07-10",
-          "price": 4.5
-        },
-        {
-          "date": "2026-02-03",
-          "price": 5
-        },
-        {
-          "date": "2026-02-11",
-          "price": 5
-        },
-        {
-          "date": "2026-03-10",
-          "price": 5
-        },
-        {
-          "date": "2026-04-02",
-          "price": 4
-        }
-      ],
-      "category": "Other",
-      "woolworths": {
-        "name": "Weet-Bix Little Kids Breakfast Cereal",
-        "price": 5,
-        "unit_price": 1.25,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/142976/weet-bix-little-kids-breakfast-cereal",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/142976.jpg"
-      },
-      "coles": {
-        "name": "Sanitarium Weet-bix Little Kids Essentials Breakfast Cereal | 400g",
-        "price": 4,
-        "unit_price": 1,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/sanitarium-weet-bix-little-kids-essentials-breakfast-cereal-400g-4233292",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4233292.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 1,
-      "alternatives": [
-        {
-          "name": "Sanitarium Weet-bix Little Kids Essentials Breakfast Cereal | 400g",
-          "price": 4,
-          "unit_price": 1,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/sanitarium-weet-bix-little-kids-essentials-breakfast-cereal-400g-4233292",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4233292.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 1.25,
-      "per_100_coles": 1,
       "per_100_unit": "100g"
     },
     {
@@ -12612,7 +12602,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 20,
+    "done": 25,
     "total": 157
   },
   "pending_validation": [
@@ -12700,6 +12690,51 @@
       "coles_price": 2.55,
       "coles_url": "https://www.coles.com.au/product/coles-potatoes-sweet-gold-approx.-500g-4199503",
       "coles_prev_price": 2.55,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "The Odd Bunch Capsicum Prepacked",
+      "ww_price": 6.3,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/825870/the-odd-bunch-capsicum-prepacked",
+      "ww_prev_price": 6.3,
+      "ww_suspicious": false,
+      "coles_price": 8.9,
+      "coles_url": "https://www.coles.com.au/product/coles-tri-colour-capsicum-prepack-500g-4841072",
+      "coles_prev_price": 8.9,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "The Odd Bunch Carrots",
+      "ww_price": 2.0,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/288440/the-odd-bunch-carrots",
+      "ww_prev_price": 2,
+      "ww_suspicious": false,
+      "coles_price": 2.6,
+      "coles_url": "https://www.coles.com.au/product/coles-i'm-perfect-carrots-prepacked-1.5kg-3609392",
+      "coles_prev_price": 2.6,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "The Odd Bunch Zucchini Prepacked",
+      "ww_price": 3.5,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/825869/the-odd-bunch-zucchini-prepacked",
+      "ww_prev_price": 3.5,
+      "ww_suspicious": false,
+      "coles_price": 7.5,
+      "coles_url": "https://www.coles.com.au/product/coles-organic-zucchini-500g-5032219",
+      "coles_prev_price": 7.5,
       "coles_suspicious": true,
       "flagged_date": "2026-05-30",
       "reason": [
