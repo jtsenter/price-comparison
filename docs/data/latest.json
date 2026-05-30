@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-30T10:07:43.156295+00:00",
+  "last_updated": "2026-05-30T10:07:57.851377+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1080,120 +1080,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Helga's Wholemeal Bread With Grains",
-      "last_scraped": "2026-05-29T22:05:19.203373+00:00",
-      "trip_count": 15,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 5
-        },
-        {
-          "date": "2024-11-12",
-          "price": 5
-        },
-        {
-          "date": "2024-12-02",
-          "price": 5
-        },
-        {
-          "date": "2025-02-02",
-          "price": 5
-        },
-        {
-          "date": "2025-03-17",
-          "price": 5
-        },
-        {
-          "date": "2025-04-05",
-          "price": 5
-        },
-        {
-          "date": "2025-04-25",
-          "price": 5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 5
-        },
-        {
-          "date": "2025-05-22",
-          "price": 5
-        },
-        {
-          "date": "2025-06-21",
-          "price": 5
-        },
-        {
-          "date": "2025-07-03",
-          "price": 5
-        },
-        {
-          "date": "2025-07-26",
-          "price": 5
-        },
-        {
-          "date": "2026-04-13",
-          "price": 5.2
-        },
-        {
-          "date": "2026-04-21",
-          "price": 5.2
-        },
-        {
-          "date": "2026-04-29",
-          "price": 5.2
-        }
-      ],
-      "category": "Bakery",
-      "woolworths": {
-        "name": "Helga's Bread Traditional Wholemeal",
-        "price": 5.3,
-        "unit_price": 0.71,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/84129/helga-s-bread-traditional-wholemeal",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/084129.jpg"
-      },
-      "coles": {
-        "name": "Traditional Wholemeal Bread",
-        "price": 5.3,
-        "unit_price": 0.71,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/helga's-traditional-wholemeal-bread-750g-5969435",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5969435.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5.3
-        },
-        {
-          "date": "2026-05-30",
-          "price": 5.3
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5.3
-        },
-        {
-          "date": "2026-05-30",
-          "price": 5.3
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 0.71,
-      "per_100_coles": 0.71,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Lebanese Cucumbers",
-      "last_scraped": "2026-05-29T22:05:21.316049+00:00",
+      "last_scraped": "2026-05-30T10:07:46.013164+00:00",
       "trip_count": 27,
       "price_history": [
         {
@@ -1325,17 +1213,7 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.11,
-      "alternatives": [
-        {
-          "name": "Coles Lebanese Cucumbers | approx. 160g",
-          "price": 1.42,
-          "unit_price": 1.42,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-lebanese-cucumbers-approx.-160g-4575208",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4575208.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -1348,7 +1226,7 @@
           "price": 1.42
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.89,
@@ -1356,7 +1234,7 @@
     },
     {
       "list_item": "Lurpak Butter Spreadable",
-      "last_scraped": "2026-05-29T22:05:23.250108+00:00",
+      "last_scraped": "2026-05-30T10:07:48.977285+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -1377,7 +1255,7 @@
         },
         {
           "date": "2026-02-03",
-          "price": 9
+          "price": 9.0
         },
         {
           "date": "2026-04-29",
@@ -1391,7 +1269,7 @@
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Lurpak Butter Spreadable",
-        "price": 9,
+        "price": 9.0,
         "unit_price": 2.25,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/87702/lurpak-butter-spreadable",
@@ -1420,15 +1298,127 @@
           "price": 8.3
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.25,
       "per_100_coles": 2.08,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Helga's Wholemeal Bread With Grains",
+      "last_scraped": "2026-05-30T10:07:51.527618+00:00",
+      "trip_count": 15,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 5.0
+        },
+        {
+          "date": "2024-11-12",
+          "price": 5.0
+        },
+        {
+          "date": "2024-12-02",
+          "price": 5.0
+        },
+        {
+          "date": "2025-02-02",
+          "price": 5.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 5.0
+        },
+        {
+          "date": "2025-04-05",
+          "price": 5.0
+        },
+        {
+          "date": "2025-04-25",
+          "price": 5.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.0
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.0
+        },
+        {
+          "date": "2025-06-21",
+          "price": 5.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 5.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 5.0
+        },
+        {
+          "date": "2026-04-13",
+          "price": 5.2
+        },
+        {
+          "date": "2026-04-21",
+          "price": 5.2
+        },
+        {
+          "date": "2026-04-29",
+          "price": 5.2
+        }
+      ],
+      "category": "Bakery",
+      "woolworths": {
+        "name": "Helga's Bread Traditional Wholemeal",
+        "price": 5.3,
+        "unit_price": 0.71,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/84129/helga-s-bread-traditional-wholemeal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/084129.jpg"
+      },
+      "coles": {
+        "name": "Traditional Wholemeal Bread",
+        "price": 5.3,
+        "unit_price": 0.71,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/helga's-traditional-wholemeal-bread-750g-5969435",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5969435.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5.3
+        },
+        {
+          "date": "2026-05-30",
+          "price": 5.3
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5.3
+        },
+        {
+          "date": "2026-05-30",
+          "price": 5.3
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.71,
+      "per_100_coles": 0.71,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Pringles Sour Cream & Onion Potato Chips",
-      "last_scraped": "2026-05-29T22:05:27.473050+00:00",
+      "last_scraped": "2026-05-30T10:07:54.352785+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -1478,18 +1468,8 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2784058.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [
-        {
-          "name": "Pringles Potato Chips Sour Cream & Onion | 53g",
-          "price": 2.7,
-          "unit_price": 2.7,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-53g-2784138",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2784138.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "saving_per_item": 0.0,
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -1502,11 +1482,91 @@
           "price": 5.5
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 4.1,
       "per_100_coles": 4.1,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle",
+      "last_scraped": "2026-05-30T10:07:57.846831+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 3.0
+        },
+        {
+          "date": "2024-11-20",
+          "price": 3.0
+        },
+        {
+          "date": "2024-12-19",
+          "price": 3.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 1.8
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.0
+        },
+        {
+          "date": "2025-05-04",
+          "price": 1.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 2.0
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Schweppes Lemon Lime Bitters Soft Drink Mixer Bottle",
+        "price": 3.0,
+        "unit_price": 2.73,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/634290/schweppes-lemon-lime-bitters-soft-drink-mixer-bottle",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634290.jpg"
+      },
+      "coles": {
+        "name": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle | 1.1L",
+        "price": 1.8,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/schweppes-lemon-lime-bitters-soft-drink-classic-mixers-bottle-1.1l-3014839",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3014839.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.2,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.8
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.27,
+      "per_100_coles": 0.16,
+      "per_100_unit": "100ml"
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Portions Snacks",
@@ -1591,86 +1651,6 @@
       "per_100_ww": 2.67,
       "per_100_coles": 2.67,
       "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle",
-      "last_scraped": "2026-05-29T22:05:31.903194+00:00",
-      "trip_count": 9,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 3
-        },
-        {
-          "date": "2024-11-20",
-          "price": 3
-        },
-        {
-          "date": "2024-12-19",
-          "price": 3
-        },
-        {
-          "date": "2025-03-11",
-          "price": 1.8
-        },
-        {
-          "date": "2025-03-27",
-          "price": 3
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3
-        },
-        {
-          "date": "2025-05-04",
-          "price": 1.5
-        },
-        {
-          "date": "2025-06-06",
-          "price": 2
-        },
-        {
-          "date": "2025-07-10",
-          "price": 2
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Schweppes Lemon Lime Bitters Soft Drink Mixer Bottle",
-        "price": 3,
-        "unit_price": 2.73,
-        "unit": "1L",
-        "url": "https://www.woolworths.com.au/shop/productdetails/634290/schweppes-lemon-lime-bitters-soft-drink-mixer-bottle",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634290.jpg"
-      },
-      "coles": {
-        "name": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle | 1.1L",
-        "price": 1.8,
-        "unit_price": null,
-        "unit": null,
-        "url": "https://www.coles.com.au/product/schweppes-lemon-lime-bitters-soft-drink-classic-mixers-bottle-1.1l-3014839",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3014839.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.2,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.8
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 0.27,
-      "per_100_coles": 0.16,
-      "per_100_unit": "100ml"
     },
     {
       "list_item": "Schweppes Orange Mango Natural Mineral Water Bottle",
@@ -12642,7 +12622,7 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 10,
+    "done": 15,
     "total": 157
   },
   "pending_validation": [
@@ -12700,6 +12680,21 @@
       "coles_price": 4.5,
       "coles_url": "https://www.coles.com.au/product/coles-kale-bunch-green-1-each-8696598",
       "coles_prev_price": 4.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-30",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Helga's Wholemeal Bread With Grains",
+      "ww_price": 5.3,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/84129/helga-s-bread-traditional-wholemeal",
+      "ww_prev_price": 5.3,
+      "ww_suspicious": true,
+      "coles_price": 5.3,
+      "coles_url": "https://www.coles.com.au/product/helga's-traditional-wholemeal-bread-750g-5969435",
+      "coles_prev_price": 5.3,
       "coles_suspicious": true,
       "flagged_date": "2026-05-30",
       "reason": [
