@@ -793,6 +793,15 @@ function renderDeals() {
       ? `<img class="deal-img" src="${imgSrc}" alt="" loading="lazy" onerror="this.style.display='none'" />`
       : '<div class="deal-img-placeholder"></div>';
 
+    const safeNameHD = item.list_item.replace(/"/g, '&quot;');
+
+    // Discrepancy warning — must be declared before dealCell
+    const _hdDiff = (ww?.price != null && co?.price != null) ? Math.abs(ww.price - co.price) : 0;
+    const _hdDiffPct = (ww?.price != null && co?.price != null) ? _hdDiff / Math.max(ww.price, co.price) : 0;
+    const discWarn = _hdDiffPct > DISCREPANCY_WARN_THRESHOLD && !isDiffDismissed(item.list_item, _hdDiff)
+      ? `<span class="discrepancy-warn" title="Large price difference — double check the match is correct">⚠<button class="dismiss-diff-btn" data-item="${safeNameHD}" data-diff="${_hdDiff.toFixed(4)}" title="Dismiss warning">✕</button></span>`
+      : '';
+
     // Deal score cell
     const storeChip = deal.store === 'woolworths'
       ? '<span class="store-chip ww sm">W</span>'
@@ -838,15 +847,6 @@ function renderDeals() {
 
     const wwClass  = deal.store === 'woolworths' ? 'cell-deal-ww' : '';
     const coClass  = deal.store === 'coles'      ? 'cell-deal-coles' : '';
-
-    const safeNameHD = item.list_item.replace(/"/g, '&quot;');
-
-    // Discrepancy warning
-    const _hdDiff = (ww?.price != null && co?.price != null) ? Math.abs(ww.price - co.price) : 0;
-    const _hdDiffPct = (ww?.price != null && co?.price != null) ? _hdDiff / Math.max(ww.price, co.price) : 0;
-    const discWarn = _hdDiffPct > DISCREPANCY_WARN_THRESHOLD && !isDiffDismissed(item.list_item, _hdDiff)
-      ? `<span class="discrepancy-warn" title="Large price difference — double check the match is correct">⚠<button class="dismiss-diff-btn" data-item="${safeNameHD}" data-diff="${_hdDiff.toFixed(4)}" title="Dismiss warning">✕</button></span>`
-      : '';
 
     const isWatchedHD = _watchlistHD.has(item.list_item);
     const watchBtnHD = `<button class="item-watch-btn${isWatchedHD ? ' active' : ''}" data-item="${safeNameHD}" title="${isWatchedHD ? 'Remove from watchlist' : 'Add to watchlist'}">👁</button>`;

@@ -2149,10 +2149,10 @@ function isHotDeal(item, exclusions) {
   if (minP === maxP) return false; // flat history — no real deal signal
   const ww = item.woolworths?.price;
   const co = item.coles?.price;
-  const current = item.cheaper_store === 'woolworths' ? ww : (item.cheaper_store === 'coles' ? co : (co ?? ww));
-  if (current == null) return false;
-  const trendPos = (current - minP) / (maxP - minP);
-  return trendPos < HOT_DEAL_TREND_THRESHOLD;
+  // Check both stores independently — same logic as getDealInfo in hot-deals.html
+  if (ww != null && (ww - minP) / (maxP - minP) < HOT_DEAL_TREND_THRESHOLD) return true;
+  if (co != null && (co - minP) / (maxP - minP) < HOT_DEAL_TREND_THRESHOLD) return true;
+  return false;
 }
 
 // ── Card view ─────────────────────────────────────────────────────────────────
