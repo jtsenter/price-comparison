@@ -1346,10 +1346,13 @@ function initBulkBar() {
 function computeBannerStats(items) {
   const exclusions = loadExclusions();
   const filtered = items.filter(item => {
-    if (item.archived && _activePriority !== 'archive') return false;
     const p = getPriority(item.list_item);
-    if (_activePriority !== 'archive' && p === 'archive') return false;
-    if (_activePriority !== 'all' && _activePriority !== 'archive' && p !== _activePriority) return false;
+    if (p === 'archive' || item.archived) {
+      if (_activePriority !== 'archive') return false;
+    } else {
+      if (_activePriority === 'archive') return false;
+      if (_activePriority !== 'all' && p !== _activePriority) return false;
+    }
     if (_activeCategory !== 'All' && getCategory(item) !== _activeCategory) return false;
     if (_showHotOnly && !isHotDeal(item, exclusions)) return false;
     // Only include items that have prices at both stores
@@ -1877,12 +1880,15 @@ const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
 function sortItems(items) {
   const exclusions = loadExclusions();
   let filtered = items.filter(item => {
-    if (item.archived && _activePriority !== 'archive') return false;
     const p = getPriority(item.list_item);
-    // Always hide archived items unless archive view is active
-    if (_activePriority !== 'archive' && p === 'archive') return false;
-    // Priority pill filter
-    if (_activePriority !== 'all' && _activePriority !== 'archive' && p !== _activePriority) return false;
+    // Archived items (by priority or item.archived flag): only visible in archive view.
+    // In archive view, show ONLY those items and nothing else.
+    if (p === 'archive' || item.archived) {
+      if (_activePriority !== 'archive') return false;
+    } else {
+      if (_activePriority === 'archive') return false;
+      if (_activePriority !== 'all' && p !== _activePriority) return false;
+    }
     // Hot deals filter
     if (_showHotOnly && !isHotDeal(item, exclusions)) return false;
     // Store filter (only active when hot filter is on)
