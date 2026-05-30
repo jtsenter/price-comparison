@@ -568,7 +568,22 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
 // ── Constants ────────────────────────────────────────────────────────────────
 
 const STALE_PROGRESS_MS  = 3 * 60 * 1000; // ms with no progress update → ⚠ Stalled
-const HOT_DEAL_TREND_THRESHOLD = 0.10;     // current price must be in bottom 10% of historical range
+const HOT_DEAL_TREND_THRESHOLD  = 0.10;    // current price must be in bottom 10% of historical range
+const DISCREPANCY_WARN_THRESHOLD = 0.31;   // price diff % above which ⚠ is shown
+
+// ── Dismissed diff warnings ──────────────────────────────────────────────────
+function loadDismissedDiffs() {
+  try { return JSON.parse(localStorage.getItem('pw_dismissed_diffs_v1') || '{}'); } catch { return {}; }
+}
+function saveDismissedDiffs(d) { localStorage.setItem('pw_dismissed_diffs_v1', JSON.stringify(d)); }
+function isDiffDismissed(itemName, currentDiff) {
+  const dismissed = loadDismissedDiffs()[itemName];
+  if (dismissed == null) return false;
+  return currentDiff <= dismissed * 1.10;
+}
+function dismissDiff(itemName, currentDiff) {
+  const d = loadDismissedDiffs(); d[itemName] = currentDiff; saveDismissedDiffs(d);
+}
 
 // ── State ─────────────────────────────────────────────────────────────────────
 
@@ -786,6 +801,7 @@ function renderDeals() {
       <div class="deal-score-cell" style="text-align:center">
         ${storeChip}
         <div class="deal-pct ${pctClass}">${dealLabel}</div>
+        ${discWarn}
       </div>`;
 
     // WW cell
@@ -824,8 +840,16 @@ function renderDeals() {
     const wwClass  = deal.store === 'woolworths' ? 'cell-deal-ww' : '';
     const coClass  = deal.store === 'coles'      ? 'cell-deal-coles' : '';
 
-    const isWatchedHD = _watchlistHD.has(item.list_item);
     const safeNameHD = item.list_item.replace(/"/g, '&quot;');
+
+    // Discrepancy warning
+    const _hdDiff = (ww?.price != null && co?.price != null) ? Math.abs(ww.price - co.price) : 0;
+    const _hdDiffPct = (ww?.price != null && co?.price != null) ? _hdDiff / Math.max(ww.price, co.price) : 0;
+    const discWarn = _hdDiffPct > DISCREPANCY_WARN_THRESHOLD && !isDiffDismissed(item.list_item, _hdDiff)
+      ? `<span class="discrepancy-warn" title="Large price difference — double check the match is correct">⚠<button class="dismiss-diff-btn" data-item="${safeNameHD}" data-diff="${_hdDiff.toFixed(4)}" title="Dismiss warning">✕</button></span>`
+      : '';
+
+    const isWatchedHD = _watchlistHD.has(item.list_item);
     const watchBtnHD = `<button class="item-watch-btn${isWatchedHD ? ' active' : ''}" data-item="${safeNameHD}" title="${isWatchedHD ? 'Remove from watchlist' : 'Add to watchlist'}">👁</button>`;
     tbody.insertAdjacentHTML('beforeend', `<tr>
       <td class="item-name">
@@ -1148,10 +1172,12 @@ function initRefreshBtn() {
   initTooltip();
   initRefreshBtn();
 
-  // Watch button clicks (delegated from tbody)
+  // Watch + dismiss-diff button clicks (delegated from tbody)
   document.getElementById('dealsBody')?.addEventListener('click', (e) => {
     const wb = e.target.closest('.item-watch-btn');
-    if (wb) { e.stopPropagation(); toggleWatchlistHD(wb.dataset.item); }
+    if (wb) { e.stopPropagation(); toggleWatchlistHD(wb.dataset.item); return; }
+    const db = e.target.closest('.dismiss-diff-btn');
+    if (db) { e.stopPropagation(); dismissDiff(db.dataset.item, parseFloat(db.dataset.diff)); renderDeals(); }
   });
 
   // Scrape strip dismiss/retry

@@ -94,6 +94,25 @@ function formatDate(isoString) {
   });
 }
 
+// ── Dismissed diff warnings ──────────────────────────────────────────────────
+
+function loadDismissedDiffs() {
+  try { return JSON.parse(localStorage.getItem('pw_dismissed_diffs_v1') || '{}'); } catch { return {}; }
+}
+function saveDismissedDiffs(d) {
+  localStorage.setItem('pw_dismissed_diffs_v1', JSON.stringify(d));
+}
+function isDiffDismissed(itemName, currentDiff) {
+  const dismissed = loadDismissedDiffs()[itemName];
+  if (dismissed == null) return false;
+  return currentDiff <= dismissed * 1.10;
+}
+function dismissDiff(itemName, currentDiff) {
+  const d = loadDismissedDiffs();
+  d[itemName] = currentDiff;
+  saveDismissedDiffs(d);
+}
+
 // ── Thresholds ────────────────────────────────────────────────────────────────
 
 const HOT_DEAL_TREND_THRESHOLD = 0.10;   // current price must be in bottom 10% of historical range
@@ -2659,8 +2678,9 @@ function renderPage(data) {
     const priceDiffPct = (wwPrice != null && coPrice != null)
       ? Math.abs(wwPrice - coPrice) / Math.max(wwPrice, coPrice)
       : 0;
-    const discrepancyWarning = priceDiffPct > DISCREPANCY_WARN_THRESHOLD
-      ? `<span class="discrepancy-warn" title="Large price difference — double check the match is correct">⚠</span>`
+    const _absDiff = (wwPrice != null && coPrice != null) ? Math.abs(wwPrice - coPrice) : 0;
+    const discrepancyWarning = priceDiffPct > DISCREPANCY_WARN_THRESHOLD && !isDiffDismissed(item.list_item, _absDiff)
+      ? `<span class="discrepancy-warn" title="Large price difference — double check the match is correct">⚠<button class="dismiss-diff-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" data-diff="${_absDiff.toFixed(4)}" title="Dismiss warning">✕</button></span>`
       : '';
 
     // Match quality warning (from scraper confidence / size validation)
@@ -3746,6 +3766,14 @@ async function boot() {
           triggerItemRefresh(refreshBtn.dataset.item, refreshBtn, { wwUrl: ov.wwUrl, colesUrl: ov.colesUrl });
           return;
         }
+        const dismissDiffBtn = e.target.closest('.dismiss-diff-btn');
+        if (dismissDiffBtn) {
+          e.stopPropagation();
+          dismissDiff(dismissDiffBtn.dataset.item, parseFloat(dismissDiffBtn.dataset.diff));
+          if (_lastData) renderPage(_lastData);
+          return;
+        }
+
         const warnDismiss = e.target.closest('.warn-dismiss');
         if (warnDismiss) {
           e.stopPropagation();

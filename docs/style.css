@@ -1199,9 +1199,16 @@ td.priority-cell { text-align: center; }
 
 /* ── Discrepancy warning ─────────────────────────────────────── */
 .discrepancy-warn {
+  display: inline-flex; align-items: center; gap: 2px;
   font-size: 11px; color: #D97706; margin-left: 4px;
-  cursor: help; vertical-align: middle;
+  vertical-align: middle;
 }
+.dismiss-diff-btn {
+  background: none; border: none; padding: 0 1px;
+  font-size: 10px; color: #D97706; opacity: 0.6;
+  cursor: pointer; line-height: 1;
+}
+.dismiss-diff-btn:hover { opacity: 1; }
 
 /* ── Match quality warning (low-confidence / size mismatch) ─── */
 .match-warn {
