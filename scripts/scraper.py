@@ -72,6 +72,16 @@ def _iso_week(d) -> tuple[int, int]:
     return ic[0], ic[1]
 
 
+def _dedup_hist(history: list) -> list:
+    """Remove duplicate date entries from a price history list, keeping the last per date."""
+    seen: dict = {}
+    for e in history:
+        d = e.get("date", "")
+        if d:
+            seen[d] = e  # last entry wins (matches scraper's own write order)
+    return list(seen.values())
+
+
 def _week_dedup(history: list, new_price: float) -> str:
     today_week = _iso_week(date.today())
     for entry in history:
@@ -921,8 +931,9 @@ async def _scrape_single_item(
     _vco = "low" if co_conf == "carried" else co_conf
     pair_meta = validate_pair(item, ww_match, coles_match, _vww, _vco)
 
-    existing_ww_hist = existing_item.get("ww_price_history",    [])
-    existing_co_hist = existing_item.get("coles_price_history", [])
+    # Deduplicate by date before use — guards against external writes introducing duplicates
+    existing_ww_hist = _dedup_hist(existing_item.get("ww_price_history",    []) or [])
+    existing_co_hist = _dedup_hist(existing_item.get("coles_price_history", []) or [])
     ww_dedup = _week_dedup(existing_ww_hist,  ww_price)    if ww_price    else 'skip'
     co_dedup = _week_dedup(existing_co_hist,  coles_price) if coles_price else 'skip'
     item_price_history = history.get("price_history", [])
