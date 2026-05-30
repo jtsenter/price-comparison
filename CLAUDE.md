@@ -138,6 +138,12 @@ powershell -ExecutionPolicy Bypass -File "C:\actions-runner\install-service.ps1"
 
 Verify online status: https://github.com/jtsenter/price-comparison/settings/actions/runners
 
+## Commit Rules — CRITICAL
+- Never push more than once per task unless explicitly told to
+- Accumulate all changes locally, push ONE commit at the end
+- If a task has multiple fixes, apply all before committing
+- Never do "one commit per fix" unless user explicitly requests it
+
 ## Known gaps / work in progress
 
 - `clientPer100()` is duplicated in `app.js` and `hot-deals.html` — should be extracted
