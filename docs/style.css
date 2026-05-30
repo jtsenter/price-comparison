@@ -907,7 +907,7 @@ tr:hover .item-refresh-btn { opacity: 1; pointer-events: auto; }
 }
 .price-history-row {
   display: grid;
-  grid-template-columns: 1fr 70px 70px auto;
+  grid-template-columns: 1fr 70px 70px 180px;
   align-items: center;
   gap: 8px;
   padding: 9px 14px;
