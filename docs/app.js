@@ -139,6 +139,49 @@ async function persistArchivedToRepo(s, archivedNames, message = 'chore: sync ar
   }
 }
 
+// ── Watchlist persistence ─────────────────────────────────────────────────────
+
+function loadWatchlistLocal() {
+  try { return new Set(JSON.parse(localStorage.getItem('pw_watchlist_v1') || '[]')); } catch { return new Set(); }
+}
+function saveWatchlistLocal(set) {
+  localStorage.setItem('pw_watchlist_v1', JSON.stringify([...set]));
+}
+async function persistWatchlistToRepo(names) {
+  const s = loadSettings();
+  if (!s.user || !s.repo || !s.token) return;
+  const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/watchlist.json`;
+  const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
+  const content = btoa(JSON.stringify(names, null, 2) + '\n');
+  const doPut = async () => {
+    const getRes = await fetch(apiPath, { headers });
+    const meta = getRes.ok ? await getRes.json() : {};
+    const body = { message: 'chore: sync watchlist', content };
+    if (meta.sha) body.sha = meta.sha;
+    return fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
+  };
+  let putRes = await doPut();
+  if (putRes.status === 409) putRes = await doPut();
+  // fire-and-forget — errors are silently ignored
+}
+async function initWatchlist() {
+  _watchlist = loadWatchlistLocal();
+  try {
+    const res = await fetch(`data/watchlist.json?t=${Date.now()}`);
+    if (res.ok) {
+      const names = await res.json();
+      if (Array.isArray(names)) { _watchlist = new Set(names); saveWatchlistLocal(_watchlist); }
+    }
+  } catch {}
+}
+function toggleWatchlist(itemName) {
+  if (_watchlist.has(itemName)) _watchlist.delete(itemName);
+  else _watchlist.add(itemName);
+  saveWatchlistLocal(_watchlist);
+  persistWatchlistToRepo([..._watchlist]); // fire-and-forget
+  if (_lastData) renderPage(_lastData);
+}
+
 async function persistLatestJson(data, message = 'chore: update latest.json') {
   const s = loadSettings();
   if (!s.user || !s.repo || !s.token) return;
@@ -322,6 +365,7 @@ let _showHotOnly = false;
 let _storeFilter = 'all';
 let _showPricesOnly = false;
 let _searchQuery = '';
+let _watchlist = new Set(); // loaded on boot from localStorage + watchlist.json
 let _viewMode = localStorage.getItem('pw_view_mode') || 'table'; // 'table' | 'card'
 
 // ── Bulk selection ────────────────────────────────────────────────────────────
@@ -1346,12 +1390,16 @@ function initBulkBar() {
 function computeBannerStats(items) {
   const exclusions = loadExclusions();
   const filtered = items.filter(item => {
-    const p = getPriority(item.list_item);
-    if (p === 'archive' || item.archived) {
-      if (_activePriority !== 'archive') return false;
+    if (_activePriority === 'watchlist') {
+      if (!_watchlist.has(item.list_item)) return false;
     } else {
-      if (_activePriority === 'archive') return false;
-      if (_activePriority !== 'all' && p !== _activePriority) return false;
+      const p = getPriority(item.list_item);
+      if (p === 'archive' || item.archived) {
+        if (_activePriority !== 'archive') return false;
+      } else {
+        if (_activePriority === 'archive') return false;
+        if (_activePriority !== 'all' && p !== _activePriority) return false;
+      }
     }
     if (_activeCategory !== 'All' && getCategory(item) !== _activeCategory) return false;
     if (_showHotOnly && !isHotDeal(item, exclusions)) return false;
@@ -1880,6 +1928,8 @@ const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
 function sortItems(items) {
   const exclusions = loadExclusions();
   let filtered = items.filter(item => {
+    // Watchlist filter: show only watchlisted items; bypass archive/priority checks
+    if (_activePriority === 'watchlist') return _watchlist.has(item.list_item);
     const p = getPriority(item.list_item);
     // Archived items (by priority or item.archived flag): only visible in archive view.
     // In archive view, show ONLY those items and nothing else.
@@ -2247,7 +2297,8 @@ function renderMobileCards(items, data) {
     const displayName = ov.displayName || stripWW(item.list_item);
     const cat     = getCategory(item);
     const priority = getPriority(item.list_item);
-    const hotDeal = isHotDeal(item, exclusions);
+    const hotDeal  = isHotDeal(item, exclusions);
+    const isWatchedMC = _watchlist.has(item.list_item);
 
     const coImgSrc = resolveImgUrl(co?.image_url) || '';
     const wwImgSrc = resolveImgUrl(ww?.image_url) || '';
@@ -2290,7 +2341,10 @@ function renderMobileCards(items, data) {
           <div class="mc-name">${displayName}</div>
           <div class="mc-badges">${catHtml}${prioHtml}</div>
         </div>
-        ${hotDeal ? '<span class="mc-hot">🔥</span>' : ''}
+        <span class="mc-icons">
+          ${isWatchedMC ? `<button class="mc-watch-btn active" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Remove from watchlist">👁</button>` : `<button class="mc-watch-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Add to watchlist">👁</button>`}
+          ${hotDeal ? '<span class="mc-hot">🔥</span>' : ''}
+        </span>
       </div>
       ${barHtml ? `<div class="mc-bar">${barHtml}</div>` : ''}
       <div class="mc-prices">
@@ -2313,7 +2367,12 @@ function renderMobileCards(items, data) {
         ${saving && saving > 0 ? `<span class="mc-saving">Save ${fmt(saving)}</span>` : ''}
       </div>` : ''}`;
 
-    card.addEventListener('click', () => {
+    card.addEventListener('click', (e) => {
+      // Watch button stops propagation so it doesn't also open the price history modal
+      if (e.target.closest('.mc-watch-btn')) {
+        toggleWatchlist(e.target.closest('.mc-watch-btn').dataset.item);
+        return;
+      }
       const fullItem = (_lastData?.items || []).find(i => i.list_item === item.list_item) || item;
       openPriceHistoryModal(fullItem);
     });
@@ -2497,7 +2556,9 @@ function renderPage(data) {
   const priorities = loadPriorities();
   const categoryTabItems = _activePriority === 'archive'
     ? allDisplayItems.filter(i => i.archived || priorities[i.list_item] === 'archive')
-    : allDisplayItems.filter(i => !i.archived && priorities[i.list_item] !== 'archive');
+    : _activePriority === 'watchlist'
+      ? allDisplayItems.filter(i => _watchlist.has(i.list_item))
+      : allDisplayItems.filter(i => !i.archived && priorities[i.list_item] !== 'archive');
   buildCategoryTabs(categoryTabItems);
 
   // Prices-only toggle button
@@ -2688,6 +2749,8 @@ function renderPage(data) {
 
     const tripsHtml = item.trip_count != null ? `<span class="trips-cell">${item.trip_count}</span>` : '';
 
+    const isWatched = _watchlist.has(item.list_item);
+    const watchBtn  = `<button class="item-watch-btn${isWatched ? ' active' : ''}" data-item="${safeKey}" title="${isWatched ? 'Remove from watchlist' : 'Add to watchlist'}">👁</button>`;
     const refreshBtn = `<button class="item-refresh-btn" data-item="${safeKey}" title="Refresh prices for this item">↻</button>`;
 
     const wwClass  = cheaper === 'woolworths' ? 'cell-ww' : '';
@@ -2740,7 +2803,7 @@ function renderPage(data) {
     const prevCo = _prevPrices[item.list_item]?.co;
     const priceChanged = (prevWw != null && prevWw !== ww?.price) || (prevCo != null && prevCo !== co?.price);
     const rowClass = isPending ? ' class="row-pending"' : (priceChanged ? ' class="row-flash"' : '');
-    tbody.insertAdjacentHTML('beforeend', `<tr${rowClass} data-item="${safeKey}"><td class="check-cell"><input type="checkbox" class="row-check" data-item="${safeKey}"${checked}></td>${getVisibleCols().map(col => tdMap[col] || '').join('')}<td class="actions-cell">${refreshBtn}</td></tr>`);
+    tbody.insertAdjacentHTML('beforeend', `<tr${rowClass} data-item="${safeKey}"><td class="check-cell"><input type="checkbox" class="row-check" data-item="${safeKey}"${checked}></td>${getVisibleCols().map(col => tdMap[col] || '').join('')}<td class="actions-cell">${watchBtn}${refreshBtn}</td></tr>`);
 
     _prevPrices[item.list_item] = { ww: ww?.price, co: co?.price };
     if (priceChanged && _pendingRefreshItem === item.list_item) _pendingRefreshItem = null;
@@ -3626,8 +3689,8 @@ async function boot() {
     }
   });
 
-  // Load analysis data first so priorities/units are ready before render
-  await loadItemAnalysis();
+  // Load analysis data and watchlist before first render
+  await Promise.all([loadItemAnalysis(), initWatchlist()]);
   const data = await loadData();
 
   {
@@ -3692,6 +3755,9 @@ async function boot() {
           warnDismiss.closest('.match-warn')?.remove();
           return;
         }
+
+        const watchBtn = e.target.closest('.item-watch-btn');
+        if (watchBtn) { toggleWatchlist(watchBtn.dataset.item); return; }
 
         const editBtn = e.target.closest('.item-edit-btn');
         if (editBtn && _lastData) {

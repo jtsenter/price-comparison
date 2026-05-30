@@ -1489,7 +1489,46 @@ td.priority-cell { text-align: center; }
   .price-bar-outer { display: none; }
 }
 
-/* ── Toast notification ───────────────────────────────────────── */
+/* ── Watchlist buttons ────────────────────────────────────────── */
+.item-watch-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--text-soft);
+  padding: 2px 3px;
+  border-radius: 4px;
+  opacity: 0.45;
+  transition: opacity 0.15s, color 0.15s;
+  line-height: 1;
+}
+.item-watch-btn:hover { opacity: 1; }
+.item-watch-btn.active { color: var(--ww); opacity: 1; }
+
+/* Mobile card icons row (👁 + 🔥) */
+.mc-icons {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  margin-left: auto;
+  align-self: center;
+}
+.mc-watch-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text-soft);
+  padding: 0 1px;
+  opacity: 0.35;
+  transition: opacity 0.15s, color 0.15s;
+  line-height: 1;
+}
+.mc-watch-btn:active { opacity: 1; }
+.mc-watch-btn.active { color: var(--ww); opacity: 1; }
+
+/* Toast notification ───────────────────────────────────────── */
 .toast-notif {
   position: fixed;
   bottom: 80px;

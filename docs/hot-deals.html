@@ -327,7 +327,7 @@
 <!-- Category filter tabs -->
 <div id="categoryTabs" class="category-tabs" style="padding-top:12px;padding-bottom:8px;background:var(--card);border-bottom:1px solid var(--border)"></div>
 
-<!-- Filter bar: store pills -->
+<!-- Filter bar: store pills + watchlist toggle -->
 <div class="deals-filter-bar">
   <span class="deals-filter-label">Store</span>
   <div id="storeFilter" style="display:flex;gap:8px;flex-wrap:wrap">
@@ -335,6 +335,7 @@
     <button class="store-filter-btn" data-store="woolworths"><span class="store-chip ww sm">W</span> WW</button>
     <button class="store-filter-btn" data-store="coles"><span class="store-chip coles sm">C</span> Coles</button>
   </div>
+  <button class="priority-pill watchlist-pill" id="watchlistFilterBtn" style="margin-left:auto">👁 Watchlist</button>
 </div>
 
 <!-- Active sort keys display -->
@@ -363,6 +364,7 @@
               <span class="store-chip coles sm">C</span> Coles Price <span class="sort-arrow"></span>
             </th>
             <th data-col="avg" style="min-width:160px">Trend <span class="sort-arrow"></span></th>
+            <th style="width:32px"></th>
           </tr>
         </thead>
         <tbody id="dealsBody"></tbody>
@@ -573,6 +575,8 @@ const HOT_DEAL_TREND_THRESHOLD = 0.10;     // current price must be in bottom 10
 let sortKeys = [{ col: 'deal', dir: 'desc' }];
 let _activeCategory = 'All';
 let _storeFilter = 'all';
+let _watchlistOnly = false;
+let _watchlistHD = new Set();
 let _data = null;
 let _archivedSet = new Set();
 let _progressDismissed = false;
@@ -660,6 +664,7 @@ function onColClick(col) {
 
 function filterDeals(allDeals, exclusions) {
   return allDeals.filter(({ item }) => {
+    if (_watchlistOnly && !_watchlistHD.has(item.list_item)) return false;
     if (_activeCategory !== 'All' && getCategory(item) !== _activeCategory) return false;
     if (_storeFilter !== 'all') {
       const d = getDealInfo(item, exclusions);
@@ -817,6 +822,9 @@ function renderDeals() {
     const wwClass  = deal.store === 'woolworths' ? 'cell-deal-ww' : '';
     const coClass  = deal.store === 'coles'      ? 'cell-deal-coles' : '';
 
+    const isWatchedHD = _watchlistHD.has(item.list_item);
+    const safeNameHD = item.list_item.replace(/"/g, '&quot;');
+    const watchBtnHD = `<button class="item-watch-btn${isWatchedHD ? ' active' : ''}" data-item="${safeNameHD}" title="${isWatchedHD ? 'Remove from watchlist' : 'Add to watchlist'}">👁</button>`;
     tbody.insertAdjacentHTML('beforeend', `<tr>
       <td class="item-name">
         <div class="deal-item-cell">
@@ -831,6 +839,7 @@ function renderDeals() {
       <td class="${wwClass}">${wwHtml}</td>
       <td class="${coClass}">${coHtml}</td>
       <td class="trend-cell">${avgCell}</td>
+      <td style="text-align:center">${watchBtnHD}</td>
     </tr>`);
   });
 
@@ -884,6 +893,62 @@ function initStoreFilter() {
       btn.classList.add('active');
       renderDeals();
     });
+  });
+}
+
+function toggleWatchlistHD(itemName) {
+  if (_watchlistHD.has(itemName)) _watchlistHD.delete(itemName);
+  else _watchlistHD.add(itemName);
+  try { localStorage.setItem('pw_watchlist_v1', JSON.stringify([..._watchlistHD])); } catch {}
+  // Persist to GitHub (fire-and-forget)
+  const user = localStorage.getItem('gh_user') || '';
+  const repo = localStorage.getItem('gh_repo') || '';
+  const token = localStorage.getItem('gh_token') || '';
+  if (user && repo && token) {
+    const names = [..._watchlistHD];
+    const apiPath = `https://api.github.com/repos/${user}/${repo}/contents/docs/data/watchlist.json`;
+    const headers = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
+    const content = btoa(JSON.stringify(names, null, 2) + '\n');
+    (async () => {
+      try {
+        const getRes = await fetch(apiPath, { headers });
+        const meta = getRes.ok ? await getRes.json() : {};
+        const body = { message: 'chore: sync watchlist', content };
+        if (meta.sha) body.sha = meta.sha;
+        let putRes = await fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
+        if (putRes.status === 409) {
+          const getRes2 = await fetch(apiPath, { headers });
+          const meta2 = getRes2.ok ? await getRes2.json() : {};
+          if (meta2.sha) body.sha = meta2.sha;
+          await fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
+        }
+      } catch {}
+    })();
+  }
+  renderDeals();
+}
+
+async function initWatchlistHD() {
+  try { _watchlistHD = new Set(JSON.parse(localStorage.getItem('pw_watchlist_v1') || '[]')); } catch {}
+  try {
+    const res = await fetch(`data/watchlist.json?t=${Date.now()}`);
+    if (res.ok) {
+      const names = await res.json();
+      if (Array.isArray(names)) {
+        _watchlistHD = new Set(names);
+        localStorage.setItem('pw_watchlist_v1', JSON.stringify(names));
+      }
+    }
+  } catch {}
+}
+
+function initWatchlistFilter() {
+  const btn = document.getElementById('watchlistFilterBtn');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    _watchlistOnly = !_watchlistOnly;
+    btn.classList.toggle('active', _watchlistOnly);
+    renderDeals();
   });
 }
 
@@ -1060,6 +1125,7 @@ function initRefreshBtn() {
     const [dataRes, archRes] = await Promise.all([
       fetch(`data/latest.json?t=${Date.now()}`),
       fetch(`data/archived_items.json?t=${Date.now()}`).catch(() => null),
+      initWatchlistHD(),
     ]);
     if (!dataRes.ok) throw new Error('not found');
     _data = await dataRes.json();
@@ -1076,8 +1142,15 @@ function initRefreshBtn() {
 
   initSortHeaders();
   initStoreFilter();
+  initWatchlistFilter();
   initTooltip();
   initRefreshBtn();
+
+  // Watch button clicks (delegated from tbody)
+  document.getElementById('dealsBody')?.addEventListener('click', (e) => {
+    const wb = e.target.closest('.item-watch-btn');
+    if (wb) { e.stopPropagation(); toggleWatchlistHD(wb.dataset.item); }
+  });
 
   // Scrape strip dismiss/retry
   document.getElementById('scrapeStripDismiss')?.addEventListener('click', () => {
