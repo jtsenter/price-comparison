@@ -578,8 +578,15 @@ def _build_output(items: list, not_found: list, trigger: str, progress: dict | N
 _PROGRESS_BRANCH  = "scrape-progress"
 _PROGRESS_API_URL = "https://api.github.com/repos/jtsenter/price-comparison/contents/docs/data/latest.json"
 
-def push_progress(items: list, not_found: list, done: int, total: int, trigger: str, pending_validation: list | None = None):
-    out = _build_output(items, not_found, trigger, progress={"done": done, "total": total}, pending_validation=pending_validation)
+def push_progress(items: list, not_found: list, done: int, total: int, trigger: str,
+                  current_item: str = "", started_at: str = "",
+                  pending_validation: list | None = None):
+    progress: dict = {"done": done, "total": total}
+    if started_at:
+        progress["started_at"] = started_at
+    if current_item:
+        progress["current_item"] = current_item
+    out = _build_output(items, not_found, trigger, progress=progress, pending_validation=pending_validation)
     os.makedirs(DATA_DIR, exist_ok=True)
     latest_path = os.path.join(DATA_DIR, "latest.json")
     with open(latest_path, "w") as f:
@@ -595,19 +602,20 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
         "X-GitHub-Api-Version": "2022-11-28",
         "Content-Type": "application/json",
     }
-    try:
-        # Fetch fresh SHA for the file on scrape-progress (None if file not yet created)
-        get_req = urllib.request.Request(
+
+    def _fetch_sha() -> str | None:
+        req = urllib.request.Request(
             f"{_PROGRESS_API_URL}?ref={_PROGRESS_BRANCH}", headers=headers
         )
         try:
-            with urllib.request.urlopen(get_req, timeout=30) as r:
-                sha = json.loads(r.read())["sha"]
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return json.loads(r.read())["sha"]
         except urllib.error.HTTPError as e:
             if e.code == 404:
-                sha = None   # first write to the branch — no SHA needed
-            else:
-                raise
+                return None   # first write to branch — no SHA needed
+            raise
+
+    def _do_put(sha: str | None) -> None:
         body: dict = {
             "message": f"progress: {done}/{total} items scraped",
             "content": encoded,
@@ -615,15 +623,33 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
         }
         if sha:
             body["sha"] = sha
-        put_req = urllib.request.Request(
+        req = urllib.request.Request(
             _PROGRESS_API_URL,
             data=json.dumps(body).encode("utf-8"),
             headers=headers,
             method="PUT",
         )
-        with urllib.request.urlopen(put_req, timeout=30):
+        with urllib.request.urlopen(req, timeout=30):
             pass
-        print(f"  -> Pushed progress to {_PROGRESS_BRANCH} ({done}/{total})")
+
+    try:
+        sha = _fetch_sha()
+        try:
+            _do_put(sha)
+            print(f"  -> Pushed progress to {_PROGRESS_BRANCH} ({done}/{total})")
+        except urllib.error.HTTPError as e:
+            if e.code == 409:
+                # Stale SHA (concurrent write) — refetch and retry once
+                try:
+                    sha2 = _fetch_sha()
+                    _do_put(sha2)
+                    print(f"  -> Pushed progress to {_PROGRESS_BRANCH} ({done}/{total}) [409 retry ok]")
+                except urllib.error.HTTPError as e2:
+                    print(f"  -> Progress push failed after retry: HTTP {e2.code} on {_PROGRESS_BRANCH}")
+                except Exception as e2:
+                    print(f"  -> Progress push failed after retry: {e2} on {_PROGRESS_BRANCH}")
+            else:
+                print(f"  -> Progress push skipped: HTTP {e.code} on {_PROGRESS_BRANCH}")
     except Exception as e:
         print(f"  -> Progress push skipped: {e}")
 
@@ -631,7 +657,9 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
 _push_thread_ref = [None]
 _push_lock = threading.Lock()
 
-def push_progress_bg(items, not_found, done, total, trigger, existing_items=None, pending_validation=None):
+def push_progress_bg(items, not_found, done, total, trigger, existing_items=None,
+                     current_item: str = "", started_at: str = "",
+                     pending_validation=None):
     """Non-blocking progress push — skips if a previous push is still running.
     existing_items: full pre-scrape item list; carry-forward items not yet re-scraped
     so the JSON always shows all products during a scrape.
@@ -649,7 +677,7 @@ def push_progress_bg(items, not_found, done, total, trigger, existing_items=None
             merged = json.loads(json.dumps(items))
         t = threading.Thread(
             target=push_progress,
-            args=(merged, list(not_found), done, total, trigger, pending_validation),
+            args=(merged, list(not_found), done, total, trigger, current_item, started_at, pending_validation),
             daemon=True,
         )
         _push_thread_ref[0] = t
@@ -1135,12 +1163,15 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             # can show the progress bar immediately.  At this point _push_thread_ref[0]
             # is None (no previous push), so the lock check never fires and the
             # background thread starts without delay.
+            _scrape_start_time = datetime.now(timezone.utc).isoformat()
             if total_to_scrape > 0:
                 push_progress_bg(
                     items_output, not_found,
                     skipped,            # items already handled via carry-forward
                     total_all, trigger,
                     existing_items=list(existing_map.values()),
+                    current_item="",
+                    started_at=_scrape_start_time,
                     pending_validation=existing_pv if existing_pv else None,
                 )
 
@@ -1183,6 +1214,8 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                                 len(items_output) + len(not_found) + skipped,
                                 total_all, trigger,
                                 existing_items=list(existing_map.values()),
+                                current_item=name,
+                                started_at=_scrape_start_time,
                                 pending_validation=merged_pv if merged_pv else None,
                             )
                         if timed_out:
