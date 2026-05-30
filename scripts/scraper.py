@@ -76,7 +76,7 @@ def _week_dedup(history: list, new_price: float) -> str:
     today_week = _iso_week(date.today())
     for entry in history:
         if _iso_week(entry['date']) == today_week:
-            return 'skip' if round(entry['price'], 2) == round(new_price, 2) else 'conflict'
+            return 'skip' if round(entry['price'], 2) == round(new_price, 2) else 'update'
     return 'append'
 
 
@@ -931,14 +931,38 @@ async def _scrape_single_item(
     ww_reasons    = _suspicious_reasons(ww_price,    prev_ww,    item_price_history)
     coles_reasons = _suspicious_reasons(coles_price, prev_coles, item_price_history)
     today_str = date.today().isoformat()
-    new_ww_hist = existing_ww_hist if (ww_dedup != 'append' or ww_reasons) \
-                  else existing_ww_hist + [{"date": today_str, "price": round(ww_price, 2)}]
-    new_co_hist = existing_co_hist if (co_dedup != 'append' or coles_reasons) \
-                  else existing_co_hist + [{"date": today_str, "price": round(coles_price, 2)}]
-    all_reasons = list(dict.fromkeys(
-        (['week_conflict'] if ww_dedup == 'conflict' or co_dedup == 'conflict' else [])
-        + ww_reasons + coles_reasons
-    ))
+    today_week = _iso_week(date.today())
+
+    # WW history: withhold if suspicious; update in-week entry; append if new week; skip if unchanged
+    if ww_reasons:
+        new_ww_hist = existing_ww_hist
+    elif ww_dedup == 'update':
+        new_ww_hist = [
+            {"date": e["date"], "price": round(ww_price, 2)}
+            if _iso_week(e["date"]) == today_week else e
+            for e in existing_ww_hist
+        ]
+    elif ww_dedup == 'append':
+        new_ww_hist = existing_ww_hist + [{"date": today_str, "price": round(ww_price, 2)}]
+    else:  # skip
+        new_ww_hist = existing_ww_hist
+
+    # Coles history: same logic
+    if coles_reasons:
+        new_co_hist = existing_co_hist
+    elif co_dedup == 'update':
+        new_co_hist = [
+            {"date": e["date"], "price": round(coles_price, 2)}
+            if _iso_week(e["date"]) == today_week else e
+            for e in existing_co_hist
+        ]
+    elif co_dedup == 'append':
+        new_co_hist = existing_co_hist + [{"date": today_str, "price": round(coles_price, 2)}]
+    else:  # skip
+        new_co_hist = existing_co_hist
+
+    # week_conflict is normal repricing behaviour — never a validation trigger
+    all_reasons = list(dict.fromkeys(ww_reasons + coles_reasons))
     _validation_entry = None
     if all_reasons:
         _validation_entry = {
@@ -946,11 +970,11 @@ async def _scrape_single_item(
             "ww_price": ww_price,
             "ww_url": (ww_match or {}).get("url", ""),
             "ww_prev_price": prev_ww,
-            "ww_suspicious": bool(ww_reasons or ww_dedup == 'conflict'),
+            "ww_suspicious": bool(ww_reasons),
             "coles_price": coles_price,
             "coles_url": (coles_match or {}).get("url", ""),
             "coles_prev_price": prev_coles,
-            "coles_suspicious": bool(coles_reasons or co_dedup == 'conflict'),
+            "coles_suspicious": bool(coles_reasons),
             "flagged_date": today_str,
             "reason": all_reasons,
         }
