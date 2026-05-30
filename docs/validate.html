@@ -614,7 +614,8 @@ function renderEntry(entry) {
   card.className = 'validate-card';
   card.dataset.item = entry.item;
 
-  const reasonsHtml = (entry.reason || []).map(r => {
+  const displayReasons = (entry.reason || []).filter(r => r !== 'week_conflict');
+  const reasonsHtml = displayReasons.map(r => {
     const { text, cls } = reasonLabel(r);
     return `<span class="reason-tag ${cls}">${text}</span>`;
   }).join('');
@@ -661,6 +662,25 @@ function renderEntry(entry) {
   } catch (err) {
     document.getElementById('loading').textContent = 'Failed to load data.';
     return;
+  }
+
+  // One-time cleanup: strip week_conflict from all pending_validation entries;
+  // remove entries whose only reason was week_conflict.
+  const s = loadSettings();
+  const pv = _latestData.pending_validation || [];
+  let needsCleanup = pv.some(e => (e.reason || []).includes('week_conflict'));
+  if (needsCleanup) {
+    const cleaned = pv
+      .map(e => ({ ...e, reason: (e.reason || []).filter(r => r !== 'week_conflict') }))
+      .filter(e => e.reason.length > 0);
+    _latestData = { ..._latestData, pending_validation: cleaned.length ? cleaned : undefined };
+    if (!cleaned.length) delete _latestData.pending_validation;
+    if (s.token && s.user && s.repo) {
+      try {
+        await githubPut(s, 'docs/data/latest.json', JSON.stringify(_latestData, null, 2) + '\n',
+          'chore: remove week_conflict from pending_validation');
+      } catch (_) { /* non-fatal — cleanup will retry on next load */ }
+    }
   }
 
   document.getElementById('loading').style.display = 'none';
