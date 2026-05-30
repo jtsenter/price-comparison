@@ -2199,7 +2199,8 @@ function renderCards(items) {
       warnHtml = ` <span class="match-warn match-warn-low" title="Low-confidence match — verify these are the same product">⚠<button class="warn-dismiss" data-item="${safeKey}">✕</button></span>`;
     }
 
-    const bar = buildPriceBar(item.list_item, item.price_history, cheaper==='woolworths' ? ww?.price : co?.price, item._ww_price_factor ?? 1);
+    const _allHistory2 = [...(item.price_history||[]), ...(item.ww_price_history||[]), ...(item.coles_price_history||[])];
+    const bar = buildPriceBar(item.list_item, _allHistory2, cheaper==='woolworths' ? ww?.price : co?.price, item._ww_price_factor ?? 1);
     const isChecked = _checkedItems.has(item.list_item);
     const notFound = !ww && !co;
 
@@ -2311,8 +2312,9 @@ function renderMobileCards(items, data) {
     const currentRef = cheaper === 'woolworths' ? ww?.price
                      : cheaper === 'coles'      ? co?.price
                      : (co?.price ?? ww?.price);
-    const barHtml = Array.isArray(item.price_history) && item.price_history.length
-      ? buildPriceBar(item.list_item, item.price_history, currentRef, item._ww_price_factor ?? 1)
+    const _allHistoryMC = [...(item.price_history||[]), ...(item.ww_price_history||[]), ...(item.coles_price_history||[])];
+    const barHtml = _allHistoryMC.length
+      ? buildPriceBar(item.list_item, _allHistoryMC, currentRef, item._ww_price_factor ?? 1)
       : '';
 
     const wwP100 = clientPer100(ww);
@@ -2644,7 +2646,8 @@ function renderPage(data) {
 
     // Price bar uses cheaper store's price as reference (or fallback)
     const currentRef = cheaper === 'woolworths' ? ww?.price : (cheaper === 'coles' ? co?.price : (co?.price ?? ww?.price));
-    const bar = Array.isArray(item.price_history) ? buildPriceBar(item.list_item, item.price_history, currentRef, item._ww_price_factor ?? 1) : '';
+    const _allHistory = [...(item.price_history||[]), ...(item.ww_price_history||[]), ...(item.coles_price_history||[])];
+    const bar = _allHistory.length ? buildPriceBar(item.list_item, _allHistory, currentRef, item._ww_price_factor ?? 1) : '';
 
     // % Cheaper + discrepancy warning (must be before itemCell)
     const wwPrice = ww?.price;
