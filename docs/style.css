@@ -1005,12 +1005,12 @@ th.sort-active { color: var(--text); }
 /* ── Filter separator ─────────────────────────────────────────── */
 .filter-separator {
   display: inline-block;
-  width: 1px;
-  height: 20px;
-  background: var(--border);
-  margin: 0 4px;
+  width: 2px;
+  height: 18px;
+  background: var(--border-strong);
+  margin: 0 6px;
   vertical-align: middle;
-  opacity: 0.5;
+  border-radius: 1px;
   flex-shrink: 0;
 }
 
