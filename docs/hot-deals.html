@@ -558,7 +558,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
     trackHtml = `<div class="price-bar"><div class="price-marker" style="left:${pos.toFixed(1)}%"></div></div>`;
   }
 
-  const allTimeLowBadge = rawPos === 0 ? ' 🏆' : '';
+  const allTimeLowBadge = rawPos === 0 ? '<span class="trophy-icon">🏆</span>' : '';
   return `<div class="price-bar-outer" data-tooltip="${tooltip}">
     ${trackHtml}
     <div class="price-bar-labels"><span>${fmt(minP)}${allTimeLowBadge}</span><span>${fmt(maxP)}</span></div>

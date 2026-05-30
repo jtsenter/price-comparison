@@ -976,6 +976,32 @@ th.sort-active { color: var(--text); }
   border-color: var(--accent);
 }
 
+/* ── Trophy icon with tooltip ────────────────────────────────── */
+.trophy-icon {
+  position: relative;
+  cursor: default;
+  display: inline-block;
+  font-style: normal;
+}
+.trophy-icon::after {
+  content: "All-time low";
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  z-index: 10;
+}
+.trophy-icon:hover::after { opacity: 1; }
+
 /* ── Filter separator ─────────────────────────────────────────── */
 .filter-separator {
   display: inline-block;
