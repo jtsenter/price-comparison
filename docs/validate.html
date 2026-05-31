@@ -439,8 +439,16 @@ async function handleAction(entry, store, action, cardEl) {
     // Remove this entry from pending_validation
     const updatedPV = (fresh.pending_validation || []).filter(e => e.item !== entry.item);
 
-    const updated = { ...fresh, items: updatedItems, pending_validation: updatedPV.length ? updatedPV : undefined };
-    // Remove key if empty
+    // Update approved_prices for confirmed stores
+    const today = new Date().toISOString().slice(0, 10);
+    const ap = { ...(fresh.approved_prices || {}) };
+    if (!ap[entry.item]) ap[entry.item] = { approved_date: today };
+    if (dec.ww    === 'confirm' && entry.ww_price    != null) ap[entry.item].ww    = entry.ww_price;
+    if (dec.coles === 'confirm' && entry.coles_price != null) ap[entry.item].coles = entry.coles_price;
+    ap[entry.item].approved_date = today;
+
+    const updated = { ...fresh, items: updatedItems, approved_prices: ap,
+                      pending_validation: updatedPV.length ? updatedPV : undefined };
     if (!updatedPV.length) delete updated.pending_validation;
 
     const content = JSON.stringify(updated, null, 2) + '\n';
@@ -527,7 +535,17 @@ async function confirmAll() {
       });
     }
 
-    const updated = { ...fresh, items: updatedItems };
+    // Update approved_prices for all confirmed entries
+    const today = new Date().toISOString().slice(0, 10);
+    const ap = { ...(fresh.approved_prices || {}) };
+    for (const entry of toConfirm) {
+      if (!ap[entry.item]) ap[entry.item] = { approved_date: today };
+      if (entry.ww_price    != null) ap[entry.item].ww    = entry.ww_price;
+      if (entry.coles_price != null) ap[entry.item].coles = entry.coles_price;
+      ap[entry.item].approved_date = today;
+    }
+
+    const updated = { ...fresh, items: updatedItems, approved_prices: ap };
     delete updated.pending_validation;
 
     await githubPut(s, 'docs/data/latest.json', JSON.stringify(updated, null, 2) + '\n',

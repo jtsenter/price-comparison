@@ -90,6 +90,13 @@ def _week_dedup(history: list, new_price: float) -> str:
     return 'append'
 
 
+def _is_approved(price: float | None, approved_price: float | None, tolerance: float = 0.05) -> bool:
+    """Return True if price is within tolerance of the previously-approved price."""
+    if approved_price is None or price is None:
+        return False
+    return abs(price - approved_price) / max(abs(approved_price), 0.01) <= tolerance
+
+
 def _suspicious_reasons(new_price, prev_price, price_history) -> list[str]:
     if new_price is None or new_price <= 0:
         return []
@@ -563,7 +570,7 @@ def find_alternatives(all_results: list[dict], matched: dict | None, max_alts: i
 # Incremental push helpers
 # ---------------------------------------------------------------------------
 
-def _build_output(items: list, not_found: list, trigger: str, progress: dict | None = None, pending_validation: list | None = None) -> dict:
+def _build_output(items: list, not_found: list, trigger: str, progress: dict | None = None, pending_validation: list | None = None, approved_prices: dict | None = None) -> dict:
     # Only compare items where both prices are present — avoids single-store items skewing the totals
     comparable = [r for r in items if r.get("woolworths", {}) and r["woolworths"].get("price") is not None
                   and r.get("coles", {}) and r["coles"].get("price") is not None]
@@ -599,6 +606,8 @@ def _build_output(items: list, not_found: list, trigger: str, progress: dict | N
         out["scrape_progress"] = progress
     if pending_validation is not None:
         out["pending_validation"] = pending_validation
+    if approved_prices is not None:
+        out["approved_prices"] = approved_prices
     return out
 
 
@@ -994,8 +1003,11 @@ async def _scrape_single_item(
     item_price_history = history.get("price_history", [])
     prev_ww    = (existing_item.get("woolworths") or {}).get("price")
     prev_coles = (existing_item.get("coles")     or {}).get("price")
-    ww_reasons    = _suspicious_reasons(ww_price,    prev_ww,    item_price_history)
-    coles_reasons = _suspicious_reasons(coles_price, prev_coles, item_price_history)
+    _item_approved = (existing_data.get("approved_prices") or {}).get(item, {})
+    ww_reasons    = ([] if _is_approved(ww_price,    _item_approved.get("ww"))
+                     else _suspicious_reasons(ww_price,    prev_ww,    item_price_history))
+    coles_reasons = ([] if _is_approved(coles_price, _item_approved.get("coles"))
+                     else _suspicious_reasons(coles_price, prev_coles, item_price_history))
     today_str = date.today().isoformat()
     today_week = _iso_week(date.today())
 
@@ -1112,6 +1124,8 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
 
     # Load existing pending_validation as a dict keyed by item name for O(1) dedup
     existing_pv: dict = {e["item"]: e for e in existing_data.get("pending_validation", [])}
+    # Load existing approved_prices — carried forward and updated during this run
+    existing_approved: dict = dict(existing_data.get("approved_prices") or {})
 
     async with async_playwright() as pw:
         browser = await pw.chromium.launch(
@@ -1302,9 +1316,28 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         output = _build_output(
             all_items, existing.get("not_found_items", []), trigger,
             pending_validation=merged_pv if merged_pv else None,
+            approved_prices=existing.get("approved_prices") or None,
         )
         print(f"Patched '{single_item}' into existing data ({len(all_items)} total items).")
     else:
+        # Remove stale approvals: if a re-scraped item's price moved >5% from its approved
+        # price, clear that store's approval so it can be re-flagged and re-approved.
+        for result in items_output:
+            name = result["list_item"]
+            ap = existing_approved.get(name, {})
+            if not ap:
+                continue
+            ww_p = (result.get("woolworths") or {}).get("price")
+            co_p = (result.get("coles") or {}).get("price")
+            if ww_p is not None and not _is_approved(ww_p, ap.get("ww")):
+                ap.pop("ww", None)
+            if co_p is not None and not _is_approved(co_p, ap.get("coles")):
+                ap.pop("coles", None)
+            if ap:
+                existing_approved[name] = ap
+            else:
+                existing_approved.pop(name, None)
+
         # Merge by item name: new entries replace old ones for the same item (last scrape wins)
         merged_pv_dict = {**existing_pv, **{e["item"]: e for e in new_validation_entries}}
         # Remove items that were scraped cleanly this run (no new validation entry)
@@ -1316,6 +1349,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         output = _build_output(
             items_output, not_found, trigger,
             pending_validation=merged_pv if merged_pv else None,
+            approved_prices=existing_approved if existing_approved else None,
         )
         s = output["summary"]
         print(f"\nDone. {len(items_output)} items compared, {len(not_found)} not found.")
