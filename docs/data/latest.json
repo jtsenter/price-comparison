@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T03:25:04.073259+00:00",
+  "last_updated": "2026-05-31T03:25:17.469348+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5177,65 +5177,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Basa Thawed Freshwater Basa Fillets",
-      "last_scraped": "2026-05-31T02:47:49.720057+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2026-02-07",
-          "price": 11.0
-        },
-        {
-          "date": "2026-04-21",
-          "price": 11.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 8.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Basa Thawed Freshwater Basa Fillets",
-        "price": 8.0,
-        "unit_price": 8.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/87465/basa-thawed-freshwater-basa-fillets",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087465.jpg"
-      },
-      "coles": {
-        "name": "I&j Frozen Basa Fillets | 750g",
-        "price": 10,
-        "unit_price": 10,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/iandj-frozen-basa-fillets-750g-7108785",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7108785.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 4.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 10
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.8,
-      "per_100_coles": 1.33,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.75
-    },
-    {
       "list_item": "Beechworth 100% Pure Australian Honey Jar",
-      "last_scraped": "2026-05-31T02:47:49.824990+00:00",
+      "last_scraped": "2026-05-31T03:25:06.871348+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5291,7 +5234,7 @@
           "price": 8.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.7,
       "per_100_coles": 1.7,
@@ -5299,7 +5242,7 @@
     },
     {
       "list_item": "Ben & Jerry's Ice Cream Tub Chocolate Chip Cookie Dough",
-      "last_scraped": "2026-05-31T02:47:53.266059+00:00",
+      "last_scraped": "2026-05-31T03:25:08.196533+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5363,7 +5306,7 @@
           "price": 14.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.58,
       "per_100_coles": 3.17,
@@ -5371,7 +5314,7 @@
     },
     {
       "list_item": "Bulla Creme Fraiche Creme Fraiche",
-      "last_scraped": "2026-05-31T02:47:53.514674+00:00",
+      "last_scraped": "2026-05-31T03:25:12.023290+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -5427,7 +5370,7 @@
           "price": 5.4
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.7,
       "per_100_coles": 2.7,
@@ -5435,7 +5378,7 @@
     },
     {
       "list_item": "Cabbage Red Quarter",
-      "last_scraped": "2026-05-31T02:47:56.261079+00:00",
+      "last_scraped": "2026-05-31T03:25:13.810029+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -5491,7 +5434,7 @@
           "price": 4.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -5499,7 +5442,7 @@
     },
     {
       "list_item": "Cadbury Old Gold Dark 70% Cocoa Chocolate Block",
-      "last_scraped": "2026-05-31T02:47:57.080406+00:00",
+      "last_scraped": "2026-05-31T03:25:17.461067+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5534,7 +5477,7 @@
       },
       "coles": {
         "name": "Cadbury Old Gold Peppermint Dark Chocolate Block | 180g",
-        "price": 4,
+        "price": 4.0,
         "unit_price": 2.22,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/cadbury-old-gold-peppermint-dark-chocolate-block-180g-2350546",
@@ -5543,7 +5486,35 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 4.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Cadbury Old Gold Peppermint Dark Chocolate Block | 180g",
+          "price": 4.0,
+          "unit_price": 2.22,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/cadbury-old-gold-peppermint-dark-chocolate-block-180g-2350546",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2350546.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Cadbury Old Gold Peanut Brittle Dark Chocolate Block | 175g",
+          "price": 4.0,
+          "unit_price": 2.29,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/cadbury-old-gold-peanut-brittle-dark-chocolate-block-175g-5856541",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5856541.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Cadbury Old Gold Fruit And Nut Block Chocolate | 170g",
+          "price": 4.0,
+          "unit_price": 2.35,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/cadbury-old-gold-fruit-and-nut-block-chocolate-170g-1752861",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1752861.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -5556,11 +5527,68 @@
           "price": 4
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 4.85,
       "per_100_coles": 2.22,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Basa Thawed Freshwater Basa Fillets",
+      "last_scraped": "2026-05-31T02:47:49.720057+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2026-02-07",
+          "price": 11.0
+        },
+        {
+          "date": "2026-04-21",
+          "price": 11.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Basa Thawed Freshwater Basa Fillets",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/87465/basa-thawed-freshwater-basa-fillets",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087465.jpg"
+      },
+      "coles": {
+        "name": "I&j Frozen Basa Fillets | 750g",
+        "price": 10,
+        "unit_price": 10,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/iandj-frozen-basa-fillets-750g-7108785",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7108785.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 10
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.8,
+      "per_100_coles": 1.33,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.75
     },
     {
       "list_item": "Capsicum Green",
@@ -11627,10 +11655,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 50,
+    "done": 55,
     "total": 154,
     "started_at": "2026-05-31T03:21:41.122931+00:00",
-    "current_item": "Balconi Mix Max Cake Cocoa 350g"
+    "current_item": "Cadbury Old Gold Dark 70% Cocoa Chocolate Block"
   },
   "pending_validation": [
     {
@@ -13637,6 +13665,51 @@
       "coles_price": 5.8,
       "coles_url": "https://www.coles.com.au/product/balconi-mix-max-cocoa-cakes-10-pack-350g-5088122",
       "coles_prev_price": 5.8,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Ben & Jerry's Ice Cream Tub Chocolate Chip Cookie Dough",
+      "ww_price": 7.25,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/911420/ben-jerry-s-dairy-free-chocolate-chip-cookie-dough-tub",
+      "ww_prev_price": 7.25,
+      "ww_suspicious": true,
+      "coles_price": 14.5,
+      "coles_url": "https://www.coles.com.au/product/ben-and-jerry's-chocolate-chip-cookie-dough-ice-cream-tub-458ml-7806125",
+      "coles_prev_price": 14.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Bulla Creme Fraiche Creme Fraiche",
+      "ww_price": 5.4,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/374553/bulla-creme-fraiche-creme-fraiche",
+      "ww_prev_price": 5.4,
+      "ww_suspicious": true,
+      "coles_price": 5.4,
+      "coles_url": "https://www.coles.com.au/product/bulla-creme-fraiche-200g-8453381",
+      "coles_prev_price": 5.4,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Cabbage Red Quarter",
+      "ww_price": 2.1,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/127079/fresh-red-cabbage-quarter",
+      "ww_prev_price": 2.1,
+      "ww_suspicious": true,
+      "coles_price": 4.5,
+      "coles_url": "https://www.coles.com.au/product/coles-cabbage-half-red-1-each-4457052",
+      "coles_prev_price": 4.5,
       "coles_suspicious": true,
       "flagged_date": "2026-05-31",
       "reason": [
