@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T03:25:17.469348+00:00",
+  "last_updated": "2026-05-31T03:25:30.761518+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5534,65 +5534,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Basa Thawed Freshwater Basa Fillets",
-      "last_scraped": "2026-05-31T02:47:49.720057+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2026-02-07",
-          "price": 11.0
-        },
-        {
-          "date": "2026-04-21",
-          "price": 11.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 8.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Basa Thawed Freshwater Basa Fillets",
-        "price": 8.0,
-        "unit_price": 8.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/87465/basa-thawed-freshwater-basa-fillets",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087465.jpg"
-      },
-      "coles": {
-        "name": "I&j Frozen Basa Fillets | 750g",
-        "price": 10,
-        "unit_price": 10,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/iandj-frozen-basa-fillets-750g-7108785",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7108785.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 4.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 10
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.8,
-      "per_100_coles": 1.33,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.75
-    },
-    {
       "list_item": "Capsicum Green",
-      "last_scraped": "2026-05-31T02:47:59.746673+00:00",
+      "last_scraped": "2026-05-31T03:25:17.801551+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5636,7 +5579,26 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.02,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Organic Green Capsicum | approx. 200g",
+          "price": 1.7,
+          "unit_price": 1.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-organic-green-capsicum-approx.-200g-each-7238350",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7238350.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Capsicum Green Loose | approx. 220g",
+          "price": 1.96,
+          "unit_price": 1.96,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7214862.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -5649,7 +5611,7 @@
           "price": 1.96
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.89,
@@ -5657,7 +5619,7 @@
     },
     {
       "list_item": "Continental Classics Cup A Soup Chicken With Lots Of Noodles",
-      "last_scraped": "2026-05-31T02:48:00.922028+00:00",
+      "last_scraped": "2026-05-31T03:25:23.287263+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -5692,7 +5654,17 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.4,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Continental Chicken Noodle Soup Serves 4 | 45g",
+          "price": 1.2,
+          "unit_price": 1.2,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/continental-chicken-noodle-soup-serves-4-45g-129335",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/129335.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -5705,7 +5677,7 @@
           "price": 2.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.33,
       "per_100_coles": 4.67,
@@ -5713,7 +5685,7 @@
     },
     {
       "list_item": "Dolmio Extra Bolognese Tomato Pasta Sauce",
-      "last_scraped": "2026-05-31T02:48:03.321979+00:00",
+      "last_scraped": "2026-05-31T03:25:23.701921+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -5741,7 +5713,7 @@
       "coles": {
         "name": "Dolmio Extra Italian Herb Pasta Sauce | 500g",
         "price": 4.6,
-        "unit_price": 6,
+        "unit_price": 6.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/dolmio-extra-italian-herb-pasta-sauce-500g-1274420",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1274420.jpg"
@@ -5769,75 +5741,15 @@
           "price": 4.6
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.92,
       "per_100_coles": 0.92,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Essentials Salted Butter",
-      "last_scraped": "2026-05-31T02:48:04.599618+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 7.0
-        },
-        {
-          "date": "2025-03-27",
-          "price": 7.0
-        },
-        {
-          "date": "2025-05-12",
-          "price": 7.0
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Essentials Unsalted Butter",
-        "price": 7.0,
-        "unit_price": 1.4,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/688962/essentials-unsalted-butter",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/688962.jpg"
-      },
-      "coles": {
-        "name": "Westgold Salted Butter | 400g",
-        "price": 8,
-        "unit_price": 8,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/westgold-salted-butter-400g-7075278",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7075278.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 7
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8
-        },
-        {
-          "date": "2026-05-30",
-          "price": 8
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.4,
-      "per_100_coles": 2.0,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Essentials White Vinegar",
-      "last_scraped": "2026-05-31T02:48:07.861347+00:00",
+      "last_scraped": "2026-05-31T03:25:30.089587+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -5893,11 +5805,128 @@
           "price": 2.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.09,
       "per_100_coles": 0.67,
       "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Essentials Salted Butter",
+      "last_scraped": "2026-05-31T03:25:30.756349+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 7.0
+        },
+        {
+          "date": "2025-03-27",
+          "price": 7.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 7.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Essentials Unsalted Butter",
+        "price": 7.0,
+        "unit_price": 1.4,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/688962/essentials-unsalted-butter",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/688962.jpg"
+      },
+      "coles": {
+        "name": "Westgold Salted Butter | 400g",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/westgold-salted-butter-400g-7075278",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7075278.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 7
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8
+        },
+        {
+          "date": "2026-05-30",
+          "price": 8
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 1.4,
+      "per_100_coles": 2.0,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Basa Thawed Freshwater Basa Fillets",
+      "last_scraped": "2026-05-31T02:47:49.720057+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2026-02-07",
+          "price": 11.0
+        },
+        {
+          "date": "2026-04-21",
+          "price": 11.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Basa Thawed Freshwater Basa Fillets",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/87465/basa-thawed-freshwater-basa-fillets",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087465.jpg"
+      },
+      "coles": {
+        "name": "I&j Frozen Basa Fillets | 750g",
+        "price": 10,
+        "unit_price": 10,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/iandj-frozen-basa-fillets-750g-7108785",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7108785.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 10
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.8,
+      "per_100_coles": 1.33,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.75
     },
     {
       "list_item": "Fresh Radish Bunch",
@@ -11655,10 +11684,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 55,
+    "done": 60,
     "total": 154,
     "started_at": "2026-05-31T03:21:41.122931+00:00",
-    "current_item": "Cadbury Old Gold Dark 70% Cocoa Chocolate Block"
+    "current_item": "Essentials Salted Butter"
   },
   "pending_validation": [
     {
@@ -13710,6 +13739,51 @@
       "coles_price": 4.5,
       "coles_url": "https://www.coles.com.au/product/coles-cabbage-half-red-1-each-4457052",
       "coles_prev_price": 4.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Dolmio Extra Bolognese Tomato Pasta Sauce",
+      "ww_price": 4.6,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/758286/dolmio-extra-bolognese-tomato-pasta-sauce",
+      "ww_prev_price": 4.6,
+      "ww_suspicious": true,
+      "coles_price": 4.6,
+      "coles_url": "https://www.coles.com.au/product/dolmio-extra-italian-herb-pasta-sauce-500g-1274420",
+      "coles_prev_price": 4.6,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Essentials White Vinegar",
+      "ww_price": 1.85,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/94706/essentials-white-vinegar",
+      "ww_prev_price": 1.85,
+      "ww_suspicious": false,
+      "coles_price": 2.5,
+      "coles_url": "https://www.coles.com.au/product/cornwell's-white-vinegar-375ml-432763",
+      "coles_prev_price": 2.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Essentials Salted Butter",
+      "ww_price": 7.0,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/688962/essentials-unsalted-butter",
+      "ww_prev_price": 7.0,
+      "ww_suspicious": false,
+      "coles_price": 8.0,
+      "coles_url": "https://www.coles.com.au/product/westgold-salted-butter-400g-7075278",
+      "coles_prev_price": 8,
       "coles_suspicious": true,
       "flagged_date": "2026-05-31",
       "reason": [
