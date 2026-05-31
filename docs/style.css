@@ -1718,6 +1718,7 @@ td.priority-cell { text-align: center; }
   .mobile-card:active        { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
   .mobile-card.cheaper-ww    { border-left-color: var(--ww); }
   .mobile-card.cheaper-coles { border-left-color: var(--coles); }
+  .mobile-card.mc-selected   { border: 2px solid var(--accent); background: rgba(0,132,61,0.06); }
 
   /* Top row: thumbnail + name + flame */
   .mc-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }

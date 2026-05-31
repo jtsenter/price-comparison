@@ -392,6 +392,7 @@ let _storeFilter = 'all';
 let _showPricesOnly = false;
 let _searchQuery = '';
 let _watchlist = new Set(); // loaded on boot from localStorage + watchlist.json
+let _selectedItems = new Set(); // session-only mobile card selection
 let _viewMode = localStorage.getItem('pw_view_mode') || 'table'; // 'table' | 'card'
 
 // ── Bulk selection ────────────────────────────────────────────────────────────
@@ -1471,6 +1472,41 @@ function initPricesOnlyFilter() {
   });
 }
 
+// ── Mobile card selection pill ────────────────────────────────────────────────
+
+function _updateSelectedPill() {
+  const pill = $('selectedPill');
+  const count = $('selectedCount');
+  if (!pill) return;
+  const n = _selectedItems.size;
+  pill.style.display = n > 0 ? '' : 'none';
+  if (count) count.textContent = n;
+  // If now 0, exit selected filter
+  if (n === 0 && _activePriority === 'selected') {
+    _activePriority = 'all';
+    document.querySelector('#priorityFilter [data-priority="all"]')?.classList.add('active');
+    pill.classList.remove('active');
+    if (_lastData) renderPage(_lastData);
+  }
+}
+
+function initSelectedPill() {
+  $('selectedPill')?.addEventListener('click', () => {
+    if (_selectedItems.size === 0) return;
+    if (_activePriority === 'selected') {
+      // Toggle off
+      _activePriority = 'all';
+      $('selectedPill')?.classList.remove('active');
+      document.querySelector('#priorityFilter .priority-pill[data-priority="all"]')?.classList.add('active');
+    } else {
+      _activePriority = 'selected';
+      document.querySelectorAll('#priorityFilter .priority-pill').forEach(b => b.classList.remove('active'));
+      $('selectedPill')?.classList.add('active');
+    }
+    if (_lastData) renderPage(_lastData);
+  });
+}
+
 // ── Archive sync (module-level so initBulkBar callbacks can reach it) ─────────
 
 let _archiveSyncTimer = null;
@@ -1554,6 +1590,8 @@ function computeBannerStats(items) {
   const filtered = items.filter(item => {
     if (_activePriority === 'watchlist') {
       if (!_watchlist.has(item.list_item)) return false;
+    } else if (_activePriority === 'selected') {
+      if (!_selectedItems.has(item.list_item)) return false;
     } else {
       const p = getPriority(item.list_item);
       if (p === 'archive' || item.archived) {
@@ -2092,6 +2130,8 @@ function sortItems(items) {
   let filtered = items.filter(item => {
     // Watchlist filter: show only watchlisted items; bypass archive/priority checks
     if (_activePriority === 'watchlist') return _watchlist.has(item.list_item);
+    // Mobile selection filter
+    if (_activePriority === 'selected') return _selectedItems.has(item.list_item);
     const p = getPriority(item.list_item);
     // Archived items (by priority or item.archived flag): only visible in archive view.
     // In archive view, show ONLY those items and nothing else.
@@ -2494,8 +2534,9 @@ function renderMobileCards(items, data) {
     const saving    = item.saving_per_item;
     const borderCls = wwCheaper ? ' cheaper-ww' : coCheaper ? ' cheaper-coles' : '';
 
+    const isSelected = _selectedItems.has(item.list_item);
     const card = document.createElement('div');
-    card.className = `mobile-card${borderCls}`;
+    card.className = `mobile-card${borderCls}${isSelected ? ' mc-selected' : ''}`;
     card.dataset.item = item.list_item;
 
     card.innerHTML = `
@@ -2539,6 +2580,15 @@ function renderMobileCards(items, data) {
       }
       if (e.target.closest('.mc-unarchive-btn')) {
         unarchiveItem(e.target.closest('.mc-unarchive-btn').dataset.item);
+        return;
+      }
+      // Mobile-only (≤700px): tap card to toggle selection
+      if (window.innerWidth <= 700) {
+        const name = item.list_item;
+        if (_selectedItems.has(name)) _selectedItems.delete(name);
+        else _selectedItems.add(name);
+        card.classList.toggle('mc-selected', _selectedItems.has(name));
+        _updateSelectedPill();
         return;
       }
       const fullItem = (_lastData?.items || []).find(i => i.list_item === item.list_item) || item;
@@ -3637,6 +3687,7 @@ async function boot() {
   initImgPicker();
   initPriorityFilter();
   initPricesOnlyFilter();
+  initSelectedPill();
   initBulkBar();
   initColumnChooser();
   initColFilterDropdown();
