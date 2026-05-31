@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T03:24:30.019757+00:00",
+  "last_updated": "2026-05-31T03:24:50.257811+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4270,7 +4270,7 @@
     },
     {
       "list_item": "Woolworths Greek Style Yoghurt",
-      "last_scraped": "2026-05-31T02:47:19.542237+00:00",
+      "last_scraped": "2026-05-31T03:24:34.766008+00:00",
       "trip_count": 33,
       "price_history": [
         {
@@ -4438,15 +4438,119 @@
           "price": 4.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.42,
       "per_100_coles": 0.45,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Onion Brown Bag",
+      "last_scraped": "2026-05-31T03:24:38.904377+00:00",
+      "trip_count": 14,
+      "price_history": [
+        {
+          "date": "2024-12-09",
+          "price": 3.6
+        },
+        {
+          "date": "2025-02-28",
+          "price": 3.6
+        },
+        {
+          "date": "2025-03-27",
+          "price": 2.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.8
+        },
+        {
+          "date": "2025-04-25",
+          "price": 2.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.6
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.8
+        },
+        {
+          "date": "2025-07-26",
+          "price": 3.6
+        },
+        {
+          "date": "2026-02-03",
+          "price": 2.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 2.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Onion Brown Bag",
+        "price": 3.6,
+        "unit_price": 3.6,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/144336/woolworths-onion-brown-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144336.jpg"
+      },
+      "coles": {
+        "name": "Brown Onions",
+        "price": 4.0,
+        "unit_price": 4.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4803991.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.4,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3.6
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4
+        },
+        {
+          "date": "2026-05-30",
+          "price": 4
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.36,
+      "per_100_coles": 0.4,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Red Watermelon Cut Quarter",
-      "last_scraped": "2026-05-31T02:47:23.423284+00:00",
+      "last_scraped": "2026-05-31T03:24:39.800860+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4502,7 +4606,35 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.68,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Red Split Lentils | 1kg",
+          "price": 4.0,
+          "unit_price": 4.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-red-split-lentils-1kg-9073535",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9073535.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Kitchen Cut Fruit Watermelon | 350g",
+          "price": 6.5,
+          "unit_price": 6.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-kitchen-cut-fruit-watermelon-350g-7864336",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7864336.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Seedless Watermelon Cut | approx. 1.8kg",
+          "price": 7.02,
+          "unit_price": 7.02,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-seedless-watermelon-cut-approx.-1.8kg-7508229",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7508229.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -4515,7 +4647,7 @@
           "price": 7.02
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.39,
@@ -4523,7 +4655,7 @@
     },
     {
       "list_item": "Woolworths Sour Cream",
-      "last_scraped": "2026-05-31T02:47:26.893680+00:00",
+      "last_scraped": "2026-05-31T03:24:44.401007+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4601,119 +4733,15 @@
           "price": 3.3
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.1,
       "per_100_coles": 1.1,
       "per_100_unit": "100ml"
     },
     {
-      "list_item": "Woolworths Onion Brown Bag",
-      "last_scraped": "2026-05-31T02:47:27.218006+00:00",
-      "trip_count": 14,
-      "price_history": [
-        {
-          "date": "2024-12-09",
-          "price": 3.6
-        },
-        {
-          "date": "2025-02-28",
-          "price": 3.6
-        },
-        {
-          "date": "2025-03-27",
-          "price": 2.0
-        },
-        {
-          "date": "2025-04-14",
-          "price": 1.8
-        },
-        {
-          "date": "2025-04-25",
-          "price": 2.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 3.6
-        },
-        {
-          "date": "2025-06-06",
-          "price": 2.0
-        },
-        {
-          "date": "2025-07-10",
-          "price": 1.8
-        },
-        {
-          "date": "2025-07-26",
-          "price": 3.6
-        },
-        {
-          "date": "2026-02-03",
-          "price": 2.5
-        },
-        {
-          "date": "2026-02-23",
-          "price": 2.5
-        },
-        {
-          "date": "2026-03-10",
-          "price": 2.5
-        },
-        {
-          "date": "2026-04-02",
-          "price": 2.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 2.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Onion Brown Bag",
-        "price": 3.6,
-        "unit_price": 3.6,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/144336/woolworths-onion-brown-bag",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144336.jpg"
-      },
-      "coles": {
-        "name": "Brown Onions",
-        "price": 4,
-        "unit_price": 4,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4803991.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.4,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.6
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4
-        },
-        {
-          "date": "2026-05-30",
-          "price": 4
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.36,
-      "per_100_coles": 0.4,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Washed Potato Bag",
-      "last_scraped": "2026-05-31T02:47:37.731146+00:00",
+      "last_scraped": "2026-05-31T03:24:50.252183+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -4756,8 +4784,8 @@
       },
       "coles": {
         "name": "Potatoes Washed",
-        "price": 6,
-        "unit_price": 3,
+        "price": 6.0,
+        "unit_price": 3.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1206748.jpg"
@@ -4785,7 +4813,7 @@
           "price": 6
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.28,
       "per_100_coles": 0.3,
@@ -11579,10 +11607,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 40,
+    "done": 45,
     "total": 154,
     "started_at": "2026-05-31T03:21:41.122931+00:00",
-    "current_item": "Woolworths Garlic Heads CLOVE"
+    "current_item": "Woolworths Washed Potato Bag"
   },
   "pending_validation": [
     {
@@ -13514,6 +13542,36 @@
       "coles_price": 4.2,
       "coles_url": "https://www.coles.com.au/product/coles-garlic-prepack-3-pack-8433238",
       "coles_prev_price": 4.2,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Onion Brown Bag",
+      "ww_price": 3.6,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/144336/woolworths-onion-brown-bag",
+      "ww_prev_price": 3.6,
+      "ww_suspicious": false,
+      "coles_price": 4.0,
+      "coles_url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
+      "coles_prev_price": 4,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Washed Potato Bag",
+      "ww_price": 5.5,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/262783/woolworths-washed-potatoes-bag",
+      "ww_prev_price": 5.5,
+      "ww_suspicious": true,
+      "coles_price": 6.0,
+      "coles_url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
+      "coles_prev_price": 6,
       "coles_suspicious": true,
       "flagged_date": "2026-05-31",
       "reason": [
