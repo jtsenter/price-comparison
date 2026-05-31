@@ -1997,6 +1997,8 @@ async function pollForCompletion(s, dispatchedAt) {
   const apiHeaders = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' };
   let dataPollTimer;
 
+  // finish(true)  — run succeeded: clear timer, reload data
+  // finish(false) — run explicitly failed (bad conclusion from GitHub API)
   const finish = (success) => {
     clearInterval(dataPollTimer);
     if (success) {
@@ -2011,6 +2013,28 @@ async function pollForCompletion(s, dispatchedAt) {
       btn.innerHTML = '⚠ Run failed';
       setTimeout(() => { btn.innerHTML = '↻ Update Prices'; btn.disabled = false; }, 4000);
     }
+  };
+
+  // lostConnection() — poll timed out or network error, NOT an explicit failure.
+  // Keep the progress bar visible at its last known %, show a recoverable message
+  // with a Refresh button that restarts polling from Phase 1.
+  const lostConnection = () => {
+    // Do NOT clear dataPollTimer — the data poll keeps running in case the
+    // scrape-progress branch catches up later.
+    btn.innerHTML = '↻ Update Prices';
+    btn.disabled = false;
+    const strip = $('scrapeStrip');
+    if (strip && strip.style.display !== 'none') {
+      $('scrapeStripLabel').innerHTML =
+        '⚠ Lost connection — <a href="https://github.com/' +
+        `${s.user}/${s.repo}/actions" target="_blank" style="color:inherit">check GitHub Actions</a>`;
+      const retryBtn = $('scrapeStripRetry');
+      if (retryBtn) retryBtn.style.display = 'inline-block';
+    }
+    // Restart Phase 1 polling after a short delay so the user can recover
+    // by waiting rather than having to click Refresh themselves.
+    findAttempts = 0;
+    setTimeout(findRun, 15000);
   };
 
   // Live data poll: re-renders the progress bar every 5 s while the scrape runs.
@@ -2031,7 +2055,7 @@ async function pollForCompletion(s, dispatchedAt) {
   // Phase 1: find the run created after dispatch (~1 min timeout, 5 s polling)
   let findAttempts = 0;
   const findRun = async () => {
-    if (++findAttempts > 12) { finish(false); return; }
+    if (++findAttempts > 12) { lostConnection(); return; }
     try {
       const r = await fetch(`${apiBase}/actions/workflows/scrape.yml/runs?per_page=10`, { headers: apiHeaders });
       const data = await r.json();
@@ -2045,7 +2069,7 @@ async function pollForCompletion(s, dispatchedAt) {
   const waitForRun = async (runId) => {
     let waitAttempts = 0;
     const poll = async () => {
-      if (++waitAttempts > 90) { finish(false); return; }
+      if (++waitAttempts > 90) { lostConnection(); return; }
       try {
         const r = await fetch(`${apiBase}/actions/runs/${runId}`, { headers: apiHeaders });
         const run = await r.json();
