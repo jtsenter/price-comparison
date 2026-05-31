@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T11:21:22.295369+00:00",
+  "last_updated": "2026-05-31T11:21:36.358786+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8038,64 +8038,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Vevelle 2 Ply White Toilet Tissue",
-      "last_scraped": "2026-05-31T11:00:37.454477+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2025-02-02",
-          "price": 6.0
-        },
-        {
-          "date": "2025-03-11",
-          "price": 6.0
-        },
-        {
-          "date": "2025-04-14",
-          "price": 6.0
-        },
-        {
-          "date": "2025-05-12",
-          "price": 6.0
-        },
-        {
-          "date": "2025-06-06",
-          "price": 6.0
-        },
-        {
-          "date": "2025-07-10",
-          "price": 6.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Vevelle White 2 Ply Toilet Tissue",
-        "price": 6.0,
-        "unit_price": 0.19,
-        "unit": null,
-        "url": "https://www.woolworths.com.au/shop/productdetails/171303/vevelle-white-2-ply-toilet-tissue",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/171303.jpg"
-      },
-      "coles": null,
-      "cheaper_store": "woolworths",
-      "saving_per_item": null,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-31",
-          "price": 6.0
-        }
-      ],
-      "coles_price_history": [],
-      "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "White Seedless Grapes Bag Approx. 900g",
-      "last_scraped": "2026-05-31T11:00:40.397946+00:00",
+      "last_scraped": "2026-05-31T11:21:23.960392+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -8130,15 +8074,25 @@
       },
       "coles": {
         "name": "Coles White Seedless Grapes | approx. 1kg",
-        "price": 6,
-        "unit_price": 6,
+        "price": 6.0,
+        "unit_price": 6.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-white-seedless-grapes-approx.-1kg-8133391",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8133391.jpg"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.5,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Red Seedless Grapes | approx. 1kg",
+          "price": 4.9,
+          "unit_price": 4.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-red-seedless-grapes-approx.-1kg-8133562",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8133562.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -8155,7 +8109,7 @@
           "price": 6
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.61,
       "per_100_coles": 0.6,
@@ -8163,7 +8117,7 @@
     },
     {
       "list_item": "Woolworths 100% Canadian Maple Syrup",
-      "last_scraped": "2026-05-31T11:00:41.739361+00:00",
+      "last_scraped": "2026-05-31T11:21:27.191975+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8194,8 +8148,8 @@
       },
       "coles": {
         "name": "Coles Finest Pure Canadian Maple Syrup | 250mL",
-        "price": 6,
-        "unit_price": 6,
+        "price": 6.0,
+        "unit_price": 6.0,
         "unit": "100mL",
         "url": "https://www.coles.com.au/product/coles-finest-pure-canadian-maple-syrup-250ml-1790270",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1790270.jpg"
@@ -8215,7 +8169,7 @@
           "price": 6
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.4,
       "per_100_coles": 2.4,
@@ -8223,7 +8177,7 @@
     },
     {
       "list_item": "Woolworths 12 Extra Large Cage Free Eggs",
-      "last_scraped": "2026-05-31T11:00:44.182092+00:00",
+      "last_scraped": "2026-05-31T11:21:30.533757+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8279,7 +8233,7 @@
           "price": 6.4
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.81,
       "per_100_coles": 0.8,
@@ -8287,7 +8241,7 @@
     },
     {
       "list_item": "Woolworths 18 Large Cage Free Eggs",
-      "last_scraped": "2026-05-31T11:00:44.851358+00:00",
+      "last_scraped": "2026-05-31T11:21:31.686561+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8339,10 +8293,168 @@
           "price": 8.4
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.93,
       "per_100_coles": 0.93,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Baby Corn Spears",
+      "last_scraped": "2026-05-31T11:21:36.352693+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 1.9
+        },
+        {
+          "date": "2024-12-02",
+          "price": 1.9
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.9
+        },
+        {
+          "date": "2026-03-10",
+          "price": 1.9
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.9
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Baby Corn Spears",
+        "price": 1.9,
+        "unit_price": 4.63,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/491829/woolworths-baby-corn-spears",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/491829.jpg"
+      },
+      "coles": {
+        "name": "Coles Corn Spears Young | 410g",
+        "price": 1.95,
+        "unit_price": 1.95,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-corn-spears-young-410g-8701042",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8701042.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.17,
+      "alternatives": [
+        {
+          "name": "Coles Corn Kernels | 420g",
+          "price": 1.05,
+          "unit_price": 1.05,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4774066.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Popping Corn Kernels | 400g",
+          "price": 1.8,
+          "unit_price": 1.8,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-popping-corn-kernels-400g-5374675",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5374675.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Corn Spears Young | 410g",
+          "price": 1.95,
+          "unit_price": 1.95,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-corn-spears-young-410g-8701042",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8701042.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.9
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.95
+        },
+        {
+          "date": "2026-05-30",
+          "price": 1.95
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 0.46,
+      "per_100_coles": 0.48,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.41
+    },
+    {
+      "list_item": "Vevelle 2 Ply White Toilet Tissue",
+      "last_scraped": "2026-05-31T11:00:37.454477+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 6.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 6.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 6.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 6.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 6.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 6.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Vevelle White 2 Ply Toilet Tissue",
+        "price": 6.0,
+        "unit_price": 0.19,
+        "unit": null,
+        "url": "https://www.woolworths.com.au/shop/productdetails/171303/vevelle-white-2-ply-toilet-tissue",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/171303.jpg"
+      },
+      "coles": null,
+      "cheaper_store": "woolworths",
+      "saving_per_item": null,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-31",
+          "price": 6.0
+        }
+      ],
+      "coles_price_history": [],
+      "match_confidence": "none",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
       "per_100_unit": "100g"
     },
     {
@@ -8408,80 +8520,6 @@
       "per_100_ww": null,
       "per_100_coles": null,
       "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Baby Corn Spears",
-      "last_scraped": "2026-05-31T11:00:48.131268+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 1.9
-        },
-        {
-          "date": "2024-12-02",
-          "price": 1.9
-        },
-        {
-          "date": "2025-05-12",
-          "price": 1.9
-        },
-        {
-          "date": "2025-07-10",
-          "price": 1.9
-        },
-        {
-          "date": "2026-03-10",
-          "price": 1.9
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.9
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Baby Corn Spears",
-        "price": 1.9,
-        "unit_price": 4.63,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/491829/woolworths-baby-corn-spears",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/491829.jpg"
-      },
-      "coles": {
-        "name": "Coles Corn Spears Young | 410g",
-        "price": 1.95,
-        "unit_price": 1.95,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-corn-spears-young-410g-8701042",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8701042.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.17,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.9
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.95
-        },
-        {
-          "date": "2026-05-30",
-          "price": 1.95
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.46,
-      "per_100_coles": 0.48,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.41
     },
     {
       "list_item": "Woolworths Capsicum Green",
@@ -11134,10 +11172,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 90,
+    "done": 95,
     "total": 144,
     "started_at": "2026-05-31T11:16:28.284335+00:00",
-    "current_item": "Vevelle White 2 Ply Toilet Tissue"
+    "current_item": "Woolworths Baby Corn Spears"
   },
   "pending_validation": [
     {
