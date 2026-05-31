@@ -1110,8 +1110,8 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
     new_validation_entries: list = []
     single_item_ve = None
 
-    # Load existing pending_validation so new entries are merged in
-    existing_pv: list = existing_data.get("pending_validation", [])
+    # Load existing pending_validation as a dict keyed by item name for O(1) dedup
+    existing_pv: dict = {e["item"]: e for e in existing_data.get("pending_validation", [])}
 
     async with async_playwright() as pw:
         browser = await pw.chromium.launch(
@@ -1235,7 +1235,8 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                     finally:
                         completed[0] += 1
                         if completed[0] % 5 == 0:
-                            merged_pv = existing_pv + new_validation_entries
+                            _pv_snap = {**existing_pv, **{e["item"]: e for e in new_validation_entries}}
+                            merged_pv = list(_pv_snap.values())
                             push_progress_bg(
                                 items_output, not_found,
                                 len(items_output) + len(not_found) + skipped,
@@ -1304,7 +1305,14 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         )
         print(f"Patched '{single_item}' into existing data ({len(all_items)} total items).")
     else:
-        merged_pv = existing_pv + new_validation_entries
+        # Merge by item name: new entries replace old ones for the same item (last scrape wins)
+        merged_pv_dict = {**existing_pv, **{e["item"]: e for e in new_validation_entries}}
+        # Remove items that were scraped cleanly this run (no new validation entry)
+        scraped_this_run = {i["list_item"] for i in items_output}
+        new_entry_names = {e["item"] for e in new_validation_entries}
+        for name in scraped_this_run - new_entry_names:
+            merged_pv_dict.pop(name, None)
+        merged_pv = list(merged_pv_dict.values())
         output = _build_output(
             items_output, not_found, trigger,
             pending_validation=merged_pv if merged_pv else None,
