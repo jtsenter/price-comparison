@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T11:21:08.923083+00:00",
+  "last_updated": "2026-05-31T11:21:22.295369+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7686,7 +7686,7 @@
     },
     {
       "list_item": "Strike Paper Towels Embossed 2 Ply",
-      "last_scraped": "2026-05-31T11:00:28.564007+00:00",
+      "last_scraped": "2026-05-31T11:21:13.389324+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -7750,7 +7750,7 @@
           "price": 4.6
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -7758,7 +7758,7 @@
     },
     {
       "list_item": "The Odd Bunch Mandarin Prepacked",
-      "last_scraped": "2026-05-31T11:00:31.810446+00:00",
+      "last_scraped": "2026-05-31T11:21:13.805865+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -7801,7 +7801,26 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.8,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Imperial Mandarins | approx. 100g",
+          "price": 0.45,
+          "unit_price": 0.45,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-imperial-mandarins-approx.-100g-409750",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/409750.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Mandarin Segments in Syrup 4 Pack | 480g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-mandarin-segments-in-syrup-4-pack-480g-9837753",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9837753.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -7814,75 +7833,15 @@
           "price": 3.9
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.31,
       "per_100_coles": 0.39,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Twinings Honeybush, Orange & Mandarin",
-      "last_scraped": "2026-05-31T11:00:34.077229+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2025-04-14",
-          "price": 3.0
-        },
-        {
-          "date": "2025-05-12",
-          "price": 3.0
-        },
-        {
-          "date": "2025-07-10",
-          "price": 1.5
-        },
-        {
-          "date": "2026-02-03",
-          "price": 3.0
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Twinings Honeybush Orange & Mandarin",
-        "price": 2.7,
-        "unit_price": 0.27,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/659035/twinings-honeybush-orange-mandarin",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/659035.jpg"
-      },
-      "coles": {
-        "name": "Twinings Honeybush Orange Mandarin Tea Bags | 10 pack",
-        "price": 2.7,
-        "unit_price": 5,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/twinings-honeybush-orange-mandarin-tea-bags-10-pack-8067560",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8067560.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.7
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.7
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Twinings Orange & Cinnamon Tea Bags Tea",
-      "last_scraped": "2026-05-31T11:00:34.861559+00:00",
+      "last_scraped": "2026-05-31T11:21:17.687008+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -7918,7 +7877,7 @@
       "coles": {
         "name": "Twinings Infused Orange & Cinnamon Tea Bags | 10 pack",
         "price": 2.7,
-        "unit_price": 5,
+        "unit_price": 5.0,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/twinings-infused-orange-and-cinnamon-tea-bags-10-pack-2006132",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2006132.jpg"
@@ -7938,7 +7897,141 @@
           "price": 2.7
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Twinings Honeybush, Orange & Mandarin",
+      "last_scraped": "2026-05-31T11:21:18.826617+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 3.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.0
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Twinings Honeybush Orange & Mandarin",
+        "price": 2.7,
+        "unit_price": 0.27,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/659035/twinings-honeybush-orange-mandarin",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/659035.jpg"
+      },
+      "coles": {
+        "name": "Twinings Honeybush Orange Mandarin Tea Bags | 10 pack",
+        "price": 2.7,
+        "unit_price": 5.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/twinings-honeybush-orange-mandarin-tea-bags-10-pack-8067560",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8067560.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.7
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.7
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Vevelle White 2 Ply Toilet Tissue",
+      "last_scraped": "2026-05-31T11:21:22.286348+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2026-02-03",
+          "price": 6.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 6.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 6.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 6.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Vevelle White 2 Ply Toilet Tissue",
+        "price": 6.0,
+        "unit_price": 0.19,
+        "unit": null,
+        "url": "https://www.woolworths.com.au/shop/productdetails/171303/vevelle-white-2-ply-toilet-tissue",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/171303.jpg"
+      },
+      "coles": {
+        "name": "Quilton White Toilet Tissue | 6 pack",
+        "price": 4.55,
+        "unit_price": 0.42,
+        "unit": "100ea",
+        "url": "https://www.coles.com.au/product/quilton-white-toilet-tissue-6-pack-3055257",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3055257.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.45,
+      "alternatives": [
+        {
+          "name": "Coles Simply 2-ply White Toilet Paper | 18 Pack",
+          "price": 7.5,
+          "unit_price": 0.16,
+          "unit": "100ea",
+          "url": "https://www.coles.com.au/product/coles-simply-2-ply-white-toilet-paper-18-pack-9152405",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9152405.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 6
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4.55
+        },
+        {
+          "date": "2026-05-30",
+          "price": 4.55
+        }
+      ],
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -7995,70 +8088,6 @@
       ],
       "coles_price_history": [],
       "match_confidence": "none",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Vevelle White 2 Ply Toilet Tissue",
-      "last_scraped": "2026-05-31T11:00:38.072724+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2026-02-03",
-          "price": 6.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 6.0
-        },
-        {
-          "date": "2026-04-02",
-          "price": 6.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 6.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Vevelle White 2 Ply Toilet Tissue",
-        "price": 6.0,
-        "unit_price": 0.19,
-        "unit": null,
-        "url": "https://www.woolworths.com.au/shop/productdetails/171303/vevelle-white-2-ply-toilet-tissue",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/171303.jpg"
-      },
-      "coles": {
-        "name": "Quilton White Toilet Tissue | 6 pack",
-        "price": 4.55,
-        "unit_price": 0.42,
-        "unit": "100ea",
-        "url": "https://www.coles.com.au/product/quilton-white-toilet-tissue-6-pack-3055257",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3055257.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.45,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 6
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4.55
-        },
-        {
-          "date": "2026-05-30",
-          "price": 4.55
-        }
-      ],
-      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -11105,10 +11134,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 85,
+    "done": 90,
     "total": 144,
     "started_at": "2026-05-31T11:16:28.284335+00:00",
-    "current_item": "Strike 2 Ply Paper Towel 2 Ply"
+    "current_item": "Vevelle White 2 Ply Toilet Tissue"
   },
   "pending_validation": [
     {
