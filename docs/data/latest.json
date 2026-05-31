@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T02:45:47.572745+00:00",
+  "last_updated": "2026-05-31T02:46:02.996867+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1646,7 +1646,7 @@
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Portions Snacks",
-      "last_scraped": "2026-05-30T10:07:58.479939+00:00",
+      "last_scraped": "2026-05-31T02:45:48.852652+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -1730,7 +1730,7 @@
     },
     {
       "list_item": "Schweppes Orange Mango Natural Mineral Water Bottle",
-      "last_scraped": "2026-05-30T10:08:00.809043+00:00",
+      "last_scraped": "2026-05-31T02:45:51.117331+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1806,7 +1806,7 @@
     },
     {
       "list_item": "Strike Blue Toilet Cleaner Cistern Blocks",
-      "last_scraped": "2026-05-30T10:08:08.794720+00:00",
+      "last_scraped": "2026-05-31T02:45:59.780585+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1882,7 +1882,7 @@
     },
     {
       "list_item": "Sweet Potato Gold",
-      "last_scraped": "2026-05-30T10:08:10.572126+00:00",
+      "last_scraped": "2026-05-31T02:46:00.681657+00:00",
       "trip_count": 17,
       "price_history": [
         {
@@ -1998,7 +1998,7 @@
     },
     {
       "list_item": "The Dutch Company Confectionary 4 Syrup Wafers",
-      "last_scraped": "2026-05-30T10:08:11.932048+00:00",
+      "last_scraped": "2026-05-31T02:46:02.992806+00:00",
       "trip_count": 11,
       "price_history": [
         {
@@ -11454,10 +11454,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 15,
+    "done": 20,
     "total": 156,
     "started_at": "2026-05-31T02:44:51.650037+00:00",
-    "current_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle"
+    "current_item": "The Dutch Company Confectionary 4 Syrup Wafers"
   },
   "pending_validation": [
     {
@@ -12384,6 +12384,21 @@
       "coles_price": 5.3,
       "coles_url": "https://www.coles.com.au/product/helga's-traditional-wholemeal-bread-750g-5969435",
       "coles_prev_price": 5.3,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Sweet Potato Gold",
+      "ww_price": 1.96,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/147071/sweet-potato-gold",
+      "ww_prev_price": 1.96,
+      "ww_suspicious": false,
+      "coles_price": 2.55,
+      "coles_url": "https://www.coles.com.au/product/coles-potatoes-sweet-gold-approx.-500g-4199503",
+      "coles_prev_price": 2.55,
       "coles_suspicious": true,
       "flagged_date": "2026-05-31",
       "reason": [
