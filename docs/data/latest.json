@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T03:26:02.482537+00:00",
+  "last_updated": "2026-05-31T03:26:18.223740+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6607,65 +6607,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Basa Thawed Freshwater Basa Fillets",
-      "last_scraped": "2026-05-31T02:47:49.720057+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2026-02-07",
-          "price": 11.0
-        },
-        {
-          "date": "2026-04-21",
-          "price": 11.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 8.0
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Basa Thawed Freshwater Basa Fillets",
-        "price": 8.0,
-        "unit_price": 8.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/87465/basa-thawed-freshwater-basa-fillets",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087465.jpg"
-      },
-      "coles": {
-        "name": "I&j Frozen Basa Fillets | 750g",
-        "price": 10,
-        "unit_price": 10,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/iandj-frozen-basa-fillets-750g-7108785",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7108785.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 4.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 10
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.8,
-      "per_100_coles": 1.33,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.75
-    },
-    {
       "list_item": "Mainland Extra Tasty Cheese Block",
-      "last_scraped": "2026-05-31T02:48:41.836018+00:00",
+      "last_scraped": "2026-05-31T03:26:08.221261+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -6733,76 +6676,15 @@
           "price": 11.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.36,
       "per_100_coles": 2.36,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "McKenzie's Dried Veg Pearl Barley",
-      "last_scraped": "2026-05-31T02:48:44.338039+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2025-01-29",
-          "price": 1.9
-        },
-        {
-          "date": "2025-04-14",
-          "price": 1.9
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.6
-        },
-        {
-          "date": "2026-05-06",
-          "price": 1.6
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "McKenzie's Dried Veg Pearl Barley",
-        "price": 1.9,
-        "unit_price": 3.8,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/27298/mckenzie-s-dried-veg-pearl-barley",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/027298.jpg"
-      },
-      "coles": {
-        "name": "Barley Pearl",
-        "price": 1.6,
-        "unit_price": 3.2,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/mckenzie's-barley-pearl-500g-130039",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/130039.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.3,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.9
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.6
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.38,
-      "per_100_coles": 0.32,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "McKenzie's Green Lentil Whole",
-      "last_scraped": "2026-05-31T02:48:45.031067+00:00",
+      "last_scraped": "2026-05-31T03:26:12.488104+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -6866,7 +6748,7 @@
           "price": 2.3
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.48,
       "per_100_coles": 0.61,
@@ -6874,8 +6756,79 @@
       "_ww_price_factor": 0.375
     },
     {
+      "list_item": "McKenzie's Dried Veg Pearl Barley",
+      "last_scraped": "2026-05-31T03:26:12.810517+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-01-29",
+          "price": 1.9
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.9
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.6
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.6
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "McKenzie's Dried Veg Pearl Barley",
+        "price": 1.9,
+        "unit_price": 3.8,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/27298/mckenzie-s-dried-veg-pearl-barley",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/027298.jpg"
+      },
+      "coles": {
+        "name": "Barley Pearl",
+        "price": 1.6,
+        "unit_price": 3.2,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/mckenzie's-barley-pearl-500g-130039",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/130039.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.3,
+      "alternatives": [
+        {
+          "name": "Barley Pearl",
+          "price": 1.6,
+          "unit_price": 3.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/mckenzie's-barley-pearl-500g-130039",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/130039.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.9
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.6
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.38,
+      "per_100_coles": 0.32,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "McKenzie's Red Lentils",
-      "last_scraped": "2026-05-31T02:48:48.183656+00:00",
+      "last_scraped": "2026-05-31T03:26:16.386498+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6931,7 +6884,7 @@
           "price": 2.3
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.48,
       "per_100_coles": 0.61,
@@ -6940,7 +6893,7 @@
     },
     {
       "list_item": "McVitie's Digestives Milk Chocolate",
-      "last_scraped": "2026-05-31T02:48:49.027463+00:00",
+      "last_scraped": "2026-05-31T03:26:18.219075+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6981,6 +6934,15 @@
       "saving_per_item": 0.0,
       "alternatives": [
         {
+          "name": "Mcvities Digestives Tops Biscuits Milk Chocolate | 100g",
+          "price": 1.5,
+          "unit_price": 1.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/mcvities-digestives-tops-biscuits-milk-chocolate-100g-5777536",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5777536.jpg",
+          "retailer": "coles"
+        },
+        {
           "name": "McVitie's Digestives Choc Tops Milk Chocolate",
           "price": 2.0,
           "unit_price": 2.0,
@@ -7002,11 +6964,68 @@
           "price": 5.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.07,
       "per_100_coles": 2.07,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Basa Thawed Freshwater Basa Fillets",
+      "last_scraped": "2026-05-31T02:47:49.720057+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2026-02-07",
+          "price": 11.0
+        },
+        {
+          "date": "2026-04-21",
+          "price": 11.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Basa Thawed Freshwater Basa Fillets",
+        "price": 8.0,
+        "unit_price": 8.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/87465/basa-thawed-freshwater-basa-fillets",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087465.jpg"
+      },
+      "coles": {
+        "name": "I&j Frozen Basa Fillets | 750g",
+        "price": 10,
+        "unit_price": 10,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/iandj-frozen-basa-fillets-750g-7108785",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7108785.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 10
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.8,
+      "per_100_coles": 1.33,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.75
     },
     {
       "list_item": "McVitie's Hobnobs Milk Chocolate",
@@ -11779,10 +11798,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 70,
+    "done": 75,
     "total": 154,
     "started_at": "2026-05-31T03:21:41.122931+00:00",
-    "current_item": "Macro Organic Pasta Sauce Chunky Bolognese"
+    "current_item": "McVitie's Digestives Milk Chocolate"
   },
   "pending_validation": [
     {
@@ -13954,6 +13973,51 @@
       "coles_price": 2.0,
       "coles_url": "https://www.coles.com.au/product/coles-organic-bolognese-pasta-sauce-500g-3664834",
       "coles_prev_price": 2,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Mainland Extra Tasty Cheese Block",
+      "ww_price": 11.8,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/807870/mainland-extra-tasty-cheese-block",
+      "ww_prev_price": 11.8,
+      "ww_suspicious": true,
+      "coles_price": 11.8,
+      "coles_url": "https://www.coles.com.au/product/mainland-extra-tasty-cheddar-cheese-block-500g-3308421",
+      "coles_prev_price": 11.8,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "McKenzie's Green Lentil Whole",
+      "ww_price": 4.8,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/439264/mckenzie-s-green-lentil-whole",
+      "ww_prev_price": 4.8,
+      "ww_suspicious": false,
+      "coles_price": 2.3,
+      "coles_url": "https://www.coles.com.au/product/mckenzie's-whole-green-lentils-375g-130050",
+      "coles_prev_price": 2.3,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "McKenzie's Red Lentils",
+      "ww_price": 4.8,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/588066/mckenzie-s-red-lentils",
+      "ww_prev_price": 4.8,
+      "ww_suspicious": false,
+      "coles_price": 2.3,
+      "coles_url": "https://www.coles.com.au/product/mckenzie's-split-red-lentils-375g-130061",
+      "coles_prev_price": 2.3,
       "coles_suspicious": true,
       "flagged_date": "2026-05-31",
       "reason": [
