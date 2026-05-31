@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T11:19:23.689915+00:00",
+  "last_updated": "2026-05-31T11:19:37.397033+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5154,7 +5154,7 @@
     },
     {
       "list_item": "Ben & Jerry's Ice Cream Tub Chocolate Chip Cookie Dough",
-      "last_scraped": "2026-05-31T10:59:05.027291+00:00",
+      "last_scraped": "2026-05-31T11:19:24.711828+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5218,7 +5218,7 @@
           "price": 14.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.58,
       "per_100_coles": 3.17,
@@ -5226,7 +5226,7 @@
     },
     {
       "list_item": "Cadbury Old Gold Dark 70% Cocoa Chocolate Block",
-      "last_scraped": "2026-05-31T10:59:08.215234+00:00",
+      "last_scraped": "2026-05-31T11:19:30.959100+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5261,7 +5261,7 @@
       },
       "coles": {
         "name": "Cadbury Old Gold Peppermint Dark Chocolate Block | 180g",
-        "price": 4,
+        "price": 4.0,
         "unit_price": 2.22,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/cadbury-old-gold-peppermint-dark-chocolate-block-180g-2350546",
@@ -5270,7 +5270,35 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 4.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Cadbury Old Gold Peppermint Dark Chocolate Block | 180g",
+          "price": 4.0,
+          "unit_price": 2.22,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/cadbury-old-gold-peppermint-dark-chocolate-block-180g-2350546",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2350546.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Cadbury Old Gold Peanut Brittle Dark Chocolate Block | 175g",
+          "price": 4.0,
+          "unit_price": 2.29,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/cadbury-old-gold-peanut-brittle-dark-chocolate-block-175g-5856541",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5856541.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Cadbury Old Gold Fruit And Nut Block Chocolate | 170g",
+          "price": 4.0,
+          "unit_price": 2.35,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/cadbury-old-gold-fruit-and-nut-block-chocolate-170g-1752861",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1752861.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -5283,15 +5311,79 @@
           "price": 4
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 4.85,
       "per_100_coles": 2.22,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Bulla Creme Fraiche Creme Fraiche",
+      "last_scraped": "2026-05-31T11:19:32.381589+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 5.0
+        },
+        {
+          "date": "2024-11-20",
+          "price": 5.0
+        },
+        {
+          "date": "2025-05-29",
+          "price": 5.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Bulla Creme Fraiche Creme Fraiche",
+        "price": 5.4,
+        "unit_price": 2.7,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/374553/bulla-creme-fraiche-creme-fraiche",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/374553.jpg"
+      },
+      "coles": {
+        "name": "Creme Fraiche",
+        "price": 5.4,
+        "unit_price": 2.7,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/bulla-creme-fraiche-200g-8453381",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8453381.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5.4
+        },
+        {
+          "date": "2026-05-30",
+          "price": 5.4
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5.4
+        },
+        {
+          "date": "2026-05-30",
+          "price": 5.4
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 2.7,
+      "per_100_coles": 2.7,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "Capsicum Green",
-      "last_scraped": "2026-05-31T10:59:11.542829+00:00",
+      "last_scraped": "2026-05-31T11:19:36.141959+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5335,7 +5427,26 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.02,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Organic Green Capsicum | approx. 200g",
+          "price": 1.7,
+          "unit_price": 1.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-organic-green-capsicum-approx.-200g-each-7238350",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7238350.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Capsicum Green Loose | approx. 220g",
+          "price": 1.96,
+          "unit_price": 1.96,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7214862.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -5348,79 +5459,15 @@
           "price": 1.96
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.89,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Bulla Creme Fraiche Creme Fraiche",
-      "last_scraped": "2026-05-31T10:59:15.561553+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 5.0
-        },
-        {
-          "date": "2024-11-20",
-          "price": 5.0
-        },
-        {
-          "date": "2025-05-29",
-          "price": 5.0
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Bulla Creme Fraiche Creme Fraiche",
-        "price": 5.4,
-        "unit_price": 2.7,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/374553/bulla-creme-fraiche-creme-fraiche",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/374553.jpg"
-      },
-      "coles": {
-        "name": "Bulla Creme Fraiche | 200g",
-        "price": 5.4,
-        "unit_price": 5.4,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/bulla-creme-fraiche-200g-8453381",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8453381.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5.4
-        },
-        {
-          "date": "2026-05-30",
-          "price": 5.4
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5.4
-        },
-        {
-          "date": "2026-05-30",
-          "price": 5.4
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.7,
-      "per_100_coles": 2.7,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Continental Classics Cup A Soup Chicken With Lots Of Noodles",
-      "last_scraped": "2026-05-31T10:59:16.254371+00:00",
+      "last_scraped": "2026-05-31T11:19:37.391572+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -5455,7 +5502,17 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.4,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Continental Chicken Noodle Soup Serves 4 | 45g",
+          "price": 1.2,
+          "unit_price": 1.2,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/continental-chicken-noodle-soup-serves-4-45g-129335",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/129335.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -5468,7 +5525,7 @@
           "price": 2.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.33,
       "per_100_coles": 4.67,
@@ -10841,9 +10898,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 50,
+    "done": 55,
     "total": 144,
     "started_at": "2026-05-31T11:16:28.284335+00:00",
-    "current_item": "Beechworth 100% Pure Australian Honey Jar"
+    "current_item": "Continental Classics Cup A Soup Chicken With Lots Of Noodles"
   }
 }
