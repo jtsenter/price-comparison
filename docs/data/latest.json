@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T02:45:11.872325+00:00",
+  "last_updated": "2026-05-31T02:45:28.464249+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -560,7 +560,7 @@
     },
     {
       "list_item": "Cavendish Bananas",
-      "last_scraped": "2026-05-30T10:07:30.378819+00:00",
+      "last_scraped": "2026-05-31T02:45:14.055277+00:00",
       "trip_count": 30,
       "price_history": [
         {
@@ -716,7 +716,7 @@
           "price": 0.83
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.49,
@@ -724,7 +724,7 @@
     },
     {
       "list_item": "Fresh Broccoli",
-      "last_scraped": "2026-05-30T10:07:33.110182+00:00",
+      "last_scraped": "2026-05-31T02:45:18.414194+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -848,7 +848,7 @@
     },
     {
       "list_item": "Hass Avocado",
-      "last_scraped": "2026-05-30T10:07:36.415792+00:00",
+      "last_scraped": "2026-05-31T02:45:22.838061+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -896,7 +896,7 @@
       "coles": {
         "name": "Coles Hass Avocados | 1 Each",
         "price": 2.5,
-        "unit_price": 4,
+        "unit_price": 4.0,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-hass-avocados-1-each-5900530",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5900530.jpg"
@@ -920,7 +920,7 @@
           "price": 2.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -928,7 +928,7 @@
     },
     {
       "list_item": "Fresh Cauliflower Half",
-      "last_scraped": "2026-05-30T10:07:39.706147+00:00",
+      "last_scraped": "2026-05-31T02:45:23.451544+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -1044,7 +1044,7 @@
           "price": 2.7
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -1052,7 +1052,7 @@
     },
     {
       "list_item": "Kale Fresh Bunch",
-      "last_scraped": "2026-05-30T10:07:43.152574+00:00",
+      "last_scraped": "2026-05-31T02:45:28.462014+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1108,7 +1108,17 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.1,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Kale Bunch Green | 1 Each",
+          "price": 4.5,
+          "unit_price": 4.5,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-kale-bunch-green-1-each-8696598",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8696598.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -11434,10 +11444,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 5,
+    "done": 10,
     "total": 156,
     "started_at": "2026-05-31T02:44:51.650037+00:00",
-    "current_item": "Capsicum Yellow"
+    "current_item": "Kale Fresh Bunch"
   },
   "pending_validation": [
     {
@@ -12319,6 +12329,36 @@
       "coles_price": 1.29,
       "coles_url": "https://www.coles.com.au/product/coles-yellow-capsicum-approx.-220g-7215355",
       "coles_prev_price": 1.29,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Hass Avocado",
+      "ww_price": 1.5,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/120080/hass-avocado",
+      "ww_prev_price": 1.5,
+      "ww_suspicious": true,
+      "coles_price": 2.5,
+      "coles_url": "https://www.coles.com.au/product/coles-hass-avocados-1-each-5900530",
+      "coles_prev_price": 2.5,
+      "coles_suspicious": false,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Kale Fresh Bunch",
+      "ww_price": 4.6,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/380338/kale-fresh-bunch",
+      "ww_prev_price": 4.6,
+      "ww_suspicious": true,
+      "coles_price": 4.5,
+      "coles_url": "https://www.coles.com.au/product/coles-kale-bunch-green-1-each-8696598",
+      "coles_prev_price": 4.5,
       "coles_suspicious": true,
       "flagged_date": "2026-05-31",
       "reason": [
