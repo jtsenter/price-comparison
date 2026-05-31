@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T03:30:55.552956+00:00",
+  "last_updated": "2026-05-31T04:31:53.384746+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6828,7 +6828,7 @@
     },
     {
       "list_item": "McKenzie's Red Lentils",
-      "last_scraped": "2026-05-31T03:26:16.386498+00:00",
+      "last_scraped": "2026-05-31T04:31:53.207969+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6858,15 +6858,15 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/588066.jpg"
       },
       "coles": {
-        "name": "McKenzie's Split Red Lentils | 375g",
-        "price": 2.3,
-        "unit_price": null,
-        "unit": null,
-        "url": "https://www.coles.com.au/product/mckenzie's-split-red-lentils-375g-130061",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/130061.jpg"
+        "name": "Split Red Lentils",
+        "price": 4.8,
+        "unit_price": 4.8,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/mckenzie's-split-red-lentils-1kg-9190991",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9190991.jpg"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.5,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -6884,12 +6884,11 @@
           "price": 2.3
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.48,
-      "per_100_coles": 0.61,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.375
+      "per_100_coles": 0.48,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "McVitie's Digestives Milk Chocolate",
@@ -12402,10 +12401,10 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 741.82,
-    "total_coles": 811.14,
+    "total_coles": 813.64,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 69.32,
+    "total_saving": 71.82,
     "items_compared": 154,
     "items_not_found": 0
   },
@@ -12913,21 +12912,6 @@
       "ww_suspicious": false,
       "coles_price": 2.3,
       "coles_url": "https://www.coles.com.au/product/mckenzie's-whole-green-lentils-375g-130050",
-      "coles_prev_price": 2.3,
-      "coles_suspicious": true,
-      "flagged_date": "2026-05-30",
-      "reason": [
-        "outside_historical_range"
-      ]
-    },
-    {
-      "item": "McKenzie's Red Lentils",
-      "ww_price": 4.8,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/588066/mckenzie-s-red-lentils",
-      "ww_prev_price": 4.8,
-      "ww_suspicious": false,
-      "coles_price": 2.3,
-      "coles_url": "https://www.coles.com.au/product/mckenzie's-split-red-lentils-375g-130061",
       "coles_prev_price": 2.3,
       "coles_suspicious": true,
       "flagged_date": "2026-05-30",
@@ -13776,21 +13760,6 @@
       ]
     },
     {
-      "item": "McKenzie's Red Lentils",
-      "ww_price": 4.8,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/588066/mckenzie-s-red-lentils",
-      "ww_prev_price": 4.8,
-      "ww_suspicious": false,
-      "coles_price": 2.3,
-      "coles_url": "https://www.coles.com.au/product/mckenzie's-split-red-lentils-375g-130061",
-      "coles_prev_price": 2.3,
-      "coles_suspicious": true,
-      "flagged_date": "2026-05-31",
-      "reason": [
-        "outside_historical_range"
-      ]
-    },
-    {
       "item": "Mutti Tomato Paste Double Concentrate",
       "ww_price": 2.4,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/290303/mutti-tomato-paste-double-concentrate",
@@ -14616,21 +14585,6 @@
       ]
     },
     {
-      "item": "McKenzie's Red Lentils",
-      "ww_price": 4.8,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/588066/mckenzie-s-red-lentils",
-      "ww_prev_price": 4.8,
-      "ww_suspicious": false,
-      "coles_price": 2.3,
-      "coles_url": "https://www.coles.com.au/product/mckenzie's-split-red-lentils-375g-130061",
-      "coles_prev_price": 2.3,
-      "coles_suspicious": true,
-      "flagged_date": "2026-05-31",
-      "reason": [
-        "outside_historical_range"
-      ]
-    },
-    {
       "item": "Mutti Tomato Paste Double Concentrate",
       "ww_price": 2.4,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/290303/mutti-tomato-paste-double-concentrate",
@@ -14928,6 +14882,21 @@
       "flagged_date": "2026-05-31",
       "reason": [
         "outside_historical_range"
+      ]
+    },
+    {
+      "item": "McKenzie's Red Lentils",
+      "ww_price": 4.8,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/588066/mckenzie-s-red-lentils",
+      "ww_prev_price": 4.8,
+      "ww_suspicious": false,
+      "coles_price": 4.8,
+      "coles_url": "https://www.coles.com.au/product/mckenzie's-split-red-lentils-1kg-9190991",
+      "coles_prev_price": 2.3,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "30pct_change"
       ]
     }
   ]
