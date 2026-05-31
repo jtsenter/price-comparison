@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T11:20:44.102090+00:00",
+  "last_updated": "2026-05-31T11:20:55.099527+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6967,7 +6967,7 @@
     },
     {
       "list_item": "Mon Ami French Camembert Cheese",
-      "last_scraped": "2026-05-31T11:00:08.053507+00:00",
+      "last_scraped": "2026-05-31T11:20:44.765560+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -7007,14 +7007,33 @@
       "coles": {
         "name": "Emborg French Camembert | 200g",
         "price": 6.4,
-        "unit_price": 32,
+        "unit_price": 32.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/emborg-french-camembert-200g-4360529",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4360529.jpg"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 5.2,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Jindi Camembert | 125g",
+          "price": 5.85,
+          "unit_price": 5.85,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/jindi-camembert-125g-6139320",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6139320.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "South Cape Camembert | 200g",
+          "price": 7.0,
+          "unit_price": 7.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/south-cape-camembert-200g-5269091",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5269091.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -7027,7 +7046,7 @@
           "price": 6.4
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 3.0,
       "per_100_coles": 3.2,
@@ -7036,7 +7055,7 @@
     },
     {
       "list_item": "Old El Paso Fajita Spice Mix Mexican Style",
-      "last_scraped": "2026-05-31T11:00:11.368930+00:00",
+      "last_scraped": "2026-05-31T11:20:49.230245+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7076,7 +7095,35 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Old El Paso Mild Fajita Kit Mexican Style | 485g",
+          "price": 5.95,
+          "unit_price": 1.23,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/old-el-paso-mild-fajita-kit-mexican-style-485g-5030450",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5030450.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Old El Paso Fajita Spice Mix | 40g",
+          "price": 2.7,
+          "unit_price": 2.7,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/old-el-paso-fajita-spice-mix-40g-5066050",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5066050.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Old El Paso Spice Mix For Tacos Mild | 30g",
+          "price": 2.7,
+          "unit_price": 2.7,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/old-el-paso-spice-mix-for-tacos-mild-30g-291377",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/291377.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -7089,7 +7136,7 @@
           "price": 2.7
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 6.75,
       "per_100_coles": 6.75,
@@ -7097,7 +7144,7 @@
     },
     {
       "list_item": "Parsnip Fresh",
-      "last_scraped": "2026-05-31T11:00:13.163229+00:00",
+      "last_scraped": "2026-05-31T11:20:50.954242+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7161,7 +7208,7 @@
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Block",
-      "last_scraped": "2026-05-31T11:00:14.181997+00:00",
+      "last_scraped": "2026-05-31T11:20:54.514048+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -7199,6 +7246,24 @@
       "saving_per_item": 4.27,
       "alternatives": [
         {
+          "name": "Philadelphia Original Cream Cheese Block | 250g",
+          "price": 5.7,
+          "unit_price": 5.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-original-cream-cheese-block-250g-192502",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/192502.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Philadelphia Cream Cheese Original Block 2 Pack | 500g",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-cream-cheese-original-block-2-pack-500g-5081291",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5081291.jpg",
+          "retailer": "coles"
+        },
+        {
           "name": "Philadelphia Original Cream Cheese Twin Block",
           "price": 9.0,
           "unit_price": 18.0,
@@ -7220,7 +7285,7 @@
           "price": 5.7
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.28,
       "per_100_coles": 2.28,
@@ -7229,7 +7294,7 @@
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Spread Tub",
-      "last_scraped": "2026-05-31T11:00:16.397848+00:00",
+      "last_scraped": "2026-05-31T11:20:55.091123+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -7265,7 +7330,17 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 4.27,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Philadelphia Original Soft Cream Cheese Tub | 250g",
+          "price": 5.7,
+          "unit_price": 5.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-original-soft-cream-cheese-tub-250g-5196114",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5196114.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -7278,7 +7353,7 @@
           "price": 5.7
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.28,
       "per_100_coles": 2.28,
@@ -11030,10 +11105,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 75,
+    "done": 80,
     "total": 144,
     "started_at": "2026-05-31T11:16:28.284335+00:00",
-    "current_item": "Mutti Tomato Paste Double Concentrate"
+    "current_item": "Philadelphia Original Cream Cheese Spread Tub"
   },
   "pending_validation": [
     {
