@@ -1375,6 +1375,26 @@ function initPricesOnlyFilter() {
   });
 }
 
+// ── Archive sync (module-level so initBulkBar callbacks can reach it) ─────────
+
+let _archiveSyncTimer = null;
+async function syncArchivedToGitHub() {
+  const s = loadSettings();
+  if (!s.user || !s.repo || !s.token) return;
+  if (_archivedSaving) return;
+  const pr = loadPriorities();
+  const archivedNames = Object.keys(pr).filter(k => pr[k] === 'archive');
+  _archivedSaving = true;
+  try {
+    await persistArchivedToRepo(s, archivedNames);
+  } catch (_) { /* silently ignore */ }
+  finally { _archivedSaving = false; }
+}
+function scheduleArchiveSync() {
+  clearTimeout(_archiveSyncTimer);
+  _archiveSyncTimer = setTimeout(syncArchivedToGitHub, 2000);
+}
+
 // ── Bulk action bar ───────────────────────────────────────────────────────────
 
 function initBulkBar() {
@@ -3519,25 +3539,6 @@ async function boot() {
 
   $('shopListBtn')?.addEventListener('click', () => exportShoppingList(false));
   $('bulkExportBtn')?.addEventListener('click', () => exportShoppingList(true));
-
-  // Auto-sync archived_items.json to GitHub whenever archive state changes (debounced 2s)
-  let _archiveSyncTimer = null;
-  async function syncArchivedToGitHub() {
-    const s = loadSettings();
-    if (!s.user || !s.repo || !s.token) return; // no credentials configured, skip silently
-    if (_archivedSaving) return; // write-lock: skip if button PUT is in-flight
-    const pr = loadPriorities();
-    const archivedNames = Object.keys(pr).filter(k => pr[k] === 'archive');
-    _archivedSaving = true;
-    try {
-      await persistArchivedToRepo(s, archivedNames);
-    } catch (_) { /* silently ignore — user can still use Scrape Archived button */ }
-    finally { _archivedSaving = false; }
-  }
-  function scheduleArchiveSync() {
-    clearTimeout(_archiveSyncTimer);
-    _archiveSyncTimer = setTimeout(syncArchivedToGitHub, 2000);
-  }
 
   // Scrape strip dismiss & retry
   // Scrape Archived button — persists archived list to GitHub then dispatches workflow
