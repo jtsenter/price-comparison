@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T02:45:28.464249+00:00",
+  "last_updated": "2026-05-31T02:45:47.572745+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1147,7 +1147,7 @@
     },
     {
       "list_item": "Lebanese Cucumbers",
-      "last_scraped": "2026-05-30T10:07:46.013164+00:00",
+      "last_scraped": "2026-05-31T02:45:33.722948+00:00",
       "trip_count": 27,
       "price_history": [
         {
@@ -1279,7 +1279,17 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.11,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Lebanese Cucumbers | approx. 160g",
+          "price": 1.42,
+          "unit_price": 1.42,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-lebanese-cucumbers-approx.-160g-4575208",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4575208.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -1292,7 +1302,7 @@
           "price": 1.42
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.89,
@@ -1300,7 +1310,7 @@
     },
     {
       "list_item": "Lurpak Butter Spreadable",
-      "last_scraped": "2026-05-30T10:07:48.977285+00:00",
+      "last_scraped": "2026-05-31T02:45:37.421917+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -1372,7 +1382,7 @@
     },
     {
       "list_item": "Helga's Wholemeal Bread With Grains",
-      "last_scraped": "2026-05-30T10:07:51.527618+00:00",
+      "last_scraped": "2026-05-31T02:45:38.965385+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -1484,7 +1494,7 @@
     },
     {
       "list_item": "Pringles Sour Cream & Onion Potato Chips",
-      "last_scraped": "2026-05-30T10:07:54.352785+00:00",
+      "last_scraped": "2026-05-31T02:45:42.604906+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -1556,7 +1566,7 @@
     },
     {
       "list_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle",
-      "last_scraped": "2026-05-30T10:07:57.846831+00:00",
+      "last_scraped": "2026-05-31T02:45:47.569746+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -11444,10 +11454,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 10,
+    "done": 15,
     "total": 156,
     "started_at": "2026-05-31T02:44:51.650037+00:00",
-    "current_item": "Kale Fresh Bunch"
+    "current_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle"
   },
   "pending_validation": [
     {
@@ -12359,6 +12369,21 @@
       "coles_price": 4.5,
       "coles_url": "https://www.coles.com.au/product/coles-kale-bunch-green-1-each-8696598",
       "coles_prev_price": 4.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Helga's Wholemeal Bread With Grains",
+      "ww_price": 5.3,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/84129/helga-s-bread-traditional-wholemeal",
+      "ww_prev_price": 5.3,
+      "ww_suspicious": true,
+      "coles_price": 5.3,
+      "coles_url": "https://www.coles.com.au/product/helga's-traditional-wholemeal-bread-750g-5969435",
+      "coles_prev_price": 5.3,
       "coles_suspicious": true,
       "flagged_date": "2026-05-31",
       "reason": [
