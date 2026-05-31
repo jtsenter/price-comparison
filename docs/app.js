@@ -1964,7 +1964,7 @@ async function loadNameChanges() {
 
 // ── Sort state ───────────────────────────────────────────────────────────────
 
-let sortKeys = [{ col: 'trips', dir: 'desc' }];
+let sortKeys = [{ col: 'trend', dir: 'asc' }];
 let _mobileSortMode = 'trend-asc'; // 'trend-asc' | 'trend-desc' | 'default'
 
 // Re-render when window crosses the 640px mobile breakpoint (e.g. device rotation)
@@ -3851,5 +3851,24 @@ async function boot() {
     });
   }
 }
+
+// ── Global keyboard shortcuts ─────────────────────────────────────────────────
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  // Close whichever modal is open — check in reverse stack order (topmost first)
+  const modalIds = ['diffItemModal', 'priceHistoryModal', 'uploadModal', 'editModal', 'settingsModal'];
+  for (const id of modalIds) {
+    const m = document.getElementById(id);
+    if (m && m.classList.contains('open')) {
+      m.classList.remove('open');
+      // Clear per-modal state that would otherwise linger
+      if (id === 'priceHistoryModal') _historyItem = null;
+      if (id === 'diffItemModal')     _diffItemContext = null;
+      if (id === 'editModal')         _editingItem = null;
+      break; // only close the top-most open modal
+    }
+  }
+});
 
 document.addEventListener('DOMContentLoaded', boot);
