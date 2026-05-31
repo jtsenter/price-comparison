@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T02:46:38.784484+00:00",
+  "last_updated": "2026-05-31T02:46:54.261725+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3095,7 +3095,7 @@
     },
     {
       "list_item": "Woolworths Cherry Tomatoes Punnet",
-      "last_scraped": "2026-05-30T10:08:48.735207+00:00",
+      "last_scraped": "2026-05-31T02:46:40.968184+00:00",
       "trip_count": 21,
       "price_history": [
         {
@@ -3225,7 +3225,7 @@
     },
     {
       "list_item": "Woolworths Cookie Caramel Bar Slice",
-      "last_scraped": "2026-05-30T10:08:50.672464+00:00",
+      "last_scraped": "2026-05-31T02:46:42.792867+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -3317,7 +3317,7 @@
     },
     {
       "list_item": "Woolworths Cos Hearts Lettuce",
-      "last_scraped": "2026-05-30T10:08:53.593329+00:00",
+      "last_scraped": "2026-05-31T02:46:46.379513+00:00",
       "trip_count": 22,
       "price_history": [
         {
@@ -3449,7 +3449,7 @@
     },
     {
       "list_item": "Woolworths Corn Sweet",
-      "last_scraped": "2026-05-30T10:08:59.465197+00:00",
+      "last_scraped": "2026-05-31T02:46:51.128202+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -3574,7 +3574,7 @@
     },
     {
       "list_item": "Woolworths Dreamy Choc Chip Cookies",
-      "last_scraped": "2026-05-30T10:09:02.405928+00:00",
+      "last_scraped": "2026-05-31T02:46:54.258139+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -11454,10 +11454,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 30,
+    "done": 35,
     "total": 156,
     "started_at": "2026-05-31T02:44:51.650037+00:00",
-    "current_item": "Woolworths Broccolini Bunch"
+    "current_item": "Woolworths Dreamy Choc Chip Cookies"
   },
   "pending_validation": [
     {
@@ -12504,6 +12504,21 @@
       "coles_price": 6.5,
       "coles_url": "https://www.coles.com.au/product/coles-family-broccolini-1-each-4841775",
       "coles_prev_price": 6.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Cookie Caramel Bar Slice",
+      "ww_price": 8.0,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/61196/woolworths-cookie-caramel-bar-slice",
+      "ww_prev_price": 8.0,
+      "ww_suspicious": true,
+      "coles_price": 6.75,
+      "coles_url": "https://www.coles.com.au/product/coles-cafe-style-cookie-caramel-slice-280g-8962523",
+      "coles_prev_price": 6.75,
       "coles_suspicious": true,
       "flagged_date": "2026-05-31",
       "reason": [
