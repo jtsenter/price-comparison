@@ -3526,18 +3526,6 @@ function exportShoppingList(useChecked) {
 // ── Boot ─────────────────────────────────────────────────────────────────────
 
 async function boot() {
-  // Sync any localStorage URL overrides to the repo immediately so the scraper always
-  // uses pinned URLs even if they were set before the persist-on-save fix was deployed.
-  (() => {
-    const s = loadSettings();
-    if (s.user && s.repo && s.token) {
-      const ov = loadOverrides();
-      if (Object.values(ov).some(v => v.wwUrl || v.colesUrl)) {
-        persistUrlOverridesToRepo(s, ov).catch(() => {});
-      }
-    }
-  })();
-
   initSettingsModal();
   initEditModal();
   initPriceHistoryModal();
