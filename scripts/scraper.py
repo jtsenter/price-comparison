@@ -493,29 +493,56 @@ COLES_PRODUCT_PAGE_JS = """
 """
 
 
+_COLES_BOT_KEYWORDS = ('interruption', 'captcha', 'access denied', 'challenge', 'verify')
+
 async def fetch_coles_by_url(page, url: str) -> dict | None:
-    """Fetch a single Coles product directly by URL (faster than search)."""
+    """Fetch a single Coles product directly by URL (faster than search).
+    Retries once after a 3-second delay if bot detection is hit (Incapsula
+    'Pardon Our Interruption' page) or the execution context is destroyed by
+    a mid-evaluation redirect triggered by Coles's challenge system.
+    """
     if url and not url.startswith("http"):
         url = "https://" + url
-    try:
-        await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
-        await page.wait_for_timeout(COLES_WAIT_MS)
-        raw = await page.evaluate(COLES_PRODUCT_PAGE_JS)
-        name = raw.get("name", "")
-        price = parse_price(raw.get("price_text", ""))
-        unit_price, unit = parse_unit_price(raw.get("unit_price_text", ""))
-        if name and price:
-            return {
-                "name": name,
-                "price": price,
-                "unit_price": unit_price,
-                "unit": unit,
-                "url": url,
-                "image_url": _normalise_coles_img(raw.get("image_url", "")),
-            }
-        print(f"  [Coles] Could not extract product (name={name!r}, price={price}) from: {url}")
-    except Exception as e:
-        print(f"  [Coles] Exception fetching URL {url}: {e}")
+    for attempt in range(2):
+        try:
+            await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
+            await page.wait_for_timeout(COLES_WAIT_MS)
+            raw = await page.evaluate(COLES_PRODUCT_PAGE_JS)
+            name = raw.get("name", "")
+            price = parse_price(raw.get("price_text", ""))
+            unit_price, unit = parse_unit_price(raw.get("unit_price_text", ""))
+            if name and price:
+                if attempt > 0:
+                    print(f"  [Coles] Retry succeeded for {url}")
+                return {
+                    "name": name,
+                    "price": price,
+                    "unit_price": unit_price,
+                    "unit": unit,
+                    "url": url,
+                    "image_url": _normalise_coles_img(raw.get("image_url", "")),
+                }
+            # Extraction yielded no product — check if it's a bot-detection page
+            if attempt == 0:
+                page_title = await page.title()
+                if any(kw in page_title.lower() for kw in _COLES_BOT_KEYWORDS):
+                    print(f"  [Coles] Bot detection hit on {url}, retrying in 3s…")
+                    await page.wait_for_timeout(3000)
+                    continue
+            if attempt > 0:
+                print(f"  [Coles] Retry also failed for {url}, returning None")
+            else:
+                print(f"  [Coles] Could not extract product (name={name!r}, price={price}) from: {url}")
+        except Exception as e:
+            if attempt == 0 and "execution context was destroyed" in str(e).lower():
+                print(f"  [Coles] Bot detection hit on {url}, retrying in 3s…")
+                await page.wait_for_timeout(3000)
+                continue
+            if attempt > 0:
+                print(f"  [Coles] Retry also failed for {url}, returning None")
+            else:
+                print(f"  [Coles] Exception fetching URL {url}: {e}")
+        return None
     return None
 
 
