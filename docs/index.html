@@ -351,6 +351,25 @@
   </div>
 </div>
 
+<!-- Image picker modal -->
+<div class="modal-overlay" id="imgPickerModal">
+  <div class="modal" style="max-width:440px">
+    <button class="modal-close" id="imgPickerClose">✕</button>
+    <h2 style="margin-bottom:16px;font-size:16px">Choose product image</h2>
+    <div id="imgPickerOptions" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap"></div>
+    <div class="modal-actions" style="margin-top:16px">
+      <button class="btn btn-ghost" id="imgPickerCancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Image hover preview (shared singleton) -->
+<div id="imgHoverPreview" style="display:none;position:fixed;z-index:8000;pointer-events:none;
+  background:#fff;border:1px solid var(--border);border-radius:8px;padding:4px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.15)">
+  <img id="imgHoverImg" style="width:220px;height:220px;object-fit:contain;display:block;border-radius:6px" src="" alt="" />
+</div>
+
 <!-- Toast notification -->
 <div id="toastNotif" class="toast-notif" style="display:none"></div>
 

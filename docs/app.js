@@ -130,6 +130,13 @@ function saveOverrides(obj) {
   localStorage.setItem('pw_overrides_v1', JSON.stringify(obj));
 }
 
+// ── Image overrides ───────────────────────────────────────────────────────────
+// Stores { [list_item]: 'ww' | 'coles' } — user-chosen image source per item
+function loadImgOverrides() {
+  try { return JSON.parse(localStorage.getItem('pw_img_overrides_v1') || '{}'); } catch { return {}; }
+}
+function saveImgOverrides(obj) { localStorage.setItem('pw_img_overrides_v1', JSON.stringify(obj)); }
+
 // Write url_overrides.json to the repo so the scraper uses pinned URLs on every run.
 // overrides: the full pw_overrides_v1 localStorage object.
 let _overridesSaving = false;
@@ -1144,6 +1151,95 @@ function showToast(msg, durationMs = 3000) {
     toast.style.opacity = '0';
     setTimeout(() => { toast.style.display = 'none'; }, 300);
   }, durationMs);
+}
+
+// ── Image hover preview + picker modal ───────────────────────────────────────
+
+function initImgPicker() {
+  const preview = document.getElementById('imgHoverPreview');
+  const previewImg = document.getElementById('imgHoverImg');
+  const modal = document.getElementById('imgPickerModal');
+  if (!preview || !modal) return;
+
+  // Hover: show large preview near the thumbnail
+  let _hoverTarget = null;
+  document.addEventListener('mouseover', (e) => {
+    const img = e.target.closest('.img-hoverable');
+    if (!img) return;
+    _hoverTarget = img;
+    previewImg.src = img.src;
+    preview.style.display = 'block';
+  });
+  document.addEventListener('mousemove', (e) => {
+    if (!_hoverTarget) return;
+    const margin = 12;
+    let top = e.clientY + margin;
+    let left = e.clientX + margin;
+    const pw = preview.offsetWidth || 228, ph = preview.offsetHeight || 228;
+    if (left + pw > window.innerWidth - 8) left = e.clientX - pw - margin;
+    if (top + ph > window.innerHeight - 8) top = e.clientY - ph - margin;
+    preview.style.top = `${top}px`;
+    preview.style.left = `${left}px`;
+  });
+  document.addEventListener('mouseout', (e) => {
+    if (e.target.closest('.img-hoverable')) {
+      _hoverTarget = null;
+      preview.style.display = 'none';
+    }
+  });
+
+  // Click: open picker modal
+  let _pickerItem = null;
+  const closeModal = () => { modal.classList.remove('open'); _pickerItem = null; };
+  document.getElementById('imgPickerClose')?.addEventListener('click', closeModal);
+  document.getElementById('imgPickerCancel')?.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+  document.addEventListener('click', (e) => {
+    const img = e.target.closest('.img-hoverable');
+    if (!img) return;
+    e.stopPropagation();
+    const itemName = img.dataset.item;
+    const wwImg    = img.dataset.wwImg || '';
+    const coImg    = img.dataset.coImg || '';
+    if (!wwImg && !coImg) return; // nothing to pick
+    _pickerItem = itemName;
+
+    const current = loadImgOverrides()[itemName] || (coImg ? 'coles' : 'ww');
+    const opts = document.getElementById('imgPickerOptions');
+    opts.innerHTML = '';
+
+    const makeOpt = (store, src, label) => {
+      if (!src) return;
+      const wrap = document.createElement('div');
+      wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer';
+      const isActive = current === store;
+      wrap.innerHTML = `
+        <img src="${src}" style="width:150px;height:150px;object-fit:contain;border-radius:8px;
+          border:3px solid ${isActive ? 'var(--accent)' : 'var(--border)'};
+          background:var(--bg);padding:4px" onerror="this.style.display='none'" />
+        <span style="font-size:12px;font-weight:600;color:${isActive ? 'var(--accent)' : 'var(--text-soft)'}">
+          ${label}${isActive ? ' ✓' : ''}
+        </span>
+        <button class="btn btn-ghost" style="font-size:12px;padding:4px 12px"
+          data-store="${store}" data-item="${itemName.replace(/"/g, '&quot;')}">Use this</button>`;
+      opts.appendChild(wrap);
+    };
+    makeOpt('ww', wwImg, 'Woolworths');
+    makeOpt('coles', coImg, 'Coles');
+
+    opts.querySelectorAll('[data-store]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const ov = loadImgOverrides();
+        ov[btn.dataset.item] = btn.dataset.store;
+        saveImgOverrides(ov);
+        closeModal();
+        if (_lastData) renderPage(_lastData);
+      });
+    });
+
+    modal.classList.add('open');
+  });
 }
 
 // ── Different Item modal ─────────────────────────────────────────────────────
@@ -2690,13 +2786,17 @@ function renderPage(data) {
 
     const coImgSrc = resolveImgUrl(co?.image_url) || '';
     const wwImgSrc = resolveImgUrl(ww?.image_url) || '';
-    const imgSrc = coImgSrc || wwImgSrc;
+    const _imgPref  = loadImgOverrides()[item.list_item];
+    const imgSrc = (_imgPref === 'ww' ? wwImgSrc : _imgPref === 'coles' ? coImgSrc : null)
+                   || coImgSrc || wwImgSrc;
     const imgFallback = coImgSrc && wwImgSrc ? wwImgSrc : '';
+    const safeKey = item.list_item.replace(/"/g, '&quot;');
     const imgHtml = imgSrc
-      ? `<img class="item-img" src="${imgSrc}" alt="" loading="lazy" onerror="imgError(this,'${imgFallback}')" />`
+      ? `<img class="item-img img-hoverable" src="${imgSrc}" alt="" loading="lazy"
+           data-item="${safeKey}" data-ww-img="${wwImgSrc}" data-co-img="${coImgSrc}"
+           onerror="imgError(this,'${imgFallback}')" />`
       : '<div class="item-img-placeholder">No Photo</div>';
 
-    const safeKey = item.list_item.replace(/"/g, '&quot;');
     const editBtn = `<button class="item-edit-btn" data-edit-item="${safeKey}" title="Edit name/URL">✎</button>`;
 
     // Price bar uses cheaper store's price as reference (or fallback)
@@ -3534,6 +3634,7 @@ async function boot() {
   initUploadModal();
   initSearch();
   initDiffItemModal();
+  initImgPicker();
   initPriorityFilter();
   initPricesOnlyFilter();
   initBulkBar();
@@ -3857,7 +3958,7 @@ async function boot() {
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
   // Close whichever modal is open — check in reverse stack order (topmost first)
-  const modalIds = ['diffItemModal', 'priceHistoryModal', 'uploadModal', 'editModal', 'settingsModal'];
+  const modalIds = ['diffItemModal', 'imgPickerModal', 'priceHistoryModal', 'uploadModal', 'editModal', 'settingsModal'];
   for (const id of modalIds) {
     const m = document.getElementById(id);
     if (m && m.classList.contains('open')) {
