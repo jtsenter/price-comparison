@@ -2563,18 +2563,24 @@ function renderMobileCards(items, data) {
     card.className = `mobile-card${borderCls}${isSelected ? ' mc-selected' : ''}`;
     card.dataset.item = item.list_item;
 
+    const savingTag = saving && saving > 0 ? `<span class="mc-saving">Save ${fmt(saving)}</span>` : '';
     card.innerHTML = `
       <div class="mc-top">
         ${imgHtml}
         <div class="mc-name-wrap">
-          <div class="mc-name">${displayName}</div>
-          <div class="mc-badges">${catHtml}${prioHtml}</div>
+          <div class="mc-name-row">
+            <div class="mc-name">${displayName}</div>
+            <span class="mc-icons">
+              ${isWatchedMC ? `<button class="mc-watch-btn active" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Remove from watchlist">👁</button>` : `<button class="mc-watch-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Add to watchlist">👁</button>`}
+              ${hotDeal ? '<span class="mc-hot">🔥</span>' : ''}
+              ${_activePriority === 'archive' ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : ''}
+            </span>
+          </div>
+          <div class="mc-badges">
+            <div class="mc-badges-left">${catHtml}${prioHtml}</div>
+            ${savingTag}
+          </div>
         </div>
-        <span class="mc-icons">
-          ${isWatchedMC ? `<button class="mc-watch-btn active" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Remove from watchlist">👁</button>` : `<button class="mc-watch-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Add to watchlist">👁</button>`}
-          ${hotDeal ? '<span class="mc-hot">🔥</span>' : ''}
-          ${_activePriority === 'archive' ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : ''}
-        </span>
       </div>
       ${barHtml ? `<div class="mc-bar">${barHtml}</div>` : ''}
       <div class="mc-prices">
@@ -2594,7 +2600,6 @@ function renderMobileCards(items, data) {
         <span class="mc-winner-badge ${wwCheaper ? 'ww' : coCheaper ? 'coles' : 'equal'}">
           ${wwCheaper ? '✓ WW cheaper' : coCheaper ? '✓ Coles cheaper' : '= Same price'}
         </span>
-        ${saving && saving > 0 ? `<span class="mc-saving">Save ${fmt(saving)}</span>` : ''}
       </div>` : ''}`;
 
     card.addEventListener('click', (e) => {

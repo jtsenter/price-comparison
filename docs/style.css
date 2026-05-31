@@ -1720,7 +1720,7 @@ td.priority-cell { text-align: center; }
   .mobile-card.cheaper-coles { border-left-color: var(--coles); }
   .mobile-card.mc-selected   { border: 2px solid var(--accent); background: rgba(0,132,61,0.06); }
 
-  /* Top row: thumbnail + name + flame */
+  /* Top row: thumbnail + name-wrap */
   .mc-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
   .mc-img {
     width: 40px; height: 40px; object-fit: contain;
@@ -1733,12 +1733,20 @@ td.priority-cell { text-align: center; }
     border: 1px solid var(--border);
   }
   .mc-name-wrap { flex: 1; min-width: 0; }
+  /* Name + icons on the same row */
+  .mc-name-row { display: flex; align-items: flex-start; gap: 4px; }
   .mc-name {
     font-size: 15px; font-weight: 600; color: var(--text);
     display: -webkit-box; -webkit-line-clamp: 2;
     -webkit-box-orient: vertical; overflow: hidden; line-height: 1.35;
+    flex: 1; min-width: 0;
   }
-  .mc-badges { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+  /* Badges row: frequency tag left, saving right */
+  .mc-badges {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 6px; margin-top: 4px;
+  }
+  .mc-badges-left { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
   .mc-cat {
     font-size: 11px; color: var(--text-soft); background: var(--bg);
     border: 1px solid var(--border); padding: 1px 7px; border-radius: 10px;
@@ -1747,7 +1755,7 @@ td.priority-cell { text-align: center; }
   .mc-priority.weekly  { background: #FEF3C7; color: #92400E; }
   .mc-priority.monthly { background: #DBEAFE; color: #1E40AF; }
   .mc-priority.rare    { background: #F3F4F6; color: #6B7280; }
-  .mc-hot { font-size: 16px; flex-shrink: 0; margin-left: auto; align-self: center; }
+  .mc-hot { font-size: 16px; flex-shrink: 0; line-height: 1; }
 
   /* Trend bar (re-enable; 700px rule hides .price-bar-outer globally) */
   .mc-bar { margin: 6px 0 0; }
