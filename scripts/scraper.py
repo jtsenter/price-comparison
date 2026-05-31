@@ -1057,6 +1057,12 @@ async def _scrape_single_item(
             "reason": all_reasons,
         }
 
+    # If a store returned no result this run (and _carry also found nothing), preserve
+    # whatever was in the previous latest.json rather than overwriting with None.
+    # This prevents a single bot-detection miss from permanently erasing valid data.
+    _final_ww = ww_match if ww_match is not None else existing_item.get("woolworths")
+    _final_co = coles_match if coles_match is not None else existing_item.get("coles")
+
     result = {
         "list_item": item,
         "last_scraped": datetime.now(timezone.utc).isoformat(),
@@ -1064,8 +1070,8 @@ async def _scrape_single_item(
         "price_history": [e for e in history.get("price_history", [])
                           if e.get("date", "") not in ("", "1970-01-01", None)],
         "category": category,
-        "woolworths": ww_match,
-        "coles": coles_match,
+        "woolworths": _final_ww,
+        "coles": _final_co,
         "cheaper_store": cheaper_store,
         "saving_per_item": saving,
         "alternatives": alternatives,
