@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T02:51:36.411468+00:00",
+  "last_updated": "2026-05-31T03:21:41.129129+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11037,94 +11037,8 @@
       "_ww_price_factor": 0.42
     },
     {
-      "list_item": "Woolworths Lean Beef Mince",
-      "last_scraped": "2026-05-30T10:09:26.484318+00:00",
-      "trip_count": 9,
-      "price_history": [
-        {
-          "date": "2024-12-02",
-          "price": 9.0
-        },
-        {
-          "date": "2024-12-19",
-          "price": 15.5
-        },
-        {
-          "date": "2025-05-04",
-          "price": 13.75
-        },
-        {
-          "date": "2025-05-29",
-          "price": 15.5
-        },
-        {
-          "date": "2025-07-03",
-          "price": 16.0
-        },
-        {
-          "date": "2026-02-03",
-          "price": 19.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 19.0
-        },
-        {
-          "date": "2026-04-13",
-          "price": 18.75
-        },
-        {
-          "date": "2026-05-06",
-          "price": 19.35
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths Lean Beef Mince",
-        "price": 19.35,
-        "unit_price": 19.35,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/577862/woolworths-lean-beef-mince",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/577862.jpg"
-      },
-      "coles": {
-        "name": "El- Amin's Beef Lean Mince | 500g",
-        "price": 12.5,
-        "unit_price": 12.5,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/el-amin's-beef-lean-mince-500g-6123116",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6123116.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 2.82,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 19.35
-        },
-        {
-          "date": "2026-05-30",
-          "price": 19.35
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 12.5
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.94,
-      "per_100_coles": 2.5,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.5
-    },
-    {
       "list_item": "Woolworths Greek Style Fetta",
-      "last_scraped": "2026-05-30T10:13:21.743949+00:00",
+      "last_scraped": "2026-05-31T02:51:39.812812+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11178,7 +11092,7 @@
     },
     {
       "list_item": "Woolworths Green Asparagus Bunch Green",
-      "last_scraped": "2026-05-30T10:13:23.126516+00:00",
+      "last_scraped": "2026-05-31T02:51:40.286981+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11230,7 +11144,7 @@
     },
     {
       "list_item": "Woolworths Mixed Herbs Dried",
-      "last_scraped": "2026-05-30T10:13:24.884290+00:00",
+      "last_scraped": "2026-05-31T02:51:42.875941+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11282,7 +11196,7 @@
     },
     {
       "list_item": "Woolworths Red Washed Potatoes Bag",
-      "last_scraped": "2026-05-30T10:13:26.229124+00:00",
+      "last_scraped": "2026-05-31T02:51:43.862529+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11338,7 +11252,7 @@
     },
     {
       "list_item": "Woolworths Thyme Leaves",
-      "last_scraped": "2026-05-30T10:13:28.340866+00:00",
+      "last_scraped": "2026-05-31T02:51:46.879332+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11390,7 +11304,7 @@
     },
     {
       "list_item": "Woolworths Water Chestnuts Sliced",
-      "last_scraped": "2026-05-30T10:13:29.887476+00:00",
+      "last_scraped": "2026-05-31T02:51:47.505374+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11445,19 +11359,18 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 767.6,
-    "total_coles": 832.14,
+    "total_woolworths": 748.25,
+    "total_coles": 819.64,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 64.54,
-    "items_compared": 157,
+    "total_saving": 71.39,
+    "items_compared": 156,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 150,
-    "total": 156,
-    "started_at": "2026-05-31T02:44:51.650037+00:00",
-    "current_item": "Woolworths Corn Sweet Kernels"
+    "done": 0,
+    "total": 154,
+    "started_at": "2026-05-31T03:21:41.122931+00:00"
   },
   "pending_validation": [
     {
