@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T10:56:54.029692+00:00",
+  "last_updated": "2026-05-31T10:57:10.152257+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1147,7 +1147,7 @@
     },
     {
       "list_item": "Lebanese Cucumbers",
-      "last_scraped": "2026-05-31T02:45:33.722948+00:00",
+      "last_scraped": "2026-05-31T10:56:59.274596+00:00",
       "trip_count": 27,
       "price_history": [
         {
@@ -1309,80 +1309,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Lurpak Butter Spreadable",
-      "last_scraped": "2026-05-31T02:45:37.421917+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 7.5
-        },
-        {
-          "date": "2025-03-11",
-          "price": 8.2
-        },
-        {
-          "date": "2025-04-14",
-          "price": 8.2
-        },
-        {
-          "date": "2025-07-10",
-          "price": 8.2
-        },
-        {
-          "date": "2026-02-03",
-          "price": 9.0
-        },
-        {
-          "date": "2026-04-29",
-          "price": 8.3
-        },
-        {
-          "date": "2026-05-06",
-          "price": 8.3
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Lurpak Butter Spreadable",
-        "price": 9.0,
-        "unit_price": 2.25,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/87702/lurpak-butter-spreadable",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087702.jpg"
-      },
-      "coles": {
-        "name": "Lurpak Butter Spreadable Slightly Salted | 400g",
-        "price": 8.3,
-        "unit_price": null,
-        "unit": null,
-        "url": "https://www.coles.com.au/product/lurpak-butter-spreadable-slightly-salted-400g-5376659",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5376659.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.7,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 9
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8.3
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.25,
-      "per_100_coles": 2.08,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Helga's Wholemeal Bread With Grains",
-      "last_scraped": "2026-05-31T02:45:38.965385+00:00",
+      "last_scraped": "2026-05-31T10:57:00.428158+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -1486,15 +1414,87 @@
           "price": 5.3
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.71,
       "per_100_coles": 0.71,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Lurpak Butter Spreadable",
+      "last_scraped": "2026-05-31T10:57:03.504306+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 7.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 8.2
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.2
+        },
+        {
+          "date": "2025-07-10",
+          "price": 8.2
+        },
+        {
+          "date": "2026-02-03",
+          "price": 9.0
+        },
+        {
+          "date": "2026-04-29",
+          "price": 8.3
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.3
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Lurpak Butter Spreadable",
+        "price": 9.0,
+        "unit_price": 2.25,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/87702/lurpak-butter-spreadable",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087702.jpg"
+      },
+      "coles": {
+        "name": "Lurpak Butter Spreadable Slightly Salted | 400g",
+        "price": 8.3,
+        "unit_price": null,
+        "unit": null,
+        "url": "https://www.coles.com.au/product/lurpak-butter-spreadable-slightly-salted-400g-5376659",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5376659.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.7,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 9
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8.3
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.25,
+      "per_100_coles": 2.08,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Pringles Sour Cream & Onion Potato Chips",
-      "last_scraped": "2026-05-31T02:45:42.604906+00:00",
+      "last_scraped": "2026-05-31T10:57:06.550999+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -1566,7 +1566,7 @@
     },
     {
       "list_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle",
-      "last_scraped": "2026-05-31T02:45:47.569746+00:00",
+      "last_scraped": "2026-05-31T10:57:10.149483+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -11252,9 +11252,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 10,
+    "done": 15,
     "total": 145,
     "started_at": "2026-05-31T10:56:16.558259+00:00",
-    "current_item": "Kale Fresh Bunch"
+    "current_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle"
   }
 }
