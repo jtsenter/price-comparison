@@ -1531,8 +1531,12 @@ td.priority-cell { text-align: center; }
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 700px) {
   html, body { overflow-x: hidden; }
-  .header-inner { padding: 0 14px; }
+  .header-inner { padding: 0 10px; gap: 8px; }
   .brand-name { display: none; }
+  /* Nav scrolls horizontally if items don't fit */
+  nav { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-shrink: 1; }
+  nav::-webkit-scrollbar { display: none; }
+  nav a { padding: 5px 8px; font-size: 12px; white-space: nowrap; }
   main { padding: 16px 14px 48px; }
   .store-cards { flex-direction: column; }
   .store-divider { flex-direction: row; padding: 0; }
