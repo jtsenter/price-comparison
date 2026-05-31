@@ -1395,6 +1395,18 @@ function scheduleArchiveSync() {
   _archiveSyncTimer = setTimeout(syncArchivedToGitHub, 2000);
 }
 
+function unarchiveItem(itemName) {
+  const pr = loadPriorities();
+  if (pr[itemName] === 'archive') {
+    pr[itemName] = 'monthly'; // restore to monthly (safest default)
+  } else {
+    delete pr[itemName];
+  }
+  savePriorities(pr);
+  scheduleArchiveSync(); // debounced write to archived_items.json
+  if (_lastData) renderPage(_lastData);
+}
+
 // ── Bulk action bar ───────────────────────────────────────────────────────────
 
 function initBulkBar() {
@@ -2400,6 +2412,7 @@ function renderMobileCards(items, data) {
         <span class="mc-icons">
           ${isWatchedMC ? `<button class="mc-watch-btn active" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Remove from watchlist">👁</button>` : `<button class="mc-watch-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Add to watchlist">👁</button>`}
           ${hotDeal ? '<span class="mc-hot">🔥</span>' : ''}
+          ${_activePriority === 'archive' ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : ''}
         </span>
       </div>
       ${barHtml ? `<div class="mc-bar">${barHtml}</div>` : ''}
@@ -2424,9 +2437,12 @@ function renderMobileCards(items, data) {
       </div>` : ''}`;
 
     card.addEventListener('click', (e) => {
-      // Watch button stops propagation so it doesn't also open the price history modal
       if (e.target.closest('.mc-watch-btn')) {
         toggleWatchlist(e.target.closest('.mc-watch-btn').dataset.item);
+        return;
+      }
+      if (e.target.closest('.mc-unarchive-btn')) {
+        unarchiveItem(e.target.closest('.mc-unarchive-btn').dataset.item);
         return;
       }
       const fullItem = (_lastData?.items || []).find(i => i.list_item === item.list_item) || item;
@@ -2795,6 +2811,9 @@ function renderPage(data) {
     const isWatched = _watchlist.has(item.list_item);
     const watchBtn  = `<button class="item-watch-btn${isWatched ? ' active' : ''}" data-item="${safeKey}" title="${isWatched ? 'Remove from watchlist' : 'Add to watchlist'}">👁</button>`;
     const refreshBtn = `<button class="item-refresh-btn" data-item="${safeKey}" title="Refresh prices for this item">↻</button>`;
+    const unarchiveBtn = _activePriority === 'archive'
+      ? `<button class="item-unarchive-btn" data-item="${safeKey}" title="Unarchive this item">↩ Unarchive</button>`
+      : '';
 
     const wwClass  = cheaper === 'woolworths' ? 'cell-ww' : '';
     const coClass  = cheaper === 'coles'      ? 'cell-coles' : '';
@@ -2846,7 +2865,7 @@ function renderPage(data) {
     const prevCo = _prevPrices[item.list_item]?.co;
     const priceChanged = (prevWw != null && prevWw !== ww?.price) || (prevCo != null && prevCo !== co?.price);
     const rowClass = isPending ? ' class="row-pending"' : (priceChanged ? ' class="row-flash"' : '');
-    tbody.insertAdjacentHTML('beforeend', `<tr${rowClass} data-item="${safeKey}"><td class="check-cell"><input type="checkbox" class="row-check" data-item="${safeKey}"${checked}></td>${getVisibleCols().map(col => tdMap[col] || '').join('')}<td class="actions-cell">${watchBtn}${refreshBtn}</td></tr>`);
+    tbody.insertAdjacentHTML('beforeend', `<tr${rowClass} data-item="${safeKey}"><td class="check-cell"><input type="checkbox" class="row-check" data-item="${safeKey}"${checked}></td>${getVisibleCols().map(col => tdMap[col] || '').join('')}<td class="actions-cell">${unarchiveBtn}${watchBtn}${refreshBtn}</td></tr>`);
 
     _prevPrices[item.list_item] = { ww: ww?.price, co: co?.price };
     if (priceChanged && _pendingRefreshItem === item.list_item) _pendingRefreshItem = null;
@@ -3791,6 +3810,9 @@ async function boot() {
 
         const watchBtn = e.target.closest('.item-watch-btn');
         if (watchBtn) { toggleWatchlist(watchBtn.dataset.item); return; }
+
+        const unarchiveBtn = e.target.closest('.item-unarchive-btn');
+        if (unarchiveBtn) { unarchiveItem(unarchiveBtn.dataset.item); return; }
 
         const editBtn = e.target.closest('.item-edit-btn');
         if (editBtn && _lastData) {

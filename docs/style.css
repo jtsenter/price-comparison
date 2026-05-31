@@ -757,6 +757,19 @@ tr:hover .item-refresh-btn { opacity: 1; pointer-events: auto; }
 .item-refresh-btn:hover:not(:disabled) { background: var(--ww); color: #fff; border-color: var(--ww); }
 .item-refresh-btn.spinning { opacity: 1; pointer-events: auto; animation: spin 0.8s linear infinite; }
 .item-refresh-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.item-unarchive-btn {
+  height: 26px; padding: 0 8px;
+  border: 1px solid var(--border); border-radius: 6px;
+  background: var(--bg); color: var(--text-soft);
+  font-size: 12px; cursor: pointer; white-space: nowrap;
+  transition: all 0.15s; flex-shrink: 0;
+}
+.item-unarchive-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.mc-unarchive-btn {
+  background: none; border: 1px solid var(--border); border-radius: 6px;
+  padding: 2px 6px; font-size: 12px; color: var(--text-soft); cursor: pointer;
+}
+.mc-unarchive-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
 
 /* Table footer */
 .tfoot-row td {
