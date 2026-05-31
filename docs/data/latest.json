@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-31T03:22:39.275203+00:00",
+  "last_updated": "2026-05-31T03:23:06.944433+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1660,7 +1660,7 @@
     },
     {
       "list_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle",
-      "last_scraped": "2026-05-31T02:45:47.569746+00:00",
+      "last_scraped": "2026-05-31T03:22:44.131278+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -1732,7 +1732,7 @@
           "price": 1.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.27,
       "per_100_coles": 0.16,
@@ -1740,7 +1740,7 @@
     },
     {
       "list_item": "Schweppes Orange Mango Natural Mineral Water Bottle",
-      "last_scraped": "2026-05-31T02:45:51.117331+00:00",
+      "last_scraped": "2026-05-31T03:22:45.398473+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1808,7 +1808,7 @@
           "price": 1.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.27,
       "per_100_coles": 0.16,
@@ -1816,7 +1816,7 @@
     },
     {
       "list_item": "Strike Blue Toilet Cleaner Cistern Blocks",
-      "last_scraped": "2026-05-31T02:45:59.780585+00:00",
+      "last_scraped": "2026-05-31T03:22:54.151729+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1863,8 +1863,8 @@
       },
       "coles": {
         "name": "In Cistern Marine Toilet Cleaner 2 Pack",
-        "price": 2,
-        "unit_price": 2,
+        "price": 2.0,
+        "unit_price": 2.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-ultra-in-cistern-marine-toilet-cleaner-2-pack-100g-1549030",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1549030.jpg"
@@ -1884,7 +1884,7 @@
           "price": 2
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 2.0,
@@ -1892,7 +1892,7 @@
     },
     {
       "list_item": "Sweet Potato Gold",
-      "last_scraped": "2026-05-31T02:46:00.681657+00:00",
+      "last_scraped": "2026-05-31T03:22:57.230551+00:00",
       "trip_count": 17,
       "price_history": [
         {
@@ -2000,11 +2000,130 @@
           "price": 2.55
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.51,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "The Odd Bunch Capsicum Prepacked",
+      "last_scraped": "2026-05-31T03:23:06.940799+00:00",
+      "trip_count": 15,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 7.9
+        },
+        {
+          "date": "2024-11-20",
+          "price": 7.9
+        },
+        {
+          "date": "2024-12-09",
+          "price": 7.0
+        },
+        {
+          "date": "2025-02-02",
+          "price": 4.7
+        },
+        {
+          "date": "2025-02-28",
+          "price": 5.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 6.3
+        },
+        {
+          "date": "2025-04-05",
+          "price": 7.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 7.0
+        },
+        {
+          "date": "2025-05-04",
+          "price": 7.9
+        },
+        {
+          "date": "2025-05-22",
+          "price": 7.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 6.3
+        },
+        {
+          "date": "2025-06-21",
+          "price": 5.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-23",
+          "price": 6.3
+        },
+        {
+          "date": "2026-03-10",
+          "price": 6.3
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "The Odd Bunch Capsicum Prepacked",
+        "price": 6.3,
+        "unit_price": 6.3,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/825870/the-odd-bunch-capsicum-prepacked",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/825870.jpg"
+      },
+      "coles": {
+        "name": "Coles Tri Colour Capsicum Prepack | 500g",
+        "price": 8.9,
+        "unit_price": 8.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-tri-colour-capsicum-prepack-500g-4841072",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4841072.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 5.75,
+      "alternatives": [
+        {
+          "name": "Coles Deli Roast Capsicum Strips | 130g",
+          "price": 3.75,
+          "unit_price": 3.75,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-deli-roast-capsicum-strips-130g-5651120",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5651120.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 6.3
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8.9
+        },
+        {
+          "date": "2026-05-30",
+          "price": 8.9
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 0.63,
+      "per_100_coles": 1.78,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.5
     },
     {
       "list_item": "The Dutch Company Confectionary 4 Syrup Wafers",
@@ -2093,115 +2212,6 @@
       "per_100_ww": 2.44,
       "per_100_coles": 2.44,
       "per_100_unit": "100g"
-    },
-    {
-      "list_item": "The Odd Bunch Capsicum Prepacked",
-      "last_scraped": "2026-05-31T02:46:04.631687+00:00",
-      "trip_count": 15,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 7.9
-        },
-        {
-          "date": "2024-11-20",
-          "price": 7.9
-        },
-        {
-          "date": "2024-12-09",
-          "price": 7.0
-        },
-        {
-          "date": "2025-02-02",
-          "price": 4.7
-        },
-        {
-          "date": "2025-02-28",
-          "price": 5.5
-        },
-        {
-          "date": "2025-03-27",
-          "price": 6.3
-        },
-        {
-          "date": "2025-04-05",
-          "price": 7.0
-        },
-        {
-          "date": "2025-04-14",
-          "price": 7.0
-        },
-        {
-          "date": "2025-05-04",
-          "price": 7.9
-        },
-        {
-          "date": "2025-05-22",
-          "price": 7.0
-        },
-        {
-          "date": "2025-06-06",
-          "price": 6.3
-        },
-        {
-          "date": "2025-06-21",
-          "price": 5.5
-        },
-        {
-          "date": "2025-07-10",
-          "price": 4.0
-        },
-        {
-          "date": "2026-02-23",
-          "price": 6.3
-        },
-        {
-          "date": "2026-03-10",
-          "price": 6.3
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "The Odd Bunch Capsicum Prepacked",
-        "price": 6.3,
-        "unit_price": 6.3,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/825870/the-odd-bunch-capsicum-prepacked",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/825870.jpg"
-      },
-      "coles": {
-        "name": "Coles Tri Colour Capsicum Prepack | 500g",
-        "price": 8.9,
-        "unit_price": 8.9,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-tri-colour-capsicum-prepack-500g-4841072",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4841072.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 5.75,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 6.3
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8.9
-        },
-        {
-          "date": "2026-05-30",
-          "price": 8.9
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.63,
-      "per_100_coles": 1.78,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.5
     },
     {
       "list_item": "The Odd Bunch Carrots",
@@ -11378,10 +11388,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 15,
+    "done": 20,
     "total": 154,
     "started_at": "2026-05-31T03:21:41.122931+00:00",
-    "current_item": "Pringles Sour Cream & Onion Potato Chips"
+    "current_item": "The Odd Bunch Capsicum Prepacked"
   },
   "pending_validation": [
     {
@@ -13148,6 +13158,36 @@
       "coles_price": 5.3,
       "coles_url": "https://www.coles.com.au/product/helga's-traditional-wholemeal-bread-750g-5969435",
       "coles_prev_price": 5.3,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Sweet Potato Gold",
+      "ww_price": 1.96,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/147071/sweet-potato-gold",
+      "ww_prev_price": 1.96,
+      "ww_suspicious": false,
+      "coles_price": 2.55,
+      "coles_url": "https://www.coles.com.au/product/coles-potatoes-sweet-gold-approx.-500g-4199503",
+      "coles_prev_price": 2.55,
+      "coles_suspicious": true,
+      "flagged_date": "2026-05-31",
+      "reason": [
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "The Odd Bunch Capsicum Prepacked",
+      "ww_price": 6.3,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/825870/the-odd-bunch-capsicum-prepacked",
+      "ww_prev_price": 6.3,
+      "ww_suspicious": false,
+      "coles_price": 8.9,
+      "coles_url": "https://www.coles.com.au/product/coles-tri-colour-capsicum-prepack-500g-4841072",
+      "coles_prev_price": 8.9,
       "coles_suspicious": true,
       "flagged_date": "2026-05-31",
       "reason": [
