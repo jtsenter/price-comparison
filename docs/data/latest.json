@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-01T07:16:42.024465+00:00",
+  "last_updated": "2026-06-01T07:16:57.069389+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10269,7 +10269,7 @@
     },
     {
       "list_item": "Green Zucchini",
-      "last_scraped": "2026-06-01T06:14:45.787907+00:00",
+      "last_scraped": "2026-06-01T07:16:42.829192+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10330,12 +10330,12 @@
     },
     {
       "list_item": "Kinder Chocolate Sharepack",
-      "last_scraped": "2026-06-01T06:14:49.357115+00:00",
+      "last_scraped": "2026-06-01T07:16:45.399962+00:00",
       "trip_count": 2,
       "price_history": [
         {
           "date": "2024-12-19",
-          "price": 7
+          "price": 7.0
         },
         {
           "date": "2025-05-04",
@@ -10390,12 +10390,12 @@
     },
     {
       "list_item": "Lotus Biscoff Spread",
-      "last_scraped": "2026-06-01T06:14:53.316138+00:00",
+      "last_scraped": "2026-06-01T07:16:48.400193+00:00",
       "trip_count": 2,
       "price_history": [
         {
           "date": "2025-02-02",
-          "price": 6
+          "price": 6.0
         },
         {
           "date": "2025-03-11",
@@ -10405,7 +10405,7 @@
       "category": "Pantry",
       "woolworths": {
         "name": "Lotus Biscoff Spread",
-        "price": 6,
+        "price": 6.0,
         "unit_price": 1.5,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/670114/lotus-biscoff-spread",
@@ -10450,7 +10450,7 @@
     },
     {
       "list_item": "Macro Grass Fed Australian Stir-Fry Beef",
-      "last_scraped": "2026-06-01T06:14:57.099672+00:00",
+      "last_scraped": "2026-06-01T07:16:52.162398+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10459,7 +10459,7 @@
         },
         {
           "date": "2025-06-13",
-          "price": 13
+          "price": 13.0
         }
       ],
       "category": "Meat & Seafood",
@@ -10509,6 +10509,67 @@
       "per_100_coles": 2.6,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.5
+    },
+    {
+      "list_item": "Maltesers Milk Chocolate Party Gift Box",
+      "last_scraped": "2026-06-01T07:16:57.063644+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-03-02",
+          "price": 7.75
+        },
+        {
+          "date": "2026-04-02",
+          "price": 7.75
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Maltesers Milk Chocolate Party Gift Box",
+        "price": 11.0,
+        "unit_price": 2.75,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/54407/maltesers-milk-chocolate-party-gift-box",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/054407.jpg"
+      },
+      "coles": {
+        "name": "Maltesers Milk Chocolate Party Gift Box | 400g",
+        "price": 7.75,
+        "unit_price": 1.94,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/maltesers-milk-chocolate-party-gift-box-400g-3609268",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3609268.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 3.25,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 11
+        },
+        {
+          "date": "2026-06-01",
+          "price": 11
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 7.75
+        },
+        {
+          "date": "2026-06-01",
+          "price": 7.75
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.75,
+      "per_100_coles": 1.94,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "KitKat Gold Crush Block",
@@ -10569,67 +10630,6 @@
       "size_warning": false,
       "per_100_ww": 4.69,
       "per_100_coles": 3.13,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Maltesers Milk Chocolate Party Gift Box",
-      "last_scraped": "2026-06-01T06:15:01.251339+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2026-03-02",
-          "price": 7.75
-        },
-        {
-          "date": "2026-04-02",
-          "price": 7.75
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Maltesers Milk Chocolate Party Gift Box",
-        "price": 11,
-        "unit_price": 2.75,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/54407/maltesers-milk-chocolate-party-gift-box",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/054407.jpg"
-      },
-      "coles": {
-        "name": "Maltesers Milk Chocolate Party Gift Box | 400g",
-        "price": 7.75,
-        "unit_price": 1.94,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/maltesers-milk-chocolate-party-gift-box-400g-3609268",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3609268.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 3.25,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 11
-        },
-        {
-          "date": "2026-06-01",
-          "price": 11
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 7.75
-        },
-        {
-          "date": "2026-06-01",
-          "price": 7.75
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.75,
-      "per_100_coles": 1.94,
       "per_100_unit": "100g"
     },
     {
@@ -11752,9 +11752,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 120,
+    "done": 125,
     "total": 144,
     "started_at": "2026-06-01T07:11:03.837955+00:00",
-    "current_item": "Greek Style Yoghurt 2kg"
+    "current_item": "Maltesers Milk Chocolate Party Gift Box"
   }
 }
