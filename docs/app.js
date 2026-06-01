@@ -400,12 +400,12 @@ let _viewMode = localStorage.getItem('pw_view_mode') || 'table'; // 'table' | 'c
 let _checkedItems = new Set();
 
 function updateBulkBar() {
-  const bar = $('bulkBar');
+  const bar = $('bulkToolbar');
   if (!bar) return;
   const count = _checkedItems.size;
   bar.style.display = count > 0 ? 'flex' : 'none';
-  const el = $('bulkCount');
-  if (el) el.textContent = `${count} item${count !== 1 ? 's' : ''} selected`;
+  const pill = bar.querySelector('.bt-count-pill');
+  if (pill) pill.textContent = count;
 }
 
 // ── Column order & widths ────────────────────────────────────────────────────
@@ -1550,31 +1550,71 @@ function unarchiveItem(itemName) {
 // ── Bulk action bar ───────────────────────────────────────────────────────────
 
 function initBulkBar() {
-  const bar = $('bulkBar');
+  const bar = $('bulkToolbar');
   if (!bar) return;
 
-  $('bulkCategorySelect')?.addEventListener('change', () => {
-    const cat = $('bulkCategorySelect').value;
-    if (!cat) return;
-    const ov = loadCategoryOverrides();
-    _checkedItems.forEach(name => { ov[name] = cat; });
-    saveCategoryOverrides(ov);
-    $('bulkCategorySelect').value = '';
+  // Helper: floating chip dropdown anchored above its button
+  function openChipDropdown(btn, items, onSelect) {
+    document.querySelectorAll('.bt-dropdown').forEach(d => d.remove());
+    const drop = document.createElement('div');
+    drop.className = 'bt-dropdown';
+    items.forEach(({ label, value }) => {
+      const el = document.createElement('button');
+      el.className = 'bt-dropdown-item';
+      el.textContent = label;
+      el.addEventListener('click', () => { onSelect(value); drop.remove(); });
+      drop.appendChild(el);
+    });
+    document.body.appendChild(drop);
+    const rect = btn.getBoundingClientRect();
+    drop.style.left = rect.left + 'px';
+    drop.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
+    setTimeout(() => {
+      document.addEventListener('click', function handler(e) {
+        if (!drop.contains(e.target) && e.target !== btn) {
+          drop.remove();
+          document.removeEventListener('click', handler);
+        }
+      });
+    }, 0);
+  }
+
+  bar.querySelector('.bt-deselect')?.addEventListener('click', () => {
+    _checkedItems.clear();
+    updateBulkBar();
     if (_lastData) renderPage(_lastData);
   });
 
-  $('bulkPrioritySelect')?.addEventListener('change', () => {
-    const p = $('bulkPrioritySelect').value;
-    if (!p) return;
-    const pr = loadPriorities();
-    _checkedItems.forEach(name => { pr[name] = p; });
-    savePriorities(pr);
-    $('bulkPrioritySelect').value = '';
-    if (_lastData) renderPage(_lastData);
-    scheduleArchiveSync();
+  bar.querySelector('.bt-cat')?.addEventListener('click', (e) => {
+    const cats = [
+      'Fruit & Veg', 'Dairy & Eggs', 'Meat & Seafood', 'Bakery', 'Frozen Foods',
+      'Pantry', 'Drinks & Alcohol', 'Sweets', 'Personal Care', 'Household', 'Baby', 'Ready Meals'
+    ];
+    openChipDropdown(e.currentTarget, cats.map(c => ({ label: c, value: c })), (cat) => {
+      const ov = loadCategoryOverrides();
+      _checkedItems.forEach(name => { ov[name] = cat; });
+      saveCategoryOverrides(ov);
+      if (_lastData) renderPage(_lastData);
+    });
   });
 
-  $('bulkArchiveBtn')?.addEventListener('click', () => {
+  bar.querySelector('.bt-pri')?.addEventListener('click', (e) => {
+    openChipDropdown(e.currentTarget, [
+      { label: '⭐ Weekly',  value: 'weekly'  },
+      { label: '📅 Monthly', value: 'monthly' },
+      { label: '🔵 Rare',    value: 'rare'    },
+    ], (p) => {
+      const pr = loadPriorities();
+      _checkedItems.forEach(name => { pr[name] = p; });
+      savePriorities(pr);
+      if (_lastData) renderPage(_lastData);
+      scheduleArchiveSync();
+    });
+  });
+
+  bar.querySelector('.bt-sl')?.addEventListener('click', () => exportShoppingList(true));
+
+  bar.querySelector('.bt-archive')?.addEventListener('click', () => {
     const pr = loadPriorities();
     _checkedItems.forEach(name => { pr[name] = 'archive'; });
     savePriorities(pr);
@@ -1582,14 +1622,6 @@ function initBulkBar() {
     updateBulkBar();
     if (_lastData) renderPage(_lastData);
     scheduleArchiveSync();
-  });
-
-  $('bulkShopListBtn')?.addEventListener('click', () => exportShoppingList(true));
-
-  $('bulkDeselectBtn')?.addEventListener('click', () => {
-    _checkedItems.clear();
-    updateBulkBar();
-    if (_lastData) renderPage(_lastData);
   });
 }
 
@@ -3783,7 +3815,6 @@ async function boot() {
   if (refreshBtn) refreshBtn.addEventListener('click', triggerRefresh);
 
   $('shopListBtn')?.addEventListener('click', () => exportShoppingList(false));
-  $('bulkExportBtn')?.addEventListener('click', () => exportShoppingList(true));
 
   // Scrape strip dismiss & retry
   // Scrape Archived button — persists archived list to GitHub then dispatches workflow

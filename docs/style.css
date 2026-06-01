@@ -1351,50 +1351,57 @@ td.priority-cell { text-align: center; }
 .check-cell input[type="checkbox"] { cursor: pointer; accent-color: var(--ww); width: 15px; height: 15px; }
 
 /* ── Bulk action bar ─────────────────────────────────────────── */
-.bulk-bar {
-  position: fixed;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #1E293B;
-  color: #fff;
-  border-radius: 14px;
-  padding: 10px 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 8px 32px rgba(0,0,0,.35);
-  z-index: 300;
-  white-space: nowrap;
-  flex-wrap: wrap;
-  max-width: calc(100vw - 48px);
+.bulk-toolbar {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; background: #1E293B; padding: 10px 20px;
+  border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,.3);
+  z-index: 500; min-width: 600px; max-width: 90vw;
 }
-.bulk-count { font-size: 13px; font-weight: 600; margin-right: 4px; }
-.bulk-select {
-  background: rgba(255,255,255,.12);
-  border: 1px solid rgba(255,255,255,.2);
-  color: #fff;
-  border-radius: 8px;
-  padding: 5px 10px;
-  font-size: 13px;
-  cursor: pointer;
+.bt-left  { display: flex; align-items: center; gap: 8px; }
+.bt-right { display: flex; align-items: center; gap: 8px; }
+.bt-count-pill {
+  width: 26px; height: 26px; background: #6366F1; color: #fff;
+  font-size: 12px; font-weight: 700; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
-.bulk-select option { background: #1E293B; }
-.bulk-btn {
-  background: rgba(255,255,255,.12);
-  border: 1px solid rgba(255,255,255,.2);
-  color: #fff;
-  border-radius: 8px;
-  padding: 5px 12px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
+.bt-label { color: #E2E8F0; font-size: 13px; font-weight: 600; }
+.bt-deselect {
+  background: none; border: none; color: #64748B;
+  font-size: 12px; cursor: pointer; font-weight: 500;
+  padding: 0;
+}
+.bt-deselect:hover { color: #94A3B8; }
+.bt-divider { width: 1px; height: 22px; background: rgba(255,255,255,.12); margin: 0 4px; flex-shrink: 0; }
+.bt-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 13px; border-radius: 8px; font-size: 12px;
+  font-weight: 600; cursor: pointer; border: 1px solid rgba(255,255,255,.1);
+  background: #374151; color: #E2E8F0; white-space: nowrap;
   transition: background .15s;
 }
-.bulk-btn:hover { background: rgba(255,255,255,.25); }
-.bulk-btn.danger { background: rgba(239,68,68,.3); border-color: rgba(239,68,68,.5); }
-.bulk-btn.danger:hover { background: rgba(239,68,68,.5); }
-.bulk-divider { width: 1px; background: rgba(255,255,255,.2); height: 24px; flex-shrink: 0; }
+.bt-chip:hover { background: #4B5563; }
+.bt-chip .arrow { color: #F59E0B; }
+.bt-sl { background: #00843D; border-color: #006B31; color: #fff; padding: 6px 16px; }
+.bt-sl:hover { background: #006B31; }
+.bt-archive { background: rgba(127,29,29,.6); border-color: rgba(153,27,27,.5); color: #FCA5A5; }
+.bt-archive:hover { background: rgba(153,27,27,.7); }
+/* Chip dropdown */
+.bt-dropdown {
+  position: fixed; background: #1E293B; border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  padding: 6px; z-index: 600; min-width: 160px;
+}
+.bt-dropdown-item {
+  display: block; width: 100%; text-align: left;
+  background: none; border: none; color: #E2E8F0;
+  font-size: 13px; padding: 7px 12px; border-radius: 6px; cursor: pointer;
+}
+.bt-dropdown-item:hover { background: rgba(255,255,255,.08); }
+@media (max-width: 700px) {
+  .bulk-toolbar { left: 12px; right: 12px; transform: none; min-width: unset; flex-wrap: wrap; bottom: 12px; }
+}
 
 /* ── Column chooser ──────────────────────────────────────────── */
 .col-chooser-wrap { position: relative; }

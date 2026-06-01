@@ -75,35 +75,19 @@
 </header>
 
 <!-- Bulk action bar -->
-<div class="bulk-bar" id="bulkBar" style="display:none">
-  <span class="bulk-count" id="bulkCount">0 selected</span>
-  <div class="bulk-divider"></div>
-  <select class="bulk-select" id="bulkCategorySelect">
-    <option value="">Set category…</option>
-    <option>Fruit &amp; Veg</option>
-    <option>Dairy &amp; Eggs</option>
-    <option>Meat &amp; Seafood</option>
-    <option>Bakery</option>
-    <option>Frozen Foods</option>
-    <option>Pantry</option>
-    <option>Drinks &amp; Alcohol</option>
-    <option>Sweets</option>
-    <option>Personal Care</option>
-    <option>Household</option>
-    <option>Baby</option>
-    <option>Ready Meals</option>
-  </select>
-  <select class="bulk-select" id="bulkPrioritySelect">
-    <option value="">Set priority…</option>
-    <option value="weekly">Weekly</option>
-    <option value="monthly">Monthly</option>
-    <option value="rare">Rare</option>
-  </select>
-  <div class="bulk-divider"></div>
-  <button class="bulk-btn danger" id="bulkArchiveBtn">Archive selected</button>
-  <button class="bulk-btn" id="bulkExportBtn">🛒 Export selected</button>
-  <button class="bulk-btn" id="bulkShopListBtn">🛒 Shopping List →</button>
-  <button class="bulk-btn" id="bulkDeselectBtn">✕ Deselect all</button>
+<div id="bulkToolbar" class="bulk-toolbar" style="display:none">
+  <div class="bt-left">
+    <span class="bt-count-pill">0</span>
+    <span class="bt-label">selected</span>
+    <button class="bt-deselect">Deselect all ✕</button>
+    <div class="bt-divider"></div>
+    <button class="bt-chip bt-cat">📁 Category <span class="arrow">▾</span></button>
+    <button class="bt-chip bt-pri">⭐ Priority <span class="arrow">▾</span></button>
+  </div>
+  <div class="bt-right">
+    <button class="bt-chip bt-sl">🛒 Add to Shopping List</button>
+    <button class="bt-chip bt-archive">🗄 Archive</button>
+  </div>
 </div>
 
 <div class="notif-dropdown" id="notifDropdown" style="display:none">
