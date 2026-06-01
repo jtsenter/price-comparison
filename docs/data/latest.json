@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-01T06:08:54.256673+00:00",
+  "last_updated": "2026-06-01T06:09:14.224117+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -601,7 +601,7 @@
     },
     {
       "list_item": "Cavendish Bananas",
-      "last_scraped": "2026-05-31T11:16:49.811300+00:00",
+      "last_scraped": "2026-06-01T06:08:57.063918+00:00",
       "trip_count": 30,
       "price_history": [
         {
@@ -749,11 +749,19 @@
         {
           "date": "2026-05-29",
           "price": 0.88
+        },
+        {
+          "date": "2026-06-01",
+          "price": 0.88
         }
       ],
       "coles_price_history": [
         {
           "date": "2026-05-29",
+          "price": 0.83
+        },
+        {
+          "date": "2026-06-01",
           "price": 0.83
         }
       ],
@@ -765,7 +773,7 @@
     },
     {
       "list_item": "Fresh Broccoli",
-      "last_scraped": "2026-05-31T11:16:51.555159+00:00",
+      "last_scraped": "2026-06-01T06:09:00.802621+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -873,11 +881,19 @@
         {
           "date": "2026-05-29",
           "price": 1.49
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.49
         }
       ],
       "coles_price_history": [
         {
           "date": "2026-05-29",
+          "price": 2.2
+        },
+        {
+          "date": "2026-06-01",
           "price": 2.2
         }
       ],
@@ -889,7 +905,7 @@
     },
     {
       "list_item": "Hass Avocado",
-      "last_scraped": "2026-05-31T11:16:55.901405+00:00",
+      "last_scraped": "2026-06-01T06:09:04.767521+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -953,11 +969,19 @@
         {
           "date": "2026-05-30",
           "price": 1.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.5
         }
       ],
       "coles_price_history": [
         {
           "date": "2026-05-29",
+          "price": 2.5
+        },
+        {
+          "date": "2026-06-01",
           "price": 2.5
         }
       ],
@@ -969,7 +993,7 @@
     },
     {
       "list_item": "Fresh Cauliflower Half",
-      "last_scraped": "2026-05-31T11:16:59.374014+00:00",
+      "last_scraped": "2026-06-01T06:09:07.915013+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -1056,8 +1080,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Fresh Cauliflower Half",
-        "price": 1.75,
-        "unit_price": 1.75,
+        "price": 2.75,
+        "unit_price": 2.75,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/135568/fresh-cauliflower-half",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135568.jpg"
@@ -1068,11 +1092,22 @@
         "unit_price": 2.7,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-cauliflower-half-1-each-4601320",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4601320.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4601320.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.95,
-      "alternatives": [],
+      "cheaper_store": "coles",
+      "saving_per_item": 0.05,
+      "alternatives": [
+        {
+          "name": "Cauliflower Half",
+          "price": 2.7,
+          "unit_price": 2.7,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-cauliflower-half-1-each-4601320",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4601320.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -1082,6 +1117,10 @@
       "coles_price_history": [
         {
           "date": "2026-05-29",
+          "price": 2.7
+        },
+        {
+          "date": "2026-06-01",
           "price": 2.7
         }
       ],
@@ -1093,7 +1132,7 @@
     },
     {
       "list_item": "Kale Fresh Bunch",
-      "last_scraped": "2026-05-31T11:17:03.540357+00:00",
+      "last_scraped": "2026-06-01T06:09:14.216637+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1168,6 +1207,10 @@
         {
           "date": "2026-05-30",
           "price": 4.6
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4.6
         }
       ],
       "coles_price_history": [
@@ -1177,6 +1220,10 @@
         },
         {
           "date": "2026-05-30",
+          "price": 4.5
+        },
+        {
+          "date": "2026-06-01",
           "price": 4.5
         }
       ],
@@ -11701,19 +11748,19 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 685.54,
+    "total_woolworths": 686.54,
     "total_coles": 740.09,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 54.55,
+    "total_saving": 53.55,
     "items_compared": 143,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 5,
+    "done": 10,
     "total": 144,
     "started_at": "2026-06-01T06:08:32.174360+00:00",
-    "current_item": "Capsicum Yellow"
+    "current_item": "Kale Fresh Bunch"
   },
   "pending_validation": [
     {
@@ -11742,6 +11789,21 @@
       "coles_prev_price": 2.3,
       "coles_suspicious": true,
       "flagged_date": "2026-05-31",
+      "reason": [
+        "30pct_change"
+      ]
+    },
+    {
+      "item": "Fresh Cauliflower Half",
+      "ww_price": 2.75,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/135568/fresh-cauliflower-half",
+      "ww_prev_price": 1.75,
+      "ww_suspicious": true,
+      "coles_price": 2.7,
+      "coles_url": "https://www.coles.com.au/product/coles-cauliflower-half-1-each-4601320",
+      "coles_prev_price": 2.7,
+      "coles_suspicious": false,
+      "flagged_date": "2026-06-01",
       "reason": [
         "30pct_change"
       ]
