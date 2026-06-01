@@ -231,31 +231,43 @@ async function persistLatestJson(data, message = 'chore: update latest.json') {
 
 async function persistUrlOverridesToRepo(s, overrides) {
   if (!s?.user || !s?.repo || !s?.token) return;
-  // Build scraper format: {item: {ww_url, coles_url}} — skip display-name-only entries
-  const scraperFmt = {};
-  for (const [item, ov] of Object.entries(overrides)) {
-    if (ov.wwUrl || ov.colesUrl) {
-      scraperFmt[item] = {};
-      if (ov.wwUrl)    scraperFmt[item].ww_url    = ov.wwUrl;
-      if (ov.colesUrl) scraperFmt[item].coles_url = ov.colesUrl;
-    }
-  }
   const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/url_overrides.json`;
   const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
-  const content = JSON.stringify(scraperFmt, null, 2) + '\n';
+
+  // Fetch the current file so we can merge rather than overwrite.
+  // Entries already in the repo but not in localStorage (e.g. manually added by Claude)
+  // are preserved; localStorage entries take priority on conflict.
+  const getRes = await fetch(apiPath, { headers });
+  const getJson = getRes.ok ? await getRes.json() : {};
+  let existing = {};
+  if (getJson.content) {
+    try { existing = JSON.parse(atob(getJson.content.replace(/\n/g, ''))); } catch {}
+  }
+
+  // Merge: start with repo copy, then overlay localStorage entries
+  const merged = { ...existing };
+  for (const [item, ov] of Object.entries(overrides)) {
+    if (ov.wwUrl || ov.colesUrl) {
+      merged[item] = { ...(merged[item] || {}) };
+      if (ov.wwUrl)    merged[item].ww_url    = ov.wwUrl;
+      if (ov.colesUrl) merged[item].coles_url = ov.colesUrl;
+    }
+  }
+
+  const content = JSON.stringify(merged, null, 2) + '\n';
   const encoded = btoa(unescape(encodeURIComponent(content)));
 
-  // Always re-fetch SHA immediately before PUT; retry once on 409 (stale SHA from concurrent call)
+  // PUT with retry on 409 (stale SHA)
   const doPut = async () => {
-    const getRes = await fetch(apiPath, { headers });
-    const shaJson = getRes.ok ? await getRes.json() : {};
+    const shaRes = await fetch(apiPath, { headers });
+    const shaJson = shaRes.ok ? await shaRes.json() : {};
     const putBody = { message: 'Update URL overrides', content: encoded };
     if (shaJson.sha) putBody.sha = shaJson.sha;
     return fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(putBody) });
   };
 
   let putRes = await doPut();
-  if (putRes.status === 409) putRes = await doPut(); // retry with fresh SHA
+  if (putRes.status === 409) putRes = await doPut();
   if (!putRes.ok) {
     const msg = await putRes.text().catch(() => String(putRes.status));
     throw new Error(`GitHub PUT failed (${putRes.status}): ${msg}`);
