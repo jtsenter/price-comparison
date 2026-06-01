@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-01T23:22:32.763354+00:00",
+  "last_updated": "2026-06-01T23:33:40.605667+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1020,7 +1020,7 @@
     },
     {
       "list_item": "Hass Avocado",
-      "last_scraped": "2026-06-01T23:22:32.399143+00:00",
+      "last_scraped": "2026-06-01T23:33:40.385917+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1066,15 +1066,15 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120080.jpg"
       },
       "coles": {
-        "name": "Coles Hass Avocados | 1 Each",
+        "name": "Hass Avocados",
         "price": 2.5,
-        "unit_price": 4.0,
+        "unit_price": 2.5,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-hass-avocados-1-each-5900530",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5900530.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 1.0,
+      "saving_per_item": 1,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -1100,7 +1100,7 @@
           "price": 2.5
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -2893,7 +2893,7 @@
     },
     {
       "list_item": "Woolworths BBQ Lamb Kebabs With Mint & Honey",
-      "last_scraped": "2026-06-01T23:04:35.672133+00:00",
+      "last_scraped": "2026-06-01T23:33:02.976880+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -2935,24 +2935,24 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6024489.jpg"
       },
       "coles": {
-        "name": "Coles Perform Lamb With Mint Sauce | 360g",
-        "price": 10,
-        "unit_price": 10,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-perform-lamb-with-mint-sauce-360g-1756910",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1756910.jpg",
+        "name": "Lamb Kebabs",
+        "price": 7.5,
+        "unit_price": 16.67,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-lamb-kebabs-450g-3900020",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3900020.jpg",
         "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 6.94,
+      "cheaper_store": "coles",
+      "saving_per_item": 1,
       "alternatives": [
         {
-          "name": "Coles Perform Lamb With Mint Sauce | 360g",
-          "price": 10,
-          "unit_price": 10,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-perform-lamb-with-mint-sauce-360g-1756910",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1756910.jpg",
+          "name": "Lamb Kebabs",
+          "price": 7.5,
+          "unit_price": 16.67,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-lamb-kebabs-450g-3900020",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3900020.jpg",
           "retailer": "coles"
         }
       ],
@@ -2978,14 +2978,17 @@
         {
           "date": "2026-06-01",
           "price": 7.5
+        },
+        {
+          "date": "2026-06-02",
+          "price": 7.5
         }
       ],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.89,
-      "per_100_coles": 2.78,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.36
+      "per_100_coles": 1.67,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths 12 Extra Large Free Range Eggs",
@@ -12797,31 +12800,13 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 721.41,
-    "total_coles": 746.59,
+    "total_coles": 744.09,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 25.18,
+    "total_saving": 22.68,
     "items_compared": 144,
     "items_not_found": 0
   },
-  "pending_validation": [
-    {
-      "item": "Woolworths BBQ Lamb Kebabs With Mint & Honey",
-      "ww_price": 8.5,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/6024489/woolworths-bbq-australian-lamb-koftas-honey-mint",
-      "ww_prev_price": 8.5,
-      "ww_suspicious": false,
-      "coles_price": 10,
-      "coles_url": "https://www.coles.com.au/product/coles-perform-lamb-with-mint-sauce-360g-1756910",
-      "coles_prev_price": 7.5,
-      "coles_suspicious": true,
-      "flagged_date": "2026-06-02",
-      "reason": [
-        "30pct_change",
-        "outside_historical_range"
-      ]
-    }
-  ],
   "approved_prices": {
     "Cadbury Dairy Milk Top Deck Chocolate Block": {
       "approved_date": "2026-05-31",
@@ -12869,8 +12854,9 @@
       "coles": 7.5
     },
     "Woolworths BBQ Lamb Kebabs With Mint & Honey": {
-      "approved_date": "2026-05-31",
-      "ww": 8.5
+      "approved_date": "2026-06-01",
+      "ww": 8.5,
+      "coles": 7.5
     },
     "Woolworths Beef Porterhouse Steak & Butter": {
       "approved_date": "2026-05-31",
