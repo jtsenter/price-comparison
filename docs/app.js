@@ -2242,7 +2242,8 @@ function sortItems(items) {
         const prices = history
           .map(p => p.price)
           .filter((p, i) => p > 0 && !_excluded.has(Number(history[i].price).toFixed(2)));
-        if (prices.length < 2) return null;
+        if (!prices.length) return null;          // no valid prices → no data → sort last
+        if (prices.length === 1) return [2, 0];   // single price point → treat as flat → middle
         const minP = Math.min(...prices), maxP = Math.max(...prices);
         const ref = item.cheaper_store === 'woolworths' ? item.woolworths?.price
                   : item.cheaper_store === 'coles'      ? item.coles?.price
@@ -2287,6 +2288,13 @@ function sortItems(items) {
         if (aVal !== bVal) return (aVal - bVal) * mul;
         continue;
       }
+      // NaN guard: NaN comparisons always return false in JS, silently breaking sort stability.
+      // Treat NaN as larger than everything so it sinks to the bottom regardless of direction.
+      const aNan = typeof ai === 'number' && isNaN(ai);
+      const bNan = typeof bi === 'number' && isNaN(bi);
+      if (aNan && bNan) continue;
+      if (aNan) return 1;
+      if (bNan) return -1;
       if (ai < bi) return -1 * mul;
       if (ai > bi) return  1 * mul;
     }
@@ -2490,7 +2498,8 @@ function renderMobileCards(items, data) {
       const excluded = new Set((excl[item.list_item] || []).map(p => Number(p).toFixed(2)));
       const prices = hist.map(e => e.price)
         .filter((p, i) => p > 0 && !excluded.has(Number(hist[i].price).toFixed(2)));
-      if (prices.length < 2) return 9999;
+      if (!prices.length) return 9999;        // no valid prices → sort last
+      if (prices.length === 1) return 0.5;    // single price point → treat as flat → middle
       const minP = Math.min(...prices), maxP = Math.max(...prices);
       if (minP === maxP) return 0.5;
       const ref = item.cheaper_store === 'woolworths' ? item.woolworths?.price
