@@ -316,7 +316,7 @@ function saveUnitOverrides(obj) {
 // ── Category overrides ───────────────────────────────────────────────────────
 
 const KNOWN_CATEGORIES = [
-  'Fruit & Veg', 'Dairy & Eggs', 'Meat & Seafood', 'Bakery', 'Frozen Foods',
+  'Fruit & Veg', 'Meat & Seafood', 'Dairy & Eggs', 'Bakery', 'Frozen Foods',
   'Pantry', 'Drinks & Alcohol', 'Sweets', 'Personal Care', 'Household', 'Baby', 'Ready Meals',
 ];
 
@@ -377,11 +377,58 @@ const CATEGORY_REMAP = {
   'Nuts & Seeds':           'Pantry',
 };
 
+// Per-item category corrections — applied after CATEGORY_REMAP, before user localStorage overrides win.
+// These fix scraper mismatches without needing to edit latest.json.
+const ITEM_CATEGORY_DEFAULTS = {
+  // Bakery → correct
+  'Essentials Domestic Wipes Roll':                               'Household',
+  'Woolworths Fresh Continental Parsley Bunch':                   'Fruit & Veg',
+  // Dairy & Eggs → correct (scraper matched by store section, not product type)
+  'Ben & Jerry\'s Ice Cream Tub Chocolate Chip Cookie Dough':    'Frozen Foods',
+  'Cadbury Dairy Milk Large Chocolate Block':                     'Sweets',
+  'Cadbury Dairy Milk Top Deck Chocolate Block':                  'Sweets',
+  'Continental Classics Cup A Soup Creamy Chicken With Croutons': 'Pantry',
+  'KitKat Milk Chocolate Mini Bars Share Pack':                   'Sweets',
+  'Maltesers Milk Chocolate Party Gift Box':                      'Sweets',
+  'McVitie\'s Digestives Milk Chocolate':                        'Sweets',
+  'McVitie\'s Hobnobs Milk Chocolate':                           'Sweets',
+  'Pringles Sour Cream & Onion Potato Chips':                     'Sweets',
+  'Snickers Milk Chocolate Party Share Bag':                      'Sweets',
+  'Snickers Milk Chocolate Party Share Bag 20 Pieces':            'Sweets',
+  'Woolworths Beef Porterhouse Steak & Butter':                   'Meat & Seafood',
+  'Woolworths Butternut Pumpkin Cut':                             'Fruit & Veg',
+  'Yumi\'s Eggplant Mediterranean Dip':                          'Pantry',
+  // Fruit & Veg → correct
+  'Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot':         'Baby',
+  'Dolmio Extra Bolognese Tomato Pasta Sauce':                    'Pantry',
+  'Macro Organic Natural Pumpkin Kernels':                        'Pantry',
+  'Mutti Tomato Paste Double Concentrate':                        'Pantry',
+  'Sam\'s Pantry Granola Pink Lady Apple & Cinnamon':             'Pantry',
+  'Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle': 'Drinks & Alcohol',
+  'Schweppes Orange Mango Natural Mineral Water Bottle':          'Drinks & Alcohol',
+  'Twinings Honeybush, Orange & Mandarin':                        'Pantry',
+  'Twinings Orange & Cinnamon Tea Bags Tea':                      'Pantry',
+  // Meat & Seafood → correct
+  'Continental Classics Cup A Soup Chicken With Lots Of Noodles': 'Pantry',
+  // Other → correct
+  'Hedy\'s Fresh Quiche Lorraine Chilled Meal':                   'Ready Meals',
+  'Old El Paso Fajita Spice Mix Mexican Style':                   'Pantry',
+  'Parsnip Fresh':                                                'Fruit & Veg',
+  'Weet-Bix Little Kids Breakfast Cereal':                        'Baby',
+  'Woolworths Garlic Heads CLOVE':                                'Fruit & Veg',
+  // Pantry → correct
+  'Baby Mum-Mum Snack Vegetable Rice Rusk':                      'Baby',
+  'Strike Blue Toilet Cleaner Cistern Blocks':                    'Household',
+  'Vevelle White 2 Ply Toilet Tissue':                            'Household',
+  'Woolworths Dill Fresh Herb':                                   'Fruit & Veg',
+};
+
 function getCategory(item) {
   const ov = loadCategoryOverrides()[item.list_item];
   if (ov) return ov;
   const c = (item.category || '').trim();
-  return CATEGORY_REMAP[c] || c || 'Other';
+  const remapped = CATEGORY_REMAP[c] || c || 'Other';
+  return ITEM_CATEGORY_DEFAULTS[item.list_item] || remapped;
 }
 
 // ── Filter state ─────────────────────────────────────────────────────────────
@@ -1586,11 +1633,7 @@ function initBulkBar() {
   });
 
   bar.querySelector('.bt-cat')?.addEventListener('click', (e) => {
-    const cats = [
-      'Fruit & Veg', 'Dairy & Eggs', 'Meat & Seafood', 'Bakery', 'Frozen Foods',
-      'Pantry', 'Drinks & Alcohol', 'Sweets', 'Personal Care', 'Household', 'Baby', 'Ready Meals'
-    ];
-    openChipDropdown(e.currentTarget, cats.map(c => ({ label: c, value: c })), (cat) => {
+    openChipDropdown(e.currentTarget, KNOWN_CATEGORIES.map(c => ({ label: c, value: c })), (cat) => {
       const ov = loadCategoryOverrides();
       _checkedItems.forEach(name => { ov[name] = cat; });
       saveCategoryOverrides(ov);
@@ -1684,13 +1727,16 @@ function buildCategoryTabs(items) {
   const container = $('categoryTabs');
   if (!container) return;
 
-  const counts = {};
-  items.forEach(i => {
-    const c = getCategory(i);
-    counts[c] = (counts[c] || 0) + 1;
-  });
-  const top10 = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([c]) => c);
-  const cats = ['All', ...top10];
+  const present = new Set();
+  items.forEach(i => present.add(getCategory(i)));
+
+  // Order: KNOWN_CATEGORIES first (in defined grocery-store order), then any unknowns, then Other last
+  const ordered = [
+    ...KNOWN_CATEGORIES.filter(c => present.has(c)),
+    ...[...present].filter(c => !KNOWN_CATEGORIES.includes(c) && c !== 'Other').sort(),
+    ...(present.has('Other') ? ['Other'] : []),
+  ];
+  const cats = ['All', ...ordered];
 
   container.innerHTML = '';
   cats.forEach(cat => {
