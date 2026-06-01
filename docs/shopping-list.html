@@ -102,6 +102,10 @@
       nav::-webkit-scrollbar { display: none; }
       nav a { white-space: nowrap; font-size: 13px; padding: 6px 8px; }
       .btn-hdr { display: none; }
+      .totals-bar { grid-template-columns: 1fr; }
+      .total-divider { border-left: none; border-right: none; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 12px 24px; flex-direction: row; justify-content: center; gap: 12px; }
+      .total-block { padding: 16px 20px; }
+      .total-amount { font-size: 26px; }
     }
     @media print {
       header .header-actions { display: none; }
