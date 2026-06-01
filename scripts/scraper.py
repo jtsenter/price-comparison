@@ -152,10 +152,18 @@ def _parse_ww_products(product_list: list) -> list[dict]:
         url_name = p.get("UrlFriendlyName", "")
         name = p.get("Name", "")
         price = p.get("Price")
+        was_price = p.get("WasPrice")
         cup_price = p.get("CupPrice")
         cup_string = p.get("CupString", "")
         if not name or price is None:
             continue
+        # Prefer the regular shelf price over a member-exclusive (Everyday Rewards) price.
+        # When IsEveryDayRewards or IsPmDeals is set, Price is the member price and
+        # WasPrice is the regular shelf price anyone can pay.
+        is_member_deal = bool(p.get("IsEveryDayRewards") or p.get("IsPmDeals"))
+        if is_member_deal and was_price is not None and float(was_price) > float(price):
+            print(f"    [WW] Member price skipped for '{name}': ${price} → shelf price ${was_price}")
+            price = was_price
         product_url = (
             f"{WOOLWORTHS_BASE}/shop/productdetails/{stockcode}/{url_name}"
             if stockcode else ""
@@ -288,10 +296,16 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
             if product:
                 name = product.get("Name", "")
                 price = product.get("Price")
+                was_price = product.get("WasPrice")
                 cup_price = product.get("CupPrice")
                 cup_string = product.get("CupString", "")
                 stockcode = product.get("Stockcode")
                 url_name = product.get("UrlFriendlyName", "")
+                # Prefer regular shelf price over member-exclusive price
+                is_member_deal = bool(product.get("IsEveryDayRewards") or product.get("IsPmDeals"))
+                if is_member_deal and was_price is not None and float(was_price) > float(price):
+                    print(f"    [WW] Member price skipped for '{name}' (by URL): ${price} → shelf price ${was_price}")
+                    price = was_price
                 if name and price is not None:
                     _, unit = parse_unit_price(cup_string)
                     product_url = (
