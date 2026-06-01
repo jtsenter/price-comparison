@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-01T21:29:56.733186+00:00",
+  "last_updated": "2026-06-01T21:30:17.579182+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11776,7 +11776,7 @@
     },
     {
       "list_item": "Sam's Pantry Caramel Brownie Low Sugar Protein Bars",
-      "last_scraped": "2026-06-01T07:17:07.087123+00:00",
+      "last_scraped": "2026-06-01T21:30:01.187653+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11807,7 +11807,17 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 4.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Red Tractor Protein Low Sugar Granola Apple Caramel | 450g",
+          "price": 6.5,
+          "unit_price": 1.44,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/red-tractor-protein-low-sugar-granola-apple-caramel-450g-4312843",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4312843.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -11836,7 +11846,7 @@
     },
     {
       "list_item": "Snickers Milk Chocolate Party Share Bag",
-      "last_scraped": "2026-06-01T07:17:08.503576+00:00",
+      "last_scraped": "2026-06-01T21:30:03.987783+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11860,14 +11870,24 @@
       "coles": {
         "name": "Snickers Chocolate Party Share Bag 12 Pieces | 180g",
         "price": 7.5,
-        "unit_price": 10,
+        "unit_price": 10.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/snickers-chocolate-party-share-bag-12-pieces-180g-5369879",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5369879.jpg"
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 3.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Pods Snickers Chocolate Snack & Share Party Bag | 160g",
+          "price": 3.5,
+          "unit_price": 2.19,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/pods-snickers-chocolate-snack-and-share-party-bag-160g-5899759",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5899759.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -11888,75 +11908,15 @@
           "price": 7.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.5,
       "per_100_coles": 4.17,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Vanish Napisan Stain Remover Powder",
-      "last_scraped": "2026-06-01T07:17:17.435784+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-05-12",
-          "price": 19.0
-        },
-        {
-          "date": "2025-07-10",
-          "price": 19.0
-        }
-      ],
-      "category": "Household",
-      "woolworths": {
-        "name": "Vanish Napisan Stain Remover Powder",
-        "price": 19.0,
-        "unit_price": 9.5,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/192217/vanish-napisan-stain-remover-powder",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/192217.jpg"
-      },
-      "coles": {
-        "name": "Napisan Oxi Action Fabric Stain Remover Powder",
-        "price": 19,
-        "unit_price": 9.5,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/vanish-napisan-oxi-action-fabric-stain-remover-powder-2kg-9506348",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9506348.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 19
-        },
-        {
-          "date": "2026-06-01",
-          "price": 19
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 19
-        },
-        {
-          "date": "2026-06-01",
-          "price": 19
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.95,
-      "per_100_coles": 0.95,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths 4 Angus Quarter Pound Beef Burgers",
-      "last_scraped": "2026-06-01T07:17:11.283144+00:00",
+      "last_scraped": "2026-06-01T21:30:10.967514+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11979,8 +11939,8 @@
       },
       "coles": {
         "name": "Coles Finest Angus Beef Burgers | 300g",
-        "price": 9,
-        "unit_price": 9,
+        "price": 9.0,
+        "unit_price": 9.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-finest-angus-beef-burgers-300g-1327877",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1327877.jpg",
@@ -11988,7 +11948,35 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 6.3,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Finest Angus Beef Burgers | 300g",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-finest-angus-beef-burgers-300g-1327877",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1327877.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Simply Australian Beef Burgers | 800g",
+          "price": 9.3,
+          "unit_price": 9.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-simply-australian-beef-burgers-800g-2700580",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2700580.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "V2 Burger Beef 4pk 452g | 452GRAM",
+          "price": 10.0,
+          "unit_price": 10.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/v2-burger-beef-4pk-452g-452gram-8851668",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8851668.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -12009,12 +11997,173 @@
           "price": 9
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.98,
       "per_100_coles": 3.0,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.3
+    },
+    {
+      "list_item": "Vanish Napisan Stain Remover Powder",
+      "last_scraped": "2026-06-01T21:30:11.351888+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 19.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 19.0
+        }
+      ],
+      "category": "Household",
+      "woolworths": {
+        "name": "Vanish Napisan Oxi Action Stain Remover Powder 2 x 2kg",
+        "price": 47.99,
+        "unit_price": 12.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/1126119533/vanish-napisan-oxi-action-stain-remover-powder-2-x-2kg",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/1126119533.jpg"
+      },
+      "coles": {
+        "name": "Napisan Oxi Action Fabric Stain Remover Powder",
+        "price": 19.0,
+        "unit_price": 9.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/vanish-napisan-oxi-action-fabric-stain-remover-powder-2kg-9506348",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9506348.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 28.99,
+      "alternatives": [
+        {
+          "name": "Napisan Oxi Action Fabric Stain Remover Powder",
+          "price": 19.0,
+          "unit_price": 9.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/vanish-napisan-oxi-action-fabric-stain-remover-powder-2kg-9506348",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9506348.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 19
+        },
+        {
+          "date": "2026-06-01",
+          "price": 47.99
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 19
+        },
+        {
+          "date": "2026-06-01",
+          "price": 19
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 2.4,
+      "per_100_coles": 0.95,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Black Beans",
+      "last_scraped": "2026-06-01T21:30:17.570623+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-04-02",
+          "price": 1.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.0
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Black Beans",
+        "price": 1.0,
+        "unit_price": 2.38,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/907377/woolworths-black-beans",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/907377.jpg"
+      },
+      "coles": {
+        "name": "Coles Black Beans | 420g",
+        "price": 1.0,
+        "unit_price": 1.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3812975.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.58,
+      "alternatives": [
+        {
+          "name": "Coles Black Beans | 420g",
+          "price": 1.0,
+          "unit_price": 1.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3812975.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Carmelina Black Beans | 400 GRAM",
+          "price": 1.9,
+          "unit_price": 1.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/carmelina-black-beans-400-gram-8855589",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855589.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Woolworths Beef & Black Bean With Rice",
+          "price": 8.0,
+          "unit_price": 2.29,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/6038388/woolworths-beef-black-bean-with-rice",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6038388.jpg",
+          "retailer": "woolworths"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.24,
+      "per_100_coles": 0.24,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.42
     },
     {
       "list_item": "Woolworths Beef & Lamb Meatballs",
@@ -12076,78 +12225,6 @@
       "per_100_coles": 1.25,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.56
-    },
-    {
-      "list_item": "Woolworths Black Beans",
-      "last_scraped": "2026-06-01T07:17:17.265309+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2026-04-02",
-          "price": 1.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 1.0
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Black Beans",
-        "price": 1.0,
-        "unit_price": 2.38,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/907377/woolworths-black-beans",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/907377.jpg"
-      },
-      "coles": {
-        "name": "Coles Black Beans | 420g",
-        "price": 1,
-        "unit_price": 1,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3812975.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.58,
-      "alternatives": [
-        {
-          "name": "Woolworths Beef & Black Bean With Rice",
-          "price": 8.0,
-          "unit_price": 2.29,
-          "unit": "100G",
-          "url": "https://www.woolworths.com.au/shop/productdetails/6038388/woolworths-beef-black-bean-with-rice",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6038388.jpg",
-          "retailer": "woolworths"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.24,
-      "per_100_coles": 0.24,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.42
     },
     {
       "list_item": "Woolworths Butternut Pumpkin Cut",
@@ -12643,19 +12720,19 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 692.42,
+    "total_woolworths": 721.41,
     "total_coles": 746.59,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 54.17,
+    "total_saving": 25.18,
     "items_compared": 144,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 130,
+    "done": 135,
     "total": 144,
     "started_at": "2026-06-01T21:22:09.827543+00:00",
-    "current_item": "Rexona Men 48hr Deodorant Stick Sport Defence"
+    "current_item": "Woolworths Black Beans"
   },
   "pending_validation": [
     {
