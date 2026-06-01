@@ -8354,6 +8354,10 @@
         {
           "date": "2026-06-01",
           "price": 5.5
+        },
+        {
+          "date": "2026-06-02",
+          "price": 6
         }
       ],
       "match_confidence": "low",
@@ -12834,21 +12838,6 @@
         "30pct_change",
         "outside_historical_range"
       ]
-    },
-    {
-      "item": "Strawberries Punnet",
-      "ww_price": 5.5,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/144607/strawberries-punnet",
-      "ww_prev_price": 5.5,
-      "ww_suspicious": false,
-      "coles_price": 6,
-      "coles_url": "https://www.coles.com.au/product/coles-strawberries-250g-5191256",
-      "coles_prev_price": 5.5,
-      "coles_suspicious": true,
-      "flagged_date": "2026-06-02",
-      "reason": [
-        "outside_historical_range"
-      ]
     }
   ],
   "approved_prices": {
@@ -13141,6 +13130,10 @@
     "Woolworths Red Watermelon Cut Quarter": {
       "approved_date": "2026-06-01",
       "ww": 8.58
+    },
+    "Strawberries Punnet": {
+      "approved_date": "2026-06-01",
+      "coles": 6
     }
   }
 }
