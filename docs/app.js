@@ -1164,7 +1164,10 @@ function openPriceHistoryModal(item) {
       : `<span style="color:var(--text-soft)">—</span>`;
     const btnHtml = wwKey != null ? `
       <button class="price-exclude-btn" data-price="${wwKey}">${isExcluded ? 'Include' : 'Exclude'}</button>
-      <button class="price-diff-btn"    data-price="${wwKey}">Different item</button>` : '';
+      <button class="price-diff-btn"    data-price="${wwKey}">Different item</button>`
+      // Coles-only row (WW blocked/missing that day) — offer a remove button
+      : (entry.source === 'scrape' && entry.coles != null) ? `
+      <button class="price-colesonly-remove-btn" data-date="${entry.date}">Remove</button>` : '';
 
     row.innerHTML = `
       <span class="price-history-date">${entry.date || 'Unknown date'}</span>
@@ -1189,6 +1192,29 @@ function openPriceHistoryModal(item) {
 
       row.querySelector('.price-diff-btn').addEventListener('click', () => {
         openDiffItemModal(item, wwKey);
+      });
+    }
+
+    const colesOnlyRemoveBtn = row.querySelector('.price-colesonly-remove-btn');
+    if (colesOnlyRemoveBtn) {
+      colesOnlyRemoveBtn.addEventListener('click', async () => {
+        if (!_lastData || !_historyItem) return;
+        const dateToRemove = colesOnlyRemoveBtn.dataset.date;
+        const idx = _lastData.items.findIndex(i => i.list_item === _historyItem.list_item);
+        if (idx === -1) return;
+        const updated = { ..._lastData.items[idx] };
+        updated.coles_price_history = (updated.coles_price_history || []).filter(e => e.date !== dateToRemove);
+        _lastData.items[idx] = updated;
+        _historyItem = updated;
+        colesOnlyRemoveBtn.textContent = 'Saving…';
+        colesOnlyRemoveBtn.disabled = true;
+        const s = loadSettings();
+        if (s.user && s.repo && s.token) {
+          try { await persistLatestJson(_lastData, 'chore: remove orphan Coles-only history entry'); }
+          catch (e) { console.warn('Could not persist to GitHub:', e); }
+        }
+        openPriceHistoryModal(_historyItem);
+        renderPage(_lastData);
       });
     }
 
