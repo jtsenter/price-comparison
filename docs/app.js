@@ -3477,7 +3477,7 @@ async function addItemsToShoppingList(newItems) {
     const { anyOnline } = await getRunnerStatus(s);
     if (!anyOnline) {
       showRunnerOfflineBanner();
-      alert('Items added to your shopping list, but the scraper is offline — prices will update when the runner restarts.');
+      alert('Items added to your basket, but the scraper is offline — prices will update when the runner restarts.');
       return;
     }
     hideRunnerOfflineBanner();
@@ -3494,7 +3494,7 @@ async function addItemsToShoppingList(newItems) {
       }
     );
 
-    alert(`✓ Added ${newItems.length} item(s) to your shopping list and triggered a price scrape!`);
+    alert(`✓ Added ${newItems.length} item(s) to your basket and triggered a price scrape!`);
   } catch (err) {
     alert(`Error: ${err.message}`);
   }
