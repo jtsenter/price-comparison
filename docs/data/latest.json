@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-01T21:28:53.619712+00:00",
+  "last_updated": "2026-06-01T21:29:06.798067+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10383,7 +10383,7 @@
     },
     {
       "list_item": "Yumi's Eggplant Mediterranean Dip",
-      "last_scraped": "2026-06-01T07:16:18.011642+00:00",
+      "last_scraped": "2026-06-01T21:28:54.045706+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -10414,8 +10414,8 @@
       },
       "coles": {
         "name": "Yumi's Mediterranean Eggplant Dip | 200g",
-        "price": 5,
-        "unit_price": 5,
+        "price": 5.0,
+        "unit_price": 5.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/yumi's-mediterranean-eggplant-dip-200g-8670878",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8670878.jpg"
@@ -10443,76 +10443,15 @@
           "price": 5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.88,
       "per_100_coles": 2.5,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
-      "last_scraped": "2026-06-01T07:16:18.236080+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-02-02",
-          "price": 3.85
-        },
-        {
-          "date": "2025-06-06",
-          "price": 3.85
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
-        "price": 3.85,
-        "unit_price": 10.69,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/634312/baby-mum-mum-organiic-rice-rusks-blueberry-carrot",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634312.jpg"
-      },
-      "coles": {
-        "name": "Baby Mum-mum Rice Rusk Organic Blueberry & Carrot +8 Months | 36g",
-        "price": 2.85,
-        "unit_price": 7.92,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/baby-mum-mum-rice-rusk-organic-blueberry-and-carrot-+8-months-36g-2800347",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2800347.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.85
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.85
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.85
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.85
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 10.69,
-      "per_100_coles": 7.92,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Coca-Cola Zero Sugar Soft Drink Bottle",
-      "last_scraped": "2026-06-01T07:16:21.752799+00:00",
+      "last_scraped": "2026-06-01T21:28:59.033927+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10536,7 +10475,7 @@
       "coles": {
         "name": "Coca-Cola Zero Sugar Soft Drink Bottle | 1.25L",
         "price": 4.2,
-        "unit_price": 6,
+        "unit_price": 6.0,
         "unit": "1L",
         "url": "https://www.coles.com.au/product/coca-cola-zero-sugar-soft-drink-bottle-1.25l-2993706",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2993706.jpg"
@@ -10568,15 +10507,86 @@
           "price": 4.2
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.17,
       "per_100_coles": 0.34,
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
+      "last_scraped": "2026-06-01T21:28:59.231595+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 3.85
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.85
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
+        "price": 3.85,
+        "unit_price": 10.69,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/634312/baby-mum-mum-organiic-rice-rusks-blueberry-carrot",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634312.jpg"
+      },
+      "coles": {
+        "name": "Baby Mum-mum Rice Rusk Organic Blueberry & Carrot +8 Months | 36g",
+        "price": 2.85,
+        "unit_price": 7.92,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/baby-mum-mum-rice-rusk-organic-blueberry-and-carrot-+8-months-36g-2800347",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2800347.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.0,
+      "alternatives": [
+        {
+          "name": "Baby Mum-mum Rice Rusk Organic Blueberry & Carrot +8 Months | 36g",
+          "price": 2.85,
+          "unit_price": 7.92,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/baby-mum-mum-rice-rusk-organic-blueberry-and-carrot-+8-months-36g-2800347",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2800347.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3.85
+        },
+        {
+          "date": "2026-06-01",
+          "price": 3.85
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.85
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2.85
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 10.69,
+      "per_100_coles": 7.92,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Colman's Ingredients English Mustard",
-      "last_scraped": "2026-06-01T07:16:21.358771+00:00",
+      "last_scraped": "2026-06-01T21:29:05.210927+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10607,7 +10617,35 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.5,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Colman's Mint Sauce | 165g",
+          "price": 4.5,
+          "unit_price": 2.73,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/colman's-mint-sauce-165g-2931946",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2931946.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Mild American Mustard | 260g",
+          "price": 2.8,
+          "unit_price": 2.8,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-mild-american-mustard-260g-6733092",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6733092.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Hot English Mustard | 200g",
+          "price": 2.9,
+          "unit_price": 2.9,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-hot-english-mustard-200g-3762924",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3762924.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -10628,7 +10666,7 @@
           "price": 4.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 5.0,
       "per_100_coles": 4.5,
@@ -10636,7 +10674,7 @@
     },
     {
       "list_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons",
-      "last_scraped": "2026-06-01T07:16:24.426378+00:00",
+      "last_scraped": "2026-06-01T21:29:06.775896+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10658,7 +10696,7 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/166232.jpg"
       },
       "coles": {
-        "name": "Continental Cup A Soup Creamy Chicken with Croutons Serves 2 | 60g",
+        "name": "Continental Cup A Soup Creamy Chicken With Croutons Serves 2 | 60g",
         "price": 2.8,
         "unit_price": 6.6,
         "unit": "100g",
@@ -10688,7 +10726,7 @@
           "price": 2.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.33,
       "per_100_coles": 4.67,
@@ -12480,10 +12518,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 110,
+    "done": 115,
     "total": 144,
     "started_at": "2026-06-01T21:22:09.827543+00:00",
-    "current_item": "Woolworths Wholegrain Wrap 8Pk"
+    "current_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons"
   },
   "pending_validation": [
     {
