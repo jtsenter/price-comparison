@@ -53,8 +53,8 @@ EXCEL_PATH = os.path.join(os.path.dirname(__file__), "..", "shopping_list.xlsx")
 
 # ── Tunable constants ────────────────────────────────────────────────────────
 PAGE_TIMEOUT_MS      = 20_000   # page.goto timeout
-COLES_WAIT_MS        = 1_500    # post-navigation wait for Coles pages
-COLES_SCROLL_WAIT_MS = 800      # post-scroll wait for lazy-loaded tiles
+COLES_WAIT_MS        = 1_100    # post-navigation wait for Coles pages
+COLES_SCROLL_WAIT_MS = 600      # post-scroll wait for lazy-loaded tiles
 MAX_PRODUCT_PRICE    = 50.0     # upper bound for plausible product prices
 SKIP_AGE_DAYS        = 4        # items scraped within N days are skipped
 CONCURRENCY          = 2        # parallel page-pairs (don't exceed 3)
@@ -222,7 +222,7 @@ async def search_woolworths(page, query: str) -> list[dict]:
     url = f"{WOOLWORTHS_BASE}/shop/search/products?searchTerm={quote(query)}"
     try:
         await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
-        await page.wait_for_timeout(600)
+        await page.wait_for_timeout(450)
 
         current_url = page.url
         title = await page.title()
@@ -282,7 +282,7 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
         url = "https://" + url
     try:
         await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
-        await page.wait_for_timeout(800)
+        await page.wait_for_timeout(600)
         next_data = await page.evaluate("""
             () => {
                 const el = document.getElementById('__NEXT_DATA__');
@@ -1266,7 +1266,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                             _scrape_single_item(
                                 name, purchase_history, ww_page, co_page, "", "", existing_data,
                             ),
-                            timeout=120,
+                            timeout=90,
                         )
                         if result:
                             items_output.append(result)
@@ -1275,8 +1275,8 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                         if _ve:
                             new_validation_entries.append(_ve)
                     except asyncio.TimeoutError:
-                        print(f"  [TIMEOUT] {name} exceeded 120s — skipping")
-                        not_found.append(name)
+                        print(f"  [TIMEOUT] {name} exceeded 90s — keeping existing data")
+                        not_found.append(name)   # final carry-forward will restore existing price data
                         timed_out = True
                     except Exception as e:
                         print(f"  Error scraping {name}: {e}")
