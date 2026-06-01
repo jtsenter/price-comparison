@@ -118,7 +118,7 @@ function dismissDiff(itemName, currentDiff) {
 const HOT_DEAL_TREND_THRESHOLD = 0.10;   // current price must be in bottom 10% of historical range
 const DISCREPANCY_WARN_THRESHOLD = 0.31; // price diff % above which ⚠ is shown
 const STALE_DATA_DAYS          = 5;      // days before "data is stale" banner appears
-const STALE_PROGRESS_MS        = 3 * 60 * 1000; // ms with no progress update → ⚠ Stalled
+const STALE_PROGRESS_MS        = 5 * 60 * 1000; // ms with no progress update → ⚠ Stalled
 
 // ── Overrides (edit name / URL) ──────────────────────────────────────────────
 

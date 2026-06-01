@@ -1259,6 +1259,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                     ww_page = await ww_pool.get()
                     co_page = await co_pool.get()
                     timed_out = False
+                    _force_push = False
                     try:
                         idx = completed[0] + 1
                         print(f"[{idx}/{total_to_scrape}] {name}")
@@ -1278,12 +1279,13 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                         print(f"  [TIMEOUT] {name} exceeded 90s — keeping existing data")
                         not_found.append(name)   # final carry-forward will restore existing price data
                         timed_out = True
+                        _force_push = True       # push immediately so UI stall detector resets
                     except Exception as e:
                         print(f"  Error scraping {name}: {e}")
                         not_found.append(name)   # keep item visible; final pass will carry forward
                     finally:
                         completed[0] += 1
-                        if completed[0] % 5 == 0:
+                        if completed[0] % 5 == 0 or _force_push:
                             _pv_snap = {**existing_pv, **{e["item"]: e for e in new_validation_entries}}
                             merged_pv = list(_pv_snap.values())
                             push_progress_bg(
