@@ -3990,6 +3990,33 @@ async function boot() {
     $('settingsModal').style.display = 'none';
   });
 
+  // ── Sync URL overrides → GitHub ───────────────────────────────
+  $('syncOverridesBtn')?.addEventListener('click', async () => {
+    const s = loadSettings();
+    if (!s.user || !s.repo || !s.token) {
+      alert('Please save your GitHub settings first.');
+      return;
+    }
+    const overrides = loadOverrides();
+    const hasUrls = Object.values(overrides).some(v => v.wwUrl || v.colesUrl);
+    if (!hasUrls) {
+      alert('No URL overrides found in local storage — nothing to sync.');
+      return;
+    }
+    const btn = $('syncOverridesBtn');
+    btn.disabled = true;
+    btn.textContent = 'Syncing…';
+    try {
+      await persistUrlOverridesToRepo(s, overrides);
+      btn.textContent = '✓ Synced';
+      setTimeout(() => { btn.textContent = 'Sync URL overrides'; btn.disabled = false; }, 2000);
+    } catch (e) {
+      alert(`⚠ Sync failed — check your token.\n${e.message}`);
+      btn.textContent = 'Sync URL overrides';
+      btn.disabled = false;
+    }
+  });
+
   $('scrapeStripDismiss')?.addEventListener('click', () => {
     _progressDismissed = true;
     const strip = $('scrapeStrip');

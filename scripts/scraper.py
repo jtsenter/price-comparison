@@ -187,6 +187,10 @@ def _parse_ww_products(product_list: list) -> list[dict]:
         if is_member_deal and was_price is not None and float(was_price) > float(price):
             print(f"    [WW] Member price skipped for '{name}': ${price} → shelf price ${was_price}")
             price = was_price
+        elif not is_member_deal and was_price is not None and float(was_price) > float(price):
+            # WasPrice is higher but EDR flag is absent — possible unlabeled member deal.
+            # Cannot fix here (no DOM access on search pages); pin the URL to enable DOM fallback.
+            print(f"    [WW] {name!r}: Price=${price} WasPrice={was_price} IsEDR=False — possible unlabeled member deal (pin URL to fix)")
         product_url = (
             f"{WOOLWORTHS_BASE}/shop/productdetails/{stockcode}/{url_name}"
             if stockcode else ""
