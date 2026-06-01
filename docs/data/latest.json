@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-01T06:10:28.711718+00:00",
+  "last_updated": "2026-06-01T06:10:43.848598+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3343,7 +3343,7 @@
     },
     {
       "list_item": "Woolworths Cherry Tomatoes Punnet",
-      "last_scraped": "2026-05-31T11:18:20.058659+00:00",
+      "last_scraped": "2026-06-01T06:10:28.999377+00:00",
       "trip_count": 21,
       "price_history": [
         {
@@ -3451,38 +3451,14 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 2.4,
-      "alternatives": [
-        {
-          "name": "Mutti Cherry Tomatoes | 400g",
-          "price": 2.7,
-          "unit_price": 2.7,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/mutti-cherry-tomatoes-400g-2612948",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2612948.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Cherry Tomatoes | 250g",
-          "price": 3.2,
-          "unit_price": 3.2,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-cherry-tomatoes-250g-4834736",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4834736.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Tomatoes Cherry Vine Ripened | 200g",
-          "price": 3.5,
-          "unit_price": 3.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-tomatoes-cherry-vine-ripened-200g-8003851",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8003851.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
+          "price": 3.2
+        },
+        {
+          "date": "2026-06-01",
           "price": 3.2
         }
       ],
@@ -3490,9 +3466,13 @@
         {
           "date": "2026-05-29",
           "price": 3.2
+        },
+        {
+          "date": "2026-06-01",
+          "price": 3.2
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.28,
       "per_100_coles": 1.28,
@@ -3501,7 +3481,7 @@
     },
     {
       "list_item": "Woolworths Cookie Caramel Bar Slice",
-      "last_scraped": "2026-05-31T11:18:21.635575+00:00",
+      "last_scraped": "2026-06-01T06:10:33.363332+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -3564,17 +3544,7 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 1.25,
-      "alternatives": [
-        {
-          "name": "Streets Golden Gaytime Caramel Slice 4 Pack | 400mL",
-          "price": 6.5,
-          "unit_price": 1.63,
-          "unit": "100mL",
-          "url": "https://www.coles.com.au/product/streets-golden-gaytime-caramel-slice-4-pack-400ml-8579823",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8579823.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -3583,6 +3553,10 @@
         {
           "date": "2026-05-30",
           "price": 8
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8.0
         }
       ],
       "coles_price_history": [
@@ -3593,9 +3567,13 @@
         {
           "date": "2026-05-30",
           "price": 6.75
+        },
+        {
+          "date": "2026-06-01",
+          "price": 6.75
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.86,
       "per_100_coles": 2.41,
@@ -3603,7 +3581,7 @@
     },
     {
       "list_item": "Woolworths Cos Hearts Lettuce",
-      "last_scraped": "2026-05-31T11:18:26.618362+00:00",
+      "last_scraped": "2026-06-01T06:10:37.224618+00:00",
       "trip_count": 22,
       "price_history": [
         {
@@ -3719,11 +3697,19 @@
         {
           "date": "2026-05-29",
           "price": 3.3
+        },
+        {
+          "date": "2026-06-01",
+          "price": 3.3
         }
       ],
       "coles_price_history": [
         {
           "date": "2026-05-29",
+          "price": 2.9
+        },
+        {
+          "date": "2026-06-01",
           "price": 2.9
         }
       ],
@@ -3735,7 +3721,7 @@
     },
     {
       "list_item": "Woolworths Corn Sweet",
-      "last_scraped": "2026-05-31T11:18:28.618034+00:00",
+      "last_scraped": "2026-06-01T06:10:40.664461+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -3839,20 +3825,14 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.0,
-      "alternatives": [
-        {
-          "name": "Sweet Corn",
-          "price": 5.5,
-          "unit_price": 1.83,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/coles-sweet-corn-3-pack-5806601",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5806601.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
+          "price": 4.5
+        },
+        {
+          "date": "2026-06-01",
           "price": 4.5
         }
       ],
@@ -3860,9 +3840,13 @@
         {
           "date": "2026-05-29",
           "price": 5.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5.5
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.9,
       "per_100_coles": null,
@@ -3870,7 +3854,7 @@
     },
     {
       "list_item": "Woolworths Dreamy Choc Chip Cookies",
-      "last_scraped": "2026-05-31T11:18:34.493783+00:00",
+      "last_scraped": "2026-06-01T06:10:43.842943+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -3925,29 +3909,14 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.8,
-      "alternatives": [
-        {
-          "name": "Coles Bakery Indulgent Choc 40% Choc Chip Cookie | 6 Pack",
-          "price": 3.0,
-          "unit_price": 0.5,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/coles-bakery-indulgent-choc-40percent-choc-chip-cookie-6-pack-2592079",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2592079.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Bakery Indulgent White 40% Choc Chip Cookie | 6 Pack",
-          "price": 3.0,
-          "unit_price": 0.5,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/coles-bakery-indulgent-white-40percent-choc-chip-cookie-6-pack-2759913",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2759913.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
+          "price": 3.8
+        },
+        {
+          "date": "2026-06-01",
           "price": 3.8
         }
       ],
@@ -3955,9 +3924,13 @@
         {
           "date": "2026-05-29",
           "price": 3
+        },
+        {
+          "date": "2026-06-01",
+          "price": 3.0
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.6,
@@ -11793,10 +11766,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 30,
+    "done": 35,
     "total": 144,
     "started_at": "2026-06-01T06:08:32.174360+00:00",
-    "current_item": "Woolworths Broccolini Bunch"
+    "current_item": "Woolworths Dreamy Choc Chip Cookies"
   },
   "pending_validation": [
     {
