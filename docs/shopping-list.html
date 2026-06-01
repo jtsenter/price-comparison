@@ -175,31 +175,20 @@ async function boot() {
     Object.assign(analysis, Object.fromEntries(Object.entries(prioOv).map(([k, v]) => [k, { ...(analysis[k] || {}), priority: v }])));
   } catch {}
 
-  // Determine selection
-  let sel = null;
-  try { sel = JSON.parse(localStorage.getItem('pw_export_sel')); } catch {}
-
-  const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
+  // Determine selection — read flat name list written by app.js exportShoppingList()
+  let slNames = null;
+  try {
+    const raw = localStorage.getItem('pw_sl_items');
+    if (raw) { slNames = JSON.parse(raw); localStorage.removeItem('pw_sl_items'); }
+  } catch {}
 
   let items = (data.items || []).filter(i => !i.archived);
 
-  if (sel?.type === 'checked' && sel.items?.length) {
-    const set = new Set(sel.items);
-    items = items.filter(i => set.has(i.list_item));
-  } else if (sel?.type === 'filter') {
-    if (sel.priority && sel.priority !== 'all') {
-      items = items.filter(i => {
-        const p = analysis[i.list_item]?.priority || 'rare';
-        return p === sel.priority;
-      });
-    }
-    if (sel.category && sel.category !== 'All') {
-      items = items.filter(i => getCategory(i, catOv) === sel.category);
-    }
-    if (sel.pricesOnly) {
-      items = items.filter(i => i.woolworths?.price != null || i.coles?.price != null);
-    }
+  if (slNames && slNames.length) {
+    const nameSet = new Set(slNames);
+    items = items.filter(i => nameSet.has(i.list_item));
   }
+  // If slNames is null/empty we fall through and show all non-archived items
 
   if (!items.length) {
     main.innerHTML = '<div class="empty">No items found for this selection.</div>';
@@ -223,9 +212,7 @@ async function boot() {
   const wwWins    = wwTotal <= coTotal;
 
   // Filter note
-  let filterNote = '';
-  if (sel?.type === 'checked') filterNote = `Showing ${items.length} selected item${items.length !== 1 ? 's' : ''}`;
-  else if (sel?.type === 'filter' && sel.priority !== 'all') filterNote = `Filtered: ${sel.priority}${sel.category && sel.category !== 'All' ? ' · ' + sel.category : ''}`;
+  let filterNote = slNames?.length ? `Showing ${items.length} item${items.length !== 1 ? 's' : ''}` : '';
 
   function buildTable(storeItems, store) {
     if (!storeItems.length) return `<p class="only-note">No items are cheapest at ${store === 'ww' ? 'Woolworths' : 'Coles'} in this selection.</p>`;

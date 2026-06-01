@@ -3716,22 +3716,19 @@ function getCurrentVisibleItems() {
   return sortItems(_lastData.items).map(i => i.list_item);
 }
 
+function buildShoppingListItems(useChecked) {
+  if (!_lastData) return [];
+  // Priority 1: mobile tap-selected items
+  if (_selectedItems.size > 0) return [..._selectedItems];
+  // Priority 2: desktop checkbox-selected rows (bulk bar)
+  if (useChecked && _checkedItems && _checkedItems.size > 0) return [..._checkedItems];
+  // Priority 3: whatever is currently visible (respects search + frequency + category + hot/priced-only)
+  return sortItems(_lastData.items).map(i => i.list_item);
+}
+
 function exportShoppingList(useChecked) {
-  let sel;
-  if (_selectedItems.size > 0) {
-    // Priority 1: tap-selected (mobile) or any selected items — always wins
-    sel = { type: 'checked', items: [..._selectedItems] };
-  } else if (useChecked && _checkedItems.size > 0) {
-    // Desktop checkbox-selected rows
-    sel = { type: 'checked', items: [..._checkedItems] };
-  } else if (_searchQuery) {
-    // Priority 2: active search — pass the exact visible item list
-    sel = { type: 'checked', items: getCurrentVisibleItems() };
-  } else {
-    // Priority 3: current filter view (frequency tab + category + hot/priced-only)
-    sel = { type: 'filter', priority: _activePriority, category: _activeCategory, hotOnly: _showHotOnly, pricesOnly: _showPricesOnly };
-  }
-  localStorage.setItem('pw_export_sel', JSON.stringify(sel));
+  const names = buildShoppingListItems(useChecked);
+  localStorage.setItem('pw_sl_items', JSON.stringify(names));
   window.location.href = 'shopping-list.html';
 }
 
