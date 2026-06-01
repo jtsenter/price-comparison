@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-01T21:29:44.873574+00:00",
+  "last_updated": "2026-06-01T21:29:56.733186+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11415,7 +11415,7 @@
     },
     {
       "list_item": "Maltesers Milk Chocolate Party Gift Box",
-      "last_scraped": "2026-06-01T07:16:57.063644+00:00",
+      "last_scraped": "2026-06-01T21:29:46.173232+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11447,7 +11447,17 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 3.25,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Maltesers Milk Chocolate Party Gift Box | 400g",
+          "price": 7.75,
+          "unit_price": 1.94,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/maltesers-milk-chocolate-party-gift-box-400g-3609268",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3609268.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -11468,75 +11478,15 @@
           "price": 7.75
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.75,
       "per_100_coles": 1.94,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Manning Valley 12 Extra Large Free Range Eggs",
-      "last_scraped": "2026-06-01T07:17:00.667761+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 7.8
-        },
-        {
-          "date": "2025-07-10",
-          "price": 8.7
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Manning Valley 12 Extra Large Free Range Eggs",
-        "price": 8.7,
-        "unit_price": 1.24,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/313900/manning-valley-12-extra-large-free-range-eggs",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/313900.jpg"
-      },
-      "coles": {
-        "name": "Sunny Queen Free Range Large Eggs 12 Pack | 600g",
-        "price": 8.5,
-        "unit_price": 8.5,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/sunny-queen-free-range-large-eggs-12-pack-600g-5417778",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5417778.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.2,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8.7
-        },
-        {
-          "date": "2026-06-01",
-          "price": 8.7
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 8.5
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.24,
-      "per_100_coles": 1.42,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Obela Hommus Dip With Garlic Smashed Falafel",
-      "last_scraped": "2026-06-01T07:17:02.082707+00:00",
+      "last_scraped": "2026-06-01T21:29:50.601166+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11568,7 +11518,17 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 1.65,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Obela Garnished Dip Garlic Hommus With Smashed Falafel | 220g",
+          "price": 3.85,
+          "unit_price": 1.75,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/obela-garnished-dip-garlic-hommus-with-smashed-falafel-220g-1048818",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1048818.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -11589,15 +11549,94 @@
           "price": 3.85
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.5,
       "per_100_coles": 1.75,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Manning Valley 12 Extra Large Free Range Eggs",
+      "last_scraped": "2026-06-01T21:29:51.949392+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 7.8
+        },
+        {
+          "date": "2025-07-10",
+          "price": 8.7
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Manning Valley 12 Extra Large Free Range Eggs",
+        "price": 8.7,
+        "unit_price": 1.24,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/313900/manning-valley-12-extra-large-free-range-eggs",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/313900.jpg"
+      },
+      "coles": {
+        "name": "Sunny Queen Free Range Large Eggs 12 Pack | 600g",
+        "price": 8.5,
+        "unit_price": 8.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/sunny-queen-free-range-large-eggs-12-pack-600g-5417778",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5417778.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.2,
+      "alternatives": [
+        {
+          "name": "Sunrise Free Range Eggs 12 Pack | 700g",
+          "price": 6.4,
+          "unit_price": 0.91,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/sunrise-free-range-eggs-12-pack-700g-6339534",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6339534.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Yarra Valley Free Range Eggs 12 Pack | 700g",
+          "price": 6.5,
+          "unit_price": 0.93,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/yarra-valley-free-range-eggs-12-pack-700g-6804769",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6804769.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8.7
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8.7
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8.5
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 1.24,
+      "per_100_coles": 1.42,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Orange Navel",
-      "last_scraped": "2026-06-01T07:17:03.961739+00:00",
+      "last_scraped": "2026-06-01T21:29:54.662110+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11629,7 +11668,26 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.17,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Orange Navel | approx. 250g",
+          "price": 1.12,
+          "unit_price": 1.12,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-orange-navel-approx.-250g-4255717",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4255717.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Cara Cara Oranges | approx. 250g",
+          "price": 1.12,
+          "unit_price": 1.12,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-cara-cara-oranges-approx.-250g-each-9599134",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9599134.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -11650,7 +11708,7 @@
           "price": 1.12
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.45,
@@ -11658,7 +11716,7 @@
     },
     {
       "list_item": "Rexona Men 48hr Deodorant Stick Sport Defence",
-      "last_scraped": "2026-06-01T07:17:05.383744+00:00",
+      "last_scraped": "2026-06-01T21:29:56.722966+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11681,7 +11739,7 @@
       },
       "coles": {
         "name": "Rexona Men Deodorant 48hr Stick Sport Defence | 52g",
-        "price": 5,
+        "price": 5.0,
         "unit_price": null,
         "unit": null,
         "url": "https://www.coles.com.au/product/rexona-men-deodorant-48hr-stick-sport-defence-52g-8448304",
@@ -11710,7 +11768,7 @@
           "price": 5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 9.42,
       "per_100_coles": 9.62,
@@ -12594,10 +12652,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 125,
+    "done": 130,
     "total": 144,
     "started_at": "2026-06-01T21:22:09.827543+00:00",
-    "current_item": "KitKat Gold Crush Block"
+    "current_item": "Rexona Men 48hr Deodorant Stick Sport Defence"
   },
   "pending_validation": [
     {
