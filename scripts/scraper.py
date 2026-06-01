@@ -334,12 +334,15 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                 if is_member_deal and was_price is not None and float(was_price) > float(price):
                     print(f"    [WW] Member price skipped for '{name}' (by URL): ${price} → shelf price ${was_price}")
                     price = was_price
-                # DOM fallback: check for an explicit regular-price element.
-                # Catches cases where IsEveryDayRewards flag is absent but the page still
-                # shows a member/promotional price as the primary price.
+                # DOM price check: read what the page actually renders.
+                # Priority 1 (EDR secondary element): shown only when there's a member deal —
+                #   indicates the non-member shelf price.
+                # Priority 2 (main price element): what the page displays as the current price —
+                #   overrides __NEXT_DATA__ when they disagree (JSON can be stale/non-personalized).
                 if price is not None:
                     _dom = await page.evaluate("""
                         () => {
+                            // Secondary element — only present for EDR deals (non-member price)
                             for (const sel of [
                                 '[data-testid="product-regular-price"]',
                                 '[class*="RegularPrice"]',
@@ -348,7 +351,21 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                                 const el = document.querySelector(sel);
                                 if (el?.textContent) {
                                     const m = el.textContent.match(/\\$\\s*([\\d.]+)/);
-                                    if (m) return { p: parseFloat(m[1]), sel };
+                                    if (m) return { p: parseFloat(m[1]), sel, kind: 'regular' };
+                                }
+                            }
+                            // Main displayed price — what the page actually shows
+                            for (const sel of [
+                                '[data-testid="product-price"]',
+                                '[class*="Price-module_price"]',
+                                '[class*="ProductPrice"]',
+                                '[class*="product-price"]:not([class*="was"]):not([class*="save"])',
+                                '[class*="price__value"]',
+                            ]) {
+                                const el = document.querySelector(sel);
+                                if (el?.textContent) {
+                                    const m = el.textContent.match(/\\$\\s*([\\d.]+)/);
+                                    if (m) return { p: parseFloat(m[1]), sel, kind: 'main' };
                                 }
                             }
                             return null;
@@ -357,11 +374,12 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                     if _dom:
                         _dom_p   = _dom['p']
                         _dom_sel = _dom['sel']
+                        _dom_kind = _dom.get('kind', 'unknown')
                         if abs(_dom_p - float(price)) > 0.005:
-                            print(f"    [WW] DOM {_dom_sel!r} price ${_dom_p} overrides __NEXT_DATA__ ${price}")
+                            print(f"    [WW] DOM [{_dom_kind}] {_dom_sel!r} price ${_dom_p} overrides __NEXT_DATA__ ${price}")
                             price = _dom_p
                         else:
-                            print(f"    [WW] DOM {_dom_sel!r} confirms price ${_dom_p}")
+                            print(f"    [WW] DOM [{_dom_kind}] {_dom_sel!r} confirms price ${_dom_p}")
                 if name and price is not None:
                     _, unit = parse_unit_price(cup_string)
                     product_url = (
