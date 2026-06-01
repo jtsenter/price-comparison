@@ -94,17 +94,23 @@ def _should_add_history_entry(history: list, new_price: float, today: str) -> bo
     """Return True if a new price history entry should be appended.
 
     Rules (applies to all scrape triggers — manual and scheduled):
-    - No history yet          → add.
-    - Price changed vs last   → add (always, regardless of how recent).
-    - Price unchanged         → skip (never record a repeat price).
+    - No history yet                           → add.
+    - Price changed vs last entry              → add (always, regardless of age).
+    - Price unchanged, last entry < 7 days ago → skip.
+    - Price unchanged, last entry ≥ 7 days ago → add (confirms price still valid).
     """
     if not history:
         return True
     last = history[-1]
     last_price = last.get('price')
+    last_date  = last.get('date', '')
     if round(float(last_price), 2) != round(float(new_price), 2):
         return True   # price changed — always record
-    return False      # same price — skip
+    try:
+        days_since = (date.fromisoformat(today) - date.fromisoformat(last_date[:10])).days
+        return days_since >= 7
+    except Exception:
+        return True   # date parsing failed — add to be safe
 
 
 def _is_approved(price: float | None, approved_price: float | None, tolerance: float = 0.05) -> bool:
@@ -1070,7 +1076,7 @@ async def _scrape_single_item(
     coles_reasons = ([] if _is_approved(coles_price, _item_approved.get("coles"))
                      else _suspicious_reasons(coles_price, prev_coles, item_price_history))
 
-    # WW history: withhold if suspicious; append only if price changed
+    # WW history: withhold if suspicious; append if price changed or ≥7 days since last entry
     if ww_reasons:
         new_ww_hist = existing_ww_hist
     elif ww_add:
