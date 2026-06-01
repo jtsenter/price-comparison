@@ -2571,8 +2571,8 @@ function renderMobileCards(items, data) {
           <div class="mc-name-row">
             <div class="mc-name">${displayName}</div>
             <span class="mc-icons">
-              ${isWatchedMC ? `<button class="mc-watch-btn active" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Remove from watchlist">👁</button>` : `<button class="mc-watch-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Add to watchlist">👁</button>`}
               ${hotDeal ? '<span class="mc-hot">🔥</span>' : ''}
+              ${isWatchedMC ? `<button class="mc-watch-btn active" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Remove from watchlist">👁</button>` : `<button class="mc-watch-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Add to watchlist">👁</button>`}
               ${_activePriority === 'archive' ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : ''}
             </span>
           </div>
@@ -3694,10 +3694,16 @@ function renderCfdValues(search, resetScroll = true) {
 
 // ── Export shopping list ──────────────────────────────────────────────────────
 
-function exportShoppingList(useChecked) {
-  const sel = (useChecked && _checkedItems.size > 0)
-    ? { type: 'checked', items: [..._checkedItems] }
-    : { type: 'filter', priority: _activePriority, category: _activeCategory, hotOnly: _showHotOnly, pricesOnly: _showPricesOnly };
+function exportShoppingList(useChecked, mobileSelected = null) {
+  let sel;
+  if (mobileSelected && mobileSelected.size > 0) {
+    // Mobile tap-selected items take priority
+    sel = { type: 'checked', items: [...mobileSelected] };
+  } else if (useChecked && _checkedItems.size > 0) {
+    sel = { type: 'checked', items: [..._checkedItems] };
+  } else {
+    sel = { type: 'filter', priority: _activePriority, category: _activeCategory, hotOnly: _showHotOnly, pricesOnly: _showPricesOnly };
+  }
   localStorage.setItem('pw_export_sel', JSON.stringify(sel));
   window.open('shopping-list.html', '_blank');
 }
@@ -3725,7 +3731,8 @@ async function boot() {
   const refreshBtn = $('refreshBtn');
   if (refreshBtn) refreshBtn.addEventListener('click', triggerRefresh);
 
-  $('shopListBtn')?.addEventListener('click', () => exportShoppingList(false));
+  $('shopListBtn')?.addEventListener('click', () =>
+    exportShoppingList(false, window.innerWidth <= 700 ? _selectedItems : null));
   $('bulkExportBtn')?.addEventListener('click', () => exportShoppingList(true));
 
   // Scrape strip dismiss & retry
