@@ -3702,14 +3702,24 @@ function renderCfdValues(search, resetScroll = true) {
 
 // ── Export shopping list ──────────────────────────────────────────────────────
 
-function exportShoppingList(useChecked, mobileSelected = null) {
+function getCurrentVisibleItems() {
+  if (!_lastData) return [];
+  return sortItems(_lastData.items).map(i => i.list_item);
+}
+
+function exportShoppingList(useChecked) {
   let sel;
-  if (mobileSelected && mobileSelected.size > 0) {
-    // Mobile tap-selected items take priority
-    sel = { type: 'checked', items: [...mobileSelected] };
+  if (_selectedItems.size > 0) {
+    // Priority 1: tap-selected (mobile) or any selected items — always wins
+    sel = { type: 'checked', items: [..._selectedItems] };
   } else if (useChecked && _checkedItems.size > 0) {
+    // Desktop checkbox-selected rows
     sel = { type: 'checked', items: [..._checkedItems] };
+  } else if (_searchQuery) {
+    // Priority 2: active search — pass the exact visible item list
+    sel = { type: 'checked', items: getCurrentVisibleItems() };
   } else {
+    // Priority 3: current filter view (frequency tab + category + hot/priced-only)
     sel = { type: 'filter', priority: _activePriority, category: _activeCategory, hotOnly: _showHotOnly, pricesOnly: _showPricesOnly };
   }
   localStorage.setItem('pw_export_sel', JSON.stringify(sel));
@@ -3739,8 +3749,7 @@ async function boot() {
   const refreshBtn = $('refreshBtn');
   if (refreshBtn) refreshBtn.addEventListener('click', triggerRefresh);
 
-  $('shopListBtn')?.addEventListener('click', () =>
-    exportShoppingList(false, window.innerWidth <= 700 ? _selectedItems : null));
+  $('shopListBtn')?.addEventListener('click', () => exportShoppingList(false));
   $('bulkExportBtn')?.addEventListener('click', () => exportShoppingList(true));
 
   // Scrape strip dismiss & retry
