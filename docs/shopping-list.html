@@ -33,32 +33,63 @@
 
     main { max-width: 860px; margin: 0 auto; padding: 24px; }
 
-    /* Totals comparison */
-    .totals-bar {
-      display: grid; grid-template-columns: 1fr auto 1fr;
-      gap: 0; background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); margin-bottom: 24px;
+    /* ── Store card summary ─────────────────── */
+    .store-summary-wrap {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+      margin-bottom: 24px; overflow: hidden;
     }
-    .total-block { padding: 20px 24px; }
-    .total-block.winner { background: #F0FDF4; }
-    .total-store { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
-    .total-store.ww { color: var(--ww); }
-    .total-store.coles { color: var(--coles); }
-    .total-amount { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
-    .total-amount.winner { color: var(--green); }
-    .total-amount.loser  { color: var(--text-soft); }
-    .total-items { font-size: 12px; color: var(--text-soft); margin-top: 4px; }
-    .total-win-badge { display: inline-block; background: var(--green); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 10px; margin-top: 6px; }
-    .total-block.clickable { cursor: pointer; transition: background 0.15s; }
-    .total-block.clickable:hover { background: var(--bg); }
-    .total-block.eq-active.ww-active  { box-shadow: inset 0 0 0 2px var(--ww); }
-    .total-block.eq-active.coles-active { box-shadow: inset 0 0 0 2px var(--coles); }
-    .equal-hint { font-size: 11px; color: var(--text-soft); margin-top: 6px; font-style: italic; }
-    .equal-note { font-size: 12px; color: var(--text-mid); background: #F8FAFC; border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 14px; margin-bottom: 16px; }
-    .total-divider { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 16px; gap: 4px; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
-    .save-label { font-size: 11px; color: var(--text-soft); text-align: center; white-space: nowrap; }
-    .save-amount { font-size: 18px; font-weight: 800; color: var(--green); }
-    .save-equal  { font-size: 14px; font-weight: 700; color: var(--text-mid); text-align: center; }
+    .store-cards-grid { display: grid; grid-template-columns: 1fr 1fr; }
+    .store-card-sl {
+      display: grid;
+      grid-template-rows: auto auto auto auto 1fr auto minmax(36px,auto);
+      padding: 20px 24px; border-bottom: 3px solid transparent;
+      background: var(--card); cursor: pointer;
+      transition: background .15s, border-bottom-color .15s;
+    }
+    .store-card-sl + .store-card-sl { border-left: 1px solid var(--border); }
+    .store-card-sl.card-active   { background: #F0FDF4; border-bottom-color: #00843D; }
+    .store-card-sl.card-inactive:hover { background: #FFF8F8; }
+    .sc-icon { margin-bottom: 12px; }
+    .sc-icon-chip {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 10px;
+      font-weight: 900; color: #fff; font-size: 18px; line-height: 1;
+    }
+    .sc-icon-chip.ww    { background: var(--ww); }
+    .sc-icon-chip.coles { background: var(--coles); }
+    .sc-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .sc-store-name { font-size: 14px; font-weight: 700; }
+    .sc-item-pill {
+      font-size: 11px; background: var(--bg); color: var(--text-soft);
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 1px 8px; font-weight: 500;
+    }
+    .sc-price { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 6px; }
+    .sc-price.price-active   { color: var(--green); }
+    .sc-price.price-inactive { color: var(--text-soft); }
+    .sc-subtitle { font-size: 12px; color: var(--text-soft); }
+    .sc-spacer { min-height: 8px; }
+    .sc-badge-row { margin-top: 12px; }
+    .sc-badge {
+      display: inline-block; background: var(--green); color: #fff;
+      font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 10px;
+    }
+    .sc-hint { font-size: 11px; color: var(--text-soft); font-style: italic; min-height: 36px; padding-top: 4px; }
+    /* Stats bar */
+    .sc-stats-bar {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      border-top: 1px solid var(--border);
+    }
+    .sc-stat { padding: 12px 20px; display: flex; flex-direction: column; gap: 2px; }
+    .sc-stat + .sc-stat { border-left: 1px solid var(--border); }
+    .sc-stat-center { align-items: center; text-align: center; }
+    .sc-stat-right  { align-items: flex-end; text-align: right; }
+    .sc-stat-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-soft); }
+    .sc-stat-value { font-size: 20px; font-weight: 800; color: var(--text); }
+    .sc-save-value { color: var(--green); }
+    .sc-equal-chip { font-size: 13px; font-weight: 600; color: var(--text-mid); }
+    .sc-stat-sub { font-size: 12px; color: var(--text-mid); }
 
     /* Store sections */
     .store-section { margin-bottom: 28px; }
@@ -113,10 +144,11 @@
       nav::-webkit-scrollbar { display: none; }
       nav a { white-space: nowrap; font-size: 13px; padding: 6px 8px; }
       .btn-hdr { display: none; }
-      .totals-bar { grid-template-columns: 1fr; }
-      .total-divider { border-left: none; border-right: none; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 12px 24px; flex-direction: row; justify-content: center; gap: 12px; }
-      .total-block { padding: 16px 20px; }
-      .total-amount { font-size: 26px; }
+      .store-cards-grid { grid-template-columns: 1fr; }
+      .store-card-sl + .store-card-sl { border-left: none; border-top: 1px solid var(--border); }
+      .sc-stats-bar { grid-template-columns: 1fr; }
+      .sc-stat + .sc-stat { border-left: none; border-top: 1px solid var(--border); }
+      .sc-price { font-size: 26px; }
     }
     @media print {
       header .header-actions { display: none; }
@@ -285,51 +317,42 @@ async function boot() {
     </table>`;
   }
 
-  // FIX 2: renderContent() is called on boot and again whenever equalStore changes
+  // renderContent() is called on boot and again whenever equalStore changes
   function renderContent() {
     const { wwItems, colesItems } = computeSplit();
     const ec = equalItems.length;
-    const wwEqActive = ec > 0 && equalStore === 'ww';
-    const coEqActive = ec > 0 && equalStore === 'coles';
+    const wwActive = equalStore === 'ww';
 
-    // FIX 2: total-block classes for clickable + active state
-    const wwBlockCls = ['total-block',
-      wwWins ? 'winner' : '',
-      ec > 0 ? 'clickable' : '',
-      wwEqActive ? 'eq-active ww-active' : ''].filter(Boolean).join(' ');
-    const coBlockCls = ['total-block',
-      coWins ? 'winner' : '',
-      ec > 0 ? 'clickable' : '',
-      coEqActive ? 'eq-active coles-active' : ''].filter(Boolean).join(' ');
+    // Card classes
+    const wwCardCls = `store-card-sl ${wwActive ? 'card-active' : 'card-inactive'}`;
+    const coCardCls = `store-card-sl ${!wwActive ? 'card-active' : 'card-inactive'}`;
 
-    // FIX 2: hint text under each store total
+    // Price colour — active card always green, inactive always grey
+    const wwPriceCls = wwActive ? 'price-active' : 'price-inactive';
+    const coPriceCls = !wwActive ? 'price-active' : 'price-inactive';
+
+    // Badge visibility — hidden when totals are equal OR card is not active
+    const wwBadgeStyle = (isEqual || !wwActive) ? 'visibility:hidden' : '';
+    const coBadgeStyle = (isEqual || wwActive)  ? 'visibility:hidden' : '';
+
+    // Hint text (only if equal-price items exist)
     const wwHint = ec > 0
-      ? (wwEqActive
-          ? `<div class="equal-hint">Includes ${ec} equal-price item${ec !== 1 ? 's' : ''} — click Coles to move &rarr;</div>`
-          : `<div class="equal-hint">&larr; Click to move equal-price items here</div>`)
+      ? (wwActive
+          ? `Includes ${ec} equal-price item${ec !== 1 ? 's' : ''} assigned here · Click Coles → to switch`
+          : `← Click to move equal-price items here`)
       : '';
     const coHint = ec > 0
-      ? (coEqActive
-          ? `<div class="equal-hint">Includes ${ec} equal-price item${ec !== 1 ? 's' : ''} &larr; click WW to move</div>`
-          : `<div class="equal-hint">Click to move equal-price items here &rarr;</div>`)
+      ? (!wwActive
+          ? `Includes ${ec} equal-price item${ec !== 1 ? 's' : ''} assigned here · Click WW → to switch`
+          : `Click to move equal-price items here →`)
       : '';
 
-    // FIX 3: divider content changes when totals are equal
-    const dividerInner = isEqual
-      ? `<div class="save-label">Same total</div><div class="save-equal">at both stores</div>`
-      : `<div class="save-label">You save</div>
-         <div class="save-amount">${fmt(saving)}</div>
-         <div class="save-label">by choosing</div>
-         <div class="save-label">${wwWins ? 'Woolworths' : 'Coles'}</div>`;
-
-    // FIX 3: amount class — no winner/loser colouring when totals are equal
-    const wwAmtCls = isEqual ? '' : (wwWins ? ' winner' : ' loser');
-    const coAmtCls = isEqual ? '' : (coWins ? ' winner' : ' loser');
-
-    // FIX 2: equal-price reassignment note above tables
-    const equalNote = ec > 0
-      ? `<div class="equal-note">&#8776; Same price at both stores — currently assigned to ${equalStore === 'ww' ? 'Woolworths' : 'Coles'} (click ${equalStore === 'ww' ? 'Coles' : 'Woolworths'} above to switch)</div>`
-      : '';
+    // Stats bar centre section
+    const saveVal   = isEqual ? '—' : fmt(saving);
+    const saveClass = isEqual ? '' : 'sc-save-value';
+    const statsCenter = isEqual
+      ? `<span class="sc-equal-chip">⚖ Same price at both stores</span>`
+      : `<div class="sc-stat-sub">by choosing <strong>${wwWins ? 'Woolworths' : 'Coles'}</strong></div>`;
 
     main.innerHTML = `
       <div class="sl-topbar">
@@ -337,25 +360,51 @@ async function boot() {
         <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
       </div>
 
-      <div class="totals-bar">
-        <div class="${wwBlockCls}" id="wwTotalBlock">
-          <div class="total-store ww">Woolworths — ${wwCount} item${wwCount !== 1 ? 's' : ''}</div>
-          <div class="total-amount${wwAmtCls}">${fmt(wwTotal)}</div>
-          <div class="total-items">All items bought at WW</div>
-          ${wwWins ? '<div class="total-win-badge">✓ Cheaper</div>' : ''}
-          ${wwHint}
+      <div class="store-summary-wrap">
+        <div class="store-cards-grid">
+          <div class="${wwCardCls}" id="wwTotalBlock">
+            <div class="sc-icon"><span class="sc-icon-chip ww">W</span></div>
+            <div class="sc-name-row">
+              <span class="sc-store-name">Woolworths</span>
+              <span class="sc-item-pill">${wwCount} item${wwCount !== 1 ? 's' : ''}</span>
+            </div>
+            <div class="sc-price ${wwPriceCls}">${fmt(wwTotal)}</div>
+            <div class="sc-subtitle">If you bought everything here</div>
+            <div class="sc-spacer"></div>
+            <div class="sc-badge-row">
+              <span class="sc-badge" style="${wwBadgeStyle}">✓ Selected store</span>
+            </div>
+            <div class="sc-hint">${wwHint}</div>
+          </div>
+          <div class="${coCardCls}" id="colesTotalBlock">
+            <div class="sc-icon"><span class="sc-icon-chip coles">C</span></div>
+            <div class="sc-name-row">
+              <span class="sc-store-name">Coles</span>
+              <span class="sc-item-pill">${coCount} item${coCount !== 1 ? 's' : ''}</span>
+            </div>
+            <div class="sc-price ${coPriceCls}">${fmt(coTotal)}</div>
+            <div class="sc-subtitle">If you bought everything here</div>
+            <div class="sc-spacer"></div>
+            <div class="sc-badge-row">
+              <span class="sc-badge" style="${coBadgeStyle}">✓ Selected store</span>
+            </div>
+            <div class="sc-hint">${coHint}</div>
+          </div>
         </div>
-        <div class="total-divider">${dividerInner}</div>
-        <div class="${coBlockCls}" id="colesTotalBlock">
-          <div class="total-store coles">Coles — ${coCount} item${coCount !== 1 ? 's' : ''}</div>
-          <div class="total-amount${coAmtCls}">${fmt(coTotal)}</div>
-          <div class="total-items">All items bought at Coles</div>
-          ${coWins ? '<div class="total-win-badge">✓ Cheaper</div>' : ''}
-          ${coHint}
+        <div class="sc-stats-bar">
+          <div class="sc-stat">
+            <div class="sc-stat-label">You Save</div>
+            <div class="sc-stat-value ${saveClass}">${saveVal}</div>
+          </div>
+          <div class="sc-stat sc-stat-center">
+            ${statsCenter}
+          </div>
+          <div class="sc-stat sc-stat-right">
+            <div class="sc-stat-label">Items Compared</div>
+            <div class="sc-stat-value">${displayItems.length}</div>
+          </div>
         </div>
       </div>
-
-      ${equalNote}
 
       <div class="store-section">
         <div class="section-header">
@@ -376,7 +425,7 @@ async function boot() {
       </div>
     `;
 
-    // FIX 2: wire store-block click handlers to reassign equal items
+    // Wire store-block click handlers to reassign equal-price items
     if (ec > 0) {
       document.getElementById('wwTotalBlock')?.addEventListener('click', () => {
         if (equalStore !== 'ww') { equalStore = 'ww'; renderContent(); }
@@ -387,9 +436,9 @@ async function boot() {
     }
 
     document.getElementById('removeAllBtn')?.addEventListener('click', () => {
-      if (confirm('Remove all items from this shopping list?')) {
+      if (confirm('Remove all items from your basket?')) {
         localStorage.removeItem('pw_sl_handoff');
-        main.innerHTML = '<div class="empty">Your shopping list is empty. <a href="index.html">Go back to add items.</a></div>';
+        main.innerHTML = '<div class="empty">Your basket is empty. <a href="index.html">Go back to add items.</a></div>';
       }
     });
   }
