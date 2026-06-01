@@ -1370,7 +1370,7 @@ td.priority-cell { text-align: center; }
 .bt-deselect {
   background: none; border: none; color: #64748B;
   font-size: 12px; cursor: pointer; font-weight: 500;
-  padding: 0;
+  padding: 0; white-space: nowrap;
 }
 .bt-deselect:hover { color: #94A3B8; }
 .bt-divider { width: 1px; height: 22px; background: rgba(255,255,255,.12); margin: 0 4px; flex-shrink: 0; }
@@ -1382,7 +1382,7 @@ td.priority-cell { text-align: center; }
   transition: background .15s;
 }
 .bt-chip:hover { background: #4B5563; }
-.bt-chip .arrow { color: #F59E0B; }
+.bt-chip .arrow { color: #F59E0B; font-size: 14px; line-height: 1; }
 .bt-sl { background: #00843D; border-color: #006B31; color: #fff; padding: 6px 16px; }
 .bt-sl:hover { background: #006B31; }
 .bt-archive { background: rgba(127,29,29,.6); border-color: rgba(153,27,27,.5); color: #FCA5A5; }
