@@ -187,40 +187,51 @@ async function boot() {
   let handoff = null;
   try {
     const raw = localStorage.getItem('pw_sl_handoff');
-    if (raw) { handoff = JSON.parse(raw); localStorage.removeItem('pw_sl_handoff'); }
+    handoff = raw ? JSON.parse(raw) : null;
+    localStorage.removeItem('pw_sl_handoff');
   } catch {}
+  console.log('[PW] pw_sl_handoff on load:', handoff ? { count: handoff.items?.length, first3: handoff.items?.slice(0, 3), note: handoff.note } : null);
 
-  let items = (data.items || []).filter(i => !i.archived);
+  const allItems = (data.items || []).filter(i => !i.archived);
 
-  if (handoff?.items?.length) {
+  let displayItems;
+  if (handoff && Array.isArray(handoff.items) && handoff.items.length > 0) {
     const nameSet = new Set(handoff.items);
-    items = items.filter(i => nameSet.has(i.list_item));
+    displayItems = allItems.filter(i => nameSet.has(i.list_item));
+    console.log('[PW] displayItems after handoff filter:', displayItems.length);
+  } else {
+    displayItems = allItems; // fallback: show everything
+    console.log('[PW] No handoff — showing all', displayItems.length, 'items');
   }
-  // If handoff is missing/empty, fall through and show all non-archived items
 
-  if (!items.length) {
+  if (!displayItems.length) {
     main.innerHTML = '<div class="empty">No items found for this selection.</div>';
     return;
   }
 
   // Split by cheapest available store
-  const wwItems    = items.filter(i => i.woolworths?.price != null && (i.cheaper_store === 'woolworths' || i.coles?.price == null));
-  const colesItems = items.filter(i => i.coles?.price != null && (i.cheaper_store === 'coles' || i.woolworths?.price == null));
+  const wwItems    = displayItems.filter(i => i.woolworths?.price != null && (i.cheaper_store === 'woolworths' || i.coles?.price == null));
+  const colesItems = displayItems.filter(i => i.coles?.price != null && (i.cheaper_store === 'coles' || i.woolworths?.price == null));
 
-  // Totals at each store (only items available at that store)
-  const wwTotal = items
+  // Totals at each store (only displayItems available at that store)
+  const wwTotal = displayItems
     .filter(i => i.woolworths?.price != null)
     .reduce((s, i) => s + i.woolworths.price * getUnits(i.list_item, unitOv, analysis), 0);
-  const coTotal = items
+  const coTotal = displayItems
     .filter(i => i.coles?.price != null)
     .reduce((s, i) => s + i.coles.price * getUnits(i.list_item, unitOv, analysis), 0);
-  const wwCount   = items.filter(i => i.woolworths?.price != null).length;
-  const coCount   = items.filter(i => i.coles?.price != null).length;
+  const wwCount   = displayItems.filter(i => i.woolworths?.price != null).length;
+  const coCount   = displayItems.filter(i => i.coles?.price != null).length;
   const saving    = Math.abs(wwTotal - coTotal);
   const wwWins    = wwTotal <= coTotal;
 
-  // Filter note — use the description baked into the handoff
-  const filterNote = handoff?.note ? `Showing ${handoff.note}` : '';
+  // Banner note
+  let filterNote;
+  if (handoff?.note) {
+    filterNote = `Showing ${handoff.note}`;
+  } else {
+    filterNote = `Showing all items (${displayItems.length})`;
+  }
 
   function buildTable(storeItems, store) {
     if (!storeItems.length) return `<p class="only-note">No items are cheapest at ${store === 'ww' ? 'Woolworths' : 'Coles'} in this selection.</p>`;
