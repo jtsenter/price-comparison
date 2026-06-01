@@ -95,6 +95,14 @@
 
     .empty { text-align: center; padding: 60px 20px; color: var(--text-soft); }
 
+    @media (max-width: 700px) {
+      .header-inner { padding: 0 10px; gap: 8px; }
+      .brand-name { display: none; }
+      nav { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      nav::-webkit-scrollbar { display: none; }
+      nav a { white-space: nowrap; font-size: 13px; padding: 6px 8px; }
+      .btn-hdr { display: none; }
+    }
     @media print {
       header .header-actions { display: none; }
       body { background: #fff; }

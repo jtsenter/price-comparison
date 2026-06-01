@@ -386,7 +386,7 @@ function getCategory(item) {
 
 // ── Filter state ─────────────────────────────────────────────────────────────
 
-let _activePriority = 'all';
+let _activePriority = 'weekly';
 let _showHotOnly = false;
 let _storeFilter = 'all';
 let _showPricesOnly = false;

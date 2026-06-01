@@ -1534,9 +1534,10 @@ td.priority-cell { text-align: center; }
   .header-inner { padding: 0 10px; gap: 8px; }
   .brand-name { display: none; }
   /* Nav scrolls horizontally if items don't fit */
-  nav { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-shrink: 1; }
+  nav { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; flex-shrink: 1; }
   nav::-webkit-scrollbar { display: none; }
-  nav a { padding: 5px 8px; font-size: 12px; white-space: nowrap; }
+  nav a, nav button { white-space: nowrap; font-size: 13px; padding: 6px 8px; }
+  .print-btn, [onclick*="print"] { display: none; }
   main { padding: 16px 14px 48px; }
   .store-cards { flex-direction: column; }
   .store-divider { flex-direction: row; padding: 0; }
