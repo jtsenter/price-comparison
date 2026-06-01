@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-01T07:12:47.385902+00:00",
+  "last_updated": "2026-06-01T07:13:02.586134+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3347,12 +3347,12 @@
     },
     {
       "list_item": "Woolworths Cherry Tomatoes Punnet",
-      "last_scraped": "2026-06-01T06:10:28.999377+00:00",
+      "last_scraped": "2026-06-01T07:12:49.122520+00:00",
       "trip_count": 21,
       "price_history": [
         {
           "date": "2024-11-12",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2024-12-02",
@@ -3360,15 +3360,15 @@
         },
         {
           "date": "2024-12-09",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-01-29",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-02-02",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-02-28",
@@ -3400,11 +3400,11 @@
         },
         {
           "date": "2025-06-06",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2026-02-03",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2026-02-11",
@@ -3412,27 +3412,27 @@
         },
         {
           "date": "2026-02-23",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2026-03-02",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2026-03-10",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2026-04-02",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2026-04-21",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2026-05-06",
-          "price": 3
+          "price": 3.0
         }
       ],
       "category": "Fruit & Veg",
@@ -3485,7 +3485,7 @@
     },
     {
       "list_item": "Woolworths Cookie Caramel Bar Slice",
-      "last_scraped": "2026-06-01T06:10:33.363332+00:00",
+      "last_scraped": "2026-06-01T07:12:50.467888+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -3510,7 +3510,7 @@
         },
         {
           "date": "2025-04-14",
-          "price": 7
+          "price": 7.0
         },
         {
           "date": "2025-05-12",
@@ -3532,7 +3532,7 @@
       "category": "Sweets",
       "woolworths": {
         "name": "Woolworths Cookie Caramel Bar Slice",
-        "price": 8,
+        "price": 8.0,
         "unit_price": 2.86,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/61196/woolworths-cookie-caramel-bar-slice",
@@ -3585,7 +3585,7 @@
     },
     {
       "list_item": "Woolworths Cos Hearts Lettuce",
-      "last_scraped": "2026-06-01T06:10:37.224618+00:00",
+      "last_scraped": "2026-06-01T07:12:53.334068+00:00",
       "trip_count": 22,
       "price_history": [
         {
@@ -3658,7 +3658,7 @@
         },
         {
           "date": "2026-03-02",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2026-03-10",
@@ -3725,7 +3725,7 @@
     },
     {
       "list_item": "Woolworths Corn Sweet",
-      "last_scraped": "2026-06-01T06:10:40.664461+00:00",
+      "last_scraped": "2026-06-01T07:12:59.342493+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -3798,7 +3798,7 @@
         },
         {
           "date": "2026-04-02",
-          "price": 1
+          "price": 1.0
         },
         {
           "date": "2026-04-21",
@@ -3813,7 +3813,7 @@
       "woolworths": {
         "name": "Woolworths Corn Sweet",
         "price": 4.5,
-        "unit_price": 9,
+        "unit_price": 9.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/139897/woolworths-corn-sweet",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139897.jpg"
@@ -3828,7 +3828,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 1,
+      "saving_per_item": 1.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -3858,7 +3858,7 @@
     },
     {
       "list_item": "Woolworths Dreamy Choc Chip Cookies",
-      "last_scraped": "2026-06-01T06:10:43.842943+00:00",
+      "last_scraped": "2026-06-01T07:13:02.582681+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -3871,7 +3871,7 @@
         },
         {
           "date": "2025-02-02",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-02-28",
@@ -11752,9 +11752,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 30,
+    "done": 35,
     "total": 144,
     "started_at": "2026-06-01T07:11:03.837955+00:00",
-    "current_item": "Woolworths Broccolini Bunch"
+    "current_item": "Woolworths Dreamy Choc Chip Cookies"
   }
 }
