@@ -430,22 +430,43 @@ async function handleAction(entry, store, action, cardEl) {
       newCoHist = [...newCoHist, { date: entry.flagged_date, price: Math.round(entry.coles_price * 100) / 100 }];
     }
 
-    // Update the item in the items array
+    // Update the item — revert rejected prices to prev_price; leave history untouched for rejects
     const updatedItems = (fresh.items || []).map(i => {
       if (i.list_item !== entry.item) return i;
-      return { ...i, ww_price_history: newWwHist, coles_price_history: newCoHist };
+      const patch = { ww_price_history: newWwHist, coles_price_history: newCoHist };
+
+      // Revert rejected store prices back to the previous known-good price
+      if (wwNeeds && dec.ww === 'reject' && entry.ww_prev_price != null)
+        patch.woolworths = { ...(i.woolworths || {}), price: entry.ww_prev_price };
+      if (colesNeeds && dec.coles === 'reject' && entry.coles_prev_price != null)
+        patch.coles = { ...(i.coles || {}), price: entry.coles_prev_price };
+
+      // Recalculate cheaper_store / saving_per_item after any price revert
+      const wwP = patch.woolworths ? patch.woolworths.price : (i.woolworths?.price ?? null);
+      const coP = patch.coles      ? patch.coles.price      : (i.coles?.price      ?? null);
+      if (wwP != null && coP != null) {
+        if      (wwP < coP) { patch.cheaper_store = 'woolworths'; patch.saving_per_item = Math.round((coP - wwP) * 100) / 100; }
+        else if (coP < wwP) { patch.cheaper_store = 'coles';      patch.saving_per_item = Math.round((wwP - coP) * 100) / 100; }
+        else                { patch.cheaper_store = 'equal';      patch.saving_per_item = 0; }
+      }
+
+      return { ...i, ...patch };
     });
 
     // Remove this entry from pending_validation
     const updatedPV = (fresh.pending_validation || []).filter(e => e.item !== entry.item);
 
-    // Update approved_prices for confirmed stores
+    // Only update approved_prices for confirmed stores — rejected prices must never be approved
     const today = new Date().toISOString().slice(0, 10);
     const ap = { ...(fresh.approved_prices || {}) };
-    if (!ap[entry.item]) ap[entry.item] = { approved_date: today };
-    if (dec.ww    === 'confirm' && entry.ww_price    != null) ap[entry.item].ww    = entry.ww_price;
-    if (dec.coles === 'confirm' && entry.coles_price != null) ap[entry.item].coles = entry.coles_price;
-    ap[entry.item].approved_date = today;
+    const wwConfirmed    = wwNeeds    && dec.ww    === 'confirm' && entry.ww_price    != null;
+    const colesConfirmed = colesNeeds && dec.coles === 'confirm' && entry.coles_price != null;
+    if (wwConfirmed || colesConfirmed) {
+      if (!ap[entry.item]) ap[entry.item] = {};
+      if (wwConfirmed)    ap[entry.item].ww    = entry.ww_price;
+      if (colesConfirmed) ap[entry.item].coles = entry.coles_price;
+      ap[entry.item].approved_date = today;
+    }
 
     const updated = { ...fresh, items: updatedItems, approved_prices: ap,
                       pending_validation: updatedPV.length ? updatedPV : undefined };
