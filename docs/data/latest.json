@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-01T07:16:24.438713+00:00",
+  "last_updated": "2026-06-01T07:16:42.024465+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9968,7 +9968,7 @@
     },
     {
       "list_item": "Continental Classics Cup A Soup Italian Minestrone With Pasta",
-      "last_scraped": "2026-06-01T06:14:27.010522+00:00",
+      "last_scraped": "2026-06-01T07:16:24.688034+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10028,7 +10028,7 @@
     },
     {
       "list_item": "Dettol Antibacterial Liquid Hand Wash Hand Soap Pump Aloe Vera",
-      "last_scraped": "2026-06-01T06:14:30.558354+00:00",
+      "last_scraped": "2026-06-01T07:16:27.802860+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10098,7 +10098,7 @@
     },
     {
       "list_item": "Essentials Domestic Wipes Roll",
-      "last_scraped": "2026-06-01T06:14:34.574597+00:00",
+      "last_scraped": "2026-06-01T07:16:31.024927+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10158,7 +10158,7 @@
     },
     {
       "list_item": "Ecostore Dish Liquid Ultrasensitive",
-      "last_scraped": "2026-06-01T06:14:42.311215+00:00",
+      "last_scraped": "2026-06-01T07:16:39.170064+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10188,7 +10188,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7752300.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -10215,6 +10215,57 @@
       "per_100_ww": 0.92,
       "per_100_coles": 0.92,
       "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Greek Style Yoghurt 2kg",
+      "last_scraped": "2026-06-01T07:16:42.014097+00:00",
+      "trip_count": 2,
+      "price_history": [],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Greek Style Yoghurt",
+        "price": 8.4,
+        "unit_price": 0.42,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/249085/woolworths-greek-style-yoghurt",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/249085.jpg"
+      },
+      "coles": {
+        "name": "Greek Style Yogurt",
+        "price": 12.5,
+        "unit_price": 0.63,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/farmers-union-greek-style-yogurt-2kg-1012016",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1012016.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.1,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-30",
+          "price": 8.4
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8.4
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-31",
+          "price": 12.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 12.5
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.42,
+      "per_100_coles": 0.63,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Green Zucchini",
@@ -10275,57 +10326,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.39,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Greek Style Yoghurt 2kg",
-      "last_scraped": "2026-06-01T06:14:46.652835+00:00",
-      "trip_count": 2,
-      "price_history": [],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Greek Style Yoghurt",
-        "price": 8.4,
-        "unit_price": 0.42,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/249085/woolworths-greek-style-yoghurt",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/249085.jpg"
-      },
-      "coles": {
-        "name": "Greek Style Yogurt",
-        "price": 12.5,
-        "unit_price": 0.63,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/farmers-union-greek-style-yogurt-2kg-1012016",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1012016.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 4.1,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-30",
-          "price": 8.4
-        },
-        {
-          "date": "2026-06-01",
-          "price": 8.4
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-31",
-          "price": 12.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 12.5
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.42,
-      "per_100_coles": 0.63,
       "per_100_unit": "100g"
     },
     {
@@ -11752,9 +11752,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 115,
+    "done": 120,
     "total": 144,
     "started_at": "2026-06-01T07:11:03.837955+00:00",
-    "current_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons"
+    "current_item": "Greek Style Yoghurt 2kg"
   }
 }
