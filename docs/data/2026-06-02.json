@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-01T23:33:40.605667+00:00",
+  "last_updated": "2026-06-01T23:40:32.288531+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1020,7 +1020,7 @@
     },
     {
       "list_item": "Hass Avocado",
-      "last_scraped": "2026-06-01T23:33:40.385917+00:00",
+      "last_scraped": "2026-06-01T23:40:32.082818+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -2944,7 +2944,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 1.0,
+      "saving_per_item": 1,
       "alternatives": [
         {
           "name": "Lamb Kebabs",
@@ -2977,6 +2977,10 @@
         },
         {
           "date": "2026-06-01",
+          "price": 7.5
+        },
+        {
+          "date": "2026-06-02",
           "price": 7.5
         }
       ],
@@ -12803,23 +12807,6 @@
     "items_compared": 144,
     "items_not_found": 0
   },
-  "pending_validation": [
-    {
-      "item": "Woolworths BBQ Lamb Kebabs With Mint & Honey",
-      "ww_price": 8.5,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/6024489/woolworths-bbq-australian-lamb-koftas-honey-mint",
-      "ww_prev_price": 8.5,
-      "ww_suspicious": false,
-      "coles_price": 7.5,
-      "coles_url": "https://www.coles.com.au/product/coles-lamb-kebabs-450g-3900020",
-      "coles_prev_price": 10,
-      "coles_suspicious": true,
-      "flagged_date": "2026-06-02",
-      "reason": [
-        "outside_historical_range"
-      ]
-    }
-  ],
   "approved_prices": {
     "Cadbury Dairy Milk Top Deck Chocolate Block": {
       "approved_date": "2026-05-31",
@@ -12867,8 +12854,9 @@
       "coles": 7.5
     },
     "Woolworths BBQ Lamb Kebabs With Mint & Honey": {
-      "approved_date": "2026-05-31",
-      "ww": 8.5
+      "approved_date": "2026-06-01",
+      "ww": 8.5,
+      "coles": 7.5
     },
     "Woolworths Beef Porterhouse Steak & Butter": {
       "approved_date": "2026-05-31",
