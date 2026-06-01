@@ -1435,6 +1435,14 @@ function initPriorityFilter() {
         $('storeFilter').style.display = 'none';
         const scrapeArchBtn = $('scrapeArchivedBtn');
         if (scrapeArchBtn) scrapeArchBtn.style.display = _activePriority === 'archive' ? 'inline-flex' : 'none';
+        // Clear search so count and render stay in sync after tab switch
+        if (_searchQuery) {
+          _searchQuery = '';
+          const si = $('searchInput');
+          if (si) si.value = '';
+          const sc = $('searchClear');
+          if (sc) sc.style.display = 'none';
+        }
       }
       if (_lastData) renderPage(_lastData);
     });
