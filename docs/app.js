@@ -3705,7 +3705,7 @@ function exportShoppingList(useChecked, mobileSelected = null) {
     sel = { type: 'filter', priority: _activePriority, category: _activeCategory, hotOnly: _showHotOnly, pricesOnly: _showPricesOnly };
   }
   localStorage.setItem('pw_export_sel', JSON.stringify(sel));
-  window.open('shopping-list.html', '_blank');
+  window.location.href = 'shopping-list.html';
 }
 
 // ── Boot ─────────────────────────────────────────────────────────────────────
