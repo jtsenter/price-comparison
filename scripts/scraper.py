@@ -334,38 +334,47 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                 if is_member_deal and was_price is not None and float(was_price) > float(price):
                     print(f"    [WW] Member price skipped for '{name}' (by URL): ${price} → shelf price ${was_price}")
                     price = was_price
-                # DOM price check: read what the page actually renders.
-                # Priority 1 (EDR secondary element): shown only when there's a member deal —
-                #   indicates the non-member shelf price.
-                # Priority 2 (main price element): what the page displays as the current price —
-                #   overrides __NEXT_DATA__ when they disagree (JSON can be stale/non-personalized).
+                # DOM price check: compare what the page actually renders against __NEXT_DATA__.
+                # Uses a class-agnostic text-node walker so hashed CSS module names don't matter.
+                # Strategy 1: data-testid selectors (EDR secondary "regular price" element first,
+                #   then main price testids).
+                # Strategy 2: walk all text nodes, find leaf nodes whose text is exactly "$X.XX"
+                #   and pick the first one in plausible grocery price range.
                 if price is not None:
                     _dom = await page.evaluate("""
                         () => {
-                            // Secondary element — only present for EDR deals (non-member price)
-                            for (const sel of [
-                                '[data-testid="product-regular-price"]',
-                                '[class*="RegularPrice"]',
-                                '[class*="regular-price"]',
-                            ]) {
-                                const el = document.querySelector(sel);
+                            const priceRe = /^\\$\\s*([\\d]+\\.[\\d]{2})$/;
+                            const rangeOk = p => p >= 0.5 && p <= 50;
+
+                            // data-testid selectors: EDR non-member price first, then main price
+                            const testIds = [
+                                ['product-regular-price', 'regular'],
+                                ['product-price',         'main'],
+                                ['pricing',               'main'],
+                                ['product-pricing',       'main'],
+                                ['price-display',         'main'],
+                            ];
+                            for (const [tid, kind] of testIds) {
+                                const el = document.querySelector(`[data-testid="${tid}"]`);
                                 if (el?.textContent) {
                                     const m = el.textContent.match(/\\$\\s*([\\d.]+)/);
-                                    if (m) return { p: parseFloat(m[1]), sel, kind: 'regular' };
+                                    if (m) {
+                                        const p = parseFloat(m[1]);
+                                        if (rangeOk(p)) return { p, sel: `[data-testid="${tid}"]`, kind };
+                                    }
                                 }
                             }
-                            // Main displayed price — what the page actually shows
-                            for (const sel of [
-                                '[data-testid="product-price"]',
-                                '[class*="Price-module_price"]',
-                                '[class*="ProductPrice"]',
-                                '[class*="product-price"]:not([class*="was"]):not([class*="save"])',
-                                '[class*="price__value"]',
-                            ]) {
-                                const el = document.querySelector(sel);
-                                if (el?.textContent) {
-                                    const m = el.textContent.match(/\\$\\s*([\\d.]+)/);
-                                    if (m) return { p: parseFloat(m[1]), sel, kind: 'main' };
+
+                            // Text-node walker: finds leaf nodes whose trimmed text is exactly "$X.XX"
+                            // Works regardless of class names or DOM structure changes.
+                            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+                            let node;
+                            while ((node = walker.nextNode())) {
+                                const t = node.textContent.trim();
+                                const m = t.match(priceRe);
+                                if (m) {
+                                    const p = parseFloat(m[1]);
+                                    if (rangeOk(p)) return { p, sel: 'text-node', kind: 'main' };
                                 }
                             }
                             return null;
@@ -380,6 +389,8 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                             price = _dom_p
                         else:
                             print(f"    [WW] DOM [{_dom_kind}] {_dom_sel!r} confirms price ${_dom_p}")
+                    else:
+                        print(f"    [WW] DOM found no price element — keeping __NEXT_DATA__ ${price}")
                 if name and price is not None:
                     _, unit = parse_unit_price(cup_string)
                     product_url = (
