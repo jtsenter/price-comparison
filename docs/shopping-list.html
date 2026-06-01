@@ -49,9 +49,16 @@
     .total-amount.loser  { color: var(--text-soft); }
     .total-items { font-size: 12px; color: var(--text-soft); margin-top: 4px; }
     .total-win-badge { display: inline-block; background: var(--green); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 10px; margin-top: 6px; }
+    .total-block.clickable { cursor: pointer; transition: background 0.15s; }
+    .total-block.clickable:hover { background: var(--bg); }
+    .total-block.eq-active.ww-active  { box-shadow: inset 0 0 0 2px var(--ww); }
+    .total-block.eq-active.coles-active { box-shadow: inset 0 0 0 2px var(--coles); }
+    .equal-hint { font-size: 11px; color: var(--text-soft); margin-top: 6px; font-style: italic; }
+    .equal-note { font-size: 12px; color: var(--text-mid); background: #F8FAFC; border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 14px; margin-bottom: 16px; }
     .total-divider { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 16px; gap: 4px; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
     .save-label { font-size: 11px; color: var(--text-soft); text-align: center; white-space: nowrap; }
     .save-amount { font-size: 18px; font-weight: 800; color: var(--green); }
+    .save-equal  { font-size: 14px; font-weight: 700; color: var(--text-mid); text-align: center; }
 
     /* Store sections */
     .store-section { margin-bottom: 28px; }
@@ -209,28 +216,43 @@ async function boot() {
     return;
   }
 
-  // Split by cheapest available store
-  const wwItems    = displayItems.filter(i => i.woolworths?.price != null && (i.cheaper_store === 'woolworths' || i.coles?.price == null));
-  const colesItems = displayItems.filter(i => i.coles?.price != null && (i.cheaper_store === 'coles' || i.woolworths?.price == null));
+  // Banner note
+  const filterNote = handoff?.note ? `Showing ${handoff.note}` : `Showing all items (${displayItems.length})`;
 
-  // Totals at each store (only displayItems available at that store)
+  // Equal-price items (same price at both stores) — reassignable by user
+  const equalItems = displayItems.filter(i =>
+    i.cheaper_store === 'equal' &&
+    i.woolworths?.price != null &&
+    i.coles?.price != null);
+
+  let equalStore = 'ww'; // which store equal-price items are currently assigned to
+
+  // Store-agnostic aggregate totals (what it costs to buy everything at one store)
   const wwTotal = displayItems
     .filter(i => i.woolworths?.price != null)
     .reduce((s, i) => s + i.woolworths.price * getUnits(i.list_item, unitOv, analysis), 0);
   const coTotal = displayItems
     .filter(i => i.coles?.price != null)
     .reduce((s, i) => s + i.coles.price * getUnits(i.list_item, unitOv, analysis), 0);
-  const wwCount   = displayItems.filter(i => i.woolworths?.price != null).length;
-  const coCount   = displayItems.filter(i => i.coles?.price != null).length;
-  const saving    = Math.abs(wwTotal - coTotal);
-  const wwWins    = wwTotal <= coTotal;
+  const wwCount = displayItems.filter(i => i.woolworths?.price != null).length;
+  const coCount = displayItems.filter(i => i.coles?.price != null).length;
+  const saving  = Math.abs(wwTotal - coTotal);
+  const isEqual = saving < 0.01; // FIX 3: detect equal totals
+  const wwWins  = !isEqual && wwTotal < coTotal;
+  const coWins  = !isEqual && coTotal < wwTotal;
 
-  // Banner note
-  let filterNote;
-  if (handoff?.note) {
-    filterNote = `Showing ${handoff.note}`;
-  } else {
-    filterNote = `Showing all items (${displayItems.length})`;
+  function computeSplit() {
+    // FIX 1: equal-price items go to the store selected by equalStore
+    const wwItems = displayItems.filter(i =>
+      i.woolworths?.price != null &&
+      (i.cheaper_store === 'woolworths' ||
+       (i.cheaper_store === 'equal' && equalStore === 'ww') ||
+       i.coles?.price == null));
+    const colesItems = displayItems.filter(i =>
+      i.coles?.price != null &&
+      (i.cheaper_store === 'coles' ||
+       (i.cheaper_store === 'equal' && equalStore === 'coles')));
+    return { wwItems, colesItems };
   }
 
   function buildTable(storeItems, store) {
@@ -239,7 +261,6 @@ async function boot() {
       const price = store === 'ww' ? i.woolworths?.price : i.coles?.price;
       return s + (price ?? 0) * getUnits(i.list_item, unitOv, analysis);
     }, 0);
-
     const rows = storeItems.map(i => {
       const sd = store === 'ww' ? i.woolworths : i.coles;
       const units = getUnits(i.list_item, unitOv, analysis);
@@ -256,7 +277,6 @@ async function boot() {
         <td class="r"><span class="total-val">${fmt(lineTotal)}</span></td>
       </tr>`;
     }).join('');
-
     return `<table>
       <thead><tr><th>Item</th><th class="r">Price</th><th class="r">Qty</th><th class="r">Total</th></tr></thead>
       <tbody>${rows}</tbody>
@@ -264,59 +284,116 @@ async function boot() {
     </table>`;
   }
 
-  main.innerHTML = `
-    <div class="sl-topbar">
-      ${filterNote ? `<div class="filter-note">📋 ${filterNote}</div>` : '<div></div>'}
-      <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
-    </div>
+  // FIX 2: renderContent() is called on boot and again whenever equalStore changes
+  function renderContent() {
+    const { wwItems, colesItems } = computeSplit();
+    const ec = equalItems.length;
+    const wwEqActive = ec > 0 && equalStore === 'ww';
+    const coEqActive = ec > 0 && equalStore === 'coles';
 
-    <div class="totals-bar">
-      <div class="total-block${wwWins ? ' winner' : ''}">
-        <div class="total-store ww">Woolworths — ${wwCount} item${wwCount !== 1 ? 's' : ''}</div>
-        <div class="total-amount${wwWins ? ' winner' : ' loser'}">${fmt(wwTotal)}</div>
-        <div class="total-items">All items bought at WW</div>
-        ${wwWins ? '<div class="total-win-badge">✓ Cheaper</div>' : ''}
-      </div>
-      <div class="total-divider">
-        <div class="save-label">You save</div>
-        <div class="save-amount">${fmt(saving)}</div>
-        <div class="save-label">by choosing</div>
-        <div class="save-label">${wwWins ? 'Woolworths' : 'Coles'}</div>
-      </div>
-      <div class="total-block${!wwWins ? ' winner' : ''}">
-        <div class="total-store coles">Coles — ${coCount} item${coCount !== 1 ? 's' : ''}</div>
-        <div class="total-amount${!wwWins ? ' winner' : ' loser'}">${fmt(coTotal)}</div>
-        <div class="total-items">All items bought at Coles</div>
-        ${!wwWins ? '<div class="total-win-badge">✓ Cheaper</div>' : ''}
-      </div>
-    </div>
+    // FIX 2: total-block classes for clickable + active state
+    const wwBlockCls = ['total-block',
+      wwWins ? 'winner' : '',
+      ec > 0 ? 'clickable' : '',
+      wwEqActive ? 'eq-active ww-active' : ''].filter(Boolean).join(' ');
+    const coBlockCls = ['total-block',
+      coWins ? 'winner' : '',
+      ec > 0 ? 'clickable' : '',
+      coEqActive ? 'eq-active coles-active' : ''].filter(Boolean).join(' ');
 
-    <div class="store-section">
-      <div class="section-header">
-        <span class="store-chip ww">W</span>
-        <span class="section-title">Buy at Woolworths</span>
-        <span class="section-count">${wwItems.length} item${wwItems.length !== 1 ? 's' : ''}</span>
-      </div>
-      ${buildTable(wwItems, 'ww')}
-    </div>
+    // FIX 2: hint text under each store total
+    const wwHint = ec > 0
+      ? (wwEqActive
+          ? `<div class="equal-hint">Includes ${ec} equal-price item${ec !== 1 ? 's' : ''} — click Coles to move &rarr;</div>`
+          : `<div class="equal-hint">&larr; Click to move equal-price items here</div>`)
+      : '';
+    const coHint = ec > 0
+      ? (coEqActive
+          ? `<div class="equal-hint">Includes ${ec} equal-price item${ec !== 1 ? 's' : ''} &larr; click WW to move</div>`
+          : `<div class="equal-hint">Click to move equal-price items here &rarr;</div>`)
+      : '';
 
-    <div class="store-section">
-      <div class="section-header">
-        <span class="store-chip coles">C</span>
-        <span class="section-title">Buy at Coles</span>
-        <span class="section-count">${colesItems.length} item${colesItems.length !== 1 ? 's' : ''}</span>
-      </div>
-      ${buildTable(colesItems, 'coles')}
-    </div>
-  `;
+    // FIX 3: divider content changes when totals are equal
+    const dividerInner = isEqual
+      ? `<div class="save-label">Same total</div><div class="save-equal">at both stores</div>`
+      : `<div class="save-label">You save</div>
+         <div class="save-amount">${fmt(saving)}</div>
+         <div class="save-label">by choosing</div>
+         <div class="save-label">${wwWins ? 'Woolworths' : 'Coles'}</div>`;
 
-  // Remove All — clears the list and shows an empty state
-  document.getElementById('removeAllBtn')?.addEventListener('click', () => {
-    if (confirm('Remove all items from this shopping list?')) {
-      localStorage.removeItem('pw_sl_handoff');
-      main.innerHTML = '<div class="empty">Your shopping list is empty. <a href="index.html">Go back to add items.</a></div>';
+    // FIX 3: amount class — no winner/loser colouring when totals are equal
+    const wwAmtCls = isEqual ? '' : (wwWins ? ' winner' : ' loser');
+    const coAmtCls = isEqual ? '' : (coWins ? ' winner' : ' loser');
+
+    // FIX 2: equal-price reassignment note above tables
+    const equalNote = ec > 0
+      ? `<div class="equal-note">&#8776; Same price at both stores — currently assigned to ${equalStore === 'ww' ? 'Woolworths' : 'Coles'} (click ${equalStore === 'ww' ? 'Coles' : 'Woolworths'} above to switch)</div>`
+      : '';
+
+    main.innerHTML = `
+      <div class="sl-topbar">
+        <div class="filter-note">📋 ${filterNote}</div>
+        <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
+      </div>
+
+      <div class="totals-bar">
+        <div class="${wwBlockCls}" id="wwTotalBlock">
+          <div class="total-store ww">Woolworths — ${wwCount} item${wwCount !== 1 ? 's' : ''}</div>
+          <div class="total-amount${wwAmtCls}">${fmt(wwTotal)}</div>
+          <div class="total-items">All items bought at WW</div>
+          ${wwWins ? '<div class="total-win-badge">✓ Cheaper</div>' : ''}
+          ${wwHint}
+        </div>
+        <div class="total-divider">${dividerInner}</div>
+        <div class="${coBlockCls}" id="colesTotalBlock">
+          <div class="total-store coles">Coles — ${coCount} item${coCount !== 1 ? 's' : ''}</div>
+          <div class="total-amount${coAmtCls}">${fmt(coTotal)}</div>
+          <div class="total-items">All items bought at Coles</div>
+          ${coWins ? '<div class="total-win-badge">✓ Cheaper</div>' : ''}
+          ${coHint}
+        </div>
+      </div>
+
+      ${equalNote}
+
+      <div class="store-section">
+        <div class="section-header">
+          <span class="store-chip ww">W</span>
+          <span class="section-title">Buy at Woolworths</span>
+          <span class="section-count">${wwItems.length} item${wwItems.length !== 1 ? 's' : ''}</span>
+        </div>
+        ${buildTable(wwItems, 'ww')}
+      </div>
+
+      <div class="store-section">
+        <div class="section-header">
+          <span class="store-chip coles">C</span>
+          <span class="section-title">Buy at Coles</span>
+          <span class="section-count">${colesItems.length} item${colesItems.length !== 1 ? 's' : ''}</span>
+        </div>
+        ${buildTable(colesItems, 'coles')}
+      </div>
+    `;
+
+    // FIX 2: wire store-block click handlers to reassign equal items
+    if (ec > 0) {
+      document.getElementById('wwTotalBlock')?.addEventListener('click', () => {
+        if (equalStore !== 'ww') { equalStore = 'ww'; renderContent(); }
+      });
+      document.getElementById('colesTotalBlock')?.addEventListener('click', () => {
+        if (equalStore !== 'coles') { equalStore = 'coles'; renderContent(); }
+      });
     }
-  });
+
+    document.getElementById('removeAllBtn')?.addEventListener('click', () => {
+      if (confirm('Remove all items from this shopping list?')) {
+        localStorage.removeItem('pw_sl_handoff');
+        main.innerHTML = '<div class="empty">Your shopping list is empty. <a href="index.html">Go back to add items.</a></div>';
+      }
+    });
+  }
+
+  renderContent();
 }
 
 boot();
