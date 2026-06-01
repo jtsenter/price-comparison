@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-01T21:30:41.724477+00:00",
+  "last_updated": "2026-06-01T23:04:35.827864+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1020,7 +1020,7 @@
     },
     {
       "list_item": "Hass Avocado",
-      "last_scraped": "2026-06-01T21:22:39.967313+00:00",
+      "last_scraped": "2026-06-01T23:03:15.060626+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1066,15 +1066,15 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120080.jpg"
       },
       "coles": {
-        "name": "Coles Hass Avocados | 1 Each",
+        "name": "Hass Avocados",
         "price": 2.5,
-        "unit_price": 4,
+        "unit_price": 2.5,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-hass-avocados-1-each-5900530",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5900530.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 1,
+      "saving_per_item": 1.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -1100,7 +1100,7 @@
           "price": 2.5
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -2893,7 +2893,7 @@
     },
     {
       "list_item": "Woolworths BBQ Lamb Kebabs With Mint & Honey",
-      "last_scraped": "2026-06-01T21:23:46.318434+00:00",
+      "last_scraped": "2026-06-01T23:04:35.672133+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -2947,30 +2947,12 @@
       "saving_per_item": 6.94,
       "alternatives": [
         {
-          "name": "Coles RSPCA Approved Chicken Kebabs Honey & Soy | 375g",
-          "price": 8.5,
-          "unit_price": 8.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-kebabs-honey-and-soy-375g-3745710",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3745710.jpg",
-          "retailer": "coles"
-        },
-        {
           "name": "Coles Perform Lamb With Mint Sauce | 360g",
           "price": 10,
           "unit_price": 10,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/coles-perform-lamb-with-mint-sauce-360g-1756910",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1756910.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles RSPCA Approved Chicken Kebabs Honey & Soy | 750g",
-          "price": 12,
-          "unit_price": 12,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-rspca-approved-chicken-kebabs-honey-and-soy-750g-3745878",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3745878.jpg",
           "retailer": "coles"
         }
       ],
