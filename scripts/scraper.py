@@ -301,11 +301,40 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                 cup_string = product.get("CupString", "")
                 stockcode = product.get("Stockcode")
                 url_name = product.get("UrlFriendlyName", "")
-                # Prefer regular shelf price over member-exclusive price
                 is_member_deal = bool(product.get("IsEveryDayRewards") or product.get("IsPmDeals"))
+                print(f"    [WW URL] {name!r}: Price=${price} WasPrice={was_price} IsEDR={is_member_deal}")
+                # Prefer regular shelf price over member-exclusive (Everyday Rewards) price
                 if is_member_deal and was_price is not None and float(was_price) > float(price):
                     print(f"    [WW] Member price skipped for '{name}' (by URL): ${price} → shelf price ${was_price}")
                     price = was_price
+                # DOM fallback: check for an explicit regular-price element.
+                # Catches cases where IsEveryDayRewards flag is absent but the page still
+                # shows a member/promotional price as the primary price.
+                if price is not None:
+                    _dom = await page.evaluate("""
+                        () => {
+                            for (const sel of [
+                                '[data-testid="product-regular-price"]',
+                                '[class*="RegularPrice"]',
+                                '[class*="regular-price"]',
+                            ]) {
+                                const el = document.querySelector(sel);
+                                if (el?.textContent) {
+                                    const m = el.textContent.match(/\\$\\s*([\\d.]+)/);
+                                    if (m) return { p: parseFloat(m[1]), sel };
+                                }
+                            }
+                            return null;
+                        }
+                    """)
+                    if _dom:
+                        _dom_p   = _dom['p']
+                        _dom_sel = _dom['sel']
+                        if abs(_dom_p - float(price)) > 0.005:
+                            print(f"    [WW] DOM {_dom_sel!r} price ${_dom_p} overrides __NEXT_DATA__ ${price}")
+                            price = _dom_p
+                        else:
+                            print(f"    [WW] DOM {_dom_sel!r} confirms price ${_dom_p}")
                 if name and price is not None:
                     _, unit = parse_unit_price(cup_string)
                     product_url = (
