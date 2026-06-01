@@ -1040,22 +1040,37 @@ async def _scrape_single_item(
         new_co_hist = existing_co_hist
 
     # week_conflict is normal repricing behaviour — never a validation trigger
+
+    # FIX 1: don't flag a store whose price is identical to the previous scrape.
+    # An unchanged price cannot be a real pricing event regardless of history shape.
+    if ww_reasons and ww_price is not None and prev_ww is not None and round(ww_price, 2) == round(prev_ww, 2):
+        ww_reasons = []
+    if coles_reasons and coles_price is not None and prev_coles is not None and round(coles_price, 2) == round(prev_coles, 2):
+        coles_reasons = []
+
     all_reasons = list(dict.fromkeys(ww_reasons + coles_reasons))
     _validation_entry = None
     if all_reasons:
-        _validation_entry = {
-            "item": item,
-            "ww_price": ww_price,
-            "ww_url": (ww_match or {}).get("url", ""),
-            "ww_prev_price": prev_ww,
-            "ww_suspicious": bool(ww_reasons),
-            "coles_price": coles_price,
-            "coles_url": (coles_match or {}).get("url", ""),
-            "coles_prev_price": prev_coles,
-            "coles_suspicious": bool(coles_reasons),
-            "flagged_date": today_str,
-            "reason": all_reasons,
-        }
+        # FIX 2: suppress entry if every still-flagged store's price is within the
+        # approved_prices tolerance — the per-store _is_approved check above only
+        # runs before _suspicious_reasons; this catches edge cases where approved
+        # prices were updated between scrape runs.
+        _ww_clear = not ww_reasons or _is_approved(ww_price, _item_approved.get("ww"))
+        _co_clear = not coles_reasons or _is_approved(coles_price, _item_approved.get("coles"))
+        if not (_ww_clear and _co_clear):
+            _validation_entry = {
+                "item": item,
+                "ww_price": ww_price,
+                "ww_url": (ww_match or {}).get("url", ""),
+                "ww_prev_price": prev_ww,
+                "ww_suspicious": bool(ww_reasons),
+                "coles_price": coles_price,
+                "coles_url": (coles_match or {}).get("url", ""),
+                "coles_prev_price": prev_coles,
+                "coles_suspicious": bool(coles_reasons),
+                "flagged_date": today_str,
+                "reason": all_reasons,
+            }
 
     # If a store returned no result this run (and _carry also found nothing), preserve
     # whatever was in the previous latest.json rather than overwriting with None.
