@@ -3718,17 +3718,39 @@ function getCurrentVisibleItems() {
 
 function buildShoppingListItems(useChecked) {
   if (!_lastData) return [];
+  const allItems = _lastData.items;
   // Priority 1: mobile tap-selected items
-  if (_selectedItems.size > 0) return [..._selectedItems];
+  if (_selectedItems.size > 0)
+    return allItems.filter(i => _selectedItems.has(i.list_item));
   // Priority 2: desktop checkbox-selected rows (bulk bar)
-  if (useChecked && _checkedItems && _checkedItems.size > 0) return [..._checkedItems];
-  // Priority 3: whatever is currently visible (respects search + frequency + category + hot/priced-only)
-  return sortItems(_lastData.items).map(i => i.list_item);
+  if (useChecked && _checkedItems && _checkedItems.size > 0)
+    return allItems.filter(i => _checkedItems.has(i.list_item));
+  // Priority 3: active search — substring match on list_item name
+  if (_searchQuery && _searchQuery.trim().length > 0) {
+    const q = _searchQuery.trim().toLowerCase();
+    return allItems.filter(i => i.list_item.toLowerCase().includes(q));
+  }
+  // Priority 4: current filter view (frequency tab + category + hot/priced-only)
+  return sortItems(allItems);
 }
 
 function exportShoppingList(useChecked) {
-  const names = buildShoppingListItems(useChecked);
-  localStorage.setItem('pw_sl_items', JSON.stringify(names));
+  const items = buildShoppingListItems(useChecked);
+  const names = items.map(i => i.list_item);
+  // Build a human-readable description of what's being exported
+  let note;
+  if (_selectedItems.size > 0 || (useChecked && _checkedItems && _checkedItems.size > 0)) {
+    note = `${names.length} selected item${names.length !== 1 ? 's' : ''}`;
+  } else if (_searchQuery && _searchQuery.trim().length > 0) {
+    note = `${names.length} item${names.length !== 1 ? 's' : ''} matching "${_searchQuery.trim()}"`;
+  } else {
+    const pLabel = _activePriority === 'all' ? 'all' : `all ${_activePriority}`;
+    const catSuffix = _activeCategory !== 'All' ? ` · ${_activeCategory}` : '';
+    note = `${pLabel} items${catSuffix}`;
+  }
+  let quantities = {};
+  try { quantities = JSON.parse(localStorage.getItem('pw_priorities_v1') || '{}'); } catch {}
+  localStorage.setItem('pw_sl_handoff', JSON.stringify({ items: names, note, quantities }));
   window.location.href = 'shopping-list.html';
 }
 
