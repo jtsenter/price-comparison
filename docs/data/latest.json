@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-01T07:11:22.624021+00:00",
+  "last_updated": "2026-06-01T07:11:41.334905+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -601,7 +601,7 @@
     },
     {
       "list_item": "Cavendish Bananas",
-      "last_scraped": "2026-06-01T06:08:57.063918+00:00",
+      "last_scraped": "2026-06-01T07:11:26.647318+00:00",
       "trip_count": 30,
       "price_history": [
         {
@@ -773,7 +773,7 @@
     },
     {
       "list_item": "Fresh Broccoli",
-      "last_scraped": "2026-06-01T06:09:00.802621+00:00",
+      "last_scraped": "2026-06-01T07:11:27.980525+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -905,7 +905,7 @@
     },
     {
       "list_item": "Hass Avocado",
-      "last_scraped": "2026-06-01T06:09:04.767521+00:00",
+      "last_scraped": "2026-06-01T07:11:32.028114+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -953,13 +953,13 @@
       "coles": {
         "name": "Coles Hass Avocados | 1 Each",
         "price": 2.5,
-        "unit_price": 4,
+        "unit_price": 4.0,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-hass-avocados-1-each-5900530",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5900530.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 1,
+      "saving_per_item": 1.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -993,7 +993,7 @@
     },
     {
       "list_item": "Fresh Cauliflower Half",
-      "last_scraped": "2026-06-01T06:09:07.915013+00:00",
+      "last_scraped": "2026-06-01T07:11:36.933346+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -1136,7 +1136,7 @@
     },
     {
       "list_item": "Kale Fresh Bunch",
-      "last_scraped": "2026-06-01T06:09:14.216637+00:00",
+      "last_scraped": "2026-06-01T07:11:41.332964+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -11752,9 +11752,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 5,
+    "done": 10,
     "total": 144,
     "started_at": "2026-06-01T07:11:03.837955+00:00",
-    "current_item": "Capsicum Yellow"
+    "current_item": "Kale Fresh Bunch"
   }
 }
