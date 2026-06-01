@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-06-01T21:18:36.714402+00:00",
-  "trigger": "scheduled",
+  "last_updated": "2026-06-01T21:22:09.829541+00:00",
+  "trigger": "manual",
   "items": [
     {
       "list_item": "Baby Mum-Mum Snack Vegetable Rice Rusk",
@@ -11698,7 +11698,7 @@
     },
     {
       "list_item": "Woolworths Red Onions",
-      "last_scraped": "2026-06-01T07:16:10.526645+00:00",
+      "last_scraped": "2026-06-01T21:18:48.411763+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -11723,37 +11723,60 @@
         "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg"
       },
-      "coles": null,
-      "cheaper_store": "woolworths",
-      "saving_per_item": null,
-      "alternatives": [],
+      "coles": {
+        "name": "Red Onion 1 Kg",
+        "price": 3.5,
+        "unit_price": 3.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-red-onion-1-kg-1kg-8467604",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8467604.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.5,
+      "alternatives": [
+        {
+          "name": "Red Onion 1 Kg",
+          "price": 3.5,
+          "unit_price": 3.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-red-onion-1-kg-1kg-8467604",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8467604.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-06-01",
           "price": 5
         }
       ],
-      "coles_price_history": [],
-      "match_confidence": "none",
+      "coles_price_history": [
+        {
+          "date": "2026-06-02",
+          "price": 3.5
+        }
+      ],
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.5,
-      "per_100_coles": null,
+      "per_100_coles": 0.35,
       "per_100_unit": "100g"
     }
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 686.54,
-    "total_coles": 740.09,
+    "total_woolworths": 691.54,
+    "total_coles": 743.59,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 53.55,
+    "total_saving": 52.05,
     "items_compared": 144,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 143,
+    "done": 0,
     "total": 144,
-    "started_at": "2026-06-01T21:18:36.693735+00:00"
+    "started_at": "2026-06-01T21:22:09.827543+00:00"
   }
 }
