@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-01T21:29:06.798067+00:00",
+  "last_updated": "2026-06-01T21:29:27.092213+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10734,7 +10734,7 @@
     },
     {
       "list_item": "Continental Classics Cup A Soup Italian Minestrone With Pasta",
-      "last_scraped": "2026-06-01T07:16:24.688034+00:00",
+      "last_scraped": "2026-06-01T21:29:11.307881+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10765,7 +10765,17 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.4,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Continental Cup A Pasta Bolognese | 59g",
+          "price": 1.0,
+          "unit_price": 1.69,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/continental-cup-a-pasta-bolognese-59g-1089600",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1089600.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -10786,7 +10796,7 @@
           "price": 2.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.87,
       "per_100_coles": 3.73,
@@ -10794,7 +10804,7 @@
     },
     {
       "list_item": "Dettol Antibacterial Liquid Hand Wash Hand Soap Pump Aloe Vera",
-      "last_scraped": "2026-06-01T07:16:27.802860+00:00",
+      "last_scraped": "2026-06-01T21:29:12.936140+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10827,6 +10837,15 @@
       "saving_per_item": 1.7,
       "alternatives": [
         {
+          "name": "Dettol Antibacterial Liquid Hand Wash Aloe Vera And Vitamin E Refill | 950mL",
+          "price": 5.5,
+          "unit_price": 0.58,
+          "unit": "100mL",
+          "url": "https://www.coles.com.au/product/dettol-antibacterial-liquid-hand-wash-aloe-vera-and-vitamin-e-refill-950ml-1878848",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1878848.jpg",
+          "retailer": "coles"
+        },
+        {
           "name": "Dettol Antibacterial Liquid Hand Wash Pump Aloe Vera & Vitamin E",
           "price": 4.5,
           "unit_price": 0.9,
@@ -10834,6 +10853,15 @@
           "url": "https://www.woolworths.com.au/shop/productdetails/267236/dettol-antibacterial-liquid-hand-wash-pump-aloe-vera-vitamin-e",
           "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/267236.jpg",
           "retailer": "woolworths"
+        },
+        {
+          "name": "Dettol Kids Colour Foaming Hand Wash Aloe Vera | 250mL",
+          "price": 2.5,
+          "unit_price": 1.0,
+          "unit": "100mL",
+          "url": "https://www.coles.com.au/product/dettol-kids-colour-foaming-hand-wash-aloe-vera-250ml-8962793",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8962793.jpg",
+          "retailer": "coles"
         }
       ],
       "ww_price_history": [
@@ -10856,75 +10884,15 @@
           "price": 4.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.12,
       "per_100_coles": 0.9,
       "per_100_unit": "100ml"
     },
     {
-      "list_item": "Ecostore Dish Liquid Ultrasensitive",
-      "last_scraped": "2026-06-01T07:16:39.170064+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-04-14",
-          "price": 3.35
-        },
-        {
-          "date": "2025-07-10",
-          "price": 4.8
-        }
-      ],
-      "category": "Household",
-      "woolworths": {
-        "name": "Ecostore Dishwashing Liquid Lemon",
-        "price": 9.2,
-        "unit_price": 0.92,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/796646/ecostore-dishwashing-liquid-lemon",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/796646.jpg"
-      },
-      "coles": {
-        "name": "Dishwashing Liquid Lemon",
-        "price": 9.2,
-        "unit_price": 0.92,
-        "unit": "100mL",
-        "url": "https://www.coles.com.au/product/ecostore-dishwashing-liquid-lemon-1l-7752300",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7752300.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 9.2
-        },
-        {
-          "date": "2026-06-01",
-          "price": 9.2
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 9.2
-        },
-        {
-          "date": "2026-06-01",
-          "price": 9.2
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.92,
-      "per_100_coles": 0.92,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Essentials Domestic Wipes Roll",
-      "last_scraped": "2026-06-01T07:16:31.024927+00:00",
+      "last_scraped": "2026-06-01T21:29:20.924806+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10983,6 +10951,137 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Ecostore Dish Liquid Ultrasensitive",
+      "last_scraped": "2026-06-01T21:29:23.416054+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 3.35
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.8
+        }
+      ],
+      "category": "Household",
+      "woolworths": {
+        "name": "Ecostore Dishwashing Liquid Lemon",
+        "price": 9.2,
+        "unit_price": 0.92,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/796646/ecostore-dishwashing-liquid-lemon",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/796646.jpg"
+      },
+      "coles": {
+        "name": "Dishwashing Liquid Lemon",
+        "price": 9.2,
+        "unit_price": 0.92,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/ecostore-dishwashing-liquid-lemon-1l-7752300",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7752300.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 9.2
+        },
+        {
+          "date": "2026-06-01",
+          "price": 9.2
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 9.2
+        },
+        {
+          "date": "2026-06-01",
+          "price": 9.2
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.92,
+      "per_100_coles": 0.92,
+      "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Green Zucchini",
+      "last_scraped": "2026-06-01T21:29:27.079036+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-04-14",
+          "price": 0.78
+        },
+        {
+          "date": "2025-04-25",
+          "price": 1.18
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Fresh Zucchini Green",
+        "price": 1.18,
+        "unit_price": 1.18,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/170225/fresh-zucchini-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/170225.jpg"
+      },
+      "coles": {
+        "name": "Coles Green Zucchini | approx. 200g",
+        "price": 0.78,
+        "unit_price": 0.78,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-green-zucchini-approx.-200g-4910506",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4910506.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.4,
+      "alternatives": [
+        {
+          "name": "Coles Green Zucchini | approx. 200g",
+          "price": 0.78,
+          "unit_price": 0.78,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-green-zucchini-approx.-200g-4910506",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4910506.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.18
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.18
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 0.78
+        },
+        {
+          "date": "2026-06-01",
+          "price": 0.78
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 0.39,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Greek Style Yoghurt 2kg",
       "last_scraped": "2026-06-01T07:16:42.014097+00:00",
       "trip_count": 2,
@@ -11031,67 +11130,6 @@
       "size_warning": false,
       "per_100_ww": 0.42,
       "per_100_coles": 0.63,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Green Zucchini",
-      "last_scraped": "2026-06-01T07:16:42.829192+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-04-14",
-          "price": 0.78
-        },
-        {
-          "date": "2025-04-25",
-          "price": 1.18
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Fresh Zucchini Green",
-        "price": 1.18,
-        "unit_price": 1.18,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/170225/fresh-zucchini-green",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/170225.jpg"
-      },
-      "coles": {
-        "name": "Coles Green Zucchini | approx. 200g",
-        "price": 0.78,
-        "unit_price": 0.78,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-green-zucchini-approx.-200g-4910506",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4910506.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.4,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.18
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.18
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 0.78
-        },
-        {
-          "date": "2026-06-01",
-          "price": 0.78
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 0.39,
       "per_100_unit": "100g"
     },
     {
@@ -12518,10 +12556,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 115,
+    "done": 120,
     "total": 144,
     "started_at": "2026-06-01T21:22:09.827543+00:00",
-    "current_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons"
+    "current_item": "Green Zucchini"
   },
   "pending_validation": [
     {
