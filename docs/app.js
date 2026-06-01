@@ -1584,6 +1584,8 @@ function initBulkBar() {
     scheduleArchiveSync();
   });
 
+  $('bulkShopListBtn')?.addEventListener('click', () => exportShoppingList(true));
+
   $('bulkDeselectBtn')?.addEventListener('click', () => {
     _checkedItems.clear();
     updateBulkBar();
@@ -3750,7 +3752,9 @@ function exportShoppingList(useChecked) {
   }
   let quantities = {};
   try { quantities = JSON.parse(localStorage.getItem('pw_priorities_v1') || '{}'); } catch {}
-  localStorage.setItem('pw_sl_handoff', JSON.stringify({ items: names, note, quantities }));
+  const handoffPayload = { items: names, note, quantities };
+  console.log('[PW] exportShoppingList → pw_sl_handoff', { count: names.length, first3: names.slice(0, 3), note });
+  localStorage.setItem('pw_sl_handoff', JSON.stringify(handoffPayload));
   window.location.href = 'shopping-list.html';
 }
 
