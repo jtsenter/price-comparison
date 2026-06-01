@@ -4181,6 +4181,23 @@ async function boot() {
     syncArchivedToGitHub();
   }
 
+  // One-time sync on load: push localStorage URL overrides to url_overrides.json.
+  // Runs silently once per browser session so the scraper always has up-to-date pinned URLs
+  // even if a previous GitHub API write failed or the user closed the dialog without saving.
+  if (!sessionStorage.getItem('pw_overrides_synced')) {
+    sessionStorage.setItem('pw_overrides_synced', '1');
+    const _bootOvSettings = loadSettings();
+    if (_bootOvSettings.user && _bootOvSettings.repo && _bootOvSettings.token) {
+      const _bootOv = loadOverrides();
+      const _hasUrls = Object.values(_bootOv).some(v => v.wwUrl || v.colesUrl);
+      if (_hasUrls) {
+        persistUrlOverridesToRepo(_bootOvSettings, _bootOv).catch(() => {
+          // Silent — failure will be visible on next manual save attempt
+        });
+      }
+    }
+  }
+
   // Background runner-status check: silently show the offline banner if the runner
   // is down, and update the stale-data banner text to match.
   const _bootSettings = loadSettings();
