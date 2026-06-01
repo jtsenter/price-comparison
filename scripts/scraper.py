@@ -90,6 +90,29 @@ def _week_dedup(history: list, new_price: float) -> str:
     return 'append'
 
 
+def _should_add_history_entry(history: list, new_price: float, today: str) -> bool:
+    """Return True if a new price history entry should be appended.
+
+    Rules (applies to all scrape triggers — manual and scheduled):
+    - No history yet                      → add.
+    - Price changed vs last entry         → add (always, regardless of age).
+    - Price unchanged, last entry < 7 days ago → skip (suppress noise).
+    - Price unchanged, last entry ≥ 7 days ago → add (confirms price still valid).
+    """
+    if not history:
+        return True
+    last = history[-1]
+    last_price = last.get('price')
+    last_date  = last.get('date', '')
+    if round(float(last_price), 2) != round(float(new_price), 2):
+        return True   # price changed — always record
+    try:
+        days_since = (date.fromisoformat(today) - date.fromisoformat(last_date[:10])).days
+        return days_since >= 7
+    except Exception:
+        return True   # date parsing failed — add to be safe
+
+
 def _is_approved(price: float | None, approved_price: float | None, tolerance: float = 0.05) -> bool:
     """Return True if price is within tolerance of the previously-approved price."""
     if approved_price is None or price is None:
@@ -1041,8 +1064,9 @@ async def _scrape_single_item(
     # Deduplicate by date before use — guards against external writes introducing duplicates
     existing_ww_hist = _dedup_hist(existing_item.get("ww_price_history",    []) or [])
     existing_co_hist = _dedup_hist(existing_item.get("coles_price_history", []) or [])
-    ww_dedup = _week_dedup(existing_ww_hist,  ww_price)    if ww_price    else 'skip'
-    co_dedup = _week_dedup(existing_co_hist,  coles_price) if coles_price else 'skip'
+    today_str = date.today().isoformat()
+    ww_add = _should_add_history_entry(existing_ww_hist,  ww_price,    today_str) if ww_price    else False
+    co_add = _should_add_history_entry(existing_co_hist,  coles_price, today_str) if coles_price else False
     item_price_history = history.get("price_history", [])
     prev_ww    = (existing_item.get("woolworths") or {}).get("price")
     prev_coles = (existing_item.get("coles")     or {}).get("price")
@@ -1051,35 +1075,21 @@ async def _scrape_single_item(
                      else _suspicious_reasons(ww_price,    prev_ww,    item_price_history))
     coles_reasons = ([] if _is_approved(coles_price, _item_approved.get("coles"))
                      else _suspicious_reasons(coles_price, prev_coles, item_price_history))
-    today_str = date.today().isoformat()
-    today_week = _iso_week(date.today())
 
-    # WW history: withhold if suspicious; update in-week entry; append if new week; skip if unchanged
+    # WW history: withhold if suspicious; append if price changed or ≥7 days since last entry
     if ww_reasons:
         new_ww_hist = existing_ww_hist
-    elif ww_dedup == 'update':
-        new_ww_hist = [
-            {"date": e["date"], "price": round(ww_price, 2)}
-            if _iso_week(e["date"]) == today_week else e
-            for e in existing_ww_hist
-        ]
-    elif ww_dedup == 'append':
+    elif ww_add:
         new_ww_hist = existing_ww_hist + [{"date": today_str, "price": round(ww_price, 2)}]
-    else:  # skip
+    else:
         new_ww_hist = existing_ww_hist
 
     # Coles history: same logic
     if coles_reasons:
         new_co_hist = existing_co_hist
-    elif co_dedup == 'update':
-        new_co_hist = [
-            {"date": e["date"], "price": round(coles_price, 2)}
-            if _iso_week(e["date"]) == today_week else e
-            for e in existing_co_hist
-        ]
-    elif co_dedup == 'append':
+    elif co_add:
         new_co_hist = existing_co_hist + [{"date": today_str, "price": round(coles_price, 2)}]
-    else:  # skip
+    else:
         new_co_hist = existing_co_hist
 
     # week_conflict is normal repricing behaviour — never a validation trigger
