@@ -91,9 +91,13 @@
     .btn-primary { background: var(--ww); color: #fff; border-color: var(--ww); }
     .btn-primary:hover { background: #006B31; }
 
-    .filter-note { font-size: 12px; color: var(--text-soft); background: #FFFBEB; border: 1px solid #FCD34D; border-radius: var(--radius); padding: 8px 14px; margin-bottom: 16px; }
+    .sl-topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .filter-note { font-size: 12px; color: var(--text-soft); background: #FFFBEB; border: 1px solid #FCD34D; border-radius: var(--radius); padding: 8px 14px; margin-bottom: 0; flex: 1; min-width: 0; }
+    .btn-outline-danger { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid #FCA5A5; background: transparent; color: #DC2626; transition: all .15s; white-space: nowrap; }
+    .btn-outline-danger:hover { background: #FEF2F2; border-color: #DC2626; }
 
     .empty { text-align: center; padding: 60px 20px; color: var(--text-soft); }
+    .empty a { color: var(--ww); text-decoration: underline; }
 
     @media (max-width: 700px) {
       .header-inner { padding: 0 10px; gap: 8px; }
@@ -179,20 +183,20 @@ async function boot() {
     Object.assign(analysis, Object.fromEntries(Object.entries(prioOv).map(([k, v]) => [k, { ...(analysis[k] || {}), priority: v }])));
   } catch {}
 
-  // Determine selection — read flat name list written by app.js exportShoppingList()
-  let slNames = null;
+  // Read handoff written by app.js exportShoppingList()
+  let handoff = null;
   try {
-    const raw = localStorage.getItem('pw_sl_items');
-    if (raw) { slNames = JSON.parse(raw); localStorage.removeItem('pw_sl_items'); }
+    const raw = localStorage.getItem('pw_sl_handoff');
+    if (raw) { handoff = JSON.parse(raw); localStorage.removeItem('pw_sl_handoff'); }
   } catch {}
 
   let items = (data.items || []).filter(i => !i.archived);
 
-  if (slNames && slNames.length) {
-    const nameSet = new Set(slNames);
+  if (handoff?.items?.length) {
+    const nameSet = new Set(handoff.items);
     items = items.filter(i => nameSet.has(i.list_item));
   }
-  // If slNames is null/empty we fall through and show all non-archived items
+  // If handoff is missing/empty, fall through and show all non-archived items
 
   if (!items.length) {
     main.innerHTML = '<div class="empty">No items found for this selection.</div>';
@@ -215,8 +219,8 @@ async function boot() {
   const saving    = Math.abs(wwTotal - coTotal);
   const wwWins    = wwTotal <= coTotal;
 
-  // Filter note
-  let filterNote = slNames?.length ? `Showing ${items.length} item${items.length !== 1 ? 's' : ''}` : '';
+  // Filter note — use the description baked into the handoff
+  const filterNote = handoff?.note ? `Showing ${handoff.note}` : '';
 
   function buildTable(storeItems, store) {
     if (!storeItems.length) return `<p class="only-note">No items are cheapest at ${store === 'ww' ? 'Woolworths' : 'Coles'} in this selection.</p>`;
@@ -250,7 +254,10 @@ async function boot() {
   }
 
   main.innerHTML = `
-    ${filterNote ? `<div class="filter-note">📋 ${filterNote}</div>` : ''}
+    <div class="sl-topbar">
+      ${filterNote ? `<div class="filter-note">📋 ${filterNote}</div>` : '<div></div>'}
+      <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
+    </div>
 
     <div class="totals-bar">
       <div class="total-block${wwWins ? ' winner' : ''}">
@@ -291,6 +298,14 @@ async function boot() {
       ${buildTable(colesItems, 'coles')}
     </div>
   `;
+
+  // Remove All — clears the list and shows an empty state
+  document.getElementById('removeAllBtn')?.addEventListener('click', () => {
+    if (confirm('Remove all items from this shopping list?')) {
+      localStorage.removeItem('pw_sl_handoff');
+      main.innerHTML = '<div class="empty">Your shopping list is empty. <a href="index.html">Go back to add items.</a></div>';
+    }
+  });
 }
 
 boot();
