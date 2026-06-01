@@ -684,7 +684,6 @@ function renderEntry(entry) {
 
   // One-time cleanup: strip week_conflict from all pending_validation entries;
   // remove entries whose only reason was week_conflict.
-  const s = loadSettings();
   const pv = _latestData.pending_validation || [];
   let needsCleanup = pv.some(e => (e.reason || []).includes('week_conflict'));
   if (needsCleanup) {
