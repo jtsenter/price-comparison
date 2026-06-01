@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-01T07:16:14.533749+00:00",
+  "last_updated": "2026-06-01T07:16:24.438713+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9655,7 +9655,7 @@
     },
     {
       "list_item": "Yumi's Eggplant Mediterranean Dip",
-      "last_scraped": "2026-06-01T06:14:17.928203+00:00",
+      "last_scraped": "2026-06-01T07:16:18.011642+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9664,11 +9664,11 @@
         },
         {
           "date": "2026-02-03",
-          "price": 5
+          "price": 5.0
         },
         {
           "date": "2026-04-02",
-          "price": 5
+          "price": 5.0
         },
         {
           "date": "2026-05-06",
@@ -9723,7 +9723,7 @@
     },
     {
       "list_item": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
-      "last_scraped": "2026-06-01T06:14:19.625180+00:00",
+      "last_scraped": "2026-06-01T07:16:18.236080+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9754,7 +9754,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 1,
+      "saving_per_item": 1.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9783,8 +9783,68 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Colman's Ingredients English Mustard",
+      "last_scraped": "2026-06-01T07:16:21.358771+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.6
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Colman's Ingredients English Mustard",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/88972/colman-s-ingredients-english-mustard",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/088972.jpg"
+      },
+      "coles": {
+        "name": "Colman's Old English Mustard | 100g",
+        "price": 4.5,
+        "unit_price": 4.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/colman's-old-english-mustard-100g-6921434",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6921434.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.5,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4.5
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 5.0,
+      "per_100_coles": 4.5,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Coca-Cola Zero Sugar Soft Drink Bottle",
-      "last_scraped": "2026-06-01T06:14:22.897457+00:00",
+      "last_scraped": "2026-06-01T07:16:21.752799+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9847,63 +9907,63 @@
       "per_100_unit": "100ml"
     },
     {
-      "list_item": "Colman's Ingredients English Mustard",
-      "last_scraped": "2026-06-01T06:14:23.153228+00:00",
+      "list_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons",
+      "last_scraped": "2026-06-01T07:16:24.426378+00:00",
       "trip_count": 2,
       "price_history": [
         {
-          "date": "2025-05-12",
-          "price": 3
+          "date": "2026-02-03",
+          "price": 2.8
         },
         {
-          "date": "2025-07-10",
-          "price": 3.6
+          "date": "2026-04-02",
+          "price": 1.4
         }
       ],
-      "category": "Pantry",
+      "category": "Dairy & Eggs",
       "woolworths": {
-        "name": "Colman's Ingredients English Mustard",
-        "price": 5,
-        "unit_price": 5,
+        "name": "Continental Classics Cup A Soup Creamy Chicken With Croutons",
+        "price": 1.4,
+        "unit_price": 2.33,
         "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/88972/colman-s-ingredients-english-mustard",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/088972.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/166232/continental-classics-cup-a-soup-creamy-chicken-with-croutons",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/166232.jpg"
       },
       "coles": {
-        "name": "Colman's Old English Mustard | 100g",
-        "price": 4.5,
-        "unit_price": 4.5,
+        "name": "Continental Cup A Soup Creamy Chicken with Croutons Serves 2 | 60g",
+        "price": 2.8,
+        "unit_price": 6.6,
         "unit": "100g",
-        "url": "https://www.coles.com.au/product/colman's-old-english-mustard-100g-6921434",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6921434.jpg"
+        "url": "https://www.coles.com.au/product/continental-cup-a-soup-creamy-chicken-with-croutons-serves-2-60g-9151344",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9151344.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.5,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.4,
       "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
-          "price": 5
+          "price": 1.4
         },
         {
           "date": "2026-06-01",
-          "price": 5
+          "price": 1.4
         }
       ],
       "coles_price_history": [
         {
           "date": "2026-05-29",
-          "price": 4.5
+          "price": 2.8
         },
         {
           "date": "2026-06-01",
-          "price": 4.5
+          "price": 2.8
         }
       ],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 5,
-      "per_100_coles": 4.5,
+      "per_100_ww": 2.33,
+      "per_100_coles": 4.67,
       "per_100_unit": "100g"
     },
     {
@@ -9964,66 +10024,6 @@
       "size_warning": false,
       "per_100_ww": 1.87,
       "per_100_coles": 3.73,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons",
-      "last_scraped": "2026-06-01T06:14:27.349226+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2026-02-03",
-          "price": 2.8
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.4
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Continental Classics Cup A Soup Creamy Chicken With Croutons",
-        "price": 1.4,
-        "unit_price": 2.33,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/166232/continental-classics-cup-a-soup-creamy-chicken-with-croutons",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/166232.jpg"
-      },
-      "coles": {
-        "name": "Continental Cup A Soup Creamy Chicken with Croutons Serves 2 | 60g",
-        "price": 2.8,
-        "unit_price": 6.6,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/continental-cup-a-soup-creamy-chicken-with-croutons-serves-2-60g-9151344",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9151344.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.4,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.4
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.4
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.8
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.8
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.33,
-      "per_100_coles": 4.67,
       "per_100_unit": "100g"
     },
     {
@@ -11752,9 +11752,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 110,
+    "done": 115,
     "total": 144,
     "started_at": "2026-06-01T07:11:03.837955+00:00",
-    "current_item": "Woolworths Tuna In Springwater"
+    "current_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons"
   }
 }
