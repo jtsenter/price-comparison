@@ -2236,9 +2236,9 @@ function sortItems(items) {
         return (ww != null && co != null) ? Math.abs(ww - co) / Math.max(ww, co) : -Infinity;
       }
       case 'trend': {
-        const history = item.price_history;
-        if (!history?.length) return null;
-        // Apply same exclusions as buildPriceBar so sort matches the visual bar
+        // Merge all history sources — same as buildPriceBar so sort matches the visual bar
+        const history = [...(item.price_history||[]), ...(item.ww_price_history||[]), ...(item.coles_price_history||[])];
+        if (!history.length) return null;
         const _excl = loadExclusions();
         const _excluded = new Set((_excl[item.list_item] || []).map(p => Number(p).toFixed(2)));
         const prices = history
@@ -2350,8 +2350,8 @@ function pricePercentile(prices, pct) {
 }
 
 function isHotDeal(item, exclusions) {
-  const history = item.price_history;
-  if (!history || history.length < 3) return false;
+  const history = [...(item.price_history||[]), ...(item.ww_price_history||[]), ...(item.coles_price_history||[])];
+  if (history.length < 3) return false;
   const excluded = new Set((exclusions[item.list_item] || []).map(p => Number(p).toFixed(2)));
   const prices = history.map(h => h.price).filter((p, i) => p > 0 && !excluded.has(Number(history[i].price).toFixed(2)));
   if (prices.length < 3) return false;
@@ -2495,8 +2495,9 @@ function renderMobileCards(items, data) {
   if (_mobileSortMode !== 'default') {
     const excl = loadExclusions();
     const getTrendPos = (item) => {
-      const hist = item.price_history;
-      if (!hist?.length) return 9999;
+      // Merge all history sources — same as buildPriceBar so sort matches the visual bar
+      const hist = [...(item.price_history||[]), ...(item.ww_price_history||[]), ...(item.coles_price_history||[])];
+      if (!hist.length) return 9999;
       const excluded = new Set((excl[item.list_item] || []).map(p => Number(p).toFixed(2)));
       const prices = hist.map(e => e.price)
         .filter((p, i) => p > 0 && !excluded.has(Number(hist[i].price).toFixed(2)));

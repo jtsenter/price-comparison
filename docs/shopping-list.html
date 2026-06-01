@@ -251,7 +251,8 @@ async function boot() {
     const colesItems = displayItems.filter(i =>
       i.coles?.price != null &&
       (i.cheaper_store === 'coles' ||
-       (i.cheaper_store === 'equal' && equalStore === 'coles')));
+       (i.cheaper_store === 'equal' && equalStore === 'coles') ||
+       i.woolworths?.price == null));   // Coles-only items always go here
     return { wwItems, colesItems };
   }
 
