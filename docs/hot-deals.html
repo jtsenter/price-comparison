@@ -332,6 +332,8 @@
 
 <div id="priceTooltip" class="price-tooltip-fixed" style="display:none"></div>
 
+<!-- Shared isHotDeal / calcTrendPos / sortByTrend — must load before inline script -->
+<script src="sort-utils.js"></script>
 <script>
 // ── Shared utilities ──────────────────────────────────────────────────────────
 
@@ -408,28 +410,8 @@ function getCategory(item) {
 }
 
 // ── Deal computation ──────────────────────────────────────────────────────────
-// A "deal" qualifies if price_history shows an all-time low or bottom 20% of range.
-// isHotDeal() gates which items appear; getSimpleDealInfo() provides store/price for display.
-
-// Hot deal detection — uses price_history (Excel purchase trips) only.
-// Include if: currentBest <= histMin (all-time low) OR trendPos < 0.20 (bottom 20%).
-// Will be extracted to sort-utils.js in the next commit.
-function isHotDeal(item) {
-  const hist = item.price_history || [];
-  if (hist.length < 2) return false;
-  const prices = hist.map(h => h.price).filter(p => p > 0);
-  if (prices.length < 2) return false;
-  const histMin = Math.min(...prices);
-  const histMax = Math.max(...prices);
-  if (histMin === histMax) return false;
-  const currentBest = Math.min(
-    item.woolworths?.price ?? Infinity,
-    item.coles?.price ?? Infinity
-  );
-  if (!isFinite(currentBest)) return false;
-  const trendPos = (currentBest - histMin) / (histMax - histMin);
-  return currentBest <= histMin || trendPos < 0.20;
-}
+// isHotDeal() and calcTrendPos() are provided by sort-utils.js (loaded above).
+// getSimpleDealInfo() provides the per-row store/price details for display.
 
 function getSimpleDealInfo(item, exclusions) {
   const store = item.cheaper_store;
@@ -561,23 +543,7 @@ function getSortValue(col, item, dealInfo) {
     case 'deal':     return dealInfo != null ? -dealInfo.savingPct : Infinity; // higher savingPct = better deal → negate for desc sort
     case 'ww':       return item.woolworths?.price ?? Infinity;
     case 'coles':    return item.coles?.price ?? Infinity;
-    case 'avg': {
-      // Same bucket logic as main page Trend sort
-      const history = item.price_history;
-      if (!history?.length) return null;
-      const prices = history.map(p => p.price).filter(p => p > 0);
-      if (prices.length < 2) return null;
-      const minP = Math.min(...prices), maxP = Math.max(...prices);
-      const ref = dealInfo?.price;
-      if (ref == null) return null;
-      // Bucket scheme: 0=below-range, 1=in-range(<0.5), 2=flat, 3=in-range(≥0.5), 4=above-range, null=no-data
-      if (minP === maxP) return [2, 0];  // all flat items → midpoint bucket, name tiebreaker for stability
-      const pos = (ref - minP) / (maxP - minP);
-      if (pos < 0)   return [0, pos];
-      if (pos < 0.5) return [1, pos];
-      if (pos > 1)   return [4, pos];
-      return [3, pos];
-    }
+    case 'avg': return calcTrendPos(item); // 0.0=best deal, 1.0=expensive, 999=no history
     case 'category': return getCategory(item).toLowerCase();
     case 'watch':    return _watchlistHD.has(item.list_item) ? 0 : 1; // watchlisted first on asc
     default:         return 0;
@@ -592,18 +558,7 @@ function sortDeals(items, exclusions) {
       const mul = dir === 'asc' ? 1 : -1;
       const av = getSortValue(col, a, da);
       const bv = getSortValue(col, b, db);
-      // Avg (trend): [bucket, value] pairs; null = no-data → always last
-      if (col === 'avg') {
-        const aNul = av === null, bNul = bv === null;
-        if (aNul && bNul) continue;
-        if (aNul) return 1;
-        if (bNul) return -1;
-        const [aBucket, aVal] = av;
-        const [bBucket, bVal] = bv;
-        if (aBucket !== bBucket) return (aBucket - bBucket) * mul;
-        if (aVal !== bVal) return (aVal - bVal) * mul;
-        continue;
-      }
+      // avg (trend): calcTrendPos returns a plain number (999 = no history → sorts last on asc)
       if (av < bv) return -1 * mul;
       if (av > bv) return  1 * mul;
     }

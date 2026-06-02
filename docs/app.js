@@ -2330,31 +2330,7 @@ function sortItems(items) {
         const ww = item.woolworths?.price, co = item.coles?.price;
         return (ww != null && co != null) ? Math.abs(ww - co) / Math.max(ww, co) : -Infinity;
       }
-      case 'trend': {
-        // Merge all history sources — same as buildPriceBar so sort matches the visual bar
-        const history = [...(item.price_history||[]), ...(item.ww_price_history||[]), ...(item.coles_price_history||[])];
-        if (!history.length) return null;
-        const _excl = loadExclusions();
-        const _excluded = new Set((_excl[item.list_item] || []).map(p => Number(p).toFixed(2)));
-        const prices = history
-          .map(p => p.price)
-          .filter((p, i) => p > 0 && !_excluded.has(Number(history[i].price).toFixed(2)));
-        if (!prices.length) return null;          // no valid prices → no data → sort last
-        if (prices.length === 1) return [2, 0];   // single price point → treat as flat → middle
-        const minP = Math.min(...prices), maxP = Math.max(...prices);
-        const ref = item.cheaper_store === 'woolworths' ? item.woolworths?.price
-                  : item.cheaper_store === 'coles'      ? item.coles?.price
-                  : (item.coles?.price ?? item.woolworths?.price);
-        if (ref == null) return null;
-        // Bucket scheme: 0=below-range, 1=in-range(<0.5), 2=flat, 3=in-range(≥0.5), 4=above-range, null=no-data
-        // Flat items sit at the 0.5 midpoint, between the below-centre and above-centre in-range halves
-        if (minP === maxP) return [2, 0];  // all flat items → midpoint bucket, name tiebreaker for stability
-        const pos = (ref - minP) / (maxP - minP);
-        if (pos < 0)   return [0, pos];  // below range
-        if (pos < 0.5) return [1, pos];  // in range, below midpoint
-        if (pos > 1)   return [4, pos];  // above range
-        return [3, pos];                  // in range, at/above midpoint (includes pos === 0.5 and pos === 1.0)
-      }
+      case 'trend': return calcTrendPos(item); // 0.0=best deal, 1.0=expensive, 999=no history (sorts last)
       case 'category':     return getCategory(item).toLowerCase();
       case 'last_scraped': return item.last_scraped || '';
       case 'ww_total':     return (item.woolworths?.price ?? 0) * getUnits(item.list_item);
@@ -2373,18 +2349,6 @@ function sortItems(items) {
       const { col, dir } = sortKeys[i];
       const mul = dir === 'asc' ? 1 : -1;
       const ai = av[i], bi = bv[i];
-      // Trend: [bucket, value] pairs; null = no-data → always last
-      if (col === 'trend') {
-        const aNul = ai === null, bNul = bi === null;
-        if (aNul && bNul) continue;
-        if (aNul) return 1;
-        if (bNul) return -1;
-        const [aBucket, aVal] = ai;
-        const [bBucket, bVal] = bi;
-        if (aBucket !== bBucket) return (aBucket - bBucket) * mul;
-        if (aVal !== bVal) return (aVal - bVal) * mul;
-        continue;
-      }
       // NaN guard: NaN comparisons always return false in JS, silently breaking sort stability.
       // Treat NaN as larger than everything so it sinks to the bottom regardless of direction.
       const aNan = typeof ai === 'number' && isNaN(ai);
@@ -2438,26 +2402,8 @@ function applyColSort(col) {
 }
 
 // ── Weekly special detection ─────────────────────────────────────────────────
-// isHotDeal uses price_history (Excel purchase trips) only.
-// Include if: currentBest <= histMin (all-time low) OR trendPos < 0.20 (bottom 20% of range).
-// Will be extracted to sort-utils.js in the next commit so hot-deals.html uses the same definition.
-
-function isHotDeal(item) {
-  const hist = item.price_history || [];
-  if (hist.length < 2) return false;
-  const prices = hist.map(h => h.price).filter(p => p > 0);
-  if (prices.length < 2) return false;
-  const histMin = Math.min(...prices);
-  const histMax = Math.max(...prices);
-  if (histMin === histMax) return false;
-  const currentBest = Math.min(
-    item.woolworths?.price ?? Infinity,
-    item.coles?.price ?? Infinity
-  );
-  if (!isFinite(currentBest)) return false;
-  const trendPos = (currentBest - histMin) / (histMax - histMin);
-  return currentBest <= histMin || trendPos < 0.20;
-}
+// isHotDeal() and calcTrendPos() are provided by sort-utils.js (loaded before app.js in index.html).
+// Do not redefine them here — both pages must share the exact same implementation.
 
 // ── Card view ─────────────────────────────────────────────────────────────────
 
@@ -2587,26 +2533,9 @@ function renderMobileCards(items, data) {
   // Re-sort for mobile sort modes (desktop sortKeys sort already applied via sortItems())
   let displayItems = [...items];
   if (_mobileSortMode !== 'default') {
-    const excl = loadExclusions();
-    const getTrendPos = (item) => {
-      // Merge all history sources — same as buildPriceBar so sort matches the visual bar
-      const hist = [...(item.price_history||[]), ...(item.ww_price_history||[]), ...(item.coles_price_history||[])];
-      if (!hist.length) return 9999;
-      const excluded = new Set((excl[item.list_item] || []).map(p => Number(p).toFixed(2)));
-      const prices = hist.map(e => e.price)
-        .filter((p, i) => p > 0 && !excluded.has(Number(hist[i].price).toFixed(2)));
-      if (!prices.length) return 9999;        // no valid prices → sort last
-      if (prices.length === 1) return 0.5;    // single price point → treat as flat → middle
-      const minP = Math.min(...prices), maxP = Math.max(...prices);
-      if (minP === maxP) return 0.5;
-      const ref = item.cheaper_store === 'woolworths' ? item.woolworths?.price
-                : item.cheaper_store === 'coles'      ? item.coles?.price
-                : (item.coles?.price ?? item.woolworths?.price);
-      if (ref == null) return 9999;
-      return (ref - minP) / (maxP - minP);
-    };
+    // calcTrendPos() from sort-utils.js: 0.0=best deal, 0.5=flat/middle, 999=no history
     const mul = _mobileSortMode === 'trend-asc' ? 1 : -1;
-    displayItems.sort((a, b) => mul * (getTrendPos(a) - getTrendPos(b)));
+    displayItems.sort((a, b) => mul * (calcTrendPos(a) - calcTrendPos(b)));
   }
 
   // Sort pill
