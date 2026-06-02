@@ -119,6 +119,15 @@
       width: 8px; height: 8px; border-radius: 50%;
       background: #94A3B8; flex-shrink: 0;
     }
+    /* ── Optimal split strip ── */
+    .bar-optimal {
+      background: #F0FDF4; border-top: 1px solid #D1FAE5;
+      border-bottom: 1px solid #D1FAE5;
+      padding: 9px 22px; font-size: 13px; color: #059669;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .bar-optimal strong { font-size: 15px; font-weight: 800; }
+    .bar-optimal span { color: #94A3B8; font-size: 12px; }
 
     /* Store sections */
     .store-section { margin-bottom: 28px; }
@@ -317,6 +326,15 @@ async function boot() {
   const diff    = Math.abs(wwTotal - coTotal);
   const isEqual = diff < 0.01;
 
+  // Optimal split: buy each item at whichever store is cheapest for it.
+  const optimalTotal = displayItems.reduce((sum, i) => {
+    const qty = getUnits(i.list_item, unitOv, analysis);
+    const best = i.cheaper_store === 'coles'
+      ? (i.coles?.price ?? i.woolworths?.price ?? 0)
+      : (i.woolworths?.price ?? i.coles?.price ?? 0);
+    return sum + best * qty;
+  }, 0);
+
   function computeSplit() {
     // Routing rules — every displayItem ends up in exactly one table:
     //   WW table:    cheaper_store === 'woolworths'
@@ -456,6 +474,10 @@ async function boot() {
             </div>
             <div class="sc-hint">${coHint}</div>
           </div>
+        </div>
+        <div class="bar-optimal">
+          🏆 Best split: <strong>${fmt(optimalTotal)}</strong>
+          <span>— buying each item at its cheapest store</span>
         </div>
         <div class="bar-ribbon">
           ${ribbonSaveChip}
