@@ -652,6 +652,20 @@ function colHeadHtml(col) {
 
 // ── Price history bar ────────────────────────────────────────────────────────
 
+// Guard against bad per-kg normalization. If a pack price was quoted per-kg,
+// the stored saving_per_item used a wrong factor. Recompute from visible prices.
+function savingAmount(item) {
+  const w = item.woolworths?.price, c = item.coles?.price;
+  if (w == null || c == null) return item.saving_per_item ?? 0;
+  const wUnit = item.woolworths?.unit_price;
+  // Pack price quoted per-kg => stored saving used a bad factor; use visible diff
+  if (item._ww_price_factor && wUnit != null &&
+      Math.abs(wUnit - w) > Math.max(0.05, w * 0.01)) {
+    return Math.abs(w - c);
+  }
+  return item.saving_per_item ?? Math.abs(w - c);
+}
+
 function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   if (!priceHistory?.length || currentPrice == null) return '';
 
@@ -2322,7 +2336,7 @@ function sortItems(items) {
       case 'ww':       return item.woolworths?.price ?? Infinity;
       case 'coles':    return item.coles?.price ?? Infinity;
       case 'cheaper':  return item.cheaper_store ?? 'zzz';
-      case 'saving':   return item.saving_per_item ?? -Infinity;
+      case 'saving':   return savingAmount(item) ?? -Infinity;
       case 'trips':    return item.trip_count || 0;
       case 'units':    return getUnits(item.list_item);
       case 'priority': return PRIORITY_ORDER[getPriority(item.list_item)] ?? 99;
@@ -2468,8 +2482,8 @@ function renderCards(items) {
     const wwClass   = cheaper === 'woolworths' ? 'winner-ww' : '';
     const coClass   = cheaper === 'coles'      ? 'winner-coles' : '';
     const units     = getUnits(item.list_item);
-    const savingAmt = item.saving_per_item != null && item.saving_per_item > 0
-      ? fmt(item.saving_per_item * units) : null;
+    const savingAmt = savingAmount(item) != null && savingAmount(item) > 0
+      ? fmt(savingAmount(item) * units) : null;
     const savingHtml = savingAmt
       ? `<div class="card-saving">${cheaper==='woolworths'?'<span class="store-chip ww sm">W</span>':'<span class="store-chip coles sm">C</span>'} Save ${savingAmt}</div>`
       : '';
@@ -2598,7 +2612,7 @@ function renderMobileCards(items, data) {
 
     const wwCheaper = cheaper === 'woolworths';
     const coCheaper = cheaper === 'coles';
-    const saving    = item.saving_per_item;
+    const saving    = savingAmount(item);
     const borderCls = wwCheaper ? ' cheaper-ww' : coCheaper ? ' cheaper-coles' : '';
 
     const isSelected = _selectedItems.has(item.list_item);
@@ -3023,7 +3037,7 @@ function renderPage(data) {
     if (!hasBothPrices) {
       savingContent = `<span class="no-data">—</span>`;
     } else {
-      const unitsSaving = (item.saving_per_item ?? 0) * units;
+      const unitsSaving = (savingAmount(item) ?? 0) * units;
       savingContent = unitsSaving > 0
         ? `<span class="saving-cell">${fmt(unitsSaving)}</span>`
         : `<span class="no-data">$0.00</span>`;
@@ -3109,7 +3123,7 @@ function renderPage(data) {
     _fCoBase += coP;
     _fWWQty  += wwP * qty;
     _fCoQty  += coP * qty;
-    _fSaving += (item.saving_per_item ?? 0) * qty;
+    _fSaving += (savingAmount(item) ?? 0) * qty;
   }
   const footWWBase   = Math.round(_fWWBase  * 100) / 100;
   const footCoBase   = Math.round(_fCoBase  * 100) / 100;
