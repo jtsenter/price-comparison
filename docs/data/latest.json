@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-02T00:28:37.986682+00:00",
+  "last_updated": "2026-06-02T00:28:51.270856+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10390,7 +10390,7 @@
     },
     {
       "list_item": "Woolworths Wholegrain Wrap 8Pk",
-      "last_scraped": "2026-06-01T21:28:53.600144+00:00",
+      "last_scraped": "2026-06-02T00:28:38.346888+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -10428,7 +10428,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3731716.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -10457,72 +10457,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Coca-Cola Zero Sugar Soft Drink Bottle",
-      "last_scraped": "2026-06-01T21:28:59.033927+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-06-21",
-          "price": 3.5
-        },
-        {
-          "date": "2026-04-21",
-          "price": 2.1
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Coca-Cola Zero Sugar Soft Drink Bottle",
-        "price": 2.1,
-        "unit_price": 1.68,
-        "unit": "1L",
-        "url": "https://www.woolworths.com.au/shop/productdetails/623034/coca-cola-zero-sugar-soft-drink-bottle",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/623034.jpg"
-      },
-      "coles": {
-        "name": "Coca-Cola Zero Sugar Soft Drink Bottle | 1.25L",
-        "price": 4.2,
-        "unit_price": 6,
-        "unit": "1L",
-        "url": "https://www.coles.com.au/product/coca-cola-zero-sugar-soft-drink-bottle-1.25l-2993706",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2993706.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 2.1,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.1
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.1
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4.2
-        },
-        {
-          "date": "2026-05-30",
-          "price": 4.2
-        },
-        {
-          "date": "2026-06-01",
-          "price": 4.2
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 0.17,
-      "per_100_coles": 0.34,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
-      "last_scraped": "2026-06-01T21:28:59.231595+00:00",
+      "last_scraped": "2026-06-02T00:28:42.582332+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10553,7 +10489,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 1,
+      "saving_per_item": 1.0,
       "alternatives": [
         {
           "name": "Baby Mum-mum Rice Rusk Organic Blueberry & Carrot +8 Months | 36g",
@@ -10592,13 +10528,77 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Coca-Cola Zero Sugar Soft Drink Bottle",
+      "last_scraped": "2026-06-02T00:28:44.593469+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-06-21",
+          "price": 3.5
+        },
+        {
+          "date": "2026-04-21",
+          "price": 2.1
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Coca-Cola Zero Sugar Soft Drink Bottle",
+        "price": 2.1,
+        "unit_price": 1.68,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/623034/coca-cola-zero-sugar-soft-drink-bottle",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/623034.jpg"
+      },
+      "coles": {
+        "name": "Coca-Cola Zero Sugar Soft Drink Bottle | 1.25L",
+        "price": 4.2,
+        "unit_price": 6.0,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/coca-cola-zero-sugar-soft-drink-bottle-1.25l-2993706",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2993706.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.1,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.1
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2.1
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4.2
+        },
+        {
+          "date": "2026-05-30",
+          "price": 4.2
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4.2
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.17,
+      "per_100_coles": 0.34,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "Colman's Ingredients English Mustard",
-      "last_scraped": "2026-06-01T21:29:05.210927+00:00",
+      "last_scraped": "2026-06-02T00:28:47.788527+00:00",
       "trip_count": 2,
       "price_history": [
         {
           "date": "2025-05-12",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-07-10",
@@ -10608,8 +10608,8 @@
       "category": "Pantry",
       "woolworths": {
         "name": "Colman's Ingredients English Mustard",
-        "price": 5,
-        "unit_price": 5,
+        "price": 5.0,
+        "unit_price": 5.0,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/88972/colman-s-ingredients-english-mustard",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/088972.jpg"
@@ -10675,13 +10675,13 @@
       ],
       "match_confidence": "medium",
       "size_warning": false,
-      "per_100_ww": 5,
+      "per_100_ww": 5.0,
       "per_100_coles": 4.5,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons",
-      "last_scraped": "2026-06-01T21:29:06.775896+00:00",
+      "last_scraped": "2026-06-02T00:28:51.254357+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10733,7 +10733,7 @@
           "price": 2.8
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.33,
       "per_100_coles": 4.67,
@@ -12822,9 +12822,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 110,
+    "done": 115,
     "total": 144,
     "started_at": "2026-06-02T00:22:14.256893+00:00",
-    "current_item": "Yumi's Eggplant Mediterranean Dip"
+    "current_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons"
   }
 }
