@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-02T00:24:32.104106+00:00",
+  "last_updated": "2026-06-02T00:24:55.270154+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4101,7 +4101,7 @@
     },
     {
       "list_item": "Woolworths Dreamy Choc Chip Cookies",
-      "last_scraped": "2026-06-01T21:24:22.284894+00:00",
+      "last_scraped": "2026-06-02T00:24:35.726046+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4114,7 +4114,7 @@
         },
         {
           "date": "2025-02-02",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-02-28",
@@ -4148,8 +4148,8 @@
       },
       "coles": {
         "name": "Coles Choc Chip Cookies | 500g",
-        "price": 3,
-        "unit_price": 3,
+        "price": 3.0,
+        "unit_price": 3.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-choc-chip-cookies-500g-6823480",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6823480.jpg"
@@ -4159,7 +4159,7 @@
       "alternatives": [
         {
           "name": "Coles Bakery Indulgent Choc 40% Choc Chip Cookie | 6 Pack",
-          "price": 3,
+          "price": 3.0,
           "unit_price": 0.5,
           "unit": "1ea",
           "url": "https://www.coles.com.au/product/coles-bakery-indulgent-choc-40percent-choc-chip-cookie-6-pack-2592079",
@@ -4168,7 +4168,7 @@
         },
         {
           "name": "Coles Bakery Indulgent White 40% Choc Chip Cookie | 6 Pack",
-          "price": 3,
+          "price": 3.0,
           "unit_price": 0.5,
           "unit": "1ea",
           "url": "https://www.coles.com.au/product/coles-bakery-indulgent-white-40percent-choc-chip-cookie-6-pack-2759913",
@@ -4203,8 +4203,88 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Extra Virgin Spanish Olive Oil",
+      "last_scraped": "2026-06-02T00:24:41.847072+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 18.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 14.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 14.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 18.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 15.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 14.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 14.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Extra Virgin Spanish Olive Oil",
+        "price": 14.0,
+        "unit_price": 1.4,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/698868/woolworths-extra-virgin-spanish-olive-oil",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/698868.jpg"
+      },
+      "coles": {
+        "name": "Extra Virgin Olive Oil",
+        "price": 15.0,
+        "unit_price": 1.5,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-1l-5607376",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5607376.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 14
+        },
+        {
+          "date": "2026-06-01",
+          "price": 14
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 15
+        },
+        {
+          "date": "2026-06-01",
+          "price": 15
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 1.4,
+      "per_100_coles": 1.5,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "Woolworths Fresh Continental Parsley Bunch",
-      "last_scraped": "2026-06-01T21:24:31.765872+00:00",
+      "last_scraped": "2026-06-02T00:24:45.743951+00:00",
       "trip_count": 11,
       "price_history": [
         {
@@ -4270,7 +4350,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4575161.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -4299,88 +4379,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Extra Virgin Spanish Olive Oil",
-      "last_scraped": "2026-06-01T21:24:32.753988+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2025-02-02",
-          "price": 18
-        },
-        {
-          "date": "2025-03-11",
-          "price": 14
-        },
-        {
-          "date": "2025-05-12",
-          "price": 14
-        },
-        {
-          "date": "2025-06-06",
-          "price": 18
-        },
-        {
-          "date": "2026-02-03",
-          "price": 15
-        },
-        {
-          "date": "2026-03-10",
-          "price": 14
-        },
-        {
-          "date": "2026-05-06",
-          "price": 14
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Extra Virgin Spanish Olive Oil",
-        "price": 14,
-        "unit_price": 1.4,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/698868/woolworths-extra-virgin-spanish-olive-oil",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/698868.jpg"
-      },
-      "coles": {
-        "name": "Extra Virgin Olive Oil",
-        "price": 15,
-        "unit_price": 1.5,
-        "unit": "100mL",
-        "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-1l-5607376",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5607376.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 14
-        },
-        {
-          "date": "2026-06-01",
-          "price": 14
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 15
-        },
-        {
-          "date": "2026-06-01",
-          "price": 15
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 1.4,
-      "per_100_coles": 1.5,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Woolworths Frozen Meat Pies",
-      "last_scraped": "2026-06-01T21:24:39.165471+00:00",
+      "last_scraped": "2026-06-02T00:24:46.686279+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -4442,7 +4442,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5181729.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -4476,6 +4476,190 @@
       "size_warning": false,
       "per_100_ww": 0.94,
       "per_100_coles": 0.94,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Greek Style Yoghurt",
+      "last_scraped": "2026-06-02T00:24:55.266272+00:00",
+      "trip_count": 33,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 4.2
+        },
+        {
+          "date": "2024-11-12",
+          "price": 4.2
+        },
+        {
+          "date": "2024-11-20",
+          "price": 4.2
+        },
+        {
+          "date": "2024-12-02",
+          "price": 4.2
+        },
+        {
+          "date": "2024-12-09",
+          "price": 4.2
+        },
+        {
+          "date": "2024-12-19",
+          "price": 4.2
+        },
+        {
+          "date": "2025-01-29",
+          "price": 4.2
+        },
+        {
+          "date": "2025-02-02",
+          "price": 8.0
+        },
+        {
+          "date": "2025-02-28",
+          "price": 8.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 8.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 8.0
+        },
+        {
+          "date": "2025-03-27",
+          "price": 8.0
+        },
+        {
+          "date": "2025-04-05",
+          "price": 8.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.0
+        },
+        {
+          "date": "2025-04-25",
+          "price": 8.0
+        },
+        {
+          "date": "2025-05-04",
+          "price": 8.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 8.0
+        },
+        {
+          "date": "2025-05-22",
+          "price": 8.0
+        },
+        {
+          "date": "2025-05-29",
+          "price": 8.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 8.0
+        },
+        {
+          "date": "2025-06-13",
+          "price": 8.0
+        },
+        {
+          "date": "2025-06-21",
+          "price": 8.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 8.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 8.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 8.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 8.0
+        },
+        {
+          "date": "2026-02-07",
+          "price": 3.8
+        },
+        {
+          "date": "2026-02-23",
+          "price": 3.8
+        },
+        {
+          "date": "2026-03-02",
+          "price": 3.8
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.8
+        },
+        {
+          "date": "2026-04-02",
+          "price": 3.8
+        },
+        {
+          "date": "2026-04-13",
+          "price": 3.8
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.8
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Natural Greek Style Yoghurt",
+        "price": 4.2,
+        "unit_price": 0.42,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/571487/woolworths-natural-greek-style-yoghurt",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/571487.jpg"
+      },
+      "coles": {
+        "name": "Greek Style Natural Yoghurt",
+        "price": 4.5,
+        "unit_price": 0.45,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-greek-style-natural-yoghurt-1kg-2273478",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2273478.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.3,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4.2
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4.2
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4.5
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.42,
+      "per_100_coles": 0.45,
       "per_100_unit": "100g"
     },
     {
@@ -4579,190 +4763,6 @@
       "size_warning": false,
       "per_100_ww": 4.14,
       "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Greek Style Yoghurt",
-      "last_scraped": "2026-06-01T21:24:51.303270+00:00",
-      "trip_count": 33,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 4.2
-        },
-        {
-          "date": "2024-11-12",
-          "price": 4.2
-        },
-        {
-          "date": "2024-11-20",
-          "price": 4.2
-        },
-        {
-          "date": "2024-12-02",
-          "price": 4.2
-        },
-        {
-          "date": "2024-12-09",
-          "price": 4.2
-        },
-        {
-          "date": "2024-12-19",
-          "price": 4.2
-        },
-        {
-          "date": "2025-01-29",
-          "price": 4.2
-        },
-        {
-          "date": "2025-02-02",
-          "price": 8
-        },
-        {
-          "date": "2025-02-28",
-          "price": 8
-        },
-        {
-          "date": "2025-03-11",
-          "price": 8
-        },
-        {
-          "date": "2025-03-17",
-          "price": 8
-        },
-        {
-          "date": "2025-03-27",
-          "price": 8
-        },
-        {
-          "date": "2025-04-05",
-          "price": 8
-        },
-        {
-          "date": "2025-04-14",
-          "price": 8
-        },
-        {
-          "date": "2025-04-25",
-          "price": 8
-        },
-        {
-          "date": "2025-05-04",
-          "price": 8
-        },
-        {
-          "date": "2025-05-12",
-          "price": 8
-        },
-        {
-          "date": "2025-05-22",
-          "price": 8
-        },
-        {
-          "date": "2025-05-29",
-          "price": 8
-        },
-        {
-          "date": "2025-06-06",
-          "price": 8
-        },
-        {
-          "date": "2025-06-13",
-          "price": 8
-        },
-        {
-          "date": "2025-06-21",
-          "price": 8
-        },
-        {
-          "date": "2025-07-03",
-          "price": 8
-        },
-        {
-          "date": "2025-07-10",
-          "price": 8
-        },
-        {
-          "date": "2025-07-26",
-          "price": 8
-        },
-        {
-          "date": "2026-02-03",
-          "price": 8
-        },
-        {
-          "date": "2026-02-07",
-          "price": 3.8
-        },
-        {
-          "date": "2026-02-23",
-          "price": 3.8
-        },
-        {
-          "date": "2026-03-02",
-          "price": 3.8
-        },
-        {
-          "date": "2026-03-10",
-          "price": 3.8
-        },
-        {
-          "date": "2026-04-02",
-          "price": 3.8
-        },
-        {
-          "date": "2026-04-13",
-          "price": 3.8
-        },
-        {
-          "date": "2026-05-06",
-          "price": 3.8
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Natural Greek Style Yoghurt",
-        "price": 4.2,
-        "unit_price": 0.42,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/571487/woolworths-natural-greek-style-yoghurt",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/571487.jpg"
-      },
-      "coles": {
-        "name": "Greek Style Natural Yoghurt",
-        "price": 4.5,
-        "unit_price": 0.45,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-greek-style-natural-yoghurt-1kg-2273478",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2273478.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.3,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4.2
-        },
-        {
-          "date": "2026-06-01",
-          "price": 4.2
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 4.5
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 0.42,
-      "per_100_coles": 0.45,
       "per_100_unit": "100g"
     },
     {
@@ -12822,9 +12822,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 35,
+    "done": 40,
     "total": 144,
     "started_at": "2026-06-02T00:22:14.256893+00:00",
-    "current_item": "Woolworths Dill Fresh Herb"
+    "current_item": "Woolworths Greek Style Yoghurt"
   }
 }
