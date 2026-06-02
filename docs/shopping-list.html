@@ -28,8 +28,6 @@
     nav a:hover { background: var(--bg); color: var(--text); }
     nav a.active { background: var(--bg); color: var(--text); font-weight: 600; }
     .header-right { display: flex; align-items: center; gap: 8px; }
-    .btn-hdr { display: inline-flex; align-items: center; gap: 7px; padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; background: var(--ww); color: #fff; box-shadow: 0 1px 3px rgba(0,132,61,0.35); transition: all 0.15s; }
-    .btn-hdr:hover { background: #006B31; transform: translateY(-1px); }
 
     main { max-width: 860px; margin: 0 auto; padding: 24px; }
 
@@ -166,8 +164,8 @@
     /* Print button */
     .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--text-mid); transition: all .15s; }
     .btn:hover { background: var(--bg); color: var(--text); }
-    .btn-primary { background: var(--ww); color: #fff; border-color: var(--ww); }
-    .btn-primary:hover { background: #006B31; }
+    .btn-primary { background: var(--ww); color: #fff; border-color: var(--ww); box-shadow: 0 1px 3px rgba(0,132,61,0.35); }
+    .btn-primary:hover { background: #006B31; transform: translateY(-1px); }
 
     .sl-topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
     .filter-note { font-size: 14px; color: var(--text-mid); background: #FFFBEB; border: 1px solid #FCD34D; border-radius: var(--radius); padding: 8px 14px; margin-bottom: 0; flex: 1; min-width: 0; }
@@ -183,7 +181,6 @@
       nav { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
       nav::-webkit-scrollbar { display: none; }
       nav a { white-space: nowrap; font-size: 13px; padding: 6px 8px; }
-      .btn-hdr { display: none; }
       .store-cards-grid { grid-template-columns: 1fr; }
       .store-card-sl + .store-card-sl { border-left: none; border-top: 1px solid var(--border); }
       .bar-ribbon { gap: 8px; padding: 10px 14px; }
@@ -217,7 +214,7 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span class="notif-badge" id="notifBadge"></span>
       </button>
-      <button class="btn-hdr" onclick="window.print()">🖨 Print</button>
+      <button class="btn btn-primary" onclick="window.print()">🖨 Print</button>
     </div>
   </div>
 </header>
