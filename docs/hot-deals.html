@@ -301,6 +301,10 @@
       </nav>
     </div>
     <div class="header-right">
+      <button class="btn btn-ghost btn-icon" id="notifBtn" style="display:none">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-badge" id="notifBadge"></span>
+      </button>
       <button class="btn btn-primary" id="refreshBtn">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
         Update Prices
@@ -318,6 +322,14 @@
     <button id="scrapeStripDismiss" class="scrape-strip-dismiss" title="Dismiss">✕</button>
   </div>
 </header>
+
+<div class="notif-dropdown" id="notifDropdown" style="display:none">
+  <div class="notif-header">
+    <strong>Item name changes detected</strong>
+    <button class="notif-dismiss-all" id="notifDismissAll">Dismiss all</button>
+  </div>
+  <div class="notif-items" id="notifItems"></div>
+</div>
 
 <div class="deals-hero">
   <div class="deals-hero-title">🔥 Hot Deals</div>
@@ -1207,6 +1219,37 @@ function initRefreshBtn() {
       } catch {}
     }, 7000);
   }
+})();
+
+// ── Bell notifications (name changes) ────────────────────────────────────────
+(async function initNavBell() {
+  try {
+    const r = await fetch(`data/name_changes_detected.json?t=${Date.now()}`);
+    if (!r.ok) return;
+    const changes = await r.json();
+    const keys = Object.keys(changes || {}).sort();
+    if (!keys.length) return;
+    const fingerprint = keys.join('|');
+    if (localStorage.getItem('pw_notif_dismissed_v1') === fingerprint) return;
+    const notifBtn = document.getElementById('notifBtn');
+    const notifBadge = document.getElementById('notifBadge');
+    const notifItems = document.getElementById('notifItems');
+    const notifDropdown = document.getElementById('notifDropdown');
+    if (!notifBtn) return;
+    notifBadge.textContent = keys.length;
+    notifBtn.style.display = 'inline-flex';
+    notifItems.innerHTML = keys.map(k => `<span class="notif-item">${k}</span>`).join('');
+    notifBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      notifDropdown.style.display = notifDropdown.style.display === 'none' ? 'block' : 'none';
+    });
+    document.addEventListener('click', () => { notifDropdown.style.display = 'none'; });
+    document.getElementById('notifDismissAll')?.addEventListener('click', () => {
+      localStorage.setItem('pw_notif_dismissed_v1', fingerprint);
+      notifBtn.style.display = 'none';
+      notifDropdown.style.display = 'none';
+    });
+  } catch {}
 })();
 </script>
 </body>
