@@ -169,7 +169,7 @@
     .btn-primary:hover { background: #006B31; }
 
     .sl-topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
-    .filter-note { font-size: 12px; color: var(--text-soft); background: #FFFBEB; border: 1px solid #FCD34D; border-radius: var(--radius); padding: 8px 14px; margin-bottom: 0; flex: 1; min-width: 0; }
+    .filter-note { font-size: 14px; color: var(--text-mid); background: #FFFBEB; border: 1px solid #FCD34D; border-radius: var(--radius); padding: 8px 14px; margin-bottom: 0; flex: 1; min-width: 0; }
     .btn-outline-danger { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid #FCA5A5; background: transparent; color: #DC2626; transition: all .15s; white-space: nowrap; }
     .btn-outline-danger:hover { background: #FEF2F2; border-color: #DC2626; }
 
@@ -298,8 +298,10 @@ async function boot() {
     return;
   }
 
-  // Banner note
-  const filterNote = handoff?.note ? `Showing ${handoff.note}` : `Showing all items (${displayItems.length})`;
+  // Banner note — count always bold; handoff note appended as context if present
+  const filterNoteHtml = handoff?.note
+    ? `Showing <strong>${displayItems.length}</strong> ${handoff.note}`
+    : `Showing <strong>${displayItems.length}</strong> item${displayItems.length !== 1 ? 's' : ''}`;
 
   // Equal-price items (same price at both stores) — reassignable by user
   const equalItems = displayItems.filter(i =>
@@ -440,7 +442,7 @@ async function boot() {
 
     main.innerHTML = `
       <div class="sl-topbar">
-        <div class="filter-note">📋 ${filterNote}</div>
+        <div class="filter-note">📋 ${filterNoteHtml}</div>
         <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
       </div>
 
@@ -450,7 +452,7 @@ async function boot() {
             <div class="sc-icon"><span class="sc-icon-chip ww">W</span></div>
             <div class="sc-name-row">
               <span class="sc-store-name">Woolworths</span>
-              <span class="sc-item-pill">${wwCount} item${wwCount !== 1 ? 's' : ''}</span>
+              <span class="sc-item-pill">${wwItems.length} item${wwItems.length !== 1 ? 's' : ''}</span>
             </div>
             <div class="sc-price ${wwPriceCls}">${fmt(wwTotal)}</div>
             <div class="sc-subtitle">If you bought everything here</div>
@@ -464,7 +466,7 @@ async function boot() {
             <div class="sc-icon"><span class="sc-icon-chip coles">C</span></div>
             <div class="sc-name-row">
               <span class="sc-store-name">Coles</span>
-              <span class="sc-item-pill">${coCount} item${coCount !== 1 ? 's' : ''}</span>
+              <span class="sc-item-pill">${colesItems.length} item${colesItems.length !== 1 ? 's' : ''}</span>
             </div>
             <div class="sc-price ${coPriceCls}">${fmt(coTotal)}</div>
             <div class="sc-subtitle">If you bought everything here</div>
