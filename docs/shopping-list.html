@@ -296,7 +296,9 @@ async function boot() {
 
   let equalStore = 'ww'; // which store equal-price items are currently assigned to
 
-  // Store-agnostic aggregate totals (what it costs to buy everything at one store)
+  // Store-agnostic aggregate totals (what it costs to buy everything at one store).
+  // Each total uses ONLY that store's price; single-store items are excluded from
+  // the other store's total — they are not double-counted.
   const wwTotal = displayItems
     .filter(i => i.woolworths?.price != null)
     .reduce((s, i) => s + i.woolworths.price * getUnits(i.list_item, unitOv, analysis), 0);
@@ -305,8 +307,14 @@ async function boot() {
     .reduce((s, i) => s + i.coles.price * getUnits(i.list_item, unitOv, analysis), 0);
   const wwCount = displayItems.filter(i => i.woolworths?.price != null).length;
   const coCount = displayItems.filter(i => i.coles?.price != null).length;
-  const saving  = Math.abs(wwTotal - coTotal);
-  const isEqual = saving < 0.01; // FIX 3: detect equal totals
+
+  // Saving: computed only from items available at BOTH stores so single-store
+  // items don't skew the comparison (a WW-only item can't be compared to Coles).
+  const saving = displayItems
+    .filter(i => i.woolworths?.price != null && i.coles?.price != null)
+    .reduce((s, i) => s + Math.abs(i.woolworths.price - i.coles.price) * getUnits(i.list_item, unitOv, analysis), 0);
+
+  const isEqual = saving < 0.01;
   const wwWins  = !isEqual && wwTotal < coTotal;
   const coWins  = !isEqual && coTotal < wwTotal;
 
