@@ -76,20 +76,46 @@
       font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 10px;
     }
     .sc-hint { font-size: 11px; color: var(--text-soft); font-style: italic; min-height: 36px; padding-top: 4px; }
-    /* Stats bar */
-    .sc-stats-bar {
-      display: grid; grid-template-columns: 1fr 1fr 1fr;
-      border-top: 1px solid var(--border);
+    /* ── Save ribbon (replaces stats bar) ── */
+    .bar-ribbon {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      background: #fff; border-top: 1px solid var(--border);
+      padding: 10px 20px;
     }
-    .sc-stat { padding: 12px 20px; display: flex; flex-direction: column; gap: 2px; }
-    .sc-stat + .sc-stat { border-left: 1px solid var(--border); }
-    .sc-stat-center { align-items: center; text-align: center; }
-    .sc-stat-right  { align-items: flex-end; text-align: right; }
-    .sc-stat-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-soft); }
-    .sc-stat-value { font-size: 20px; font-weight: 800; color: var(--text); }
-    .sc-save-value { color: var(--green); }
-    .sc-equal-chip { font-size: 13px; font-weight: 600; color: var(--text-mid); }
-    .sc-stat-sub { font-size: 12px; color: var(--text-mid); }
+    .bar-save-chip {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: #ECFDF5; border: 1px solid #D1FAE5;
+      color: #059669; font-size: 13px; font-weight: 700;
+      padding: 6px 14px; border-radius: 20px; white-space: nowrap;
+    }
+    .bar-save-chip-eq {
+      background: #F1F5F9; border-color: var(--border); color: #64748B;
+    }
+    .ribbon-sep {
+      width: 1px; height: 18px; background: var(--border);
+      margin: 0 2px; flex-shrink: 0;
+    }
+    .bar-store-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #F1F5F9; color: #475569;
+      font-size: 12px; font-weight: 600;
+      padding: 5px 11px; border-radius: 14px; white-space: nowrap;
+    }
+    .bar-store-chip.ww-chip::before {
+      content: ''; display: inline-block;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--ww); flex-shrink: 0;
+    }
+    .bar-store-chip.co-chip::before {
+      content: ''; display: inline-block;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--coles); flex-shrink: 0;
+    }
+    .bar-store-chip.eq-chip::before {
+      content: ''; display: inline-block;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #94A3B8; flex-shrink: 0;
+    }
 
     /* Store sections */
     .store-section { margin-bottom: 28px; }
@@ -146,8 +172,7 @@
       .btn-hdr { display: none; }
       .store-cards-grid { grid-template-columns: 1fr; }
       .store-card-sl + .store-card-sl { border-left: none; border-top: 1px solid var(--border); }
-      .sc-stats-bar { grid-template-columns: 1fr; }
-      .sc-stat + .sc-stat { border-left: none; border-top: 1px solid var(--border); }
+      .bar-ribbon { gap: 8px; padding: 10px 14px; }
       .sc-price { font-size: 26px; }
     }
     @media print {
@@ -365,12 +390,21 @@ async function boot() {
           : `Click to move equal-price items here →`)
       : '';
 
-    // Stats bar centre section
-    const saveVal   = isEqual ? '—' : fmt(saving);
-    const saveClass = isEqual ? '' : 'sc-save-value';
-    const statsCenter = isEqual
-      ? `<span class="sc-equal-chip">⚖ Same price at both stores</span>`
-      : `<div class="sc-stat-sub">by choosing <strong>${wwWins ? 'Woolworths' : 'Coles'}</strong></div>`;
+    // ── Save ribbon ──────────────────────────────────────────────────────────
+    // Intrinsic classification counts (independent of equalStore assignment)
+    const wwOnlyCount = displayItems.filter(i => i.cheaper_store === 'woolworths').length;
+    const coOnlyCount = displayItems.filter(i => i.cheaper_store === 'coles').length;
+    const ribbonSaveChip = isEqual
+      ? `<span class="bar-save-chip bar-save-chip-eq">⚖ Same price at both stores</span>`
+      : `<span class="bar-save-chip">
+           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+           You save ${fmt(saving)}
+         </span>`;
+    const ribbonChips = [
+      wwOnlyCount > 0    ? `<span class="bar-store-chip ww-chip">${wwOnlyCount} at Woolworths</span>` : '',
+      equalItems.length > 0 ? `<span class="bar-store-chip eq-chip">${equalItems.length} equal-price</span>` : '',
+      coOnlyCount > 0    ? `<span class="bar-store-chip co-chip">${coOnlyCount} at Coles</span>` : '',
+    ].join('');
 
     main.innerHTML = `
       <div class="sl-topbar">
@@ -409,18 +443,10 @@ async function boot() {
             <div class="sc-hint">${coHint}</div>
           </div>
         </div>
-        <div class="sc-stats-bar">
-          <div class="sc-stat">
-            <div class="sc-stat-label">You Save</div>
-            <div class="sc-stat-value ${saveClass}">${saveVal}</div>
-          </div>
-          <div class="sc-stat sc-stat-center">
-            ${statsCenter}
-          </div>
-          <div class="sc-stat sc-stat-right">
-            <div class="sc-stat-label">Items Compared</div>
-            <div class="sc-stat-value">${displayItems.length}</div>
-          </div>
+        <div class="bar-ribbon">
+          ${ribbonSaveChip}
+          <div class="ribbon-sep"></div>
+          ${ribbonChips}
         </div>
       </div>
 
