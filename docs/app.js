@@ -2849,7 +2849,8 @@ function renderPage(data) {
   const coverageText = missingCount > 0
     ? `${pricedBoth}/${totalNonArchived} priced · ${missingCount} missing`
     : `${totalNonArchived} items`;
-  const hotCount = (data.items || []).filter(i => !isUiArchived(i) && isHotDeal(i, _renderExclusions)).length;
+  // "deals" = any non-archived item where one store is cheaper (matches hot-deals.html definition)
+  const hotCount = (data.items || []).filter(i => !isUiArchived(i) && (i.cheaper_store === 'woolworths' || i.cheaper_store === 'coles')).length;
   $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>${hotCount > 0 ? `<a href="hot-deals.html" class="hot-deals-link">🔥 ${hotCount} deal${hotCount !== 1 ? 's' : ''}</a>` : ''}`;
   $('banner').style.display = 'block';
   const _sw = $('searchWrap');

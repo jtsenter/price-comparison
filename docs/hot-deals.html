@@ -470,46 +470,29 @@ function getCategory(item) {
 }
 
 // ── Deal computation ──────────────────────────────────────────────────────────
+// A "deal" is any non-archived item where cheaper_store is woolworths or coles.
+// This matches the definition used on the main page's "🔥 N deals" link.
 
-function pricePercentile(prices, pct) {
-  const sorted = [...prices].sort((a, b) => a - b);
-  return sorted[Math.floor(sorted.length * pct)];
-}
+function getSimpleDealInfo(item, exclusions) {
+  const store = item.cheaper_store;
+  if (store !== 'woolworths' && store !== 'coles') return null;
+  const price     = store === 'woolworths' ? item.woolworths?.price : item.coles?.price;
+  const otherPrice = store === 'woolworths' ? item.coles?.price    : item.woolworths?.price;
+  if (price == null) return null;
+  const savingPct = (otherPrice != null && otherPrice > 0) ? (otherPrice - price) / otherPrice : 0;
 
-function getDealInfo(item, exclusions) {
-  const history = item.price_history;
-  if (!history || history.length < 3) return null;
+  // Check for all-time low across all price history sources
   const excluded = new Set((exclusions[item.list_item] || []).map(p => Number(p).toFixed(2)));
-  const prices = history.map(h => h.price).filter((p, i) => p > 0 && !excluded.has(Number(history[i].price).toFixed(2)));
-  if (prices.length < 3) return null;
+  const allHistory = [
+    ...(item.price_history       || []),
+    ...(item.ww_price_history    || []),
+    ...(item.coles_price_history || []),
+  ];
+  const allPrices = allHistory.map(h => h.price).filter(p => p > 0 && !excluded.has(Number(p).toFixed(2)));
+  const minHistoric = allPrices.length ? Math.min(...allPrices) : null;
+  const isAllTimeLow = minHistoric != null && price <= minHistoric + 0.005;
 
-  const minHistoric = Math.min(...prices);
-  const maxHistoric = Math.max(...prices);
-  // Flat price history — no real deal signal
-  if (minHistoric === maxHistoric) return null;
-
-  const ww = item.woolworths?.price;
-  const co = item.coles?.price;
-
-  // Check each store: trendPosition must be < threshold
-  const results = [];
-  if (ww != null) {
-    const pos = (ww - minHistoric) / (maxHistoric - minHistoric);
-    if (pos < HOT_DEAL_TREND_THRESHOLD) {
-      results.push({ store: 'woolworths', price: ww, trendPos: pos, minHistoric, maxHistoric, isAllTimeLow: ww <= minHistoric });
-    }
-  }
-  if (co != null) {
-    const pos = (co - minHistoric) / (maxHistoric - minHistoric);
-    if (pos < HOT_DEAL_TREND_THRESHOLD) {
-      results.push({ store: 'coles', price: co, trendPos: pos, minHistoric, maxHistoric, isAllTimeLow: co <= minHistoric });
-    }
-  }
-
-  if (!results.length) return null;
-  // Return the best deal (lowest trendPosition = deepest in range)
-  results.sort((a, b) => a.trendPos - b.trendPos);
-  return results[0];
+  return { store, price, savingPct, isAllTimeLow };
 }
 
 // ── Price bar ──────────────────────────────────────────────────────────────────
@@ -529,7 +512,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
 
   if (minP === maxP) {
     if (Math.abs(currentPrice - minP) < 0.005) {
-      // Truly same price — flat bar (shouldn't reach here since getDealInfo requires pctOff > 0)
+      // Truly same price — flat bar (current price equals stable historical price)
       return `
       <div class="price-bar-outer">
         <div class="price-bar price-bar-flat"><div class="price-marker" style="left:50%"></div></div>
@@ -581,7 +564,6 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
 // ── Constants ────────────────────────────────────────────────────────────────
 
 const STALE_PROGRESS_MS  = 3 * 60 * 1000; // ms with no progress update → ⚠ Stalled
-const HOT_DEAL_TREND_THRESHOLD  = 0.10;    // current price must be in bottom 10% of historical range
 const DISCREPANCY_WARN_THRESHOLD = 0.31;   // price diff % above which ⚠ is shown
 
 // ── Dismissed diff warnings ──────────────────────────────────────────────────
@@ -622,7 +604,7 @@ const COL_LABELS = {
 function getSortValue(col, item, dealInfo) {
   switch (col) {
     case 'name':     return item.list_item.toLowerCase();
-    case 'deal':     return dealInfo != null ? -dealInfo.trendPos : Infinity; // lower trendPos = better deal → negate for desc sort
+    case 'deal':     return dealInfo != null ? -dealInfo.savingPct : Infinity; // higher savingPct = better deal → negate for desc sort
     case 'ww':       return item.woolworths?.price ?? Infinity;
     case 'coles':    return item.coles?.price ?? Infinity;
     case 'avg': {
@@ -650,8 +632,8 @@ function getSortValue(col, item, dealInfo) {
 
 function sortDeals(items, exclusions) {
   return [...items].sort((a, b) => {
-    const da = getDealInfo(a, exclusions);
-    const db = getDealInfo(b, exclusions);
+    const da = getSimpleDealInfo(a, exclusions);
+    const db = getSimpleDealInfo(b, exclusions);
     for (const { col, dir } of sortKeys) {
       const mul = dir === 'asc' ? 1 : -1;
       const av = getSortValue(col, a, da);
@@ -693,13 +675,10 @@ function onColClick(col) {
 // ── Filters ───────────────────────────────────────────────────────────────────
 
 function filterDeals(allDeals, exclusions) {
-  return allDeals.filter(({ item }) => {
+  return allDeals.filter(({ item, deal }) => {
     if (_watchlistOnly && !_watchlistHD.has(item.list_item)) return false;
     if (_activeCategory !== 'All' && getCategory(item) !== _activeCategory) return false;
-    if (_storeFilter !== 'all') {
-      const d = getDealInfo(item, exclusions);
-      if (d?.store !== _storeFilter) return false;
-    }
+    if (_storeFilter !== 'all' && deal?.store !== _storeFilter) return false;
     return true;
   });
 }
@@ -741,9 +720,9 @@ function renderDeals() {
 
   const exclusions = loadExclusions();
 
-  // Collect all hot-deal items (may have deals at one or both stores)
+  // Collect all deal items: any item where one store is cheaper
   const allDeals = items
-    .map(item => ({ item, deal: getDealInfo(item, exclusions) }))
+    .map(item => ({ item, deal: getSimpleDealInfo(item, exclusions) }))
     .filter(({ deal }) => deal != null);
 
   buildCategoryTabs(allDeals.map(d => d.item));
@@ -791,7 +770,7 @@ function renderDeals() {
   const overrides = (() => { try { return JSON.parse(localStorage.getItem('pw_overrides_v1') || '{}'); } catch { return {}; } })();
 
   sorted.forEach(item => {
-    const deal = getDealInfo(item, exclusions);
+    const deal = getSimpleDealInfo(item, exclusions);
     if (!deal) return;
 
     const ww = item.woolworths;
@@ -821,7 +800,7 @@ function renderDeals() {
     const pctClass = deal.store === 'woolworths' ? 'ww' : 'coles';
     const dealCell = `
       <div class="deal-score-cell" style="text-align:center">
-        ${storeChip}${discWarn}
+        ${storeChip}
       </div>`;
 
     // WW cell
@@ -866,7 +845,7 @@ function renderDeals() {
       <td class="item-name">
         <div class="deal-item-cell">
           ${imgHtml}
-          <div><div class="deal-item-name">${displayName}</div></div>
+          <div><div class="deal-item-name">${displayName}${discWarn}</div></div>
         </div>
       </td>
       <td>${dealCell}</td>

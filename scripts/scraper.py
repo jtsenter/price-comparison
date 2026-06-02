@@ -329,9 +329,12 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                 url_name = product.get("UrlFriendlyName", "")
                 is_member_deal = bool(product.get("IsEveryDayRewards") or product.get("IsPmDeals"))
                 print(f"    [WW URL] {name!r}: Price=${price} WasPrice={was_price} IsEDR={is_member_deal}")
-                # Prefer regular shelf price over member-exclusive (Everyday Rewards) price
-                if is_member_deal and was_price is not None and float(was_price) > float(price):
-                    print(f"    [WW] Member price skipped for '{name}' (by URL): ${price} → shelf price ${was_price}")
+                # Prefer regular shelf price over member-exclusive (Everyday Rewards) price.
+                # Apply unconditionally: WasPrice > Price always means Price is a member deal,
+                # regardless of whether IsEveryDayRewards is set in __NEXT_DATA__.
+                if was_price is not None and float(was_price) > float(price):
+                    flag_note = "IsEDR" if is_member_deal else "no IsEDR flag"
+                    print(f"    [WW] WasPrice override for '{name}' ({flag_note}): ${price} → shelf price ${was_price}")
                     price = was_price
                 # DOM price check: collect ALL price-like text nodes on the page and
                 # take the highest one. Shelf price is always ≥ member/EDR price, so
