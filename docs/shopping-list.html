@@ -141,7 +141,7 @@
     .section-count { font-size: 12px; color: var(--text-soft); }
 
     table { width: 100%; border-collapse: collapse; table-layout: fixed; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
-    thead th { position: sticky; top: 60px; z-index: 10; background: var(--bg); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-soft); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); box-shadow: 0 1px 0 var(--border); }
+    thead th { position: sticky; top: var(--header-h, 60px); z-index: 10; background: var(--bg); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-soft); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); box-shadow: 0 1px 0 var(--border); }
     thead th.r { text-align: right; }
     .sl-sort-hdr { cursor: pointer; user-select: none; }
     .sl-sort-hdr:hover { color: var(--text); }
@@ -631,6 +631,14 @@ boot();
     });
   } catch {}
 })();
+</script>
+<script>
+function setHeaderOffset() {
+  const h = document.querySelector('header')?.offsetHeight || 60;
+  document.documentElement.style.setProperty('--header-h', h + 'px');
+}
+window.addEventListener('load', setHeaderOffset);
+window.addEventListener('resize', setHeaderOffset);
 </script>
 </body>
 </html>
