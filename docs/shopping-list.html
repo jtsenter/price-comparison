@@ -138,7 +138,8 @@
     tbody tr:nth-child(even) { background: #FAFBFC; }
     td { padding: 10px 14px; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     td.r { text-align: right; font-weight: 600; }
-    .item-name-cell { font-weight: 500; white-space: normal; }
+    /* Name cell: wrap text, let other cells keep fixed widths from colgroup */
+    .item-name-cell { font-weight: 500; white-space: normal; overflow: visible; text-overflow: clip; max-width: 0; }
     .item-cat { font-size: 11px; color: var(--text-soft); margin-top: 1px; }
     .price-val { font-size: 15px; font-weight: 700; }
     .unit-val { font-size: 11px; color: var(--text-soft); }
