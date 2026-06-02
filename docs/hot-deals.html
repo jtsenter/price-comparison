@@ -334,7 +334,6 @@
 
 <!-- Shared utilities — must load before inline script -->
 <script src="utils.js"></script>
-<script src="sort-utils.js"></script>
 <script>
 // ── Shared utilities ──────────────────────────────────────────────────────────
 
@@ -755,9 +754,8 @@ function renderDeals() {
     }
 
     // Trend cell — price bar only, same as main page
-    const currentPrice = deal.store === 'woolworths' ? ww?.price : co?.price;
-    const _allHistoryHD = [...(item.price_history||[]), ...(item.ww_price_history||[]), ...(item.coles_price_history||[])];
-    const avgCell = buildPriceBar(item.list_item, _allHistoryHD, currentPrice, item._ww_price_factor ?? 1) || '—';
+    const _trendSeriesHD = getTrendSeries(item);
+    const avgCell = buildPriceBar(item.list_item, _trendSeriesHD.prices.map(p => ({price: p})), _trendSeriesHD.current) || '—';
 
     const wwClass  = deal.store === 'woolworths' ? 'cell-deal-ww' : '';
     const coClass  = deal.store === 'coles'      ? 'cell-deal-coles' : '';

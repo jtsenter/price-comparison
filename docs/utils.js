@@ -3,6 +3,19 @@
 // Both app.js (index.html) and hot-deals.html load this file before their own code
 // Do NOT redefine these functions elsewhere or divergence will occur
 
+// ── Unified trend data source ──────────────────────────────────────────────
+// Single series for both slider and sort: includes price_history + current prices.
+function getTrendSeries(item) {
+  const hist = (item.price_history || []).map(h => Number(h.price));
+  const w = item.woolworths?.price, c = item.coles?.price;
+  const prices = [...hist, w, c].filter(p => typeof p === 'number' && p > 0);
+  const current = Math.min(
+    w != null ? w : Infinity,
+    c != null ? c : Infinity
+  );
+  return { prices, current: isFinite(current) ? current : null };
+}
+
 // ── Trend Position Calculation ──────────────────────────────────────────────
 // Returns 0.0–1.0 where current best price sits in purchase-history range:
 //   0.0 = at/below all-time low   (best deal, maximum savings)
@@ -11,20 +24,11 @@
 //   999 = no usable history (sorts last)
 
 function calcTrendPosition(item) {
-  const hist = item.price_history || [];
-  if (hist.length < 2) return 999;
-  const prices = hist.map(h => Number(h.price)).filter(p => p > 0);
-  if (prices.length < 2) return 999;
-  const histMin = Math.min(...prices);
-  const histMax = Math.max(...prices);
-  if (histMin === histMax) return 0.5;  // flat → middle
-  const wwP = item.woolworths?.price;
-  const coP = item.coles?.price;
-  if (!wwP && !coP) return 999;
-  const currentBest = Math.min(wwP ?? Infinity, coP ?? Infinity);
-  if (!isFinite(currentBest)) return 999;
-  const pos = (currentBest - histMin) / (histMax - histMin);
-  return isNaN(pos) ? 999 : Math.max(0, Math.min(1, pos));
+  const { prices, current } = getTrendSeries(item);
+  if (prices.length < 2 || current == null) return 999;
+  const lo = Math.min(...prices), hi = Math.max(...prices);
+  if (lo === hi) return 0.5;
+  return Math.max(0, Math.min(1, (current - lo) / (hi - lo)));
 }
 
 // ── Trend Sort Comparator ──────────────────────────────────────────────────
