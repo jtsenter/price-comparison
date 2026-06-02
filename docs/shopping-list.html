@@ -91,6 +91,9 @@
     .bar-save-chip-eq {
       background: #F1F5F9; border-color: var(--border); color: #64748B;
     }
+    .bar-save-chip-warn {
+      background: #FFF7ED; border-color: #FED7AA; color: #C2410C;
+    }
     .ribbon-sep {
       width: 1px; height: 18px; background: var(--border);
       margin: 0 2px; flex-shrink: 0;
@@ -309,15 +312,10 @@ async function boot() {
   const wwCount = displayItems.filter(i => i.woolworths?.price != null).length;
   const coCount = displayItems.filter(i => i.coles?.price != null).length;
 
-  // Saving: computed only from items available at BOTH stores so single-store
-  // items don't skew the comparison (a WW-only item can't be compared to Coles).
-  const saving = displayItems
-    .filter(i => i.woolworths?.price != null && i.coles?.price != null)
-    .reduce((s, i) => s + Math.abs(i.woolworths.price - i.coles.price) * getUnits(i.list_item, unitOv, analysis), 0);
-
-  const isEqual = saving < 0.01;
-  const wwWins  = !isEqual && wwTotal < coTotal;
-  const coWins  = !isEqual && coTotal < wwTotal;
+  // diff = absolute difference between all-WW and all-Coles hypothetical totals.
+  // Drives the ribbon chip state (cheaper / paying-more / equal).
+  const diff    = Math.abs(wwTotal - coTotal);
+  const isEqual = diff < 0.01;
 
   function computeSplit() {
     // Routing rules — every displayItem ends up in exactly one table:
@@ -395,28 +393,27 @@ async function boot() {
     const wwBadgeStyle = (isEqual || !wwActive) ? 'visibility:hidden' : '';
     const coBadgeStyle = (isEqual || wwActive)  ? 'visibility:hidden' : '';
 
-    // Hint text (only if equal-price items exist)
-    const wwHint = ec > 0
-      ? (wwActive
-          ? `Includes ${ec} equal-price item${ec !== 1 ? 's' : ''} assigned here · Click Coles → to switch`
-          : `← Click to move equal-price items here`)
+    // Hint text — shown only on the active card; no navigation instruction text
+    const wwHint = ec > 0 && wwActive
+      ? `Includes ${ec} equal-price item${ec !== 1 ? 's' : ''} assigned here`
       : '';
-    const coHint = ec > 0
-      ? (!wwActive
-          ? `Includes ${ec} equal-price item${ec !== 1 ? 's' : ''} assigned here · Click WW → to switch`
-          : `Click to move equal-price items here →`)
+    const coHint = ec > 0 && !wwActive
+      ? `Includes ${ec} equal-price item${ec !== 1 ? 's' : ''} assigned here`
       : '';
 
     // ── Save ribbon ──────────────────────────────────────────────────────────
     // Intrinsic classification counts (independent of equalStore assignment)
     const wwOnlyCount = displayItems.filter(i => i.cheaper_store === 'woolworths').length;
     const coOnlyCount = displayItems.filter(i => i.cheaper_store === 'coles').length;
+    // Chip state depends on equalStore (which store the user is currently viewing)
+    const selectedTotal = equalStore === 'ww' ? wwTotal : coTotal;
+    const otherTotal    = equalStore === 'ww' ? coTotal : wwTotal;
+    const isCheaper     = selectedTotal <= otherTotal;
     const ribbonSaveChip = isEqual
       ? `<span class="bar-save-chip bar-save-chip-eq">⚖ Same price at both stores</span>`
-      : `<span class="bar-save-chip">
-           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-           You save ${fmt(saving)}
-         </span>`;
+      : isCheaper
+        ? `<span class="bar-save-chip">✓ You save ${fmt(diff)}</span>`
+        : `<span class="bar-save-chip bar-save-chip-warn">⚠ You're paying ${fmt(diff)} more</span>`;
     const ribbonChips = [
       wwOnlyCount > 0    ? `<span class="bar-store-chip ww-chip">${wwOnlyCount} at Woolworths</span>` : '',
       equalItems.length > 0 ? `<span class="bar-store-chip eq-chip">${equalItems.length} equal-price</span>` : '',
