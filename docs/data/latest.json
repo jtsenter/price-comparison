@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-02T00:28:20.543201+00:00",
+  "last_updated": "2026-06-02T00:28:37.986682+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10009,7 +10009,7 @@
     },
     {
       "list_item": "Woolworths Red Onions",
-      "last_scraped": "2026-06-01T21:28:39.133883+00:00",
+      "last_scraped": "2026-06-02T00:28:21.744896+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -10028,8 +10028,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Red Onions Bag",
-        "price": 5,
-        "unit_price": 5,
+        "price": 5.0,
+        "unit_price": 5.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg"
@@ -10075,76 +10075,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Rosemary Leaves",
-      "last_scraped": "2026-06-01T21:28:43.765107+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-01-29",
-          "price": 2
-        },
-        {
-          "date": "2025-03-17",
-          "price": 2
-        },
-        {
-          "date": "2026-03-02",
-          "price": 2
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Rosemary Leaves",
-        "price": 2,
-        "unit_price": 1.11,
-        "unit": "10G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/251141/woolworths-rosemary-leaves",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251141.jpg"
-      },
-      "coles": {
-        "name": "Coles Rosemary Leaves | 28g",
-        "price": 2.8,
-        "unit_price": 2.8,
-        "unit": "10g",
-        "url": "https://www.coles.com.au/product/coles-rosemary-leaves-28g-8984220",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8984220.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.8,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.8
-        },
-        {
-          "date": "2026-05-30",
-          "price": 2.8
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.8
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 11.1,
-      "per_100_coles": 10,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Thickened Cream",
-      "last_scraped": "2026-06-01T21:28:47.370851+00:00",
+      "last_scraped": "2026-06-02T00:28:27.683044+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -10153,11 +10085,11 @@
         },
         {
           "date": "2025-05-12",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-06-06",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2026-02-11",
@@ -10223,8 +10155,76 @@
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Woolworths Rosemary Leaves",
+      "last_scraped": "2026-06-02T00:28:29.350423+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-01-29",
+          "price": 2.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 2.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 2.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Rosemary Leaves",
+        "price": 2.0,
+        "unit_price": 1.11,
+        "unit": "10G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/251141/woolworths-rosemary-leaves",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251141.jpg"
+      },
+      "coles": {
+        "name": "Coles Rosemary Leaves | 28g",
+        "price": 2.8,
+        "unit_price": 2.8,
+        "unit": "10g",
+        "url": "https://www.coles.com.au/product/coles-rosemary-leaves-28g-8984220",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8984220.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.8,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.8
+        },
+        {
+          "date": "2026-05-30",
+          "price": 2.8
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2.8
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 11.1,
+      "per_100_coles": 10.0,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Tuna In Springwater",
-      "last_scraped": "2026-06-01T21:28:49.900465+00:00",
+      "last_scraped": "2026-06-02T00:28:32.723953+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -10321,6 +10321,74 @@
       "_ww_price_factor": 0.185
     },
     {
+      "list_item": "Yumi's Eggplant Mediterranean Dip",
+      "last_scraped": "2026-06-02T00:28:37.976204+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-06-21",
+          "price": 4.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 5.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 5.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.75
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Yumi's Eggplant Mediterranean Dip",
+        "price": 3.75,
+        "unit_price": 1.88,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/139881/yumi-s-eggplant-mediterranean-dip",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139881.jpg"
+      },
+      "coles": {
+        "name": "Yumi's Mediterranean Eggplant Dip | 200g",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/yumi's-mediterranean-eggplant-dip-200g-8670878",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8670878.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.25,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3.75
+        },
+        {
+          "date": "2026-06-01",
+          "price": 3.75
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 1.88,
+      "per_100_coles": 2.5,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Wholegrain Wrap 8Pk",
       "last_scraped": "2026-06-01T21:28:53.600144+00:00",
       "trip_count": 4,
@@ -10386,74 +10454,6 @@
       "size_warning": false,
       "per_100_ww": 0.61,
       "per_100_coles": 0.61,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Yumi's Eggplant Mediterranean Dip",
-      "last_scraped": "2026-06-01T21:28:54.045706+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2025-06-21",
-          "price": 4.5
-        },
-        {
-          "date": "2026-02-03",
-          "price": 5
-        },
-        {
-          "date": "2026-04-02",
-          "price": 5
-        },
-        {
-          "date": "2026-05-06",
-          "price": 3.75
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Yumi's Eggplant Mediterranean Dip",
-        "price": 3.75,
-        "unit_price": 1.88,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/139881/yumi-s-eggplant-mediterranean-dip",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139881.jpg"
-      },
-      "coles": {
-        "name": "Yumi's Mediterranean Eggplant Dip | 200g",
-        "price": 5,
-        "unit_price": 5,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/yumi's-mediterranean-eggplant-dip-200g-8670878",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8670878.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.25,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.75
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.75
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 1.88,
-      "per_100_coles": 2.5,
       "per_100_unit": "100g"
     },
     {
@@ -12822,9 +12822,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 105,
+    "done": 110,
     "total": 144,
     "started_at": "2026-06-02T00:22:14.256893+00:00",
-    "current_item": "Woolworths Red Onions Bag"
+    "current_item": "Yumi's Eggplant Mediterranean Dip"
   }
 }
