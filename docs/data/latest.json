@@ -1081,8 +1081,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Hass Avocado",
-        "price": 1.5,
-        "unit_price": 1.5,
+        "price": 2.2,
+        "unit_price": 2.2,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/120080/hass-avocado",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120080.jpg"
@@ -1096,7 +1096,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5900530.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 1.0,
+      "saving_per_item": 0.3,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -3206,8 +3206,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Broccolini Bunch",
-        "price": 2.3,
-        "unit_price": 2.3,
+        "price": 3.7,
+        "unit_price": 3.7,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/187314/woolworths-broccolini-bunch",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/187314.jpg"
@@ -3221,16 +3221,12 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4841775.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 4.2,
+      "saving_per_item": 2.8,
       "alternatives": [],
       "ww_price_history": [
         {
-          "date": "2026-05-29",
-          "price": 2.3
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.3
+          "date": "2026-06-02",
+          "price": 3.7
         }
       ],
       "coles_price_history": [
@@ -5505,8 +5501,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Capsicum Green",
-        "price": 1.98,
-        "unit_price": 1.98,
+        "price": 2.23,
+        "unit_price": 2.23,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/135156/woolworths-capsicum-green",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135156.jpg"
@@ -5521,16 +5517,12 @@
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 0.02,
+      "saving_per_item": 0.27,
       "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-06-02",
           "price": 2.23
-        },
-        {
-          "date": "2026-06-02",
-          "price": 1.98
         }
       ],
       "coles_price_history": [
@@ -8674,83 +8666,6 @@
       "per_100_coles": 0.48,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.41
-    },
-    {
-      "list_item": "Woolworths Capsicum Green",
-      "last_scraped": "2026-06-02T09:13:41.096091+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2026-02-23",
-          "price": 2.23
-        },
-        {
-          "date": "2026-04-02",
-          "price": 2.23
-        },
-        {
-          "date": "2026-04-21",
-          "price": 2.73
-        },
-        {
-          "date": "2026-04-29",
-          "price": 2.73
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Capsicum Green",
-        "price": 1.98,
-        "unit_price": 1.98,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/135156/woolworths-capsicum-green",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135156.jpg"
-      },
-      "coles": {
-        "name": "Coles Capsicum Green Loose | approx. 220g",
-        "price": 1.96,
-        "unit_price": 1.96,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7214862.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.02,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.98
-        },
-        {
-          "date": "2026-05-30",
-          "price": 1.98
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.98
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.96
-        },
-        {
-          "date": "2026-05-30",
-          "price": 1.96
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.96
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 0.89,
-      "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Celery Heart",
