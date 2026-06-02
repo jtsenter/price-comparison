@@ -336,12 +336,13 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                     flag_note = "IsEDR" if is_member_deal else "no IsEDR flag"
                     print(f"    [WW] WasPrice override for '{name}' ({flag_note}): ${price} → shelf price ${was_price}")
                     price = was_price
-                # DOM price check: collect ALL price-like text nodes on the page and
-                # take the highest one. Shelf price is always ≥ member/EDR price, so
-                # max() reliably selects the non-member price when two are present.
-                # Uses a class-agnostic TreeWalker so hashed CSS module names don't matter.
-                # Selector priority: [data-testid="product-regular-price"] first (explicit
-                # non-member element), then all "$X.XX" text nodes.
+                # DOM price check: collect prices from shelf-price-specific selectors,
+                # avoiding member-exclusive elements. Shelf price is always ≥ member price.
+                # Selector priority:
+                #   1. [data-testid="product-regular-price"] (explicit shelf price)
+                #   2. [class*="regular"][class*="price"] (contains "regular" + "price")
+                #   3. Any price NOT inside [class*="member"], [class*="reward"], [class*="loyalty"]
+                #   4. Fallback: all prices, use max
                 if price is not None:
                     _dom_prices = await page.evaluate("""
                         () => {
@@ -349,25 +350,67 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                             const rangeOk = p => p >= 0.5 && p <= 50;
                             const found = [];
 
-                            // Explicit non-member price element (EDR deals only)
+                            // 1. Explicit non-member price element: [data-testid="product-regular-price"]
                             const regEl = document.querySelector('[data-testid="product-regular-price"]');
                             if (regEl?.textContent) {
                                 const m = regEl.textContent.match(/\\$\\s*([\\d.]+)/);
                                 if (m) {
                                     const p = parseFloat(m[1]);
-                                    if (rangeOk(p)) found.push({ p, src: 'product-regular-price' });
+                                    if (rangeOk(p)) found.push({ p, src: 'data-testid-regular-price' });
                                 }
                             }
+                            if (found.length > 0) return found; // High-confidence result
 
-                            // Walk all text nodes for "$X.XX" leaf values
+                            // 2. Class-based: [class*="regular"][class*="price"] (case-insensitive contains)
+                            const allEls = document.querySelectorAll('*');
+                            for (const el of allEls) {
+                                const cls = (el.className || '').toLowerCase();
+                                if (cls.includes('regular') && cls.includes('price')) {
+                                    const t = el.textContent?.trim();
+                                    const m = t?.match(/\\$\\s*([\\d.]+)/);
+                                    if (m) {
+                                        const p = parseFloat(m[1]);
+                                        if (rangeOk(p)) found.push({ p, src: 'class-regular-price' });
+                                    }
+                                }
+                            }
+                            if (found.length > 0) return found; // Good result
+
+                            // 3. Any price NOT inside [class*="member"], [class*="reward"], [class*="loyalty"]
                             const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
                             let node;
                             while ((node = walker.nextNode())) {
                                 const t = node.textContent.trim();
                                 const m = t.match(priceRe);
                                 if (m) {
+                                    // Check if this node is inside a member/reward/loyalty container
+                                    let parent = node.parentElement;
+                                    let inMemberEl = false;
+                                    for (let i = 0; i < 10 && parent; i++) {
+                                        const pc = (parent.className || '').toLowerCase();
+                                        if (pc.includes('member') || pc.includes('reward') || pc.includes('loyalty')) {
+                                            inMemberEl = true;
+                                            break;
+                                        }
+                                        parent = parent.parentElement;
+                                    }
+                                    if (!inMemberEl) {
+                                        const p = parseFloat(m[1]);
+                                        if (rangeOk(p)) found.push({ p, src: 'non-member-text' });
+                                    }
+                                }
+                            }
+                            if (found.length > 0) return found; // Filtered result
+
+                            // 4. Fallback: all prices (including member prices)
+                            const walkerAll = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+                            let nodeAll;
+                            while ((nodeAll = walkerAll.nextNode())) {
+                                const t = nodeAll.textContent.trim();
+                                const m = t.match(priceRe);
+                                if (m) {
                                     const p = parseFloat(m[1]);
-                                    if (rangeOk(p)) found.push({ p, src: 'text-node' });
+                                    if (rangeOk(p)) found.push({ p, src: 'fallback-all-text' });
                                 }
                             }
                             return found;
@@ -376,10 +419,11 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                     if _dom_prices:
                         _dom_vals = [e['p'] for e in _dom_prices]
                         _dom_max  = max(_dom_vals)
+                        _sources = set(e['src'] for e in _dom_prices)
                         if len(_dom_vals) >= 2:
-                            print(f"    [WW] DOM prices found: {_dom_vals} — using highest ${_dom_max} (shelf > member)")
+                            print(f"    [WW] DOM prices found: {_dom_vals} (sources: {_sources}) — using highest ${_dom_max} (shelf > member)")
                         else:
-                            print(f"    [WW] DOM price: ${_dom_vals[0]}")
+                            print(f"    [WW] DOM price: ${_dom_vals[0]} (source: {list(_sources)[0]})")
                         if abs(_dom_max - float(price)) > 0.005:
                             print(f"    [WW] DOM overrides __NEXT_DATA__ ${price} → ${_dom_max}")
                             price = _dom_max

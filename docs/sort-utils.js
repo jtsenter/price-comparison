@@ -5,25 +5,29 @@
 
 // ── Hot deal detection ────────────────────────────────────────────────────────
 // An item qualifies as a hot deal if its current best price is:
-//   • at or below the all-time purchase-history low  (currentBest <= histMin), OR
+//   • at or below the all-time purchase-history low  (currentBest <= histMin + 0.01 cent tolerance), OR
 //   • in the bottom 20% of its purchase-history range (trendPos < 0.20)
 // Uses price_history only (Excel purchase trips) — more stable than scrape history.
 
 function isHotDeal(item) {
+  if (item.archived) return false;
   const hist = item.price_history || [];
   if (hist.length < 2) return false;
-  const prices = hist.map(h => h.price).filter(p => p > 0);
+  const prices = hist.map(h => Number(h.price)).filter(p => p > 0);
   if (prices.length < 2) return false;
   const histMin = Math.min(...prices);
   const histMax = Math.max(...prices);
-  if (histMin === histMax) return false;
-  const currentBest = Math.min(
-    item.woolworths?.price ?? Infinity,
-    item.coles?.price ?? Infinity
-  );
+  if (histMin === histMax) return false; // flat history, no range
+  const wwP = item.woolworths?.price;
+  const coP = item.coles?.price;
+  if (!wwP && !coP) return false;
+  const currentBest = Math.min(wwP ?? Infinity, coP ?? Infinity);
   if (!isFinite(currentBest)) return false;
-  const trendPos = (currentBest - histMin) / (histMax - histMin);
-  return currentBest <= histMin || trendPos < 0.20;
+  const range = histMax - histMin;
+  const trendPos = (currentBest - histMin) / range;
+  const isAllTimeLow = currentBest <= histMin + 0.01; // 1c tolerance
+  const isBottom20 = trendPos < 0.20;
+  return isAllTimeLow || isBottom20;
 }
 
 // ── Trend position ────────────────────────────────────────────────────────────
