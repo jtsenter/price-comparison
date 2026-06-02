@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-02T00:30:10.339738+00:00",
+  "last_updated": "2026-06-02T09:09:05.372065+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -591,7 +591,7 @@
     },
     {
       "list_item": "Fresh Broccoli",
-      "last_scraped": "2026-06-02T00:22:37.448087+00:00",
+      "last_scraped": "2026-06-02T08:33:43.780344+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -685,15 +685,15 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/134681.jpg"
       },
       "coles": {
-        "name": "Coles Kitchen Broccoli Florets | 150g",
-        "price": 2.2,
-        "unit_price": 2.2,
+        "name": "Broccoli Medium",
+        "price": 1.7,
+        "unit_price": 5.0,
         "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-kitchen-broccoli-florets-150g-2310971",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2310971.jpg"
+        "url": "https://www.coles.com.au/product/coles-broccoli-medium-approx.-340g-407755",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/407755.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 0.71,
+      "saving_per_item": 0.21,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -713,12 +713,16 @@
         {
           "date": "2026-06-01",
           "price": 2.2
+        },
+        {
+          "date": "2026-06-02",
+          "price": 1.7
         }
       ],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
-      "per_100_coles": 1.47,
+      "per_100_coles": 0.5,
       "per_100_unit": "100g"
     },
     {
@@ -1077,8 +1081,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Hass Avocado",
-        "price": 1.5,
-        "unit_price": 1.5,
+        "price": 2.2,
+        "unit_price": 2.2,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/120080/hass-avocado",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120080.jpg"
@@ -1092,16 +1096,12 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5900530.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 1.0,
+      "saving_per_item": 0.3,
       "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-06-02",
           "price": 2.2
-        },
-        {
-          "date": "2026-06-02",
-          "price": 1.5
         }
       ],
       "coles_price_history": [
@@ -4664,7 +4664,7 @@
     },
     {
       "list_item": "Woolworths Garlic Heads CLOVE",
-      "last_scraped": "2026-06-02T00:24:56.124218+00:00",
+      "last_scraped": "2026-06-02T08:33:03.766699+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4759,7 +4759,7 @@
           "price": 4.2
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 4.14,
       "per_100_coles": null,
@@ -5831,8 +5831,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Capsicum Green",
-        "price": 1.98,
-        "unit_price": 1.98,
+        "price": 2.23,
+        "unit_price": 2.23,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/135156/woolworths-capsicum-green",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135156.jpg"
@@ -5847,7 +5847,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 0.02,
+      "saving_per_item": 0.27,
       "alternatives": [
         {
           "name": "Coles Organic Green Capsicum | approx. 200g",
@@ -5870,12 +5870,8 @@
       ],
       "ww_price_history": [
         {
-          "date": "2026-05-29",
-          "price": 1.98
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.98
+          "date": "2026-06-02",
+          "price": 2.23
         }
       ],
       "coles_price_history": [
@@ -12566,22 +12562,22 @@
     },
     {
       "list_item": "Woolworths Mixed Herbs Dried",
-      "last_scraped": "2026-06-01T21:30:34.293658+00:00",
+      "last_scraped": "2026-06-02T00:30:11.938531+00:00",
       "trip_count": 2,
       "price_history": [
         {
           "date": "2025-03-17",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2026-02-03",
-          "price": 2
+          "price": 2.0
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Mixed Herbs Dried",
-        "price": 2,
+        "price": 2.0,
         "unit_price": 1.67,
         "unit": "10G",
         "url": "https://www.woolworths.com.au/shop/productdetails/251120/woolworths-mixed-herbs-dried",
@@ -12597,7 +12593,17 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.15,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Mixed Herb Crushed Tomatoes | 400g",
+          "price": 1.3,
+          "unit_price": 1.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-mixed-herb-crushed-tomatoes-400g-8675678",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8675678.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -12618,7 +12624,7 @@
           "price": 2.15
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 16.7,
       "per_100_coles": 16.54,
@@ -12626,23 +12632,23 @@
     },
     {
       "list_item": "Woolworths Red Washed Potatoes Bag",
-      "last_scraped": "2026-06-01T21:30:37.616683+00:00",
+      "last_scraped": "2026-06-02T00:30:17.066305+00:00",
       "trip_count": 2,
       "price_history": [
         {
           "date": "2026-04-21",
-          "price": 6
+          "price": 6.0
         },
         {
           "date": "2026-05-06",
-          "price": 6
+          "price": 6.0
         }
       ],
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Red Washed Potatoes Bag",
-        "price": 8,
-        "unit_price": 4,
+        "price": 8.0,
+        "unit_price": 4.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/101638/woolworths-red-washed-potatoes-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/101638.jpg"
@@ -12657,7 +12663,17 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.5,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Red Royale Potatoes Loose | approx. 170g",
+          "price": 0.9,
+          "unit_price": 0.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-red-royale-potatoes-loose-approx.-170g-1181308",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1181308.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -12682,7 +12698,7 @@
           "price": 8.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.42,
@@ -12690,22 +12706,22 @@
     },
     {
       "list_item": "Woolworths Thyme Leaves",
-      "last_scraped": "2026-06-01T21:30:39.521826+00:00",
+      "last_scraped": "2026-06-02T00:30:18.036737+00:00",
       "trip_count": 2,
       "price_history": [
         {
           "date": "2025-07-10",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2026-03-02",
-          "price": 2
+          "price": 2.0
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Thyme Leaves",
-        "price": 2,
+        "price": 2.0,
         "unit_price": 1.67,
         "unit": "10G",
         "url": "https://www.woolworths.com.au/shop/productdetails/251228/woolworths-thyme-leaves",
@@ -12713,15 +12729,25 @@
       },
       "coles": {
         "name": "Coles Thyme Leaves | 18g",
-        "price": 2,
-        "unit_price": 2,
+        "price": 2.0,
+        "unit_price": 2.0,
         "unit": "10g",
         "url": "https://www.coles.com.au/product/coles-thyme-leaves-18g-8983046",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8983046.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Hoyts Thyme | 15g",
+          "price": 1.6,
+          "unit_price": 1.6,
+          "unit": "10g",
+          "url": "https://www.coles.com.au/product/hoyts-thyme-15g-286901",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/286901.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -12742,7 +12768,7 @@
           "price": 2
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 16.7,
       "per_100_coles": 11.11,
@@ -12750,7 +12776,7 @@
     },
     {
       "list_item": "Woolworths Water Chestnuts Sliced",
-      "last_scraped": "2026-06-01T21:30:41.234964+00:00",
+      "last_scraped": "2026-06-02T00:30:24.126834+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12782,7 +12808,35 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.32,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Valcom Water Chestnut Slices | 227g",
+          "price": 1.6,
+          "unit_price": 1.6,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/valcom-water-chestnut-slices-227g-5789579",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5789579.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Double Phoenix Whole Water Chestnuts | 567g",
+          "price": 2.2,
+          "unit_price": 2.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/double-phoenix-whole-water-chestnuts-567g-1384190",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1384190.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Tick Fresh Water Chestnuts | 400g",
+          "price": 3.8,
+          "unit_price": 3.8,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/tick-fresh-water-chestnuts-400g-3908054",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3908054.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -12803,7 +12857,7 @@
           "price": 1.6
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.56,
       "per_100_coles": 0.7,
@@ -12813,18 +12867,17 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 721.41,
-    "total_coles": 744.09,
+    "total_woolworths": 722.36,
+    "total_coles": 743.59,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 22.68,
+    "total_saving": 21.23,
     "items_compared": 144,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 140,
+    "done": 0,
     "total": 144,
-    "started_at": "2026-06-02T00:22:14.256893+00:00",
-    "current_item": "Woolworths Green Asparagus Bunch Green"
+    "started_at": "2026-06-02T09:09:05.369777+00:00"
   }
 }
