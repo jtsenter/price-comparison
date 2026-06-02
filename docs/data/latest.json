@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-02T09:13:35.823914+00:00",
+  "last_updated": "2026-06-02T09:13:47.857688+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8595,7 +8595,7 @@
     },
     {
       "list_item": "Woolworths Baby Corn Spears",
-      "last_scraped": "2026-06-02T00:27:42.688162+00:00",
+      "last_scraped": "2026-06-02T09:13:37.002144+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -8643,35 +8643,7 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.17,
-      "alternatives": [
-        {
-          "name": "Coles Corn Kernels | 420g",
-          "price": 1.05,
-          "unit_price": 1.05,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4774066.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Popping Corn Kernels | 400g",
-          "price": 1.8,
-          "unit_price": 1.8,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-popping-corn-kernels-400g-5374675",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5374675.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Corn Spears Young | 410g",
-          "price": 1.95,
-          "unit_price": 1.95,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-corn-spears-young-410g-8701042",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8701042.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -8696,7 +8668,7 @@
           "price": 1.95
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.46,
       "per_100_coles": 0.48,
@@ -8705,7 +8677,7 @@
     },
     {
       "list_item": "Woolworths Capsicum Green",
-      "last_scraped": "2026-06-02T00:27:47.969342+00:00",
+      "last_scraped": "2026-06-02T09:13:41.096091+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8745,26 +8717,7 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.02,
-      "alternatives": [
-        {
-          "name": "Coles Organic Green Capsicum | approx. 200g",
-          "price": 1.7,
-          "unit_price": 1.7,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-organic-green-capsicum-approx.-200g-each-7238350",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7238350.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Capsicum Green Loose | approx. 220g",
-          "price": 1.96,
-          "unit_price": 1.96,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7214862.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -8793,15 +8746,84 @@
           "price": 1.96
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.89,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Celery Heart",
+      "last_scraped": "2026-06-02T09:13:44.148277+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 4.0
+        },
+        {
+          "date": "2025-06-13",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 4.0
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Celery Heart",
+        "price": 4.5,
+        "unit_price": 4.5,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/748851/woolworths-celery-heart",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/748851.jpg"
+      },
+      "coles": {
+        "name": "Coles Celery Bunch | 1 Each",
+        "price": 4.0,
+        "unit_price": 4.0,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-celery-bunch-1-each-4845732",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4845732.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.5,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4.5
+        },
+        {
+          "date": "2026-05-30",
+          "price": 4.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4.5
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Basmati Rice",
-      "last_scraped": "2026-06-02T00:27:52.021415+00:00",
+      "last_scraped": "2026-06-02T09:13:46.247433+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -8857,112 +8879,15 @@
           "price": 4
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.4,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Celery Heart",
-      "last_scraped": "2026-06-02T00:27:54.402967+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-05-12",
-          "price": 4.0
-        },
-        {
-          "date": "2025-06-13",
-          "price": 4.0
-        },
-        {
-          "date": "2026-02-11",
-          "price": 4.0
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Celery Heart",
-        "price": 4.5,
-        "unit_price": 4.5,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/748851/woolworths-celery-heart",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/748851.jpg"
-      },
-      "coles": {
-        "name": "Coles Celery Bunch | 1 Each",
-        "price": 4.0,
-        "unit_price": 4.0,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-celery-bunch-1-each-4845732",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4845732.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.5,
-      "alternatives": [
-        {
-          "name": "Coles Lettuce Cos Baby Hearts | 2 Pack",
-          "price": 2.9,
-          "unit_price": 2.9,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/coles-lettuce-cos-baby-hearts-2-pack-4646485",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4646485.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Lamb Hearts | approx. 530g",
-          "price": 3.71,
-          "unit_price": 3.71,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-lamb-hearts-approx.-530g-9476316",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9476316.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Celery Bunch | 1 Each",
-          "price": 4.0,
-          "unit_price": 4.0,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/coles-celery-bunch-1-each-4845732",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4845732.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4.5
-        },
-        {
-          "date": "2026-05-30",
-          "price": 4.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 4.5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4
-        },
-        {
-          "date": "2026-06-01",
-          "price": 4
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Cous Cous",
-      "last_scraped": "2026-06-02T00:27:59.004290+00:00",
+      "last_scraped": "2026-06-02T09:13:47.734379+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -9018,7 +8943,7 @@
           "price": 2
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.4,
@@ -12339,10 +12264,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 95,
+    "done": 100,
     "total": 144,
     "started_at": "2026-06-02T09:09:05.369777+00:00",
-    "current_item": "Woolworths Asparagus Green Bunch"
+    "current_item": "Woolworths Cous Cous"
   },
   "pending_validation": [
     {
