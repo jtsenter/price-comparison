@@ -120,6 +120,22 @@ def _is_approved(price: float | None, approved_price: float | None, tolerance: f
     return abs(price - approved_price) / max(abs(approved_price), 0.01) <= tolerance
 
 
+def _suspicious_drop(new_price, prev_price, hist_prices, pct_threshold: float = 0.20) -> bool:
+    """Return True only if new price drops >20% from previous AND sets a new historical low.
+    Normal price fluctuations within historical range are always allowed.
+    """
+    if new_price is None or prev_price is None or prev_price <= 0:
+        return False
+    if not hist_prices:
+        return False
+    hist_min = min(p for p in hist_prices if p > 0)
+    drop_pct = (prev_price - new_price) / prev_price
+    if drop_pct > pct_threshold and new_price < hist_min:
+        print(f"    [WARN] Suspicious drop: ${prev_price} → ${new_price} ({drop_pct*100:.0f}% drop, below hist min ${hist_min})")
+        return True
+    return False
+
+
 def _suspicious_reasons(new_price, prev_price, price_history) -> list[str]:
     if new_price is None or new_price <= 0:
         return []
@@ -127,12 +143,21 @@ def _suspicious_reasons(new_price, prev_price, price_history) -> list[str]:
     if len(hist_prices) < SUSPICIOUS_MIN_HISTORY:
         return []
     reasons = []
+
+    # >20% drop AND new all-time low → likely EDR/member price
+    if _suspicious_drop(new_price, prev_price, hist_prices, 0.20):
+        reasons.append('suspicious_drop_gt20pct')
+
+    # Existing: 30% change in either direction
     if prev_price is not None and prev_price > 0:
         if abs(new_price - prev_price) / prev_price > SUSPICIOUS_CHANGE_PCT:
             reasons.append('30pct_change')
+
+    # Existing: outside historical range
     hist_min, hist_max = min(hist_prices), max(hist_prices)
     if new_price < hist_min or new_price > hist_max:
         reasons.append('outside_historical_range')
+
     return reasons
 
 
@@ -1195,6 +1220,15 @@ async def _scrape_single_item(
                 "flagged_date": today_str,
                 "reason": all_reasons,
             }
+
+    # FIX 3: Suppress EDR/member prices — only act if drop is >20% AND new all-time low
+    if ww_reasons and 'suspicious_drop_gt20pct' in ww_reasons and ww_match and prev_ww is not None:
+        print(f"    [FIX] WW suppressed: keeping ${prev_ww} instead of ${ww_match['price']} (EDR/member price suspected)")
+        ww_match = None  # carry-forward previous price
+
+    if coles_reasons and 'suspicious_drop_gt20pct' in coles_reasons and coles_match and prev_coles is not None:
+        print(f"    [FIX] Coles suppressed: keeping ${prev_coles} instead of ${coles_match['price']} (EDR/member price suspected)")
+        coles_match = None  # carry-forward previous price
 
     # If a store returned no result this run (and _carry also found nothing), preserve
     # whatever was in the previous latest.json rather than overwriting with None.
