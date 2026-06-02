@@ -73,8 +73,13 @@ CATEGORY_KEYWORDS = {
 
 def guess_category(item_name: str) -> str:
     name_lower = item_name.lower()
+    best_cat, best_score, best_len = "Other", 0, 0
     for category, keywords in CATEGORY_KEYWORDS.items():
-        for kw in keywords:
-            if kw in name_lower:
-                return category
-    return "Other"
+        matches = [kw for kw in keywords if kw in name_lower]
+        if not matches:
+            continue
+        score = len(matches)
+        longest = max(len(kw) for kw in matches)
+        if score > best_score or (score == best_score and longest > best_len):
+            best_cat, best_score, best_len = category, score, longest
+    return best_cat
