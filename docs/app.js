@@ -2330,7 +2330,7 @@ function sortItems(items) {
         const ww = item.woolworths?.price, co = item.coles?.price;
         return (ww != null && co != null) ? Math.abs(ww - co) / Math.max(ww, co) : -Infinity;
       }
-      case 'trend': return calcTrendPos(item); // 0.0=best deal, 1.0=expensive, 999=no history (sorts last)
+      case 'trend': return calcTrendPosition(item); // 0.0=best deal, 1.0=expensive, 999=no history (sorts last)
       case 'category':     return getCategory(item).toLowerCase();
       case 'last_scraped': return item.last_scraped || '';
       case 'ww_total':     return (item.woolworths?.price ?? 0) * getUnits(item.list_item);

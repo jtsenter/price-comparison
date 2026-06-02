@@ -332,7 +332,8 @@
 
 <div id="priceTooltip" class="price-tooltip-fixed" style="display:none"></div>
 
-<!-- Shared isHotDeal / calcTrendPos / sortByTrend — must load before inline script -->
+<!-- Shared utilities — must load before inline script -->
+<script src="utils.js"></script>
 <script src="sort-utils.js"></script>
 <script>
 // ── Shared utilities ──────────────────────────────────────────────────────────
@@ -422,7 +423,7 @@ function getCategory(item) {
 }
 
 // ── Deal computation ──────────────────────────────────────────────────────────
-// isHotDeal() and calcTrendPos() are provided by sort-utils.js (loaded above).
+// isHotDeal(), calcTrendPosition(), and sortByTrend() are provided by utils.js (loaded above).
 // getSimpleDealInfo() provides the per-row store/price details for display.
 
 function getSimpleDealInfo(item, exclusions) {
@@ -555,7 +556,7 @@ function getSortValue(col, item, dealInfo) {
     case 'deal':     return dealInfo != null ? -dealInfo.savingPct : Infinity; // higher savingPct = better deal → negate for desc sort
     case 'ww':       return item.woolworths?.price ?? Infinity;
     case 'coles':    return item.coles?.price ?? Infinity;
-    case 'avg': return calcTrendPos(item); // 0.0=best deal, 1.0=expensive, 999=no history
+    case 'avg': return calcTrendPosition(item); // 0.0=best deal, 1.0=expensive, 999=no history
     case 'category': return getCategory(item).toLowerCase();
     case 'watch':    return _watchlistHD.has(item.list_item) ? 0 : 1; // watchlisted first on asc
     default:         return 0;
@@ -570,7 +571,7 @@ function sortDeals(items, exclusions) {
       const mul = dir === 'asc' ? 1 : -1;
       const av = getSortValue(col, a, da);
       const bv = getSortValue(col, b, db);
-      // avg (trend): calcTrendPos returns a plain number (999 = no history → sorts last on asc)
+      // avg (trend): calcTrendPosition returns a plain number (999 = no history → sorts last on asc)
       if (av < bv) return -1 * mul;
       if (av > bv) return  1 * mul;
     }
