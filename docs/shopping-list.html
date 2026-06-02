@@ -154,7 +154,6 @@
     td.r { text-align: right; font-weight: 600; }
     /* Name cell: wrap text, let other cells keep fixed widths from colgroup */
     .item-name-cell { font-weight: 500; white-space: normal; overflow: visible; text-overflow: clip; max-width: 0; }
-    .item-cat { font-size: 11px; color: var(--text-soft); margin-top: 1px; }
     .price-val { font-size: 15px; font-weight: 700; }
     .unit-val { font-size: 11px; color: var(--text-soft); }
     .total-val { font-size: 15px; font-weight: 700; color: var(--text); }
@@ -194,7 +193,7 @@
       header .header-actions { display: none; }
       body { background: #fff; }
       main { padding: 12px; }
-      .totals-bar, table { box-shadow: none; }
+      table { box-shadow: none; }
     }
   </style>
 </head>
@@ -281,7 +280,6 @@ async function boot() {
     handoff = raw ? JSON.parse(raw) : null;
     localStorage.removeItem('pw_sl_handoff');
   } catch {}
-  console.log('[PW] pw_sl_handoff on load:', handoff ? { count: handoff.items?.length, first3: handoff.items?.slice(0, 3), note: handoff.note } : null);
 
   const allItems = (data.items || []).filter(i => !i.archived);
 
@@ -289,10 +287,8 @@ async function boot() {
   if (handoff && Array.isArray(handoff.items) && handoff.items.length > 0) {
     const nameSet = new Set(handoff.items);
     displayItems = allItems.filter(i => nameSet.has(i.list_item));
-    console.log('[PW] displayItems after handoff filter:', displayItems.length);
   } else {
     displayItems = allItems; // fallback: show everything
-    console.log('[PW] No handoff — showing all', displayItems.length, 'items');
   }
 
   if (!displayItems.length) {

@@ -22,10 +22,6 @@
       gap: 10px;
       margin-bottom: 4px;
     }
-    .deals-hero-sub {
-      font-size: 13px;
-      color: var(--text-mid);
-    }
     .deals-hero-stats {
       display: flex;
       gap: 20px;
@@ -98,23 +94,6 @@
     .deals-table thead th.sort-primary {
       color: var(--text);
       background: #f8fafc;
-    }
-    .deals-table thead th .sort-key-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--accent);
-      color: #fff;
-      border-radius: 10px;
-      font-size: 9px;
-      font-weight: 700;
-      width: 14px;
-      height: 14px;
-      margin-left: 4px;
-      vertical-align: middle;
-    }
-    .deals-table thead th .sort-key-badge.secondary {
-      background: var(--text-soft);
     }
     .deals-table tbody tr {
       border-bottom: 1px solid var(--border);
@@ -225,47 +204,6 @@
     }
     .deals-empty-icon { font-size: 48px; margin-bottom: 12px; }
     .deals-empty-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-
-    /* ── Sort controls bar ── */
-    .sort-bar {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 24px;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      font-size: 12px;
-      color: var(--text-soft);
-      flex-wrap: wrap;
-    }
-    .sort-bar-label { font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
-    .sort-key-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 3px 8px;
-      font-size: 12px;
-      color: var(--text);
-      cursor: pointer;
-    }
-    .sort-key-chip:first-of-type {
-      border-color: var(--accent);
-      color: var(--accent);
-      font-weight: 700;
-    }
-    .sort-key-chip .chip-dir { font-size: 10px; }
-    .sort-clear-btn {
-      background: none;
-      border: none;
-      color: var(--text-soft);
-      cursor: pointer;
-      font-size: 12px;
-      padding: 3px 6px;
-    }
-    .sort-clear-btn:hover { color: var(--text); }
 
     /* ── Fixed tooltip (same as main) ── */
     .price-tooltip-fixed {
@@ -593,11 +531,6 @@ let _archivedSet = new Set();
 let _progressDismissed = false;
 let _progressLastDone = null;
 let _progressLastChangeTime = null;
-
-const COL_LABELS = {
-  name: 'Product', deal: 'Best', ww: 'WW Price', coles: 'Coles Price',
-  avg: 'Avg Price', category: 'Category', watch: 'Watch',
-};
 
 // ── Sort ───────────────────────────────────────────────────────────────────────
 

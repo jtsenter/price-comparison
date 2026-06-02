@@ -2440,11 +2440,6 @@ function applyColSort(col) {
 
 // ── Weekly special detection ─────────────────────────────────────────────────
 
-function pricePercentile(prices, pct) {
-  const sorted = [...prices].sort((a, b) => a - b);
-  return sorted[Math.floor(sorted.length * pct)];
-}
-
 function isHotDeal(item, exclusions) {
   const history = [...(item.price_history||[]), ...(item.ww_price_history||[]), ...(item.coles_price_history||[])];
   if (history.length < 3) return false;
@@ -3851,7 +3846,6 @@ function exportShoppingList(useChecked) {
   let quantities = {};
   try { quantities = JSON.parse(localStorage.getItem('pw_priorities_v1') || '{}'); } catch {}
   const handoffPayload = { items: names, note, quantities };
-  console.log('[PW] exportShoppingList → pw_sl_handoff', { count: names.length, first3: names.slice(0, 3), note });
   localStorage.setItem('pw_sl_handoff', JSON.stringify(handoffPayload));
   window.location.href = 'shopping-list.html';
 }
