@@ -1151,8 +1151,12 @@ function openPriceHistoryModal(item) {
   listEl.appendChild(hdr);
 
   allEntries.forEach(entry => {
-    const wwKey    = entry.ww != null ? Number(entry.ww).toFixed(2) : null;
-    const isExcluded = wwKey != null && excludedPrices.has(wwKey);
+    // Use WW price as the key when present; fall back to Coles price for Coles-only rows.
+    // This ensures every row has a priceKey and can show the same button set.
+    const wwKey    = entry.ww    != null ? Number(entry.ww).toFixed(2)    : null;
+    const coKey    = entry.coles != null ? Number(entry.coles).toFixed(2) : null;
+    const priceKey = wwKey ?? coKey;
+    const isExcluded = priceKey != null && excludedPrices.has(priceKey);
     const row = document.createElement('div');
     row.className = `price-history-row${isExcluded ? ' excluded' : ''}`;
 
@@ -1162,12 +1166,11 @@ function openPriceHistoryModal(item) {
     const coHtml = entry.coles != null
       ? `<span class="price-history-price" style="color:var(--coles)">${fmt(entry.coles)}</span>`
       : `<span style="color:var(--text-soft)">—</span>`;
-    const btnHtml = wwKey != null ? `
-      <button class="price-exclude-btn" data-price="${wwKey}">${isExcluded ? 'Include' : 'Exclude'}</button>
-      <button class="price-diff-btn"    data-price="${wwKey}">Different item</button>`
-      // Coles-only row (WW blocked/missing that day) — offer a remove button
-      : (entry.source === 'scrape' && entry.coles != null) ? `
-      <button class="price-colesonly-remove-btn" data-date="${entry.date}">Remove</button>` : '';
+
+    // Every row gets the same two buttons regardless of which store(s) are present.
+    const btnHtml = priceKey != null ? `
+      <button class="price-exclude-btn" data-price="${priceKey}">${isExcluded ? 'Include' : 'Exclude'}</button>
+      <button class="price-diff-btn"    data-price="${priceKey}">Different item</button>` : '';
 
     row.innerHTML = `
       <span class="price-history-date">${entry.date || 'Unknown date'}</span>
@@ -1175,13 +1178,13 @@ function openPriceHistoryModal(item) {
       <span class="price-history-store-col">${coHtml}</span>
       <span class="price-history-actions-col">${btnHtml}</span>`;
 
-    if (wwKey != null) {
+    if (priceKey != null) {
       row.querySelector('.price-exclude-btn').addEventListener('click', () => {
         const ex = loadExclusions();
         const list = ex[item.list_item] || [];
-        const priceNum = Number(wwKey);
+        const priceNum = Number(priceKey);
         if (isExcluded) {
-          ex[item.list_item] = list.filter(p => Number(p).toFixed(2) !== wwKey);
+          ex[item.list_item] = list.filter(p => Number(p).toFixed(2) !== priceKey);
         } else {
           ex[item.list_item] = [...list, priceNum];
         }
@@ -1191,30 +1194,7 @@ function openPriceHistoryModal(item) {
       });
 
       row.querySelector('.price-diff-btn').addEventListener('click', () => {
-        openDiffItemModal(item, wwKey);
-      });
-    }
-
-    const colesOnlyRemoveBtn = row.querySelector('.price-colesonly-remove-btn');
-    if (colesOnlyRemoveBtn) {
-      colesOnlyRemoveBtn.addEventListener('click', async () => {
-        if (!_lastData || !_historyItem) return;
-        const dateToRemove = colesOnlyRemoveBtn.dataset.date;
-        const idx = _lastData.items.findIndex(i => i.list_item === _historyItem.list_item);
-        if (idx === -1) return;
-        const updated = { ..._lastData.items[idx] };
-        updated.coles_price_history = (updated.coles_price_history || []).filter(e => e.date !== dateToRemove);
-        _lastData.items[idx] = updated;
-        _historyItem = updated;
-        colesOnlyRemoveBtn.textContent = 'Saving…';
-        colesOnlyRemoveBtn.disabled = true;
-        const s = loadSettings();
-        if (s.user && s.repo && s.token) {
-          try { await persistLatestJson(_lastData, 'chore: remove orphan Coles-only history entry'); }
-          catch (e) { console.warn('Could not persist to GitHub:', e); }
-        }
-        openPriceHistoryModal(_historyItem);
-        renderPage(_lastData);
+        openDiffItemModal(item, priceKey);
       });
     }
 
