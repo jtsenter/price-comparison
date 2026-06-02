@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-02T09:09:25.324303+00:00",
+  "last_updated": "2026-06-02T09:09:47.436616+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -667,7 +667,7 @@
     },
     {
       "list_item": "Capsicum Yellow",
-      "last_scraped": "2026-06-02T00:22:31.740583+00:00",
+      "last_scraped": "2026-06-02T09:09:27.903401+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -763,7 +763,7 @@
     },
     {
       "list_item": "Fresh Broccoli",
-      "last_scraped": "2026-06-02T08:33:43.780344+00:00",
+      "last_scraped": "2026-06-02T09:09:34.432035+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -891,7 +891,7 @@
           "price": 1.7
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.5,
@@ -899,7 +899,7 @@
     },
     {
       "list_item": "Fresh Cauliflower Half",
-      "last_scraped": "2026-06-02T00:22:47.459723+00:00",
+      "last_scraped": "2026-06-02T09:09:36.536928+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -1042,7 +1042,7 @@
     },
     {
       "list_item": "Hass Avocado",
-      "last_scraped": "2026-06-02T00:22:48.063184+00:00",
+      "last_scraped": "2026-06-02T09:09:43.906180+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1081,8 +1081,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Hass Avocado",
-        "price": 2.2,
-        "unit_price": 2.2,
+        "price": 1.5,
+        "unit_price": 1.5,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/120080/hass-avocado",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120080.jpg"
@@ -1096,7 +1096,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5900530.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 0.3,
+      "saving_per_item": 1.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -1118,6 +1118,126 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Helga's Wholemeal Bread With Grains",
+      "last_scraped": "2026-06-02T09:09:47.433841+00:00",
+      "trip_count": 15,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 5.0
+        },
+        {
+          "date": "2024-11-12",
+          "price": 5.0
+        },
+        {
+          "date": "2024-12-02",
+          "price": 5.0
+        },
+        {
+          "date": "2025-02-02",
+          "price": 5.0
+        },
+        {
+          "date": "2025-03-17",
+          "price": 5.0
+        },
+        {
+          "date": "2025-04-05",
+          "price": 5.0
+        },
+        {
+          "date": "2025-04-25",
+          "price": 5.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.0
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.0
+        },
+        {
+          "date": "2025-06-21",
+          "price": 5.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 5.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 5.0
+        },
+        {
+          "date": "2026-04-13",
+          "price": 5.2
+        },
+        {
+          "date": "2026-04-21",
+          "price": 5.2
+        },
+        {
+          "date": "2026-04-29",
+          "price": 5.2
+        }
+      ],
+      "category": "Bakery",
+      "woolworths": {
+        "name": "Helga's Bread Traditional Wholemeal",
+        "price": 5.3,
+        "unit_price": 0.71,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/84129/helga-s-bread-traditional-wholemeal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/084129.jpg"
+      },
+      "coles": {
+        "name": "Traditional Wholemeal Bread",
+        "price": 5.3,
+        "unit_price": 0.71,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/helga's-traditional-wholemeal-bread-750g-5969435",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5969435.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5.3
+        },
+        {
+          "date": "2026-05-30",
+          "price": 5.3
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5.3
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5.3
+        },
+        {
+          "date": "2026-05-30",
+          "price": 5.3
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5.3
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.71,
+      "per_100_coles": 0.71,
       "per_100_unit": "100g"
     },
     {
@@ -1392,126 +1512,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.89,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Helga's Wholemeal Bread With Grains",
-      "last_scraped": "2026-06-02T00:23:00.562927+00:00",
-      "trip_count": 15,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 5.0
-        },
-        {
-          "date": "2024-11-12",
-          "price": 5.0
-        },
-        {
-          "date": "2024-12-02",
-          "price": 5.0
-        },
-        {
-          "date": "2025-02-02",
-          "price": 5.0
-        },
-        {
-          "date": "2025-03-17",
-          "price": 5.0
-        },
-        {
-          "date": "2025-04-05",
-          "price": 5.0
-        },
-        {
-          "date": "2025-04-25",
-          "price": 5.0
-        },
-        {
-          "date": "2025-05-12",
-          "price": 5.0
-        },
-        {
-          "date": "2025-05-22",
-          "price": 5.0
-        },
-        {
-          "date": "2025-06-21",
-          "price": 5.0
-        },
-        {
-          "date": "2025-07-03",
-          "price": 5.0
-        },
-        {
-          "date": "2025-07-26",
-          "price": 5.0
-        },
-        {
-          "date": "2026-04-13",
-          "price": 5.2
-        },
-        {
-          "date": "2026-04-21",
-          "price": 5.2
-        },
-        {
-          "date": "2026-04-29",
-          "price": 5.2
-        }
-      ],
-      "category": "Bakery",
-      "woolworths": {
-        "name": "Helga's Bread Traditional Wholemeal",
-        "price": 5.3,
-        "unit_price": 0.71,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/84129/helga-s-bread-traditional-wholemeal",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/084129.jpg"
-      },
-      "coles": {
-        "name": "Traditional Wholemeal Bread",
-        "price": 5.3,
-        "unit_price": 0.71,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/helga's-traditional-wholemeal-bread-750g-5969435",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5969435.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5.3
-        },
-        {
-          "date": "2026-05-30",
-          "price": 5.3
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5.3
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5.3
-        },
-        {
-          "date": "2026-05-30",
-          "price": 5.3
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5.3
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 0.71,
-      "per_100_coles": 0.71,
       "per_100_unit": "100g"
     },
     {
@@ -12867,18 +12867,36 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 722.36,
+    "total_woolworths": 721.66,
     "total_coles": 743.59,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 21.23,
+    "total_saving": 21.93,
     "items_compared": 144,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 5,
+    "done": 10,
     "total": 144,
     "started_at": "2026-06-02T09:09:05.369777+00:00",
-    "current_item": "Cavendish Bananas"
-  }
+    "current_item": "Helga's Wholemeal Bread With Grains"
+  },
+  "pending_validation": [
+    {
+      "item": "Hass Avocado",
+      "ww_price": 1.5,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/120080/hass-avocado",
+      "ww_prev_price": 2.2,
+      "ww_suspicious": true,
+      "coles_price": 2.5,
+      "coles_url": "https://www.coles.com.au/product/coles-hass-avocados-1-each-5900530",
+      "coles_prev_price": 2.5,
+      "coles_suspicious": false,
+      "flagged_date": "2026-06-02",
+      "reason": [
+        "30pct_change",
+        "outside_historical_range"
+      ]
+    }
+  ]
 }
