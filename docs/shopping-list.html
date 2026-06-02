@@ -143,7 +143,7 @@
     .section-count { font-size: 12px; color: var(--text-soft); }
 
     table { width: 100%; border-collapse: collapse; table-layout: fixed; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
-    thead th { position: sticky; top: 60px; z-index: 10; background: var(--bg); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-soft); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+    thead th { position: sticky; top: 60px; z-index: 10; background: var(--bg); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-soft); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); box-shadow: 0 1px 0 var(--border); }
     thead th.r { text-align: right; }
     .sl-sort-hdr { cursor: pointer; user-select: none; }
     .sl-sort-hdr:hover { color: var(--text); }
@@ -252,6 +252,18 @@ function fmtUnit(price, unit) {
   const m = unit.match(/^\d*\.?\d*\s*(?:g|kg|ml|l|ea|pk|pack|each)\b/i);
   return m ? `/${m[0].trim()}` : '';
 }
+
+// ── Dynamic sticky header offset ─────────────────────────────────────────────
+// Calculates actual nav height and applies it to thead th sticky offset.
+// This prevents floating prices if header height ever changes.
+function fixStickyOffset() {
+  const navH = document.querySelector('header')?.offsetHeight || 60;
+  document.querySelectorAll('thead th').forEach(th => {
+    th.style.top = navH + 'px';
+  });
+}
+window.addEventListener('load', fixStickyOffset);
+window.addEventListener('resize', fixStickyOffset);
 
 async function boot() {
   const main = document.getElementById('main');
