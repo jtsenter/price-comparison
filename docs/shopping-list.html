@@ -145,6 +145,8 @@
     table { width: 100%; border-collapse: collapse; table-layout: fixed; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
     thead th { background: var(--bg); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-soft); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
     thead th.r { text-align: right; }
+    .sl-sort-hdr { cursor: pointer; user-select: none; }
+    .sl-sort-hdr:hover { color: var(--text); }
     tbody tr { border-bottom: 1px solid var(--border); }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:nth-child(even) { background: #FAFBFC; }
@@ -311,6 +313,33 @@ async function boot() {
 
   let equalStore = 'ww'; // which store equal-price items are currently assigned to
 
+  // Per-table sort state — survives renderContent() re-renders
+  let wwSortKey = 'category', wwSortDir = 'asc';
+  let colesSortKey = 'category', colesSortDir = 'asc';
+
+  function sortItems(items, store, key, dir) {
+    const mul = dir === 'asc' ? 1 : -1;
+    return [...items].sort((a, b) => {
+      let av, bv;
+      if (key === 'category') {
+        av = getCategory(a, catOv).toLowerCase();
+        bv = getCategory(b, catOv).toLowerCase();
+      } else if (key === 'item') {
+        av = a.list_item.toLowerCase();
+        bv = b.list_item.toLowerCase();
+      } else if (key === 'price') {
+        av = (store === 'ww' ? a.woolworths?.price : a.coles?.price) ?? Infinity;
+        bv = (store === 'ww' ? b.woolworths?.price : b.coles?.price) ?? Infinity;
+      } else if (key === 'total') {
+        const ap = (store === 'ww' ? a.woolworths?.price : a.coles?.price) ?? 0;
+        const bp = (store === 'ww' ? b.woolworths?.price : b.coles?.price) ?? 0;
+        av = ap * getUnits(a.list_item, unitOv, analysis);
+        bv = bp * getUnits(b.list_item, unitOv, analysis);
+      }
+      return typeof av === 'string' ? av.localeCompare(bv) * mul : (av - bv) * mul;
+    });
+  }
+
   // Store-agnostic aggregate totals (what it costs to buy everything at one store).
   // Each total uses ONLY that store's price; single-store items are excluded from
   // the other store's total — they are not double-counted.
@@ -360,23 +389,24 @@ async function boot() {
     return { wwItems, colesItems };
   }
 
-  function buildTable(storeItems, store) {
+  function buildTable(storeItems, store, sortKey, sortDir) {
     if (!storeItems.length) return `<p class="only-note">No items are cheapest at ${store === 'ww' ? 'Woolworths' : 'Coles'} in this selection.</p>`;
-    const subtotal = storeItems.reduce((s, i) => {
+    const pfx    = store === 'ww' ? 'ww' : 'coles';
+    const sorted = sortItems(storeItems, store, sortKey, sortDir);
+    const subtotal = sorted.reduce((s, i) => {
       const price = store === 'ww' ? i.woolworths?.price : i.coles?.price;
       return s + (price ?? 0) * getUnits(i.list_item, unitOv, analysis);
     }, 0);
-    const rows = storeItems.map(i => {
+    const arrow = (key) => sortKey === key ? (sortDir === 'asc' ? ' ↑' : ' ↓') : ' ↕';
+    const rows = sorted.map(i => {
       const sd = store === 'ww' ? i.woolworths : i.coles;
       const units = getUnits(i.list_item, unitOv, analysis);
       const lineTotal = (sd?.price ?? 0) * units;
       const cat = getCategory(i, catOv);
       const unitStr = fmtUnit(sd?.unit_price, sd?.unit);
       return `<tr>
-        <td class="item-name-cell">
-          ${i.list_item}
-          ${cat ? `<div class="item-cat">${cat}</div>` : ''}
-        </td>
+        <td class="item-name-cell">${i.list_item}</td>
+        <td style="font-size:12px;color:#64748B;overflow:hidden;text-overflow:ellipsis">${cat}</td>
         <td class="r"><span class="price-val">${fmt(sd?.price)}</span>${unitStr ? `<div class="unit-val">${unitStr}</div>` : ''}</td>
         <td class="r">${units}</td>
         <td class="r"><span class="total-val">${fmt(lineTotal)}</span></td>
@@ -384,14 +414,21 @@ async function boot() {
     }).join('');
     return `<table>
       <colgroup>
-        <col style="width:auto">
+        <col>
         <col style="width:110px">
-        <col style="width:80px">
-        <col style="width:90px">
+        <col style="width:100px">
+        <col style="width:70px">
+        <col style="width:85px">
       </colgroup>
-      <thead><tr><th>Item</th><th class="r">Price</th><th class="r">Qty</th><th class="r">Total</th></tr></thead>
+      <thead><tr>
+        <th class="sl-sort-hdr" data-sort-store="${pfx}" data-sort-key="item">Item${arrow('item')}</th>
+        <th class="sl-sort-hdr" data-sort-store="${pfx}" data-sort-key="category">Category${arrow('category')}</th>
+        <th class="r sl-sort-hdr" data-sort-store="${pfx}" data-sort-key="price">Price${arrow('price')}</th>
+        <th class="r">Qty</th>
+        <th class="r sl-sort-hdr" data-sort-store="${pfx}" data-sort-key="total">Total${arrow('total')}</th>
+      </tr></thead>
       <tbody>${rows}</tbody>
-      <tfoot><tr><td><strong>Subtotal</strong></td><td></td><td></td><td class="r"><strong>${fmt(subtotal)}</strong></td></tr></tfoot>
+      <tfoot><tr><td><strong>Subtotal</strong></td><td></td><td></td><td></td><td class="r"><strong>${fmt(subtotal)}</strong></td></tr></tfoot>
     </table>`;
   }
 
@@ -494,7 +531,7 @@ async function boot() {
           <span class="section-title">Buy at Woolworths</span>
           <span class="section-count">${wwItems.length} item${wwItems.length !== 1 ? 's' : ''}</span>
         </div>
-        ${buildTable(wwItems, 'ww')}
+        ${buildTable(wwItems, 'ww', wwSortKey, wwSortDir)}
       </div>
 
       <div class="store-section">
@@ -503,9 +540,24 @@ async function boot() {
           <span class="section-title">Buy at Coles</span>
           <span class="section-count">${colesItems.length} item${colesItems.length !== 1 ? 's' : ''}</span>
         </div>
-        ${buildTable(colesItems, 'coles')}
+        ${buildTable(colesItems, 'coles', colesSortKey, colesSortDir)}
       </div>
     `;
+
+    // Wire sort header clicks (per-table, independent state)
+    document.querySelectorAll('.sl-sort-hdr').forEach(th => {
+      th.addEventListener('click', () => {
+        const s = th.dataset.sortStore, k = th.dataset.sortKey;
+        if (s === 'ww') {
+          wwSortDir = wwSortKey === k ? (wwSortDir === 'asc' ? 'desc' : 'asc') : 'asc';
+          wwSortKey = k;
+        } else {
+          colesSortDir = colesSortKey === k ? (colesSortDir === 'asc' ? 'desc' : 'asc') : 'asc';
+          colesSortKey = k;
+        }
+        renderContent();
+      });
+    });
 
     // Wire store-block click handlers to reassign equal-price items
     if (ec > 0) {
