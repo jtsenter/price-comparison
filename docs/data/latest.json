@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-02T00:27:59.014089+00:00",
+  "last_updated": "2026-06-02T00:28:20.543201+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9567,7 +9567,7 @@
     },
     {
       "list_item": "Woolworths Extra Virgin Olive Oil Spray",
-      "last_scraped": "2026-06-01T21:28:22.476601+00:00",
+      "last_scraped": "2026-06-02T00:28:03.584933+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9598,7 +9598,7 @@
       },
       "coles": {
         "name": "Extra Virgin Olive Oil",
-        "price": 9,
+        "price": 9.0,
         "unit_price": 1.8,
         "unit": "100mL",
         "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
@@ -9610,7 +9610,7 @@
       "alternatives": [
         {
           "name": "Extra Virgin Olive Oil",
-          "price": 9,
+          "price": 9.0,
           "unit_price": 1.8,
           "unit": "100mL",
           "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
@@ -9650,7 +9650,7 @@
     },
     {
       "list_item": "Woolworths Lamb Mince",
-      "last_scraped": "2026-06-01T21:28:24.023777+00:00",
+      "last_scraped": "2026-06-02T00:28:07.576268+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -9659,26 +9659,26 @@
         },
         {
           "date": "2025-03-17",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-04-14",
-          "price": 8
+          "price": 8.0
         }
       ],
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Woolworths Lamb Mince",
-        "price": 9,
-        "unit_price": 18,
+        "price": 9.0,
+        "unit_price": 18.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/582607/woolworths-lamb-mince",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/582607.jpg"
       },
       "coles": {
         "name": "Coles 3 Star Lamb Mince | 500g",
-        "price": 9,
-        "unit_price": 9,
+        "price": 9.0,
+        "unit_price": 9.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8850461.jpg",
@@ -9689,8 +9689,8 @@
       "alternatives": [
         {
           "name": "Coles 3 Star Lamb Mince | 500g",
-          "price": 9,
-          "unit_price": 9,
+          "price": 9.0,
+          "unit_price": 9.0,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8850461.jpg",
@@ -9698,8 +9698,8 @@
         },
         {
           "name": "Coles Perform Lamb With Mint Sauce | 360g",
-          "price": 10,
-          "unit_price": 10,
+          "price": 10.0,
+          "unit_price": 10.0,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/coles-perform-lamb-with-mint-sauce-360g-1756910",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1756910.jpg",
@@ -9707,8 +9707,8 @@
         },
         {
           "name": "Coles Lamb Leg Diced | 450g",
-          "price": 13,
-          "unit_price": 13,
+          "price": 13.0,
+          "unit_price": 13.0,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/coles-lamb-leg-diced-450g-3580600",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3580600.jpg",
@@ -9751,8 +9751,84 @@
       "_ww_price_factor": 0.5
     },
     {
+      "list_item": "Woolworths Mild Salsa",
+      "last_scraped": "2026-06-02T00:28:12.754772+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 1.5
+        },
+        {
+          "date": "2025-01-29",
+          "price": 2.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.9
+        },
+        {
+          "date": "2026-04-13",
+          "price": 1.9
+        },
+        {
+          "date": "2026-05-06",
+          "price": 1.9
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Mild Salsa",
+        "price": 1.9,
+        "unit_price": 0.63,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/311121/woolworths-mild-salsa",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/311121.jpg"
+      },
+      "coles": {
+        "name": "Salsa Mild",
+        "price": 1.9,
+        "unit_price": 0.63,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-salsa-mild-300g-5859834",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5859834.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.9
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.9
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.9
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.9
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.63,
+      "per_100_coles": 0.63,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Pesto Basil",
-      "last_scraped": "2026-06-01T21:28:30.107197+00:00",
+      "last_scraped": "2026-06-02T00:28:14.379171+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9790,7 +9866,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5419660.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9819,93 +9895,17 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Mild Salsa",
-      "last_scraped": "2026-06-01T21:28:31.831122+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 1.5
-        },
-        {
-          "date": "2025-01-29",
-          "price": 2
-        },
-        {
-          "date": "2025-04-14",
-          "price": 2
-        },
-        {
-          "date": "2025-07-10",
-          "price": 1.9
-        },
-        {
-          "date": "2026-04-13",
-          "price": 1.9
-        },
-        {
-          "date": "2026-05-06",
-          "price": 1.9
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Mild Salsa",
-        "price": 1.9,
-        "unit_price": 0.63,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/311121/woolworths-mild-salsa",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/311121.jpg"
-      },
-      "coles": {
-        "name": "Salsa Mild",
-        "price": 1.9,
-        "unit_price": 0.63,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-salsa-mild-300g-5859834",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5859834.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.9
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.9
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.9
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.9
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 0.63,
-      "per_100_coles": 0.63,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Red Onions Bag",
-      "last_scraped": "2026-06-01T21:28:37.874011+00:00",
+      "last_scraped": "2026-06-02T00:28:20.528945+00:00",
       "trip_count": 5,
       "price_history": [
         {
           "date": "2025-06-06",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-07-10",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2026-03-10",
@@ -9913,7 +9913,7 @@
         },
         {
           "date": "2026-04-02",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2026-05-06",
@@ -9923,8 +9923,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Red Onions Bag",
-        "price": 5,
-        "unit_price": 5,
+        "price": 5.0,
+        "unit_price": 5.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg"
@@ -9961,8 +9961,8 @@
         },
         {
           "name": "Coles Brown Onions | 1kg",
-          "price": 4,
-          "unit_price": 4,
+          "price": 4.0,
+          "unit_price": 4.0,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4803991.jpg",
@@ -12822,9 +12822,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 100,
+    "done": 105,
     "total": 144,
     "started_at": "2026-06-02T00:22:14.256893+00:00",
-    "current_item": "Woolworths Cous Cous"
+    "current_item": "Woolworths Red Onions Bag"
   }
 }
