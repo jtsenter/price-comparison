@@ -115,7 +115,6 @@ function dismissDiff(itemName, currentDiff) {
 
 // ── Thresholds ────────────────────────────────────────────────────────────────
 
-const HOT_DEAL_TREND_THRESHOLD = 0.10;   // current price must be in bottom 10% of historical range
 const DISCREPANCY_WARN_THRESHOLD = 0.31; // price diff % above which ⚠ is shown
 const STALE_DATA_DAYS          = 5;      // days before "data is stale" banner appears
 const STALE_PROGRESS_MS        = 5 * 60 * 1000; // ms with no progress update → ⚠ Stalled
@@ -1705,7 +1704,7 @@ function computeBannerStats(items) {
       }
     }
     if (_activeCategory !== 'All' && getCategory(item) !== _activeCategory) return false;
-    if (_showHotOnly && !isHotDeal(item, exclusions)) return false;
+    if (_showHotOnly && !isHotDeal(item)) return false;
     // Only include items that have prices at both stores
     if (item.woolworths?.price == null || item.coles?.price == null) return false;
     return true;
@@ -2272,7 +2271,7 @@ function sortItems(items) {
       if (_activePriority !== 'all' && p !== _activePriority) return false;
     }
     // Hot deals filter
-    if (_showHotOnly && !isHotDeal(item, exclusions)) return false;
+    if (_showHotOnly && !isHotDeal(item)) return false;
     // Store filter (only active when hot filter is on)
     if (_showHotOnly && _storeFilter !== 'all') {
       if (_storeFilter === 'woolworths' && item.cheaper_store !== 'woolworths') return false;
@@ -2439,21 +2438,25 @@ function applyColSort(col) {
 }
 
 // ── Weekly special detection ─────────────────────────────────────────────────
+// isHotDeal uses price_history (Excel purchase trips) only.
+// Include if: currentBest <= histMin (all-time low) OR trendPos < 0.20 (bottom 20% of range).
+// Will be extracted to sort-utils.js in the next commit so hot-deals.html uses the same definition.
 
-function isHotDeal(item, exclusions) {
-  const history = [...(item.price_history||[]), ...(item.ww_price_history||[]), ...(item.coles_price_history||[])];
-  if (history.length < 3) return false;
-  const excluded = new Set((exclusions[item.list_item] || []).map(p => Number(p).toFixed(2)));
-  const prices = history.map(h => h.price).filter((p, i) => p > 0 && !excluded.has(Number(history[i].price).toFixed(2)));
-  if (prices.length < 3) return false;
-  const minP = Math.min(...prices), maxP = Math.max(...prices);
-  if (minP === maxP) return false; // flat history — no real deal signal
-  const ww = item.woolworths?.price;
-  const co = item.coles?.price;
-  // Check both stores independently — same logic as getDealInfo in hot-deals.html
-  if (ww != null && (ww - minP) / (maxP - minP) < HOT_DEAL_TREND_THRESHOLD) return true;
-  if (co != null && (co - minP) / (maxP - minP) < HOT_DEAL_TREND_THRESHOLD) return true;
-  return false;
+function isHotDeal(item) {
+  const hist = item.price_history || [];
+  if (hist.length < 2) return false;
+  const prices = hist.map(h => h.price).filter(p => p > 0);
+  if (prices.length < 2) return false;
+  const histMin = Math.min(...prices);
+  const histMax = Math.max(...prices);
+  if (histMin === histMax) return false;
+  const currentBest = Math.min(
+    item.woolworths?.price ?? Infinity,
+    item.coles?.price ?? Infinity
+  );
+  if (!isFinite(currentBest)) return false;
+  const trendPos = (currentBest - histMin) / (histMax - histMin);
+  return currentBest <= histMin || trendPos < 0.20;
 }
 
 // ── Card view ─────────────────────────────────────────────────────────────────
@@ -2474,7 +2477,7 @@ function renderCards(items) {
     const displayName = ov.displayName || stripWW(item.list_item);
     const cat = getCategory(item);
     const p = getPriority(item.list_item);
-    const hotDeal = isHotDeal(item, exclusions);
+    const hotDeal = isHotDeal(item);
     const wwUrl  = ov.wwUrl    || ww?.url || '';
     const coUrl  = ov.colesUrl || co?.url || '';
     const safeKey = item.list_item.replace(/"/g, '&quot;');
@@ -2844,8 +2847,8 @@ function renderPage(data) {
   const coverageText = missingCount > 0
     ? `${pricedBoth}/${totalNonArchived} priced · ${missingCount} missing`
     : `${totalNonArchived} items`;
-  // "deals" = any non-archived item where one store is cheaper (matches hot-deals.html definition)
-  const hotCount = (data.items || []).filter(i => !isUiArchived(i) && (i.cheaper_store === 'woolworths' || i.cheaper_store === 'coles')).length;
+  // "deals" = items matching the hot-deals page filter (price_history: all-time low or bottom 20% of range)
+  const hotCount = (data.items || []).filter(i => !isUiArchived(i) && isHotDeal(i)).length;
   $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>${hotCount > 0 ? `<a href="hot-deals.html" class="hot-deals-link">🔥 ${hotCount} deal${hotCount !== 1 ? 's' : ''}</a>` : ''}`;
   $('banner').style.display = 'block';
   const _sw = $('searchWrap');
@@ -3034,7 +3037,7 @@ function renderPage(data) {
       </div>`;
 
     // Hot deal: fire goes on the cheaper store's price cell
-    const hotDeal = isHotDeal(item, _renderExclusions);
+    const hotDeal = isHotDeal(item);
     const hotBadge = `<span class="hot-badge" title="Hot Deal!">🔥</span>`;
 
     // Per-100g/ml — computed from product name (reliable for packs); falls back to scraped cup price

@@ -408,8 +408,28 @@ function getCategory(item) {
 }
 
 // ── Deal computation ──────────────────────────────────────────────────────────
-// A "deal" is any non-archived item where cheaper_store is woolworths or coles.
-// This matches the definition used on the main page's "🔥 N deals" link.
+// A "deal" qualifies if price_history shows an all-time low or bottom 20% of range.
+// isHotDeal() gates which items appear; getSimpleDealInfo() provides store/price for display.
+
+// Hot deal detection — uses price_history (Excel purchase trips) only.
+// Include if: currentBest <= histMin (all-time low) OR trendPos < 0.20 (bottom 20%).
+// Will be extracted to sort-utils.js in the next commit.
+function isHotDeal(item) {
+  const hist = item.price_history || [];
+  if (hist.length < 2) return false;
+  const prices = hist.map(h => h.price).filter(p => p > 0);
+  if (prices.length < 2) return false;
+  const histMin = Math.min(...prices);
+  const histMax = Math.max(...prices);
+  if (histMin === histMax) return false;
+  const currentBest = Math.min(
+    item.woolworths?.price ?? Infinity,
+    item.coles?.price ?? Infinity
+  );
+  if (!isFinite(currentBest)) return false;
+  const trendPos = (currentBest - histMin) / (histMax - histMin);
+  return currentBest <= histMin || trendPos < 0.20;
+}
 
 function getSimpleDealInfo(item, exclusions) {
   const store = item.cheaper_store;
@@ -521,7 +541,8 @@ function dismissDiff(itemName, currentDiff) {
 // ── State ─────────────────────────────────────────────────────────────────────
 
 // sortKeys: ordered array of {col, dir} — first element is primary sort
-let sortKeys = [{ col: 'deal', dir: 'desc' }];
+// Default: Trend ↑ (lowest position = best value relative to history = best deal at top)
+let sortKeys = [{ col: 'avg', dir: 'asc' }];
 let _activeCategory = 'All';
 let _storeFilter = 'all';
 let _watchlistOnly = false;
@@ -653,8 +674,9 @@ function renderDeals() {
 
   const exclusions = loadExclusions();
 
-  // Collect all deal items: any item where one store is cheaper
+  // Collect all deal items: pass isHotDeal gate first, then require a store comparison for display
   const allDeals = items
+    .filter(item => isHotDeal(item))
     .map(item => ({ item, deal: getSimpleDealInfo(item, exclusions) }))
     .filter(({ deal }) => deal != null);
 
