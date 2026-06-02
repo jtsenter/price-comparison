@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-02T01:00:39.020343+00:00",
+  "last_updated": "2026-06-02T08:33:44.147600+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -591,7 +591,7 @@
     },
     {
       "list_item": "Fresh Broccoli",
-      "last_scraped": "2026-06-02T00:22:37.448087+00:00",
+      "last_scraped": "2026-06-02T08:33:43.780344+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -685,15 +685,15 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/134681.jpg"
       },
       "coles": {
-        "name": "Coles Kitchen Broccoli Florets | 150g",
-        "price": 2.2,
-        "unit_price": 2.2,
+        "name": "Broccoli Medium",
+        "price": 1.7,
+        "unit_price": 5.0,
         "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-kitchen-broccoli-florets-150g-2310971",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2310971.jpg"
+        "url": "https://www.coles.com.au/product/coles-broccoli-medium-approx.-340g-407755",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/407755.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 0.71,
+      "saving_per_item": 0.21,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -713,12 +713,16 @@
         {
           "date": "2026-06-01",
           "price": 2.2
+        },
+        {
+          "date": "2026-06-02",
+          "price": 1.7
         }
       ],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
-      "per_100_coles": 1.47,
+      "per_100_coles": 0.5,
       "per_100_unit": "100g"
     },
     {
@@ -12867,11 +12871,11 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 721.41,
-    "total_coles": 744.09,
+    "total_woolworths": 722.11,
+    "total_coles": 743.59,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 22.68,
+    "total_saving": 21.48,
     "items_compared": 144,
     "items_not_found": 0
   },
