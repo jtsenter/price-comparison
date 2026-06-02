@@ -184,13 +184,12 @@ def _parse_ww_products(product_list: list) -> list[dict]:
         # When IsEveryDayRewards or IsPmDeals is set, Price is the member price and
         # WasPrice is the regular shelf price anyone can pay.
         is_member_deal = bool(p.get("IsEveryDayRewards") or p.get("IsPmDeals"))
-        if is_member_deal and was_price is not None and float(was_price) > float(price):
-            print(f"    [WW] Member price skipped for '{name}': ${price} → shelf price ${was_price}")
+        if was_price is not None and float(was_price) > float(price):
+            # WasPrice is higher than Price — regardless of the EDR flag, the shelf price
+            # is always ≥ the member price. Use WasPrice as the real shelf price.
+            flag_note = "IsEDR" if is_member_deal else "no IsEDR flag"
+            print(f"    [WW] Member/promo price for '{name}' ({flag_note}): ${price} → shelf price ${was_price}")
             price = was_price
-        elif not is_member_deal and was_price is not None and float(was_price) > float(price):
-            # WasPrice is higher but EDR flag is absent — possible unlabeled member deal.
-            # Cannot fix here (no DOM access on search pages); pin the URL to enable DOM fallback.
-            print(f"    [WW] {name!r}: Price=${price} WasPrice={was_price} IsEDR=False — possible unlabeled member deal (pin URL to fix)")
         product_url = (
             f"{WOOLWORTHS_BASE}/shop/productdetails/{stockcode}/{url_name}"
             if stockcode else ""
@@ -334,39 +333,30 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                 if is_member_deal and was_price is not None and float(was_price) > float(price):
                     print(f"    [WW] Member price skipped for '{name}' (by URL): ${price} → shelf price ${was_price}")
                     price = was_price
-                # DOM price check: compare what the page actually renders against __NEXT_DATA__.
-                # Uses a class-agnostic text-node walker so hashed CSS module names don't matter.
-                # Strategy 1: data-testid selectors (EDR secondary "regular price" element first,
-                #   then main price testids).
-                # Strategy 2: walk all text nodes, find leaf nodes whose text is exactly "$X.XX"
-                #   and pick the first one in plausible grocery price range.
+                # DOM price check: collect ALL price-like text nodes on the page and
+                # take the highest one. Shelf price is always ≥ member/EDR price, so
+                # max() reliably selects the non-member price when two are present.
+                # Uses a class-agnostic TreeWalker so hashed CSS module names don't matter.
+                # Selector priority: [data-testid="product-regular-price"] first (explicit
+                # non-member element), then all "$X.XX" text nodes.
                 if price is not None:
-                    _dom = await page.evaluate("""
+                    _dom_prices = await page.evaluate("""
                         () => {
                             const priceRe = /^\\$\\s*([\\d]+\\.[\\d]{2})$/;
                             const rangeOk = p => p >= 0.5 && p <= 50;
+                            const found = [];
 
-                            // data-testid selectors: EDR non-member price first, then main price
-                            const testIds = [
-                                ['product-regular-price', 'regular'],
-                                ['product-price',         'main'],
-                                ['pricing',               'main'],
-                                ['product-pricing',       'main'],
-                                ['price-display',         'main'],
-                            ];
-                            for (const [tid, kind] of testIds) {
-                                const el = document.querySelector(`[data-testid="${tid}"]`);
-                                if (el?.textContent) {
-                                    const m = el.textContent.match(/\\$\\s*([\\d.]+)/);
-                                    if (m) {
-                                        const p = parseFloat(m[1]);
-                                        if (rangeOk(p)) return { p, sel: `[data-testid="${tid}"]`, kind };
-                                    }
+                            // Explicit non-member price element (EDR deals only)
+                            const regEl = document.querySelector('[data-testid="product-regular-price"]');
+                            if (regEl?.textContent) {
+                                const m = regEl.textContent.match(/\\$\\s*([\\d.]+)/);
+                                if (m) {
+                                    const p = parseFloat(m[1]);
+                                    if (rangeOk(p)) found.push({ p, src: 'product-regular-price' });
                                 }
                             }
 
-                            // Text-node walker: finds leaf nodes whose trimmed text is exactly "$X.XX"
-                            // Works regardless of class names or DOM structure changes.
+                            // Walk all text nodes for "$X.XX" leaf values
                             const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
                             let node;
                             while ((node = walker.nextNode())) {
@@ -374,23 +364,24 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                                 const m = t.match(priceRe);
                                 if (m) {
                                     const p = parseFloat(m[1]);
-                                    if (rangeOk(p)) return { p, sel: 'text-node', kind: 'main' };
+                                    if (rangeOk(p)) found.push({ p, src: 'text-node' });
                                 }
                             }
-                            return null;
+                            return found;
                         }
                     """)
-                    if _dom:
-                        _dom_p   = _dom['p']
-                        _dom_sel = _dom['sel']
-                        _dom_kind = _dom.get('kind', 'unknown')
-                        if abs(_dom_p - float(price)) > 0.005:
-                            print(f"    [WW] DOM [{_dom_kind}] {_dom_sel!r} price ${_dom_p} overrides __NEXT_DATA__ ${price}")
-                            price = _dom_p
+                    if _dom_prices:
+                        _dom_vals = [e['p'] for e in _dom_prices]
+                        _dom_max  = max(_dom_vals)
+                        if len(_dom_vals) >= 2:
+                            print(f"    [WW] DOM prices found: {_dom_vals} — using highest ${_dom_max} (shelf > member)")
                         else:
-                            print(f"    [WW] DOM [{_dom_kind}] {_dom_sel!r} confirms price ${_dom_p}")
+                            print(f"    [WW] DOM price: ${_dom_vals[0]}")
+                        if abs(_dom_max - float(price)) > 0.005:
+                            print(f"    [WW] DOM overrides __NEXT_DATA__ ${price} → ${_dom_max}")
+                            price = _dom_max
                     else:
-                        print(f"    [WW] DOM found no price element — keeping __NEXT_DATA__ ${price}")
+                        print(f"    [WW] DOM found no price elements — keeping __NEXT_DATA__ ${price}")
                 if name and price is not None:
                     _, unit = parse_unit_price(cup_string)
                     product_url = (
