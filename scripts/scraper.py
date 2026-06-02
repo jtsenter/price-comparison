@@ -1133,6 +1133,8 @@ async def _scrape_single_item(
 
     cheaper_store = None
     saving = None
+    # saving_per_item is the per-unit price difference (NOT qty-adjusted).
+    # The app.js multiplies this by units/qty to show basket total savings.
     if ww_norm is not None and coles_price is not None:
         if ww_norm < coles_price:
             cheaper_store, saving = "woolworths", round(coles_price - ww_norm, 2)

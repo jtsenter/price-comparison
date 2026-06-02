@@ -2402,7 +2402,7 @@ function applyColSort(col) {
 }
 
 // ── Weekly special detection ─────────────────────────────────────────────────
-// isHotDeal() and calcTrendPos() are provided by sort-utils.js (loaded before app.js in index.html).
+// isHotDeal() and calcTrendPosition() are provided by utils.js (loaded before app.js in index.html).
 // Do not redefine them here — both pages must share the exact same implementation.
 
 // ── Card view ─────────────────────────────────────────────────────────────────
@@ -2533,9 +2533,9 @@ function renderMobileCards(items, data) {
   // Re-sort for mobile sort modes (desktop sortKeys sort already applied via sortItems())
   let displayItems = [...items];
   if (_mobileSortMode !== 'default') {
-    // calcTrendPos() from sort-utils.js: 0.0=best deal, 0.5=flat/middle, 999=no history
+    // calcTrendPosition() from utils.js: 0.0=best deal, 0.5=flat/middle, 999=no history
     const mul = _mobileSortMode === 'trend-asc' ? 1 : -1;
-    displayItems.sort((a, b) => mul * (calcTrendPos(a) - calcTrendPos(b)));
+    displayItems.sort((a, b) => mul * (calcTrendPosition(a) - calcTrendPosition(b)));
   }
 
   // Sort pill

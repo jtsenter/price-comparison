@@ -399,7 +399,7 @@ table { width: max-content; min-width: 100%; border-collapse: collapse; }
 /* ── Sticky ghost header (JS-driven, bypasses overflow:hidden) */
 .sticky-header-ghost {
   position: fixed;
-  z-index: 90;
+  z-index: 999;
   overflow: hidden;
   background: var(--bg);
   border-bottom: 2px solid var(--border-strong);
