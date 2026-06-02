@@ -319,7 +319,14 @@ async function boot() {
   const coWins  = !isEqual && coTotal < wwTotal;
 
   function computeSplit() {
-    // FIX 1: equal-price items go to the store selected by equalStore
+    // Routing rules — every displayItem ends up in exactly one table:
+    //   WW table:    cheaper_store === 'woolworths'
+    //             OR cheaper_store === 'equal'  AND equalStore === 'ww'
+    //             OR woolworths only (no Coles price)
+    //   Coles table: cheaper_store === 'coles'
+    //             OR cheaper_store === 'equal'  AND equalStore === 'coles'
+    //             OR coles only (no WW price)
+    // Items without either price are excluded from displayItems upstream.
     const wwItems = displayItems.filter(i =>
       i.woolworths?.price != null &&
       (i.cheaper_store === 'woolworths' ||
@@ -329,7 +336,8 @@ async function boot() {
       i.coles?.price != null &&
       (i.cheaper_store === 'coles' ||
        (i.cheaper_store === 'equal' && equalStore === 'coles') ||
-       i.woolworths?.price == null));   // Coles-only items always go here
+       i.woolworths?.price == null));
+    // Invariant: wwItems ∪ colesItems === displayItems (no item in both or neither)
     return { wwItems, colesItems };
   }
 
