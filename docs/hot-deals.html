@@ -403,6 +403,18 @@ const CATEGORY_REMAP = {
   'Spices & Herbs': 'Pantry', 'Spreads & Dips': 'Pantry',
   'Nuts & Seeds': 'Pantry',
 };
+
+// ── Dynamic sticky header offset ─────────────────────────────────────────────
+// Calculates actual nav height and applies it to thead th sticky offset.
+function fixStickyOffset() {
+  const navH = document.querySelector('header')?.offsetHeight || 60;
+  document.querySelectorAll('.deals-table thead th').forEach(th => {
+    th.style.top = navH + 'px';
+  });
+}
+window.addEventListener('load', fixStickyOffset);
+window.addEventListener('resize', fixStickyOffset);
+
 function getCategory(item) {
   try { const ov = JSON.parse(localStorage.getItem('pw_categories_v1') || '{}'); if (ov[item.list_item]) return ov[item.list_item]; } catch {}
   const c = (item.category || '').trim();

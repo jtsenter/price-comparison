@@ -399,5 +399,21 @@
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script src="sort-utils.js"></script>
 <script src="app.js?v=4"></script>
+<script>
+// ── Dynamic sticky header offset ─────────────────────────────────────────────
+// Measures nav height and syncs it with sticky header ghost (ghost-header-ghost).
+function fixStickyOffset() {
+  const navH = document.querySelector('header')?.offsetHeight || 60;
+  // Update ghost header top position if it exists
+  const ghost = document.querySelector('.sticky-header-ghost');
+  if (ghost) ghost.style.top = navH + 'px';
+  // Update regular sticky headers if any
+  document.querySelectorAll('#tableHead th').forEach(th => {
+    th.style.top = navH + 'px';
+  });
+}
+window.addEventListener('load', fixStickyOffset);
+window.addEventListener('resize', fixStickyOffset);
+</script>
 </body>
 </html>

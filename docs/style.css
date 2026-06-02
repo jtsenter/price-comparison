@@ -384,8 +384,10 @@ table { width: max-content; min-width: 100%; border-collapse: collapse; }
   padding: 12px 16px;
   text-align: left;
   border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 0 var(--border);
   white-space: nowrap;
   position: relative;
+  z-index: 50;
   user-select: none;
   cursor: grab;
 }
