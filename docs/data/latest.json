@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-02T00:26:46.758720+00:00",
+  "last_updated": "2026-06-02T00:26:57.931226+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7578,7 +7578,7 @@
     },
     {
       "list_item": "Mutti Tomato Paste Double Concentrate",
-      "last_scraped": "2026-06-01T21:26:59.157439+00:00",
+      "last_scraped": "2026-06-02T00:26:49.185435+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7660,20 +7660,20 @@
     },
     {
       "list_item": "Old El Paso Fajita Spice Mix Mexican Style",
-      "last_scraped": "2026-06-01T21:27:03.580214+00:00",
+      "last_scraped": "2026-06-02T00:26:52.815232+00:00",
       "trip_count": 4,
       "price_history": [
         {
           "date": "2024-11-20",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-04-14",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-07-10",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2026-03-10",
@@ -7699,7 +7699,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [
         {
           "name": "Old El Paso Mild Fajita Kit Mexican Style | 485g",
@@ -7757,7 +7757,7 @@
     },
     {
       "list_item": "Parsnip Fresh",
-      "last_scraped": "2026-06-01T21:27:04.624333+00:00",
+      "last_scraped": "2026-06-02T00:26:53.001069+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7828,102 +7828,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Philadelphia Original Cream Cheese Block",
-      "last_scraped": "2026-06-01T21:27:07.174933+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2024-12-09",
-          "price": 2.85
-        },
-        {
-          "date": "2025-03-17",
-          "price": 4.5
-        },
-        {
-          "date": "2026-05-06",
-          "price": 5.7
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Philadelphia Original Cream Cheese Block",
-        "price": 5.7,
-        "unit_price": 22.8,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/48062/philadelphia-original-cream-cheese-block",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/048062.jpg"
-      },
-      "coles": {
-        "name": "Philadelphia Original Cream Cheese Block | 250g",
-        "price": 5.7,
-        "unit_price": 5.7,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/philadelphia-original-cream-cheese-block-250g-192502",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/192502.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 4.27,
-      "alternatives": [
-        {
-          "name": "Philadelphia Original Cream Cheese Block | 250g",
-          "price": 5.7,
-          "unit_price": 5.7,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/philadelphia-original-cream-cheese-block-250g-192502",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/192502.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Philadelphia Cream Cheese Original Block 2 Pack | 500g",
-          "price": 9,
-          "unit_price": 9,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/philadelphia-cream-cheese-original-block-2-pack-500g-5081291",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5081291.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Philadelphia Original Cream Cheese Twin Block",
-          "price": 9,
-          "unit_price": 18,
-          "unit": "1KG",
-          "url": "https://www.woolworths.com.au/shop/productdetails/72546/philadelphia-original-cream-cheese-twin-block",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/072546.jpg",
-          "retailer": "woolworths"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5.7
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5.7
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5.7
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5.7
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 2.28,
-      "per_100_coles": 2.28,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.25
-    },
-    {
       "list_item": "Philadelphia Original Cream Cheese Spread Tub",
-      "last_scraped": "2026-06-01T21:27:08.969904+00:00",
+      "last_scraped": "2026-06-02T00:26:56.923938+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -7991,6 +7897,100 @@
         }
       ],
       "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 2.28,
+      "per_100_coles": 2.28,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.25
+    },
+    {
+      "list_item": "Philadelphia Original Cream Cheese Block",
+      "last_scraped": "2026-06-02T00:26:57.923579+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-12-09",
+          "price": 2.85
+        },
+        {
+          "date": "2025-03-17",
+          "price": 4.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 5.7
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Philadelphia Original Cream Cheese Block",
+        "price": 5.7,
+        "unit_price": 22.8,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/48062/philadelphia-original-cream-cheese-block",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/048062.jpg"
+      },
+      "coles": {
+        "name": "Philadelphia Original Cream Cheese Block | 250g",
+        "price": 5.7,
+        "unit_price": 5.7,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/philadelphia-original-cream-cheese-block-250g-192502",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/192502.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 4.27,
+      "alternatives": [
+        {
+          "name": "Philadelphia Original Cream Cheese Block | 250g",
+          "price": 5.7,
+          "unit_price": 5.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-original-cream-cheese-block-250g-192502",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/192502.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Philadelphia Cream Cheese Original Block 2 Pack | 500g",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-cream-cheese-original-block-2-pack-500g-5081291",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5081291.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Philadelphia Original Cream Cheese Twin Block",
+          "price": 9.0,
+          "unit_price": 18.0,
+          "unit": "1KG",
+          "url": "https://www.woolworths.com.au/shop/productdetails/72546/philadelphia-original-cream-cheese-twin-block",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/072546.jpg",
+          "retailer": "woolworths"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5.7
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5.7
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5.7
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5.7
+        }
+      ],
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.28,
       "per_100_coles": 2.28,
@@ -12822,9 +12822,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 75,
+    "done": 80,
     "total": 144,
     "started_at": "2026-06-02T00:22:14.256893+00:00",
-    "current_item": "Mon Ami French Camembert Cheese"
+    "current_item": "Philadelphia Original Cream Cheese Block"
   }
 }
