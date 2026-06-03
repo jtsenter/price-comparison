@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-03T00:36:01.554957+00:00",
+  "last_updated": "2026-06-03T00:36:22.625107+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4579,7 +4579,7 @@
     },
     {
       "list_item": "Woolworths Greek Style Yoghurt",
-      "last_scraped": "2026-06-02T09:11:29.049377+00:00",
+      "last_scraped": "2026-06-03T00:36:02.349799+00:00",
       "trip_count": 33,
       "price_history": [
         {
@@ -4612,79 +4612,79 @@
         },
         {
           "date": "2025-02-02",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-02-28",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-03-11",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-03-17",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-03-27",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-04-05",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-04-14",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-04-25",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-05-04",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-05-12",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-05-22",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-05-29",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-06-06",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-06-13",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-06-21",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-07-03",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-07-10",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-07-26",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2026-02-03",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2026-02-07",
@@ -4755,7 +4755,7 @@
           "price": 4.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.42,
       "per_100_coles": 0.45,
@@ -4763,7 +4763,7 @@
     },
     {
       "list_item": "Woolworths Red Watermelon Cut Quarter",
-      "last_scraped": "2026-06-02T09:11:33.120599+00:00",
+      "last_scraped": "2026-06-03T00:36:07.862183+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4819,7 +4819,35 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 1.56,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Red Split Lentils | 1kg",
+          "price": 4.0,
+          "unit_price": 4.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-red-split-lentils-1kg-9073535",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9073535.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Kitchen Cut Fruit Watermelon | 350g",
+          "price": 6.5,
+          "unit_price": 6.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-kitchen-cut-fruit-watermelon-350g-7864336",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7864336.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Kitchen Cut Fruit Salad Watermelon Fingers 750g | 1 Each",
+          "price": 8.5,
+          "unit_price": 8.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-kitchen-cut-fruit-salad-watermelon-fingers-750g-1-each-7536858",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7536858.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -4852,7 +4880,7 @@
     },
     {
       "list_item": "Woolworths Sour Cream",
-      "last_scraped": "2026-06-02T09:11:36.004325+00:00",
+      "last_scraped": "2026-06-03T00:36:12.482805+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4906,7 +4934,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3676946.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -4928,7 +4956,7 @@
           "price": 3.3
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.1,
       "per_100_coles": 1.1,
@@ -4936,7 +4964,7 @@
     },
     {
       "list_item": "Woolworths Onion Brown Bag",
-      "last_scraped": "2026-06-02T09:11:39.172948+00:00",
+      "last_scraped": "2026-06-03T00:36:12.575919+00:00",
       "trip_count": 14,
       "price_history": [
         {
@@ -4949,7 +4977,7 @@
         },
         {
           "date": "2025-03-27",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2025-04-14",
@@ -4965,7 +4993,7 @@
         },
         {
           "date": "2025-06-06",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2025-07-10",
@@ -4989,7 +5017,7 @@
         },
         {
           "date": "2026-04-02",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2026-05-06",
@@ -5007,15 +5035,26 @@
       },
       "coles": {
         "name": "Brown Onions",
-        "price": 4,
-        "unit_price": 4,
+        "price": 2.5,
+        "unit_price": 2.5,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4803991.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4803991.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.4,
-      "alternatives": [],
+      "cheaper_store": "coles",
+      "saving_per_item": 1.1,
+      "alternatives": [
+        {
+          "name": "Brown Onions",
+          "price": 2.5,
+          "unit_price": 2.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4803991.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -5040,15 +5079,15 @@
           "price": 4
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.36,
-      "per_100_coles": 0.4,
+      "per_100_coles": 0.25,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Washed Potato Bag",
-      "last_scraped": "2026-06-02T09:11:45.797463+00:00",
+      "last_scraped": "2026-06-03T00:36:22.621618+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -5083,16 +5122,16 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Washed Potatoes Bag",
-        "price": 5.5,
-        "unit_price": 2.75,
+        "price": 8.0,
+        "unit_price": 4.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/262783/woolworths-washed-potatoes-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/262783.jpg"
       },
       "coles": {
         "name": "Potatoes Washed",
-        "price": 6,
-        "unit_price": 3,
+        "price": 8.5,
+        "unit_price": 4.25,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1206748.jpg"
@@ -5128,10 +5167,10 @@
           "price": 6
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
-      "per_100_ww": 0.28,
-      "per_100_coles": 0.3,
+      "per_100_ww": 0.4,
+      "per_100_coles": 0.42,
       "per_100_unit": "100g"
     },
     {
@@ -11957,19 +11996,19 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 724.12,
-    "total_coles": 735.69,
+    "total_woolworths": 726.62,
+    "total_coles": 736.69,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 11.57,
+    "total_saving": 10.07,
     "items_compared": 144,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 40,
+    "done": 45,
     "total": 144,
     "started_at": "2026-06-03T00:33:33.955651+00:00",
-    "current_item": "Woolworths Garlic Heads CLOVE"
+    "current_item": "Woolworths Washed Potato Bag"
   },
   "pending_validation": [
     {
@@ -12135,6 +12174,36 @@
       "coles_price": 3.9,
       "coles_url": "https://www.coles.com.au/product/coles-lettuce-cos-baby-hearts-2-pack-4646485",
       "coles_prev_price": 2.9,
+      "coles_suspicious": true,
+      "flagged_date": "2026-06-03",
+      "reason": [
+        "30pct_change"
+      ]
+    },
+    {
+      "item": "Woolworths Onion Brown Bag",
+      "ww_price": 3.6,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/144336/woolworths-onion-brown-bag",
+      "ww_prev_price": 3.6,
+      "ww_suspicious": false,
+      "coles_price": 2.5,
+      "coles_url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
+      "coles_prev_price": 4,
+      "coles_suspicious": true,
+      "flagged_date": "2026-06-03",
+      "reason": [
+        "30pct_change"
+      ]
+    },
+    {
+      "item": "Woolworths Washed Potato Bag",
+      "ww_price": 8.0,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/262783/woolworths-washed-potatoes-bag",
+      "ww_prev_price": 5.5,
+      "ww_suspicious": true,
+      "coles_price": 8.5,
+      "coles_url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
+      "coles_prev_price": 6,
       "coles_suspicious": true,
       "flagged_date": "2026-06-03",
       "reason": [
