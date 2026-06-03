@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-03T00:34:44.514635+00:00",
+  "last_updated": "2026-06-03T00:35:02.441773+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2294,7 +2294,7 @@
     },
     {
       "list_item": "The Odd Bunch Capsicum Prepacked",
-      "last_scraped": "2026-06-02T09:10:16.169543+00:00",
+      "last_scraped": "2026-06-03T00:34:45.778727+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -2307,7 +2307,7 @@
         },
         {
           "date": "2024-12-09",
-          "price": 7
+          "price": 7.0
         },
         {
           "date": "2025-02-02",
@@ -2323,11 +2323,11 @@
         },
         {
           "date": "2025-04-05",
-          "price": 7
+          "price": 7.0
         },
         {
           "date": "2025-04-14",
-          "price": 7
+          "price": 7.0
         },
         {
           "date": "2025-05-04",
@@ -2335,7 +2335,7 @@
         },
         {
           "date": "2025-05-22",
-          "price": 7
+          "price": 7.0
         },
         {
           "date": "2025-06-06",
@@ -2347,7 +2347,7 @@
         },
         {
           "date": "2025-07-10",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2026-02-23",
@@ -2369,15 +2369,34 @@
       },
       "coles": {
         "name": "Coles Tri Colour Capsicum Prepack | 500g",
-        "price": 8.9,
-        "unit_price": 8.9,
+        "price": 7.9,
+        "unit_price": 7.9,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-tri-colour-capsicum-prepack-500g-4841072",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4841072.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 5.75,
-      "alternatives": [],
+      "saving_per_item": 4.75,
+      "alternatives": [
+        {
+          "name": "Coles Yellow Capsicum | approx. 220g",
+          "price": 1.3,
+          "unit_price": 1.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-yellow-capsicum-approx.-220g-7215355",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7215355.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles I'M Perfect Capsicum | 1kg",
+          "price": 5.5,
+          "unit_price": 5.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-i'm-perfect-capsicum-1kg-1328010",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1328010.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -2400,18 +2419,22 @@
         {
           "date": "2026-06-01",
           "price": 8.9
+        },
+        {
+          "date": "2026-06-03",
+          "price": 7.9
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.63,
-      "per_100_coles": 1.78,
+      "per_100_coles": 1.58,
       "per_100_unit": "100g",
       "_ww_price_factor": 0.5
     },
     {
       "list_item": "The Odd Bunch Carrots",
-      "last_scraped": "2026-06-02T09:10:24.469050+00:00",
+      "last_scraped": "2026-06-03T00:34:53.429043+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -2428,7 +2451,7 @@
         },
         {
           "date": "2025-07-03",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2026-02-03",
@@ -2450,7 +2473,7 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "The Odd Bunch Carrots",
-        "price": 2,
+        "price": 2.0,
         "unit_price": 1.33,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/288440/the-odd-bunch-carrots",
@@ -2458,14 +2481,14 @@
       },
       "coles": {
         "name": "I'm Perfect Carrots Prepacked",
-        "price": 2.6,
-        "unit_price": 1.73,
+        "price": 2.0,
+        "unit_price": 1.33,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-i'm-perfect-carrots-prepacked-1.5kg-3609392",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3609392.jpg"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.6,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -2489,17 +2512,21 @@
         {
           "date": "2026-06-01",
           "price": 2.6
+        },
+        {
+          "date": "2026-06-03",
+          "price": 2.0
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.13,
-      "per_100_coles": 0.17,
+      "per_100_coles": 0.13,
       "per_100_unit": "100g"
     },
     {
       "list_item": "The Odd Bunch Zucchini Prepacked",
-      "last_scraped": "2026-06-02T09:10:26.345216+00:00",
+      "last_scraped": "2026-06-03T00:34:54.776898+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -2524,15 +2551,15 @@
         },
         {
           "date": "2025-02-28",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2025-03-11",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2025-03-17",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2025-03-27",
@@ -2560,7 +2587,7 @@
         },
         {
           "date": "2025-07-10",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2026-02-03",
@@ -2586,8 +2613,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "The Odd Bunch Zucchini Prepacked",
-        "price": 3.5,
-        "unit_price": 4.67,
+        "price": 2.9,
+        "unit_price": 3.87,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/825869/the-odd-bunch-zucchini-prepacked",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/825869.jpg"
@@ -2595,13 +2622,13 @@
       "coles": {
         "name": "Zucchini",
         "price": 7.5,
-        "unit_price": 15,
+        "unit_price": 15.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-organic-zucchini-500g-5032219",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5032219.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 4,
+      "saving_per_item": 4.6,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -2611,6 +2638,10 @@
         {
           "date": "2026-06-01",
           "price": 3.5
+        },
+        {
+          "date": "2026-06-03",
+          "price": 2.9
         }
       ],
       "coles_price_history": [
@@ -2627,20 +2658,20 @@
           "price": 7.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
-      "per_100_ww": 0.47,
+      "per_100_ww": 0.39,
       "per_100_coles": 1.5,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Weet-Bix Little Kids Breakfast Cereal",
-      "last_scraped": "2026-06-02T09:10:28.991877+00:00",
+      "last_scraped": "2026-06-03T00:34:58.506496+00:00",
       "trip_count": 7,
       "price_history": [
         {
           "date": "2025-05-22",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-06-06",
@@ -2652,25 +2683,25 @@
         },
         {
           "date": "2026-02-03",
-          "price": 5
+          "price": 5.0
         },
         {
           "date": "2026-02-11",
-          "price": 5
+          "price": 5.0
         },
         {
           "date": "2026-03-10",
-          "price": 5
+          "price": 5.0
         },
         {
           "date": "2026-04-02",
-          "price": 4
+          "price": 4.0
         }
       ],
       "category": "Other",
       "woolworths": {
         "name": "Weet-Bix Little Kids Breakfast Cereal",
-        "price": 5,
+        "price": 5.0,
         "unit_price": 1.25,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/142976/weet-bix-little-kids-breakfast-cereal",
@@ -2678,15 +2709,14 @@
       },
       "coles": {
         "name": "Sanitarium Weet-bix Little Kids Essentials Breakfast Cereal | 400g",
-        "price": 4,
-        "unit_price": 1,
+        "price": 5.0,
+        "unit_price": 5.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/sanitarium-weet-bix-little-kids-essentials-breakfast-cereal-400g-4233292",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4233292.jpg",
-        "retailer": "coles"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4233292.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 1,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -2706,17 +2736,21 @@
         {
           "date": "2026-06-01",
           "price": 4
+        },
+        {
+          "date": "2026-06-03",
+          "price": 5.0
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.25,
-      "per_100_coles": 1,
+      "per_100_coles": 1.25,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Truss Tomatoes",
-      "last_scraped": "2026-06-02T09:10:33.710049+00:00",
+      "last_scraped": "2026-06-03T00:35:02.438889+00:00",
       "trip_count": 35,
       "price_history": [
         {
@@ -2863,22 +2897,22 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Truss Tomatoes",
-        "price": 1.25,
-        "unit_price": 1.25,
+        "price": 0.97,
+        "unit_price": 0.97,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/169438/truss-tomatoes",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/169438.jpg"
       },
       "coles": {
         "name": "Tomatoes Greenhouse Truss",
-        "price": 0.76,
-        "unit_price": 5.9,
+        "price": 1.1,
+        "unit_price": 8.5,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-tomatoes-greenhouse-truss-approx.-130g-4628676",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4628676.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.49,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.13,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -2888,6 +2922,10 @@
         {
           "date": "2026-06-01",
           "price": 1.25
+        },
+        {
+          "date": "2026-06-03",
+          "price": 0.97
         }
       ],
       "coles_price_history": [
@@ -2900,10 +2938,10 @@
           "price": 0.76
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
-      "per_100_coles": 0.59,
+      "per_100_coles": 0.85,
       "per_100_unit": "100g"
     },
     {
@@ -11813,19 +11851,19 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 724.1,
-    "total_coles": 738.25,
+    "total_woolworths": 723.22,
+    "total_coles": 737.99,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 14.15,
+    "total_saving": 14.77,
     "items_compared": 144,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 20,
+    "done": 25,
     "total": 144,
     "started_at": "2026-06-03T00:33:33.955651+00:00",
-    "current_item": "The Dutch Company Confectionary 4 Syrup Wafers"
+    "current_item": "Truss Tomatoes"
   },
   "pending_validation": [
     {
@@ -11934,6 +11972,21 @@
       "flagged_date": "2026-06-03",
       "reason": [
         "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Truss Tomatoes",
+      "ww_price": 0.97,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/169438/truss-tomatoes",
+      "ww_prev_price": 1.25,
+      "ww_suspicious": false,
+      "coles_price": 1.1,
+      "coles_url": "https://www.coles.com.au/product/coles-tomatoes-greenhouse-truss-approx.-130g-4628676",
+      "coles_prev_price": 0.76,
+      "coles_suspicious": true,
+      "flagged_date": "2026-06-03",
+      "reason": [
+        "30pct_change"
       ]
     }
   ]
