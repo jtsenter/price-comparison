@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-03T00:38:42.761326+00:00",
+  "last_updated": "2026-06-03T00:38:58.261554+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8855,7 +8855,7 @@
     },
     {
       "list_item": "White Seedless Grapes Bag Approx. 900g",
-      "last_scraped": "2026-06-02T09:13:27.312124+00:00",
+      "last_scraped": "2026-06-03T00:38:47.146285+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -8882,23 +8882,52 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "White Seedless Grapes Bag Approx. 900g",
-        "price": 5.5,
-        "unit_price": 5.5,
+        "price": 6.0,
+        "unit_price": 6.0,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/138801/white-seedless-grapes-bag-approx-900g",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/138801.jpg"
       },
       "coles": {
         "name": "Coles White Seedless Grapes | approx. 1kg",
-        "price": 6,
-        "unit_price": 6,
+        "price": 5.9,
+        "unit_price": 5.9,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-white-seedless-grapes-approx.-1kg-8133391",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8133391.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8133391.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.5,
-      "alternatives": [],
+      "cheaper_store": "coles",
+      "saving_per_item": 0.1,
+      "alternatives": [
+        {
+          "name": "Coles White Seedless Cotton Candy Grapes | 400g",
+          "price": 5.5,
+          "unit_price": 5.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-white-seedless-cotton-candy-grapes-400g-2051126",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2051126.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Candy Hearts Grapes Seedless | 400g",
+          "price": 5.5,
+          "unit_price": 5.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-candy-hearts-grapes-seedless-400g-1837749",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1837749.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles White Seedless Grapes | approx. 1kg",
+          "price": 5.9,
+          "unit_price": 5.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-white-seedless-grapes-approx.-1kg-8133391",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8133391.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -8921,17 +8950,21 @@
         {
           "date": "2026-06-01",
           "price": 6
+        },
+        {
+          "date": "2026-06-03",
+          "price": 5.9
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
-      "per_100_ww": 0.61,
-      "per_100_coles": 0.6,
+      "per_100_ww": 0.67,
+      "per_100_coles": 0.59,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths 100% Canadian Maple Syrup",
-      "last_scraped": "2026-06-02T09:13:29.603963+00:00",
+      "last_scraped": "2026-06-03T00:38:48.249726+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8944,17 +8977,17 @@
         },
         {
           "date": "2025-06-06",
-          "price": 6
+          "price": 6.0
         },
         {
           "date": "2026-05-06",
-          "price": 6
+          "price": 6.0
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths 100% Canadian Maple Syrup",
-        "price": 6,
+        "price": 6.0,
         "unit_price": 2.4,
         "unit": "100ML",
         "url": "https://www.woolworths.com.au/shop/productdetails/298476/woolworths-100-canadian-maple-syrup",
@@ -8962,15 +8995,25 @@
       },
       "coles": {
         "name": "Coles Finest Pure Canadian Maple Syrup | 250mL",
-        "price": 6,
-        "unit_price": 6,
+        "price": 6.0,
+        "unit_price": 6.0,
         "unit": "100mL",
         "url": "https://www.coles.com.au/product/coles-finest-pure-canadian-maple-syrup-250ml-1790270",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1790270.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Nature Valley Crunchy Canadian Maple Syrup 6 Twin Bars | 252g",
+          "price": 4.7,
+          "unit_price": 1.87,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/nature-valley-crunchy-canadian-maple-syrup-6-twin-bars-252g-3585057",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3585057.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -8991,15 +9034,83 @@
           "price": 6
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.4,
       "per_100_coles": 2.4,
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Woolworths 18 Large Cage Free Eggs",
+      "last_scraped": "2026-06-03T00:38:52.696944+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 7.9
+        },
+        {
+          "date": "2025-03-27",
+          "price": 7.9
+        },
+        {
+          "date": "2025-05-29",
+          "price": 8.7
+        },
+        {
+          "date": "2025-06-13",
+          "price": 8.7
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths 18 Large Cage Free Eggs",
+        "price": 8.4,
+        "unit_price": 0.93,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/74593/woolworths-18-large-cage-free-eggs",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/074593.jpg"
+      },
+      "coles": {
+        "name": "Coles Cage Free Eggs 18 Pack | 900g",
+        "price": 8.4,
+        "unit_price": 8.4,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-cage-free-eggs-18-pack-900g-5178961",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5178961.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8.4
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8.4
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8.4
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8.4
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 0.93,
+      "per_100_coles": 0.93,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths 12 Extra Large Cage Free Eggs",
-      "last_scraped": "2026-06-02T09:13:30.731270+00:00",
+      "last_scraped": "2026-06-03T00:38:53.438739+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9063,83 +9174,15 @@
           "price": 6.4
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.81,
       "per_100_coles": 0.8,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths 18 Large Cage Free Eggs",
-      "last_scraped": "2026-06-02T09:13:33.217471+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2025-02-28",
-          "price": 7.9
-        },
-        {
-          "date": "2025-03-27",
-          "price": 7.9
-        },
-        {
-          "date": "2025-05-29",
-          "price": 8.7
-        },
-        {
-          "date": "2025-06-13",
-          "price": 8.7
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths 18 Large Cage Free Eggs",
-        "price": 8.4,
-        "unit_price": 0.93,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/74593/woolworths-18-large-cage-free-eggs",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/074593.jpg"
-      },
-      "coles": {
-        "name": "Coles Cage Free Eggs 18 Pack | 900g",
-        "price": 8.4,
-        "unit_price": 8.4,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-cage-free-eggs-18-pack-900g-5178961",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5178961.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8.4
-        },
-        {
-          "date": "2026-06-01",
-          "price": 8.4
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8.4
-        },
-        {
-          "date": "2026-06-01",
-          "price": 8.4
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.93,
-      "per_100_coles": 0.93,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Asparagus Green Bunch",
-      "last_scraped": "2026-06-02T09:13:35.813586+00:00",
+      "last_scraped": "2026-06-03T00:38:58.254320+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -9148,7 +9191,7 @@
         },
         {
           "date": "2024-12-02",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2025-02-02",
@@ -9166,8 +9209,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Green Asparagus Bunch Green",
-        "price": 3.9,
-        "unit_price": 3.9,
+        "price": 3.5,
+        "unit_price": 3.5,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/305235/woolworths-green-asparagus-bunch-green",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/305235.jpg"
@@ -9181,8 +9224,18 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8809049.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 0.5,
-      "alternatives": [],
+      "saving_per_item": 0.9,
+      "alternatives": [
+        {
+          "name": "Coles Asparagus Spears | 425g",
+          "price": 3.0,
+          "unit_price": 3.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-asparagus-spears-425g-5841817",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5841817.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -9191,6 +9244,10 @@
         {
           "date": "2026-06-01",
           "price": 3.9
+        },
+        {
+          "date": "2026-06-03",
+          "price": 3.5
         }
       ],
       "coles_price_history": [
@@ -9203,7 +9260,7 @@
           "price": 4.4
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -12389,19 +12446,19 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 733.88,
-    "total_coles": 732.13,
+    "total_woolworths": 733.98,
+    "total_coles": 732.03,
     "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 1.75,
+    "total_saving": 1.95,
     "items_compared": 144,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 90,
+    "done": 95,
     "total": 144,
     "started_at": "2026-06-03T00:33:33.955651+00:00",
-    "current_item": "Vevelle White 2 Ply Toilet Tissue"
+    "current_item": "Woolworths Asparagus Green Bunch"
   },
   "pending_validation": [
     {
@@ -12737,6 +12794,21 @@
       "flagged_date": "2026-06-03",
       "reason": [
         "30pct_change",
+        "outside_historical_range"
+      ]
+    },
+    {
+      "item": "White Seedless Grapes Bag Approx. 900g",
+      "ww_price": 6.0,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/138801/white-seedless-grapes-bag-approx-900g",
+      "ww_prev_price": 5.5,
+      "ww_suspicious": true,
+      "coles_price": 5.9,
+      "coles_url": "https://www.coles.com.au/product/coles-white-seedless-grapes-approx.-1kg-8133391",
+      "coles_prev_price": 6,
+      "coles_suspicious": false,
+      "flagged_date": "2026-06-03",
+      "reason": [
         "outside_historical_range"
       ]
     }
