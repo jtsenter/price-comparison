@@ -142,7 +142,8 @@
 
     .sl-table-wrap { clip-path: inset(0 round var(--radius)); border: 1px solid var(--border); box-shadow: var(--shadow); border-radius: var(--radius); }
     table { width: 100%; border-collapse: collapse; table-layout: fixed; background: var(--card); }
-    thead th { position: sticky; top: var(--header-h, 60px); z-index: 10; background: var(--bg); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-soft); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); box-shadow: 0 1px 0 var(--border); }
+    thead th { position: sticky; top: var(--header-h, 60px); z-index: 10; background: var(--bg); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-soft); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); box-shadow: 0 1px 0 var(--border); }
+    thead th:last-child { border-right: none; }
     thead th.r { text-align: right; }
     .sl-sort-hdr { cursor: pointer; user-select: none; }
     .sl-sort-hdr:hover { color: var(--text); }
@@ -234,6 +235,52 @@
 
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '—';
+
+// ── Basket column widths ──────────────────────────────────────────────────────
+let _slColWidths = (() => {
+  try { return JSON.parse(localStorage.getItem('pw_sl_col_widths')) || {}; } catch { return {}; }
+})();
+function saveSlColWidths() { localStorage.setItem('pw_sl_col_widths', JSON.stringify(_slColWidths)); }
+
+function initSlResize() {
+  document.querySelectorAll('.sl-table-wrap thead th[data-col]').forEach(th => {
+    const col = th.dataset.col;
+    const saved = _slColWidths[col];
+    if (saved) { th.style.width = saved + 'px'; th.style.minWidth = saved + 'px'; }
+    if (th.querySelector('.col-resize-handle')) return;
+    const handle = document.createElement('div');
+    handle.className = 'col-resize-handle';
+    th.appendChild(handle);
+    handle.addEventListener('mousedown', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      const table   = th.closest('table');
+      const tbody   = table?.querySelector('tbody');
+      const thead   = th.closest('thead');
+      const colIdx  = [...thead.querySelectorAll('th')].indexOf(th);
+      const startX  = e.clientX;
+      const startW  = th.getBoundingClientRect().width;
+      handle.classList.add('resizing');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+      function onMove(e) {
+        const newW = Math.max(50, startW + e.clientX - startX);
+        th.style.width = newW + 'px'; th.style.minWidth = newW + 'px';
+        tbody?.querySelectorAll(`tr td:nth-child(${colIdx + 1})`).forEach(td => {
+          td.style.width = newW + 'px'; td.style.minWidth = newW + 'px'; td.style.maxWidth = newW + 'px';
+        });
+      }
+      function onUp() {
+        handle.classList.remove('resizing');
+        document.body.style.cursor = ''; document.body.style.userSelect = '';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        _slColWidths[col] = th.getBoundingClientRect().width; saveSlColWidths();
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
+}
 
 function getCategory(item, catOv) { return catOv[item.list_item] || item.category || 'Other'; }
 
@@ -427,11 +474,11 @@ async function boot() {
         <col style="width:85px">
       </colgroup>
       <thead><tr>
-        <th class="sl-sort-hdr" data-sort-store="${pfx}" data-sort-key="item">Item${arrow('item')}</th>
-        <th class="sl-sort-hdr" data-sort-store="${pfx}" data-sort-key="category">Category${arrow('category')}</th>
-        <th class="r sl-sort-hdr" data-sort-store="${pfx}" data-sort-key="price">Price${arrow('price')}</th>
-        <th class="r">Qty</th>
-        <th class="r sl-sort-hdr" data-sort-store="${pfx}" data-sort-key="total">Total${arrow('total')}</th>
+        <th class="sl-sort-hdr" data-col="item" data-sort-store="${pfx}" data-sort-key="item">Item${arrow('item')}</th>
+        <th class="sl-sort-hdr" data-col="category" data-sort-store="${pfx}" data-sort-key="category">Category${arrow('category')}</th>
+        <th class="r sl-sort-hdr" data-col="price" data-sort-store="${pfx}" data-sort-key="price">Price${arrow('price')}</th>
+        <th class="r" data-col="qty">Qty</th>
+        <th class="r sl-sort-hdr" data-col="total" data-sort-store="${pfx}" data-sort-key="total">Total${arrow('total')}</th>
       </tr></thead>
       <tbody>${rows}</tbody>
       <tfoot><tr><td><strong>Subtotal</strong></td><td></td><td></td><td></td><td class="r"><strong>${fmt(subtotal)}</strong></td></tr></tfoot>
@@ -486,6 +533,7 @@ async function boot() {
     main.innerHTML = `
       <div class="sl-topbar">
         <div class="filter-note">📋 ${filterNoteHtml}</div>
+        <button id="resetColWidthsBtn" class="btn btn-ghost" title="Reset column widths" style="white-space:nowrap">↺ Reset widths</button>
         <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
       </div>
 
@@ -581,6 +629,14 @@ async function boot() {
         main.innerHTML = '<div class="empty">Your basket is empty. <a href="index.html">Go back to add items.</a></div>';
       }
     });
+
+    document.getElementById('resetColWidthsBtn')?.addEventListener('click', () => {
+      _slColWidths = {};
+      localStorage.removeItem('pw_sl_col_widths');
+      renderContent();
+    });
+
+    initSlResize();
   }
 
   renderContent();

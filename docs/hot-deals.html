@@ -81,6 +81,7 @@
       z-index: 10;
       background: var(--card);
       border-bottom: 2px solid var(--border);
+      border-right: 1px solid var(--border);
       padding: 10px 12px;
       text-align: left;
       font-size: 12px;
@@ -90,11 +91,14 @@
       cursor: pointer;
       user-select: none;
     }
+    .deals-table thead th:last-child { border-right: none; }
     .deals-table thead th:hover { background: var(--bg); }
     .deals-table thead th.sort-primary {
       color: var(--text);
       background: #f8fafc;
     }
+    .deals-table thead th.dragging  { opacity: 0.4; }
+    .deals-table thead th.drag-over { background: var(--ww-light) !important; outline: 2px solid var(--ww); outline-offset: -2px; }
     .deals-table tbody tr {
       border-bottom: 1px solid var(--border);
       transition: background 0.1s;
@@ -294,6 +298,7 @@
   <span class="sort-bar-label">Sort:</span>
   <div id="sortKeyChips"></div>
   <button class="sort-clear-btn" id="sortClearBtn" title="Reset sort">✕ Clear</button>
+  <button class="sort-clear-btn" id="hdResetColsBtn" title="Reset column widths and order" style="margin-left:8px">↺ Reset columns</button>
 </div>
 
 <main style="padding:0 24px 40px">
@@ -627,6 +632,137 @@ function renderSortBar() {
   // No sort bar shown — multi-key sort works silently like Excel
 }
 
+// ── Column order / widths (Hot Deals) ────────────────────────────────────────
+const HD_ALL_COLS       = ['name','deal','ww','coles','category','avg','watch'];
+const HD_DEFAULT_WIDTHS = { name:240, deal:70, ww:140, coles:140, category:110, avg:160, watch:60 };
+
+let _hdColOrder = (() => {
+  try { return JSON.parse(localStorage.getItem('pw_hd_col_order')) || [...HD_ALL_COLS]; }
+  catch { return [...HD_ALL_COLS]; }
+})();
+let _hdColWidths = (() => {
+  try { return JSON.parse(localStorage.getItem('pw_hd_col_widths')) || {}; }
+  catch { return {}; }
+})();
+
+function saveHdColOrder()  { localStorage.setItem('pw_hd_col_order',  JSON.stringify(_hdColOrder));  }
+function saveHdColWidths() { localStorage.setItem('pw_hd_col_widths', JSON.stringify(_hdColWidths)); }
+
+function resetHdCols() {
+  _hdColOrder  = [...HD_ALL_COLS];
+  _hdColWidths = {};
+  localStorage.removeItem('pw_hd_col_order');
+  localStorage.removeItem('pw_hd_col_widths');
+  renderHdHead();
+  renderDeals();
+}
+
+function hdColHtml(col) {
+  const w  = _hdColWidths[col] ?? HD_DEFAULT_WIDTHS[col];
+  const ws = w ? `width:${w}px;min-width:${w}px;` : '';
+  const rh = `<div class="col-resize-handle"></div>`;
+  switch (col) {
+    case 'name':     return `<th data-col="name" style="${ws}">Product <span class="sort-arrow"></span>${rh}</th>`;
+    case 'deal':     return `<th data-col="deal" style="${ws}text-align:center">Best <span class="sort-arrow"></span>${rh}</th>`;
+    case 'ww':       return `<th data-col="ww" style="${ws}"><span class="store-chip ww sm">W</span> WW Price <span class="sort-arrow"></span>${rh}</th>`;
+    case 'coles':    return `<th data-col="coles" style="${ws}"><span class="store-chip coles sm">C</span> Coles Price <span class="sort-arrow"></span>${rh}</th>`;
+    case 'category': return `<th data-col="category" style="${ws}">Category <span class="sort-arrow"></span>${rh}</th>`;
+    case 'avg':      return `<th data-col="avg" style="${ws}">Trend <span class="sort-arrow"></span>${rh}</th>`;
+    case 'watch':    return `<th data-col="watch" style="${ws}text-align:center">Watch <span class="sort-arrow"></span>${rh}</th>`;
+    default: return '';
+  }
+}
+
+function renderHdHead() {
+  const thead = document.getElementById('dealsHead');
+  if (!thead) return;
+  thead.innerHTML = `<tr>${_hdColOrder.map(hdColHtml).join('')}</tr>`;
+  const navH = document.querySelector('header')?.offsetHeight || 60;
+  thead.querySelectorAll('th').forEach(th => { th.style.top = navH + 'px'; });
+  initSortHeaders();
+  initHdDrag();
+  initHdResize();
+}
+
+let _hdDragSrc = null;
+
+function initHdDrag() {
+  const thead = document.getElementById('dealsHead');
+  if (!thead) return;
+  thead.querySelectorAll('th[data-col]').forEach(th => {
+    th.draggable = true;
+    th.addEventListener('dragstart', (e) => {
+      if (e.target.classList.contains('col-resize-handle')) { e.preventDefault(); return; }
+      _hdDragSrc = th.dataset.col;
+      th.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', th.dataset.col);
+    });
+    th.addEventListener('dragend', () => {
+      th.classList.remove('dragging');
+      thead.querySelectorAll('th').forEach(t => t.classList.remove('drag-over'));
+      _hdDragSrc = null;
+    });
+    th.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (!_hdDragSrc || _hdDragSrc === th.dataset.col) return;
+      e.dataTransfer.dropEffect = 'move';
+      thead.querySelectorAll('th').forEach(t => t.classList.remove('drag-over'));
+      th.classList.add('drag-over');
+    });
+    th.addEventListener('dragleave', () => th.classList.remove('drag-over'));
+    th.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const targetCol = th.dataset.col;
+      if (!_hdDragSrc || _hdDragSrc === targetCol) return;
+      const si = _hdColOrder.indexOf(_hdDragSrc);
+      const ti = _hdColOrder.indexOf(targetCol);
+      if (si !== -1 && ti !== -1) {
+        _hdColOrder.splice(si, 1);
+        _hdColOrder.splice(ti, 0, _hdDragSrc);
+        saveHdColOrder();
+        renderHdHead();
+        renderDeals();
+      }
+    });
+  });
+}
+
+function initHdResize() {
+  const thead = document.getElementById('dealsHead');
+  if (!thead) return;
+  thead.querySelectorAll('.col-resize-handle').forEach(handle => {
+    const th = handle.closest('th');
+    if (!th) return;
+    handle.addEventListener('mousedown', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      const startX = e.clientX;
+      const startW = th.getBoundingClientRect().width;
+      const colIdx = [...thead.querySelectorAll('th')].indexOf(th);
+      handle.classList.add('resizing');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+      function onMove(e) {
+        const newW = Math.max(50, startW + e.clientX - startX);
+        th.style.width = newW + 'px'; th.style.minWidth = newW + 'px';
+        document.querySelectorAll(`#dealsBody tr td:nth-child(${colIdx + 1})`).forEach(td => {
+          td.style.width = newW + 'px'; td.style.minWidth = newW + 'px'; td.style.maxWidth = newW + 'px';
+        });
+      }
+      function onUp() {
+        handle.classList.remove('resizing');
+        document.body.style.cursor = ''; document.body.style.userSelect = '';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        const col = th.dataset.col;
+        if (col) { _hdColWidths[col] = th.getBoundingClientRect().width; saveHdColWidths(); }
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
+}
+
 // ── Render ─────────────────────────────────────────────────────────────────────
 
 function renderDeals() {
@@ -762,20 +898,16 @@ function renderDeals() {
 
     const isWatchedHD = _watchlistHD.has(item.list_item);
     const watchBtnHD = `<button class="item-watch-btn${isWatchedHD ? ' active' : ''}" data-item="${safeNameHD}" title="${isWatchedHD ? 'Remove from watchlist' : 'Add to watchlist'}">👁</button>`;
-    tbody.insertAdjacentHTML('beforeend', `<tr>
-      <td class="item-name">
-        <div class="deal-item-cell">
-          ${imgHtml}
-          <div><div class="deal-item-name">${displayName}${discWarn}</div></div>
-        </div>
-      </td>
-      <td>${dealCell}</td>
-      <td class="${wwClass}">${wwHtml}</td>
-      <td class="${coClass}">${coHtml}</td>
-      <td style="font-size:12px;color:var(--text-mid)">${cat}</td>
-      <td class="trend-cell">${avgCell}</td>
-      <td style="text-align:center">${watchBtnHD}</td>
-    </tr>`);
+    const _hdCellMap = {
+      name:     `<td class="item-name"><div class="deal-item-cell">${imgHtml}<div><div class="deal-item-name">${displayName}${discWarn}</div></div></div></td>`,
+      deal:     `<td>${dealCell}</td>`,
+      ww:       `<td class="${wwClass}">${wwHtml}</td>`,
+      coles:    `<td class="${coClass}">${coHtml}</td>`,
+      category: `<td style="font-size:12px;color:var(--text-mid)">${cat}</td>`,
+      avg:      `<td class="trend-cell">${avgCell}</td>`,
+      watch:    `<td style="text-align:center">${watchBtnHD}</td>`,
+    };
+    tbody.insertAdjacentHTML('beforeend', `<tr>${_hdColOrder.map(c => _hdCellMap[c] || '').join('')}</tr>`);
   });
 
   updateValidateNavBadge(_data?.pending_validation?.length ?? 0);
@@ -1075,11 +1207,12 @@ function initRefreshBtn() {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('dealsContainer').style.display = 'block';
 
-  initSortHeaders();
+  renderHdHead();
   initStoreFilter();
   initWatchlistFilter();
   initTooltip();
   initRefreshBtn();
+  document.getElementById('hdResetColsBtn')?.addEventListener('click', resetHdCols);
 
   // Watch + dismiss-diff button clicks (delegated from tbody)
   document.getElementById('dealsBody')?.addEventListener('click', (e) => {
