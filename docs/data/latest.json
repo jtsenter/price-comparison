@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-03T22:49:28.584064+00:00",
+  "last_updated": "2026-06-03T22:49:41.333834+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2439,7 +2439,7 @@
     },
     {
       "list_item": "Woolworths Cherry Tomatoes Punnet",
-      "last_scraped": "2026-06-03T00:35:26.880614+00:00",
+      "last_scraped": "2026-06-03T22:49:31.991079+00:00",
       "trip_count": 21,
       "price_history": [
         {
@@ -2546,36 +2546,8 @@
         "retailer": "coles"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 2.58,
-      "alternatives": [
-        {
-          "name": "Mutti Cherry Tomatoes | 400g",
-          "price": 2.7,
-          "unit_price": 2.7,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/mutti-cherry-tomatoes-400g-2612948",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2612948.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Cherry Tomatoes | 250g",
-          "price": 3.2,
-          "unit_price": 3.2,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-cherry-tomatoes-250g-4834736",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4834736.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Tomatoes Cherry Vine Ripened | 200g",
-          "price": 3.2,
-          "unit_price": 3.2,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-tomatoes-cherry-vine-ripened-200g-8003851",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8003851.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "saving_per_item": 0.7,
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -2600,16 +2572,15 @@
           "price": 3.2
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.0,
       "per_100_coles": 1.28,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.25
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Cookie Caramel Bar Slice",
-      "last_scraped": "2026-06-03T00:35:27.426988+00:00",
+      "last_scraped": "2026-06-03T22:49:32.138241+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -2709,7 +2680,7 @@
     },
     {
       "list_item": "Woolworths Corn Sweet",
-      "last_scraped": "2026-06-03T00:35:34.528086+00:00",
+      "last_scraped": "2026-06-03T22:49:38.952520+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -2796,8 +2767,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Corn Sweet",
-        "price": 4.5,
-        "unit_price": 9.0,
+        "price": 5.5,
+        "unit_price": 11.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/139897/woolworths-corn-sweet",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139897.jpg"
@@ -2811,8 +2782,8 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5806601.jpg",
         "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.0,
+      "cheaper_store": "coles",
+      "saving_per_item": 1.6,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -2842,155 +2813,15 @@
           "price": 3.9
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.1,
       "per_100_coles": null,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Cos Hearts Lettuce",
-      "last_scraped": "2026-06-02T09:10:58.510978+00:00",
-      "trip_count": 22,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 3.5
-        },
-        {
-          "date": "2024-12-02",
-          "price": 2.5
-        },
-        {
-          "date": "2024-12-09",
-          "price": 3.5
-        },
-        {
-          "date": "2025-01-29",
-          "price": 3.5
-        },
-        {
-          "date": "2025-02-28",
-          "price": 3.5
-        },
-        {
-          "date": "2025-03-11",
-          "price": 3.5
-        },
-        {
-          "date": "2025-03-17",
-          "price": 3.5
-        },
-        {
-          "date": "2025-04-05",
-          "price": 3.5
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.5
-        },
-        {
-          "date": "2025-05-04",
-          "price": 3.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 3.9
-        },
-        {
-          "date": "2025-06-06",
-          "price": 3.9
-        },
-        {
-          "date": "2025-07-03",
-          "price": 3.9
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.9
-        },
-        {
-          "date": "2026-02-03",
-          "price": 3.5
-        },
-        {
-          "date": "2026-02-07",
-          "price": 3.5
-        },
-        {
-          "date": "2026-02-23",
-          "price": 3.5
-        },
-        {
-          "date": "2026-03-02",
-          "price": 3.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 3.5
-        },
-        {
-          "date": "2026-04-02",
-          "price": 2.5
-        },
-        {
-          "date": "2026-04-29",
-          "price": 3.5
-        },
-        {
-          "date": "2026-05-06",
-          "price": 2.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Cos Hearts Lettuce",
-        "price": 3.3,
-        "unit_price": 1.65,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/141496/woolworths-cos-hearts-lettuce",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/141496.jpg"
-      },
-      "coles": {
-        "name": "Coles Lettuce Cos Baby Hearts | 2 Pack",
-        "price": 2.9,
-        "unit_price": 2.9,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-lettuce-cos-baby-hearts-2-pack-4646485",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4646485.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.4,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.3
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.3
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.9
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.9
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Dill Fresh Herb",
-      "last_scraped": "2026-06-03T00:35:40.111305+00:00",
+      "last_scraped": "2026-06-03T22:49:41.329835+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -3062,7 +2893,7 @@
           "price": 3.2
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 21.3,
       "per_100_coles": 32.0,
@@ -11712,22 +11543,23 @@
     "Schweppes Orange Mango Natural Mineral Water Bottle",
     "The Dutch Company Confectionary 4 Syrup Wafers",
     "Sweet Potato Gold",
-    "Truss Tomatoes"
+    "Truss Tomatoes",
+    "Woolworths Cos Hearts Lettuce"
   ],
   "summary": {
-    "total_woolworths": 680.56,
-    "total_coles": 715.67,
+    "total_woolworths": 678.26,
+    "total_coles": 712.77,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 35.11,
-    "items_compared": 136,
-    "items_not_found": 8
+    "total_saving": 34.51,
+    "items_compared": 135,
+    "items_not_found": 9
   },
   "scrape_progress": {
-    "done": 30,
+    "done": 35,
     "total": 144,
     "started_at": "2026-06-03T22:48:10.424152+00:00",
-    "current_item": "Woolworths Baby Leaf Spinach"
+    "current_item": "Woolworths Dill Fresh Herb"
   },
   "pending_validation": [
     {
