@@ -1117,6 +1117,11 @@ async def _scrape_single_item(
     if not ww_match and not coles_match:
         return None, True, None
 
+    # Guard: validate existing_item is a valid dict before accessing price history
+    if not isinstance(existing_item, dict):
+        print(f"[ERROR] Item lookup failed or invalid: {item!r}")
+        return None, True, None
+
     # Sanity check: reject suspicious price swings unless in historical range
     def check_suspicious_jump(new_price, prev_price, item_name, store):
         if new_price is None or prev_price is None or prev_price <= 0:
@@ -1134,15 +1139,15 @@ async def _scrape_single_item(
         return False, None
 
     # Apply to WW
-    ww_prev = item['ww_price_history'][-1]['price'] if item.get('ww_price_history') else None
-    is_suspicious_ww, reason_ww = check_suspicious_jump(ww_match['price'] if ww_match else None, ww_prev, item, 'ww')
+    ww_prev = existing_item['ww_price_history'][-1]['price'] if existing_item.get('ww_price_history') else None
+    is_suspicious_ww, reason_ww = check_suspicious_jump(ww_match['price'] if ww_match else None, ww_prev, existing_item, 'ww')
     if is_suspicious_ww:
         print(f"    [WARN] WW {reason_ww}: ${ww_prev}→${ww_match['price']} — carrying forward")
         ww_match = None
 
     # Apply to Coles
-    co_prev = item['coles_price_history'][-1]['price'] if item.get('coles_price_history') else None
-    is_suspicious_co, reason_co = check_suspicious_jump(coles_match['price'] if coles_match else None, co_prev, item, 'coles')
+    co_prev = existing_item['coles_price_history'][-1]['price'] if existing_item.get('coles_price_history') else None
+    is_suspicious_co, reason_co = check_suspicious_jump(coles_match['price'] if coles_match else None, co_prev, existing_item, 'coles')
     if is_suspicious_co:
         print(f"    [WARN] Coles {reason_co}: ${co_prev}→${coles_match['price']} — carrying forward")
         coles_match = None
