@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-03T22:53:09.633011+00:00",
+  "last_updated": "2026-06-03T22:53:18.839632+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9410,7 +9410,7 @@
     },
     {
       "list_item": "Woolworths Black Beans",
-      "last_scraped": "2026-06-03T00:40:56.625045+00:00",
+      "last_scraped": "2026-06-03T22:53:12.372002+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9422,7 +9422,7 @@
           "price": 1.0
         }
       ],
-      "category": "Fruit & Veg",
+      "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Black Beans",
         "price": 1.0,
@@ -9440,18 +9440,9 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3812975.jpg",
         "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.58,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [
-        {
-          "name": "Coles Black Beans | 420g",
-          "price": 1.0,
-          "unit_price": 1.0,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3812975.jpg",
-          "retailer": "coles"
-        },
         {
           "name": "Woolworths Beef & Black Bean With Rice",
           "price": 8.0,
@@ -9482,158 +9473,15 @@
           "price": 1
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.24,
       "per_100_coles": 0.24,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.42
-    },
-    {
-      "list_item": "Woolworths Butternut Pumpkin Cut",
-      "last_scraped": "2026-06-02T09:15:18.556287+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-03-27",
-          "price": 2.03
-        },
-        {
-          "date": "2025-04-25",
-          "price": 2.45
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Butternut Pumpkin Cut",
-        "price": 3.51,
-        "unit_price": 3.51,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/147197/woolworths-butternut-pumpkin-cut",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147197.jpg"
-      },
-      "coles": {
-        "name": "Coles Kitchen Butternut Pumpkin Soup | 300g",
-        "price": 4.0,
-        "unit_price": 1.33,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-kitchen-butternut-pumpkin-soup-300g-3467447",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3467447.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.49,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.51
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.51
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4
-        },
-        {
-          "date": "2026-06-01",
-          "price": 4
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 1.33,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Corn Sweet Kernels",
-      "last_scraped": "2026-06-03T00:41:03.607408+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-03-11",
-          "price": 1.2
-        },
-        {
-          "date": "2025-04-14",
-          "price": 1.2
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Corn Sweet Kernels",
-        "price": 1.05,
-        "unit_price": 2.5,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/218926/woolworths-corn-sweet-kernels",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/218926.jpg"
-      },
-      "coles": {
-        "name": "Coles Corn Kernels | 420g",
-        "price": 1.05,
-        "unit_price": 1.05,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4774066.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.61,
-      "alternatives": [
-        {
-          "name": "Coles Corn Kernels | 420g",
-          "price": 1.05,
-          "unit_price": 1.05,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4774066.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Popping Corn Kernels | 400g",
-          "price": 1.8,
-          "unit_price": 1.8,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-popping-corn-kernels-400g-5374675",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5374675.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.05
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.05
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.05
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.05
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 0.25,
-      "per_100_coles": 0.25,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.42
-    },
-    {
       "list_item": "Woolworths Greek Style Fetta",
-      "last_scraped": "2026-06-03T00:41:06.435315+00:00",
+      "last_scraped": "2026-06-03T22:53:15.612200+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9663,36 +9511,8 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6416861.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 5.36,
-      "alternatives": [
-        {
-          "name": "Riverina Fetta Greek Style | 200g",
-          "price": 5.3,
-          "unit_price": 5.3,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/riverina-fetta-greek-style-200g-4360879",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4360879.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Castello Greek Style Feta Cubes | 410g",
-          "price": 6.0,
-          "unit_price": 6.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/castello-greek-style-feta-cubes-410g-1096832",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1096832.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Lemnos Fetta Traditional | 180g",
-          "price": 7.1,
-          "unit_price": 7.1,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/lemnos-fetta-traditional-180g-8857482",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8857482.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "saving_per_item": 2.8,
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -9717,16 +9537,76 @@
           "price": 6.0
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.6,
       "per_100_coles": 3.0,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.2
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Corn Sweet Kernels",
+      "last_scraped": "2026-06-03T22:53:15.900776+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-11",
+          "price": 1.2
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.2
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Corn Sweet Kernels",
+        "price": 1.05,
+        "unit_price": 2.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/218926/woolworths-corn-sweet-kernels",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/218926.jpg"
+      },
+      "coles": {
+        "name": "Coles Corn Kernels | 420g",
+        "price": 1.05,
+        "unit_price": 1.05,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4774066.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.05
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.05
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.05
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.05
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.25,
+      "per_100_coles": 0.25,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Green Asparagus Bunch Green",
-      "last_scraped": "2026-06-03T00:41:09.104362+00:00",
+      "last_scraped": "2026-06-03T22:53:18.827024+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -9755,8 +9635,8 @@
         "url": "https://www.coles.com.au/product/coles-green-asparagus-1-each-4838737",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4838737.jpg"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.3,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9786,7 +9666,7 @@
           "price": 3.8
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -10106,22 +9986,23 @@
     "Woolworths Red Onions",
     "Ecostore Dish Liquid Ultrasensitive",
     "KitKat Gold Crush Block",
-    "Maltesers Milk Chocolate Party Gift Box"
+    "Maltesers Milk Chocolate Party Gift Box",
+    "Woolworths Butternut Pumpkin Cut"
   ],
   "summary": {
-    "total_woolworths": 603.09,
-    "total_coles": 632.12,
+    "total_woolworths": 599.58,
+    "total_coles": 628.12,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 29.03,
-    "items_compared": 123,
-    "items_not_found": 21
+    "total_saving": 28.54,
+    "items_compared": 122,
+    "items_not_found": 22
   },
   "scrape_progress": {
-    "done": 135,
+    "done": 140,
     "total": 144,
     "started_at": "2026-06-03T22:48:10.424152+00:00",
-    "current_item": "Vanish Napisan Stain Remover Powder"
+    "current_item": "Woolworths Green Asparagus Bunch Green"
   },
   "pending_validation": [
     {
