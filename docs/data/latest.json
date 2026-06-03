@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-03T22:49:55.624673+00:00",
+  "last_updated": "2026-06-03T22:50:09.408837+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3358,7 +3358,7 @@
     },
     {
       "list_item": "Woolworths Greek Style Yoghurt",
-      "last_scraped": "2026-06-03T00:36:02.349799+00:00",
+      "last_scraped": "2026-06-03T22:49:57.475147+00:00",
       "trip_count": 33,
       "price_history": [
         {
@@ -3534,15 +3534,104 @@
           "price": 4.5
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.42,
       "per_100_coles": 0.45,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Red Watermelon Cut Quarter",
+      "last_scraped": "2026-06-03T22:50:00.599892+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 5.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 6.38
+        },
+        {
+          "date": "2025-04-05",
+          "price": 7.7
+        },
+        {
+          "date": "2025-04-14",
+          "price": 7.7
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 6.38
+        },
+        {
+          "date": "2025-06-21",
+          "price": 6.38
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Red Watermelon Cut Quarter",
+        "price": 8.58,
+        "unit_price": 8.58,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/120384/woolworths-red-watermelon-cut-quarter",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120384.jpg"
+      },
+      "coles": {
+        "name": "Coles Seedless Watermelon Cut | approx. 1.8kg",
+        "price": 7.02,
+        "unit_price": 7.02,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-seedless-watermelon-cut-approx.-1.8kg-7508229",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7508229.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.56,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 7.7
+        },
+        {
+          "date": "2026-06-01",
+          "price": 7.7
+        },
+        {
+          "date": "2026-06-02",
+          "price": 8.58
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 7.02
+        },
+        {
+          "date": "2026-06-01",
+          "price": 7.02
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 0.39,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Onion Brown Bag",
-      "last_scraped": "2026-06-02T09:11:39.172948+00:00",
+      "last_scraped": "2026-06-03T22:50:02.374252+00:00",
       "trip_count": 14,
       "price_history": [
         {
@@ -3653,125 +3742,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Red Watermelon Cut Quarter",
-      "last_scraped": "2026-06-03T00:36:07.862183+00:00",
-      "trip_count": 8,
-      "price_history": [
-        {
-          "date": "2025-02-02",
-          "price": 5.5
-        },
-        {
-          "date": "2025-03-17",
-          "price": 6.38
-        },
-        {
-          "date": "2025-04-05",
-          "price": 7.7
-        },
-        {
-          "date": "2025-04-14",
-          "price": 7.7
-        },
-        {
-          "date": "2025-05-22",
-          "price": 5.5
-        },
-        {
-          "date": "2025-06-06",
-          "price": 6.38
-        },
-        {
-          "date": "2025-06-21",
-          "price": 6.38
-        },
-        {
-          "date": "2026-03-10",
-          "price": 5.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Red Watermelon Cut Quarter",
-        "price": 8.58,
-        "unit_price": 8.58,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/120384/woolworths-red-watermelon-cut-quarter",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120384.jpg"
-      },
-      "coles": {
-        "name": "Coles Seedless Watermelon Cut | approx. 1.8kg",
-        "price": 7.02,
-        "unit_price": 7.02,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-seedless-watermelon-cut-approx.-1.8kg-7508229",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7508229.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.56,
-      "alternatives": [
-        {
-          "name": "Coles Red Split Lentils | 1kg",
-          "price": 4.0,
-          "unit_price": 4.0,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-red-split-lentils-1kg-9073535",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9073535.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Kitchen Cut Fruit Watermelon | 350g",
-          "price": 6.5,
-          "unit_price": 6.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-kitchen-cut-fruit-watermelon-350g-7864336",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7864336.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Kitchen Cut Fruit Salad Watermelon Fingers 750g | 1 Each",
-          "price": 8.5,
-          "unit_price": 8.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-kitchen-cut-fruit-salad-watermelon-fingers-750g-1-each-7536858",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7536858.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 7.7
-        },
-        {
-          "date": "2026-06-01",
-          "price": 7.7
-        },
-        {
-          "date": "2026-06-02",
-          "price": 8.58
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 7.02
-        },
-        {
-          "date": "2026-06-01",
-          "price": 7.02
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 0.39,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Sour Cream",
-      "last_scraped": "2026-06-03T00:36:12.482805+00:00",
+      "last_scraped": "2026-06-03T22:50:03.807217+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -3847,99 +3819,11 @@
           "price": 3.3
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.1,
       "per_100_coles": 1.1,
       "per_100_unit": "100ml"
-    },
-    {
-      "list_item": "Woolworths Washed Potato Bag",
-      "last_scraped": "2026-06-03T00:36:22.621618+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2025-03-27",
-          "price": 7.9
-        },
-        {
-          "date": "2025-05-12",
-          "price": 9.9
-        },
-        {
-          "date": "2025-06-06",
-          "price": 9.9
-        },
-        {
-          "date": "2025-07-10",
-          "price": 9.9
-        },
-        {
-          "date": "2025-07-26",
-          "price": 9.9
-        },
-        {
-          "date": "2026-02-03",
-          "price": 12.5
-        },
-        {
-          "date": "2026-03-10",
-          "price": 12.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Washed Potatoes Bag",
-        "price": 8.0,
-        "unit_price": 4.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/262783/woolworths-washed-potatoes-bag",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/262783.jpg"
-      },
-      "coles": {
-        "name": "Potatoes Washed",
-        "price": 6.0,
-        "unit_price": 3.0,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1206748.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.5,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5.5
-        },
-        {
-          "date": "2026-05-30",
-          "price": 5.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5.5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 6
-        },
-        {
-          "date": "2026-05-30",
-          "price": 6
-        },
-        {
-          "date": "2026-06-01",
-          "price": 6
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 0.4,
-      "per_100_coles": 0.42,
-      "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Whole Milk Full Cream Milk",
@@ -11544,22 +11428,23 @@
     "The Dutch Company Confectionary 4 Syrup Wafers",
     "Sweet Potato Gold",
     "Truss Tomatoes",
-    "Woolworths Cos Hearts Lettuce"
+    "Woolworths Cos Hearts Lettuce",
+    "Woolworths Washed Potato Bag"
   ],
   "summary": {
-    "total_woolworths": 678.26,
-    "total_coles": 712.77,
+    "total_woolworths": 670.26,
+    "total_coles": 706.77,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 34.51,
-    "items_compared": 135,
-    "items_not_found": 9
+    "total_saving": 36.51,
+    "items_compared": 134,
+    "items_not_found": 10
   },
   "scrape_progress": {
-    "done": 40,
+    "done": 45,
     "total": 144,
     "started_at": "2026-06-03T22:48:10.424152+00:00",
-    "current_item": "Woolworths Garlic Heads CLOVE"
+    "current_item": "Woolworths Washed Potato Bag"
   },
   "pending_validation": [
     {
