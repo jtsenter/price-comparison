@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-03T00:36:46.896470+00:00",
+  "last_updated": "2026-06-03T00:37:00.902968+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5973,7 +5973,7 @@
     },
     {
       "list_item": "Dolmio Extra Bolognese Tomato Pasta Sauce",
-      "last_scraped": "2026-06-02T09:12:09.381682+00:00",
+      "last_scraped": "2026-06-03T00:36:49.894042+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -6000,15 +6000,43 @@
       },
       "coles": {
         "name": "Dolmio Extra Italian Herb Pasta Sauce | 500g",
-        "price": 4.6,
-        "unit_price": 6,
+        "price": 2.3,
+        "unit_price": 0.46,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/dolmio-extra-italian-herb-pasta-sauce-500g-1274420",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1274420.jpg"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
+      "cheaper_store": "coles",
+      "saving_per_item": 2.3,
+      "alternatives": [
+        {
+          "name": "Dolmio Extra Pasta Sauce Bolognese | 500g",
+          "price": 2.3,
+          "unit_price": 0.46,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/dolmio-extra-pasta-sauce-bolognese-500g-1274373",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1274373.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Dolmio Extra Pasta Sauce Tomato Onion & Roast Garlic | 500g",
+          "price": 2.3,
+          "unit_price": 0.46,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/dolmio-extra-pasta-sauce-tomato-onion-and-roast-garlic-500g-1274464",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1274464.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Dolmio Extra Pasta Sauce Red Wine & Italian Herb | 500g",
+          "price": 2.3,
+          "unit_price": 0.46,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/dolmio-extra-pasta-sauce-red-wine-and-italian-herb-500g-1274442",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1274442.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -6040,31 +6068,31 @@
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.92,
-      "per_100_coles": 0.92,
+      "per_100_coles": 0.46,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Essentials Salted Butter",
-      "last_scraped": "2026-06-02T09:12:10.785376+00:00",
+      "last_scraped": "2026-06-03T00:36:52.236490+00:00",
       "trip_count": 3,
       "price_history": [
         {
           "date": "2024-11-20",
-          "price": 7
+          "price": 7.0
         },
         {
           "date": "2025-03-27",
-          "price": 7
+          "price": 7.0
         },
         {
           "date": "2025-05-12",
-          "price": 7
+          "price": 7.0
         }
       ],
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Essentials Unsalted Butter",
-        "price": 7,
+        "price": 7.0,
         "unit_price": 1.4,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/688962/essentials-unsalted-butter",
@@ -6072,14 +6100,14 @@
       },
       "coles": {
         "name": "Westgold Salted Butter | 400g",
-        "price": 8,
-        "unit_price": 8,
+        "price": 8.0,
+        "unit_price": 8.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/westgold-salted-butter-400g-7075278",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7075278.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 1,
+      "saving_per_item": 1.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -6105,15 +6133,15 @@
           "price": 8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.4,
-      "per_100_coles": 2,
+      "per_100_coles": 2.0,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Essentials White Vinegar",
-      "last_scraped": "2026-06-02T09:12:12.576353+00:00",
+      "last_scraped": "2026-06-03T00:36:55.231017+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6177,7 +6205,7 @@
           "price": 2.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.09,
       "per_100_coles": 0.67,
@@ -6185,7 +6213,7 @@
     },
     {
       "list_item": "Fresh Radish Bunch",
-      "last_scraped": "2026-06-02T09:12:13.776948+00:00",
+      "last_scraped": "2026-06-03T00:36:55.883369+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -6221,7 +6249,17 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.1,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Radish Bunch | 1 Each",
+          "price": 3.8,
+          "unit_price": 3.8,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-radish-bunch-1-each-4911870",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4911870.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -6246,7 +6284,7 @@
           "price": 3.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -6254,7 +6292,7 @@
     },
     {
       "list_item": "Hedy's Fresh Quiche Lorraine Chilled Meal",
-      "last_scraped": "2026-06-02T09:12:16.734517+00:00",
+      "last_scraped": "2026-06-03T00:37:00.895469+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -6275,7 +6313,7 @@
         },
         {
           "date": "2026-02-07",
-          "price": 11
+          "price": 11.0
         }
       ],
       "category": "Other",
@@ -6296,7 +6334,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7388070.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -6318,7 +6356,7 @@
           "price": 14.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.32,
       "per_100_coles": 1.32,
@@ -12060,18 +12098,18 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 728.02,
-    "total_coles": 735.53,
+    "total_coles": 733.23,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 7.51,
+    "total_saving": 5.21,
     "items_compared": 144,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 55,
+    "done": 60,
     "total": 144,
     "started_at": "2026-06-03T00:33:33.955651+00:00",
-    "current_item": "Continental Classics Cup A Soup Chicken With Lots Of Noodles"
+    "current_item": "Hedy's Fresh Quiche Lorraine Chilled Meal"
   },
   "pending_validation": [
     {
@@ -12343,6 +12381,21 @@
       "coles_price": 1.4,
       "coles_url": "https://www.coles.com.au/product/continental-cup-a-soup-chicken-with-lots-of-noodles-serves-2-60g-356472",
       "coles_prev_price": 2.8,
+      "coles_suspicious": true,
+      "flagged_date": "2026-06-03",
+      "reason": [
+        "30pct_change"
+      ]
+    },
+    {
+      "item": "Dolmio Extra Bolognese Tomato Pasta Sauce",
+      "ww_price": 4.6,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/758286/dolmio-extra-bolognese-tomato-pasta-sauce",
+      "ww_prev_price": 4.6,
+      "ww_suspicious": false,
+      "coles_price": 2.3,
+      "coles_url": "https://www.coles.com.au/product/dolmio-extra-italian-herb-pasta-sauce-500g-1274420",
+      "coles_prev_price": 4.6,
       "coles_suspicious": true,
       "flagged_date": "2026-06-03",
       "reason": [
