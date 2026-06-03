@@ -393,7 +393,7 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                             // 2. Class-based: [class*="regular"][class*="price"] (case-insensitive contains)
                             const allEls = document.querySelectorAll('*');
                             for (const el of allEls) {
-                                const cls = (el.className || '').toLowerCase();
+                                const cls = (typeof el.className === 'string' ? el.className : (el.className?.toString() || '')).toLowerCase();
                                 if (cls.includes('regular') && cls.includes('price')) {
                                     const t = el.textContent?.trim();
                                     const m = t?.match(/\\$\\s*([\\d.]+)/);
@@ -416,7 +416,7 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                                     let parent = node.parentElement;
                                     let inMemberEl = false;
                                     for (let i = 0; i < 10 && parent; i++) {
-                                        const pc = (parent.className || '').toLowerCase();
+                                        const pc = (typeof parent.className === 'string' ? parent.className : (parent.className?.toString() || '')).toLowerCase();
                                         if (pc.includes('member') || pc.includes('reward') || pc.includes('loyalty')) {
                                             inMemberEl = true;
                                             break;
