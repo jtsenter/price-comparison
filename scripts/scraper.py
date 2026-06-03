@@ -1253,6 +1253,13 @@ async def _scrape_single_item(
     if coles_reasons and coles_price is not None and prev_coles is not None and round(coles_price, 2) == round(prev_coles, 2):
         coles_reasons = []
 
+    # FIX 3: if the flagged store's new price matches the competitor's price exactly,
+    # it's a real market price — two stores agreeing on the same price is not suspicious.
+    if ww_reasons and ww_price is not None and coles_price is not None and round(ww_price, 2) == round(coles_price, 2):
+        ww_reasons = []
+    if coles_reasons and coles_price is not None and ww_price is not None and round(coles_price, 2) == round(ww_price, 2):
+        coles_reasons = []
+
     all_reasons = list(dict.fromkeys(ww_reasons + coles_reasons))
     _validation_entry = None
     if all_reasons:
