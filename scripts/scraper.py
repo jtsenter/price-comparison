@@ -73,13 +73,14 @@ def _iso_week(d) -> tuple[int, int]:
 
 
 def _dedup_hist(history: list) -> list:
-    """Remove duplicate date entries from a price history list, keeping the last per date."""
+    """Remove duplicate date entries from a price history list, keeping the last per date.
+    Returns entries sorted oldest-first so history[-1] is always the most recent."""
     seen: dict = {}
     for e in history:
         d = e.get("date", "")
         if d:
             seen[d] = e  # last entry wins (matches scraper's own write order)
-    return list(seen.values())
+    return sorted(seen.values(), key=lambda e: e.get("date", ""))
 
 
 def _week_dedup(history: list, new_price: float) -> str:
@@ -1175,9 +1176,9 @@ async def _scrape_single_item(
                 _ww_price_factor = round(_co_size_g / 1000, 4)
                 print(f"    WW per-kg rate detected: ${ww_price_val}, factor for {_co_size_g}g: {_ww_price_factor}")
             else:
-                print(f"    WW unit=KG but Coles pack ≥900g or missing — factor 1.0")
+                print(f"    WW unit=KG but Coles pack >=900g or missing — factor 1.0")
         else:
-            print(f"    WW price ${ww_price_val} ≠ cup ${ww_cup_val} (pack total, not per-kg) — factor 1.0")
+            print(f"    WW price ${ww_price_val} != cup ${ww_cup_val} (pack total, not per-kg) — factor 1.0")
 
     ww_price = ww_match["price"] if ww_match else None
     coles_price = coles_match["price"] if coles_match else None
