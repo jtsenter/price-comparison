@@ -1123,11 +1123,11 @@ async def _scrape_single_item(
         return None, True, None
 
     # Sanity check: reject suspicious price swings unless in historical range
-    def check_suspicious_jump(new_price, prev_price, item_name, store):
+    def check_suspicious_jump(new_price, prev_price, item_dict, store):
         if new_price is None or prev_price is None or prev_price <= 0:
             return False, None
         change_pct = (new_price - prev_price) / prev_price
-        hist_prices = [e['price'] for e in item.get(f'{store}_price_history', []) if e.get('price', 0) > 0]
+        hist_prices = [e['price'] for e in item_dict.get(f'{store}_price_history', []) if e.get('price', 0) > 0]
         if hist_prices:
             hist_min, hist_max = min(hist_prices), max(hist_prices)
             if hist_min <= new_price <= hist_max:
