@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-03T22:52:22.202229+00:00",
+  "last_updated": "2026-06-03T22:52:29.393164+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7975,7 +7975,7 @@
     },
     {
       "list_item": "Yumi's Eggplant Mediterranean Dip",
-      "last_scraped": "2026-06-02T09:14:16.604390+00:00",
+      "last_scraped": "2026-06-03T22:52:23.435877+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7995,24 +7995,25 @@
           "price": 3.75
         }
       ],
-      "category": "Dairy & Eggs",
+      "category": "Fruit & Veg",
       "woolworths": {
         "name": "Yumi's Eggplant Mediterranean Dip",
-        "price": 3.75,
-        "unit_price": 1.88,
+        "price": 5.0,
+        "unit_price": 2.5,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/139881/yumi-s-eggplant-mediterranean-dip",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139881.jpg"
       },
       "coles": {
         "name": "Yumi's Mediterranean Eggplant Dip | 200g",
-        "price": 5.0,
-        "unit_price": 5.0,
+        "price": 3.75,
+        "unit_price": 1.88,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/yumi's-mediterranean-eggplant-dip-200g-8670878",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8670878.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8670878.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
+      "cheaper_store": "coles",
       "saving_per_item": 1.25,
       "alternatives": [],
       "ww_price_history": [
@@ -8023,6 +8024,10 @@
         {
           "date": "2026-06-01",
           "price": 3.75
+        },
+        {
+          "date": "2026-06-04",
+          "price": 5.0
         }
       ],
       "coles_price_history": [
@@ -8033,17 +8038,21 @@
         {
           "date": "2026-06-01",
           "price": 5
+        },
+        {
+          "date": "2026-06-03",
+          "price": 3.75
         }
       ],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 1.88,
-      "per_100_coles": 2.5,
+      "per_100_ww": 2.5,
+      "per_100_coles": 1.88,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
-      "last_scraped": "2026-06-03T00:39:46.307726+00:00",
+      "last_scraped": "2026-06-03T22:52:25.419911+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8073,8 +8082,8 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2800347.jpg",
         "retailer": "coles"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.0,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -8108,7 +8117,7 @@
     },
     {
       "list_item": "Coca-Cola Zero Sugar Soft Drink Bottle",
-      "last_scraped": "2026-06-03T00:39:49.669864+00:00",
+      "last_scraped": "2026-06-03T22:52:26.461223+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8120,7 +8129,7 @@
           "price": 2.1
         }
       ],
-      "category": "Pantry",
+      "category": "Drinks & Alcohol",
       "woolworths": {
         "name": "Coca-Cola Zero Sugar Soft Drink Bottle",
         "price": 2.1,
@@ -8138,7 +8147,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2993706.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 0.4,
+      "saving_per_item": 2.1,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -8166,17 +8175,21 @@
         {
           "date": "2026-06-03",
           "price": 2.5
+        },
+        {
+          "date": "2026-06-04",
+          "price": 4.2
         }
       ],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.17,
-      "per_100_coles": 0.2,
+      "per_100_coles": 0.34,
       "per_100_unit": "100ml"
     },
     {
       "list_item": "Colman's Ingredients English Mustard",
-      "last_scraped": "2026-06-03T00:39:51.060411+00:00",
+      "last_scraped": "2026-06-03T22:52:29.297658+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8207,26 +8220,7 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [
-        {
-          "name": "Coles Mild American Mustard | 260g",
-          "price": 2.8,
-          "unit_price": 2.8,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-mild-american-mustard-260g-6733092",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6733092.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Hot English Mustard | 200g",
-          "price": 2.9,
-          "unit_price": 2.9,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/coles-hot-english-mustard-200g-3762924",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3762924.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -8251,15 +8245,15 @@
           "price": 5.0
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 5.0,
-      "per_100_coles": 4.5,
+      "per_100_coles": 5.0,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons",
-      "last_scraped": "2026-06-03T00:39:54.249025+00:00",
+      "last_scraped": "2026-06-03T22:52:29.386736+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8271,7 +8265,7 @@
           "price": 1.4
         }
       ],
-      "category": "Dairy & Eggs",
+      "category": "Ready Meals",
       "woolworths": {
         "name": "Continental Classics Cup A Soup Creamy Chicken With Croutons",
         "price": 2.8,
@@ -8291,35 +8285,7 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 1.4,
-      "alternatives": [
-        {
-          "name": "Continental Cup A Soup Creamy Chicken With Croutons Serves 2 | 60g",
-          "price": 1.4,
-          "unit_price": 2.33,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/continental-cup-a-soup-creamy-chicken-with-croutons-serves-2-60g-9151344",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9151344.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Continental Cup A Soup Creamy Chicken & Corn With Croutons Serves 2 | 60g",
-          "price": 1.4,
-          "unit_price": 2.33,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/continental-cup-a-soup-creamy-chicken-and-corn-with-croutons-serves-2-60g-9151559",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9151559.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Continental Cup A Soup Creamy Chicken With Lots Of Noodles Serves 2 | 60g",
-          "price": 1.4,
-          "unit_price": 2.33,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/continental-cup-a-soup-creamy-chicken-with-lots-of-noodles-serves-2-60g-255646",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/255646.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -8348,7 +8314,7 @@
           "price": 1.4
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 4.67,
       "per_100_coles": 2.33,
@@ -10444,19 +10410,19 @@
     "Woolworths Red Onions"
   ],
   "summary": {
-    "total_woolworths": 631.04,
-    "total_coles": 665.57,
+    "total_woolworths": 632.29,
+    "total_coles": 664.32,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 34.53,
+    "total_saving": 32.03,
     "items_compared": 126,
     "items_not_found": 18
   },
   "scrape_progress": {
-    "done": 110,
+    "done": 115,
     "total": 144,
     "started_at": "2026-06-03T22:48:10.424152+00:00",
-    "current_item": "Woolworths Wholegrain Wrap 8Pk"
+    "current_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons"
   },
   "pending_validation": [
     {
