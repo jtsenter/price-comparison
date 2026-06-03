@@ -343,7 +343,7 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
         """)
         if next_data:
             pp = next_data.get("props", {}).get("pageProps", {})
-            product = pp.get("product") or pp.get("Product")
+            product = pp.get("pdDetails", {}).get("Product")
             if product:
                 name = product.get("Name", "")
                 price = product.get("Price")
@@ -352,15 +352,19 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                 cup_string = product.get("CupString", "")
                 stockcode = product.get("Stockcode")
                 url_name = product.get("UrlFriendlyName", "")
-                is_member_deal = bool(product.get("IsEveryDayRewards") or product.get("IsPmDeals"))
-                print(f"    [WW URL] {name!r}: Price=${price} WasPrice={was_price} IsEDR={is_member_deal}")
-                # Prefer regular shelf price over member-exclusive (Everyday Rewards) price.
-                # Apply unconditionally: WasPrice > Price always means Price is a member deal,
-                # regardless of whether IsEveryDayRewards is set in __NEXT_DATA__.
+                is_edr = bool(product.get("IsEdrSpecial"))
+                is_pm = bool(product.get("IsPmDelivery"))
+                on_special = bool(product.get("IsOnSpecial"))
+                print(f"    [WW URL] {name!r}: Price=${price} WasPrice={was_price} IsEdr={is_edr} IsPm={is_pm}")
+
+                # GATE: only override Price→WasPrice if this is a MEMBER-EXCLUSIVE price
+                # PUBLIC specials (IsEdrSpecial=false, IsPmDelivery=false) keep their Price intact
                 if was_price is not None and float(was_price) > float(price):
-                    flag_note = "IsEDR" if is_member_deal else "no IsEDR flag"
-                    print(f"    [WW] WasPrice override for '{name}' ({flag_note}): ${price} → shelf price ${was_price}")
-                    price = was_price
+                    if is_edr or is_pm:
+                        print(f"    [WW] Member price detected: ${price} → shelf price ${was_price}")
+                        price = was_price
+                    else:
+                        print(f"    [WW] Public special: keeping ${price} (was ${was_price})")
                 # DOM price check: collect prices from shelf-price-specific selectors,
                 # avoiding member-exclusive elements. Shelf price is always ≥ member price.
                 # Selector priority:
@@ -1113,18 +1117,62 @@ async def _scrape_single_item(
     if not ww_match and not coles_match:
         return None, True, None
 
+    # Sanity check: reject suspicious price swings unless in historical range
+    def check_suspicious_jump(new_price, prev_price, item_name, store):
+        if new_price is None or prev_price is None or prev_price <= 0:
+            return False, None
+        change_pct = (new_price - prev_price) / prev_price
+        hist_prices = [e['price'] for e in item.get(f'{store}_price_history', []) if e.get('price', 0) > 0]
+        if hist_prices:
+            hist_min, hist_max = min(hist_prices), max(hist_prices)
+            if hist_min <= new_price <= hist_max:
+                return False, None  # Within known range → OK
+        if change_pct > 0.40:
+            return True, f"jumped {change_pct*100:.0f}% up"
+        elif change_pct < -0.20:
+            return True, f"dropped {change_pct*100:.0f}%"
+        return False, None
+
+    # Apply to WW
+    ww_prev = item['ww_price_history'][-1]['price'] if item.get('ww_price_history') else None
+    is_suspicious_ww, reason_ww = check_suspicious_jump(ww_match['price'] if ww_match else None, ww_prev, item, 'ww')
+    if is_suspicious_ww:
+        print(f"    [WARN] WW {reason_ww}: ${ww_prev}→${ww_match['price']} — carrying forward")
+        ww_match = None
+
+    # Apply to Coles
+    co_prev = item['coles_price_history'][-1]['price'] if item.get('coles_price_history') else None
+    is_suspicious_co, reason_co = check_suspicious_jump(coles_match['price'] if coles_match else None, co_prev, item, 'coles')
+    if is_suspicious_co:
+        print(f"    [WARN] Coles {reason_co}: ${co_prev}→${coles_match['price']} — carrying forward")
+        coles_match = None
+
     # Compute _ww_price_factor for per-kg items (used by UI for price_history normalisation).
     # WW sells loose produce (e.g. mushrooms) at $/kg; Coles sells fixed packs (e.g. 200g).
     # Store the factor so the UI can normalise price_history and trend bars accordingly.
     # The displayed WW price remains the actual shelf price (per-kg), not a sub-pack equivalent.
-    _ww_price_factor = 1.0  # stored in JSON so buildPriceBar & isHotDeal can normalise price_history
+    _ww_price_factor = 1.0
     if ww_match and coles_match:
         _ww_unit = (ww_match.get("unit") or "").strip().upper()
-        if _ww_unit in ("KG", "1KG"):
+        ww_price_val = ww_match.get("price")
+        ww_cup_val = ww_match.get("unit_price")
+        # Only apply factor if WW's displayed price IS a per-kg rate
+        # (price ≈ cup/unit price, meaning no pack markup). If they differ,
+        # WW price is a pack total and factor must be 1.0.
+        is_per_kg_rate = (
+            ww_cup_val is not None and
+            ww_price_val is not None and
+            abs(ww_price_val - ww_cup_val) <= max(0.05, ww_price_val * 0.01)
+        )
+        if _ww_unit in ("KG", "1KG") and is_per_kg_rate:
             _co_size_g = extract_weight_g(coles_match.get("name", ""))
-            if _co_size_g and _co_size_g < 900:  # Coles pack < 900g → not a per-kg item
+            if _co_size_g and _co_size_g < 900:
                 _ww_price_factor = round(_co_size_g / 1000, 4)
-                print(f"    WW per-kg price: ${ww_match['price']}, factor for {_co_size_g}g: {_ww_price_factor}")
+                print(f"    WW per-kg rate detected: ${ww_price_val}, factor for {_co_size_g}g: {_ww_price_factor}")
+            else:
+                print(f"    WW unit=KG but Coles pack ≥900g or missing — factor 1.0")
+        else:
+            print(f"    WW price ${ww_price_val} ≠ cup ${ww_cup_val} (pack total, not per-kg) — factor 1.0")
 
     ww_price = ww_match["price"] if ww_match else None
     coles_price = coles_match["price"] if coles_match else None
