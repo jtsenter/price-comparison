@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-03T00:37:16.303214+00:00",
+  "last_updated": "2026-06-03T00:37:47.374055+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6794,85 +6794,8 @@
       "_ww_price_factor": 0.5
     },
     {
-      "list_item": "Macro Organic Natural Pumpkin Kernels",
-      "last_scraped": "2026-06-02T09:12:32.140934+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2025-03-11",
-          "price": 5
-        },
-        {
-          "date": "2025-04-14",
-          "price": 5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 5
-        },
-        {
-          "date": "2025-06-06",
-          "price": 5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Macro Organic Natural Pumpkin Kernels",
-        "price": 5.7,
-        "unit_price": 22.8,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/133300/macro-organic-natural-pumpkin-kernels",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/133300.jpg"
-      },
-      "coles": {
-        "name": "Coles Organic Pumpkin Kent | approx. 800g",
-        "price": 6,
-        "unit_price": 6,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-organic-pumpkin-kent-approx.-800g-3119043",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3119043.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.44,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5.7
-        },
-        {
-          "date": "2026-05-30",
-          "price": 5.7
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5.7
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 6
-        },
-        {
-          "date": "2026-05-30",
-          "price": 6
-        },
-        {
-          "date": "2026-06-01",
-          "price": 6
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.28,
-      "per_100_coles": 0.75,
-      "per_100_unit": "100g",
-      "_ww_price_factor": 0.8
-    },
-    {
       "list_item": "Kiwi Fruit Green",
-      "last_scraped": "2026-06-02T09:12:32.828957+00:00",
+      "last_scraped": "2026-06-03T00:37:16.879597+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -6899,23 +6822,34 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Kiwi Fruit Green",
-        "price": 0.96,
-        "unit_price": 0.96,
+        "price": 1.02,
+        "unit_price": 1.02,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/139238/kiwi-fruit-green",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139238.jpg"
       },
       "coles": {
         "name": "Green Kiwifruit",
-        "price": 1,
-        "unit_price": 1,
+        "price": 1.0,
+        "unit_price": 1.0,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-green-kiwifruit-1-each-4425883",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4425883.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4425883.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.04,
-      "alternatives": [],
+      "cheaper_store": "coles",
+      "saving_per_item": 0.02,
+      "alternatives": [
+        {
+          "name": "Green Kiwifruit",
+          "price": 1.0,
+          "unit_price": 1.0,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-green-kiwifruit-1-each-4425883",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4425883.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -6924,6 +6858,10 @@
         {
           "date": "2026-06-01",
           "price": 0.96
+        },
+        {
+          "date": "2026-06-03",
+          "price": 1.02
         }
       ],
       "coles_price_history": [
@@ -6936,7 +6874,7 @@
           "price": 1
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -6944,7 +6882,7 @@
     },
     {
       "list_item": "Macro Organic Pasta Sauce Chunky Bolognese",
-      "last_scraped": "2026-06-02T09:12:35.193886+00:00",
+      "last_scraped": "2026-06-03T00:37:22.081848+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -6971,7 +6909,7 @@
       },
       "coles": {
         "name": "Coles Organic Bolognese Pasta Sauce | 500g",
-        "price": 2,
+        "price": 2.0,
         "unit_price": 0.4,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-organic-bolognese-pasta-sauce-500g-3664834",
@@ -6980,7 +6918,17 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.5,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Organic Bolognese Pasta Sauce | 500g",
+          "price": 2.0,
+          "unit_price": 0.4,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-organic-bolognese-pasta-sauce-500g-3664834",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3664834.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -7012,92 +6960,113 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Mainland Extra Tasty Cheese Block",
-      "last_scraped": "2026-06-02T09:12:42.696704+00:00",
-      "trip_count": 6,
+      "list_item": "Macro Organic Natural Pumpkin Kernels",
+      "last_scraped": "2026-06-03T00:37:22.086488+00:00",
+      "trip_count": 4,
       "price_history": [
         {
-          "date": "2025-02-28",
-          "price": 11
+          "date": "2025-03-11",
+          "price": 5.0
         },
         {
           "date": "2025-04-14",
-          "price": 11
+          "price": 5.0
         },
         {
           "date": "2025-05-12",
-          "price": 11
+          "price": 5.0
         },
         {
-          "date": "2025-05-29",
-          "price": 9.8
-        },
-        {
-          "date": "2025-07-10",
-          "price": 9.8
-        },
-        {
-          "date": "2026-02-03",
-          "price": 11
+          "date": "2025-06-06",
+          "price": 5.0
         }
       ],
-      "category": "Dairy & Eggs",
+      "category": "Fruit & Veg",
       "woolworths": {
-        "name": "Mainland Extra Tasty Cheese Block",
-        "price": 11.8,
-        "unit_price": 23.6,
+        "name": "Macro Organic Natural Pumpkin Kernels",
+        "price": 5.7,
+        "unit_price": 22.8,
         "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/807870/mainland-extra-tasty-cheese-block",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/807870.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/133300/macro-organic-natural-pumpkin-kernels",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/133300.jpg"
       },
       "coles": {
-        "name": "Extra Tasty Cheddar Cheese Block",
-        "price": 11.8,
-        "unit_price": 23.6,
+        "name": "Coles Organic Pumpkin Kent | approx. 800g",
+        "price": 6.0,
+        "unit_price": 6.0,
         "unit": "1kg",
-        "url": "https://www.coles.com.au/product/mainland-extra-tasty-cheddar-cheese-block-500g-3308421",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3308421.jpg"
+        "url": "https://www.coles.com.au/product/coles-organic-pumpkin-kent-approx.-800g-3119043",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3119043.jpg"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.44,
+      "alternatives": [
+        {
+          "name": "Little Bellies Organic Pumpkin And Carrot Soft Corn 10+ Months | 8g",
+          "price": 1.95,
+          "unit_price": 1.95,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/little-bellies-organic-pumpkin-and-carrot-soft-corn-10+-months-8g-4163390",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4163390.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Only Organic Sweet Potato & Pumpkin Pouch | 120g",
+          "price": 2.3,
+          "unit_price": 2.3,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/only-organic-sweet-potato-and-pumpkin-pouch-120g-8423369",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8423369.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Wellness Road Organic Buckwheat Kernels | 500g",
+          "price": 5.0,
+          "unit_price": 5.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/wellness-road-organic-buckwheat-kernels-500g-3405803",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3405803.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
-          "price": 11.8
+          "price": 5.7
         },
         {
           "date": "2026-05-30",
-          "price": 11.8
+          "price": 5.7
         },
         {
           "date": "2026-06-01",
-          "price": 11.8
+          "price": 5.7
         }
       ],
       "coles_price_history": [
         {
           "date": "2026-05-29",
-          "price": 11.8
+          "price": 6
         },
         {
           "date": "2026-05-30",
-          "price": 11.8
+          "price": 6
         },
         {
           "date": "2026-06-01",
-          "price": 11.8
+          "price": 6
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
-      "per_100_ww": 2.36,
-      "per_100_coles": 2.36,
-      "per_100_unit": "100g"
+      "per_100_ww": 2.28,
+      "per_100_coles": 0.75,
+      "per_100_unit": "100g",
+      "_ww_price_factor": 0.8
     },
     {
       "list_item": "McKenzie's Dried Veg Pearl Barley",
-      "last_scraped": "2026-06-02T09:12:45.023469+00:00",
+      "last_scraped": "2026-06-03T00:37:47.108515+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7137,7 +7106,17 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.3,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Barley Pearl",
+          "price": 1.6,
+          "unit_price": 3.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/mckenzie's-barley-pearl-500g-130039",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/130039.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -7158,10 +7137,109 @@
           "price": 1.6
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.38,
       "per_100_coles": 0.32,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Mainland Extra Tasty Cheese Block",
+      "last_scraped": "2026-06-03T00:37:47.368340+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 11.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 11.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 11.0
+        },
+        {
+          "date": "2025-05-29",
+          "price": 9.8
+        },
+        {
+          "date": "2025-07-10",
+          "price": 9.8
+        },
+        {
+          "date": "2026-02-03",
+          "price": 11.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Mainland Extra Tasty Cheese Block",
+        "price": 11.8,
+        "unit_price": 23.6,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/807870/mainland-extra-tasty-cheese-block",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/807870.jpg"
+      },
+      "coles": {
+        "name": "Extra Tasty Cheddar Cheese Block",
+        "price": 10.2,
+        "unit_price": 20.4,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/mainland-extra-tasty-cheddar-cheese-block-500g-3308421",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3308421.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.6,
+      "alternatives": [
+        {
+          "name": "Extra Tasty Cheddar Cheese Block",
+          "price": 10.2,
+          "unit_price": 20.4,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/mainland-extra-tasty-cheddar-cheese-block-500g-3308421",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3308421.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 11.8
+        },
+        {
+          "date": "2026-05-30",
+          "price": 11.8
+        },
+        {
+          "date": "2026-06-01",
+          "price": 11.8
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 11.8
+        },
+        {
+          "date": "2026-05-30",
+          "price": 11.8
+        },
+        {
+          "date": "2026-06-01",
+          "price": 11.8
+        },
+        {
+          "date": "2026-06-03",
+          "price": 10.2
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 2.36,
+      "per_100_coles": 2.04,
       "per_100_unit": "100g"
     },
     {
@@ -12167,19 +12245,19 @@
   ],
   "not_found_items": [],
   "summary": {
-    "total_woolworths": 732.12,
-    "total_coles": 730.63,
+    "total_woolworths": 732.18,
+    "total_coles": 729.03,
     "cheaper_store": "coles",
     "ww_data_available": true,
-    "total_saving": 1.49,
+    "total_saving": 3.15,
     "items_compared": 144,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 65,
+    "done": 70,
     "total": 144,
     "started_at": "2026-06-03T00:33:33.955651+00:00",
-    "current_item": "Macro Natural Sunflower Kernels"
+    "current_item": "Mainland Extra Tasty Cheese Block"
   },
   "pending_validation": [
     {
