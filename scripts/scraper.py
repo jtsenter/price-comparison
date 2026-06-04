@@ -1260,6 +1260,21 @@ async def _scrape_single_item(
     if coles_reasons and coles_price is not None and ww_price is not None and round(coles_price, 2) == round(ww_price, 2):
         coles_reasons = []
 
+    # FIX 4: if the price falls within the combined range of all observed scrape prices
+    # (both WW and Coles histories), it is a known market price — not suspicious.
+    # e.g. WW at $5.50 when WW history is $2.30-$3.70 but Coles history is $6.50:
+    # the combined range is $2.30-$6.50, so $5.50 is within range and should not be flagged.
+    _all_scrape_prices = (
+        [e["price"] for e in existing_ww_hist if e.get("price", 0) > 0] +
+        [e["price"] for e in existing_co_hist if e.get("price", 0) > 0]
+    )
+    if _all_scrape_prices:
+        _hist_lo, _hist_hi = min(_all_scrape_prices), max(_all_scrape_prices)
+        if ww_reasons and ww_price is not None and _hist_lo <= ww_price <= _hist_hi:
+            ww_reasons = []
+        if coles_reasons and coles_price is not None and _hist_lo <= coles_price <= _hist_hi:
+            coles_reasons = []
+
     all_reasons = list(dict.fromkeys(ww_reasons + coles_reasons))
     _validation_entry = None
     if all_reasons:

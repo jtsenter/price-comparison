@@ -58,6 +58,16 @@
       gap: 12px;
       flex-wrap: wrap;
     }
+    .validate-item-img {
+      width: 52px; height: 52px; object-fit: contain;
+      border-radius: 8px; border: 1px solid var(--border);
+      background: var(--bg); flex-shrink: 0;
+    }
+    .validate-item-img-placeholder {
+      width: 52px; height: 52px; border-radius: 8px;
+      background: var(--bg); border: 1px solid var(--border); flex-shrink: 0;
+    }
+    .validate-header-left { display: flex; align-items: center; gap: 12px; }
     .validate-item-name {
       font-size: 15px;
       font-weight: 700;
@@ -677,11 +687,28 @@ function renderEntry(entry) {
     ? new Date(entry.flagged_date).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
     : '';
 
+  const _itemData = _latestData?.items?.find(i => i.list_item === entry.item);
+  const _rawImg = _itemData?.coles?.image_url || _itemData?.woolworths?.image_url || null;
+  function _resolveImg(u) {
+    if (!u) return '';
+    if (typeof u === 'object' && u.uri) return 'https://cdn.productimages.coles.com.au/productimages' + u.uri;
+    if (typeof u !== 'string') return '';
+    if (u.includes('/_next/image')) { try { return decodeURIComponent(new URL(u).searchParams.get('url') || ''); } catch {} }
+    return u;
+  }
+  const _imgSrc = _resolveImg(_rawImg);
+  const _imgHtml = _imgSrc
+    ? `<img class="validate-item-img" src="${_imgSrc}" alt="" loading="lazy" onerror="this.style.display='none'">`
+    : '<div class="validate-item-img-placeholder"></div>';
+
   card.innerHTML = `
     <div class="validate-card-header">
-      <div>
-        <div class="validate-item-name">${entry.item}</div>
-        <div class="validate-meta">Flagged ${date}</div>
+      <div class="validate-header-left">
+        ${_imgHtml}
+        <div>
+          <div class="validate-item-name">${entry.item}</div>
+          <div class="validate-meta">Flagged ${date}</div>
+        </div>
       </div>
       <div class="validate-reasons">${reasonsHtml}</div>
     </div>
@@ -793,3 +820,4 @@ function renderEntry(entry) {
 </script>
 </body>
 </html>
+
