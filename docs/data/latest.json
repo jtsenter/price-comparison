@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04T08:36:08.360888+00:00",
+  "last_updated": "2026-06-04T08:36:20.511792+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3843,8 +3843,91 @@
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Annalisa Chickpeas",
+      "last_scraped": "2026-06-04T08:36:12.242511+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 1.4
+        },
+        {
+          "date": "2025-05-29",
+          "price": 1.4
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.4
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Annalisa Chickpeas",
+        "price": 1.9,
+        "unit_price": 4.75,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/178262/annalisa-chickpeas",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/178262.jpg"
+      },
+      "coles": {
+        "name": "Carmelina Chick Peas | 400 GRAM",
+        "price": 1.9,
+        "unit_price": 3.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Carmelina Chick Peas | 400 GRAM",
+          "price": 1.9,
+          "unit_price": 3.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.9
+        },
+        {
+          "date": "2026-05-30",
+          "price": 1.9
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.9
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.9
+        },
+        {
+          "date": "2026-05-30",
+          "price": 1.9
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.9
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.47,
+      "per_100_coles": 0.3,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Whole Milk Full Cream Milk",
-      "last_scraped": "2026-06-03T22:50:11.022984+00:00",
+      "last_scraped": "2026-06-04T08:36:13.232517+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -3898,7 +3981,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8150288.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -3920,88 +4003,15 @@
           "price": 5.15
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.17,
       "per_100_coles": 0.17,
       "per_100_unit": "100ml"
     },
     {
-      "list_item": "Annalisa Chickpeas",
-      "last_scraped": "2026-06-03T22:50:12.843643+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-05-04",
-          "price": 1.4
-        },
-        {
-          "date": "2025-05-29",
-          "price": 1.4
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.4
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Annalisa Chickpeas",
-        "price": 1.9,
-        "unit_price": 4.75,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/178262/annalisa-chickpeas",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/178262.jpg"
-      },
-      "coles": {
-        "name": "Carmelina Chick Peas | 400 GRAM",
-        "price": 1.9,
-        "unit_price": 3,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.9
-        },
-        {
-          "date": "2026-05-30",
-          "price": 1.9
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.9
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.9
-        },
-        {
-          "date": "2026-05-30",
-          "price": 1.9
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.9
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.47,
-      "per_100_coles": 0.3,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Armada Small Kitchen Tidy Bag",
-      "last_scraped": "2026-06-03T22:50:14.622684+00:00",
+      "last_scraped": "2026-06-04T08:36:16.728812+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -4043,7 +4053,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3894277.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -4065,7 +4075,7 @@
           "price": 2.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -4073,7 +4083,7 @@
     },
     {
       "list_item": "Balconi Mix Max Cake Cocoa 350g",
-      "last_scraped": "2026-06-03T22:50:16.037829+00:00",
+      "last_scraped": "2026-06-04T08:36:16.929306+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -4111,7 +4121,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5088122.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9946,86 +9956,6 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Ben & Jerry's Ice Cream Tub Chocolate Chip Cookie Dough",
-      "last_scraped": "2026-06-03T00:36:32.833558+00:00",
-      "trip_count": 5,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 9
-        },
-        {
-          "date": "2024-12-02",
-          "price": 10
-        },
-        {
-          "date": "2024-12-19",
-          "price": 8.7
-        },
-        {
-          "date": "2025-02-02",
-          "price": 8.7
-        },
-        {
-          "date": "2025-03-11",
-          "price": 8.7
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Ben & Jerry's Chocolate Chip Cookie Dough Ice Cream Tub",
-        "price": 7.25,
-        "unit_price": 1.58,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/345039/ben-jerry-s-chocolate-chip-cookie-dough-ice-cream-tub",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/345039.jpg"
-      },
-      "coles": {
-        "name": "Ben & Jerry's Chocolate Chip Cookie Dough Ice Cream Tub | 458mL",
-        "price": 9.5,
-        "unit_price": 2.07,
-        "unit": "100mL",
-        "url": "https://www.coles.com.au/product/ben-and-jerry's-chocolate-chip-cookie-dough-ice-cream-tub-458ml-7806125",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7806125.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 2.25,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 7.25
-        },
-        {
-          "date": "2026-05-30",
-          "price": 7.25
-        },
-        {
-          "date": "2026-06-01",
-          "price": 7.25
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 14.5
-        },
-        {
-          "date": "2026-05-30",
-          "price": 14.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 14.5
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.58,
-      "per_100_coles": 2.07,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Capsicum Green",
       "last_scraped": "2026-06-03T00:36:45.343324+00:00",
       "trip_count": 5,
@@ -10846,22 +10776,23 @@
     "Truss Tomatoes",
     "Woolworths Cos Hearts Lettuce",
     "Woolworths Onion Brown Bag",
-    "Woolworths Washed Potato Bag"
+    "Woolworths Washed Potato Bag",
+    "Ben & Jerry's Ice Cream Tub Chocolate Chip Cookie Dough"
   ],
   "summary": {
-    "total_woolworths": 669.47,
-    "total_coles": 698.02,
+    "total_woolworths": 662.22,
+    "total_coles": 688.52,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 28.55,
-    "items_compared": 133,
-    "items_not_found": 11
+    "total_saving": 26.3,
+    "items_compared": 132,
+    "items_not_found": 12
   },
   "scrape_progress": {
-    "done": 45,
+    "done": 50,
     "total": 144,
     "started_at": "2026-06-04T08:34:17.586877+00:00",
-    "current_item": "Woolworths Washed Potato Bag"
+    "current_item": "Ben & Jerry's Ice Cream Tub Chocolate Chip Cookie Dough"
   },
   "pending_validation": [
     {
