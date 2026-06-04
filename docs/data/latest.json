@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04T08:38:17.227570+00:00",
+  "last_updated": "2026-06-04T08:38:24.369707+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7729,26 +7729,26 @@
     },
     {
       "list_item": "Woolworths Rosemary Leaves",
-      "last_scraped": "2026-06-03T22:52:17.879275+00:00",
+      "last_scraped": "2026-06-04T08:38:20.373776+00:00",
       "trip_count": 3,
       "price_history": [
         {
           "date": "2025-01-29",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2025-03-17",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2026-03-02",
-          "price": 2
+          "price": 2.0
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Rosemary Leaves",
-        "price": 2,
+        "price": 2.0,
         "unit_price": 1.11,
         "unit": "10G",
         "url": "https://www.woolworths.com.au/shop/productdetails/251141/woolworths-rosemary-leaves",
@@ -7792,12 +7792,12 @@
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 11.1,
-      "per_100_coles": 10,
+      "per_100_coles": 10.0,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Thickened Cream",
-      "last_scraped": "2026-06-03T22:52:19.053437+00:00",
+      "last_scraped": "2026-06-04T08:38:21.573970+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -7806,11 +7806,11 @@
         },
         {
           "date": "2025-05-12",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-06-06",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2026-02-11",
@@ -7877,7 +7877,7 @@
     },
     {
       "list_item": "Woolworths Tuna In Springwater",
-      "last_scraped": "2026-06-03T22:52:20.607507+00:00",
+      "last_scraped": "2026-06-04T08:38:22.920305+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -7946,7 +7946,7 @@
     },
     {
       "list_item": "Woolworths Wholegrain Wrap 8Pk",
-      "last_scraped": "2026-06-03T22:52:22.194893+00:00",
+      "last_scraped": "2026-06-04T08:38:24.360633+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7984,7 +7984,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3731716.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9964,66 +9964,6 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Red Onions",
-      "last_scraped": "2026-06-03T00:39:32.165542+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 4.9
-        },
-        {
-          "date": "2025-03-27",
-          "price": 3.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 5.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Red Onions Bag",
-        "price": 3.5,
-        "unit_price": 3.5,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg"
-      },
-      "coles": {
-        "name": "Red Onion 1 Kg",
-        "price": 5.1,
-        "unit_price": 5.1,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-red-onion-1-kg-1kg-8467604",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8467604.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.6,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-06-01",
-          "price": 5
-        },
-        {
-          "date": "2026-06-03",
-          "price": 3.5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-06-02",
-          "price": 3.5
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 0.35,
-      "per_100_coles": 0.51,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Ecostore Dish Liquid Ultrasensitive",
       "last_scraped": "2026-06-02T09:14:39.688642+00:00",
       "trip_count": 2,
@@ -10295,22 +10235,23 @@
     "McVitie's Hobnobs Milk Chocolate",
     "Philadelphia Original Cream Cheese Block",
     "Vevelle White 2 Ply Toilet Tissue",
-    "Woolworths Red Onions Bag"
+    "Woolworths Red Onions Bag",
+    "Woolworths Red Onions"
   ],
   "summary": {
-    "total_woolworths": 614.89,
-    "total_coles": 644.22,
+    "total_woolworths": 611.39,
+    "total_coles": 639.12,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 29.33,
-    "items_compared": 123,
-    "items_not_found": 21
+    "total_saving": 27.73,
+    "items_compared": 122,
+    "items_not_found": 22
   },
   "scrape_progress": {
-    "done": 105,
+    "done": 110,
     "total": 144,
     "started_at": "2026-06-04T08:34:17.586877+00:00",
-    "current_item": "Woolworths Red Onions Bag"
+    "current_item": "Woolworths Wholegrain Wrap 8Pk"
   },
   "pending_validation": [
     {
