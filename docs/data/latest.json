@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04T11:48:38.755423+00:00",
+  "last_updated": "2026-06-04T11:48:47.850599+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8582,7 +8582,7 @@
     },
     {
       "list_item": "Woolworths Baby Corn Spears",
-      "last_scraped": "2026-06-04T11:13:47.309477+00:00",
+      "last_scraped": "2026-06-04T11:48:41.305362+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -8662,8 +8662,73 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Basmati Rice",
+      "last_scraped": "2026-06-04T11:48:44.868566+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 4.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Basmati Rice",
+        "price": 4.0,
+        "unit_price": 0.4,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/694550/woolworths-basmati-rice",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/694550.jpg",
+        "is_on_special": false
+      },
+      "coles": {
+        "name": "Basmati Rice",
+        "price": 4,
+        "unit_price": 0.4,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-basmati-rice-1kg-8703059",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8703059.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.4,
+      "per_100_coles": 0.4,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Capsicum Green",
-      "last_scraped": "2026-06-04T11:13:50.036603+00:00",
+      "last_scraped": "2026-06-04T11:48:45.267117+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8718,72 +8783,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Basmati Rice",
-      "last_scraped": "2026-06-04T11:13:53.253843+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-05-04",
-          "price": 4.0
-        },
-        {
-          "date": "2026-02-03",
-          "price": 4.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 4.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Basmati Rice",
-        "price": 4.0,
-        "unit_price": 0.4,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/694550/woolworths-basmati-rice",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/694550.jpg"
-      },
-      "coles": {
-        "name": "Basmati Rice",
-        "price": 4,
-        "unit_price": 0.4,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-basmati-rice-1kg-8703059",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8703059.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4
-        },
-        {
-          "date": "2026-06-01",
-          "price": 4
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4
-        },
-        {
-          "date": "2026-06-01",
-          "price": 4
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.4,
-      "per_100_coles": 0.4,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Celery Heart",
-      "last_scraped": "2026-06-04T11:13:53.317285+00:00",
+      "last_scraped": "2026-06-04T11:48:47.781209+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -8852,7 +8853,7 @@
     },
     {
       "list_item": "Woolworths Cous Cous",
-      "last_scraped": "2026-06-04T11:13:56.184472+00:00",
+      "last_scraped": "2026-06-04T11:48:47.844898+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -11872,9 +11873,9 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 95,
+    "done": 100,
     "total": 144,
     "started_at": "2026-06-04T11:45:09.245227+00:00",
-    "current_item": "Woolworths Asparagus Green Bunch"
+    "current_item": "Woolworths Cous Cous"
   }
 }
