@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-03T22:53:25.786170+00:00",
+  "last_updated": "2026-06-04T08:31:17.599527+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -2901,7 +2901,7 @@
     },
     {
       "list_item": "Woolworths Dreamy Choc Chip Cookies",
-      "last_scraped": "2026-06-03T22:49:42.045043+00:00",
+      "last_scraped": "2026-06-04T08:31:17.311168+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -2914,7 +2914,7 @@
         },
         {
           "date": "2025-02-02",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-02-28",
@@ -2947,16 +2947,27 @@
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/421465.jpg"
       },
       "coles": {
-        "name": "Coles Choc Chip Cookies | 500g",
-        "price": 3,
-        "unit_price": 3,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-choc-chip-cookies-500g-6823480",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6823480.jpg"
+        "name": "Indulgent Choc 40% Choc Chip Cookie",
+        "price": 3.5,
+        "unit_price": 0.58,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-bakery-indulgent-choc-40percent-choc-chip-cookie-6-pack-2592079",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2592079.jpg",
+        "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 0.8,
-      "alternatives": [],
+      "saving_per_item": 0.3,
+      "alternatives": [
+        {
+          "name": "Indulgent Choc 40% Choc Chip Cookie",
+          "price": 3.5,
+          "unit_price": 0.58,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-bakery-indulgent-choc-40percent-choc-chip-cookie-6-pack-2592079",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2592079.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -2975,12 +2986,16 @@
         {
           "date": "2026-06-01",
           "price": 3
+        },
+        {
+          "date": "2026-06-04",
+          "price": 3.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
-      "per_100_coles": 0.6,
+      "per_100_coles": null,
       "per_100_unit": "100g"
     },
     {
@@ -12009,10 +12024,10 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 712.99,
-    "total_coles": 738.82,
+    "total_coles": 739.32,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 25.83,
+    "total_saving": 26.33,
     "items_compared": 144,
     "items_not_found": 0
   },
