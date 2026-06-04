@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04T11:49:27.211067+00:00",
+  "last_updated": "2026-06-04T11:49:36.339418+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10334,7 +10334,7 @@
     },
     {
       "list_item": "Greek Style Yoghurt 2kg",
-      "last_scraped": "2026-06-04T11:14:37.212628+00:00",
+      "last_scraped": "2026-06-04T11:49:27.465348+00:00",
       "trip_count": 2,
       "price_history": [],
       "category": "Dairy & Eggs",
@@ -10344,7 +10344,8 @@
         "unit_price": 0.42,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/249085/woolworths-greek-style-yoghurt",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/249085.jpg"
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/249085.jpg",
+        "is_on_special": false
       },
       "coles": {
         "name": "Greek Style Yogurt",
@@ -10385,7 +10386,7 @@
     },
     {
       "list_item": "Kinder Chocolate Sharepack",
-      "last_scraped": "2026-06-04T11:14:37.319739+00:00",
+      "last_scraped": "2026-06-04T11:49:30.719632+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10444,8 +10445,74 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "KitKat Gold Crush Block",
+      "last_scraped": "2026-06-04T11:49:33.454063+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 4.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 5.0
+        }
+      ],
+      "category": "Sweets",
+      "woolworths": {
+        "name": "KitKat Milkybar White Chocolate Block",
+        "price": 5.0,
+        "unit_price": 3.13,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/273964/kitkat-milkybar-white-chocolate-block",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/273964.jpg",
+        "is_on_special": true
+      },
+      "coles": {
+        "name": "Milkybar White Choc Block",
+        "price": 5,
+        "unit_price": 3.13,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/kitkat-milkybar-white-choc-block-160g-6339283",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6339283.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 7.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 7.5
+        },
+        {
+          "date": "2026-06-04",
+          "price": 5.0
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 3.13,
+      "per_100_coles": 3.13,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Lotus Biscoff Spread",
-      "last_scraped": "2026-06-04T11:14:40.447731+00:00",
+      "last_scraped": "2026-06-04T11:49:34.756515+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10528,7 +10595,7 @@
     },
     {
       "list_item": "Macro Grass Fed Australian Stir-Fry Beef",
-      "last_scraped": "2026-06-04T11:14:43.366423+00:00",
+      "last_scraped": "2026-06-04T11:49:36.329065+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11734,67 +11801,6 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "KitKat Gold Crush Block",
-      "last_scraped": "2026-06-02T09:14:54.714453+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 4.5
-        },
-        {
-          "date": "2025-04-14",
-          "price": 5
-        }
-      ],
-      "category": "Sweets",
-      "woolworths": {
-        "name": "KitKat Milkybar White Chocolate Block",
-        "price": 7.5,
-        "unit_price": 4.69,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/273964/kitkat-milkybar-white-chocolate-block",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/273964.jpg"
-      },
-      "coles": {
-        "name": "Milkybar White Choc Block",
-        "price": 5,
-        "unit_price": 3.13,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/kitkat-milkybar-white-choc-block-160g-6339283",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6339283.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 2.5,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 7.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 7.5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 4.69,
-      "per_100_coles": 3.13,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Butternut Pumpkin Cut",
       "last_scraped": "2026-06-02T09:15:18.556287+00:00",
       "trip_count": 2,
@@ -11861,18 +11867,18 @@
     "Hass Avocado"
   ],
   "summary": {
-    "total_woolworths": 696.44,
+    "total_woolworths": 693.94,
     "total_coles": 725.12,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 28.68,
+    "total_saving": 31.18,
     "items_compared": 142,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 120,
+    "done": 125,
     "total": 144,
     "started_at": "2026-06-04T11:45:09.245227+00:00",
-    "current_item": "Green Zucchini"
+    "current_item": "Macro Grass Fed Australian Stir-Fry Beef"
   }
 }
