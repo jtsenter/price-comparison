@@ -472,6 +472,7 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                         "unit": unit,
                         "url": product_url,
                         "image_url": product.get("LargeImageFile") or product.get("MediumImageFile") or "",
+                        "is_on_special": on_special,  # True=public special, False=member price
                     }
         print(f"  [WW] __NEXT_DATA__ product not found for: {url}")
     except Exception as e:
@@ -1133,9 +1134,9 @@ async def _scrape_single_item(
             hist_min, hist_max = min(hist_prices), max(hist_prices)
             if hist_min <= new_price <= hist_max:
                 return False, None  # Within known range → OK
-        if change_pct > 0.40:
+        if change_pct > 1.00:  # >100% increase = data error (wrong page/product)
             return True, f"jumped {change_pct*100:.0f}% up"
-        elif change_pct < -0.20:
+        elif change_pct < -0.50:  # >50% drop = data error; real specials are 20-40%
             return True, f"dropped {change_pct*100:.0f}%"
         return False, None
 
@@ -1299,14 +1300,22 @@ async def _scrape_single_item(
                 "reason": all_reasons,
             }
 
-    # FIX 3: Suppress EDR/member prices — only act if drop is >20% AND new all-time low
+    # FIX 3: Suppress EDR/member prices — only when is_on_special is explicitly False.
+    # If is_on_special=True (confirmed public sale) or None (search result, unknown),
+    # allow the price through to validation instead of silently carrying forward the old price.
     if ww_reasons and 'suspicious_drop_gt20pct' in ww_reasons and ww_match and prev_ww is not None:
-        print(f"    [FIX] WW suppressed: keeping ${prev_ww} instead of ${ww_match['price']} (EDR/member price suspected)")
-        ww_match = None  # carry-forward previous price
+        if ww_match.get('is_on_special') == False:
+            print(f"    [FIX] WW EDR/member price suppressed: keeping ${prev_ww} (not a public special)")
+            ww_match = None  # carry-forward previous price
+        else:
+            print(f"    [FIX] WW drop allowed through to validation: ${ww_match.get('price')} (public special or unknown)")
 
     if coles_reasons and 'suspicious_drop_gt20pct' in coles_reasons and coles_match and prev_coles is not None:
-        print(f"    [FIX] Coles suppressed: keeping ${prev_coles} instead of ${coles_match['price']} (EDR/member price suspected)")
-        coles_match = None  # carry-forward previous price
+        if coles_match.get('is_on_special') == False:
+            print(f"    [FIX] Coles EDR/member price suppressed: keeping ${prev_coles} (not a public special)")
+            coles_match = None  # carry-forward previous price
+        else:
+            print(f"    [FIX] Coles drop allowed through to validation: ${coles_match.get('price')} (public special or unknown)")
 
     # If a store returned no result this run (and _carry also found nothing), preserve
     # whatever was in the previous latest.json rather than overwriting with None.
