@@ -447,17 +447,27 @@ async function handleAction(entry, store, action, cardEl) {
     let newWwHist    = itemEntry?.ww_price_history    ?? [];
     let newCoHist    = itemEntry?.coles_price_history ?? [];
 
+    // Use today as fallback date for legacy entries that predate flagged_date field
+    const confirmedDate = entry.flagged_date || new Date().toISOString().slice(0, 10);
+
     if (wwNeeds && dec.ww === 'confirm' && entry.ww_price != null) {
-      newWwHist = [...newWwHist, { date: entry.flagged_date, price: Math.round(entry.ww_price * 100) / 100 }];
+      newWwHist = [...newWwHist, { date: confirmedDate, price: Math.round(entry.ww_price * 100) / 100 }];
     }
     if (colesNeeds && dec.coles === 'confirm' && entry.coles_price != null) {
-      newCoHist = [...newCoHist, { date: entry.flagged_date, price: Math.round(entry.coles_price * 100) / 100 }];
+      newCoHist = [...newCoHist, { date: confirmedDate, price: Math.round(entry.coles_price * 100) / 100 }];
     }
 
-    // Update the item — revert rejected prices to prev_price; leave history untouched for rejects
+    // Update the item — confirm updates current price + history; reject reverts current price
     const updatedItems = (fresh.items || []).map(i => {
       if (i.list_item !== entry.item) return i;
       const patch = { ww_price_history: newWwHist, coles_price_history: newCoHist };
+
+      // Confirmed prices: update current displayed price (covers EDR carry-forward items
+      // where scraper kept old price pending review)
+      if (wwNeeds && dec.ww === 'confirm' && entry.ww_price != null)
+        patch.woolworths = { ...(i.woolworths || {}), price: entry.ww_price };
+      if (colesNeeds && dec.coles === 'confirm' && entry.coles_price != null)
+        patch.coles = { ...(i.coles || {}), price: entry.coles_price };
 
       // Revert rejected store prices back to the previous known-good price
       if (wwNeeds && dec.ww === 'reject' && entry.ww_prev_price != null)

@@ -2905,6 +2905,13 @@ function renderPage(data) {
     };
     const msg = emptyMessages[_activePriority] || emptyMessages.all;
     tbody.innerHTML = `<tr><td colspan="${getVisibleCols().length + 2}"><div class="table-empty-state"><strong>${msg.title}</strong>${msg.sub}</div></td></tr>`;
+    // Clear tfoot so stale totals don't show when no rows are visible
+    const tfootRowEmpty = document.querySelector('tfoot tr');
+    if (tfootRowEmpty) {
+      tfootRowEmpty.innerHTML = '<td></td>' + getVisibleCols().map(col =>
+        col === 'name' ? `<td><div style="font-weight:700">0 products</div></td>` : '<td></td>'
+      ).join('') + '<td></td>';
+    }
     $('tableContainer').style.display = 'block';
     return;
   }
