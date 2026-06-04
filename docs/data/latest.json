@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04T11:58:29.176548+00:00",
+  "last_updated": "2026-06-04T11:58:38.100096+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8586,7 +8586,7 @@
     },
     {
       "list_item": "Woolworths Baby Corn Spears",
-      "last_scraped": "2026-06-04T11:48:41.305362+00:00",
+      "last_scraped": "2026-06-04T11:58:30.247935+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -8666,8 +8666,64 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Capsicum Green",
+      "last_scraped": "2026-06-04T11:58:33.501612+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2026-02-23",
+          "price": 2.23
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.23
+        },
+        {
+          "date": "2026-04-21",
+          "price": 2.73
+        },
+        {
+          "date": "2026-04-29",
+          "price": 2.73
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Capsicum Green",
+        "price": 1.98,
+        "unit_price": 1.98,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/135156/woolworths-capsicum-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135156.jpg"
+      },
+      "coles": {
+        "name": "Coles Capsicum Green Loose | approx. 220g",
+        "price": 1.3,
+        "unit_price": 1.3,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7214862.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.68,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-06-03",
+          "price": 1.98
+        }
+      ],
+      "coles_price_history": [],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 0.59,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Basmati Rice",
-      "last_scraped": "2026-06-04T11:48:44.868566+00:00",
+      "last_scraped": "2026-06-04T11:58:35.365405+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -8731,64 +8787,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Capsicum Green",
-      "last_scraped": "2026-06-04T11:48:45.267117+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2026-02-23",
-          "price": 2.23
-        },
-        {
-          "date": "2026-04-02",
-          "price": 2.23
-        },
-        {
-          "date": "2026-04-21",
-          "price": 2.73
-        },
-        {
-          "date": "2026-04-29",
-          "price": 2.73
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Capsicum Green",
-        "price": 1.98,
-        "unit_price": 1.98,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/135156/woolworths-capsicum-green",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135156.jpg"
-      },
-      "coles": {
-        "name": "Coles Capsicum Green Loose | approx. 220g",
-        "price": 1.3,
-        "unit_price": 1.3,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7214862.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.68,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-06-03",
-          "price": 1.98
-        }
-      ],
-      "coles_price_history": [],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 0.59,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Celery Heart",
-      "last_scraped": "2026-06-04T11:48:47.781209+00:00",
+      "last_scraped": "2026-06-04T11:58:35.763662+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -8857,7 +8857,7 @@
     },
     {
       "list_item": "Woolworths Cous Cous",
-      "last_scraped": "2026-06-04T11:48:47.844898+00:00",
+      "last_scraped": "2026-06-04T11:58:38.093540+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -11885,9 +11885,9 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 95,
+    "done": 100,
     "total": 144,
     "started_at": "2026-06-04T11:54:54.034800+00:00",
-    "current_item": "Woolworths Asparagus Green Bunch"
+    "current_item": "Woolworths Cous Cous"
   }
 }
