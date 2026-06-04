@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04T11:50:02.525067+00:00",
+  "last_updated": "2026-06-04T11:50:06.432029+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11615,68 +11615,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Mixed Herbs Dried",
-      "last_scraped": "2026-06-04T11:15:10.393897+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-03-17",
-          "price": 2.0
-        },
-        {
-          "date": "2026-02-03",
-          "price": 2.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Mixed Herbs Dried",
-        "price": 2,
-        "unit_price": 1.67,
-        "unit": "10G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/251120/woolworths-mixed-herbs-dried",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251120.jpg"
-      },
-      "coles": {
-        "name": "Coles Mixed Herbs | 13g",
-        "price": 2.15,
-        "unit_price": 2.15,
-        "unit": "10g",
-        "url": "https://www.coles.com.au/product/coles-mixed-herbs-13g-8987375",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8987375.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.15,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.15
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.15
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 16.7,
-      "per_100_coles": 16.54,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Red Washed Potatoes Bag",
-      "last_scraped": "2026-06-04T11:15:12.396863+00:00",
+      "last_scraped": "2026-06-04T11:50:06.420499+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -11740,6 +11680,66 @@
       "size_warning": false,
       "per_100_ww": 0.3,
       "per_100_coles": 0.42,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Mixed Herbs Dried",
+      "last_scraped": "2026-06-04T11:15:10.393897+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-03-17",
+          "price": 2.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 2.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Mixed Herbs Dried",
+        "price": 2,
+        "unit_price": 1.67,
+        "unit": "10G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/251120/woolworths-mixed-herbs-dried",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251120.jpg"
+      },
+      "coles": {
+        "name": "Coles Mixed Herbs | 13g",
+        "price": 2.15,
+        "unit_price": 2.15,
+        "unit": "10g",
+        "url": "https://www.coles.com.au/product/coles-mixed-herbs-13g-8987375",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8987375.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.15,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.15
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2.15
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 16.7,
+      "per_100_coles": 16.54,
       "per_100_unit": "100g"
     },
     {
@@ -11881,9 +11881,9 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 140,
+    "done": 141,
     "total": 144,
     "started_at": "2026-06-04T11:45:09.245227+00:00",
-    "current_item": "Woolworths Green Asparagus Bunch Green"
+    "current_item": "Woolworths Red Washed Potatoes Bag"
   }
 }
