@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04T11:46:35.687792+00:00",
+  "last_updated": "2026-06-04T11:46:47.692932+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3238,7 +3238,7 @@
     },
     {
       "list_item": "Woolworths Cherry Tomatoes Punnet",
-      "last_scraped": "2026-06-04T11:11:42.395057+00:00",
+      "last_scraped": "2026-06-04T11:46:36.036947+00:00",
       "trip_count": 21,
       "price_history": [
         {
@@ -3379,7 +3379,7 @@
     },
     {
       "list_item": "Woolworths Cookie Caramel Bar Slice",
-      "last_scraped": "2026-06-04T11:11:42.551436+00:00",
+      "last_scraped": "2026-06-04T11:46:39.117226+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -3479,7 +3479,7 @@
     },
     {
       "list_item": "Woolworths Corn Sweet",
-      "last_scraped": "2026-06-04T11:11:48.223175+00:00",
+      "last_scraped": "2026-06-04T11:46:41.903369+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -3570,7 +3570,8 @@
         "unit_price": 11.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/139897/woolworths-corn-sweet",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139897.jpg"
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139897.jpg",
+        "is_on_special": false
       },
       "coles": {
         "name": "Sweet Corn",
@@ -3619,8 +3620,152 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Cos Hearts Lettuce",
+      "last_scraped": "2026-06-04T11:46:42.164256+00:00",
+      "trip_count": 22,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 3.5
+        },
+        {
+          "date": "2024-12-02",
+          "price": 2.5
+        },
+        {
+          "date": "2024-12-09",
+          "price": 3.5
+        },
+        {
+          "date": "2025-01-29",
+          "price": 3.5
+        },
+        {
+          "date": "2025-02-28",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-17",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 3.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-04",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.9
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-03",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.9
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.5
+        },
+        {
+          "date": "2026-02-07",
+          "price": 3.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 3.5
+        },
+        {
+          "date": "2026-03-02",
+          "price": 3.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.5
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.5
+        },
+        {
+          "date": "2026-04-29",
+          "price": 3.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Cos Hearts Lettuce",
+        "price": 2.5,
+        "unit_price": 1.25,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/141496/woolworths-cos-hearts-lettuce",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/141496.jpg"
+      },
+      "coles": {
+        "name": "Coles Lettuce Cos Baby Hearts | 2 Pack",
+        "price": 2.9,
+        "unit_price": 2.9,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-lettuce-cos-baby-hearts-2-pack-4646485",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4646485.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.4,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3.3
+        },
+        {
+          "date": "2026-06-01",
+          "price": 3.3
+        },
+        {
+          "date": "2026-06-04",
+          "price": 2.5
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.9
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2.9
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Dill Fresh Herb",
-      "last_scraped": "2026-06-04T11:11:50.925297+00:00",
+      "last_scraped": "2026-06-04T11:46:47.689641+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -3659,7 +3804,8 @@
         "unit_price": 2.13,
         "unit": "10G",
         "url": "https://www.woolworths.com.au/shop/productdetails/707365/woolworths-dill-fresh-herb",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/707365.jpg"
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/707365.jpg",
+        "is_on_special": false
       },
       "coles": {
         "name": "Herb Punnets Dill",
@@ -10801,146 +10947,6 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Cos Hearts Lettuce",
-      "last_scraped": "2026-06-02T09:10:58.510978+00:00",
-      "trip_count": 22,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 3.5
-        },
-        {
-          "date": "2024-12-02",
-          "price": 2.5
-        },
-        {
-          "date": "2024-12-09",
-          "price": 3.5
-        },
-        {
-          "date": "2025-01-29",
-          "price": 3.5
-        },
-        {
-          "date": "2025-02-28",
-          "price": 3.5
-        },
-        {
-          "date": "2025-03-11",
-          "price": 3.5
-        },
-        {
-          "date": "2025-03-17",
-          "price": 3.5
-        },
-        {
-          "date": "2025-04-05",
-          "price": 3.5
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.5
-        },
-        {
-          "date": "2025-05-04",
-          "price": 3.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 3.9
-        },
-        {
-          "date": "2025-06-06",
-          "price": 3.9
-        },
-        {
-          "date": "2025-07-03",
-          "price": 3.9
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.9
-        },
-        {
-          "date": "2026-02-03",
-          "price": 3.5
-        },
-        {
-          "date": "2026-02-07",
-          "price": 3.5
-        },
-        {
-          "date": "2026-02-23",
-          "price": 3.5
-        },
-        {
-          "date": "2026-03-02",
-          "price": 3
-        },
-        {
-          "date": "2026-03-10",
-          "price": 3.5
-        },
-        {
-          "date": "2026-04-02",
-          "price": 2.5
-        },
-        {
-          "date": "2026-04-29",
-          "price": 3.5
-        },
-        {
-          "date": "2026-05-06",
-          "price": 2.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Cos Hearts Lettuce",
-        "price": 3.3,
-        "unit_price": 1.65,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/141496/woolworths-cos-hearts-lettuce",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/141496.jpg"
-      },
-      "coles": {
-        "name": "Coles Lettuce Cos Baby Hearts | 2 Pack",
-        "price": 2.9,
-        "unit_price": 2.9,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-lettuce-cos-baby-hearts-2-pack-4646485",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4646485.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.4,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.3
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.3
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.9
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.9
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Washed Potato Bag",
       "last_scraped": "2026-06-03T00:36:22.621618+00:00",
       "trip_count": 7,
@@ -11855,18 +11861,18 @@
     "Hass Avocado"
   ],
   "summary": {
-    "total_woolworths": 701.29,
+    "total_woolworths": 700.49,
     "total_coles": 725.12,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 23.83,
+    "total_saving": 24.63,
     "items_compared": 142,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 30,
+    "done": 35,
     "total": 144,
     "started_at": "2026-06-04T11:45:09.245227+00:00",
-    "current_item": "Woolworths Broccolini Bunch"
+    "current_item": "Woolworths Dill Fresh Herb"
   }
 }
