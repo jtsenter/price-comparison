@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04T11:45:32.958583+00:00",
+  "last_updated": "2026-06-04T11:45:50.695520+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -515,7 +515,7 @@
     },
     {
       "list_item": "Cavendish Bananas",
-      "last_scraped": "2026-06-04T11:10:44.642189+00:00",
+      "last_scraped": "2026-06-04T11:45:39.185007+00:00",
       "trip_count": 30,
       "price_history": [
         {
@@ -646,7 +646,8 @@
         "unit_price": 0.88,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/133211/cavendish-bananas",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/133211.jpg"
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/133211.jpg",
+        "is_on_special": false
       },
       "coles": {
         "name": "Bananas",
@@ -687,7 +688,7 @@
     },
     {
       "list_item": "Fresh Broccoli",
-      "last_scraped": "2026-06-04T11:10:48.286450+00:00",
+      "last_scraped": "2026-06-04T11:45:41.565251+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -778,7 +779,8 @@
         "unit_price": 1.49,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/134681/fresh-broccoli",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/134681.jpg"
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/134681.jpg",
+        "is_on_special": false
       },
       "coles": {
         "name": "Broccoli Medium",
@@ -827,7 +829,7 @@
     },
     {
       "list_item": "Fresh Cauliflower Half",
-      "last_scraped": "2026-06-04T11:10:50.246016+00:00",
+      "last_scraped": "2026-06-04T11:45:45.297641+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -918,7 +920,8 @@
         "unit_price": 1.95,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/135568/fresh-cauliflower-half",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135568.jpg"
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135568.jpg",
+        "is_on_special": false
       },
       "coles": {
         "name": "Cauliflower Half",
@@ -963,7 +966,7 @@
     },
     {
       "list_item": "Helga's Wholemeal Bread With Grains",
-      "last_scraped": "2026-06-04T11:10:55.631515+00:00",
+      "last_scraped": "2026-06-04T11:45:50.693650+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -1034,7 +1037,8 @@
         "unit_price": 0.71,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/84129/helga-s-bread-traditional-wholemeal",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/084129.jpg"
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/084129.jpg",
+        "is_on_special": false
       },
       "coles": {
         "name": "Traditional Wholemeal Bread",
@@ -10353,86 +10357,6 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Hass Avocado",
-      "last_scraped": "2026-06-03T00:34:08.111479+00:00",
-      "trip_count": 8,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 2.5
-        },
-        {
-          "date": "2024-11-12",
-          "price": 2.5
-        },
-        {
-          "date": "2024-11-20",
-          "price": 2.9
-        },
-        {
-          "date": "2024-12-02",
-          "price": 2.5
-        },
-        {
-          "date": "2024-12-09",
-          "price": 2.9
-        },
-        {
-          "date": "2024-12-19",
-          "price": 2.9
-        },
-        {
-          "date": "2025-01-29",
-          "price": 3.5
-        },
-        {
-          "date": "2025-02-02",
-          "price": 3.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Hass Avocado",
-        "price": 2.2,
-        "unit_price": 2.2,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/120080/hass-avocado",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120080.jpg"
-      },
-      "coles": {
-        "name": "Hass Avocados",
-        "price": 2,
-        "unit_price": 2,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-hass-avocados-1-each-5900530",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5900530.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.5,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-06-02",
-          "price": 2.2
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.5
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "The Dutch Company Confectionary 4 Syrup Wafers",
       "last_scraped": "2026-06-03T00:34:44.509571+00:00",
       "trip_count": 11,
@@ -11900,21 +11824,22 @@
     }
   ],
   "not_found_items": [
-    "Cadbury Dairy Milk Top Deck Chocolate Block"
+    "Cadbury Dairy Milk Top Deck Chocolate Block",
+    "Hass Avocado"
   ],
   "summary": {
-    "total_woolworths": 703.49,
-    "total_coles": 725.92,
+    "total_woolworths": 701.29,
+    "total_coles": 723.92,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 22.43,
-    "items_compared": 143,
-    "items_not_found": 1
+    "total_saving": 22.63,
+    "items_compared": 142,
+    "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 5,
+    "done": 10,
     "total": 144,
     "started_at": "2026-06-04T11:45:09.245227+00:00",
-    "current_item": "Capsicum Yellow"
+    "current_item": "Helga's Wholemeal Bread With Grains"
   }
 }
