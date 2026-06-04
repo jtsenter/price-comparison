@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04T11:46:01.721339+00:00",
+  "last_updated": "2026-06-04T11:46:12.738146+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1628,7 +1628,7 @@
     },
     {
       "list_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle",
-      "last_scraped": "2026-06-04T11:11:06.729813+00:00",
+      "last_scraped": "2026-06-04T11:46:04.173227+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -1679,14 +1679,14 @@
       },
       "coles": {
         "name": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle | 1.1L",
-        "price": 1.8,
-        "unit_price": null,
-        "unit": null,
+        "price": 3.0,
+        "unit_price": 3.0,
+        "unit": "1L",
         "url": "https://www.coles.com.au/product/schweppes-lemon-lime-bitters-soft-drink-classic-mixers-bottle-1.1l-3014839",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3014839.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.2,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -1708,15 +1708,15 @@
           "price": 1.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.27,
-      "per_100_coles": 0.16,
+      "per_100_coles": 0.27,
       "per_100_unit": "100ml"
     },
     {
       "list_item": "Schweppes Orange Mango Natural Mineral Water Bottle",
-      "last_scraped": "2026-06-04T11:11:09.091960+00:00",
+      "last_scraped": "2026-06-04T11:46:04.849125+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1800,7 +1800,7 @@
     },
     {
       "list_item": "Strike Blue Toilet Cleaner Cistern Blocks",
-      "last_scraped": "2026-06-04T11:11:12.360242+00:00",
+      "last_scraped": "2026-06-04T11:46:10.343997+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1843,7 +1843,8 @@
         "unit_price": 1.0,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/248546/strike-blue-toilet-cleaner-cistern-blocks",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/248546.jpg"
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/248546.jpg",
+        "is_on_special": false
       },
       "coles": {
         "name": "In Cistern Marine Toilet Cleaner 2 Pack",
@@ -1880,6 +1881,232 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 2.0,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Sweet Potato Gold",
+      "last_scraped": "2026-06-04T11:46:10.884038+00:00",
+      "trip_count": 17,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 2.21
+        },
+        {
+          "date": "2025-01-29",
+          "price": 1.96
+        },
+        {
+          "date": "2025-02-02",
+          "price": 1.96
+        },
+        {
+          "date": "2025-02-28",
+          "price": 1.56
+        },
+        {
+          "date": "2025-03-11",
+          "price": 1.96
+        },
+        {
+          "date": "2025-03-17",
+          "price": 1.96
+        },
+        {
+          "date": "2025-03-27",
+          "price": 1.96
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.96
+        },
+        {
+          "date": "2025-05-12",
+          "price": 1.96
+        },
+        {
+          "date": "2025-05-22",
+          "price": 1.96
+        },
+        {
+          "date": "2025-06-06",
+          "price": 1.96
+        },
+        {
+          "date": "2025-06-21",
+          "price": 1.96
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.96
+        },
+        {
+          "date": "2026-02-03",
+          "price": 1.56
+        },
+        {
+          "date": "2026-02-23",
+          "price": 1.96
+        },
+        {
+          "date": "2026-03-10",
+          "price": 1.56
+        },
+        {
+          "date": "2026-04-29",
+          "price": 1.96
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Sweet Potato Gold",
+        "price": 1.4,
+        "unit_price": 1.4,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/147071/sweet-potato-gold",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147071.jpg",
+        "is_on_special": false
+      },
+      "coles": {
+        "name": "Potatoes Sweet Gold",
+        "price": 1.75,
+        "unit_price": 3.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-potatoes-sweet-gold-approx.-500g-4199503",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4199503.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.35,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.96
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.96
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.55
+        },
+        {
+          "date": "2026-05-30",
+          "price": 2.55
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2.55
+        },
+        {
+          "date": "2026-06-04",
+          "price": 1.75
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 0.35,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "The Dutch Company Confectionary 4 Syrup Wafers",
+      "last_scraped": "2026-06-04T11:46:12.735908+00:00",
+      "trip_count": 11,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 3.05
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 2.5
+        },
+        {
+          "date": "2025-06-13",
+          "price": 2.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.05
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.05
+        },
+        {
+          "date": "2026-02-07",
+          "price": 2.5
+        },
+        {
+          "date": "2026-02-11",
+          "price": 2.5
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.05
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.5
+        },
+        {
+          "date": "2026-04-21",
+          "price": 2.5
+        }
+      ],
+      "category": "Sweets",
+      "woolworths": {
+        "name": "The Dutch Company Confectionary 4 Syrup Wafers",
+        "price": 3.05,
+        "unit_price": 2.44,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/291451/the-dutch-company-confectionary-4-syrup-wafers",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/291451.jpg"
+      },
+      "coles": {
+        "name": "The Dutch Company Syrup Wafers | 125g",
+        "price": 2.25,
+        "unit_price": 1.8,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/the-dutch-company-syrup-wafers-125g-4179062",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4179062.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.8,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3.05
+        },
+        {
+          "date": "2026-06-01",
+          "price": 3.05
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3.05
+        },
+        {
+          "date": "2026-06-01",
+          "price": 3.05
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.44,
+      "per_100_coles": 1.8,
       "per_100_unit": "100g"
     },
     {
@@ -10368,227 +10595,6 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "The Dutch Company Confectionary 4 Syrup Wafers",
-      "last_scraped": "2026-06-03T00:34:44.509571+00:00",
-      "trip_count": 11,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 3.05
-        },
-        {
-          "date": "2025-04-14",
-          "price": 2.5
-        },
-        {
-          "date": "2025-05-22",
-          "price": 2.5
-        },
-        {
-          "date": "2025-06-13",
-          "price": 2.5
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.05
-        },
-        {
-          "date": "2026-02-03",
-          "price": 3.05
-        },
-        {
-          "date": "2026-02-07",
-          "price": 2.5
-        },
-        {
-          "date": "2026-02-11",
-          "price": 2.5
-        },
-        {
-          "date": "2026-03-10",
-          "price": 3.05
-        },
-        {
-          "date": "2026-04-02",
-          "price": 2.5
-        },
-        {
-          "date": "2026-04-21",
-          "price": 2.5
-        }
-      ],
-      "category": "Sweets",
-      "woolworths": {
-        "name": "The Dutch Company Confectionary 4 Syrup Wafers",
-        "price": 3.05,
-        "unit_price": 2.44,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/291451/the-dutch-company-confectionary-4-syrup-wafers",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/291451.jpg"
-      },
-      "coles": {
-        "name": "The Dutch Company Syrup Wafers | 125g",
-        "price": 2.25,
-        "unit_price": 1.8,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/the-dutch-company-syrup-wafers-125g-4179062",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4179062.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.05
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.05
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.05
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.05
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 2.44,
-      "per_100_coles": 1.8,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Sweet Potato Gold",
-      "last_scraped": "2026-06-03T00:34:40.527749+00:00",
-      "trip_count": 17,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 2.21
-        },
-        {
-          "date": "2025-01-29",
-          "price": 1.96
-        },
-        {
-          "date": "2025-02-02",
-          "price": 1.96
-        },
-        {
-          "date": "2025-02-28",
-          "price": 1.56
-        },
-        {
-          "date": "2025-03-11",
-          "price": 1.96
-        },
-        {
-          "date": "2025-03-17",
-          "price": 1.96
-        },
-        {
-          "date": "2025-03-27",
-          "price": 1.96
-        },
-        {
-          "date": "2025-04-14",
-          "price": 1.96
-        },
-        {
-          "date": "2025-05-12",
-          "price": 1.96
-        },
-        {
-          "date": "2025-05-22",
-          "price": 1.96
-        },
-        {
-          "date": "2025-06-06",
-          "price": 1.96
-        },
-        {
-          "date": "2025-06-21",
-          "price": 1.96
-        },
-        {
-          "date": "2025-07-10",
-          "price": 1.96
-        },
-        {
-          "date": "2026-02-03",
-          "price": 1.56
-        },
-        {
-          "date": "2026-02-23",
-          "price": 1.96
-        },
-        {
-          "date": "2026-03-10",
-          "price": 1.56
-        },
-        {
-          "date": "2026-04-29",
-          "price": 1.96
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Sweet Potato Gold",
-        "price": 1.4,
-        "unit_price": 1.4,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/147071/sweet-potato-gold",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147071.jpg"
-      },
-      "coles": {
-        "name": "Potatoes Sweet Gold",
-        "price": 1.75,
-        "unit_price": 3.5,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-potatoes-sweet-gold-approx.-500g-4199503",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4199503.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.35,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.96
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.96
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.55
-        },
-        {
-          "date": "2026-05-30",
-          "price": 2.55
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.55
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 0.35,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Truss Tomatoes",
       "last_scraped": "2026-06-03T00:35:02.438889+00:00",
       "trip_count": 35,
@@ -11840,17 +11846,17 @@
   ],
   "summary": {
     "total_woolworths": 701.29,
-    "total_coles": 723.92,
+    "total_coles": 725.12,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 22.63,
+    "total_saving": 23.83,
     "items_compared": 142,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 15,
+    "done": 20,
     "total": 144,
     "started_at": "2026-06-04T11:45:09.245227+00:00",
-    "current_item": "Pringles Sour Cream & Onion Potato Chips"
+    "current_item": "The Dutch Company Confectionary 4 Syrup Wafers"
   }
 }
