@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04T08:38:05.537282+00:00",
+  "last_updated": "2026-06-04T08:38:17.227570+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7439,7 +7439,7 @@
     },
     {
       "list_item": "Woolworths Lamb Mince",
-      "last_scraped": "2026-06-03T22:52:04.756501+00:00",
+      "last_scraped": "2026-06-04T08:38:08.256280+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -7448,18 +7448,18 @@
         },
         {
           "date": "2025-03-17",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-04-14",
-          "price": 8
+          "price": 8.0
         }
       ],
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Woolworths Lamb Mince",
-        "price": 9,
-        "unit_price": 18,
+        "price": 9.0,
+        "unit_price": 18.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/582607/woolworths-lamb-mince",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/582607.jpg"
@@ -7474,7 +7474,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -7512,7 +7512,7 @@
     },
     {
       "list_item": "Woolworths Extra Virgin Olive Oil Spray",
-      "last_scraped": "2026-06-03T22:52:04.957356+00:00",
+      "last_scraped": "2026-06-04T08:38:09.394621+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7585,7 +7585,7 @@
     },
     {
       "list_item": "Woolworths Pesto Basil",
-      "last_scraped": "2026-06-03T22:52:08.567271+00:00",
+      "last_scraped": "2026-06-04T08:38:11.902727+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7623,7 +7623,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5419660.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -7653,7 +7653,7 @@
     },
     {
       "list_item": "Woolworths Mild Salsa",
-      "last_scraped": "2026-06-03T22:52:11.602985+00:00",
+      "last_scraped": "2026-06-04T08:38:14.547066+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -7662,11 +7662,11 @@
         },
         {
           "date": "2025-01-29",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2025-04-14",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2025-07-10",
@@ -7699,7 +7699,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5859834.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9964,113 +9964,6 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Red Onions Bag",
-      "last_scraped": "2026-06-03T00:39:28.711201+00:00",
-      "trip_count": 5,
-      "price_history": [
-        {
-          "date": "2025-06-06",
-          "price": 3
-        },
-        {
-          "date": "2025-07-10",
-          "price": 4
-        },
-        {
-          "date": "2026-03-10",
-          "price": 4.9
-        },
-        {
-          "date": "2026-04-02",
-          "price": 4
-        },
-        {
-          "date": "2026-05-06",
-          "price": 5.1
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Red Onions Bag",
-        "price": 5,
-        "unit_price": 5,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg"
-      },
-      "coles": {
-        "name": "Coles Red Onion 1 Kg | 1kg",
-        "price": 5.1,
-        "unit_price": 5.1,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-red-onion-1-kg-1kg-8467604",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8467604.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.6,
-      "alternatives": [
-        {
-          "name": "Coles Onions Red Local | approx. 200g",
-          "price": 1.18,
-          "unit_price": 1.18,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-onions-red-local-approx.-200g-4218459",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4218459.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Brown Onions | 1kg",
-          "price": 2.5,
-          "unit_price": 2.5,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4803991.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5
-        },
-        {
-          "date": "2026-05-30",
-          "price": 5
-        },
-        {
-          "date": "2026-05-31",
-          "price": 5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5
-        },
-        {
-          "date": "2026-06-03",
-          "price": 3.5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.5
-        },
-        {
-          "date": "2026-05-31",
-          "price": 3.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.5
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 0.35,
-      "per_100_coles": 0.51,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Red Onions",
       "last_scraped": "2026-06-03T00:39:32.165542+00:00",
       "trip_count": 3,
@@ -10401,22 +10294,23 @@
     "KitKat Milk Chocolate Mini Bars Share Pack",
     "McVitie's Hobnobs Milk Chocolate",
     "Philadelphia Original Cream Cheese Block",
-    "Vevelle White 2 Ply Toilet Tissue"
+    "Vevelle White 2 Ply Toilet Tissue",
+    "Woolworths Red Onions Bag"
   ],
   "summary": {
-    "total_woolworths": 619.89,
-    "total_coles": 649.32,
+    "total_woolworths": 614.89,
+    "total_coles": 644.22,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 29.43,
-    "items_compared": 124,
-    "items_not_found": 20
+    "total_saving": 29.33,
+    "items_compared": 123,
+    "items_not_found": 21
   },
   "scrape_progress": {
-    "done": 100,
+    "done": 105,
     "total": 144,
     "started_at": "2026-06-04T08:34:17.586877+00:00",
-    "current_item": "Woolworths Cous Cous"
+    "current_item": "Woolworths Red Onions Bag"
   },
   "pending_validation": [
     {
