@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04T11:47:37.622416+00:00",
+  "last_updated": "2026-06-04T11:47:47.712693+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5981,7 +5981,7 @@
     },
     {
       "list_item": "Golden Palm Medjool Dates Punnet",
-      "last_scraped": "2026-06-04T11:12:45.350003+00:00",
+      "last_scraped": "2026-06-04T11:47:38.479932+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6008,7 +6008,8 @@
         "unit_price": 27.78,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/774695/golden-palm-medjool-dates-punnet",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/774695.jpg"
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/774695.jpg",
+        "is_on_special": false
       },
       "coles": {
         "name": "Medjool Dates",
@@ -6061,76 +6062,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Hellmann's Real Mayonnaise Squeeze",
-      "last_scraped": "2026-06-04T11:12:46.079406+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2025-06-06",
-          "price": 8.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 8.0
-        },
-        {
-          "date": "2026-04-02",
-          "price": 8.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 8.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Hellmann's Real Mayonnaise Squeeze",
-        "price": 8,
-        "unit_price": 2,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/529030/hellmann-s-real-mayonnaise-squeeze",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/529030.jpg"
-      },
-      "coles": {
-        "name": "Hellmann's Squeeze Real Mayonnaise | 400g",
-        "price": 8,
-        "unit_price": 8,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/hellmann's-squeeze-real-mayonnaise-400g-3025755",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3025755.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8
-        },
-        {
-          "date": "2026-06-01",
-          "price": 8
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8
-        },
-        {
-          "date": "2026-06-01",
-          "price": 8
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.0,
-      "per_100_coles": 2.0,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Katoomba Ingredients Red Lentils",
-      "last_scraped": "2026-06-04T11:12:47.713826+00:00",
+      "last_scraped": "2026-06-04T11:47:42.054714+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -6209,6 +6142,228 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Hellmann's Real Mayonnaise Squeeze",
+      "last_scraped": "2026-06-04T11:47:42.055020+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-06-06",
+          "price": 8.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 8.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 8.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Hellmann's Real Mayonnaise Squeeze",
+        "price": 8,
+        "unit_price": 2,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/529030/hellmann-s-real-mayonnaise-squeeze",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/529030.jpg"
+      },
+      "coles": {
+        "name": "Hellmann's Squeeze Real Mayonnaise | 400g",
+        "price": 8,
+        "unit_price": 8,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/hellmann's-squeeze-real-mayonnaise-400g-3025755",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3025755.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.0,
+      "per_100_coles": 2.0,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "KitKat Milk Chocolate Mini Bars Share Pack",
+      "last_scraped": "2026-06-04T11:47:45.235528+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2026-02-07",
+          "price": 7.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 5.25
+        },
+        {
+          "date": "2026-04-21",
+          "price": 5.25
+        },
+        {
+          "date": "2026-05-06",
+          "price": 5.25
+        }
+      ],
+      "category": "Sweets",
+      "woolworths": {
+        "name": "KitKat Milk Chocolate Mini Bars Share Pack",
+        "price": 8.0,
+        "unit_price": 3.17,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/347540/kitkat-milk-chocolate-mini-bars-share-pack",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/347540.jpg"
+      },
+      "coles": {
+        "name": "KitKat Milk Chocolate Value Share Pack 18 Pieces | 252g",
+        "price": 8,
+        "unit_price": 8,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/kitkat-milk-chocolate-value-share-pack-18-pieces-252g-7018864",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7018864.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5
+        },
+        {
+          "date": "2026-05-30",
+          "price": 5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8
+        },
+        {
+          "date": "2026-05-30",
+          "price": 8
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 3.17,
+      "per_100_coles": 3.17,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Kiwi Fruit Green",
+      "last_scraped": "2026-06-04T11:47:47.708337+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-04-25",
+          "price": 0.95
+        },
+        {
+          "date": "2025-05-29",
+          "price": 0.9
+        },
+        {
+          "date": "2025-06-13",
+          "price": 0.95
+        },
+        {
+          "date": "2025-07-03",
+          "price": 0.95
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.02
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Kiwi Fruit Green",
+        "price": 1.02,
+        "unit_price": 1.02,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/139238/kiwi-fruit-green",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139238.jpg",
+        "is_on_special": false
+      },
+      "coles": {
+        "name": "Green Kiwifruit",
+        "price": 1,
+        "unit_price": 1,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-green-kiwifruit-1-each-4425883",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4425883.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.02,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 0.96
+        },
+        {
+          "date": "2026-06-01",
+          "price": 0.96
+        },
+        {
+          "date": "2026-06-04",
+          "price": 1.02
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Macro Natural Sunflower Kernels",
       "last_scraped": "2026-06-04T11:12:52.498829+00:00",
       "trip_count": 4,
@@ -6274,83 +6429,6 @@
       "size_warning": false,
       "per_100_ww": 1.0,
       "per_100_coles": 1.0,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Kiwi Fruit Green",
-      "last_scraped": "2026-06-04T11:12:53.653082+00:00",
-      "trip_count": 5,
-      "price_history": [
-        {
-          "date": "2025-04-25",
-          "price": 0.95
-        },
-        {
-          "date": "2025-05-29",
-          "price": 0.9
-        },
-        {
-          "date": "2025-06-13",
-          "price": 0.95
-        },
-        {
-          "date": "2025-07-03",
-          "price": 0.95
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.02
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Kiwi Fruit Green",
-        "price": 1.02,
-        "unit_price": 1.02,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/139238/kiwi-fruit-green",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139238.jpg"
-      },
-      "coles": {
-        "name": "Green Kiwifruit",
-        "price": 1,
-        "unit_price": 1,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-green-kiwifruit-1-each-4425883",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4425883.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.02,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 0.96
-        },
-        {
-          "date": "2026-06-01",
-          "price": 0.96
-        },
-        {
-          "date": "2026-06-04",
-          "price": 1.02
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
       "per_100_unit": "100g"
     },
     {
@@ -11278,82 +11356,6 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "KitKat Milk Chocolate Mini Bars Share Pack",
-      "last_scraped": "2026-06-03T00:37:10.710494+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2026-02-07",
-          "price": 7.5
-        },
-        {
-          "date": "2026-02-23",
-          "price": 5.25
-        },
-        {
-          "date": "2026-04-21",
-          "price": 5.25
-        },
-        {
-          "date": "2026-05-06",
-          "price": 5.25
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "KitKat Milk Chocolate Mini Bars Share Pack",
-        "price": 7.5,
-        "unit_price": 4.87,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/348593/kitkat-milk-chocolate-mini-bars-share-pack",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/348593.jpg"
-      },
-      "coles": {
-        "name": "KitKat Milk Chocolate Value Share Pack 18 Pieces | 252g",
-        "price": 8,
-        "unit_price": 8,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/kitkat-milk-chocolate-value-share-pack-18-pieces-252g-7018864",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7018864.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 3,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5
-        },
-        {
-          "date": "2026-05-30",
-          "price": 5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8
-        },
-        {
-          "date": "2026-05-30",
-          "price": 8
-        },
-        {
-          "date": "2026-06-01",
-          "price": 8
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 4.87,
-      "per_100_coles": 3.17,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "McVitie's Hobnobs Milk Chocolate",
       "last_scraped": "2026-06-03T00:38:03.732645+00:00",
       "trip_count": 5,
@@ -11862,18 +11864,18 @@
     "Hass Avocado"
   ],
   "summary": {
-    "total_woolworths": 700.24,
+    "total_woolworths": 700.74,
     "total_coles": 725.12,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 24.88,
+    "total_saving": 24.38,
     "items_compared": 142,
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 60,
+    "done": 65,
     "total": 144,
     "started_at": "2026-06-04T11:45:09.245227+00:00",
-    "current_item": "Hedy's Fresh Quiche Lorraine Chilled Meal"
+    "current_item": "Kiwi Fruit Green"
   }
 }
