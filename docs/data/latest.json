@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04T11:14:15.383325+00:00",
+  "last_updated": "2026-06-04T11:14:24.661625+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8161,7 +8161,7 @@
     },
     {
       "list_item": "Yumi's Eggplant Mediterranean Dip",
-      "last_scraped": "2026-06-04T08:38:25.744157+00:00",
+      "last_scraped": "2026-06-04T11:14:18.859690+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8170,11 +8170,11 @@
         },
         {
           "date": "2026-02-03",
-          "price": 5
+          "price": 5.0
         },
         {
           "date": "2026-04-02",
-          "price": 5
+          "price": 5.0
         },
         {
           "date": "2026-05-06",
@@ -8238,7 +8238,7 @@
     },
     {
       "list_item": "Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot",
-      "last_scraped": "2026-06-04T08:38:27.464158+00:00",
+      "last_scraped": "2026-06-04T11:14:18.983128+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8269,7 +8269,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -8302,8 +8302,72 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Colman's Ingredients English Mustard",
+      "last_scraped": "2026-06-04T11:14:21.722342+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-05-12",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.6
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Colman's Ingredients English Mustard",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/88972/colman-s-ingredients-english-mustard",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/088972.jpg"
+      },
+      "coles": {
+        "name": "Colman's Old English Mustard | 100g",
+        "price": 5,
+        "unit_price": 5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/colman's-old-english-mustard-100g-6921434",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6921434.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4.5
+        },
+        {
+          "date": "2026-06-03",
+          "price": 5
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 5.0,
+      "per_100_coles": 5.0,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Coca-Cola Zero Sugar Soft Drink Bottle",
-      "last_scraped": "2026-06-04T08:38:28.807237+00:00",
+      "last_scraped": "2026-06-04T11:14:22.000680+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -8374,72 +8438,8 @@
       "per_100_unit": "100ml"
     },
     {
-      "list_item": "Colman's Ingredients English Mustard",
-      "last_scraped": "2026-06-04T08:38:30.337270+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-05-12",
-          "price": 3
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.6
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Colman's Ingredients English Mustard",
-        "price": 5,
-        "unit_price": 5,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/88972/colman-s-ingredients-english-mustard",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/088972.jpg"
-      },
-      "coles": {
-        "name": "Colman's Old English Mustard | 100g",
-        "price": 5,
-        "unit_price": 5,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/colman's-old-english-mustard-100g-6921434",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6921434.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 4.5
-        },
-        {
-          "date": "2026-06-03",
-          "price": 5
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 5,
-      "per_100_coles": 5,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons",
-      "last_scraped": "2026-06-04T08:38:31.045371+00:00",
+      "last_scraped": "2026-06-04T11:14:24.654727+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10389,9 +10389,9 @@
     "items_not_found": 16
   },
   "scrape_progress": {
-    "done": 110,
+    "done": 115,
     "total": 144,
     "started_at": "2026-06-04T11:10:30.516096+00:00",
-    "current_item": "Woolworths Wholegrain Wrap 8Pk"
+    "current_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons"
   }
 }
