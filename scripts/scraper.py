@@ -1507,7 +1507,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                         not_found.append(name)   # keep item visible; final pass will carry forward
                     finally:
                         completed[0] += 1
-                        if completed[0] % 5 == 0 or _force_push or completed[0] == total_to_scrape:
+                        if completed[0] % 5 == 0 or _force_push or (total_to_scrape - completed[0]) < 5:
                             _pv_snap = {**existing_pv, **{e["item"]: e for e in new_validation_entries}}
                             merged_pv = list(_pv_snap.values())
                             push_progress_bg(
