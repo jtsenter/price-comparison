@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-04T08:37:32.644454+00:00",
+  "last_updated": "2026-06-04T08:37:43.182608+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6058,7 +6058,7 @@
     },
     {
       "list_item": "Sam's Pantry Granola Pink Lady Apple & Cinnamon",
-      "last_scraped": "2026-06-03T22:51:23.518044+00:00",
+      "last_scraped": "2026-06-04T08:37:34.633431+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -6093,7 +6093,17 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.9,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Red Tractor Farmers Market Honey & Cinnamon Granola | 700g",
+          "price": 5.0,
+          "unit_price": 0.71,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/red-tractor-farmers-market-honey-and-cinnamon-granola-700g-9026400",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9026400.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -6126,7 +6136,7 @@
     },
     {
       "list_item": "Snickers Milk Chocolate Party Share Bag 20 Pieces",
-      "last_scraped": "2026-06-03T22:51:25.983767+00:00",
+      "last_scraped": "2026-06-04T08:37:36.757349+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -6157,7 +6167,7 @@
       "category": "Sweets",
       "woolworths": {
         "name": "Snickers Milk Chocolate Party Share Bag",
-        "price": 8,
+        "price": 8.0,
         "unit_price": 2.67,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/206888/snickers-milk-chocolate-party-share-bag",
@@ -6172,7 +6182,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5369981.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -6210,7 +6220,7 @@
     },
     {
       "list_item": "Spring Onion Bunch",
-      "last_scraped": "2026-06-03T22:51:26.895634+00:00",
+      "last_scraped": "2026-06-04T08:37:37.808645+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6219,7 +6229,7 @@
         },
         {
           "date": "2026-02-03",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2026-04-02",
@@ -6233,8 +6243,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Spring Onion Bunch",
-        "price": 3,
-        "unit_price": 3,
+        "price": 3.0,
+        "unit_price": 3.0,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/147603/spring-onion-bunch",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147603.jpg"
@@ -6248,7 +6258,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/408419.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -6282,7 +6292,7 @@
     },
     {
       "list_item": "Strike 2 Ply Paper Towel 2 Ply",
-      "last_scraped": "2026-06-03T22:51:30.988897+00:00",
+      "last_scraped": "2026-06-04T08:37:40.323615+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6320,7 +6330,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9161472.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -6340,6 +6350,86 @@
         {
           "date": "2026-06-01",
           "price": 2.2
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Strike Paper Towels Embossed 2 Ply",
+      "last_scraped": "2026-06-04T08:37:43.178004+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 2.2
+        },
+        {
+          "date": "2025-03-11",
+          "price": 2.2
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.2
+        },
+        {
+          "date": "2025-05-12",
+          "price": 2.2
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.2
+        },
+        {
+          "date": "2025-07-10",
+          "price": 2.2
+        }
+      ],
+      "category": "Household",
+      "woolworths": {
+        "name": "Strike 2 Ply Paper Towel 2 Ply",
+        "price": 2.2,
+        "unit_price": 1.38,
+        "unit": null,
+        "url": "https://www.woolworths.com.au/shop/productdetails/171164/strike-2-ply-paper-towel-2-ply",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/171164.jpg"
+      },
+      "coles": {
+        "name": "Viva Paper Towel White | 2 pack",
+        "price": 4.6,
+        "unit_price": 4.6,
+        "unit": "100ea",
+        "url": "https://www.coles.com.au/product/viva-paper-towel-white-2-pack-9333523",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9333523.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.4,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.2
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2.2
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4.6
+        },
+        {
+          "date": "2026-05-30",
+          "price": 4.6
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4.6
         }
       ],
       "match_confidence": "low",
@@ -6430,86 +6520,6 @@
       "size_warning": false,
       "per_100_ww": 2.4,
       "per_100_coles": 2.4,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Strike Paper Towels Embossed 2 Ply",
-      "last_scraped": "2026-06-03T22:51:34.439152+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2025-02-02",
-          "price": 2.2
-        },
-        {
-          "date": "2025-03-11",
-          "price": 2.2
-        },
-        {
-          "date": "2025-04-14",
-          "price": 2.2
-        },
-        {
-          "date": "2025-05-12",
-          "price": 2.2
-        },
-        {
-          "date": "2025-06-06",
-          "price": 2.2
-        },
-        {
-          "date": "2025-07-10",
-          "price": 2.2
-        }
-      ],
-      "category": "Household",
-      "woolworths": {
-        "name": "Strike 2 Ply Paper Towel 2 Ply",
-        "price": 2.2,
-        "unit_price": 1.38,
-        "unit": null,
-        "url": "https://www.woolworths.com.au/shop/productdetails/171164/strike-2-ply-paper-towel-2-ply",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/171164.jpg"
-      },
-      "coles": {
-        "name": "Viva Paper Towel White | 2 pack",
-        "price": 4.6,
-        "unit_price": 4.6,
-        "unit": "100ea",
-        "url": "https://www.coles.com.au/product/viva-paper-towel-white-2-pack-9333523",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9333523.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 2.4,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.2
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.2
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4.6
-        },
-        {
-          "date": "2026-05-30",
-          "price": 4.6
-        },
-        {
-          "date": "2026-06-01",
-          "price": 4.6
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
       "per_100_unit": "100g"
     },
     {
@@ -10484,10 +10494,10 @@
     "items_not_found": 19
   },
   "scrape_progress": {
-    "done": 80,
+    "done": 85,
     "total": 144,
     "started_at": "2026-06-04T08:34:17.586877+00:00",
-    "current_item": "Philadelphia Original Cream Cheese Spread Tub"
+    "current_item": "Strike Paper Towels Embossed 2 Ply"
   },
   "pending_validation": [
     {
