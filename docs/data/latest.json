@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-08T04:05:43.454372+00:00",
+  "last_updated": "2026-06-08T04:05:53.202875+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7898,7 +7898,7 @@
     },
     {
       "list_item": "Sam's Pantry Granola Pink Lady Apple & Cinnamon",
-      "last_scraped": "2026-06-04T11:58:06.692090+00:00",
+      "last_scraped": "2026-06-08T04:05:46.372928+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -7942,6 +7942,10 @@
         {
           "date": "2026-06-01",
           "price": 7.6
+        },
+        {
+          "date": "2026-06-08",
+          "price": 7.6
         }
       ],
       "coles_price_history": [
@@ -7956,6 +7960,10 @@
         {
           "date": "2026-06-01",
           "price": 9.5
+        },
+        {
+          "date": "2026-06-08",
+          "price": 9.5
         }
       ],
       "match_confidence": "low",
@@ -7965,8 +7973,100 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Snickers Milk Chocolate Party Share Bag 20 Pieces",
+      "last_scraped": "2026-06-08T04:05:46.914689+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 6.5
+        },
+        {
+          "date": "2024-12-02",
+          "price": 6.5
+        },
+        {
+          "date": "2025-02-28",
+          "price": 6.5
+        },
+        {
+          "date": "2025-04-14",
+          "price": 7.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 7.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 7.5
+        }
+      ],
+      "category": "Sweets",
+      "woolworths": {
+        "name": "Snickers Milk Chocolate Party Share Bag",
+        "price": 8.0,
+        "unit_price": 2.67,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/206888/snickers-milk-chocolate-party-share-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/206888.jpg"
+      },
+      "coles": {
+        "name": "Snickers Chocolate Party Share Bag 20 Pieces | 300g",
+        "price": 8,
+        "unit_price": 8,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/snickers-chocolate-party-share-bag-20-pieces-300g-5369981",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5369981.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8
+        },
+        {
+          "date": "2026-05-30",
+          "price": 8
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8
+        },
+        {
+          "date": "2026-06-08",
+          "price": 8.0
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8
+        },
+        {
+          "date": "2026-05-30",
+          "price": 8
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8
+        },
+        {
+          "date": "2026-06-08",
+          "price": 8
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.67,
+      "per_100_coles": 2.67,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Spring Onion Bunch",
-      "last_scraped": "2026-06-04T11:58:09.806998+00:00",
+      "last_scraped": "2026-06-08T04:05:49.458078+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8028,6 +8128,10 @@
         {
           "date": "2026-06-01",
           "price": 3
+        },
+        {
+          "date": "2026-06-08",
+          "price": 3
         }
       ],
       "match_confidence": "low",
@@ -8037,92 +8141,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Snickers Milk Chocolate Party Share Bag 20 Pieces",
-      "last_scraped": "2026-06-04T11:58:09.991582+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 6.5
-        },
-        {
-          "date": "2024-12-02",
-          "price": 6.5
-        },
-        {
-          "date": "2025-02-28",
-          "price": 6.5
-        },
-        {
-          "date": "2025-04-14",
-          "price": 7.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 7.5
-        },
-        {
-          "date": "2025-06-06",
-          "price": 7.5
-        }
-      ],
-      "category": "Sweets",
-      "woolworths": {
-        "name": "Snickers Milk Chocolate Party Share Bag",
-        "price": 8.0,
-        "unit_price": 2.67,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/206888/snickers-milk-chocolate-party-share-bag",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/206888.jpg"
-      },
-      "coles": {
-        "name": "Snickers Chocolate Party Share Bag 20 Pieces | 300g",
-        "price": 8,
-        "unit_price": 8,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/snickers-chocolate-party-share-bag-20-pieces-300g-5369981",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5369981.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8
-        },
-        {
-          "date": "2026-05-30",
-          "price": 8
-        },
-        {
-          "date": "2026-06-01",
-          "price": 8
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8
-        },
-        {
-          "date": "2026-05-30",
-          "price": 8
-        },
-        {
-          "date": "2026-06-01",
-          "price": 8
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.67,
-      "per_100_coles": 2.67,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Strike 2 Ply Paper Towel 2 Ply",
-      "last_scraped": "2026-06-04T11:58:12.460754+00:00",
+      "last_scraped": "2026-06-08T04:05:52.709843+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8170,6 +8190,10 @@
         {
           "date": "2026-06-01",
           "price": 2.2
+        },
+        {
+          "date": "2026-06-08",
+          "price": 2.2
         }
       ],
       "coles_price_history": [
@@ -8180,86 +8204,10 @@
         {
           "date": "2026-06-01",
           "price": 2.2
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Strike Paper Towels Embossed 2 Ply",
-      "last_scraped": "2026-06-04T11:58:15.149380+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2025-02-02",
-          "price": 2.2
         },
         {
-          "date": "2025-03-11",
+          "date": "2026-06-08",
           "price": 2.2
-        },
-        {
-          "date": "2025-04-14",
-          "price": 2.2
-        },
-        {
-          "date": "2025-05-12",
-          "price": 2.2
-        },
-        {
-          "date": "2025-06-06",
-          "price": 2.2
-        },
-        {
-          "date": "2025-07-10",
-          "price": 2.2
-        }
-      ],
-      "category": "Household",
-      "woolworths": {
-        "name": "Strike 2 Ply Paper Towel 2 Ply",
-        "price": 2.2,
-        "unit_price": 1.38,
-        "unit": null,
-        "url": "https://www.woolworths.com.au/shop/productdetails/171164/strike-2-ply-paper-towel-2-ply",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/171164.jpg"
-      },
-      "coles": {
-        "name": "Viva Paper Towel White | 2 pack",
-        "price": 4.6,
-        "unit_price": 4.6,
-        "unit": "100ea",
-        "url": "https://www.coles.com.au/product/viva-paper-towel-white-2-pack-9333523",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9333523.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 2.4,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.2
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.2
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4.6
-        },
-        {
-          "date": "2026-05-30",
-          "price": 4.6
-        },
-        {
-          "date": "2026-06-01",
-          "price": 4.6
         }
       ],
       "match_confidence": "low",
@@ -8270,7 +8218,7 @@
     },
     {
       "list_item": "Strawberries Punnet",
-      "last_scraped": "2026-06-04T11:58:15.994291+00:00",
+      "last_scraped": "2026-06-08T04:05:53.195178+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -8351,6 +8299,86 @@
       "size_warning": false,
       "per_100_ww": 2.4,
       "per_100_coles": 2.4,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Strike Paper Towels Embossed 2 Ply",
+      "last_scraped": "2026-06-04T11:58:15.149380+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-02-02",
+          "price": 2.2
+        },
+        {
+          "date": "2025-03-11",
+          "price": 2.2
+        },
+        {
+          "date": "2025-04-14",
+          "price": 2.2
+        },
+        {
+          "date": "2025-05-12",
+          "price": 2.2
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.2
+        },
+        {
+          "date": "2025-07-10",
+          "price": 2.2
+        }
+      ],
+      "category": "Household",
+      "woolworths": {
+        "name": "Strike 2 Ply Paper Towel 2 Ply",
+        "price": 2.2,
+        "unit_price": 1.38,
+        "unit": null,
+        "url": "https://www.woolworths.com.au/shop/productdetails/171164/strike-2-ply-paper-towel-2-ply",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/171164.jpg"
+      },
+      "coles": {
+        "name": "Viva Paper Towel White | 2 pack",
+        "price": 4.6,
+        "unit_price": 4.6,
+        "unit": "100ea",
+        "url": "https://www.coles.com.au/product/viva-paper-towel-white-2-pack-9333523",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9333523.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.4,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.2
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2.2
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4.6
+        },
+        {
+          "date": "2026-05-30",
+          "price": 4.6
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4.6
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
       "per_100_unit": "100g"
     },
     {
@@ -12307,9 +12335,9 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 80,
+    "done": 85,
     "total": 144,
     "started_at": "2026-06-08T04:02:37.306964+00:00",
-    "current_item": "Philadelphia Original Cream Cheese Block"
+    "current_item": "Strawberries Punnet"
   }
 }
