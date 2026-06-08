@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-08T04:06:20.653213+00:00",
+  "last_updated": "2026-06-08T04:06:34.266133+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9467,7 +9467,7 @@
     },
     {
       "list_item": "Woolworths Lamb Mince",
-      "last_scraped": "2026-06-04T11:58:41.164973+00:00",
+      "last_scraped": "2026-06-08T04:06:24.162535+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -9516,6 +9516,10 @@
         {
           "date": "2026-06-01",
           "price": 9
+        },
+        {
+          "date": "2026-06-08",
+          "price": 9.0
         }
       ],
       "coles_price_history": [
@@ -9530,6 +9534,10 @@
         {
           "date": "2026-06-01",
           "price": 9
+        },
+        {
+          "date": "2026-06-08",
+          "price": 9
         }
       ],
       "match_confidence": "low",
@@ -9540,7 +9548,7 @@
     },
     {
       "list_item": "Woolworths Extra Virgin Olive Oil Spray",
-      "last_scraped": "2026-06-04T11:58:42.001468+00:00",
+      "last_scraped": "2026-06-08T04:06:25.136668+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9590,6 +9598,10 @@
         {
           "date": "2026-06-01",
           "price": 3.3
+        },
+        {
+          "date": "2026-06-08",
+          "price": 3.3
         }
       ],
       "coles_price_history": [
@@ -9604,6 +9616,10 @@
         {
           "date": "2026-06-01",
           "price": 9
+        },
+        {
+          "date": "2026-06-08",
+          "price": 9
         }
       ],
       "match_confidence": "low",
@@ -9614,7 +9630,7 @@
     },
     {
       "list_item": "Woolworths Pesto Basil",
-      "last_scraped": "2026-06-04T11:58:44.744017+00:00",
+      "last_scraped": "2026-06-08T04:06:28.007071+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9662,6 +9678,10 @@
         {
           "date": "2026-06-01",
           "price": 1.95
+        },
+        {
+          "date": "2026-06-08",
+          "price": 1.95
         }
       ],
       "coles_price_history": [
@@ -9671,6 +9691,10 @@
         },
         {
           "date": "2026-06-01",
+          "price": 1.95
+        },
+        {
+          "date": "2026-06-08",
           "price": 1.95
         }
       ],
@@ -9682,7 +9706,7 @@
     },
     {
       "list_item": "Woolworths Mild Salsa",
-      "last_scraped": "2026-06-04T11:58:47.660642+00:00",
+      "last_scraped": "2026-06-08T04:06:31.661532+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -9739,6 +9763,10 @@
         {
           "date": "2026-06-01",
           "price": 1.9
+        },
+        {
+          "date": "2026-06-08",
+          "price": 1.9
         }
       ],
       "coles_price_history": [
@@ -9749,12 +9777,81 @@
         {
           "date": "2026-06-01",
           "price": 1.9
+        },
+        {
+          "date": "2026-06-08",
+          "price": 1.9
         }
       ],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.63,
       "per_100_coles": 0.63,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Red Onions",
+      "last_scraped": "2026-06-08T04:06:34.261122+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 4.9
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Red Onions Bag",
+        "price": 3.5,
+        "unit_price": 3.5,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg",
+        "is_on_special": false
+      },
+      "coles": {
+        "name": "Red Onion 1 Kg",
+        "price": 5.1,
+        "unit_price": 5.1,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-red-onion-1-kg-1kg-8467604",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8467604.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 1.6,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-06-01",
+          "price": 5
+        },
+        {
+          "date": "2026-06-03",
+          "price": 3.5
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-06-02",
+          "price": 3.5
+        },
+        {
+          "date": "2026-06-04",
+          "price": 5.1
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.35,
+      "per_100_coles": 0.51,
       "per_100_unit": "100g"
     },
     {
@@ -9836,71 +9933,6 @@
         },
         {
           "date": "2026-06-01",
-          "price": 3.5
-        },
-        {
-          "date": "2026-06-04",
-          "price": 5.1
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.35,
-      "per_100_coles": 0.51,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Red Onions",
-      "last_scraped": "2026-06-04T11:58:51.379583+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 4.9
-        },
-        {
-          "date": "2025-03-27",
-          "price": 3.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 5.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Red Onions Bag",
-        "price": 3.5,
-        "unit_price": 3.5,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg",
-        "is_on_special": false
-      },
-      "coles": {
-        "name": "Red Onion 1 Kg",
-        "price": 5.1,
-        "unit_price": 5.1,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-red-onion-1-kg-1kg-8467604",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8467604.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.6,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-06-01",
-          "price": 5
-        },
-        {
-          "date": "2026-06-03",
-          "price": 3.5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-06-02",
           "price": 3.5
         },
         {
@@ -12431,9 +12463,9 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 100,
+    "done": 105,
     "total": 144,
     "started_at": "2026-06-08T04:02:37.306964+00:00",
-    "current_item": "Woolworths Cous Cous"
+    "current_item": "Woolworths Red Onions"
   }
 }
