@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-08T04:04:19.488888+00:00",
+  "last_updated": "2026-06-08T04:04:32.190954+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4505,7 +4505,7 @@
     },
     {
       "list_item": "Woolworths Greek Style Yoghurt",
-      "last_scraped": "2026-06-04T11:56:47.276681+00:00",
+      "last_scraped": "2026-06-08T04:04:22.998645+00:00",
       "trip_count": 33,
       "price_history": [
         {
@@ -4670,6 +4670,10 @@
         {
           "date": "2026-06-01",
           "price": 4.2
+        },
+        {
+          "date": "2026-06-08",
+          "price": 4.2
         }
       ],
       "coles_price_history": [
@@ -4679,6 +4683,10 @@
         },
         {
           "date": "2026-06-01",
+          "price": 4.5
+        },
+        {
+          "date": "2026-06-08",
           "price": 4.5
         }
       ],
@@ -4689,181 +4697,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Red Watermelon Cut Quarter",
-      "last_scraped": "2026-06-04T11:56:50.301351+00:00",
-      "trip_count": 8,
-      "price_history": [
-        {
-          "date": "2025-02-02",
-          "price": 5.5
-        },
-        {
-          "date": "2025-03-17",
-          "price": 6.38
-        },
-        {
-          "date": "2025-04-05",
-          "price": 7.7
-        },
-        {
-          "date": "2025-04-14",
-          "price": 7.7
-        },
-        {
-          "date": "2025-05-22",
-          "price": 5.5
-        },
-        {
-          "date": "2025-06-06",
-          "price": 6.38
-        },
-        {
-          "date": "2025-06-21",
-          "price": 6.38
-        },
-        {
-          "date": "2026-03-10",
-          "price": 5.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Red Watermelon Cut Quarter",
-        "price": 8.58,
-        "unit_price": 8.58,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/120384/woolworths-red-watermelon-cut-quarter",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120384.jpg"
-      },
-      "coles": {
-        "name": "Coles Seedless Watermelon Cut | approx. 1.8kg",
-        "price": 7.02,
-        "unit_price": 7.02,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-seedless-watermelon-cut-approx.-1.8kg-7508229",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7508229.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.56,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 7.7
-        },
-        {
-          "date": "2026-06-01",
-          "price": 7.7
-        },
-        {
-          "date": "2026-06-02",
-          "price": 8.58
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 7.02
-        },
-        {
-          "date": "2026-06-01",
-          "price": 7.02
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 0.39,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Sour Cream",
-      "last_scraped": "2026-06-04T11:56:52.874966+00:00",
-      "trip_count": 8,
-      "price_history": [
-        {
-          "date": "2024-10-27",
-          "price": 3.25
-        },
-        {
-          "date": "2024-11-20",
-          "price": 3.25
-        },
-        {
-          "date": "2025-03-27",
-          "price": 3.4
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.4
-        },
-        {
-          "date": "2025-05-12",
-          "price": 3.4
-        },
-        {
-          "date": "2025-06-13",
-          "price": 3.3
-        },
-        {
-          "date": "2025-06-21",
-          "price": 3.3
-        },
-        {
-          "date": "2026-04-13",
-          "price": 3.3
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Sour Cream",
-        "price": 3.3,
-        "unit_price": 1.1,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/105609/woolworths-sour-cream",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/105609.jpg"
-      },
-      "coles": {
-        "name": "Coles Sour Cream | 300g",
-        "price": 3.3,
-        "unit_price": 3.3,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-sour-cream-300g-3676946",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3676946.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.3
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.3
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.3
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.3
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.1,
-      "per_100_coles": 1.1,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Woolworths Onion Brown Bag",
-      "last_scraped": "2026-06-04T11:56:52.964814+00:00",
+      "last_scraped": "2026-06-08T04:04:25.740809+00:00",
       "trip_count": 14,
       "price_history": [
         {
@@ -4952,6 +4787,10 @@
         {
           "date": "2026-06-01",
           "price": 3.6
+        },
+        {
+          "date": "2026-06-08",
+          "price": 3.6
         }
       ],
       "coles_price_history": [
@@ -4975,60 +4814,152 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Whole Milk Full Cream Milk",
-      "last_scraped": "2026-06-04T11:56:59.503202+00:00",
+      "list_item": "Woolworths Red Watermelon Cut Quarter",
+      "last_scraped": "2026-06-08T04:04:25.877954+00:00",
       "trip_count": 8,
       "price_history": [
         {
-          "date": "2026-02-07",
-          "price": 3.2
+          "date": "2025-02-02",
+          "price": 5.5
         },
         {
-          "date": "2026-03-02",
-          "price": 3.2
+          "date": "2025-03-17",
+          "price": 6.38
+        },
+        {
+          "date": "2025-04-05",
+          "price": 7.7
+        },
+        {
+          "date": "2025-04-14",
+          "price": 7.7
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 6.38
+        },
+        {
+          "date": "2025-06-21",
+          "price": 6.38
         },
         {
           "date": "2026-03-10",
-          "price": 3.2
+          "price": 5.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Red Watermelon Cut Quarter",
+        "price": 8.58,
+        "unit_price": 8.58,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/120384/woolworths-red-watermelon-cut-quarter",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120384.jpg"
+      },
+      "coles": {
+        "name": "Coles Seedless Watermelon Cut | approx. 1.8kg",
+        "price": 7.02,
+        "unit_price": 7.02,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-seedless-watermelon-cut-approx.-1.8kg-7508229",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7508229.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.56,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 7.7
         },
         {
-          "date": "2026-04-02",
-          "price": 3.2
+          "date": "2026-06-01",
+          "price": 7.7
+        },
+        {
+          "date": "2026-06-02",
+          "price": 8.58
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 7.02
+        },
+        {
+          "date": "2026-06-01",
+          "price": 7.02
+        },
+        {
+          "date": "2026-06-08",
+          "price": 7.02
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 0.39,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Sour Cream",
+      "last_scraped": "2026-06-08T04:04:28.998481+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2024-10-27",
+          "price": 3.25
+        },
+        {
+          "date": "2024-11-20",
+          "price": 3.25
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.4
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.4
+        },
+        {
+          "date": "2025-05-12",
+          "price": 3.4
+        },
+        {
+          "date": "2025-06-13",
+          "price": 3.3
+        },
+        {
+          "date": "2025-06-21",
+          "price": 3.3
         },
         {
           "date": "2026-04-13",
-          "price": 3.2
-        },
-        {
-          "date": "2026-04-21",
-          "price": 4.65
-        },
-        {
-          "date": "2026-04-29",
-          "price": 5.15
-        },
-        {
-          "date": "2026-05-06",
-          "price": 5.15
+          "price": 3.3
         }
       ],
       "category": "Dairy & Eggs",
       "woolworths": {
-        "name": "Woolworths Full Cream Milk",
-        "price": 5.15,
-        "unit_price": 1.72,
-        "unit": "1L",
-        "url": "https://www.woolworths.com.au/shop/productdetails/888140/woolworths-full-cream-milk",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/888140.jpg",
-        "is_on_special": false
+        "name": "Woolworths Sour Cream",
+        "price": 3.3,
+        "unit_price": 1.1,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/105609/woolworths-sour-cream",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/105609.jpg"
       },
       "coles": {
-        "name": "Full Cream Milk",
-        "price": 5.15,
-        "unit_price": 1.72,
-        "unit": "1L",
-        "url": "https://www.coles.com.au/product/coles-full-cream-milk-3l-8150288",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8150288.jpg"
+        "name": "Coles Sour Cream | 300g",
+        "price": 3.3,
+        "unit_price": 3.3,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-sour-cream-300g-3676946",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3676946.jpg"
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
@@ -5036,32 +4967,40 @@
       "ww_price_history": [
         {
           "date": "2026-05-29",
-          "price": 5.15
+          "price": 3.3
         },
         {
           "date": "2026-06-01",
-          "price": 5.15
+          "price": 3.3
+        },
+        {
+          "date": "2026-06-08",
+          "price": 3.3
         }
       ],
       "coles_price_history": [
         {
           "date": "2026-05-29",
-          "price": 5.15
+          "price": 3.3
         },
         {
           "date": "2026-06-01",
-          "price": 5.15
+          "price": 3.3
+        },
+        {
+          "date": "2026-06-08",
+          "price": 3.3
         }
       ],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 0.17,
-      "per_100_coles": 0.17,
+      "per_100_ww": 1.1,
+      "per_100_coles": 1.1,
       "per_100_unit": "100ml"
     },
     {
       "list_item": "Woolworths Washed Potato Bag",
-      "last_scraped": "2026-06-04T11:56:59.564790+00:00",
+      "last_scraped": "2026-06-08T04:04:32.185721+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -5151,6 +5090,91 @@
       "per_100_ww": 0.4,
       "per_100_coles": 0.3,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Whole Milk Full Cream Milk",
+      "last_scraped": "2026-06-04T11:56:59.503202+00:00",
+      "trip_count": 8,
+      "price_history": [
+        {
+          "date": "2026-02-07",
+          "price": 3.2
+        },
+        {
+          "date": "2026-03-02",
+          "price": 3.2
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.2
+        },
+        {
+          "date": "2026-04-02",
+          "price": 3.2
+        },
+        {
+          "date": "2026-04-13",
+          "price": 3.2
+        },
+        {
+          "date": "2026-04-21",
+          "price": 4.65
+        },
+        {
+          "date": "2026-04-29",
+          "price": 5.15
+        },
+        {
+          "date": "2026-05-06",
+          "price": 5.15
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Full Cream Milk",
+        "price": 5.15,
+        "unit_price": 1.72,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/888140/woolworths-full-cream-milk",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/888140.jpg",
+        "is_on_special": false
+      },
+      "coles": {
+        "name": "Full Cream Milk",
+        "price": 5.15,
+        "unit_price": 1.72,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/coles-full-cream-milk-3l-8150288",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8150288.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5.15
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5.15
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5.15
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5.15
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.17,
+      "per_100_coles": 0.17,
+      "per_100_unit": "100ml"
     },
     {
       "list_item": "Annalisa Chickpeas",
@@ -12075,9 +12099,9 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 40,
+    "done": 45,
     "total": 144,
     "started_at": "2026-06-08T04:02:37.306964+00:00",
-    "current_item": "Woolworths Garlic Heads CLOVE"
+    "current_item": "Woolworths Washed Potato Bag"
   }
 }
