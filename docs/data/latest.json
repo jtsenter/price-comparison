@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-08T04:03:03.825344+00:00",
+  "last_updated": "2026-06-08T04:03:13.914998+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1117,7 +1117,7 @@
     },
     {
       "list_item": "Helga's Wholemeal Bread With Grains",
-      "last_scraped": "2026-06-04T11:55:28.006710+00:00",
+      "last_scraped": "2026-06-08T04:03:05.816484+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -1214,6 +1214,10 @@
         {
           "date": "2026-06-01",
           "price": 5.3
+        },
+        {
+          "date": "2026-06-08",
+          "price": 5.3
         }
       ],
       "coles_price_history": [
@@ -1228,6 +1232,10 @@
         {
           "date": "2026-06-01",
           "price": 5.3
+        },
+        {
+          "date": "2026-06-08",
+          "price": 5.3
         }
       ],
       "match_confidence": "high",
@@ -1237,92 +1245,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Lurpak Butter Spreadable",
-      "last_scraped": "2026-06-04T11:55:35.947594+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 7.5
-        },
-        {
-          "date": "2025-03-11",
-          "price": 8.2
-        },
-        {
-          "date": "2025-04-14",
-          "price": 8.2
-        },
-        {
-          "date": "2025-07-10",
-          "price": 8.2
-        },
-        {
-          "date": "2026-02-03",
-          "price": 9.0
-        },
-        {
-          "date": "2026-04-29",
-          "price": 8.3
-        },
-        {
-          "date": "2026-05-06",
-          "price": 8.3
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Lurpak Butter Spreadable",
-        "price": 9.0,
-        "unit_price": 2.25,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/87702/lurpak-butter-spreadable",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087702.jpg"
-      },
-      "coles": {
-        "name": "Lurpak Butter Spreadable Slightly Salted | 400g",
-        "price": 9.0,
-        "unit_price": 9.0,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/lurpak-butter-spreadable-slightly-salted-400g-5376659",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5376659.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 9
-        },
-        {
-          "date": "2026-06-01",
-          "price": 9
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8.3
-        },
-        {
-          "date": "2026-06-01",
-          "price": 8.3
-        },
-        {
-          "date": "2026-06-03",
-          "price": 9
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 2.25,
-      "per_100_coles": 2.25,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Lebanese Cucumbers",
-      "last_scraped": "2026-06-04T11:55:37.094229+00:00",
+      "last_scraped": "2026-06-08T04:03:07.078369+00:00",
       "trip_count": 27,
       "price_history": [
         {
@@ -1473,6 +1397,10 @@
         {
           "date": "2026-06-01",
           "price": 1.53
+        },
+        {
+          "date": "2026-06-08",
+          "price": 1.53
         }
       ],
       "coles_price_history": [
@@ -1483,6 +1411,10 @@
         {
           "date": "2026-06-01",
           "price": 1.42
+        },
+        {
+          "date": "2026-06-08",
+          "price": 1.42
         }
       ],
       "match_confidence": "medium",
@@ -1492,8 +1424,184 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Lurpak Butter Spreadable",
+      "last_scraped": "2026-06-08T04:03:09.829161+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 7.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 8.2
+        },
+        {
+          "date": "2025-04-14",
+          "price": 8.2
+        },
+        {
+          "date": "2025-07-10",
+          "price": 8.2
+        },
+        {
+          "date": "2026-02-03",
+          "price": 9.0
+        },
+        {
+          "date": "2026-04-29",
+          "price": 8.3
+        },
+        {
+          "date": "2026-05-06",
+          "price": 8.3
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Lurpak Butter Spreadable",
+        "price": 9.0,
+        "unit_price": 2.25,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/87702/lurpak-butter-spreadable",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/087702.jpg"
+      },
+      "coles": {
+        "name": "Lurpak Butter Spreadable Slightly Salted | 400g",
+        "price": 9.0,
+        "unit_price": 9.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/lurpak-butter-spreadable-slightly-salted-400g-5376659",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5376659.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 9
+        },
+        {
+          "date": "2026-06-01",
+          "price": 9
+        },
+        {
+          "date": "2026-06-08",
+          "price": 9.0
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8.3
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8.3
+        },
+        {
+          "date": "2026-06-03",
+          "price": 9
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 2.25,
+      "per_100_coles": 2.25,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Pringles Sour Cream & Onion Potato Chips",
+      "last_scraped": "2026-06-08T04:03:12.965499+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2024-11-20",
+          "price": 2.75
+        },
+        {
+          "date": "2025-03-27",
+          "price": 5.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 3.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 3.5
+        },
+        {
+          "date": "2026-02-23",
+          "price": 3.3
+        },
+        {
+          "date": "2026-04-29",
+          "price": 2.75
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Pringles Sour Cream & Onion Potato Chips",
+        "price": 5.5,
+        "unit_price": 4.1,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/479502/pringles-sour-cream-onion-potato-chips",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/479502.jpg"
+      },
+      "coles": {
+        "name": "Pringles Potato Chips Sour Cream & Onion | 134g",
+        "price": 5.5,
+        "unit_price": 9.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-134g-2784058",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2784058.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5.5
+        },
+        {
+          "date": "2026-06-08",
+          "price": 5.5
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5.5
+        },
+        {
+          "date": "2026-06-08",
+          "price": 5.5
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 4.1,
+      "per_100_coles": 4.1,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Philadelphia Original Cream Cheese Portions Snacks",
-      "last_scraped": "2026-06-04T11:55:42.607716+00:00",
+      "last_scraped": "2026-06-08T04:03:13.913355+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -1566,6 +1674,10 @@
         {
           "date": "2026-06-01",
           "price": 4
+        },
+        {
+          "date": "2026-06-08",
+          "price": 4.0
         }
       ],
       "coles_price_history": [
@@ -1576,102 +1688,16 @@
         {
           "date": "2026-06-01",
           "price": 4
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 2.67,
-      "per_100_coles": 2.67,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Pringles Sour Cream & Onion Potato Chips",
-      "last_scraped": "2026-06-04T11:55:43.219858+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2024-11-20",
-          "price": 2.75
         },
         {
-          "date": "2025-03-27",
-          "price": 5.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 5.5
-        },
-        {
-          "date": "2025-06-06",
-          "price": 3.5
-        },
-        {
-          "date": "2026-02-03",
-          "price": 3.5
-        },
-        {
-          "date": "2026-02-23",
-          "price": 3.3
-        },
-        {
-          "date": "2026-04-29",
-          "price": 2.75
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Pringles Sour Cream & Onion Potato Chips",
-        "price": 5.5,
-        "unit_price": 4.1,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/479502/pringles-sour-cream-onion-potato-chips",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/479502.jpg"
-      },
-      "coles": {
-        "name": "Pringles Potato Chips Sour Cream & Onion | 134g",
-        "price": 5.5,
-        "unit_price": 9.0,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-134g-2784058",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2784058.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [
-        {
-          "name": "Pringles Potato Chips Sour Cream & Onion | 53g",
-          "price": 1.5,
-          "unit_price": 2.83,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-53g-2784138",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2784138.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5.5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5.5
+          "date": "2026-06-08",
+          "price": 4.0
         }
       ],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 4.1,
-      "per_100_coles": 4.1,
+      "per_100_ww": 2.67,
+      "per_100_coles": 2.67,
       "per_100_unit": "100g"
     },
     {
@@ -11933,9 +11959,9 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 10,
+    "done": 15,
     "total": 144,
     "started_at": "2026-06-08T04:02:37.306964+00:00",
-    "current_item": "Kale Fresh Bunch"
+    "current_item": "Philadelphia Original Cream Cheese Portions Snacks"
   }
 }
