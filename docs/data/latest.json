@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-10T05:14:04.156719+00:00",
+  "last_updated": "2026-06-10T05:14:13.534043+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6315,7 +6315,7 @@
     },
     {
       "list_item": "Golden Palm Medjool Dates Punnet",
-      "last_scraped": "2026-06-08T04:05:02.330468+00:00",
+      "last_scraped": "2026-06-10T05:14:06.023555+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6369,6 +6369,10 @@
         {
           "date": "2026-06-03",
           "price": 12.5
+        },
+        {
+          "date": "2026-06-10",
+          "price": 12.5
         }
       ],
       "coles_price_history": [
@@ -6387,6 +6391,10 @@
         {
           "date": "2026-06-03",
           "price": 11
+        },
+        {
+          "date": "2026-06-10",
+          "price": 11
         }
       ],
       "match_confidence": "low",
@@ -6396,92 +6404,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Katoomba Ingredients Red Lentils",
-      "last_scraped": "2026-06-08T04:05:05.316742+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2025-03-17",
-          "price": 3.0
-        },
-        {
-          "date": "2025-04-14",
-          "price": 4.0
-        },
-        {
-          "date": "2025-04-25",
-          "price": 4.0
-        },
-        {
-          "date": "2025-07-26",
-          "price": 4.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 3.5
-        },
-        {
-          "date": "2026-05-06",
-          "price": 4.0
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Katoomba Ingredients Red Lentils",
-        "price": 4.0,
-        "unit_price": 0.4,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/753947/katoomba-ingredients-red-lentils",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/753947.jpg"
-      },
-      "coles": {
-        "name": "Katoomba Red Lentils | 1kg",
-        "price": 4,
-        "unit_price": 4,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/katoomba-red-lentils-1kg-4683608",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4683608.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4
-        },
-        {
-          "date": "2026-06-01",
-          "price": 4
-        },
-        {
-          "date": "2026-06-08",
-          "price": 4.0
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.6
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.6
-        },
-        {
-          "date": "2026-06-03",
-          "price": 4
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.4,
-      "per_100_coles": 0.4,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Hellmann's Real Mayonnaise Squeeze",
-      "last_scraped": "2026-06-08T04:05:05.346680+00:00",
+      "last_scraped": "2026-06-10T05:14:06.907503+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6556,8 +6480,96 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Katoomba Ingredients Red Lentils",
+      "last_scraped": "2026-06-10T05:14:08.685598+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-03-17",
+          "price": 3.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 4.0
+        },
+        {
+          "date": "2025-04-25",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.5
+        },
+        {
+          "date": "2026-05-06",
+          "price": 4.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Katoomba Ingredients Red Lentils",
+        "price": 4.0,
+        "unit_price": 0.4,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/753947/katoomba-ingredients-red-lentils",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/753947.jpg"
+      },
+      "coles": {
+        "name": "Katoomba Red Lentils | 1kg",
+        "price": 4,
+        "unit_price": 4,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/katoomba-red-lentils-1kg-4683608",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4683608.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4
+        },
+        {
+          "date": "2026-06-08",
+          "price": 4.0
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3.6
+        },
+        {
+          "date": "2026-06-01",
+          "price": 3.6
+        },
+        {
+          "date": "2026-06-03",
+          "price": 4
+        },
+        {
+          "date": "2026-06-10",
+          "price": 4
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.4,
+      "per_100_coles": 0.4,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "KitKat Milk Chocolate Mini Bars Share Pack",
-      "last_scraped": "2026-06-08T04:05:09.122765+00:00",
+      "last_scraped": "2026-06-10T05:14:10.457651+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6637,7 +6649,7 @@
     },
     {
       "list_item": "Macro Natural Sunflower Kernels",
-      "last_scraped": "2026-06-08T04:05:11.886128+00:00",
+      "last_scraped": "2026-06-10T05:14:13.528968+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -12680,10 +12692,10 @@
     "items_not_found": 3
   },
   "scrape_progress": {
-    "done": 60,
+    "done": 65,
     "total": 144,
     "started_at": "2026-06-10T05:11:48.662624+00:00",
-    "current_item": "Hedy's Fresh Quiche Lorraine Chilled Meal"
+    "current_item": "Macro Natural Sunflower Kernels"
   },
   "pending_validation": [
     {
