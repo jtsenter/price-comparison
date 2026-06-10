@@ -1103,10 +1103,6 @@
         {
           "date": "2026-06-01",
           "price": 2.5
-        },
-        {
-          "date": "2026-06-10",
-          "price": 1.8
         }
       ],
       "match_confidence": "high",
@@ -1749,6 +1745,10 @@
         {
           "date": "2026-06-08",
           "price": 5.5
+        },
+        {
+          "date": "2026-06-10",
+          "price": 2.75
         }
       ],
       "match_confidence": "medium",
@@ -13133,18 +13133,18 @@
   },
   "pending_validation": [
     {
-      "item": "Pringles Sour Cream & Onion Potato Chips",
-      "ww_price": 5.5,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/479502/pringles-sour-cream-onion-potato-chips",
-      "ww_prev_price": 5.5,
+      "item": "Hass Avocado",
+      "ww_price": 2.2,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/120080/hass-avocado",
+      "ww_prev_price": 2.2,
       "ww_suspicious": false,
-      "coles_price": 2.75,
-      "coles_url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-134g-2784058",
-      "coles_prev_price": 5.5,
+      "coles_price": 1.8,
+      "coles_url": "https://www.coles.com.au/product/coles-hass-avocados-1-each-5900530",
+      "coles_prev_price": 2,
       "coles_suspicious": true,
       "flagged_date": "2026-06-10",
       "reason": [
-        "30pct_change"
+        "outside_historical_range"
       ]
     },
     {
@@ -13217,8 +13217,7 @@
       "coles": 1.29
     },
     "Hass Avocado": {
-      "approved_date": "2026-06-10",
-      "coles": 1.8
+      "approved_date": "2026-06-02"
     },
     "Kale Fresh Bunch": {
       "approved_date": "2026-05-31",
@@ -13473,6 +13472,10 @@
       "approved_date": "2026-06-03",
       "coles": 6,
       "ww": 6
+    },
+    "Pringles Sour Cream & Onion Potato Chips": {
+      "coles": 2.75,
+      "approved_date": "2026-06-10"
     }
   }
 }
