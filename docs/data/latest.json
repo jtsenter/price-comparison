@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-10T05:15:28.479620+00:00",
+  "last_updated": "2026-06-10T05:15:34.194273+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9911,7 +9911,7 @@
     },
     {
       "list_item": "Woolworths Red Onions",
-      "last_scraped": "2026-06-08T04:06:34.261122+00:00",
+      "last_scraped": "2026-06-10T05:15:29.272455+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -9930,8 +9930,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Red Onions Bag",
-        "price": 3.5,
-        "unit_price": 3.5,
+        "price": 5.0,
+        "unit_price": 5.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg",
@@ -9946,7 +9946,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8467604.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 1.6,
+      "saving_per_item": 0.1,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9970,13 +9970,13 @@
       ],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 0.35,
+      "per_100_ww": 0.5,
       "per_100_coles": 0.51,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Rosemary Leaves",
-      "last_scraped": "2026-06-08T04:06:37.361178+00:00",
+      "last_scraped": "2026-06-10T05:15:31.557114+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -10052,7 +10052,7 @@
     },
     {
       "list_item": "Woolworths Thickened Cream",
-      "last_scraped": "2026-06-08T04:06:37.796089+00:00",
+      "last_scraped": "2026-06-10T05:15:31.672329+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -10139,8 +10139,84 @@
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Woolworths Wholegrain Wrap 8Pk",
+      "last_scraped": "2026-06-10T05:15:34.136984+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 2.4
+        },
+        {
+          "date": "2025-07-10",
+          "price": 2.2
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.2
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.2
+        }
+      ],
+      "category": "Bakery",
+      "woolworths": {
+        "name": "Woolworths Wholegrain Wrap 8Pk",
+        "price": 2.2,
+        "unit_price": 0.61,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/634919/woolworths-wholegrain-wrap-8pk",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634919.jpg"
+      },
+      "coles": {
+        "name": "Coles Wholemeal & Grain Soft Wraps 8 Pack | 360g",
+        "price": 2.2,
+        "unit_price": 2.2,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-wholemeal-and-grain-soft-wraps-8-pack-360g-3731716",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3731716.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.2
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2.2
+        },
+        {
+          "date": "2026-06-08",
+          "price": 2.2
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.2
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2.2
+        },
+        {
+          "date": "2026-06-08",
+          "price": 2.2
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.61,
+      "per_100_coles": 0.61,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Tuna In Springwater",
-      "last_scraped": "2026-06-08T04:06:40.472563+00:00",
+      "last_scraped": "2026-06-10T05:15:34.184963+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -10213,82 +10289,6 @@
       "size_warning": false,
       "per_100_ww": 1.16,
       "per_100_coles": 0.92,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Wholegrain Wrap 8Pk",
-      "last_scraped": "2026-06-08T04:06:40.558579+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2025-05-04",
-          "price": 2.4
-        },
-        {
-          "date": "2025-07-10",
-          "price": 2.2
-        },
-        {
-          "date": "2026-03-10",
-          "price": 2.2
-        },
-        {
-          "date": "2026-05-06",
-          "price": 2.2
-        }
-      ],
-      "category": "Bakery",
-      "woolworths": {
-        "name": "Woolworths Wholegrain Wrap 8Pk",
-        "price": 2.2,
-        "unit_price": 0.61,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/634919/woolworths-wholegrain-wrap-8pk",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634919.jpg"
-      },
-      "coles": {
-        "name": "Coles Wholemeal & Grain Soft Wraps 8 Pack | 360g",
-        "price": 2.2,
-        "unit_price": 2.2,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-wholemeal-and-grain-soft-wraps-8-pack-360g-3731716",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3731716.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.2
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.2
-        },
-        {
-          "date": "2026-06-08",
-          "price": 2.2
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.2
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.2
-        },
-        {
-          "date": "2026-06-08",
-          "price": 2.2
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.61,
-      "per_100_coles": 0.61,
       "per_100_unit": "100g"
     },
     {
@@ -12672,19 +12672,19 @@
     "Woolworths Capsicum Green"
   ],
   "summary": {
-    "total_woolworths": 700.12,
+    "total_woolworths": 701.62,
     "total_coles": 721.46,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 21.34,
+    "total_saving": 19.84,
     "items_compared": 140,
     "items_not_found": 4
   },
   "scrape_progress": {
-    "done": 105,
+    "done": 110,
     "total": 144,
     "started_at": "2026-06-10T05:11:48.662624+00:00",
-    "current_item": "Woolworths Red Onions Bag"
+    "current_item": "Woolworths Tuna In Springwater"
   },
   "pending_validation": [
     {
