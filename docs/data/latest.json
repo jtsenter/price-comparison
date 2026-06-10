@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-10T23:41:52.202193+00:00",
+  "last_updated": "2026-06-10T23:42:04.288768+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7220,7 +7220,7 @@
     },
     {
       "list_item": "McKenzie's Green Lentil Whole",
-      "last_scraped": "2026-06-10T05:14:29.793080+00:00",
+      "last_scraped": "2026-06-10T23:41:58.317496+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -7267,7 +7267,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3465667.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -7309,7 +7309,7 @@
     },
     {
       "list_item": "McKenzie's Red Lentils",
-      "last_scraped": "2026-06-10T05:14:31.787184+00:00",
+      "last_scraped": "2026-06-10T23:41:59.209241+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7348,7 +7348,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9190991.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -7390,7 +7390,7 @@
     },
     {
       "list_item": "McVitie's Digestives Milk Chocolate",
-      "last_scraped": "2026-06-10T05:14:32.266776+00:00",
+      "last_scraped": "2026-06-10T23:42:01.044380+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7428,12 +7428,12 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5854739.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [
         {
           "name": "McVitie's Digestives Choc Tops Milk Chocolate",
-          "price": 2,
-          "unit_price": 2,
+          "price": 2.0,
+          "unit_price": 2.0,
           "unit": "100G",
           "url": "https://www.woolworths.com.au/shop/productdetails/262411/mcvitie-s-digestives-choc-tops-milk-chocolate",
           "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/262411.jpg",
@@ -7476,7 +7476,7 @@
     },
     {
       "list_item": "McVitie's Hobnobs Milk Chocolate",
-      "last_scraped": "2026-06-10T05:14:34.785734+00:00",
+      "last_scraped": "2026-06-10T23:42:02.968812+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -7518,7 +7518,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9221042.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -7546,6 +7546,10 @@
         {
           "date": "2026-06-04",
           "price": 5.5
+        },
+        {
+          "date": "2026-06-11",
+          "price": 5.5
         }
       ],
       "match_confidence": "low",
@@ -7556,7 +7560,7 @@
     },
     {
       "list_item": "Mon Ami French Camembert Cheese",
-      "last_scraped": "2026-06-10T05:14:35.265867+00:00",
+      "last_scraped": "2026-06-10T23:42:04.277268+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -7565,7 +7569,7 @@
         },
         {
           "date": "2025-05-04",
-          "price": 6
+          "price": 6.0
         },
         {
           "date": "2025-05-12",
@@ -7581,14 +7585,14 @@
         },
         {
           "date": "2026-02-23",
-          "price": 6
+          "price": 6.0
         }
       ],
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Mon Ami French Camembert Cheese",
         "price": 7.2,
-        "unit_price": 36,
+        "unit_price": 36.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/751148/mon-ami-french-camembert-cheese",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/751148.jpg"
@@ -7603,7 +7607,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -7638,6 +7642,10 @@
         },
         {
           "date": "2026-06-04",
+          "price": 7.2
+        },
+        {
+          "date": "2026-06-11",
           "price": 7.2
         }
       ],
@@ -12937,10 +12945,10 @@
     "items_not_found": 3
   },
   "scrape_progress": {
-    "done": 70,
+    "done": 75,
     "total": 144,
     "started_at": "2026-06-10T23:39:00.519042+00:00",
-    "current_item": "McKenzie's Dried Veg Pearl Barley"
+    "current_item": "Mon Ami French Camembert Cheese"
   },
   "pending_validation": [
     {
