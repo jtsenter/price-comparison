@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-10T05:12:16.500471+00:00",
+  "last_updated": "2026-06-10T05:12:26.391160+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1242,7 +1242,7 @@
     },
     {
       "list_item": "Kale Fresh Bunch",
-      "last_scraped": "2026-06-08T04:03:03.823708+00:00",
+      "last_scraped": "2026-06-10T05:12:17.159954+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1353,7 +1353,7 @@
     },
     {
       "list_item": "Lebanese Cucumbers",
-      "last_scraped": "2026-06-08T04:03:07.078369+00:00",
+      "last_scraped": "2026-06-10T05:12:20.672980+00:00",
       "trip_count": 27,
       "price_history": [
         {
@@ -1476,20 +1476,20 @@
       },
       "coles": {
         "name": "Coles Lebanese Cucumbers | approx. 160g",
-        "price": 1.42,
-        "unit_price": 1.42,
+        "price": 1.1,
+        "unit_price": 1.1,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-lebanese-cucumbers-approx.-160g-4575208",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4575208.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 0.11,
+      "saving_per_item": 0.43,
       "alternatives": [
         {
           "name": "Coles Lebanese Cucumbers | approx. 160g",
-          "price": 1.42,
-          "unit_price": 1.42,
+          "price": 1.1,
+          "unit_price": 1.1,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/coles-lebanese-cucumbers-approx.-160g-4575208",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4575208.jpg",
@@ -1522,17 +1522,21 @@
         {
           "date": "2026-06-08",
           "price": 1.42
+        },
+        {
+          "date": "2026-06-10",
+          "price": 1.1
         }
       ],
       "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
-      "per_100_coles": 0.89,
+      "per_100_coles": 0.69,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Lurpak Butter Spreadable",
-      "last_scraped": "2026-06-08T04:03:09.829161+00:00",
+      "last_scraped": "2026-06-10T05:12:20.675802+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -1583,7 +1587,26 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Lurpak Butter Spreadable Slightly Salted | 250g",
+          "price": 5.2,
+          "unit_price": 2.08,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/lurpak-butter-spreadable-slightly-salted-250g-5393910",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5393910.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Lurpak Butter Lighter Spreadable Slightly Salted | 250g",
+          "price": 5.2,
+          "unit_price": 2.08,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/lurpak-butter-lighter-spreadable-slightly-salted-250g-7175363",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7175363.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -1610,9 +1633,13 @@
         {
           "date": "2026-06-03",
           "price": 9
+        },
+        {
+          "date": "2026-06-10",
+          "price": 9.0
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.25,
       "per_100_coles": 2.25,
@@ -1620,7 +1647,7 @@
     },
     {
       "list_item": "Pringles Sour Cream & Onion Potato Chips",
-      "last_scraped": "2026-06-08T04:03:12.965499+00:00",
+      "last_scraped": "2026-06-10T05:12:23.919112+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -1663,15 +1690,35 @@
       },
       "coles": {
         "name": "Pringles Potato Chips Sour Cream & Onion | 134g",
-        "price": 5.5,
-        "unit_price": 9.0,
+        "price": 2.75,
+        "unit_price": 2.05,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-134g-2784058",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2784058.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2784058.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
+      "cheaper_store": "coles",
+      "saving_per_item": 2.75,
+      "alternatives": [
+        {
+          "name": "Pringles Potato Chips Sour Cream & Onion | 134g",
+          "price": 2.75,
+          "unit_price": 2.05,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-134g-2784058",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2784058.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Pringles Potato Chips Sour Cream & Onion | 53g",
+          "price": 2.7,
+          "unit_price": 2.7,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-53g-2784138",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2784138.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -1700,15 +1747,15 @@
           "price": 5.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 4.1,
-      "per_100_coles": 4.1,
+      "per_100_coles": 2.05,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Portions Snacks",
-      "last_scraped": "2026-06-08T04:03:13.913355+00:00",
+      "last_scraped": "2026-06-10T05:12:26.389072+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -1801,7 +1848,7 @@
           "price": 4.0
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.67,
       "per_100_coles": 2.67,
@@ -12749,18 +12796,18 @@
   ],
   "summary": {
     "total_woolworths": 709.52,
-    "total_coles": 731.93,
+    "total_coles": 728.86,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 22.41,
+    "total_saving": 19.34,
     "items_compared": 143,
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 10,
+    "done": 15,
     "total": 144,
     "started_at": "2026-06-10T05:11:48.662624+00:00",
-    "current_item": "Helga's Wholemeal Bread With Grains"
+    "current_item": "Philadelphia Original Cream Cheese Portions Snacks"
   },
   "pending_validation": [
     {
@@ -12776,6 +12823,21 @@
       "flagged_date": "2026-06-10",
       "reason": [
         "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Pringles Sour Cream & Onion Potato Chips",
+      "ww_price": 5.5,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/479502/pringles-sour-cream-onion-potato-chips",
+      "ww_prev_price": 5.5,
+      "ww_suspicious": false,
+      "coles_price": 2.75,
+      "coles_url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-134g-2784058",
+      "coles_prev_price": 5.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-06-10",
+      "reason": [
+        "30pct_change"
       ]
     }
   ]
