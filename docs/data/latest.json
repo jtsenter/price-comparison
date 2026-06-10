@@ -4961,10 +4961,6 @@
         {
           "date": "2026-06-02",
           "price": 8.58
-        },
-        {
-          "date": "2026-06-10",
-          "price": 9.9
         }
       ],
       "coles_price_history": [
@@ -5174,6 +5170,10 @@
         {
           "date": "2026-06-08",
           "price": 3.6
+        },
+        {
+          "date": "2026-06-10",
+          "price": 2.5
         }
       ],
       "coles_price_history": [
@@ -13178,18 +13178,18 @@
       ]
     },
     {
-      "item": "Woolworths Onion Brown Bag",
-      "ww_price": 2.5,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/144336/woolworths-onion-brown-bag",
-      "ww_prev_price": 3.6,
+      "item": "Woolworths Red Watermelon Cut Quarter",
+      "ww_price": 9.9,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/120384/woolworths-red-watermelon-cut-quarter",
+      "ww_prev_price": 8.58,
       "ww_suspicious": true,
-      "coles_price": 4,
-      "coles_url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
-      "coles_prev_price": 4,
+      "coles_price": 7.02,
+      "coles_url": "https://www.coles.com.au/product/coles-seedless-watermelon-cut-approx.-1.8kg-7508229",
+      "coles_prev_price": 7.02,
       "coles_suspicious": false,
       "flagged_date": "2026-06-10",
       "reason": [
-        "30pct_change"
+        "outside_historical_range"
       ]
     },
     {
@@ -13275,7 +13275,8 @@
       "coles": 4.2
     },
     "Woolworths Onion Brown Bag": {
-      "approved_date": "2026-05-31"
+      "approved_date": "2026-06-10",
+      "ww": 2.5
     },
     "Woolworths Washed Potato Bag": {
       "approved_date": "2026-05-31"
@@ -13466,8 +13467,7 @@
       "approved_date": "2026-06-01"
     },
     "Woolworths Red Watermelon Cut Quarter": {
-      "approved_date": "2026-06-10",
-      "ww": 9.9
+      "approved_date": "2026-06-01"
     },
     "Strawberries Punnet": {
       "approved_date": "2026-06-03",
