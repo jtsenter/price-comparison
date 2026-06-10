@@ -3526,10 +3526,6 @@
         {
           "date": "2026-06-02",
           "price": 3.7
-        },
-        {
-          "date": "2026-06-10",
-          "price": 2.3
         }
       ],
       "coles_price_history": [
@@ -4965,6 +4961,10 @@
         {
           "date": "2026-06-02",
           "price": 8.58
+        },
+        {
+          "date": "2026-06-10",
+          "price": 9.9
         }
       ],
       "coles_price_history": [
@@ -13163,18 +13163,18 @@
       ]
     },
     {
-      "item": "Woolworths Red Watermelon Cut Quarter",
-      "ww_price": 9.9,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/120384/woolworths-red-watermelon-cut-quarter",
-      "ww_prev_price": 8.58,
+      "item": "Woolworths Broccolini Bunch",
+      "ww_price": 2.3,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/187314/woolworths-broccolini-bunch",
+      "ww_prev_price": 3.7,
       "ww_suspicious": true,
-      "coles_price": 7.02,
-      "coles_url": "https://www.coles.com.au/product/coles-seedless-watermelon-cut-approx.-1.8kg-7508229",
-      "coles_prev_price": 7.02,
+      "coles_price": 5.3,
+      "coles_url": "https://www.coles.com.au/product/coles-family-broccolini-1-each-4841775",
+      "coles_prev_price": 5.3,
       "coles_suspicious": false,
       "flagged_date": "2026-06-10",
       "reason": [
-        "outside_historical_range"
+        "30pct_change"
       ]
     },
     {
@@ -13257,9 +13257,8 @@
       "coles": 3.3
     },
     "Woolworths Broccolini Bunch": {
-      "approved_date": "2026-06-10",
-      "coles": 5.3,
-      "ww": 2.3
+      "approved_date": "2026-06-04",
+      "coles": 5.3
     },
     "Woolworths Cookie Caramel Bar Slice": {
       "approved_date": "2026-05-31",
@@ -13467,7 +13466,8 @@
       "approved_date": "2026-06-01"
     },
     "Woolworths Red Watermelon Cut Quarter": {
-      "approved_date": "2026-06-01"
+      "approved_date": "2026-06-10",
+      "ww": 9.9
     },
     "Strawberries Punnet": {
       "approved_date": "2026-06-03",
