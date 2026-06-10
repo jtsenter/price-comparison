@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-10T23:42:52.170742+00:00",
+  "last_updated": "2026-06-10T23:43:07.141028+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9591,7 +9591,7 @@
     },
     {
       "list_item": "Woolworths Lamb Mince",
-      "last_scraped": "2026-06-10T05:15:19.065000+00:00",
+      "last_scraped": "2026-06-10T23:42:56.851800+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -9600,18 +9600,18 @@
         },
         {
           "date": "2025-03-17",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-04-14",
-          "price": 8
+          "price": 8.0
         }
       ],
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Woolworths Lamb Mince",
-        "price": 9,
-        "unit_price": 18,
+        "price": 9.0,
+        "unit_price": 18.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/582607/woolworths-lamb-mince",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/582607.jpg"
@@ -9626,7 +9626,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9672,7 +9672,7 @@
     },
     {
       "list_item": "Woolworths Extra Virgin Olive Oil Spray",
-      "last_scraped": "2026-06-10T05:15:20.050511+00:00",
+      "last_scraped": "2026-06-10T23:42:59.884997+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9754,7 +9754,7 @@
     },
     {
       "list_item": "Woolworths Pesto Basil",
-      "last_scraped": "2026-06-10T05:15:22.989485+00:00",
+      "last_scraped": "2026-06-10T23:43:03.057611+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9792,7 +9792,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5419660.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9830,7 +9830,7 @@
     },
     {
       "list_item": "Woolworths Mild Salsa",
-      "last_scraped": "2026-06-10T05:15:25.411264+00:00",
+      "last_scraped": "2026-06-10T23:43:03.923207+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -9839,11 +9839,11 @@
         },
         {
           "date": "2025-01-29",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2025-04-14",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2025-07-10",
@@ -9877,7 +9877,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5859834.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9915,16 +9915,16 @@
     },
     {
       "list_item": "Woolworths Red Onions Bag",
-      "last_scraped": "2026-06-10T05:15:28.472441+00:00",
+      "last_scraped": "2026-06-10T23:43:07.129559+00:00",
       "trip_count": 5,
       "price_history": [
         {
           "date": "2025-06-06",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-07-10",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2026-03-10",
@@ -9932,7 +9932,7 @@
         },
         {
           "date": "2026-04-02",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2026-05-06",
@@ -9942,8 +9942,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Red Onions Bag",
-        "price": 5,
-        "unit_price": 5,
+        "price": 5.0,
+        "unit_price": 5.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg"
@@ -9979,6 +9979,10 @@
         {
           "date": "2026-06-03",
           "price": 3.5
+        },
+        {
+          "date": "2026-06-11",
+          "price": 5.0
         }
       ],
       "coles_price_history": [
@@ -9996,6 +10000,10 @@
         },
         {
           "date": "2026-06-04",
+          "price": 5.1
+        },
+        {
+          "date": "2026-06-11",
           "price": 5.1
         }
       ],
@@ -12898,10 +12906,10 @@
     "items_not_found": 4
   },
   "scrape_progress": {
-    "done": 100,
+    "done": 105,
     "total": 144,
     "started_at": "2026-06-10T23:39:00.519042+00:00",
-    "current_item": "Woolworths Celery Heart"
+    "current_item": "Woolworths Red Onions Bag"
   },
   "pending_validation": [
     {
