@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-10T05:14:59.461773+00:00",
+  "last_updated": "2026-06-10T05:15:07.759791+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8783,7 +8783,7 @@
     },
     {
       "list_item": "White Seedless Grapes Bag Approx. 900g",
-      "last_scraped": "2026-06-08T04:06:03.546097+00:00",
+      "last_scraped": "2026-06-10T05:15:01.811959+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -8810,8 +8810,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "White Seedless Grapes Bag Approx. 900g",
-        "price": 6.0,
-        "unit_price": 6.0,
+        "price": 6.9,
+        "unit_price": 6.9,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/138801/white-seedless-grapes-bag-approx-900g",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/138801.jpg"
@@ -8825,8 +8825,8 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8133391.jpg",
         "retailer": "coles"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "cheaper_store": "coles",
+      "saving_per_item": 0.9,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -8862,13 +8862,13 @@
       ],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 0.67,
+      "per_100_ww": 0.77,
       "per_100_coles": 0.6,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths 100% Canadian Maple Syrup",
-      "last_scraped": "2026-06-08T04:06:05.744460+00:00",
+      "last_scraped": "2026-06-10T05:15:02.552582+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8944,7 +8944,7 @@
     },
     {
       "list_item": "Woolworths 12 Extra Large Cage Free Eggs",
-      "last_scraped": "2026-06-08T04:06:07.426045+00:00",
+      "last_scraped": "2026-06-10T05:15:04.578026+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9024,7 +9024,7 @@
     },
     {
       "list_item": "Woolworths 18 Large Cage Free Eggs",
-      "last_scraped": "2026-06-08T04:06:08.814217+00:00",
+      "last_scraped": "2026-06-10T05:15:05.178378+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9100,7 +9100,7 @@
     },
     {
       "list_item": "Woolworths Asparagus Green Bunch",
-      "last_scraped": "2026-06-08T04:06:10.450980+00:00",
+      "last_scraped": "2026-06-10T05:15:07.751194+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -9155,6 +9155,10 @@
         },
         {
           "date": "2026-06-03",
+          "price": 3.5
+        },
+        {
+          "date": "2026-06-10",
           "price": 3.5
         }
       ],
@@ -12723,19 +12727,19 @@
     "Capsicum Green"
   ],
   "summary": {
-    "total_woolworths": 699.7,
+    "total_woolworths": 700.6,
     "total_coles": 722.76,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 23.06,
+    "total_saving": 22.16,
     "items_compared": 141,
     "items_not_found": 3
   },
   "scrape_progress": {
-    "done": 90,
+    "done": 95,
     "total": 144,
     "started_at": "2026-06-10T05:11:48.662624+00:00",
-    "current_item": "Twinings Orange & Cinnamon Tea Bags Tea"
+    "current_item": "Woolworths Asparagus Green Bunch"
   },
   "pending_validation": [
     {
@@ -12811,6 +12815,21 @@
       "flagged_date": "2026-06-10",
       "reason": [
         "30pct_change"
+      ]
+    },
+    {
+      "item": "White Seedless Grapes Bag Approx. 900g",
+      "ww_price": 6.9,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/138801/white-seedless-grapes-bag-approx-900g",
+      "ww_prev_price": 6.0,
+      "ww_suspicious": true,
+      "coles_price": 6,
+      "coles_url": "https://www.coles.com.au/product/coles-white-seedless-grapes-approx.-1kg-8133391",
+      "coles_prev_price": 6,
+      "coles_suspicious": false,
+      "flagged_date": "2026-06-10",
+      "reason": [
+        "outside_historical_range"
       ]
     }
   ]
