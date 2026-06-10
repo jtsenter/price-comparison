@@ -8840,6 +8840,10 @@
         {
           "date": "2026-06-01",
           "price": 5.5
+        },
+        {
+          "date": "2026-06-10",
+          "price": 6.9
         }
       ],
       "coles_price_history": [
@@ -13191,21 +13195,6 @@
       "reason": [
         "outside_historical_range"
       ]
-    },
-    {
-      "item": "White Seedless Grapes Bag Approx. 900g",
-      "ww_price": 6.9,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/138801/white-seedless-grapes-bag-approx-900g",
-      "ww_prev_price": 6,
-      "ww_suspicious": true,
-      "coles_price": 6,
-      "coles_url": "https://www.coles.com.au/product/coles-white-seedless-grapes-approx.-1kg-8133391",
-      "coles_prev_price": 6,
-      "coles_suspicious": false,
-      "flagged_date": "2026-06-10",
-      "reason": [
-        "outside_historical_range"
-      ]
     }
   ],
   "approved_prices": {
@@ -13401,8 +13390,9 @@
       "ww": 6
     },
     "White Seedless Grapes Bag Approx. 900g": {
-      "approved_date": "2026-05-31",
-      "coles": 6
+      "approved_date": "2026-06-10",
+      "coles": 6,
+      "ww": 6.9
     },
     "Woolworths 12 Extra Large Cage Free Eggs": {
       "approved_date": "2026-05-31",
