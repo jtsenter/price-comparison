@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-10T05:16:30.807463+00:00",
+  "last_updated": "2026-06-10T05:16:34.233857+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12502,80 +12502,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Red Washed Potatoes Bag",
-      "last_scraped": "2026-06-08T04:07:45.672516+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2026-04-21",
-          "price": 6.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 6.0
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Red Washed Potatoes Bag",
-        "price": 6.0,
-        "unit_price": 3.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/101638/woolworths-red-washed-potatoes-bag",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/101638.jpg"
-      },
-      "coles": {
-        "name": "Coles Red Royale Washed Potatoes | 2Kg",
-        "price": 8.5,
-        "unit_price": 8.5,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-red-royale-washed-potatoes-2kg-7963859",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7963859.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 2.5,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8
-        },
-        {
-          "date": "2026-05-30",
-          "price": 8
-        },
-        {
-          "date": "2026-06-01",
-          "price": 8
-        },
-        {
-          "date": "2026-06-03",
-          "price": 6
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 8.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 8.5
-        },
-        {
-          "date": "2026-06-08",
-          "price": 8.5
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.3,
-      "per_100_coles": 0.42,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Mixed Herbs Dried",
-      "last_scraped": "2026-06-08T04:07:46.300570+00:00",
+      "last_scraped": "2026-06-10T05:16:31.477126+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12639,6 +12567,82 @@
       "size_warning": false,
       "per_100_ww": 16.7,
       "per_100_coles": 16.54,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Red Washed Potatoes Bag",
+      "last_scraped": "2026-06-10T05:16:34.217227+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2026-04-21",
+          "price": 6.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 6.0
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Red Washed Potatoes Bag",
+        "price": 8.0,
+        "unit_price": 4.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/101638/woolworths-red-washed-potatoes-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/101638.jpg"
+      },
+      "coles": {
+        "name": "Coles Red Royale Washed Potatoes | 2Kg",
+        "price": 8.5,
+        "unit_price": 8.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-red-royale-washed-potatoes-2kg-7963859",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7963859.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.5,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8
+        },
+        {
+          "date": "2026-05-30",
+          "price": 8
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8
+        },
+        {
+          "date": "2026-06-03",
+          "price": 6
+        },
+        {
+          "date": "2026-06-10",
+          "price": 8.0
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8.5
+        },
+        {
+          "date": "2026-06-08",
+          "price": 8.5
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.4,
+      "per_100_coles": 0.42,
       "per_100_unit": "100g"
     },
     {
@@ -12785,19 +12789,19 @@
     "Woolworths Capsicum Green"
   ],
   "summary": {
-    "total_woolworths": 710.89,
+    "total_woolworths": 712.89,
     "total_coles": 721.46,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 10.57,
+    "total_saving": 8.57,
     "items_compared": 140,
     "items_not_found": 4
   },
   "scrape_progress": {
-    "done": 140,
+    "done": 142,
     "total": 144,
     "started_at": "2026-06-10T05:11:48.662624+00:00",
-    "current_item": "Woolworths Green Asparagus Bunch Green"
+    "current_item": "Woolworths Red Washed Potatoes Bag"
   },
   "pending_validation": [
     {
