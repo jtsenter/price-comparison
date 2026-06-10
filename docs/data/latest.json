@@ -1745,10 +1745,6 @@
         {
           "date": "2026-06-08",
           "price": 5.5
-        },
-        {
-          "date": "2026-06-10",
-          "price": 2.75
         }
       ],
       "match_confidence": "medium",
@@ -3530,6 +3526,10 @@
         {
           "date": "2026-06-02",
           "price": 3.7
+        },
+        {
+          "date": "2026-06-10",
+          "price": 2.3
         }
       ],
       "coles_price_history": [
@@ -13148,15 +13148,15 @@
       ]
     },
     {
-      "item": "Woolworths Broccolini Bunch",
-      "ww_price": 2.3,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/187314/woolworths-broccolini-bunch",
-      "ww_prev_price": 3.7,
-      "ww_suspicious": true,
-      "coles_price": 5.3,
-      "coles_url": "https://www.coles.com.au/product/coles-family-broccolini-1-each-4841775",
-      "coles_prev_price": 5.3,
-      "coles_suspicious": false,
+      "item": "Pringles Sour Cream & Onion Potato Chips",
+      "ww_price": 5.5,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/479502/pringles-sour-cream-onion-potato-chips",
+      "ww_prev_price": 5.5,
+      "ww_suspicious": false,
+      "coles_price": 2.75,
+      "coles_url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-134g-2784058",
+      "coles_prev_price": 5.5,
+      "coles_suspicious": true,
       "flagged_date": "2026-06-10",
       "reason": [
         "30pct_change"
@@ -13257,8 +13257,9 @@
       "coles": 3.3
     },
     "Woolworths Broccolini Bunch": {
-      "approved_date": "2026-06-04",
-      "coles": 5.3
+      "approved_date": "2026-06-10",
+      "coles": 5.3,
+      "ww": 2.3
     },
     "Woolworths Cookie Caramel Bar Slice": {
       "approved_date": "2026-05-31",
@@ -13472,10 +13473,6 @@
       "approved_date": "2026-06-03",
       "coles": 6,
       "ww": 6
-    },
-    "Pringles Sour Cream & Onion Potato Chips": {
-      "coles": 2.75,
-      "approved_date": "2026-06-10"
     }
   }
 }
