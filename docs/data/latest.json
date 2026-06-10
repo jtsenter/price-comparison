@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-10T23:41:00.579144+00:00",
+  "last_updated": "2026-06-10T23:41:10.366990+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5249,8 +5249,89 @@
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Annalisa Chickpeas",
+      "last_scraped": "2026-06-10T23:41:03.665344+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 1.4
+        },
+        {
+          "date": "2025-05-29",
+          "price": 1.4
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.4
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Annalisa Chickpeas",
+        "price": 1.9,
+        "unit_price": 4.75,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/178262/annalisa-chickpeas",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/178262.jpg"
+      },
+      "coles": {
+        "name": "Carmelina Chick Peas | 400 GRAM",
+        "price": 1.9,
+        "unit_price": 3,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.9
+        },
+        {
+          "date": "2026-05-30",
+          "price": 1.9
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.9
+        },
+        {
+          "date": "2026-06-08",
+          "price": 1.9
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.9
+        },
+        {
+          "date": "2026-05-30",
+          "price": 1.9
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.9
+        },
+        {
+          "date": "2026-06-08",
+          "price": 1.9
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.47,
+      "per_100_coles": 0.3,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Whole Milk Full Cream Milk",
-      "last_scraped": "2026-06-10T05:13:41.069735+00:00",
+      "last_scraped": "2026-06-10T23:41:04.372238+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5305,7 +5386,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8150288.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -5342,89 +5423,8 @@
       "per_100_unit": "100ml"
     },
     {
-      "list_item": "Annalisa Chickpeas",
-      "last_scraped": "2026-06-10T05:13:43.501058+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-05-04",
-          "price": 1.4
-        },
-        {
-          "date": "2025-05-29",
-          "price": 1.4
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.4
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Annalisa Chickpeas",
-        "price": 1.9,
-        "unit_price": 4.75,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/178262/annalisa-chickpeas",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/178262.jpg"
-      },
-      "coles": {
-        "name": "Carmelina Chick Peas | 400 GRAM",
-        "price": 1.9,
-        "unit_price": 3,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.9
-        },
-        {
-          "date": "2026-05-30",
-          "price": 1.9
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.9
-        },
-        {
-          "date": "2026-06-08",
-          "price": 1.9
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.9
-        },
-        {
-          "date": "2026-05-30",
-          "price": 1.9
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.9
-        },
-        {
-          "date": "2026-06-08",
-          "price": 1.9
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.47,
-      "per_100_coles": 0.3,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Armada Small Kitchen Tidy Bag",
-      "last_scraped": "2026-06-10T05:13:43.856949+00:00",
+      "last_scraped": "2026-06-10T23:41:07.090091+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5466,7 +5466,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3894277.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -5504,7 +5504,7 @@
     },
     {
       "list_item": "Balconi Mix Max Cake Cocoa 350g",
-      "last_scraped": "2026-06-10T05:13:46.271038+00:00",
+      "last_scraped": "2026-06-10T23:41:07.320178+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -5542,7 +5542,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5088122.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -5574,6 +5574,10 @@
         {
           "date": "2026-06-04",
           "price": 7.7
+        },
+        {
+          "date": "2026-06-11",
+          "price": 7.7
         }
       ],
       "match_confidence": "low",
@@ -5584,7 +5588,7 @@
     },
     {
       "list_item": "Beechworth 100% Pure Australian Honey Jar",
-      "last_scraped": "2026-06-10T05:13:46.836944+00:00",
+      "last_scraped": "2026-06-10T23:41:10.359003+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5626,7 +5630,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2624437.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -12989,10 +12993,10 @@
     "items_not_found": 2
   },
   "scrape_progress": {
-    "done": 45,
+    "done": 50,
     "total": 144,
     "started_at": "2026-06-10T23:39:00.519042+00:00",
-    "current_item": "Woolworths Washed Potato Bag"
+    "current_item": "Beechworth 100% Pure Australian Honey Jar"
   },
   "pending_validation": [
     {
