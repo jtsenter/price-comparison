@@ -2,8 +2,8 @@ name: Scrape Prices
 
 on:
   schedule:
-    # Mon and Thu at 8am AEST (22:00 UTC Sun/Wed)
-    - cron: '0 22 * * 0,3'
+    # Mon and Thu at 11am AEST (01:00 UTC)
+    - cron: '0 1 * * 1,4'
   workflow_dispatch:
     inputs:
       trigger:
