@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-11T02:03:41.520683+00:00",
+  "last_updated": "2026-06-11T02:03:52.263689+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7346,7 +7346,7 @@
     },
     {
       "list_item": "McKenzie's Green Lentil Whole",
-      "last_scraped": "2026-06-10T23:41:58.317496+00:00",
+      "last_scraped": "2026-06-11T02:03:43.069058+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -7393,7 +7393,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3465667.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -7427,7 +7427,7 @@
           "price": 4.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.48,
       "per_100_coles": 0.48,
@@ -7435,7 +7435,7 @@
     },
     {
       "list_item": "McKenzie's Red Lentils",
-      "last_scraped": "2026-06-10T23:41:59.209241+00:00",
+      "last_scraped": "2026-06-11T02:03:46.280215+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7474,7 +7474,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9190991.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -7508,7 +7508,7 @@
           "price": 4.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.48,
       "per_100_coles": 0.48,
@@ -7516,7 +7516,7 @@
     },
     {
       "list_item": "McVitie's Digestives Milk Chocolate",
-      "last_scraped": "2026-06-10T23:42:01.044380+00:00",
+      "last_scraped": "2026-06-11T02:03:46.650383+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7547,19 +7547,38 @@
       },
       "coles": {
         "name": "Mcvities Digestives Biscuits Milk Chocolate | 266g",
-        "price": 5.5,
-        "unit_price": 5.5,
+        "price": 2.75,
+        "unit_price": 1.03,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/mcvities-digestives-biscuits-milk-chocolate-266g-5854739",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5854739.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5854739.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "cheaper_store": "coles",
+      "saving_per_item": 2.75,
       "alternatives": [
         {
+          "name": "Mcvities Digestives Tops Biscuits Milk Chocolate | 100g",
+          "price": 1.0,
+          "unit_price": 1.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/mcvities-digestives-tops-biscuits-milk-chocolate-100g-5777536",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5777536.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Mcvities Digestives Biscuits Milk Chocolate | 266g",
+          "price": 2.75,
+          "unit_price": 1.03,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/mcvities-digestives-biscuits-milk-chocolate-266g-5854739",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5854739.jpg",
+          "retailer": "coles"
+        },
+        {
           "name": "McVitie's Digestives Choc Tops Milk Chocolate",
-          "price": 2,
-          "unit_price": 2,
+          "price": 2.0,
+          "unit_price": 2.0,
           "unit": "100G",
           "url": "https://www.woolworths.com.au/shop/productdetails/262411/mcvitie-s-digestives-choc-tops-milk-chocolate",
           "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/262411.jpg",
@@ -7594,15 +7613,15 @@
           "price": 5.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.07,
-      "per_100_coles": 2.07,
+      "per_100_coles": 1.03,
       "per_100_unit": "100g"
     },
     {
       "list_item": "McVitie's Hobnobs Milk Chocolate",
-      "last_scraped": "2026-06-10T23:42:02.968812+00:00",
+      "last_scraped": "2026-06-11T02:03:49.579193+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -7637,15 +7656,26 @@
       },
       "coles": {
         "name": "Mcvitie's Milk Chocolate Hobnobs | 262g",
-        "price": 5.5,
-        "unit_price": 5.5,
+        "price": 2.75,
+        "unit_price": 1.05,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/mcvitie's-milk-chocolate-hobnobs-262g-9221042",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9221042.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9221042.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
+      "cheaper_store": "coles",
+      "saving_per_item": 2.75,
+      "alternatives": [
+        {
+          "name": "Mcvitie's Milk Chocolate Hobnobs | 262g",
+          "price": 2.75,
+          "unit_price": 1.05,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/mcvitie's-milk-chocolate-hobnobs-262g-9221042",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9221042.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -7678,15 +7708,15 @@
           "price": 5.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.1,
-      "per_100_coles": 2.1,
+      "per_100_coles": 1.05,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Mon Ami French Camembert Cheese",
-      "last_scraped": "2026-06-10T23:42:04.277268+00:00",
+      "last_scraped": "2026-06-11T02:03:52.257012+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -7695,7 +7725,7 @@
         },
         {
           "date": "2025-05-04",
-          "price": 6
+          "price": 6.0
         },
         {
           "date": "2025-05-12",
@@ -7711,14 +7741,14 @@
         },
         {
           "date": "2026-02-23",
-          "price": 6
+          "price": 6.0
         }
       ],
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Mon Ami French Camembert Cheese",
         "price": 7.2,
-        "unit_price": 36,
+        "unit_price": 36.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/751148/mon-ami-french-camembert-cheese",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/751148.jpg"
@@ -7733,8 +7763,36 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Jindi Camembert | 125g",
+          "price": 4.6,
+          "unit_price": 4.6,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/jindi-camembert-125g-6139320",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6139320.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "South Cape Camembert | 200g",
+          "price": 7.0,
+          "unit_price": 7.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/south-cape-camembert-200g-5269091",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5269091.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Emborg French Camembert | 200g",
+          "price": 7.2,
+          "unit_price": 7.2,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/emborg-french-camembert-200g-4360529",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4360529.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -7775,7 +7833,7 @@
           "price": 7.2
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 3.6,
       "per_100_coles": 3.6,
@@ -13102,18 +13160,18 @@
   ],
   "summary": {
     "total_woolworths": 696.57,
-    "total_coles": 724.04,
+    "total_coles": 718.54,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 27.47,
+    "total_saving": 21.97,
     "items_compared": 139,
     "items_not_found": 5
   },
   "scrape_progress": {
-    "done": 70,
+    "done": 75,
     "total": 144,
     "started_at": "2026-06-11T02:00:52.819742+00:00",
-    "current_item": "McKenzie's Dried Veg Pearl Barley"
+    "current_item": "Mon Ami French Camembert Cheese"
   },
   "pending_validation": [
     {
@@ -13145,6 +13203,21 @@
       "reason": [
         "30pct_change",
         "outside_historical_range"
+      ]
+    },
+    {
+      "item": "McVitie's Digestives Milk Chocolate",
+      "ww_price": 5.5,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/263373/mcvitie-s-digestives-milk-chocolate",
+      "ww_prev_price": 5.5,
+      "ww_suspicious": false,
+      "coles_price": 2.75,
+      "coles_url": "https://www.coles.com.au/product/mcvities-digestives-biscuits-milk-chocolate-266g-5854739",
+      "coles_prev_price": 5.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-06-11",
+      "reason": [
+        "30pct_change"
       ]
     }
   ]
