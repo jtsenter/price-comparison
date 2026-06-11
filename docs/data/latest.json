@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-11T02:02:17.555630+00:00",
+  "last_updated": "2026-06-11T02:02:29.426426+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -4328,7 +4328,7 @@
     },
     {
       "list_item": "Woolworths Dreamy Choc Chip Cookies",
-      "last_scraped": "2026-06-10T23:40:34.384371+00:00",
+      "last_scraped": "2026-06-11T02:02:19.513915+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4341,7 +4341,7 @@
         },
         {
           "date": "2025-02-02",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-02-28",
@@ -4385,7 +4385,17 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.3,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Indulgent Choc 40% Choc Chip Cookie",
+          "price": 3.5,
+          "unit_price": 0.58,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-bakery-indulgent-choc-40percent-choc-chip-cookie-6-pack-2592079",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2592079.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -4418,7 +4428,7 @@
           "price": 3.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -4426,42 +4436,42 @@
     },
     {
       "list_item": "Woolworths Extra Virgin Spanish Olive Oil",
-      "last_scraped": "2026-06-10T23:40:40.743903+00:00",
+      "last_scraped": "2026-06-11T02:02:22.569353+00:00",
       "trip_count": 7,
       "price_history": [
         {
           "date": "2025-02-02",
-          "price": 18
+          "price": 18.0
         },
         {
           "date": "2025-03-11",
-          "price": 14
+          "price": 14.0
         },
         {
           "date": "2025-05-12",
-          "price": 14
+          "price": 14.0
         },
         {
           "date": "2025-06-06",
-          "price": 18
+          "price": 18.0
         },
         {
           "date": "2026-02-03",
-          "price": 15
+          "price": 15.0
         },
         {
           "date": "2026-03-10",
-          "price": 14
+          "price": 14.0
         },
         {
           "date": "2026-05-06",
-          "price": 14
+          "price": 14.0
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Extra Virgin Spanish Olive Oil",
-        "price": 14,
+        "price": 14.0,
         "unit_price": 1.4,
         "unit": "100ML",
         "url": "https://www.woolworths.com.au/shop/productdetails/698868/woolworths-extra-virgin-spanish-olive-oil",
@@ -4470,14 +4480,14 @@
       },
       "coles": {
         "name": "Extra Virgin Olive Oil",
-        "price": 15,
+        "price": 15.0,
         "unit_price": 1.5,
         "unit": "100mL",
         "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-1l-5607376",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5607376.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 1,
+      "saving_per_item": 1.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -4507,7 +4517,7 @@
           "price": 15
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.4,
       "per_100_coles": 1.5,
@@ -4515,7 +4525,7 @@
     },
     {
       "list_item": "Woolworths Fresh Continental Parsley Bunch",
-      "last_scraped": "2026-06-10T23:40:41.234180+00:00",
+      "last_scraped": "2026-06-11T02:02:25.167717+00:00",
       "trip_count": 11,
       "price_history": [
         {
@@ -4582,7 +4592,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4575161.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -4612,7 +4622,7 @@
           "price": 3.2
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -4620,7 +4630,7 @@
     },
     {
       "list_item": "Woolworths Frozen Meat Pies",
-      "last_scraped": "2026-06-10T23:40:43.629874+00:00",
+      "last_scraped": "2026-06-11T02:02:27.396826+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -4682,7 +4692,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5181729.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -4720,7 +4730,7 @@
           "price": 6.6
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.94,
       "per_100_coles": 0.94,
@@ -4728,7 +4738,7 @@
     },
     {
       "list_item": "Woolworths Garlic Heads CLOVE",
-      "last_scraped": "2026-06-10T23:40:47.594858+00:00",
+      "last_scraped": "2026-06-11T02:02:29.421895+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4757,7 +4767,7 @@
         },
         {
           "date": "2026-04-02",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2026-05-06",
@@ -4825,7 +4835,7 @@
           "price": 4.2
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -13232,9 +13242,9 @@
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 35,
+    "done": 40,
     "total": 144,
     "started_at": "2026-06-11T02:00:52.819742+00:00",
-    "current_item": "Woolworths Dill Fresh Herb"
+    "current_item": "Woolworths Garlic Heads CLOVE"
   }
 }
