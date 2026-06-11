@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-11T02:04:27.379387+00:00",
+  "last_updated": "2026-06-11T02:04:42.571992+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9059,8 +9059,94 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths 100% Canadian Maple Syrup",
+      "last_scraped": "2026-06-11T02:04:32.462102+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 6.6
+        },
+        {
+          "date": "2025-04-14",
+          "price": 6.6
+        },
+        {
+          "date": "2025-06-06",
+          "price": 6.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 6.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths 100% Canadian Maple Syrup",
+        "price": 6.0,
+        "unit_price": 2.4,
+        "unit": "100ML",
+        "url": "https://www.woolworths.com.au/shop/productdetails/298476/woolworths-100-canadian-maple-syrup",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/298476.jpg"
+      },
+      "coles": {
+        "name": "Coles Finest Pure Canadian Maple Syrup | 250mL",
+        "price": 6.0,
+        "unit_price": 6.0,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/coles-finest-pure-canadian-maple-syrup-250ml-1790270",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1790270.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Beechworth Honey 100% Pure Australian Honey Jar | 500g",
+          "price": 7.0,
+          "unit_price": 1.4,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/beechworth-honey-100percent-pure-australian-honey-jar-500g-2624437",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2624437.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 6
+        },
+        {
+          "date": "2026-06-01",
+          "price": 6
+        },
+        {
+          "date": "2026-06-08",
+          "price": 6
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 6
+        },
+        {
+          "date": "2026-06-01",
+          "price": 6
+        },
+        {
+          "date": "2026-06-08",
+          "price": 6
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 2.4,
+      "per_100_coles": 2.4,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "White Seedless Grapes Bag Approx. 900g",
-      "last_scraped": "2026-06-10T23:42:34.438962+00:00",
+      "last_scraped": "2026-06-11T02:04:32.546656+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -9095,16 +9181,43 @@
       },
       "coles": {
         "name": "Coles White Seedless Grapes | approx. 1kg",
-        "price": 6,
-        "unit_price": 6,
+        "price": 6.5,
+        "unit_price": 6.5,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-white-seedless-grapes-approx.-1kg-8133391",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8133391.jpg",
-        "retailer": "coles"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8133391.jpg"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 0.9,
-      "alternatives": [],
+      "saving_per_item": 0.4,
+      "alternatives": [
+        {
+          "name": "Coles Red Seedless Grapes | approx. 1kg",
+          "price": 4.9,
+          "unit_price": 4.9,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-red-seedless-grapes-approx.-1kg-8133562",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8133562.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles White Seedless Cotton Candy Grapes | 400g",
+          "price": 5.5,
+          "unit_price": 5.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-white-seedless-cotton-candy-grapes-400g-2051126",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2051126.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Candy Hearts Grapes Seedless | 400g",
+          "price": 5.5,
+          "unit_price": 5.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-candy-hearts-grapes-seedless-400g-1837749",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1837749.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -9145,91 +9258,15 @@
           "price": 6
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.77,
-      "per_100_coles": 0.6,
+      "per_100_coles": 0.65,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths 100% Canadian Maple Syrup",
-      "last_scraped": "2026-06-10T23:42:36.829397+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 6.6
-        },
-        {
-          "date": "2025-04-14",
-          "price": 6.6
-        },
-        {
-          "date": "2025-06-06",
-          "price": 6
-        },
-        {
-          "date": "2026-05-06",
-          "price": 6
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths 100% Canadian Maple Syrup",
-        "price": 6,
-        "unit_price": 2.4,
-        "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/298476/woolworths-100-canadian-maple-syrup",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/298476.jpg"
-      },
-      "coles": {
-        "name": "Coles Finest Pure Canadian Maple Syrup | 250mL",
-        "price": 6,
-        "unit_price": 6,
-        "unit": "100mL",
-        "url": "https://www.coles.com.au/product/coles-finest-pure-canadian-maple-syrup-250ml-1790270",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1790270.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 6
-        },
-        {
-          "date": "2026-06-01",
-          "price": 6
-        },
-        {
-          "date": "2026-06-08",
-          "price": 6
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 6
-        },
-        {
-          "date": "2026-06-01",
-          "price": 6
-        },
-        {
-          "date": "2026-06-08",
-          "price": 6
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.4,
-      "per_100_coles": 2.4,
-      "per_100_unit": "100ml"
-    },
-    {
       "list_item": "Woolworths 12 Extra Large Cage Free Eggs",
-      "last_scraped": "2026-06-10T23:42:38.192703+00:00",
+      "last_scraped": "2026-06-11T02:04:37.002804+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9301,7 +9338,7 @@
           "price": 6.4
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.81,
       "per_100_coles": 0.8,
@@ -9309,7 +9346,7 @@
     },
     {
       "list_item": "Woolworths 18 Large Cage Free Eggs",
-      "last_scraped": "2026-06-10T23:42:40.840962+00:00",
+      "last_scraped": "2026-06-11T02:04:38.633361+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9347,7 +9384,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5178961.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9377,7 +9414,7 @@
           "price": 8.4
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.93,
       "per_100_coles": 0.93,
@@ -9385,7 +9422,7 @@
     },
     {
       "list_item": "Woolworths Asparagus Green Bunch",
-      "last_scraped": "2026-06-10T23:42:41.544861+00:00",
+      "last_scraped": "2026-06-11T02:04:42.564894+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -9394,7 +9431,7 @@
         },
         {
           "date": "2024-12-02",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2025-02-02",
@@ -9428,7 +9465,26 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 0.9,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Asparagus Spears | 425g",
+          "price": 3.0,
+          "unit_price": 3.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-asparagus-spears-425g-5841817",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5841817.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Green Asparagus | 1 each",
+          "price": 3.3,
+          "unit_price": 3.3,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-green-asparagus-1-each-4838737",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4838737.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -9461,7 +9517,7 @@
           "price": 4.4
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -13166,18 +13222,18 @@
   ],
   "summary": {
     "total_woolworths": 690.57,
-    "total_coles": 715.24,
+    "total_coles": 715.74,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 24.67,
+    "total_saving": 25.17,
     "items_compared": 138,
     "items_not_found": 6
   },
   "scrape_progress": {
-    "done": 90,
+    "done": 95,
     "total": 144,
     "started_at": "2026-06-11T02:00:52.819742+00:00",
-    "current_item": "Vevelle White 2 Ply Toilet Tissue"
+    "current_item": "Woolworths Asparagus Green Bunch"
   },
   "pending_validation": [
     {
