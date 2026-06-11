@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-10T23:44:27.884373+00:00",
+  "last_updated": "2026-06-11T01:41:23.813321+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10951,7 +10951,7 @@
     },
     {
       "list_item": "Essentials Domestic Wipes Roll",
-      "last_scraped": "2026-06-10T23:43:33.048115+00:00",
+      "last_scraped": "2026-06-11T01:41:23.206639+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -10970,18 +10970,19 @@
         "unit_price": 0.1,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/789683/essentials-domestic-wipes-roll",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/789683.jpg"
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/789683.jpg",
+        "is_on_special": false
       },
       "coles": {
-        "name": "Johnson's Daily Essentials Face Cleansing Wipes For Normal Skin | 25 pack",
-        "price": 3.6,
-        "unit_price": 0.14,
+        "name": "Multi-purpose Domestic Cleaning Wipes",
+        "price": 4.8,
+        "unit_price": 0.1,
         "unit": "1ea",
-        "url": "https://www.coles.com.au/product/johnson's-daily-essentials-face-cleansing-wipes-for-normal-skin-25-pack-8480023",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8480023.jpg"
+        "url": "https://www.coles.com.au/product/coles-ultra-multi-purpose-domestic-cleaning-wipes-50-pack-3056249",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3056249.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 1.2,
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -11013,9 +11014,13 @@
         {
           "date": "2026-06-10",
           "price": 3.6
+        },
+        {
+          "date": "2026-06-11",
+          "price": 4.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -13244,10 +13249,10 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 726.43,
-    "total_coles": 731.35,
+    "total_coles": 732.55,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 4.92,
+    "total_saving": 6.12,
     "items_compared": 144,
     "items_not_found": 0
   },
