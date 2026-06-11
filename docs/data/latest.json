@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-11T02:01:17.046924+00:00",
+  "last_updated": "2026-06-11T02:01:27.647197+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1205,7 +1205,7 @@
     },
     {
       "list_item": "Kale Fresh Bunch",
-      "last_scraped": "2026-06-10T23:39:30.129979+00:00",
+      "last_scraped": "2026-06-11T02:01:21.328440+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1316,7 +1316,7 @@
     },
     {
       "list_item": "Lebanese Cucumbers",
-      "last_scraped": "2026-06-10T23:39:34.131643+00:00",
+      "last_scraped": "2026-06-11T02:01:21.752755+00:00",
       "trip_count": 27,
       "price_history": [
         {
@@ -1499,7 +1499,7 @@
     },
     {
       "list_item": "Lurpak Butter Spreadable",
-      "last_scraped": "2026-06-10T23:39:34.924039+00:00",
+      "last_scraped": "2026-06-11T02:01:24.334563+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -1520,7 +1520,7 @@
         },
         {
           "date": "2026-02-03",
-          "price": 9
+          "price": 9.0
         },
         {
           "date": "2026-04-29",
@@ -1542,14 +1542,14 @@
       },
       "coles": {
         "name": "Lurpak Butter Spreadable Slightly Salted | 400g",
-        "price": 9,
-        "unit_price": 9,
+        "price": 9.0,
+        "unit_price": 9.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/lurpak-butter-spreadable-slightly-salted-400g-5376659",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5376659.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [
         {
           "name": "Lurpak Butter Spreadable Slightly Salted | 250g",
@@ -1609,8 +1609,109 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Philadelphia Original Cream Cheese Portions Snacks",
+      "last_scraped": "2026-06-11T02:01:27.070198+00:00",
+      "trip_count": 10,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 4.0
+        },
+        {
+          "date": "2025-05-22",
+          "price": 4.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.0
+        },
+        {
+          "date": "2025-06-21",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.0
+        },
+        {
+          "date": "2025-07-26",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 4.0
+        },
+        {
+          "date": "2026-02-23",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 4.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 4.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Philadelphia Original Cream Cheese Portions Snacks",
+        "price": 4.0,
+        "unit_price": 26.67,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/221027/philadelphia-original-cream-cheese-portions-snacks",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/221027.jpg",
+        "is_on_special": false
+      },
+      "coles": {
+        "name": "Portions Cream Cheese Original Spread",
+        "price": 4.0,
+        "unit_price": 26.67,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/philadelphia-portions-cream-cheese-original-spread-150g-5432035",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5432035.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4
+        },
+        {
+          "date": "2026-06-08",
+          "price": 4
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4
+        },
+        {
+          "date": "2026-06-08",
+          "price": 4
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 2.67,
+      "per_100_coles": 2.67,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Pringles Sour Cream & Onion Potato Chips",
-      "last_scraped": "2026-06-10T23:39:38.254078+00:00",
+      "last_scraped": "2026-06-11T02:01:27.644922+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -1662,7 +1763,26 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 2.75,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Pringles Potato Chips Sour Cream & Onion | 134g",
+          "price": 2.75,
+          "unit_price": 2.05,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-134g-2784058",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2784058.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Pringles Potato Chips Sour Cream & Onion | 53g",
+          "price": 2.7,
+          "unit_price": 2.7,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/pringles-potato-chips-sour-cream-and-onion-53g-2784138",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2784138.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -1695,111 +1815,10 @@
           "price": 2.75
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 4.1,
       "per_100_coles": 2.05,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Philadelphia Original Cream Cheese Portions Snacks",
-      "last_scraped": "2026-06-10T23:39:40.634090+00:00",
-      "trip_count": 10,
-      "price_history": [
-        {
-          "date": "2025-05-04",
-          "price": 4
-        },
-        {
-          "date": "2025-05-22",
-          "price": 4
-        },
-        {
-          "date": "2025-06-06",
-          "price": 4
-        },
-        {
-          "date": "2025-06-21",
-          "price": 4
-        },
-        {
-          "date": "2025-07-10",
-          "price": 4
-        },
-        {
-          "date": "2025-07-26",
-          "price": 4
-        },
-        {
-          "date": "2026-02-03",
-          "price": 4
-        },
-        {
-          "date": "2026-02-23",
-          "price": 4
-        },
-        {
-          "date": "2026-03-10",
-          "price": 4
-        },
-        {
-          "date": "2026-04-02",
-          "price": 4
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Philadelphia Original Cream Cheese Portions Snacks",
-        "price": 4,
-        "unit_price": 26.67,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/221027/philadelphia-original-cream-cheese-portions-snacks",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/221027.jpg",
-        "is_on_special": false
-      },
-      "coles": {
-        "name": "Portions Cream Cheese Original Spread",
-        "price": 4,
-        "unit_price": 26.67,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/philadelphia-portions-cream-cheese-original-spread-150g-5432035",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5432035.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4
-        },
-        {
-          "date": "2026-06-01",
-          "price": 4
-        },
-        {
-          "date": "2026-06-08",
-          "price": 4
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4
-        },
-        {
-          "date": "2026-06-01",
-          "price": 4
-        },
-        {
-          "date": "2026-06-08",
-          "price": 4
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.67,
-      "per_100_coles": 2.67,
       "per_100_unit": "100g"
     },
     {
@@ -13094,9 +13113,9 @@
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 10,
+    "done": 15,
     "total": 144,
     "started_at": "2026-06-11T02:00:52.819742+00:00",
-    "current_item": "Hass Avocado"
+    "current_item": "Pringles Sour Cream & Onion Potato Chips"
   }
 }
