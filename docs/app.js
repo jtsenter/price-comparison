@@ -1108,6 +1108,9 @@ function initPriceHistoryModal() {
     modal.classList.remove('open');
     _historyItem = null;
     if (_priceHistChart) { _priceHistChart.destroy(); _priceHistChart = null; }
+    document.body.style.overflow = '';
+    const leg = document.getElementById('priceHistChartLegend');
+    if (leg) leg.remove();
   };
 
   $('priceHistoryClose').addEventListener('click', close);
@@ -1143,7 +1146,10 @@ function buildPriceHistChart(item, excludedPrices) {
   const coMap     = new Map([...coRaw].filter(([, v]) => !isExcl(v)));
 
   const allDates = [...new Set([...wwFullMap.keys(), ...coMap.keys()])].sort();
-  if (allDates.length < 2) { wrap.style.display = 'none'; return; }
+  if (allDates.length < 2) {
+    const el = document.getElementById('priceHistChartLegend'); if (el) el.remove();
+    wrap.style.display = 'none'; return;
+  }
 
   const wwData = [], coData = [], wwIsActual = [], coIsActual = [];
   let lastWW = null, lastCo = null;
@@ -1169,7 +1175,10 @@ function buildPriceHistChart(item, excludedPrices) {
   }
 
   const allPrices = [...wwData, ...coData].filter(p => p != null);
-  if (!allPrices.length) { wrap.style.display = 'none'; return; }
+  if (!allPrices.length) {
+    const el = document.getElementById('priceHistChartLegend'); if (el) el.remove();
+    wrap.style.display = 'none'; return;
+  }
   const yMax = Math.ceil(Math.max(...allPrices) * 1.2 * 10) / 10;
 
   const labels = allDates.map(d => {
@@ -1192,6 +1201,22 @@ function buildPriceHistChart(item, excludedPrices) {
     pointBorderColor:     isActual.map(a => a ? color : 'transparent'),
   });
 
+  // Insert custom HTML legend
+  const existingLeg = document.getElementById('priceHistChartLegend');
+  if (existingLeg) existingLeg.remove();
+  const chartLegend = document.createElement('div');
+  chartLegend.id = 'priceHistChartLegend';
+  chartLegend.style.cssText = 'display:flex;align-items:center;gap:20px;margin-bottom:10px;font-size:12px;color:var(--color-text-secondary,#888);';
+  chartLegend.innerHTML =
+    '<span style="display:flex;align-items:center;gap:6px;">'
+    + '<span style="width:20px;height:3px;background:#16a34a;display:inline-block;border-radius:2px;"></span>'
+    + 'Woolworths</span>'
+    + '<span style="display:flex;align-items:center;gap:4px;">'
+    + '<span style="width:8px;height:3px;background:#dc2626;display:inline-block;border-radius:2px;"></span>'
+    + '<span style="width:4px;height:3px;background:transparent;display:inline-block;"></span>'
+    + '<span style="width:8px;height:3px;background:#dc2626;display:inline-block;border-radius:2px;"></span>'
+    + 'Coles</span>';
+  wrap.parentNode.insertBefore(chartLegend, wrap);
   wrap.style.display = 'block';
 
   _priceHistChart = new Chart(canvas, {
@@ -1209,10 +1234,7 @@ function buildPriceHistChart(item, excludedPrices) {
       maintainAspectRatio: false,
       interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: {
-          position: 'top',
-          labels: { usePointStyle: true, pointStyleWidth: 10, font: { size: 12 }, color: '#374151' },
-        },
+        legend: { display: false },
         tooltip: {
           callbacks: {
             label: ctx => ctx.raw == null
@@ -1266,6 +1288,7 @@ function openPriceHistoryModal(item) {
 
   if (!allEntries.length) {
     listEl.innerHTML = '<div style="padding:16px;color:var(--text-soft);font-size:13px;">No price history available.</div>';
+    document.body.style.overflow = 'hidden';
     $('priceHistoryModal').classList.add('open');
     return;
   }
@@ -1333,6 +1356,7 @@ function openPriceHistoryModal(item) {
   });
 
   buildPriceHistChart(item, excludedPrices);
+  document.body.style.overflow = 'hidden';
   $('priceHistoryModal').classList.add('open');
 }
 

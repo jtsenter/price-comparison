@@ -860,10 +860,11 @@ tr:hover .item-refresh-btn { opacity: 1; pointer-events: auto; }
   position: fixed;
   inset: 0;
   background: rgba(15,23,42,0.5);
-  z-index: 200;
+  z-index: 9000;
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(2px);
+  overflow: hidden;
 }
 .modal-overlay.open { display: flex; }
 .modal {
@@ -913,6 +914,23 @@ tr:hover .item-refresh-btn { opacity: 1; pointer-events: auto; }
   transition: background 0.15s;
 }
 .modal-close:hover { background: var(--border); }
+.modal-scrollable { overflow-y: auto; max-height: 90vh; }
+.modal-header {
+  position: sticky; top: 0;
+  background: var(--card);
+  z-index: 10;
+  padding-bottom: 8px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.modal-header h2 { margin-bottom: 0; }
+.modal-header .modal-close {
+  position: static;
+  min-width: 32px; min-height: 32px;
+  width: 32px; height: 32px;
+  background: var(--border);
+  flex-shrink: 0;
+}
 
 /* ── Price history modal list ────────────────────────────────── */
 .price-history-list {
