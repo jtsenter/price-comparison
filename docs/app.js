@@ -1179,7 +1179,16 @@ function buildPriceHistChart(item, excludedPrices) {
     const el = document.getElementById('priceHistChartLegend'); if (el) el.remove();
     wrap.style.display = 'none'; return;
   }
-  const yMax = Math.ceil(Math.max(...allPrices) * 1.2 * 10) / 10;
+  const dataMin = Math.min(...allPrices);
+  const dataMax = Math.max(...allPrices);
+  const range = dataMax - dataMin;
+  const padding = range < 0.01 ? 0.50 : range * 0.4;
+  const yMin = Math.max(0, Math.floor((dataMin - padding) * 10) / 10);
+  const yMax = Math.ceil((dataMax + padding * 0.5) * 10) / 10;
+
+  const yRange = yMax - yMin;
+  const coOffset = yRange * 0.005;
+  const coDataOffset = coData.map(v => v !== null ? Math.round((v + coOffset) * 1000) / 1000 : null);
 
   const labels = allDates.map(d => {
     const [y, mo, day] = d.split('-').map(Number);
@@ -1223,7 +1232,7 @@ function buildPriceHistChart(item, excludedPrices) {
       labels,
       datasets: [
         makeDataset('Woolworths', wwData, wwIsActual, '#22c55e'),
-        makeDataset('Coles',      coData, coIsActual, '#ef4444'),
+        makeDataset('Coles',      coDataOffset, coIsActual, '#ef4444'),
       ],
     },
     options: {
@@ -1235,9 +1244,11 @@ function buildPriceHistChart(item, excludedPrices) {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            label: ctx => ctx.raw == null
-              ? ctx.dataset.label + ': No data'
-              : ctx.dataset.label + ': $' + Number(ctx.raw).toFixed(2),
+            label: ctx => {
+              if (ctx.raw == null) return ctx.dataset.label + ': No data';
+              const val = ctx.datasetIndex === 1 ? ctx.raw - coOffset : ctx.raw;
+              return ctx.dataset.label + ': $' + Number(val).toFixed(2);
+            },
           },
         },
       },
@@ -1247,7 +1258,7 @@ function buildPriceHistChart(item, excludedPrices) {
           ticks: { font: { size: 11 }, maxRotation: 45, color: '#6b7280' },
         },
         y: {
-          min: 0,
+          min: yMin,
           max: yMax,
           ticks: { callback: v => '$' + Number(v).toFixed(2), font: { size: 11 }, color: '#6b7280' },
           grid: { color: 'rgba(107,114,128,0.12)' },
