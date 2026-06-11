@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-11T02:02:42.732959+00:00",
+  "last_updated": "2026-06-11T02:02:51.146170+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -5252,89 +5252,8 @@
       "per_100_unit": "100ml"
     },
     {
-      "list_item": "Annalisa Chickpeas",
-      "last_scraped": "2026-06-10T23:41:03.665344+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-05-04",
-          "price": 1.4
-        },
-        {
-          "date": "2025-05-29",
-          "price": 1.4
-        },
-        {
-          "date": "2026-04-02",
-          "price": 1.4
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Annalisa Chickpeas",
-        "price": 1.9,
-        "unit_price": 4.75,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/178262/annalisa-chickpeas",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/178262.jpg"
-      },
-      "coles": {
-        "name": "Carmelina Chick Peas | 400 GRAM",
-        "price": 1.9,
-        "unit_price": 3,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.9
-        },
-        {
-          "date": "2026-05-30",
-          "price": 1.9
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.9
-        },
-        {
-          "date": "2026-06-08",
-          "price": 1.9
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.9
-        },
-        {
-          "date": "2026-05-30",
-          "price": 1.9
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.9
-        },
-        {
-          "date": "2026-06-08",
-          "price": 1.9
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.47,
-      "per_100_coles": 0.3,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Whole Milk Full Cream Milk",
-      "last_scraped": "2026-06-10T23:41:04.372238+00:00",
+      "last_scraped": "2026-06-11T02:02:43.549527+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -5389,7 +5308,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8150288.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -5419,15 +5338,106 @@
           "price": 5.15
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.17,
       "per_100_coles": 0.17,
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Annalisa Chickpeas",
+      "last_scraped": "2026-06-11T02:02:46.128046+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 1.4
+        },
+        {
+          "date": "2025-05-29",
+          "price": 1.4
+        },
+        {
+          "date": "2026-04-02",
+          "price": 1.4
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Annalisa Chickpeas",
+        "price": 1.9,
+        "unit_price": 4.75,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/178262/annalisa-chickpeas",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/178262.jpg"
+      },
+      "coles": {
+        "name": "Carmelina Chick Peas | 400 GRAM",
+        "price": 1.9,
+        "unit_price": 3.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Carmelina Chick Peas | 400 GRAM",
+          "price": 1.9,
+          "unit_price": 3.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.9
+        },
+        {
+          "date": "2026-05-30",
+          "price": 1.9
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.9
+        },
+        {
+          "date": "2026-06-08",
+          "price": 1.9
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.9
+        },
+        {
+          "date": "2026-05-30",
+          "price": 1.9
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.9
+        },
+        {
+          "date": "2026-06-08",
+          "price": 1.9
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 0.47,
+      "per_100_coles": 0.3,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Armada Small Kitchen Tidy Bag",
-      "last_scraped": "2026-06-10T23:41:07.090091+00:00",
+      "last_scraped": "2026-06-11T02:02:48.320060+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5469,7 +5479,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3894277.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -5499,7 +5509,7 @@
           "price": 2.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -5507,7 +5517,7 @@
     },
     {
       "list_item": "Balconi Mix Max Cake Cocoa 350g",
-      "last_scraped": "2026-06-10T23:41:07.320178+00:00",
+      "last_scraped": "2026-06-11T02:02:49.527834+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -5545,7 +5555,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5088122.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -5591,7 +5601,7 @@
     },
     {
       "list_item": "Beechworth 100% Pure Australian Honey Jar",
-      "last_scraped": "2026-06-10T23:41:10.359003+00:00",
+      "last_scraped": "2026-06-11T02:02:51.143027+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -5626,15 +5636,26 @@
       },
       "coles": {
         "name": "Beechworth Honey 100% Pure Australian Honey Jar | 500g",
-        "price": 8.5,
-        "unit_price": 8.5,
+        "price": 7.0,
+        "unit_price": 1.4,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/beechworth-honey-100percent-pure-australian-honey-jar-500g-2624437",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2624437.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2624437.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
+      "cheaper_store": "coles",
+      "saving_per_item": 1.5,
+      "alternatives": [
+        {
+          "name": "Beechworth Honey 100% Pure Australian Honey Jar | 500g",
+          "price": 7.0,
+          "unit_price": 1.4,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/beechworth-honey-100percent-pure-australian-honey-jar-500g-2624437",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2624437.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -5663,10 +5684,10 @@
           "price": 8.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 1.7,
-      "per_100_coles": 1.7,
+      "per_100_coles": 1.4,
       "per_100_unit": "100g"
     },
     {
@@ -13050,17 +13071,34 @@
   ],
   "summary": {
     "total_woolworths": 706.55,
-    "total_coles": 722.64,
+    "total_coles": 721.14,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 16.09,
+    "total_saving": 14.59,
     "items_compared": 141,
     "items_not_found": 3
   },
   "scrape_progress": {
-    "done": 45,
+    "done": 50,
     "total": 144,
     "started_at": "2026-06-11T02:00:52.819742+00:00",
-    "current_item": "Woolworths Washed Potato Bag"
-  }
+    "current_item": "Beechworth 100% Pure Australian Honey Jar"
+  },
+  "pending_validation": [
+    {
+      "item": "Beechworth 100% Pure Australian Honey Jar",
+      "ww_price": 8.5,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/147757/beechworth-100-pure-australian-honey-jar",
+      "ww_prev_price": 8.5,
+      "ww_suspicious": false,
+      "coles_price": 7.0,
+      "coles_url": "https://www.coles.com.au/product/beechworth-honey-100percent-pure-australian-honey-jar-500g-2624437",
+      "coles_prev_price": 8.5,
+      "coles_suspicious": true,
+      "flagged_date": "2026-06-11",
+      "reason": [
+        "outside_historical_range"
+      ]
+    }
+  ]
 }
