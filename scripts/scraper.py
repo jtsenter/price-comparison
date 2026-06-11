@@ -169,8 +169,11 @@ def _suspicious_reasons(new_price, prev_price, price_history) -> list[str]:
 def parse_price(text: str) -> float | None:
     if not text:
         return None
-    m = re.search(r"\$\s*(\d[\d,]*(?:\.\d{1,2})?)", text)
-    return float(m.group(1).replace(",", "")) if m else None
+    m = re.search(r"\$\s*(\d[\d,]*(?:\.\d+)?)", text)
+    if not m:
+        return None
+    raw = float(m.group(1).replace(",", ""))
+    return round(raw, 2)  # round $2.398 -> $2.40, $1.295 -> $1.30
 
 
 def parse_unit_price(text: str) -> tuple[float | None, str | None]:
