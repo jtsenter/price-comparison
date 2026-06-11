@@ -7615,6 +7615,10 @@
         {
           "date": "2026-06-08",
           "price": 5.5
+        },
+        {
+          "date": "2026-06-11",
+          "price": 2.75
         }
       ],
       "match_confidence": "high",
@@ -14313,21 +14317,6 @@
       ]
     },
     {
-      "item": "McVitie's Digestives Milk Chocolate",
-      "ww_price": 5.5,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/263373/mcvitie-s-digestives-milk-chocolate",
-      "ww_prev_price": 5.5,
-      "ww_suspicious": false,
-      "coles_price": 2.75,
-      "coles_url": "https://www.coles.com.au/product/mcvities-digestives-biscuits-milk-chocolate-266g-5854739",
-      "coles_prev_price": 5.5,
-      "coles_suspicious": true,
-      "flagged_date": "2026-06-11",
-      "reason": [
-        "30pct_change"
-      ]
-    },
-    {
       "item": "The Odd Bunch Mandarin Prepacked",
       "ww_price": 3.1,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/845671/the-odd-bunch-mandarin-prepacked",
@@ -14608,6 +14597,10 @@
     },
     "Beechworth 100% Pure Australian Honey Jar": {
       "coles": 7,
+      "approved_date": "2026-06-11"
+    },
+    "McVitie's Digestives Milk Chocolate": {
+      "coles": 2.75,
       "approved_date": "2026-06-11"
     }
   }
