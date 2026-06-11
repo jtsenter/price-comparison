@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-11T02:06:21.294600+00:00",
+  "last_updated": "2026-06-11T02:06:34.847186+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12903,22 +12903,22 @@
     },
     {
       "list_item": "Woolworths Black Beans",
-      "last_scraped": "2026-06-10T23:44:13.258270+00:00",
+      "last_scraped": "2026-06-11T02:06:23.765085+00:00",
       "trip_count": 2,
       "price_history": [
         {
           "date": "2026-04-02",
-          "price": 1
+          "price": 1.0
         },
         {
           "date": "2026-05-06",
-          "price": 1
+          "price": 1.0
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Black Beans",
-        "price": 1,
+        "price": 1.0,
         "unit_price": 2.38,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/907377/woolworths-black-beans",
@@ -12926,19 +12926,28 @@
       },
       "coles": {
         "name": "Coles Black Beans | 420g",
-        "price": 1,
-        "unit_price": 1,
+        "price": 1.0,
+        "unit_price": 1.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3812975.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [
         {
+          "name": "Coles Black Beans | 420g",
+          "price": 1.0,
+          "unit_price": 1.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3812975.jpg",
+          "retailer": "coles"
+        },
+        {
           "name": "Woolworths Beef & Black Bean With Rice",
-          "price": 8,
+          "price": 8.0,
           "unit_price": 2.29,
           "unit": "100G",
           "url": "https://www.woolworths.com.au/shop/productdetails/6038388/woolworths-beef-black-bean-with-rice",
@@ -12974,7 +12983,7 @@
           "price": 1
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.24,
       "per_100_coles": 0.24,
@@ -12982,7 +12991,7 @@
     },
     {
       "list_item": "Woolworths Butternut Pumpkin Cut",
-      "last_scraped": "2026-06-10T23:44:13.343550+00:00",
+      "last_scraped": "2026-06-11T02:06:25.515207+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13005,15 +13014,14 @@
       },
       "coles": {
         "name": "Coles Kitchen Butternut Pumpkin Soup | 300g",
-        "price": 4,
-        "unit_price": 1.33,
+        "price": 4.7,
+        "unit_price": 4.7,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-kitchen-butternut-pumpkin-soup-300g-3467447",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3467447.jpg",
-        "retailer": "coles"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3467447.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 0.49,
+      "saving_per_item": 1.19,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -13045,17 +13053,21 @@
         {
           "date": "2026-06-08",
           "price": 4
+        },
+        {
+          "date": "2026-06-11",
+          "price": 4.7
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
-      "per_100_coles": 1.33,
+      "per_100_coles": 1.57,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Greek Style Fetta",
-      "last_scraped": "2026-06-10T23:44:17.242134+00:00",
+      "last_scraped": "2026-06-11T02:06:30.189035+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13071,22 +13083,51 @@
       "woolworths": {
         "name": "Woolworths Greek Style Fetta",
         "price": 3.2,
-        "unit_price": 16,
+        "unit_price": 16.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/452083/woolworths-greek-style-fetta",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/452083.jpg"
       },
       "coles": {
         "name": "South Cape Greek Style Fetta | 200g",
-        "price": 6,
-        "unit_price": 30,
+        "price": 6.75,
+        "unit_price": 6.75,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/south-cape-greek-style-fetta-200g-6416861",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6416861.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6416861.jpg",
+        "retailer": "coles"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 2.8,
-      "alternatives": [],
+      "saving_per_item": 3.55,
+      "alternatives": [
+        {
+          "name": "Riverina Fetta Greek Style | 200g",
+          "price": 5.3,
+          "unit_price": 5.3,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/riverina-fetta-greek-style-200g-4360879",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4360879.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "South Cape Greek Style Fetta | 200g",
+          "price": 6.75,
+          "unit_price": 6.75,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/south-cape-greek-style-fetta-200g-6416861",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6416861.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "South Cape Greek Style Fetta Reduced Fat | 200g",
+          "price": 6.75,
+          "unit_price": 6.75,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/south-cape-greek-style-fetta-reduced-fat-200g-6416883",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6416883.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -13117,17 +13158,21 @@
         {
           "date": "2026-06-10",
           "price": 6
+        },
+        {
+          "date": "2026-06-11",
+          "price": 6.75
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.6,
-      "per_100_coles": 3,
+      "per_100_coles": 3.38,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Corn Sweet Kernels",
-      "last_scraped": "2026-06-10T23:44:17.272900+00:00",
+      "last_scraped": "2026-06-11T02:06:30.751498+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13158,8 +13203,27 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Coles Corn Kernels | 420g",
+          "price": 1.05,
+          "unit_price": 1.05,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-corn-kernels-420g-4774066",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4774066.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Popping Corn Kernels | 400g",
+          "price": 1.8,
+          "unit_price": 1.8,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-popping-corn-kernels-400g-5374675",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5374675.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -13188,7 +13252,7 @@
           "price": 1.05
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.25,
       "per_100_coles": 0.25,
@@ -13196,7 +13260,7 @@
     },
     {
       "list_item": "Woolworths Green Asparagus Bunch Green",
-      "last_scraped": "2026-06-10T23:44:20.687113+00:00",
+      "last_scraped": "2026-06-11T02:06:34.836724+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13219,15 +13283,35 @@
       },
       "coles": {
         "name": "Coles Green Asparagus | 1 each",
-        "price": 3.8,
-        "unit_price": 3.8,
+        "price": 3.3,
+        "unit_price": 3.3,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-green-asparagus-1-each-4838737",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4838737.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4838737.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.3,
-      "alternatives": [],
+      "cheaper_store": "coles",
+      "saving_per_item": 0.2,
+      "alternatives": [
+        {
+          "name": "Coles Asparagus Spears | 425g",
+          "price": 3.0,
+          "unit_price": 3.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-asparagus-spears-425g-5841817",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5841817.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Green Asparagus | 1 each",
+          "price": 3.3,
+          "unit_price": 3.3,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-green-asparagus-1-each-4838737",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4838737.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -13262,9 +13346,13 @@
         {
           "date": "2026-06-10",
           "price": 3.8
+        },
+        {
+          "date": "2026-06-11",
+          "price": 3.3
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -13566,18 +13654,18 @@
   ],
   "summary": {
     "total_woolworths": 688.59,
-    "total_coles": 710.14,
+    "total_coles": 711.09,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 21.55,
+    "total_saving": 22.5,
     "items_compared": 137,
     "items_not_found": 7
   },
   "scrape_progress": {
-    "done": 135,
+    "done": 140,
     "total": 144,
     "started_at": "2026-06-11T02:00:52.819742+00:00",
-    "current_item": "Woolworths Beef & Lamb Meatballs"
+    "current_item": "Woolworths Green Asparagus Bunch Green"
   },
   "pending_validation": [
     {
