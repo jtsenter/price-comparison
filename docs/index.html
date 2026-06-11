@@ -281,6 +281,9 @@
   <div class="modal modal-wide">
     <button class="modal-close" id="priceHistoryClose">✕</button>
     <h2 id="priceHistoryTitle">Price History</h2>
+    <div id="priceHistChartWrap" style="height:200px;margin-bottom:16px;display:none;">
+      <canvas id="priceHistChart"></canvas>
+    </div>
     <div id="priceHistoryList" class="price-history-list"></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="priceHistoryReset">Reset exclusions</button>
@@ -393,6 +396,7 @@
 <!-- Fixed tooltip for price bar (outside .table-wrap so it's never clipped) -->
 <div id="priceTooltip" class="price-tooltip-fixed" style="display:none"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script src="utils.js"></script>
 <script src="app.js?v=4"></script>

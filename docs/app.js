@@ -1098,12 +1098,17 @@ function openEditModal(item) {
 // ── Price History / Range Manager modal ─────────────────────────────────────
 
 let _historyItem = null;
+let _priceHistChart = null;
 
 function initPriceHistoryModal() {
   const modal = $('priceHistoryModal');
   if (!modal) return;
 
-  const close = () => { modal.classList.remove('open'); _historyItem = null; };
+  const close = () => {
+    modal.classList.remove('open');
+    _historyItem = null;
+    if (_priceHistChart) { _priceHistChart.destroy(); _priceHistChart = null; }
+  };
 
   $('priceHistoryClose').addEventListener('click', close);
   $('priceHistoryClose2').addEventListener('click', close);
@@ -1116,6 +1121,125 @@ function initPriceHistoryModal() {
     saveExclusions(excl);
     openPriceHistoryModal(_historyItem);
     if (_lastData) renderPage(_lastData);
+  });
+}
+
+
+function buildPriceHistChart(item, excludedPrices) {
+  const wrap = document.getElementById('priceHistChartWrap');
+  const canvas = document.getElementById('priceHistChart');
+  if (!wrap || !canvas || typeof Chart === 'undefined') return;
+
+  if (_priceHistChart) { _priceHistChart.destroy(); _priceHistChart = null; }
+
+  // Merge excel + scrape WW histories (scrape wins on same date)
+  const wwExcelMap = new Map((item.price_history      || []).map(e => [e.date, e.price]));
+  const wwScrapeMap = new Map((item.ww_price_history  || []).map(e => [e.date, e.price]));
+  const wwFullMap  = new Map([...wwExcelMap, ...wwScrapeMap]);
+  const coMap      = new Map((item.coles_price_history || []).map(e => [e.date, e.price]));
+
+  const allDates = [...new Set([...wwFullMap.keys(), ...coMap.keys()])].sort();
+  if (allDates.length < 2) { wrap.style.display = 'none'; return; }
+
+  const wwData = [], coData = [], wwIsActual = [], coIsActual = [];
+  let lastWW = null, lastCo = null;
+
+  for (const date of allDates) {
+    if (wwFullMap.has(date)) {
+      lastWW = wwFullMap.get(date);
+      wwData.push(lastWW); wwIsActual.push(true);
+    } else if (lastWW !== null) {
+      wwData.push(lastWW); wwIsActual.push(false);  // carry forward
+    } else {
+      wwData.push(null); wwIsActual.push(false);    // before first WW point
+    }
+
+    if (coMap.has(date)) {
+      lastCo = coMap.get(date);
+      coData.push(lastCo); coIsActual.push(true);
+    } else if (lastCo !== null) {
+      coData.push(lastCo); coIsActual.push(false);
+    } else {
+      coData.push(null); coIsActual.push(false);
+    }
+  }
+
+  const allPrices = [...wwData, ...coData].filter(p => p != null);
+  if (!allPrices.length) { wrap.style.display = 'none'; return; }
+  const yMax = Math.ceil(Math.max(...allPrices) * 1.2 * 10) / 10;
+
+  const isExcl = v => v != null && excludedPrices.has(Number(v).toFixed(2));
+
+  const labels = allDates.map(d => {
+    const [y, mo, day] = d.split('-').map(Number);
+    return new Date(y, mo - 1, day)
+      .toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: '2-digit' });
+  });
+
+  const makeDataset = (label, data, isActual, color) => ({
+    label,
+    data,
+    borderColor: color,
+    backgroundColor: 'transparent',
+    stepped: 'before',
+    tension: 0,
+    spanGaps: true,
+    pointRadius: isActual.map(a => a ? 4 : 0),
+    pointHoverRadius: 5,
+    pointBackgroundColor: data.map((v, i) =>
+      isActual[i] ? (isExcl(v) ? color + '55' : color) : 'transparent'),
+    pointBorderColor: data.map((v, i) =>
+      isActual[i] ? (isExcl(v) ? color + '55' : color) : 'transparent'),
+    segment: {
+      borderColor: ctx => (isExcl(data[ctx.p0DataIndex]) || isExcl(data[ctx.p1DataIndex]))
+        ? color + '55' : color,
+      borderDash: ctx => (isExcl(data[ctx.p0DataIndex]) || isExcl(data[ctx.p1DataIndex]))
+        ? [4, 4] : [],
+    },
+  });
+
+  wrap.style.display = 'block';
+
+  _priceHistChart = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        makeDataset('Woolworths', wwData, wwIsActual, '#22c55e'),
+        makeDataset('Coles',      coData, coIsActual, '#ef4444'),
+      ],
+    },
+    options: {
+      animation: false,
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: { usePointStyle: true, pointStyleWidth: 10, font: { size: 12 }, color: '#374151' },
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => ctx.raw == null
+              ? ctx.dataset.label + ': No data'
+              : ctx.dataset.label + ': $' + Number(ctx.raw).toFixed(2),
+          },
+        },
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 11 }, maxRotation: 45, color: '#6b7280' },
+        },
+        y: {
+          min: 0,
+          max: yMax,
+          ticks: { callback: v => '$' + Number(v).toFixed(2), font: { size: 11 }, color: '#6b7280' },
+          grid: { color: 'rgba(107,114,128,0.12)' },
+        },
+      },
+    },
   });
 }
 
@@ -1214,6 +1338,7 @@ function openPriceHistoryModal(item) {
     listEl.appendChild(row);
   });
 
+  buildPriceHistChart(item, excludedPrices);
   $('priceHistoryModal').classList.add('open');
 }
 
