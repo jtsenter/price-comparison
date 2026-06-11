@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-11T02:06:45.258167+00:00",
+  "last_updated": "2026-06-11T02:16:18.129563+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -6239,7 +6239,7 @@
     },
     {
       "list_item": "Essentials White Vinegar",
-      "last_scraped": "2026-06-11T02:03:12.310744+00:00",
+      "last_scraped": "2026-06-11T02:16:17.976378+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -6266,18 +6266,19 @@
         "unit_price": 0.09,
         "unit": "100ML",
         "url": "https://www.woolworths.com.au/shop/productdetails/94706/essentials-white-vinegar",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/094706.jpg"
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/094706.jpg",
+        "is_on_special": false
       },
       "coles": {
-        "name": "Cornwell's White Vinegar | 2L",
-        "price": 4.5,
-        "unit_price": 4.5,
+        "name": "White Vinegar",
+        "price": 1.95,
+        "unit_price": 0.1,
         "unit": "100mL",
-        "url": "https://www.coles.com.au/product/cornwell's-white-vinegar-2l-162749",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/162749.jpg"
+        "url": "https://www.coles.com.au/product/coles-simply-white-vinegar-2l-4524127",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4524127.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 2.65,
+      "saving_per_item": 0.1,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -6311,10 +6312,10 @@
           "price": 2.5
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.09,
-      "per_100_coles": 0.23,
+      "per_100_coles": 0.1,
       "per_100_unit": "100ml"
     },
     {
@@ -14288,10 +14289,10 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 726.43,
-    "total_coles": 740,
+    "total_coles": 737.45,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 13.57,
+    "total_saving": 11.02,
     "items_compared": 144,
     "items_not_found": 0
   },
