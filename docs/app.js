@@ -1132,11 +1132,15 @@ function buildPriceHistChart(item, excludedPrices) {
 
   if (_priceHistChart) { _priceHistChart.destroy(); _priceHistChart = null; }
 
-  // Merge excel + scrape WW histories (scrape wins on same date)
+  // Merge excel + scrape WW histories (scrape wins on same date), strip excluded prices
   const wwExcelMap = new Map((item.price_history      || []).map(e => [e.date, e.price]));
   const wwScrapeMap = new Map((item.ww_price_history  || []).map(e => [e.date, e.price]));
-  const wwFullMap  = new Map([...wwExcelMap, ...wwScrapeMap]);
-  const coMap      = new Map((item.coles_price_history || []).map(e => [e.date, e.price]));
+  const wwRaw = new Map([...wwExcelMap, ...wwScrapeMap]);
+  const coRaw = new Map((item.coles_price_history || []).map(e => [e.date, e.price]));
+
+  const isExcl = v => v != null && excludedPrices.has(Number(v).toFixed(2));
+  const wwFullMap = new Map([...wwRaw].filter(([, v]) => !isExcl(v)));
+  const coMap     = new Map([...coRaw].filter(([, v]) => !isExcl(v)));
 
   const allDates = [...new Set([...wwFullMap.keys(), ...coMap.keys()])].sort();
   if (allDates.length < 2) { wrap.style.display = 'none'; return; }
@@ -1168,8 +1172,6 @@ function buildPriceHistChart(item, excludedPrices) {
   if (!allPrices.length) { wrap.style.display = 'none'; return; }
   const yMax = Math.ceil(Math.max(...allPrices) * 1.2 * 10) / 10;
 
-  const isExcl = v => v != null && excludedPrices.has(Number(v).toFixed(2));
-
   const labels = allDates.map(d => {
     const [y, mo, day] = d.split('-').map(Number);
     return new Date(y, mo - 1, day)
@@ -1186,16 +1188,8 @@ function buildPriceHistChart(item, excludedPrices) {
     spanGaps: true,
     pointRadius: isActual.map(a => a ? 4 : 0),
     pointHoverRadius: 5,
-    pointBackgroundColor: data.map((v, i) =>
-      isActual[i] ? (isExcl(v) ? color + '55' : color) : 'transparent'),
-    pointBorderColor: data.map((v, i) =>
-      isActual[i] ? (isExcl(v) ? color + '55' : color) : 'transparent'),
-    segment: {
-      borderColor: ctx => (isExcl(data[ctx.p0DataIndex]) || isExcl(data[ctx.p1DataIndex]))
-        ? color + '55' : color,
-      borderDash: ctx => (isExcl(data[ctx.p0DataIndex]) || isExcl(data[ctx.p1DataIndex]))
-        ? [4, 4] : [],
-    },
+    pointBackgroundColor: isActual.map(a => a ? color : 'transparent'),
+    pointBorderColor:     isActual.map(a => a ? color : 'transparent'),
   });
 
   wrap.style.display = 'block';
