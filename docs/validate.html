@@ -513,9 +513,17 @@ async function handleAction(entry, store, action, cardEl) {
     _latestData = updated;
     updateCardStatus(cardEl, '✅ Saved', 'resolved');
     markCardResolved(cardEl);
-
-    // Update nav badge count
     updateValidateNavBadge(updatedPV.length);
+
+    // Remove card after a short pause so the user sees ✅ Saved, then show empty state if done
+    setTimeout(() => {
+      cardEl.remove();
+      const remaining = document.querySelectorAll('.validation-card:not(.resolved)').length;
+      if (remaining === 0) {
+        document.getElementById('validateList').style.display = 'none';
+        document.getElementById('emptyState').style.display = 'block';
+      }
+    }, 1500);
 
   } catch (err) {
     console.error(err);
