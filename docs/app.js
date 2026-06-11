@@ -1135,15 +1135,31 @@ function buildPriceHistChart(item, excludedPrices) {
 
   if (_priceHistChart) { _priceHistChart.destroy(); _priceHistChart = null; }
 
-  // Merge excel + scrape WW histories (scrape wins on same date), strip excluded prices
-  const wwExcelMap = new Map((item.price_history      || []).map(e => [e.date, e.price]));
-  const wwScrapeMap = new Map((item.ww_price_history  || []).map(e => [e.date, e.price]));
-  const wwRaw = new Map([...wwExcelMap, ...wwScrapeMap]);
-  const coRaw = new Map((item.coles_price_history || []).map(e => [e.date, e.price]));
+  // WW: merge price_history (legacy/excel, WW-only) + ww_price_history (scraper)
+  // Same merge logic as getTrendSeries: scraper entries win on same date
+  const legacyMap = new Map(
+    (item.price_history || [])
+      .filter(e => e.date && e.price > 0)
+      .map(e => [e.date, e.price])
+  );
+  const wwScrapeMap = new Map(
+    (item.ww_price_history || [])
+      .filter(e => e.date && e.price > 0)
+      .map(e => [e.date, e.price])
+  );
+  const mergedWWMap = new Map([...legacyMap, ...wwScrapeMap]);
+  const wwRaw = [...mergedWWMap.entries()]
+    .map(([date, price]) => ({ date, price }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  // Coles: coles_price_history only (no legacy equivalent)
+  const coRaw = (item.coles_price_history || [])
+    .filter(e => e.date && e.price > 0)
+    .sort((a, b) => a.date.localeCompare(b.date));
 
   const isExcl = v => v != null && excludedPrices.has(Number(v).toFixed(2));
-  const wwFullMap = new Map([...wwRaw].filter(([, v]) => !isExcl(v)));
-  const coMap     = new Map([...coRaw].filter(([, v]) => !isExcl(v)));
+  const wwFullMap = new Map(wwRaw.filter(e => !isExcl(e.price)).map(e => [e.date, e.price]));
+  const coMap     = new Map(coRaw.filter(e => !isExcl(e.price)).map(e => [e.date, e.price]));
 
   const allDates = [...new Set([...wwFullMap.keys(), ...coMap.keys()])].sort();
   if (allDates.length < 2) {
