@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-11T02:05:57.493279+00:00",
+  "last_updated": "2026-06-11T02:06:06.832462+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12064,7 +12064,7 @@
     },
     {
       "list_item": "Macro Grass Fed Australian Stir-Fry Beef",
-      "last_scraped": "2026-06-10T23:43:49.371921+00:00",
+      "last_scraped": "2026-06-11T02:05:59.752254+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12073,29 +12073,58 @@
         },
         {
           "date": "2025-06-13",
-          "price": 13
+          "price": 13.0
         }
       ],
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Macro Grass Fed Australian Stir-Fry Beef",
-        "price": 13,
-        "unit_price": 26,
+        "price": 13.0,
+        "unit_price": 26.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/175569/macro-grass-fed-australian-stir-fry-beef",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/175569.jpg"
       },
       "coles": {
         "name": "Coles Graze Grassfed Beef Stir Fry | 500g",
-        "price": 13,
-        "unit_price": 13,
+        "price": 13.0,
+        "unit_price": 13.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-graze-grassfed-beef-stir-fry-500g-2023765",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2023765.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2023765.jpg",
+        "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
+      "saving_per_item": 0.0,
+      "alternatives": [
+        {
+          "name": "Drovers Choice Beef Stir Fry | 500g",
+          "price": 11.5,
+          "unit_price": 11.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/drovers-choice-beef-stir-fry-500g-1093073",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1093073.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Graze Grass Fed No Added Hormone Beef Mince | 500g",
+          "price": 12.5,
+          "unit_price": 12.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-graze-grass-fed-no-added-hormone-beef-mince-500g-2820606",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2820606.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Graze Grassfed Beef Stir Fry | 500g",
+          "price": 13.0,
+          "unit_price": 13.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-graze-grassfed-beef-stir-fry-500g-2023765",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2023765.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -12124,7 +12153,7 @@
           "price": 13
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.6,
       "per_100_coles": 2.6,
@@ -12132,7 +12161,7 @@
     },
     {
       "list_item": "Manning Valley 12 Extra Large Free Range Eggs",
-      "last_scraped": "2026-06-10T23:43:53.103856+00:00",
+      "last_scraped": "2026-06-11T02:06:01.933041+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12192,7 +12221,7 @@
           "price": 8.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.24,
       "per_100_coles": 1.42,
@@ -12200,16 +12229,16 @@
     },
     {
       "list_item": "Obela Hommus Dip With Garlic Smashed Falafel",
-      "last_scraped": "2026-06-10T23:43:53.424121+00:00",
+      "last_scraped": "2026-06-11T02:06:03.269827+00:00",
       "trip_count": 2,
       "price_history": [
         {
           "date": "2026-02-03",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2026-03-02",
-          "price": 4
+          "price": 4.0
         }
       ],
       "category": "Pantry",
@@ -12223,15 +12252,26 @@
       },
       "coles": {
         "name": "Obela Garnished Dip Garlic Hommus With Smashed Falafel | 220g",
-        "price": 5.5,
-        "unit_price": 5.5,
+        "price": 4.0,
+        "unit_price": 1.82,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/obela-garnished-dip-garlic-hommus-with-smashed-falafel-220g-1048818",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1048818.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1048818.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
+      "cheaper_store": "coles",
+      "saving_per_item": 1.5,
+      "alternatives": [
+        {
+          "name": "Obela Garnished Dip Garlic Hommus With Smashed Falafel | 220g",
+          "price": 4.0,
+          "unit_price": 1.82,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/obela-garnished-dip-garlic-hommus-with-smashed-falafel-220g-1048818",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1048818.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -12262,17 +12302,101 @@
         {
           "date": "2026-06-10",
           "price": 5.5
+        },
+        {
+          "date": "2026-06-11",
+          "price": 4.0
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.5,
-      "per_100_coles": 2.5,
+      "per_100_coles": 1.82,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Orange Navel",
+      "last_scraped": "2026-06-11T02:06:06.115729+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-05-29",
+          "price": 0.96
+        },
+        {
+          "date": "2025-06-13",
+          "price": 0.96
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Orange Navel",
+        "price": 0.96,
+        "unit_price": 0.96,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/259450/orange-navel",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/259450.jpg"
+      },
+      "coles": {
+        "name": "Coles Orange Navel | approx. 250g",
+        "price": 1.12,
+        "unit_price": 1.12,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-orange-navel-approx.-250g-4255717",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4255717.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.16,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.29
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.29
+        },
+        {
+          "date": "2026-06-08",
+          "price": 1.29
+        },
+        {
+          "date": "2026-06-10",
+          "price": 0.96
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.12
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.12
+        },
+        {
+          "date": "2026-06-03",
+          "price": 0.72
+        },
+        {
+          "date": "2026-06-10",
+          "price": 0.72
+        },
+        {
+          "date": "2026-06-11",
+          "price": 1.12
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 0.45,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Rexona Men 48hr Deodorant Stick Sport Defence",
-      "last_scraped": "2026-06-10T23:43:56.934882+00:00",
+      "last_scraped": "2026-06-11T02:06:06.820217+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12295,7 +12419,7 @@
       },
       "coles": {
         "name": "Rexona Men Deodorant 48hr Stick Sport Defence | 52g",
-        "price": 5,
+        "price": 5.0,
         "unit_price": null,
         "unit": null,
         "url": "https://www.coles.com.au/product/rexona-men-deodorant-48hr-stick-sport-defence-52g-8448304",
@@ -12332,88 +12456,11 @@
           "price": 5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 9.42,
       "per_100_coles": 9.62,
       "per_100_unit": "100ml"
-    },
-    {
-      "list_item": "Orange Navel",
-      "last_scraped": "2026-06-10T23:43:57.438749+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-05-29",
-          "price": 0.96
-        },
-        {
-          "date": "2025-06-13",
-          "price": 0.96
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Orange Navel",
-        "price": 0.96,
-        "unit_price": 0.96,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/259450/orange-navel",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/259450.jpg"
-      },
-      "coles": {
-        "name": "Coles Orange Navel | approx. 250g",
-        "price": 0.72,
-        "unit_price": 0.72,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-orange-navel-approx.-250g-4255717",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4255717.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.24,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.29
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.29
-        },
-        {
-          "date": "2026-06-08",
-          "price": 1.29
-        },
-        {
-          "date": "2026-06-10",
-          "price": 0.96
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.12
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.12
-        },
-        {
-          "date": "2026-06-03",
-          "price": 0.72
-        },
-        {
-          "date": "2026-06-10",
-          "price": 0.72
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 0.29,
-      "per_100_unit": "100g"
     },
     {
       "list_item": "Sam's Pantry Caramel Brownie Low Sugar Protein Bars",
@@ -13435,18 +13482,18 @@
   ],
   "summary": {
     "total_woolworths": 688.59,
-    "total_coles": 709.74,
+    "total_coles": 708.64,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 21.15,
+    "total_saving": 20.05,
     "items_compared": 137,
     "items_not_found": 7
   },
   "scrape_progress": {
-    "done": 125,
+    "done": 130,
     "total": 144,
     "started_at": "2026-06-11T02:00:52.819742+00:00",
-    "current_item": "Maltesers Milk Chocolate Party Gift Box"
+    "current_item": "Rexona Men 48hr Deodorant Stick Sport Defence"
   },
   "pending_validation": [
     {
