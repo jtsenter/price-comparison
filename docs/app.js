@@ -1211,10 +1211,8 @@ function buildPriceHistChart(item, excludedPrices) {
     '<span style="display:flex;align-items:center;gap:6px;">'
     + '<span style="width:20px;height:3px;background:#16a34a;display:inline-block;border-radius:2px;"></span>'
     + 'Woolworths</span>'
-    + '<span style="display:flex;align-items:center;gap:4px;">'
-    + '<span style="width:8px;height:3px;background:#dc2626;display:inline-block;border-radius:2px;"></span>'
-    + '<span style="width:4px;height:3px;background:transparent;display:inline-block;"></span>'
-    + '<span style="width:8px;height:3px;background:#dc2626;display:inline-block;border-radius:2px;"></span>'
+    + '<span style="display:flex;align-items:center;gap:6px;">'
+    + '<span style="width:20px;height:3px;background:#dc2626;display:inline-block;border-radius:2px;"></span>'
     + 'Coles</span>';
   wrap.parentNode.insertBefore(chartLegend, wrap);
   wrap.style.display = 'block';
