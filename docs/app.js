@@ -1203,7 +1203,7 @@ function buildPriceHistChart(item, excludedPrices) {
   const yMax = Math.ceil((dataMax + padding * 0.5) * 10) / 10;
 
   const yRange = yMax - yMin;
-  const coOffset = yRange * 0.005;
+  const coOffset = yRange * 0.02;
   const coDataOffset = coData.map(v => v !== null ? Math.round((v + coOffset) * 1000) / 1000 : null);
 
   const labels = allDates.map(d => {
@@ -1248,7 +1248,8 @@ function buildPriceHistChart(item, excludedPrices) {
       labels,
       datasets: [
         makeDataset('Woolworths', wwData, wwIsActual, '#22c55e'),
-        makeDataset('Coles',      coDataOffset, coIsActual, '#ef4444'),
+        { ...makeDataset('Coles', coDataOffset, coIsActual, '#dc2626'),
+          borderWidth: 2.5, borderDash: [5, 3] },
       ],
     },
     options: {
@@ -1261,9 +1262,13 @@ function buildPriceHistChart(item, excludedPrices) {
         tooltip: {
           callbacks: {
             label: ctx => {
-              if (ctx.raw == null) return ctx.dataset.label + ': No data';
-              const val = ctx.datasetIndex === 1 ? ctx.raw - coOffset : ctx.raw;
-              return ctx.dataset.label + ': $' + Number(val).toFixed(2);
+              const store = ctx.dataset.label;
+              const raw = ctx.raw;
+              if (raw === null) return `${store}: no data yet`;
+              const display = store === 'Coles'
+                ? Math.round((raw - coOffset) * 100) / 100
+                : raw;
+              return `${store}: $${display.toFixed(2)}`;
             },
           },
         },
