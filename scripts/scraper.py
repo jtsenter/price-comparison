@@ -1132,15 +1132,19 @@ async def _scrape_single_item(
         if new_price is None or prev_price is None or prev_price <= 0:
             return False, None
         change_pct = (new_price - prev_price) / prev_price
-        hist_prices = [e['price'] for e in item_dict.get(f'{store}_price_history', []) if e.get('price', 0) > 0]
-        if hist_prices:
-            hist_min, hist_max = min(hist_prices), max(hist_prices)
+        all_hist = (
+            [e['price'] for e in item_dict.get('ww_price_history', []) if e.get('price', 0) > 0] +
+            [e['price'] for e in item_dict.get('coles_price_history', []) if e.get('price', 0) > 0] +
+            [e['price'] for e in item_dict.get('price_history', []) if e.get('price', 0) > 0]
+        )
+        if all_hist:
+            hist_min, hist_max = min(all_hist), max(all_hist)
             if hist_min <= new_price <= hist_max:
                 return False, None  # Within known range -> OK
         if change_pct > 1.00:  # >100% increase = data error (wrong page/product)
             return True, f"jumped {change_pct*100:.0f}% up"
-        elif change_pct < -0.50:  # >50% drop = data error; real specials are 20-40%
-            return True, f"dropped {change_pct*100:.0f}%"
+        elif change_pct < -0.35:  # >35% drop = data error; real specials are typically less
+            return True, f"dropped {abs(change_pct)*100:.0f}%"
         return False, None
 
     # Apply to WW
