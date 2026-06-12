@@ -450,6 +450,7 @@ let _storeFilter = 'all';
 let _showPricesOnly = false;
 let _searchQuery = '';
 let _watchlist = new Set(); // loaded on boot from localStorage + watchlist.json
+let _approvedWarns = new Set(); // loaded from approved_warns.json
 let _selectedItems = new Set(); // session-only mobile card selection
 let _viewMode = localStorage.getItem('pw_view_mode') || 'table'; // 'table' | 'card'
 
@@ -1249,7 +1250,7 @@ function buildPriceHistChart(item, excludedPrices) {
       datasets: [
         makeDataset('Woolworths', wwData, wwIsActual, '#22c55e'),
         { ...makeDataset('Coles', coDataOffset, coIsActual, '#dc2626'),
-          borderWidth: 2.5, borderDash: [5, 3] },
+          borderWidth: 2.5 },
       ],
     },
     options: {
@@ -2657,10 +2658,10 @@ function renderCards(items) {
     // Match warning
     let warnHtml = '';
     const mc = item.match_confidence;
-    if (mc === 'none' && !dismissed.includes(item.list_item)) {
-      warnHtml = ` <span class="match-warn match-warn-none" title="Could not match this item">⚠<button class="warn-dismiss" data-item="${safeKey}">✕</button></span>`;
-    } else if ((mc === 'low' || item.size_warning) && !dismissed.includes(item.list_item)) {
-      warnHtml = ` <span class="match-warn match-warn-low" title="Low-confidence match — verify these are the same product">⚠<button class="warn-dismiss" data-item="${safeKey}">✕</button></span>`;
+    if (mc === 'none' && !dismissed.includes(item.list_item) && !_approvedWarns.has(item.list_item)) {
+      warnHtml = ` <span class="match-warn match-warn-none" title="Could not match this item" data-item="${safeKey}">⚠<button class="warn-dismiss" data-item="${safeKey}">✕</button></span>`;
+    } else if ((mc === 'low' || item.size_warning) && !dismissed.includes(item.list_item) && !_approvedWarns.has(item.list_item)) {
+      warnHtml = ` <span class="match-warn match-warn-low" title="Low-confidence match — verify these are the same product" data-item="${safeKey}">⚠<button class="warn-dismiss" data-item="${safeKey}">✕</button></span>`;
     }
 
     const _trendSeries = getTrendSeries(item);
@@ -3135,9 +3136,9 @@ function renderPage(data) {
     const sizeWarn  = item.size_warning;
     let matchWarnHtml = '';
     const _dismissed = (() => { try { return JSON.parse(localStorage.getItem('pw_dismissed_warns_v1') || '[]'); } catch { return []; } })();
-    if (matchConf === 'none' && !_dismissed.includes(item.list_item)) {
-      matchWarnHtml = `<span class="match-warn match-warn-none" title="Could not confidently match this item across stores — prices may be for different products">⚠ possible mismatch<button class="warn-dismiss" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Dismiss">✕</button></span>`;
-    } else if ((matchConf === 'low' || sizeWarn) && !_dismissed.includes(item.list_item)) {
+    if (matchConf === 'none' && !_dismissed.includes(item.list_item) && !_approvedWarns.has(item.list_item)) {
+      matchWarnHtml = `<span class="match-warn match-warn-none" title="Could not confidently match this item across stores — prices may be for different products" data-item="${item.list_item.replace(/"/g,'&quot;')}">⚠ possible mismatch<button class="warn-dismiss" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Dismiss">✕</button></span>`;
+    } else if ((matchConf === 'low' || sizeWarn) && !_dismissed.includes(item.list_item) && !_approvedWarns.has(item.list_item)) {
       const tip = sizeWarn
         ? 'Pack sizes differ between stores — per-100g is a better comparison'
         : 'Low-confidence match — verify these are the same product';
@@ -4074,12 +4075,15 @@ async function boot() {
   const cardGrid = $('cardGrid');
   if (cardGrid) {
     cardGrid.addEventListener('click', (e) => {
-      const warnDismiss = e.target.closest('.warn-dismiss');
-      if (warnDismiss) {
+      const warnEl = e.target.closest('.match-warn, .warn-dismiss');
+      if (warnEl) {
         e.stopPropagation();
-        const itemName = warnDismiss.dataset.item;
-        try { const d = JSON.parse(localStorage.getItem('pw_dismissed_warns_v1')||'[]'); if (!d.includes(itemName)) d.push(itemName); localStorage.setItem('pw_dismissed_warns_v1', JSON.stringify(d)); } catch {}
-        warnDismiss.closest('.match-warn')?.remove();
+        const btn = warnEl.classList.contains('warn-dismiss') ? warnEl : warnEl.querySelector('.warn-dismiss');
+        const itemName = btn?.dataset.item || warnEl.dataset.item;
+        if (itemName) {
+          try { const d = JSON.parse(localStorage.getItem('pw_dismissed_warns_v1')||'[]'); if (!d.includes(itemName)) d.push(itemName); localStorage.setItem('pw_dismissed_warns_v1', JSON.stringify(d)); } catch {}
+        }
+        warnEl.closest('.match-warn') ? warnEl.closest('.match-warn').remove() : warnEl.remove();
         return;
       }
       const rowCheck = e.target.closest('.row-check');
@@ -4196,21 +4200,14 @@ async function boot() {
   });
 
   // Load analysis data and watchlist before first render
-  await Promise.all([loadItemAnalysis(), initWatchlist()]);
+  await Promise.all([loadItemAnalysis(), initWatchlist(), (async () => {
+    try { const r = await fetch(`data/approved_warns.json?t=${Date.now()}`); if (r.ok) _approvedWarns = new Set(await r.json()); } catch {}
+  })() ]);
   const data = await loadData();
 
   {
     renderPage(data);
     showNameChangesNotice();
-
-    // Auto-dismiss low-confidence badges after 8 s (not "none" — those need manual action)
-    setTimeout(() => {
-      document.querySelectorAll('.match-warn-low').forEach(el => {
-        el.style.transition = 'opacity 0.5s';
-        el.style.opacity = '0';
-        setTimeout(() => el.remove(), 500);
-      });
-    }, 8000);
 
     const tbody = $('tableBody');
     if (tbody) {
@@ -4249,24 +4246,27 @@ async function boot() {
           triggerItemRefresh(refreshBtn.dataset.item, refreshBtn, { wwUrl: ov.wwUrl, colesUrl: ov.colesUrl });
           return;
         }
-        const dismissDiffBtn = e.target.closest('.dismiss-diff-btn');
-        if (dismissDiffBtn) {
+        const discrepEl = e.target.closest('.discrepancy-warn, .dismiss-diff-btn');
+        if (discrepEl) {
           e.stopPropagation();
-          dismissDiff(dismissDiffBtn.dataset.item, parseFloat(dismissDiffBtn.dataset.diff));
-          if (_lastData) renderPage(_lastData);
+          const btn = discrepEl.classList.contains('dismiss-diff-btn') ? discrepEl : discrepEl.querySelector('.dismiss-diff-btn');
+          if (btn) { dismissDiff(btn.dataset.item, parseFloat(btn.dataset.diff)); if (_lastData) renderPage(_lastData); }
           return;
         }
 
-        const warnDismiss = e.target.closest('.warn-dismiss');
-        if (warnDismiss) {
+        const warnEl = e.target.closest('.match-warn, .warn-dismiss');
+        if (warnEl) {
           e.stopPropagation();
-          const itemName = warnDismiss.dataset.item;
-          try {
-            const d = JSON.parse(localStorage.getItem('pw_dismissed_warns_v1') || '[]');
-            if (!d.includes(itemName)) d.push(itemName);
-            localStorage.setItem('pw_dismissed_warns_v1', JSON.stringify(d));
-          } catch {}
-          warnDismiss.closest('.match-warn')?.remove();
+          const btn = warnEl.classList.contains('warn-dismiss') ? warnEl : warnEl.querySelector('.warn-dismiss');
+          const itemName = btn?.dataset.item || warnEl.dataset.item;
+          if (itemName) {
+            try {
+              const d = JSON.parse(localStorage.getItem('pw_dismissed_warns_v1') || '[]');
+              if (!d.includes(itemName)) d.push(itemName);
+              localStorage.setItem('pw_dismissed_warns_v1', JSON.stringify(d));
+            } catch {}
+          }
+          warnEl.closest('.match-warn') ? warnEl.closest('.match-warn').remove() : warnEl.remove();
           return;
         }
 
