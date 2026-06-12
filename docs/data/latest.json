@@ -1,10 +1,10 @@
 {
-  "last_updated": "2026-06-12T04:15:03.224989+00:00",
+  "last_updated": "2026-06-12T04:15:17.595405+00:00",
   "trigger": "manual",
   "items": [
     {
       "list_item": "Blueberries Punnet",
-      "last_scraped": "2026-06-11T23:34:40.151292+00:00",
+      "last_scraped": "2026-06-12T04:15:08.517209+00:00",
       "trip_count": 21,
       "price_history": [
         {
@@ -241,7 +241,7 @@
     },
     {
       "list_item": "Baby Mum-Mum Snack Vegetable Rice Rusk",
-      "last_scraped": "2026-06-11T23:34:41.339663+00:00",
+      "last_scraped": "2026-06-12T04:15:09.813422+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -386,7 +386,7 @@
     },
     {
       "list_item": "Cadbury Dairy Milk Large Chocolate Block",
-      "last_scraped": "2026-06-11T23:34:43.191800+00:00",
+      "last_scraped": "2026-06-12T04:15:12.957093+00:00",
       "trip_count": 11,
       "price_history": [
         {
@@ -518,7 +518,7 @@
     },
     {
       "list_item": "Cadbury Dairy Milk Top Deck Chocolate Block",
-      "last_scraped": "2026-06-11T23:34:45.698064+00:00",
+      "last_scraped": "2026-06-12T04:15:14.224806+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -561,8 +561,8 @@
       "category": "Sweets",
       "woolworths": {
         "name": "Cadbury Dairy Milk Top Deck Chocolate Block",
-        "price": 8,
-        "unit_price": 4.44,
+        "price": 8.0,
+        "unit_price": 2.22,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/814624/cadbury-dairy-milk-top-deck-chocolate-block",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/814624.jpg"
@@ -626,10 +626,139 @@
           "price": 8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
-      "per_100_ww": 4.44,
+      "per_100_ww": 2.22,
       "per_100_coles": 4.44,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Capsicum Yellow",
+      "last_scraped": "2026-06-12T04:15:17.593867+00:00",
+      "trip_count": 10,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 2.73
+        },
+        {
+          "date": "2024-12-09",
+          "price": 2.73
+        },
+        {
+          "date": "2024-12-19",
+          "price": 2.48
+        },
+        {
+          "date": "2025-06-21",
+          "price": 1.73
+        },
+        {
+          "date": "2026-02-03",
+          "price": 2.48
+        },
+        {
+          "date": "2026-02-07",
+          "price": 2.48
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.48
+        },
+        {
+          "date": "2026-04-02",
+          "price": 2.48
+        },
+        {
+          "date": "2026-04-13",
+          "price": 2.98
+        },
+        {
+          "date": "2026-04-21",
+          "price": 3.48
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Capsicum Yellow",
+        "price": 1.48,
+        "unit_price": 1.48,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/135324/capsicum-yellow",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135324.jpg",
+        "is_on_special": false
+      },
+      "coles": {
+        "name": "Yellow Capsicum",
+        "price": 2.4,
+        "unit_price": 10.9,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-yellow-capsicum-approx.-220g-7215355",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7215355.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.92,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2025-09-27",
+          "price": 1.98
+        },
+        {
+          "date": "2025-11-19",
+          "price": 3.23
+        },
+        {
+          "date": "2026-04-21",
+          "price": 3.48
+        },
+        {
+          "date": "2026-05-29",
+          "price": 1.98
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.98
+        },
+        {
+          "date": "2026-06-03",
+          "price": 2.23
+        },
+        {
+          "date": "2026-06-04",
+          "price": 1.48
+        },
+        {
+          "date": "2026-06-08",
+          "price": 1.98
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.29
+        },
+        {
+          "date": "2026-05-30",
+          "price": 1.29
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.29
+        },
+        {
+          "date": "2026-06-08",
+          "price": 1.29
+        },
+        {
+          "date": "2026-06-12",
+          "price": 2.4
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": 1.09,
       "per_100_unit": "100g"
     },
     {
@@ -14388,131 +14517,6 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Capsicum Yellow",
-      "last_scraped": "2026-06-12T03:27:09.596354+00:00",
-      "trip_count": 10,
-      "price_history": [
-        {
-          "date": "2024-12-02",
-          "price": 2.73
-        },
-        {
-          "date": "2024-12-09",
-          "price": 2.73
-        },
-        {
-          "date": "2024-12-19",
-          "price": 2.48
-        },
-        {
-          "date": "2025-06-21",
-          "price": 1.73
-        },
-        {
-          "date": "2026-02-03",
-          "price": 2.48
-        },
-        {
-          "date": "2026-02-07",
-          "price": 2.48
-        },
-        {
-          "date": "2026-03-10",
-          "price": 2.48
-        },
-        {
-          "date": "2026-04-02",
-          "price": 2.48
-        },
-        {
-          "date": "2026-04-13",
-          "price": 2.98
-        },
-        {
-          "date": "2026-04-21",
-          "price": 3.48
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Capsicum Yellow",
-        "price": 1.48,
-        "unit_price": 1.48,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/135324/capsicum-yellow",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/135324.jpg",
-        "is_on_special": false
-      },
-      "coles": {
-        "name": "Yellow Capsicum",
-        "price": 2.4,
-        "unit_price": 10.9,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-yellow-capsicum-approx.-220g-7215355",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7215355.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.92,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2025-09-27",
-          "price": 1.98
-        },
-        {
-          "date": "2025-11-19",
-          "price": 3.23
-        },
-        {
-          "date": "2026-04-21",
-          "price": 3.48
-        },
-        {
-          "date": "2026-05-29",
-          "price": 1.98
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.98
-        },
-        {
-          "date": "2026-06-03",
-          "price": 2.23
-        },
-        {
-          "date": "2026-06-04",
-          "price": 1.48
-        },
-        {
-          "date": "2026-06-08",
-          "price": 1.98
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.29
-        },
-        {
-          "date": "2026-05-30",
-          "price": 1.29
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.29
-        },
-        {
-          "date": "2026-06-08",
-          "price": 1.29
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": 1.09,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "The Odd Bunch Capsicum Prepacked",
       "last_scraped": "2026-06-11T02:01:41.880421+00:00",
       "trip_count": 15,
@@ -15177,8 +15181,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 0,
+    "done": 5,
     "total": 145,
-    "started_at": "2026-06-12T04:15:03.222077+00:00"
+    "started_at": "2026-06-12T04:15:03.222077+00:00",
+    "current_item": "Capsicum Yellow"
   }
 }
