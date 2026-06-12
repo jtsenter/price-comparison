@@ -37,7 +37,7 @@ def _normalise_coles_img(img) -> str:
             inner = parse_qs(urlparse(img).query).get("url", [""])[0]
             if inner:
                 decoded = unquote(inner)
-                # CDN-relative path (e.g. /4/409499.jpg) → prefix with CDN base
+                # CDN-relative path (e.g. /4/409499.jpg) -> prefix with CDN base
                 if decoded.startswith("/") and "://" not in decoded:
                     return COLES_CDN + decoded
                 return decoded
@@ -95,10 +95,10 @@ def _should_add_history_entry(history: list, new_price: float, today: str) -> bo
     """Return True if a new price history entry should be appended.
 
     Rules (applies to all scrape triggers — manual and scheduled):
-    - No history yet                           → add.
-    - Price changed vs last entry              → add (always, regardless of age).
-    - Price unchanged, last entry < 7 days ago → skip.
-    - Price unchanged, last entry ≥ 7 days ago → add (confirms price still valid).
+    - No history yet                           -> add.
+    - Price changed vs last entry              -> add (always, regardless of age).
+    - Price unchanged, last entry < 7 days ago -> skip.
+    - Price unchanged, last entry ≥ 7 days ago -> add (confirms price still valid).
     """
     if not history:
         return True
@@ -132,7 +132,7 @@ def _suspicious_drop(new_price, prev_price, hist_prices, pct_threshold: float = 
     hist_min = min(p for p in hist_prices if p > 0)
     drop_pct = (prev_price - new_price) / prev_price
     if drop_pct > pct_threshold and new_price < hist_min:
-        print(f"    [WARN] Suspicious drop: ${prev_price} → ${new_price} ({drop_pct*100:.0f}% drop, below hist min ${hist_min})")
+        print(f"    [WARN] Suspicious drop: ${prev_price} -> ${new_price} ({drop_pct*100:.0f}% drop, below hist min ${hist_min})")
         return True
     return False
 
@@ -145,7 +145,7 @@ def _suspicious_reasons(new_price, prev_price, price_history) -> list[str]:
         return []
     reasons = []
 
-    # >20% drop AND new all-time low → likely EDR/member price
+    # >20% drop AND new all-time low -> likely EDR/member price
     if _suspicious_drop(new_price, prev_price, hist_prices, 0.20):
         reasons.append('suspicious_drop_gt20pct')
 
@@ -217,7 +217,7 @@ def _parse_ww_products(product_list: list) -> list[dict]:
             # WasPrice is higher than Price — regardless of the EDR flag, the shelf price
             # is always ≥ the member price. Use WasPrice as the real shelf price.
             flag_note = "IsEDR" if is_member_deal else "no IsEDR flag"
-            print(f"    [WW] Member/promo price for '{name}' ({flag_note}): ${price} → shelf price ${was_price}")
+            print(f"    [WW] Member/promo price for '{name}' ({flag_note}): ${price} -> shelf price ${was_price}")
             price = was_price
         product_url = (
             f"{WOOLWORTHS_BASE}/shop/productdetails/{stockcode}/{url_name}"
@@ -361,11 +361,11 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                 on_special = bool(product.get("IsOnSpecial"))
                 print(f"    [WW URL] {name!r}: Price=${price} WasPrice={was_price} IsEdr={is_edr} IsPm={is_pm}")
 
-                # GATE: only override Price→WasPrice if this is a MEMBER-EXCLUSIVE price
+                # GATE: only override Price->WasPrice if this is a MEMBER-EXCLUSIVE price
                 # PUBLIC specials (IsEdrSpecial=false, IsPmDelivery=false) keep their Price intact
                 if was_price is not None and float(was_price) > float(price):
                     if is_edr or is_pm:
-                        print(f"    [WW] Member price detected: ${price} → shelf price ${was_price}")
+                        print(f"    [WW] Member price detected: ${price} -> shelf price ${was_price}")
                         price = was_price
                     else:
                         print(f"    [WW] Public special: keeping ${price} (was ${was_price})")
@@ -458,7 +458,7 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                         else:
                             print(f"    [WW] DOM price: ${_dom_vals[0]} (source: {list(_sources)[0]})")
                         if abs(_dom_max - float(price)) > 0.005:
-                            print(f"    [WW] DOM overrides __NEXT_DATA__ ${price} → ${_dom_max}")
+                            print(f"    [WW] DOM overrides __NEXT_DATA__ ${price} -> ${_dom_max}")
                             price = _dom_max
                     else:
                         print(f"    [WW] DOM found no price elements — keeping __NEXT_DATA__ ${price}")
@@ -921,7 +921,7 @@ def should_skip_item(ex_data: dict | None, trigger: str) -> bool:
 def _coles_fallback_query(coles_url: str, item: str) -> str:
     """Derive a search query from a Coles product URL slug.
 
-    'coles-strawberries-250g-5191256' → 'strawberries 250g'
+    'coles-strawberries-250g-5191256' -> 'strawberries 250g'
     Falls back to item name if the URL doesn't match expected pattern.
     """
     m = re.search(r'/product/([^/?]+)', coles_url)
@@ -939,7 +939,7 @@ async def _scrape_single_item(
     """Scrape one item. Returns (result_dict | None, is_not_found)."""
     category = guess_category(item)
     history = purchase_history.get(item, {})
-    # Fallback: if exact match fails, try substring match (e.g. "Lamb Mince" → "Woolworths Lamb Mince")
+    # Fallback: if exact match fails, try substring match (e.g. "Lamb Mince" -> "Woolworths Lamb Mince")
     if not history and purchase_history:
         for excel_name, hist_data in purchase_history.items():
             if item.lower() in excel_name.lower() and hist_data.get("price_history"):
@@ -1030,7 +1030,7 @@ async def _scrape_single_item(
                             # Stockcode not in top-5 results — retry search using URL slug
                             _slug_q = _sc_m.group(2).replace('-', ' ').strip()
                             # Also derive a brand-prefix-stripped query (e.g. "woolworths chickpeas"
-                            # → "chickpeas") to try if the slug is identical to the item name.
+                            # -> "chickpeas") to try if the slug is identical to the item name.
                             _slug_stripped = re.sub(r'^woolworths\s+', '', _slug_q, flags=re.IGNORECASE).strip()
                             _retry_q = _slug_q if _slug_q.lower() != item.lower() else (
                                 _slug_stripped if _slug_stripped.lower() != item.lower() else ""
@@ -1058,7 +1058,7 @@ async def _scrape_single_item(
                     _skip_picker_co = True
                 else:
                     # Coles product page failed — derive search query from URL slug
-                    # (e.g. "coles-strawberries-250g-5191256" → "strawberries 250g")
+                    # (e.g. "coles-strawberries-250g-5191256" -> "strawberries 250g")
                     _fq = _coles_fallback_query(pinned_co, item)
                     print(f"  Coles pinned URL failed, searching by: {_fq!r}")
                     coles_results = await search_with_retry(search_coles, coles_page, _fq)
@@ -1136,7 +1136,7 @@ async def _scrape_single_item(
         if hist_prices:
             hist_min, hist_max = min(hist_prices), max(hist_prices)
             if hist_min <= new_price <= hist_max:
-                return False, None  # Within known range → OK
+                return False, None  # Within known range -> OK
         if change_pct > 1.00:  # >100% increase = data error (wrong page/product)
             return True, f"jumped {change_pct*100:.0f}% up"
         elif change_pct < -0.50:  # >50% drop = data error; real specials are 20-40%
@@ -1147,14 +1147,14 @@ async def _scrape_single_item(
     ww_prev = existing_item['ww_price_history'][-1]['price'] if existing_item.get('ww_price_history') else None
     is_suspicious_ww, reason_ww = check_suspicious_jump(ww_match['price'] if ww_match else None, ww_prev, existing_item, 'ww')
     if is_suspicious_ww:
-        print(f"    [WARN] WW {reason_ww}: ${ww_prev}→${ww_match['price']} — carrying forward")
+        print(f"    [WARN] WW {reason_ww}: ${ww_prev}->${ww_match['price']} — carrying forward")
         ww_match = None
 
     # Apply to Coles
     co_prev = existing_item['coles_price_history'][-1]['price'] if existing_item.get('coles_price_history') else None
     is_suspicious_co, reason_co = check_suspicious_jump(coles_match['price'] if coles_match else None, co_prev, existing_item, 'coles')
     if is_suspicious_co:
-        print(f"    [WARN] Coles {reason_co}: ${co_prev}→${coles_match['price']} — carrying forward")
+        print(f"    [WARN] Coles {reason_co}: ${co_prev}->${coles_match['price']} — carrying forward")
         coles_match = None
 
     # Compute _ww_price_factor for per-kg items (used by UI for price_history normalisation).
