@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-12T04:15:29.430453+00:00",
+  "last_updated": "2026-06-12T04:15:40.245552+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -1750,7 +1750,7 @@
     },
     {
       "list_item": "Kale Fresh Bunch",
-      "last_scraped": "2026-06-11T23:35:01.814388+00:00",
+      "last_scraped": "2026-06-12T04:15:30.207884+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -1885,7 +1885,7 @@
     },
     {
       "list_item": "Lebanese Cucumbers",
-      "last_scraped": "2026-06-11T23:35:05.200588+00:00",
+      "last_scraped": "2026-06-12T04:15:33.766976+00:00",
       "trip_count": 27,
       "price_history": [
         {
@@ -2132,7 +2132,7 @@
     },
     {
       "list_item": "Lurpak Butter Spreadable",
-      "last_scraped": "2026-06-11T23:35:08.056691+00:00",
+      "last_scraped": "2026-06-12T04:15:33.779278+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -2167,7 +2167,7 @@
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Lurpak Butter Spreadable",
-        "price": 9,
+        "price": 9.0,
         "unit_price": 2.25,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/87702/lurpak-butter-spreadable",
@@ -2185,21 +2185,30 @@
       "saving_per_item": 0.0,
       "alternatives": [
         {
+          "name": "Lurpak Butter Spreadable Slightly Salted",
+          "price": 6.5,
+          "unit_price": 2.08,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/223865/lurpak-butter-spreadable-slightly-salted",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/223865.jpg",
+          "retailer": "woolworths"
+        },
+        {
+          "name": "Lurpak Butter Lighter Spreadable Slightly Salted",
+          "price": 6.5,
+          "unit_price": 2.08,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/281853/lurpak-butter-lighter-spreadable-slightly-salted",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/281853.jpg",
+          "retailer": "woolworths"
+        },
+        {
           "name": "Lurpak Butter Spreadable Slightly Salted | 250g",
           "price": 5.2,
           "unit_price": 2.08,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/lurpak-butter-spreadable-slightly-salted-250g-5393910",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5393910.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Lurpak Butter Lighter Spreadable Slightly Salted | 250g",
-          "price": 5.2,
-          "unit_price": 2.08,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/lurpak-butter-lighter-spreadable-slightly-salted-250g-7175363",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7175363.jpg",
           "retailer": "coles"
         }
       ],
@@ -2247,7 +2256,7 @@
           "price": 9
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.25,
       "per_100_coles": 2.25,
@@ -2255,7 +2264,7 @@
     },
     {
       "list_item": "Pringles Sour Cream & Onion Potato Chips",
-      "last_scraped": "2026-06-11T23:35:11.232437+00:00",
+      "last_scraped": "2026-06-12T04:15:36.743978+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -2357,6 +2366,130 @@
       "per_100_ww": 4.1,
       "per_100_coles": 2.05,
       "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle",
+      "last_scraped": "2026-06-12T04:15:40.243252+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 3.0
+        },
+        {
+          "date": "2024-11-20",
+          "price": 3.0
+        },
+        {
+          "date": "2024-12-19",
+          "price": 3.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 1.8
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.0
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.0
+        },
+        {
+          "date": "2025-05-04",
+          "price": 1.5
+        },
+        {
+          "date": "2025-06-06",
+          "price": 2.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 2.0
+        }
+      ],
+      "category": "Drinks & Alcohol",
+      "woolworths": {
+        "name": "Schweppes Lemon Lime Bitters Soft Drink Mixer Bottle",
+        "price": 3.0,
+        "unit_price": 2.73,
+        "unit": "1L",
+        "url": "https://www.woolworths.com.au/shop/productdetails/634290/schweppes-lemon-lime-bitters-soft-drink-mixer-bottle",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634290.jpg"
+      },
+      "coles": {
+        "name": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle | 1.1L",
+        "price": 3,
+        "unit_price": 3,
+        "unit": "1L",
+        "url": "https://www.coles.com.au/product/schweppes-lemon-lime-bitters-soft-drink-classic-mixers-bottle-1.1l-3014839",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3014839.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2025-07-08",
+          "price": 2.0
+        },
+        {
+          "date": "2025-08-08",
+          "price": 2.0
+        },
+        {
+          "date": "2025-08-17",
+          "price": 2.0
+        },
+        {
+          "date": "2025-10-05",
+          "price": 1.5
+        },
+        {
+          "date": "2025-11-05",
+          "price": 2.4
+        },
+        {
+          "date": "2025-12-03",
+          "price": 2.0
+        },
+        {
+          "date": "2026-05-29",
+          "price": 3
+        },
+        {
+          "date": "2026-06-01",
+          "price": 3
+        },
+        {
+          "date": "2026-06-08",
+          "price": 3
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.8
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.8
+        },
+        {
+          "date": "2026-06-04",
+          "price": 3
+        },
+        {
+          "date": "2026-06-11",
+          "price": 3
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 0.27,
+      "per_100_coles": 0.27,
+      "per_100_unit": "100ml"
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Portions Snacks",
@@ -2482,130 +2615,6 @@
       "per_100_ww": 2.67,
       "per_100_coles": 2.67,
       "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle",
-      "last_scraped": "2026-06-11T23:35:14.297548+00:00",
-      "trip_count": 9,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 3.0
-        },
-        {
-          "date": "2024-11-20",
-          "price": 3.0
-        },
-        {
-          "date": "2024-12-19",
-          "price": 3.0
-        },
-        {
-          "date": "2025-03-11",
-          "price": 1.8
-        },
-        {
-          "date": "2025-03-27",
-          "price": 3.0
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.0
-        },
-        {
-          "date": "2025-05-04",
-          "price": 1.5
-        },
-        {
-          "date": "2025-06-06",
-          "price": 2.0
-        },
-        {
-          "date": "2025-07-10",
-          "price": 2.0
-        }
-      ],
-      "category": "Drinks & Alcohol",
-      "woolworths": {
-        "name": "Schweppes Lemon Lime Bitters Soft Drink Mixer Bottle",
-        "price": 3.0,
-        "unit_price": 2.73,
-        "unit": "1L",
-        "url": "https://www.woolworths.com.au/shop/productdetails/634290/schweppes-lemon-lime-bitters-soft-drink-mixer-bottle",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634290.jpg"
-      },
-      "coles": {
-        "name": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle | 1.1L",
-        "price": 3,
-        "unit_price": 3,
-        "unit": "1L",
-        "url": "https://www.coles.com.au/product/schweppes-lemon-lime-bitters-soft-drink-classic-mixers-bottle-1.1l-3014839",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3014839.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2025-07-08",
-          "price": 2.0
-        },
-        {
-          "date": "2025-08-08",
-          "price": 2.0
-        },
-        {
-          "date": "2025-08-17",
-          "price": 2.0
-        },
-        {
-          "date": "2025-10-05",
-          "price": 1.5
-        },
-        {
-          "date": "2025-11-05",
-          "price": 2.4
-        },
-        {
-          "date": "2025-12-03",
-          "price": 2.0
-        },
-        {
-          "date": "2026-05-29",
-          "price": 3
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3
-        },
-        {
-          "date": "2026-06-08",
-          "price": 3
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.8
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.8
-        },
-        {
-          "date": "2026-06-04",
-          "price": 3
-        },
-        {
-          "date": "2026-06-11",
-          "price": 3
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.27,
-      "per_100_coles": 0.27,
-      "per_100_unit": "100ml"
     },
     {
       "list_item": "Schweppes Orange Mango Natural Mineral Water Bottle",
@@ -15181,9 +15190,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 10,
+    "done": 15,
     "total": 145,
     "started_at": "2026-06-12T04:15:03.222077+00:00",
-    "current_item": "Helga's Wholemeal Bread With Grains"
+    "current_item": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle"
   }
 }
