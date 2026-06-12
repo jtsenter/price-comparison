@@ -3,6 +3,7 @@ CATEGORY_KEYWORDS = {
         "milk", "yoghurt", "yogurt", "cheese", "cream", "butter", "fetta", "feta",
         "egg", "eggs", "creme fraiche", "mozzarella", "camembert", "stilton",
         "cheddar", "parmesan", "thickened cream", "sour cream",
+        "cream cheese", "philadelphia",
     ],
     "Meat & Seafood": [
         "chicken", "beef", "lamb", "pork", "salmon", "turkey", "fish", "basa",
@@ -19,6 +20,7 @@ CATEGORY_KEYWORDS = {
         "mushroom", "onion", "carrot", "spinach", "kale", "asparagus", "celery",
         "pumpkin", "potato", "sweet potato", "corn", "beans", "lettuce", "cabbage",
         "radish", "eggplant", "broccolini", "spring onion", "eschallot", "beetroot",
+        "parsley",
     ],
     "Bakery": [
         "bread", "wrap", "pizza base", "crispbread", "sourdough", "grain", "helga",
@@ -30,9 +32,9 @@ CATEGORY_KEYWORDS = {
         "coconut", "honey", "maple syrup", "mustard", "mayonnaise", "pesto", "salsa",
         "vinegar", "breadcrumbs", "stock cube", "couscous", "black bean", "cous cous",
         "paprika", "cinnamon", "pepper", "garlic powder", "rosemary", "thyme",
-        "turmeric", "mixed herbs", "dill", "parsley", "citric acid", "bicarbonate",
-        "hoyt", "peanut butter", "biscoff", "hommus", "hummus", "cream cheese",
-        "philadelphia", "eggplant dip", "beetroot hommus", "obela", "wilma",
+        "turmeric", "mixed herbs", "dill", "citric acid", "bicarbonate",
+        "hoyt", "peanut butter", "biscoff", "hommus", "hummus",
+        "eggplant dip", "beetroot hommus", "obela", "wilma",
         "walnut", "macadamia", "sunflower kernel", "pumpkin kernel", "almond", "nut",
     ],
     "Sweets": [
