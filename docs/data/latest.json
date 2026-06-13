@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-13T03:33:05.969182+00:00",
+  "last_updated": "2026-06-13T03:33:11.502017+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -14866,22 +14866,22 @@
     },
     {
       "list_item": "Woolworths Mixed Herbs Dried",
-      "last_scraped": "2026-06-12T04:19:45.271577+00:00",
+      "last_scraped": "2026-06-13T03:33:06.751096+00:00",
       "trip_count": 2,
       "price_history": [
         {
           "date": "2025-03-17",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2026-02-03",
-          "price": 2
+          "price": 2.0
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Mixed Herbs Dried",
-        "price": 2,
+        "price": 2.0,
         "unit_price": 1.67,
         "unit": "10G",
         "url": "https://www.woolworths.com.au/shop/productdetails/251120/woolworths-mixed-herbs-dried",
@@ -14934,22 +14934,22 @@
     },
     {
       "list_item": "Woolworths Thyme Leaves",
-      "last_scraped": "2026-06-12T04:19:48.190026+00:00",
+      "last_scraped": "2026-06-13T03:33:11.481846+00:00",
       "trip_count": 2,
       "price_history": [
         {
           "date": "2025-07-10",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2026-03-02",
-          "price": 2
+          "price": 2.0
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Thyme Leaves",
-        "price": 2,
+        "price": 2.0,
         "unit_price": 1.67,
         "unit": "10G",
         "url": "https://www.woolworths.com.au/shop/productdetails/251228/woolworths-thyme-leaves",
@@ -14964,7 +14964,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8983046.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -15187,9 +15187,9 @@
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 141,
+    "done": 143,
     "total": 145,
     "started_at": "2026-06-13T03:27:53.102742+00:00",
-    "current_item": "Woolworths Green Asparagus Bunch Green"
+    "current_item": "Woolworths Thyme Leaves"
   }
 }
