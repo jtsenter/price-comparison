@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-13T03:33:17.101417+00:00",
+  "last_updated": "2026-06-13T05:59:56.337458+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12968,7 +12968,7 @@
     },
     {
       "list_item": "Dettol Antibacterial Liquid Hand Wash Hand Soap Pump Aloe Vera",
-      "last_scraped": "2026-06-13T03:32:16.168508+00:00",
+      "last_scraped": "2026-06-13T05:59:55.746153+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12982,34 +12982,25 @@
       ],
       "category": "Personal Care",
       "woolworths": {
-        "name": "Dettol Antibacterial Liquid Hand Wash Soap Pump Aloe Vera",
-        "price": 2.8,
-        "unit_price": 1.12,
+        "name": "Dettol Antibacterial Liquid Hand Wash Pump Aloe Vera & Vitamin E",
+        "price": 4.5,
+        "unit_price": 0.9,
         "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/228637/dettol-antibacterial-liquid-hand-wash-soap-pump-aloe-vera",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/228637.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/267236/dettol-antibacterial-liquid-hand-wash-pump-aloe-vera-vitamin-e",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/267236.jpg",
+        "is_on_special": false
       },
       "coles": {
-        "name": "Dettol Anti-bacterial Liquid Handwash Aloe Vera | 500mL",
+        "name": "Anti-bacterial Liquid Handwash Aloe Vera",
         "price": 4.5,
-        "unit_price": 4.5,
+        "unit_price": 0.9,
         "unit": "100mL",
         "url": "https://www.coles.com.au/product/dettol-anti-bacterial-liquid-handwash-aloe-vera-500ml-6373554",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6373554.jpg"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.7,
-      "alternatives": [
-        {
-          "name": "Dettol Antibacterial Liquid Hand Wash Pump Aloe Vera & Vitamin E",
-          "price": 4.5,
-          "unit_price": 0.9,
-          "unit": "100ML",
-          "url": "https://www.woolworths.com.au/shop/productdetails/267236/dettol-antibacterial-liquid-hand-wash-pump-aloe-vera-vitamin-e",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/267236.jpg",
-          "retailer": "woolworths"
-        }
-      ],
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -13026,6 +13017,10 @@
         {
           "date": "2026-06-08",
           "price": 2.8
+        },
+        {
+          "date": "2026-06-13",
+          "price": 4.5
         }
       ],
       "coles_price_history": [
@@ -13042,9 +13037,9 @@
           "price": 4.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
-      "per_100_ww": 1.12,
+      "per_100_ww": 0.9,
       "per_100_coles": 0.9,
       "per_100_unit": "100ml"
     },
@@ -15178,11 +15173,11 @@
     "Washed Potato Bag 4kg"
   ],
   "summary": {
-    "total_woolworths": 723.55,
+    "total_woolworths": 725.25,
     "total_coles": 738.56,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 15.01,
+    "total_saving": 13.31,
     "items_compared": 144,
     "items_not_found": 1
   },
