@@ -6,7 +6,15 @@
 // ── Unified trend data source ──────────────────────────────────────────────
 // Single series for both slider and sort: includes price_history + current prices.
 function getTrendSeries(item) {
-  const hist = (item.price_history || []).map(h => Number(h.price));
+  // Include every observed price: Excel receipts (price_history) plus the scraped
+  // WW and Coles histories. Previously only price_history was used, so items whose
+  // lows live in ww_price_history (e.g. added from receipts) showed a too-high
+  // trend minimum.
+  const hist = [
+    ...(item.price_history || []),
+    ...(item.ww_price_history || []),
+    ...(item.coles_price_history || []),
+  ].map(h => Number(h.price));
   const w = item.woolworths?.price, c = item.coles?.price;
   const prices = [...hist, w, c].filter(p => typeof p === 'number' && p > 0);
   const current = Math.min(
