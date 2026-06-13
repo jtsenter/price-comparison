@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
-from lookup import parse_queries, build_reply
+from lookup import parse_queries, build_reply, _h
 
 load_dotenv()
 
@@ -22,13 +22,13 @@ OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
 
 async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "👋 *PriceWatch Bot*\n\n"
+        "👋 <b>PriceWatch Bot</b>\n\n"
         "Send me a list of grocery items and I'll tell you where to buy each one cheaper.\n\n"
         "Examples:\n"
-        "  `milk, eggs, broccoli`\n"
-        "  `bananas and yoghurt`\n"
+        "  <code>milk, eggs, broccoli</code>\n"
+        "  <code>bananas and yoghurt</code>\n"
         "  or just send a voice message 🎤",
-        parse_mode='Markdown',
+        parse_mode='HTML',
     )
 
 
@@ -39,7 +39,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Send me a list of items, e.g. `milk, eggs, broccoli`", parse_mode='Markdown')
         return
     reply = build_reply(queries)
-    await update.message.reply_text(reply, parse_mode='Markdown')
+    await update.message.reply_text(reply, parse_mode='HTML')
 
 
 async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -73,11 +73,11 @@ async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
     queries = parse_queries(text)
 
     if not queries:
-        await update.message.reply_text(f'🎤 _{text}_\n\nCouldn\'t parse any items from that.', parse_mode='Markdown')
+        await update.message.reply_text(f'🎤 <i>{_h(text)}</i>\n\nCouldn\'t parse any items from that.', parse_mode='HTML')
         return
 
-    reply = f'🎤 _{text}_\n\n' + build_reply(queries)
-    await update.message.reply_text(reply, parse_mode='Markdown')
+    reply = f'🎤 <i>{_h(text)}</i>\n\n' + build_reply(queries)
+    await update.message.reply_text(reply, parse_mode='HTML')
 
 
 async def main():

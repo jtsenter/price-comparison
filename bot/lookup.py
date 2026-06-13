@@ -47,17 +47,13 @@ def _coles_price(item):
 
 
 def _score(query: str, item: dict) -> int:
-    """Score how well a query matches an item name."""
     name = item['list_item'].lower()
     name_words = set(re.findall(r'\w+', name))
     query_words = re.findall(r'\w+', query.lower())
     if not query_words:
         return 0
-    # Count query words that appear as whole words in the item name
     hits = sum(1 for w in query_words if w in name_words)
-    # Bonus: full query is a substring (catches multi-word phrases)
     bonus = 5 if query.lower() in name else 0
-    # Penalty: item name has many extra words (reduces noise matches)
     extra = max(0, len(name_words) - len(query_words) - 2)
     return hits * 10 + bonus - extra
 
@@ -81,12 +77,19 @@ def _shorten(name: str) -> str:
     for prefix in ('Woolworths ', 'The Odd Bunch ', 'Coles '):
         if name.startswith(prefix):
             name = name[len(prefix):]
-    return name[:38] + '…' if len(name) > 38 else name
+    return name[:36] + '…' if len(name) > 36 else name
+
+
+def _h(text: str) -> str:
+    """Escape special HTML characters for Telegram HTML mode."""
+    return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
 
 def build_reply(queries: list) -> str:
-    ww_basket = []
-    coles_basket = []
+    # Each entry: (name, winning_price, other_price_or_None, tag_or_None)
+    # tag: 'ww_only' | 'coles_only' | None
+    ww_items = []
+    coles_items = []
     not_found = []
 
     for q in queries:
@@ -101,42 +104,50 @@ def build_reply(queries: list) -> str:
 
         if ww is not None and co is not None:
             if ww <= co:
-                ww_basket.append((name, ww, co - ww))
+                other = co if co != ww else None  # no comparison shown when equal
+                ww_items.append((name, ww, other, None))
             else:
-                coles_basket.append((name, co, ww - co))
+                coles_items.append((name, co, ww, None))
         elif ww is not None:
-            ww_basket.append((name, ww, 0.0))
+            ww_items.append((name, ww, None, 'ww_only'))
         elif co is not None:
-            coles_basket.append((name, co, 0.0))
+            coles_items.append((name, co, None, 'coles_only'))
         else:
             not_found.append(q)
 
-    if not ww_basket and not coles_basket:
+    if not ww_items and not coles_items:
         return "❓ Couldn't find any of those items in the price list."
 
     lines = []
 
-    if ww_basket:
-        total = sum(p for _, p, _ in ww_basket)
-        lines.append(f"🟡 *Woolworths* — ${total:.2f}")
-        for name, price, saving in ww_basket:
-            save = f"  _(save ${saving:.2f} vs Coles)_" if saving > 0.005 else ''
-            lines.append(f"  • {name} — ${price:.2f}{save}")
+    if ww_items:
+        ww_total = sum(p for _, p, _, _ in ww_items)
+        lines.append('<b>🟡 Woolworths</b>')
+        for name, price, other, tag in ww_items:
+            other_str = f'  <s>${other:.2f}</s>' if other else ''
+            tag_str = '  <i>WW only</i>' if tag == 'ww_only' else ''
+            lines.append(f'{_h(name)}{other_str}{tag_str}  <b>${price:.2f}</b>')
+        lines.append(f'<i>Total: ${ww_total:.2f}</i>')
 
-    if coles_basket:
+    if coles_items:
         if lines:
             lines.append('')
-        total = sum(p for _, p, _ in coles_basket)
-        lines.append(f"🔴 *Coles* — ${total:.2f}")
-        for name, price, saving in coles_basket:
-            save = f"  _(save ${saving:.2f} vs WW)_" if saving > 0.005 else ''
-            lines.append(f"  • {name} — ${price:.2f}{save}")
+        coles_total = sum(p for _, p, _, _ in coles_items)
+        lines.append('<b>🔴 Coles</b>')
+        for name, price, other, tag in coles_items:
+            other_str = f'  <s>${other:.2f}</s>' if other else ''
+            tag_str = '  <i>Coles only</i>' if tag == 'coles_only' else ''
+            lines.append(f'{_h(name)}{other_str}{tag_str}  <b>${price:.2f}</b>')
+        lines.append(f'<i>Total: ${coles_total:.2f}</i>')
 
-    total_saving = sum(s for _, _, s in ww_basket) + sum(s for _, _, s in coles_basket)
+    total_saving = (
+        sum(o - p for _, p, o, _ in ww_items if o) +
+        sum(o - p for _, p, o, _ in coles_items if o)
+    )
     if total_saving > 0.01:
-        lines.append(f"\n💰 Splitting saves *${total_saving:.2f}*")
+        lines.append(f'\n💰 Split saves <b>${total_saving:.2f}</b>')
 
     if not_found:
-        lines.append(f"\n❓ Not in list: {', '.join(not_found)}")
+        lines.append(f'\n❓ Not found: {_h(", ".join(not_found))}')
 
     return '\n'.join(lines)
