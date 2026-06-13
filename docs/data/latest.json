@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-13T03:33:11.502017+00:00",
+  "last_updated": "2026-06-13T06:11:01.639227+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12968,7 +12968,7 @@
     },
     {
       "list_item": "Dettol Antibacterial Liquid Hand Wash Hand Soap Pump Aloe Vera",
-      "last_scraped": "2026-06-13T03:32:16.168508+00:00",
+      "last_scraped": "2026-06-13T05:59:55.746153+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -12982,34 +12982,25 @@
       ],
       "category": "Personal Care",
       "woolworths": {
-        "name": "Dettol Antibacterial Liquid Hand Wash Soap Pump Aloe Vera",
-        "price": 2.8,
-        "unit_price": 1.12,
+        "name": "Dettol Antibacterial Liquid Hand Wash Pump Aloe Vera & Vitamin E",
+        "price": 4.5,
+        "unit_price": 0.9,
         "unit": "100ML",
-        "url": "https://www.woolworths.com.au/shop/productdetails/228637/dettol-antibacterial-liquid-hand-wash-soap-pump-aloe-vera",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/228637.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/267236/dettol-antibacterial-liquid-hand-wash-pump-aloe-vera-vitamin-e",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/267236.jpg",
+        "is_on_special": false
       },
       "coles": {
-        "name": "Dettol Anti-bacterial Liquid Handwash Aloe Vera | 500mL",
+        "name": "Anti-bacterial Liquid Handwash Aloe Vera",
         "price": 4.5,
-        "unit_price": 4.5,
+        "unit_price": 0.9,
         "unit": "100mL",
         "url": "https://www.coles.com.au/product/dettol-anti-bacterial-liquid-handwash-aloe-vera-500ml-6373554",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6373554.jpg"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.7,
-      "alternatives": [
-        {
-          "name": "Dettol Antibacterial Liquid Hand Wash Pump Aloe Vera & Vitamin E",
-          "price": 4.5,
-          "unit_price": 0.9,
-          "unit": "100ML",
-          "url": "https://www.woolworths.com.au/shop/productdetails/267236/dettol-antibacterial-liquid-hand-wash-pump-aloe-vera-vitamin-e",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/267236.jpg",
-          "retailer": "woolworths"
-        }
-      ],
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -13026,6 +13017,10 @@
         {
           "date": "2026-06-08",
           "price": 2.8
+        },
+        {
+          "date": "2026-06-13",
+          "price": 4.5
         }
       ],
       "coles_price_history": [
@@ -13042,9 +13037,9 @@
           "price": 4.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
-      "per_100_ww": 1.12,
+      "per_100_ww": 0.9,
       "per_100_coles": 0.9,
       "per_100_unit": "100ml"
     },
@@ -13348,7 +13343,7 @@
     },
     {
       "list_item": "Kinder Chocolate Sharepack",
-      "last_scraped": "2026-06-13T03:32:28.837849+00:00",
+      "last_scraped": "2026-06-13T06:02:49.356591+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13362,24 +13357,36 @@
       ],
       "category": "Sweets",
       "woolworths": {
-        "name": "Kinder Chocolate Little Ones",
-        "price": 2.8,
-        "unit_price": 2.8,
+        "name": "Kinder Chocolate Treats",
+        "price": 7.5,
+        "unit_price": 3.75,
         "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/21197/kinder-chocolate-little-ones",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/021197.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/839689/kinder-chocolate-treats",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/839689.jpg",
+        "is_on_special": false
       },
       "coles": {
-        "name": "Kinder Choc Little Ones Share Pack 16 Pack | 200g",
+        "name": "Choc Little Ones Share Pack 16 Pack",
         "price": 4.5,
         "unit_price": 2.25,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/kinder-choc-little-ones-share-pack-16-pack-200g-2528761",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2528761.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2528761.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.7,
-      "alternatives": [],
+      "cheaper_store": "coles",
+      "saving_per_item": 3.0,
+      "alternatives": [
+        {
+          "name": "Choc Little Ones Share Pack 16 Pack",
+          "price": 4.5,
+          "unit_price": 2.25,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/kinder-choc-little-ones-share-pack-16-pack-200g-2528761",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2528761.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2025-10-15",
@@ -13400,6 +13407,10 @@
         {
           "date": "2026-06-12",
           "price": 2.8
+        },
+        {
+          "date": "2026-06-13",
+          "price": 7.5
         }
       ],
       "coles_price_history": [
@@ -13420,9 +13431,9 @@
           "price": 4.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
-      "per_100_ww": 2.8,
+      "per_100_ww": 3.75,
       "per_100_coles": 2.25,
       "per_100_unit": "100g"
     },
@@ -15006,23 +15017,23 @@
     },
     {
       "list_item": "Woolworths Red Washed Potatoes Bag",
-      "last_scraped": "2026-06-12T04:19:49.580596+00:00",
+      "last_scraped": "2026-06-13T03:33:12.512921+00:00",
       "trip_count": 2,
       "price_history": [
         {
           "date": "2026-04-21",
-          "price": 6
+          "price": 6.0
         },
         {
           "date": "2026-05-06",
-          "price": 6
+          "price": 6.0
         }
       ],
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Red Washed Potatoes Bag",
-        "price": 8,
-        "unit_price": 4,
+        "price": 8.0,
+        "unit_price": 4.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/101638/woolworths-red-washed-potatoes-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/101638.jpg",
@@ -15037,7 +15048,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7963859.jpg"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 2,
+      "saving_per_item": 2.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -15103,7 +15114,7 @@
     },
     {
       "list_item": "Woolworths Water Chestnuts Sliced",
-      "last_scraped": "2026-06-12T04:19:51.087724+00:00",
+      "last_scraped": "2026-06-13T03:33:16.669982+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -15174,22 +15185,19 @@
       "per_100_unit": "100g"
     }
   ],
-  "not_found_items": [
-    "Washed Potato Bag 4kg"
-  ],
+  "not_found_items": [],
   "summary": {
-    "total_woolworths": 723.55,
+    "total_woolworths": 729.95,
     "total_coles": 738.56,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 15.01,
+    "total_saving": 8.61,
     "items_compared": 144,
-    "items_not_found": 1
+    "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 143,
+    "done": 0,
     "total": 145,
-    "started_at": "2026-06-13T03:27:53.102742+00:00",
-    "current_item": "Woolworths Thyme Leaves"
+    "started_at": "2026-06-13T06:11:01.636819+00:00"
   }
 }
