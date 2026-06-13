@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-13T06:15:56.039776+00:00",
+  "last_updated": "2026-06-13T06:16:14.707617+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12570,116 +12570,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Red Onions Bag",
-      "last_scraped": "2026-06-13T03:31:56.820375+00:00",
-      "trip_count": 5,
-      "price_history": [
-        {
-          "date": "2025-06-06",
-          "price": 3.0
-        },
-        {
-          "date": "2025-07-10",
-          "price": 4.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 4.9
-        },
-        {
-          "date": "2026-04-02",
-          "price": 4.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 5.1
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Red Onions Bag",
-        "price": 5.0,
-        "unit_price": 5.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg"
-      },
-      "coles": {
-        "name": "Coles Red Onion 1 Kg | 1kg",
-        "price": 5.1,
-        "unit_price": 5.1,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-red-onion-1-kg-1kg-8467604",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8467604.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.1,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-04",
-          "price": 5.1
-        },
-        {
-          "date": "2026-05-29",
-          "price": 5
-        },
-        {
-          "date": "2026-05-30",
-          "price": 5
-        },
-        {
-          "date": "2026-05-31",
-          "price": 5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5
-        },
-        {
-          "date": "2026-06-03",
-          "price": 3.5
-        },
-        {
-          "date": "2026-06-04",
-          "price": 4
-        },
-        {
-          "date": "2026-06-11",
-          "price": 5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.5
-        },
-        {
-          "date": "2026-05-31",
-          "price": 3.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.5
-        },
-        {
-          "date": "2026-06-04",
-          "price": 5.1
-        },
-        {
-          "date": "2026-06-11",
-          "price": 5.1
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.5,
-      "per_100_coles": 0.51,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Rosemary Leaves",
-      "last_scraped": "2026-06-13T03:32:00.271419+00:00",
+      "last_scraped": "2026-06-13T06:16:00.553250+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -12751,15 +12643,142 @@
           "price": 2.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 11.1,
       "per_100_coles": 10.0,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Red Onions Bag",
+      "last_scraped": "2026-06-13T06:16:05.740960+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2025-06-06",
+          "price": 3.0
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 4.9
+        },
+        {
+          "date": "2026-04-02",
+          "price": 4.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 5.1
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Red Onions Bag",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg"
+      },
+      "coles": {
+        "name": "Coles Red Onion 1 Kg | 1kg",
+        "price": 5.1,
+        "unit_price": 5.1,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-red-onion-1-kg-1kg-8467604",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8467604.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.1,
+      "alternatives": [
+        {
+          "name": "Coles Onions Red Local | approx. 200g",
+          "price": 1.1,
+          "unit_price": 1.1,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-onions-red-local-approx.-200g-4218459",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4218459.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Brown Onions | 1kg",
+          "price": 2.5,
+          "unit_price": 2.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-brown-onions-1kg-4803991",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4803991.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-04",
+          "price": 5.1
+        },
+        {
+          "date": "2026-05-29",
+          "price": 5
+        },
+        {
+          "date": "2026-05-30",
+          "price": 5
+        },
+        {
+          "date": "2026-05-31",
+          "price": 5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5
+        },
+        {
+          "date": "2026-06-03",
+          "price": 3.5
+        },
+        {
+          "date": "2026-06-04",
+          "price": 4
+        },
+        {
+          "date": "2026-06-11",
+          "price": 5
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3.5
+        },
+        {
+          "date": "2026-05-31",
+          "price": 3.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 3.5
+        },
+        {
+          "date": "2026-06-04",
+          "price": 5.1
+        },
+        {
+          "date": "2026-06-11",
+          "price": 5.1
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 0.5,
+      "per_100_coles": 0.51,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Woolworths Thickened Cream",
-      "last_scraped": "2026-06-13T03:32:02.595448+00:00",
+      "last_scraped": "2026-06-13T06:16:05.774918+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -12851,11 +12870,215 @@
           "price": 3.4
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.87,
       "per_100_coles": 1.13,
       "per_100_unit": "100ml"
+    },
+    {
+      "list_item": "Woolworths Wholegrain Wrap 8Pk",
+      "last_scraped": "2026-06-13T06:16:11.271709+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-05-04",
+          "price": 2.4
+        },
+        {
+          "date": "2025-07-10",
+          "price": 2.2
+        },
+        {
+          "date": "2026-03-10",
+          "price": 2.2
+        },
+        {
+          "date": "2026-05-06",
+          "price": 2.2
+        }
+      ],
+      "category": "Bakery",
+      "woolworths": {
+        "name": "Woolworths Wholegrain Wrap 8Pk",
+        "price": 2.2,
+        "unit_price": 0.61,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/634919/woolworths-wholegrain-wrap-8pk",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634919.jpg"
+      },
+      "coles": {
+        "name": "Coles Simply Soft Wholemeal & Grain Wraps 8 Pack | 360g",
+        "price": 2.2,
+        "unit_price": 2.2,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-simply-soft-wholemeal-and-grain-wraps-8-pack-360g-3731716",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3731716.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2025-09-02",
+          "price": 2.2
+        },
+        {
+          "date": "2025-12-03",
+          "price": 2.2
+        },
+        {
+          "date": "2026-05-04",
+          "price": 2.2
+        },
+        {
+          "date": "2026-05-29",
+          "price": 2.2
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2.2
+        },
+        {
+          "date": "2026-06-08",
+          "price": 2.2
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2.2
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2.2
+        },
+        {
+          "date": "2026-06-08",
+          "price": 2.2
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 0.61,
+      "per_100_coles": 0.61,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Yumi's Eggplant Mediterranean Dip",
+      "last_scraped": "2026-06-13T06:16:14.694053+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-06-21",
+          "price": 4.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 5.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 5.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.75
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Yumi's Eggplant Mediterranean Dip",
+        "price": 5.0,
+        "unit_price": 1.88,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/139881/yumi-s-eggplant-mediterranean-dip",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139881.jpg"
+      },
+      "coles": {
+        "name": "Yumi's Mediterranean Eggplant Dip | 200g",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/yumi's-mediterranean-eggplant-dip-200g-8670878",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8670878.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2025-09-27",
+          "price": 4.5
+        },
+        {
+          "date": "2025-10-21",
+          "price": 3.15
+        },
+        {
+          "date": "2025-11-05",
+          "price": 4.5
+        },
+        {
+          "date": "2025-11-12",
+          "price": 3.5
+        },
+        {
+          "date": "2025-11-19",
+          "price": 4.5
+        },
+        {
+          "date": "2025-12-03",
+          "price": 4.5
+        },
+        {
+          "date": "2026-05-04",
+          "price": 3.75
+        },
+        {
+          "date": "2026-05-29",
+          "price": 3.75
+        },
+        {
+          "date": "2026-06-01",
+          "price": 3.75
+        },
+        {
+          "date": "2026-06-04",
+          "price": 5
+        },
+        {
+          "date": "2026-06-11",
+          "price": 5
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5
+        },
+        {
+          "date": "2026-06-03",
+          "price": 3.75
+        },
+        {
+          "date": "2026-06-10",
+          "price": 3.75
+        },
+        {
+          "date": "2026-06-12",
+          "price": 5
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": 1.88,
+      "per_100_coles": 2.5,
+      "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Tuna In Springwater",
@@ -12948,210 +13171,6 @@
       "size_warning": false,
       "per_100_ww": 1.16,
       "per_100_coles": 0.92,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Wholegrain Wrap 8Pk",
-      "last_scraped": "2026-06-13T03:32:05.781710+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2025-05-04",
-          "price": 2.4
-        },
-        {
-          "date": "2025-07-10",
-          "price": 2.2
-        },
-        {
-          "date": "2026-03-10",
-          "price": 2.2
-        },
-        {
-          "date": "2026-05-06",
-          "price": 2.2
-        }
-      ],
-      "category": "Bakery",
-      "woolworths": {
-        "name": "Woolworths Wholegrain Wrap 8Pk",
-        "price": 2.2,
-        "unit_price": 0.61,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/634919/woolworths-wholegrain-wrap-8pk",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/634919.jpg"
-      },
-      "coles": {
-        "name": "Coles Simply Soft Wholemeal & Grain Wraps 8 Pack | 360g",
-        "price": 2.2,
-        "unit_price": 2.2,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-simply-soft-wholemeal-and-grain-wraps-8-pack-360g-3731716",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3731716.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2025-09-02",
-          "price": 2.2
-        },
-        {
-          "date": "2025-12-03",
-          "price": 2.2
-        },
-        {
-          "date": "2026-05-04",
-          "price": 2.2
-        },
-        {
-          "date": "2026-05-29",
-          "price": 2.2
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.2
-        },
-        {
-          "date": "2026-06-08",
-          "price": 2.2
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.2
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.2
-        },
-        {
-          "date": "2026-06-08",
-          "price": 2.2
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.61,
-      "per_100_coles": 0.61,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Yumi's Eggplant Mediterranean Dip",
-      "last_scraped": "2026-06-13T03:32:06.337108+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2025-06-21",
-          "price": 4.5
-        },
-        {
-          "date": "2026-02-03",
-          "price": 5.0
-        },
-        {
-          "date": "2026-04-02",
-          "price": 5.0
-        },
-        {
-          "date": "2026-05-06",
-          "price": 3.75
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Yumi's Eggplant Mediterranean Dip",
-        "price": 5.0,
-        "unit_price": 1.88,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/139881/yumi-s-eggplant-mediterranean-dip",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139881.jpg"
-      },
-      "coles": {
-        "name": "Yumi's Mediterranean Eggplant Dip | 200g",
-        "price": 5,
-        "unit_price": 5,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/yumi's-mediterranean-eggplant-dip-200g-8670878",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8670878.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2025-09-27",
-          "price": 4.5
-        },
-        {
-          "date": "2025-10-21",
-          "price": 3.15
-        },
-        {
-          "date": "2025-11-05",
-          "price": 4.5
-        },
-        {
-          "date": "2025-11-12",
-          "price": 3.5
-        },
-        {
-          "date": "2025-11-19",
-          "price": 4.5
-        },
-        {
-          "date": "2025-12-03",
-          "price": 4.5
-        },
-        {
-          "date": "2026-05-04",
-          "price": 3.75
-        },
-        {
-          "date": "2026-05-29",
-          "price": 3.75
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.75
-        },
-        {
-          "date": "2026-06-04",
-          "price": 5
-        },
-        {
-          "date": "2026-06-11",
-          "price": 5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5
-        },
-        {
-          "date": "2026-06-03",
-          "price": 3.75
-        },
-        {
-          "date": "2026-06-10",
-          "price": 3.75
-        },
-        {
-          "date": "2026-06-12",
-          "price": 5
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.88,
-      "per_100_coles": 2.5,
       "per_100_unit": "100g"
     },
     {
@@ -15795,10 +15814,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 105,
+    "done": 110,
     "total": 145,
     "started_at": "2026-06-13T06:11:01.636819+00:00",
-    "current_item": "Woolworths Red Onions"
+    "current_item": "Yumi's Eggplant Mediterranean Dip"
   },
   "pending_validation": [
     {
