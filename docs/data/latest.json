@@ -11078,25 +11078,25 @@
       "price_history": [
         {
           "date": "2026-02-03",
-          "price": 6.0
+          "price": 6
         },
         {
           "date": "2026-03-10",
-          "price": 6.0
+          "price": 6
         },
         {
           "date": "2026-04-02",
-          "price": 6.0
+          "price": 6
         },
         {
           "date": "2026-05-06",
-          "price": 6.0
+          "price": 6
         }
       ],
       "category": "Household",
       "woolworths": {
         "name": "Vevelle White 2 Ply Toilet Tissue",
-        "price": 6.0,
+        "price": 6,
         "unit_price": 0.19,
         "unit": null,
         "url": "https://www.woolworths.com.au/shop/productdetails/171303/vevelle-white-2-ply-toilet-tissue",
@@ -11172,6 +11172,10 @@
         {
           "date": "2026-06-01",
           "price": 4.55
+        },
+        {
+          "date": "2026-06-13",
+          "price": 8.5
         }
       ],
       "match_confidence": "high",
@@ -16126,24 +16130,6 @@
     "items_compared": 144,
     "items_not_found": 1
   },
-  "pending_validation": [
-    {
-      "item": "Vevelle White 2 Ply Toilet Tissue",
-      "ww_price": 6.0,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/171303/vevelle-white-2-ply-toilet-tissue",
-      "ww_prev_price": 6,
-      "ww_suspicious": false,
-      "coles_price": 8.5,
-      "coles_url": "https://www.coles.com.au/product/quilton-3-ply-unscented-white-toilet-paper-12-pack-5034134",
-      "coles_prev_price": 3.25,
-      "coles_suspicious": true,
-      "flagged_date": "2026-06-13",
-      "reason": [
-        "30pct_change",
-        "outside_historical_range"
-      ]
-    }
-  ],
   "approved_prices": {
     "Cadbury Dairy Milk Top Deck Chocolate Block": {
       "approved_date": "2026-05-31"
@@ -16329,8 +16315,9 @@
       "coles": 4.55
     },
     "Vevelle White 2 Ply Toilet Tissue": {
-      "approved_date": "2026-05-31",
-      "ww": 6
+      "approved_date": "2026-06-13",
+      "ww": 6,
+      "coles": 8.5
     },
     "White Seedless Grapes Bag Approx. 900g": {
       "approved_date": "2026-06-10",
