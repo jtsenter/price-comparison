@@ -56,7 +56,6 @@ PAGE_TIMEOUT_MS      = 20_000   # page.goto timeout
 COLES_WAIT_MS        = 1_100    # post-navigation wait for Coles pages
 COLES_SCROLL_WAIT_MS = 600      # post-scroll wait for lazy-loaded tiles
 MAX_PRODUCT_PRICE    = 50.0     # upper bound for plausible product prices
-SKIP_AGE_DAYS        = 4        # items scraped within N days are skipped
 CONCURRENCY          = 2        # parallel page-pairs (don't exceed 3)
 MAX_RESULTS          = 5        # search results fetched per store
 SUSPICIOUS_CHANGE_PCT   = 0.30  # flag if price changed by more than this fraction
@@ -907,15 +906,7 @@ def should_skip_item(ex_data: dict | None, trigger: str) -> bool:
     last_scraped = ex_data.get("last_scraped")
     if not last_scraped:
         return False
-    ww = ex_data.get("woolworths") or {}
-    co = ex_data.get("coles") or {}
-    if ww.get("price") is None or co.get("price") is None:
-        return False
-    try:
-        age_days = (datetime.now(timezone.utc) - datetime.fromisoformat(last_scraped)).total_seconds() / 86400
-        return age_days < SKIP_AGE_DAYS
-    except Exception:
-        return False
+    return False
 
 
 def _coles_fallback_query(coles_url: str, item: str) -> str:
