@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-13T06:16:27.848901+00:00",
+  "last_updated": "2026-06-13T06:16:39.788452+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -13563,7 +13563,7 @@
     },
     {
       "list_item": "Continental Classics Cup A Soup Creamy Chicken With Croutons",
-      "last_scraped": "2026-06-13T03:32:12.386011+00:00",
+      "last_scraped": "2026-06-13T06:16:28.733166+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13635,7 +13635,7 @@
           "price": 2.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.33,
       "per_100_coles": 4.67,
@@ -13643,7 +13643,7 @@
     },
     {
       "list_item": "Dettol Antibacterial Liquid Hand Wash Hand Soap Pump Aloe Vera",
-      "last_scraped": "2026-06-13T05:59:55.746153+00:00",
+      "last_scraped": "2026-06-13T06:16:33.173269+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13720,7 +13720,7 @@
     },
     {
       "list_item": "Ecostore Dish Liquid Ultrasensitive",
-      "last_scraped": "2026-06-13T03:32:22.575158+00:00",
+      "last_scraped": "2026-06-13T06:16:34.425339+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13789,7 +13789,7 @@
           "price": 9.2
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.92,
       "per_100_coles": 0.92,
@@ -13797,7 +13797,7 @@
     },
     {
       "list_item": "Essentials Domestic Wipes Roll",
-      "last_scraped": "2026-06-13T03:32:22.725801+00:00",
+      "last_scraped": "2026-06-13T06:16:38.464322+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13870,10 +13870,74 @@
           "price": 4.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Greek Style Yoghurt 2kg",
+      "last_scraped": "2026-06-13T06:16:39.778532+00:00",
+      "trip_count": 2,
+      "price_history": [],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Woolworths Greek Style Yoghurt",
+        "price": 8.4,
+        "unit_price": 0.42,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/249085/woolworths-greek-style-yoghurt",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/249085.jpg",
+        "is_on_special": false
+      },
+      "coles": {
+        "name": "Greek Style Yogurt",
+        "price": 13.5,
+        "unit_price": 0.68,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/farmers-union-greek-style-yogurt-2kg-1012016",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1012016.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 5.1,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-30",
+          "price": 8.4
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8.4
+        },
+        {
+          "date": "2026-06-08",
+          "price": 8.4
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-31",
+          "price": 12.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 12.5
+        },
+        {
+          "date": "2026-06-08",
+          "price": 12.5
+        },
+        {
+          "date": "2026-06-11",
+          "price": 13.5
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.42,
+      "per_100_coles": 0.68,
       "per_100_unit": "100g"
     },
     {
@@ -13950,70 +14014,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.59,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Greek Style Yoghurt 2kg",
-      "last_scraped": "2026-06-13T03:32:28.746014+00:00",
-      "trip_count": 2,
-      "price_history": [],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Woolworths Greek Style Yoghurt",
-        "price": 8.4,
-        "unit_price": 0.42,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/249085/woolworths-greek-style-yoghurt",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/249085.jpg",
-        "is_on_special": false
-      },
-      "coles": {
-        "name": "Greek Style Yogurt",
-        "price": 13.5,
-        "unit_price": 0.68,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/farmers-union-greek-style-yogurt-2kg-1012016",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1012016.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 5.1,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-30",
-          "price": 8.4
-        },
-        {
-          "date": "2026-06-01",
-          "price": 8.4
-        },
-        {
-          "date": "2026-06-08",
-          "price": 8.4
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-31",
-          "price": 12.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 12.5
-        },
-        {
-          "date": "2026-06-08",
-          "price": 12.5
-        },
-        {
-          "date": "2026-06-11",
-          "price": 13.5
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.42,
-      "per_100_coles": 0.68,
       "per_100_unit": "100g"
     },
     {
@@ -15871,10 +15871,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 115,
+    "done": 120,
     "total": 145,
     "started_at": "2026-06-13T06:11:01.636819+00:00",
-    "current_item": "Continental Classics Cup A Soup Italian Minestrone With Pasta"
+    "current_item": "Greek Style Yoghurt 2kg"
   },
   "pending_validation": [
     {
