@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-13T06:13:35.437247+00:00",
+  "last_updated": "2026-06-13T06:13:49.448712+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7606,7 +7606,7 @@
     },
     {
       "list_item": "Continental Classics Cup A Soup Chicken With Lots Of Noodles",
-      "last_scraped": "2026-06-13T03:30:13.246590+00:00",
+      "last_scraped": "2026-06-13T06:13:35.742194+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -7641,7 +7641,17 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Continental Chicken Noodle Soup Serves 4 | 45g",
+          "price": 1.2,
+          "unit_price": 1.2,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/continental-chicken-noodle-soup-serves-4-45g-129335",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/129335.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2025-09-06",
@@ -7690,7 +7700,7 @@
           "price": 2.8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.33,
       "per_100_coles": 4.67,
@@ -7698,7 +7708,7 @@
     },
     {
       "list_item": "Essentials Salted Butter",
-      "last_scraped": "2026-06-13T03:30:16.898289+00:00",
+      "last_scraped": "2026-06-13T06:13:41.103930+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -7725,7 +7735,7 @@
       },
       "coles": {
         "name": "Westgold Salted Butter | 400g",
-        "price": 7,
+        "price": 7.0,
         "unit_price": 1.75,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/westgold-salted-butter-400g-7075278",
@@ -7770,104 +7780,15 @@
           "price": 7
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.4,
       "per_100_coles": 1.75,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Fresh Radish Bunch",
-      "last_scraped": "2026-06-13T03:30:20.022634+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2025-02-28",
-          "price": 3.9
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.9
-        },
-        {
-          "date": "2026-05-06",
-          "price": 3.9
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Fresh Radish Bunch",
-        "price": 3.9,
-        "unit_price": 3.9,
-        "unit": "1EA",
-        "url": "https://www.woolworths.com.au/shop/productdetails/147319/fresh-radish-bunch",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147319.jpg"
-      },
-      "coles": {
-        "name": "Coles Radish Bunch | 1 Each",
-        "price": 3.8,
-        "unit_price": 3.8,
-        "unit": "1ea",
-        "url": "https://www.coles.com.au/product/coles-radish-bunch-1-each-4911870",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4911870.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 0.1,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2025-07-08",
-          "price": 3.9
-        },
-        {
-          "date": "2025-10-05",
-          "price": 3.9
-        },
-        {
-          "date": "2026-05-04",
-          "price": 3.9
-        },
-        {
-          "date": "2026-05-29",
-          "price": 3.9
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.9
-        },
-        {
-          "date": "2026-06-08",
-          "price": 3.9
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.8
-        },
-        {
-          "date": "2026-05-30",
-          "price": 3.8
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.8
-        },
-        {
-          "date": "2026-06-08",
-          "price": 3.8
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": null,
-      "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Essentials White Vinegar",
-      "last_scraped": "2026-06-13T03:30:20.748955+00:00",
+      "last_scraped": "2026-06-13T06:13:43.606605+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -7952,15 +7873,114 @@
           "price": 2.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.09,
       "per_100_coles": 0.1,
       "per_100_unit": "100ml"
     },
     {
+      "list_item": "Fresh Radish Bunch",
+      "last_scraped": "2026-06-13T06:13:45.411402+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 3.9
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.9
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.9
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Fresh Radish Bunch",
+        "price": 3.9,
+        "unit_price": 3.9,
+        "unit": "1EA",
+        "url": "https://www.woolworths.com.au/shop/productdetails/147319/fresh-radish-bunch",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147319.jpg"
+      },
+      "coles": {
+        "name": "Coles Radish Bunch | 1 Each",
+        "price": 3.8,
+        "unit_price": 3.8,
+        "unit": "1ea",
+        "url": "https://www.coles.com.au/product/coles-radish-bunch-1-each-4911870",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4911870.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 0.1,
+      "alternatives": [
+        {
+          "name": "Coles Radish Bunch | 1 Each",
+          "price": 3.8,
+          "unit_price": 3.8,
+          "unit": "1ea",
+          "url": "https://www.coles.com.au/product/coles-radish-bunch-1-each-4911870",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4911870.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2025-07-08",
+          "price": 3.9
+        },
+        {
+          "date": "2025-10-05",
+          "price": 3.9
+        },
+        {
+          "date": "2026-05-04",
+          "price": 3.9
+        },
+        {
+          "date": "2026-05-29",
+          "price": 3.9
+        },
+        {
+          "date": "2026-06-01",
+          "price": 3.9
+        },
+        {
+          "date": "2026-06-08",
+          "price": 3.9
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3.8
+        },
+        {
+          "date": "2026-05-30",
+          "price": 3.8
+        },
+        {
+          "date": "2026-06-01",
+          "price": 3.8
+        },
+        {
+          "date": "2026-06-08",
+          "price": 3.8
+        }
+      ],
+      "match_confidence": "medium",
+      "size_warning": false,
+      "per_100_ww": null,
+      "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Hedy's Fresh Quiche Lorraine Chilled Meal",
-      "last_scraped": "2026-06-13T03:30:23.830009+00:00",
+      "last_scraped": "2026-06-13T06:13:49.439825+00:00",
       "trip_count": 5,
       "price_history": [
         {
@@ -8040,7 +8060,7 @@
           "price": 14.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.32,
       "per_100_coles": 1.32,
@@ -15367,9 +15387,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 55,
+    "done": 60,
     "total": 145,
     "started_at": "2026-06-13T06:11:01.636819+00:00",
-    "current_item": "Dolmio Extra Bolognese Tomato Pasta Sauce"
+    "current_item": "Hedy's Fresh Quiche Lorraine Chilled Meal"
   }
 }
