@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-13T05:59:56.337458+00:00",
+  "last_updated": "2026-06-13T06:02:49.922317+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -13343,7 +13343,7 @@
     },
     {
       "list_item": "Kinder Chocolate Sharepack",
-      "last_scraped": "2026-06-13T03:32:28.837849+00:00",
+      "last_scraped": "2026-06-13T06:02:49.356591+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -13357,24 +13357,36 @@
       ],
       "category": "Sweets",
       "woolworths": {
-        "name": "Kinder Chocolate Little Ones",
-        "price": 2.8,
-        "unit_price": 2.8,
+        "name": "Kinder Chocolate Treats",
+        "price": 7.5,
+        "unit_price": 3.75,
         "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/21197/kinder-chocolate-little-ones",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/021197.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/839689/kinder-chocolate-treats",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/839689.jpg",
+        "is_on_special": false
       },
       "coles": {
-        "name": "Kinder Choc Little Ones Share Pack 16 Pack | 200g",
+        "name": "Choc Little Ones Share Pack 16 Pack",
         "price": 4.5,
         "unit_price": 2.25,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/kinder-choc-little-ones-share-pack-16-pack-200g-2528761",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2528761.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2528761.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.7,
-      "alternatives": [],
+      "cheaper_store": "coles",
+      "saving_per_item": 3.0,
+      "alternatives": [
+        {
+          "name": "Choc Little Ones Share Pack 16 Pack",
+          "price": 4.5,
+          "unit_price": 2.25,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/kinder-choc-little-ones-share-pack-16-pack-200g-2528761",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2528761.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2025-10-15",
@@ -13395,6 +13407,10 @@
         {
           "date": "2026-06-12",
           "price": 2.8
+        },
+        {
+          "date": "2026-06-13",
+          "price": 7.5
         }
       ],
       "coles_price_history": [
@@ -13415,9 +13431,9 @@
           "price": 4.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
-      "per_100_ww": 2.8,
+      "per_100_ww": 3.75,
       "per_100_coles": 2.25,
       "per_100_unit": "100g"
     },
@@ -15173,11 +15189,11 @@
     "Washed Potato Bag 4kg"
   ],
   "summary": {
-    "total_woolworths": 725.25,
+    "total_woolworths": 729.95,
     "total_coles": 738.56,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 13.31,
+    "total_saving": 8.61,
     "items_compared": 144,
     "items_not_found": 1
   },
