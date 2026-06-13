@@ -2,8 +2,18 @@ import json
 import os
 import re
 import time
+import urllib.request
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), '..', 'docs', 'data', 'latest.json')
+
+# The scraper runs on the self-hosted runner (a separate git checkout) and pushes
+# to GitHub. This bot's local working copy only updates on a manual `git pull`, so
+# reading the local file alone serves days-stale prices. Fetch the pushed copy from
+# GitHub first and fall back to the local file only if the network is unavailable.
+REMOTE_URL = os.environ.get(
+    'LATEST_JSON_URL',
+    'https://raw.githubusercontent.com/jtsenter/price-comparison/main/docs/data/latest.json',
+)
 
 _items = []
 _loaded_at = 0
@@ -12,8 +22,16 @@ CACHE_TTL = 300  # reload data every 5 minutes
 
 def _load():
     global _items, _loaded_at
-    with open(DATA_PATH, encoding='utf-8') as f:
-        data = json.load(f)
+    data = None
+    try:
+        req = urllib.request.Request(REMOTE_URL, headers={'Cache-Control': 'no-cache'})
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read().decode('utf-8'))
+    except Exception as e:
+        print(f"[lookup] remote fetch failed ({e}); falling back to local file")
+    if data is None:
+        with open(DATA_PATH, encoding='utf-8') as f:
+            data = json.load(f)
     _items = data['items']
     _loaded_at = time.time()
 
