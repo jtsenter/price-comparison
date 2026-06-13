@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-13T06:14:45.472517+00:00",
+  "last_updated": "2026-06-13T06:14:56.363341+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -10195,7 +10195,7 @@
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Spread Tub",
-      "last_scraped": "2026-06-13T03:31:06.172561+00:00",
+      "last_scraped": "2026-06-13T06:14:46.043549+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -10231,7 +10231,17 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Philadelphia Original Soft Cream Cheese Tub | 250g",
+          "price": 5.7,
+          "unit_price": 5.7,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/philadelphia-original-soft-cream-cheese-tub-250g-5196114",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5196114.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-04-21",
@@ -10272,7 +10282,7 @@
           "price": 5.7
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.28,
       "per_100_coles": 2.28,
@@ -10280,7 +10290,7 @@
     },
     {
       "list_item": "Snickers Milk Chocolate Party Share Bag 20 Pieces",
-      "last_scraped": "2026-06-13T03:31:10.150120+00:00",
+      "last_scraped": "2026-06-13T06:14:50.106109+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -10319,8 +10329,8 @@
       },
       "coles": {
         "name": "Snickers Chocolate Party Share Bag 20 Pieces | 300g",
-        "price": 8,
-        "unit_price": 8,
+        "price": 8.0,
+        "unit_price": 8.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/snickers-chocolate-party-share-bag-20-pieces-300g-5369981",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5369981.jpg"
@@ -10372,7 +10382,7 @@
           "price": 8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.67,
       "per_100_coles": 2.67,
@@ -10380,7 +10390,7 @@
     },
     {
       "list_item": "Spring Onion Bunch",
-      "last_scraped": "2026-06-13T03:31:13.229680+00:00",
+      "last_scraped": "2026-06-13T06:14:50.826392+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -10411,8 +10421,8 @@
       },
       "coles": {
         "name": "Coles Spring Onions | 1 Bunch",
-        "price": 3,
-        "unit_price": 3,
+        "price": 3.0,
+        "unit_price": 3.0,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-spring-onions-1-bunch-408419",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/408419.jpg"
@@ -10464,15 +10474,140 @@
           "price": 3
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Strawberries Punnet",
+      "last_scraped": "2026-06-13T06:14:55.545109+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-02-28",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-11",
+          "price": 3.5
+        },
+        {
+          "date": "2025-03-27",
+          "price": 4.5
+        },
+        {
+          "date": "2025-05-22",
+          "price": 5.0
+        },
+        {
+          "date": "2025-07-03",
+          "price": 5.9
+        },
+        {
+          "date": "2025-07-26",
+          "price": 5.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Strawberries Punnet",
+        "price": 6.0,
+        "unit_price": 24.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/144607/strawberries-punnet",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144607.jpg",
+        "is_on_special": false
+      },
+      "coles": {
+        "name": "Strawberries",
+        "price": 6.0,
+        "unit_price": 24.0,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-strawberries-250g-5191256",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5191256.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2025-07-25",
+          "price": 5.5
+        },
+        {
+          "date": "2025-08-08",
+          "price": 4.5
+        },
+        {
+          "date": "2025-08-17",
+          "price": 5.9
+        },
+        {
+          "date": "2025-09-02",
+          "price": 4.3
+        },
+        {
+          "date": "2025-09-06",
+          "price": 2
+        },
+        {
+          "date": "2025-10-05",
+          "price": 3.5
+        },
+        {
+          "date": "2025-10-15",
+          "price": 4.5
+        },
+        {
+          "date": "2025-10-21",
+          "price": 4.9
+        },
+        {
+          "date": "2026-05-29",
+          "price": 5.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5.5
+        },
+        {
+          "date": "2026-06-04",
+          "price": 6
+        },
+        {
+          "date": "2026-06-11",
+          "price": 6
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 5.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5.5
+        },
+        {
+          "date": "2026-06-02",
+          "price": 6
+        },
+        {
+          "date": "2026-06-10",
+          "price": 6
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 2.4,
+      "per_100_coles": 2.4,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Strike 2 Ply Paper Towel 2 Ply",
-      "last_scraped": "2026-06-13T03:31:16.763984+00:00",
+      "last_scraped": "2026-06-13T06:14:56.351163+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -10568,135 +10703,10 @@
           "price": 2.2
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Strawberries Punnet",
-      "last_scraped": "2026-06-13T03:31:16.810294+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2025-02-28",
-          "price": 3.5
-        },
-        {
-          "date": "2025-03-11",
-          "price": 3.5
-        },
-        {
-          "date": "2025-03-27",
-          "price": 4.5
-        },
-        {
-          "date": "2025-05-22",
-          "price": 5.0
-        },
-        {
-          "date": "2025-07-03",
-          "price": 5.9
-        },
-        {
-          "date": "2025-07-26",
-          "price": 5.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Strawberries Punnet",
-        "price": 6.0,
-        "unit_price": 24.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/144607/strawberries-punnet",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144607.jpg",
-        "is_on_special": false
-      },
-      "coles": {
-        "name": "Strawberries",
-        "price": 6,
-        "unit_price": 24,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-strawberries-250g-5191256",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5191256.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2025-07-25",
-          "price": 5.5
-        },
-        {
-          "date": "2025-08-08",
-          "price": 4.5
-        },
-        {
-          "date": "2025-08-17",
-          "price": 5.9
-        },
-        {
-          "date": "2025-09-02",
-          "price": 4.3
-        },
-        {
-          "date": "2025-09-06",
-          "price": 2
-        },
-        {
-          "date": "2025-10-05",
-          "price": 3.5
-        },
-        {
-          "date": "2025-10-15",
-          "price": 4.5
-        },
-        {
-          "date": "2025-10-21",
-          "price": 4.9
-        },
-        {
-          "date": "2026-05-29",
-          "price": 5.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5.5
-        },
-        {
-          "date": "2026-06-04",
-          "price": 6
-        },
-        {
-          "date": "2026-06-11",
-          "price": 6
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 5.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5.5
-        },
-        {
-          "date": "2026-06-02",
-          "price": 6
-        },
-        {
-          "date": "2026-06-10",
-          "price": 6
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.4,
-      "per_100_coles": 2.4,
       "per_100_unit": "100g"
     },
     {
@@ -15615,9 +15625,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 80,
+    "done": 85,
     "total": 145,
     "started_at": "2026-06-13T06:11:01.636819+00:00",
-    "current_item": "Sam's Pantry Granola Pink Lady Apple & Cinnamon"
+    "current_item": "Strike 2 Ply Paper Towel 2 Ply"
   }
 }
