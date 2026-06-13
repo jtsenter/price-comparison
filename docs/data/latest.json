@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-13T06:13:49.448712+00:00",
+  "last_updated": "2026-06-13T06:14:04.904151+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -8068,7 +8068,7 @@
     },
     {
       "list_item": "Golden Palm Medjool Dates Punnet",
-      "last_scraped": "2026-06-13T03:30:26.565771+00:00",
+      "last_scraped": "2026-06-13T06:13:50.643983+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8100,7 +8100,7 @@
       },
       "coles": {
         "name": "Medjool Dates",
-        "price": 14,
+        "price": 14.0,
         "unit_price": 30.84,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-medjool-dates-454g-5142013",
@@ -8157,7 +8157,7 @@
           "price": 11
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 2.78,
       "per_100_coles": 3.08,
@@ -8165,7 +8165,7 @@
     },
     {
       "list_item": "Hellmann's Real Mayonnaise Squeeze",
-      "last_scraped": "2026-06-13T03:30:27.357081+00:00",
+      "last_scraped": "2026-06-13T06:13:54.900888+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8196,15 +8196,26 @@
       },
       "coles": {
         "name": "Hellmann's Squeeze Real Mayonnaise | 400g",
-        "price": 8,
-        "unit_price": 8,
+        "price": 4.0,
+        "unit_price": 1.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/hellmann's-squeeze-real-mayonnaise-400g-3025755",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3025755.jpg"
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3025755.jpg",
+        "retailer": "coles"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
+      "cheaper_store": "coles",
+      "saving_per_item": 4.0,
+      "alternatives": [
+        {
+          "name": "Hellmann's Squeeze Real Mayonnaise | 400g",
+          "price": 4.0,
+          "unit_price": 1.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/hellmann's-squeeze-real-mayonnaise-400g-3025755",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3025755.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2025-07-31",
@@ -8253,15 +8264,15 @@
           "price": 8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 2.0,
-      "per_100_coles": 2.0,
+      "per_100_coles": 1.0,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Katoomba Ingredients Red Lentils",
-      "last_scraped": "2026-06-13T03:30:29.224113+00:00",
+      "last_scraped": "2026-06-13T06:13:59.191081+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -8300,8 +8311,8 @@
       },
       "coles": {
         "name": "Katoomba Red Lentils | 1kg",
-        "price": 4,
-        "unit_price": 4,
+        "price": 4.0,
+        "unit_price": 4.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/katoomba-red-lentils-1kg-4683608",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4683608.jpg"
@@ -8353,7 +8364,7 @@
           "price": 4
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.4,
@@ -8361,7 +8372,7 @@
     },
     {
       "list_item": "KitKat Milk Chocolate Mini Bars Share Pack",
-      "last_scraped": "2026-06-13T03:30:30.843590+00:00",
+      "last_scraped": "2026-06-13T06:14:00.022709+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8392,15 +8403,34 @@
       },
       "coles": {
         "name": "KitKat Milk Chocolate Value Share Pack 18 Pieces | 252g",
-        "price": 8,
-        "unit_price": 8,
+        "price": 8.0,
+        "unit_price": 8.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/kitkat-milk-chocolate-value-share-pack-18-pieces-252g-7018864",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7018864.jpg"
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "KitKat Packed With Milo Milk Chocolate Block | 165g",
+          "price": 3.75,
+          "unit_price": 2.27,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/kitkat-packed-with-milo-milk-chocolate-block-165g-5389720",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5389720.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "KitKat Milk Chocolate Block | 160g",
+          "price": 3.75,
+          "unit_price": 2.34,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/kitkat-milk-chocolate-block-160g-5872479",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5872479.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2025-08-08",
@@ -8453,7 +8483,7 @@
           "price": 8
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 3.17,
       "per_100_coles": 3.17,
@@ -8461,7 +8491,7 @@
     },
     {
       "list_item": "Macro Natural Sunflower Kernels",
-      "last_scraped": "2026-06-13T03:30:34.049665+00:00",
+      "last_scraped": "2026-06-13T06:14:04.897600+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8492,15 +8522,43 @@
       },
       "coles": {
         "name": "Wellness Road Sunflower Kernels | 500g",
-        "price": 5,
-        "unit_price": 5,
+        "price": 5.0,
+        "unit_price": 5.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/wellness-road-sunflower-kernels-500g-8669642",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8669642.jpg"
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Gaganis Premium Raw Sunflower Kernals | 500g",
+          "price": 4.5,
+          "unit_price": 4.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/gaganis-premium-raw-sunflower-kernals-500g-9781896",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9781896.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Chacha Roasted Sunflower Seeds Coconut | 228g",
+          "price": 4.5,
+          "unit_price": 4.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/chacha-roasted-sunflower-seeds-coconut-228g-4211085",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4211085.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Chacha Roasted Sunflower Seeds Spiced | 228g",
+          "price": 4.5,
+          "unit_price": 4.5,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/chacha-roasted-sunflower-seeds-spiced-228g-4210989",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4210989.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2025-07-08",
@@ -8537,7 +8595,7 @@
           "price": 5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 1.0,
       "per_100_coles": 1.0,
@@ -15379,17 +15437,17 @@
   "not_found_items": [],
   "summary": {
     "total_woolworths": 729.95,
-    "total_coles": 738.9,
+    "total_coles": 734.9,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 8.95,
+    "total_saving": 4.95,
     "items_compared": 144,
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 60,
+    "done": 65,
     "total": 145,
     "started_at": "2026-06-13T06:11:01.636819+00:00",
-    "current_item": "Hedy's Fresh Quiche Lorraine Chilled Meal"
+    "current_item": "Macro Natural Sunflower Kernels"
   }
 }
