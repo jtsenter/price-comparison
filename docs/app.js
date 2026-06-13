@@ -129,6 +129,52 @@ function saveOverrides(obj) {
   localStorage.setItem('pw_overrides_v1', JSON.stringify(obj));
 }
 
+// ── Rejected product URLs (from "Different item") ────────────────────────────
+// Shape: { "<item>": { "ww": ["url", ...], "coles": ["url", ...] } }
+// The scraper reads docs/data/rejected_urls.json and drops these candidates so
+// it never re-matches a product the user has flagged as belonging elsewhere.
+function loadRejected() {
+  try { return JSON.parse(localStorage.getItem('pw_rejected_urls_v1') || '{}'); } catch { return {}; }
+}
+function saveRejected(obj) {
+  localStorage.setItem('pw_rejected_urls_v1', JSON.stringify(obj));
+}
+async function persistRejectedToRepo(s, rejected) {
+  if (!s?.user || !s?.repo || !s?.token) return;
+  const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/rejected_urls.json`;
+  const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
+
+  // Merge with repo copy so entries from other sessions are preserved.
+  const getRes = await fetch(apiPath, { headers });
+  const getJson = getRes.ok ? await getRes.json() : {};
+  let existing = {};
+  if (getJson.content) {
+    try { existing = JSON.parse(atob(getJson.content.replace(/\n/g, ''))); } catch {}
+  }
+  const merged = { ...existing };
+  for (const [item, stores] of Object.entries(rejected)) {
+    merged[item] = merged[item] || {};
+    for (const store of ['ww', 'coles']) {
+      const urls = new Set([...(merged[item][store] || []), ...((stores && stores[store]) || [])]);
+      if (urls.size) merged[item][store] = [...urls];
+    }
+  }
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(merged, null, 2) + '\n')));
+  const doPut = async () => {
+    const shaRes = await fetch(apiPath, { headers });
+    const shaJson = shaRes.ok ? await shaRes.json() : {};
+    const body = { message: 'chore: sync rejected product URLs', content };
+    if (shaJson.sha) body.sha = shaJson.sha;
+    return fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
+  };
+  let putRes = await doPut();
+  if (putRes.status === 409) putRes = await doPut();
+  if (!putRes.ok) {
+    const msg = await putRes.text().catch(() => String(putRes.status));
+    throw new Error(`GitHub PUT failed (${putRes.status}): ${msg}`);
+  }
+}
+
 // ── Image overrides ───────────────────────────────────────────────────────────
 // Stores { [list_item]: 'ww' | 'coles' } — user-chosen image source per item
 function loadImgOverrides() {
@@ -1422,7 +1468,7 @@ function openPriceHistoryModal(item) {
 
     row.querySelectorAll('.price-fork-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        openDiffItemModal(item, btn.dataset.price);
+        openDiffItemModal(item, btn.dataset.price, btn.dataset.store);
       });
     });
 
@@ -1578,10 +1624,12 @@ function initDiffItemModal() {
   });
 }
 
-async function openDiffItemModal(item, priceKey) {
+async function openDiffItemModal(item, priceKey, store) {
   const priority = getPriority(item.list_item);
-  // Store context — mutation deferred until Confirm is clicked
-  _diffItemContext = { item, priceKey, priority, fromHistory: true };
+  // Store context — mutation deferred until Confirm is clicked.
+  // `store` ('ww'|'coles') identifies which store's matched product was wrong,
+  // so on confirm we can blocklist that product for this item AND pin it to the new one.
+  _diffItemContext = { item, priceKey, priority, store, fromHistory: true };
 
   const badge = $('diffItemPriorityBadge');
   if (badge) {
@@ -1617,6 +1665,20 @@ async function doDiffItemAdd(newName, ctx) {
     saveExclusions(ex);
   }
 
+  // #5: the product the scraper wrongly matched to this item IS the "different item".
+  // Capture that store's current product URL so we can (a) blocklist it for the original
+  // item and (b) pin it onto the new item. Only possible when we know the URL.
+  const store = ctx.store === 'coles' ? 'coles' : (ctx.store === 'ww' ? 'ww' : null);
+  const wrongUrl = store === 'ww'    ? (ctx.item.woolworths?.url || '')
+                 : store === 'coles' ? (ctx.item.coles?.url || '')
+                 : '';
+  if (wrongUrl) {
+    const rej = loadRejected();
+    rej[ctx.item.list_item] = rej[ctx.item.list_item] || {};
+    rej[ctx.item.list_item][store] = [...new Set([...(rej[ctx.item.list_item][store] || []), wrongUrl])];
+    saveRejected(rej);
+  }
+
   // Persist the removal to GitHub before adding new item
   if (s.user && s.repo && s.token) {
     try {
@@ -1635,6 +1697,16 @@ async function doDiffItemAdd(newName, ctx) {
     if (!proceed) return;
   }
 
+  // #5: pin the wrongly-matched product URL onto the NEW item so it scrapes the
+  // correct product from the first run (the matcher is bypassed for pinned URLs).
+  if (wrongUrl) {
+    const ov = loadOverrides();
+    ov[newName] = ov[newName] || {};
+    if (store === 'ww') ov[newName].wwUrl = wrongUrl;
+    else                ov[newName].colesUrl = wrongUrl;
+    saveOverrides(ov);
+  }
+
   // Step 3a: add stub to _lastData so item appears immediately
   const stub = {
     list_item: newName,
@@ -1651,9 +1723,17 @@ async function doDiffItemAdd(newName, ctx) {
     await writeNewItemToExcel(newName); // throws on failure, caught by caller
   }
 
-  // Persist latest.json (now includes the new stub)
+  // Persist latest.json (now includes the new stub) + the blocklist/pin files
   if (s.user && s.repo && s.token) {
     await persistLatestJson(_lastData, `feat: add "${newName}" from different-item flow`);
+    if (wrongUrl) {
+      try {
+        await persistRejectedToRepo(s, loadRejected());
+        await persistUrlOverridesToRepo(s, loadOverrides());
+      } catch (_e) {
+        showToast('⚠ Item added, but saving the URL correction to GitHub failed');
+      }
+    }
   }
 
   if (_lastData) renderPage(_lastData);
@@ -1671,12 +1751,15 @@ async function doDiffItemAdd(newName, ctx) {
   }
   hideRunnerOfflineBanner();
 
+  const _inputs = { trigger: 'manual', item: newName };
+  if (wrongUrl && store === 'ww')    _inputs.ww_url = wrongUrl;
+  if (wrongUrl && store === 'coles') _inputs.coles_url = wrongUrl;
   const dispRes = await fetch(
     `https://api.github.com/repos/${s.user}/${s.repo}/actions/workflows/scrape.yml/dispatches`,
     {
       method: 'POST',
       headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ref: 'main', inputs: { trigger: 'manual', item: newName } }),
+      body: JSON.stringify({ ref: 'main', inputs: _inputs }),
     }
   );
   if (dispRes.status === 204) {

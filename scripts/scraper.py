@@ -90,6 +90,34 @@ def _week_dedup(history: list, new_price: float) -> str:
     return 'append'
 
 
+def _product_key(url: str) -> str:
+    """Stable identity for a product URL, robust to query params / trailing slashes.
+    WW: the stockcode in /productdetails/<id>/. Coles: the trailing numeric id.
+    Falls back to the full URL when no id is found."""
+    if not url:
+        return ""
+    m = re.search(r'/productdetails/(\d+)', url)        # Woolworths
+    if m:
+        return f"ww:{m.group(1)}"
+    m = re.search(r'-(\d+)(?:[/?#]|$)', url)             # Coles slug ...-<id>
+    if m:
+        return f"co:{m.group(1)}"
+    return url.split('?')[0].rstrip('/')
+
+
+def _load_rejected_urls() -> dict:
+    """Load the per-item rejected-product map written by the UI's 'Different item' flow.
+    Shape: { "<item>": { "ww": ["url", ...], "coles": ["url", ...] } }"""
+    path = os.path.join(DATA_DIR, "rejected_urls.json")
+    if os.path.exists(path):
+        try:
+            with open(path) as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {}
+
+
 def _should_add_history_entry(history: list, new_price: float, today: str) -> bool:
     """Return True if a new price history entry should be appended.
 
@@ -1074,6 +1102,22 @@ async def _scrape_single_item(
                 search_with_retry(search_coles, coles_page, item),
             )
         await delay()
+
+    # Drop any candidates the user explicitly rejected for this item via "Different item".
+    # Matched by stable product id so query-param noise doesn't defeat the blocklist.
+    _rej_item = _load_rejected_urls().get(item, {})
+    _rej_ww = {_product_key(u) for u in _rej_item.get("ww", [])}
+    _rej_co = {_product_key(u) for u in _rej_item.get("coles", [])}
+    if _rej_ww and ww_results:
+        _before = len(ww_results)
+        ww_results = [r for r in ww_results if _product_key(r.get("url", "")) not in _rej_ww]
+        if len(ww_results) != _before:
+            print(f"    WW: dropped {_before - len(ww_results)} rejected candidate(s)")
+    if _rej_co and coles_results:
+        _before = len(coles_results)
+        coles_results = [r for r in coles_results if _product_key(r.get("url", "")) not in _rej_co]
+        if len(coles_results) != _before:
+            print(f"    Coles: dropped {_before - len(coles_results)} rejected candidate(s)")
 
     # Pick best matching product from each result list
     if _skip_picker_ww:
