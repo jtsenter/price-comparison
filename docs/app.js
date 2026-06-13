@@ -1341,7 +1341,18 @@ function openPriceHistoryModal(item) {
     date: d, ww: wwMap.get(d) ?? null, coles: coMap.get(d) ?? null, source: 'scrape',
   }));
 
-  const allEntries = [...excelEntries, ...scrapeEntries]
+  // If the current live price isn't already the top history entry, inject it so it's always visible
+  const wwLive = item.woolworths?.price ?? null;
+  const coLive = item.coles?.price ?? null;
+  const wwScraped = item.woolworths?.scraped_at?.slice(0, 10) ?? null;
+  const coScraped = item.coles?.scraped_at?.slice(0, 10) ?? null;
+  const liveDate = wwScraped || coScraped || null;
+  const alreadyInHistory = liveDate && (wwMap.has(liveDate) || coMap.has(liveDate));
+  const liveEntry = !alreadyInHistory && (wwLive != null || coLive != null)
+    ? [{ date: liveDate || 'Current', ww: wwLive, coles: coLive, source: 'live' }]
+    : [];
+
+  const allEntries = [...liveEntry, ...excelEntries, ...scrapeEntries]
     .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
   const listEl = $('priceHistoryList');
