@@ -671,7 +671,13 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   if (!priceHistory?.length || currentPrice == null) return '';
 
   const exclusions = loadExclusions();
-  const excluded = new Set((exclusions[itemName] || []).map(p => Number(p).toFixed(2)));
+  // Support new "ww:X.XX"/"coles:X.XX" format and old bare-number format (treated as ww).
+  // For trend bars (mixed WW+Coles series) we exclude a price if excluded for any store.
+  const excluded = new Set((exclusions[itemName] || []).map(k => {
+    if (typeof k === 'number') return Number(k).toFixed(2);
+    const str = String(k);
+    return str.includes(':') ? str.split(':')[1] : Number(str).toFixed(2);
+  }));
   // Use raw history prices — they are already in the same monetary units (pack/shelf price)
   // as currentPrice. _ww_price_factor is only used for cheaper_store comparison in the scraper.
   const prices = priceHistory
@@ -1158,9 +1164,13 @@ function buildPriceHistChart(item, excludedPrices) {
     .filter(e => e.date && e.price > 0)
     .sort((a, b) => a.date.localeCompare(b.date));
 
-  const isExcl = v => v != null && excludedPrices.has(Number(v).toFixed(2));
-  const wwFullMap = new Map(wwRaw.filter(e => !isExcl(e.price)).map(e => [e.date, e.price]));
-  const coMap     = new Map(coRaw.filter(e => !isExcl(e.price)).map(e => [e.date, e.price]));
+  // excludedPrices is now a Set of "ww:X.XX" / "coles:X.XX" keys (or legacy bare numbers → ww)
+  const exclWW = new Set([...excludedPrices].filter(k => !k.includes(':') || k.startsWith('ww:')).map(k => k.includes(':') ? k.split(':')[1] : k));
+  const exclCo = new Set([...excludedPrices].filter(k => k.startsWith('coles:')).map(k => k.split(':')[1]));
+  const isExclWW = v => v != null && exclWW.has(Number(v).toFixed(2));
+  const isExclCo = v => v != null && exclCo.has(Number(v).toFixed(2));
+  const wwFullMap = new Map(wwRaw.filter(e => !isExclWW(e.price)).map(e => [e.date, e.price]));
+  const coMap     = new Map(coRaw.filter(e => !isExclCo(e.price)).map(e => [e.date, e.price]));
 
   const allDates = [...new Set([...wwFullMap.keys(), ...coMap.keys()])].sort();
   if (allDates.length < 2) {
@@ -1295,7 +1305,11 @@ function openPriceHistoryModal(item) {
   $('priceHistoryTitle').textContent = `Price History — ${stripWW(item.list_item)}`;
 
   const excl = loadExclusions();
-  const excludedPrices = new Set((excl[item.list_item] || []).map(p => Number(p).toFixed(2)));
+  const exclKeys = new Set((excl[item.list_item] || []).map(k => String(k)));
+  const isWWExcl  = price => price != null && exclKeys.has(`ww:${Number(price).toFixed(2)}`);
+  const isCoExcl  = price => price != null && exclKeys.has(`coles:${Number(price).toFixed(2)}`);
+  // Build a Set in the format expected by buildPriceHistChart ("ww:X.XX" / "coles:X.XX")
+  const excludedPrices = exclKeys;
 
   // Build unified timeline.
   // All price_history entries are WW prices (Coles not tracked historically).
@@ -1336,50 +1350,62 @@ function openPriceHistoryModal(item) {
   listEl.appendChild(hdr);
 
   allEntries.forEach(entry => {
-    // Use WW price as the key when present; fall back to Coles price for Coles-only rows.
-    // This ensures every row has a priceKey and can show the same button set.
-    const wwKey    = entry.ww    != null ? Number(entry.ww).toFixed(2)    : null;
-    const coKey    = entry.coles != null ? Number(entry.coles).toFixed(2) : null;
-    const priceKey = wwKey ?? coKey;
-    const isExcluded = priceKey != null && excludedPrices.has(priceKey);
+    const wwExcluded = isWWExcl(entry.ww);
+    const coExcluded = isCoExcl(entry.coles);
+    let rowClass = 'price-history-row';
+    if (wwExcluded)  rowClass += ' excluded-ww';
+    if (coExcluded)  rowClass += ' excluded-coles';
+
     const row = document.createElement('div');
-    row.className = `price-history-row${isExcluded ? ' excluded' : ''}`;
+    row.className = rowClass;
 
     const wwHtml = entry.ww != null
-      ? `<span class="price-history-price">${fmt(entry.ww)}</span>`
-      : `<span style="color:var(--text-soft)">—</span>`;
-    const coHtml = entry.coles != null
-      ? `<span class="price-history-price" style="color:var(--coles)">${fmt(entry.coles)}</span>`
+      ? `<span class="price-history-store-cell price-history-store-ww">
+           <span class="price-history-price">${fmt(entry.ww)}</span>
+           <button class="price-excl-x" data-store="ww" data-price="${Number(entry.ww).toFixed(2)}" title="${wwExcluded ? 'Include' : 'Exclude'}">✕</button>
+         </span>`
       : `<span style="color:var(--text-soft)">—</span>`;
 
-    // Every row gets the same two buttons regardless of which store(s) are present.
-    const btnHtml = priceKey != null ? `
-      <button class="price-exclude-btn" data-price="${priceKey}">${isExcluded ? 'Include' : 'Exclude'}</button>
-      <button class="price-diff-btn"    data-price="${priceKey}">Different item</button>` : '';
+    const coHtml = entry.coles != null
+      ? `<span class="price-history-store-cell price-history-store-coles">
+           <span class="price-history-price" style="color:var(--coles)">${fmt(entry.coles)}</span>
+           <button class="price-excl-x" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="${coExcluded ? 'Include' : 'Exclude'}">✕</button>
+         </span>`
+      : `<span style="color:var(--text-soft)">—</span>`;
+
+    const hasDiffBtn = entry.ww != null || entry.coles != null;
+    const diffKey = entry.ww != null ? Number(entry.ww).toFixed(2) : Number(entry.coles).toFixed(2);
+    const actionsHtml = hasDiffBtn
+      ? `<button class="price-diff-btn" data-price="${diffKey}" title="Different item">⇄</button>`
+      : '';
 
     row.innerHTML = `
       <span class="price-history-date">${entry.date || 'Unknown date'}</span>
-      <span class="price-history-store-col">${wwHtml}</span>
-      <span class="price-history-store-col">${coHtml}</span>
-      <span class="price-history-actions-col">${btnHtml}</span>`;
+      ${wwHtml}
+      ${coHtml}
+      <span class="price-history-actions-col">${actionsHtml}</span>`;
 
-    if (priceKey != null) {
-      row.querySelector('.price-exclude-btn').addEventListener('click', () => {
+    row.querySelectorAll('.price-excl-x').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const store = btn.dataset.store;
+        const price = btn.dataset.price;
+        const key = `${store}:${price}`;
         const ex = loadExclusions();
-        const list = ex[item.list_item] || [];
-        const priceNum = Number(priceKey);
-        if (isExcluded) {
-          ex[item.list_item] = list.filter(p => Number(p).toFixed(2) !== priceKey);
+        const list = (ex[item.list_item] || []).map(String);
+        if (list.includes(key)) {
+          ex[item.list_item] = list.filter(k => k !== key);
         } else {
-          ex[item.list_item] = [...list, priceNum];
+          ex[item.list_item] = [...list, key];
         }
         saveExclusions(ex);
         openPriceHistoryModal(item);
         if (_lastData) renderPage(_lastData);
       });
+    });
 
+    if (hasDiffBtn) {
       row.querySelector('.price-diff-btn').addEventListener('click', () => {
-        openDiffItemModal(item, priceKey);
+        openDiffItemModal(item, diffKey);
       });
     }
 
