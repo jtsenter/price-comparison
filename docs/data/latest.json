@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-13T03:31:56.834630+00:00",
+  "last_updated": "2026-06-13T03:32:05.792869+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12007,7 +12007,7 @@
     },
     {
       "list_item": "Woolworths Red Onions",
-      "last_scraped": "2026-06-12T04:18:43.311128+00:00",
+      "last_scraped": "2026-06-13T03:31:59.806142+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -12026,8 +12026,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Red Onions Bag",
-        "price": 5,
-        "unit_price": 5,
+        "price": 5.0,
+        "unit_price": 5.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg",
@@ -12080,26 +12080,26 @@
     },
     {
       "list_item": "Woolworths Rosemary Leaves",
-      "last_scraped": "2026-06-12T04:18:46.284001+00:00",
+      "last_scraped": "2026-06-13T03:32:00.271419+00:00",
       "trip_count": 3,
       "price_history": [
         {
           "date": "2025-01-29",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2025-03-17",
-          "price": 2
+          "price": 2.0
         },
         {
           "date": "2026-03-02",
-          "price": 2
+          "price": 2.0
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Rosemary Leaves",
-        "price": 2,
+        "price": 2.0,
         "unit_price": 1.11,
         "unit": "10G",
         "url": "https://www.woolworths.com.au/shop/productdetails/251141/woolworths-rosemary-leaves",
@@ -12155,12 +12155,12 @@
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 11.1,
-      "per_100_coles": 10,
+      "per_100_coles": 10.0,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Woolworths Thickened Cream",
-      "last_scraped": "2026-06-12T04:18:46.963967+00:00",
+      "last_scraped": "2026-06-13T03:32:02.595448+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -12169,11 +12169,11 @@
         },
         {
           "date": "2025-05-12",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-06-06",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2026-02-11",
@@ -12260,7 +12260,7 @@
     },
     {
       "list_item": "Woolworths Tuna In Springwater",
-      "last_scraped": "2026-06-12T04:18:49.416784+00:00",
+      "last_scraped": "2026-06-13T03:32:03.166624+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -12353,7 +12353,7 @@
     },
     {
       "list_item": "Woolworths Wholegrain Wrap 8Pk",
-      "last_scraped": "2026-06-12T04:18:49.610643+00:00",
+      "last_scraped": "2026-06-13T03:32:05.781710+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -12391,7 +12391,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3731716.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -15181,9 +15181,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 105,
+    "done": 110,
     "total": 145,
     "started_at": "2026-06-13T03:27:53.102742+00:00",
-    "current_item": "Woolworths Red Onions Bag"
+    "current_item": "Woolworths Wholegrain Wrap 8Pk"
   }
 }
