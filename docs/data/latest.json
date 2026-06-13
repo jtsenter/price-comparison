@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-13T06:15:42.222765+00:00",
+  "last_updated": "2026-06-13T06:15:56.039776+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -12115,8 +12115,104 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Woolworths Extra Virgin Olive Oil Spray",
+      "last_scraped": "2026-06-13T06:15:44.932010+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2024-12-02",
+          "price": 3.7
+        },
+        {
+          "date": "2025-02-02",
+          "price": 3.7
+        },
+        {
+          "date": "2025-04-14",
+          "price": 3.7
+        },
+        {
+          "date": "2026-03-10",
+          "price": 3.3
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Extra Virgin Olive Oil Spray",
+        "price": 3.3,
+        "unit_price": 2.2,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/260739/woolworths-extra-virgin-olive-oil-spray",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/260739.jpg",
+        "is_on_special": false
+      },
+      "coles": {
+        "name": "Extra Virgin Olive Oil",
+        "price": 9.0,
+        "unit_price": 1.8,
+        "unit": "100mL",
+        "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5449504.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 5.7,
+      "alternatives": [
+        {
+          "name": "Extra Virgin Olive Oil",
+          "price": 9.0,
+          "unit_price": 1.8,
+          "unit": "100mL",
+          "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5449504.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 3.3
+        },
+        {
+          "date": "2026-06-01",
+          "price": 3.3
+        },
+        {
+          "date": "2026-06-04",
+          "price": 3.3
+        },
+        {
+          "date": "2026-06-08",
+          "price": 3.3
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 9
+        },
+        {
+          "date": "2026-05-30",
+          "price": 9
+        },
+        {
+          "date": "2026-06-01",
+          "price": 9
+        },
+        {
+          "date": "2026-06-08",
+          "price": 9
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 2.2,
+      "per_100_coles": 1.8,
+      "per_100_unit": "100ml"
+    },
+    {
       "list_item": "Woolworths Lamb Mince",
-      "last_scraped": "2026-06-13T03:31:47.588765+00:00",
+      "last_scraped": "2026-06-13T06:15:48.431907+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -12143,8 +12239,8 @@
       },
       "coles": {
         "name": "Coles 3 Star Lamb Mince | 500g",
-        "price": 9,
-        "unit_price": 9,
+        "price": 9.0,
+        "unit_price": 9.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8850461.jpg",
@@ -12152,7 +12248,35 @@
       },
       "cheaper_store": "equal",
       "saving_per_item": 0.0,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles 3 Star Lamb Mince | 500g",
+          "price": 9.0,
+          "unit_price": 9.0,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8850461.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Perform Lamb With Mint Sauce | 360g",
+          "price": 10.0,
+          "unit_price": 10.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/coles-perform-lamb-with-mint-sauce-360g-1756910",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1756910.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Coles Lamb Forequarter Chops | approx. 433g",
+          "price": 10.39,
+          "unit_price": 10.39,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-lamb-forequarter-chops-approx.-433g-9917830",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9917830.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -12196,174 +12320,8 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths Extra Virgin Olive Oil Spray",
-      "last_scraped": "2026-06-13T03:31:49.955800+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2024-12-02",
-          "price": 3.7
-        },
-        {
-          "date": "2025-02-02",
-          "price": 3.7
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.7
-        },
-        {
-          "date": "2026-03-10",
-          "price": 3.3
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Extra Virgin Olive Oil Spray",
-        "price": 3.3,
-        "unit_price": 2.2,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/260739/woolworths-extra-virgin-olive-oil-spray",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/260739.jpg",
-        "is_on_special": false
-      },
-      "coles": {
-        "name": "Extra Virgin Olive Oil",
-        "price": 9,
-        "unit_price": 1.8,
-        "unit": "100mL",
-        "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5449504.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 5.7,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 3.3
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.3
-        },
-        {
-          "date": "2026-06-04",
-          "price": 3.3
-        },
-        {
-          "date": "2026-06-08",
-          "price": 3.3
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 9
-        },
-        {
-          "date": "2026-05-30",
-          "price": 9
-        },
-        {
-          "date": "2026-06-01",
-          "price": 9
-        },
-        {
-          "date": "2026-06-08",
-          "price": 9
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 2.2,
-      "per_100_coles": 1.8,
-      "per_100_unit": "100ml"
-    },
-    {
-      "list_item": "Woolworths Pesto Basil",
-      "last_scraped": "2026-06-13T03:31:53.484945+00:00",
-      "trip_count": 4,
-      "price_history": [
-        {
-          "date": "2025-03-27",
-          "price": 1.85
-        },
-        {
-          "date": "2025-04-14",
-          "price": 1.85
-        },
-        {
-          "date": "2025-07-10",
-          "price": 1.85
-        },
-        {
-          "date": "2026-02-23",
-          "price": 1.95
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Pesto Basil",
-        "price": 1.95,
-        "unit_price": 1.03,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/753340/woolworths-pesto-basil",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/753340.jpg"
-      },
-      "coles": {
-        "name": "Coles Pesto Basil | 190g",
-        "price": 1.95,
-        "unit_price": 1.95,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/coles-pesto-basil-190g-5419660",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5419660.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.95
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.95
-        },
-        {
-          "date": "2026-06-04",
-          "price": 1.95
-        },
-        {
-          "date": "2026-06-08",
-          "price": 1.95
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 1.95
-        },
-        {
-          "date": "2026-06-01",
-          "price": 1.95
-        },
-        {
-          "date": "2026-06-08",
-          "price": 1.95
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.03,
-      "per_100_coles": 1.03,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Woolworths Mild Salsa",
-      "last_scraped": "2026-06-13T03:31:54.100335+00:00",
+      "last_scraped": "2026-06-13T06:15:50.762463+00:00",
       "trip_count": 6,
       "price_history": [
         {
@@ -12452,10 +12410,163 @@
           "price": 1.9
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.63,
       "per_100_coles": 0.63,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Pesto Basil",
+      "last_scraped": "2026-06-13T06:15:55.213519+00:00",
+      "trip_count": 4,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 1.85
+        },
+        {
+          "date": "2025-04-14",
+          "price": 1.85
+        },
+        {
+          "date": "2025-07-10",
+          "price": 1.85
+        },
+        {
+          "date": "2026-02-23",
+          "price": 1.95
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Pesto Basil",
+        "price": 1.95,
+        "unit_price": 1.03,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/753340/woolworths-pesto-basil",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/753340.jpg"
+      },
+      "coles": {
+        "name": "Coles Pesto Basil | 190g",
+        "price": 1.95,
+        "unit_price": 1.95,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/coles-pesto-basil-190g-5419660",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5419660.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.95
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.95
+        },
+        {
+          "date": "2026-06-04",
+          "price": 1.95
+        },
+        {
+          "date": "2026-06-08",
+          "price": 1.95
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 1.95
+        },
+        {
+          "date": "2026-06-01",
+          "price": 1.95
+        },
+        {
+          "date": "2026-06-08",
+          "price": 1.95
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 1.03,
+      "per_100_coles": 1.03,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Red Onions",
+      "last_scraped": "2026-06-13T06:15:56.019298+00:00",
+      "trip_count": 3,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 4.9
+        },
+        {
+          "date": "2025-03-27",
+          "price": 3.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 5.5
+        }
+      ],
+      "category": "Fruit & Veg",
+      "woolworths": {
+        "name": "Woolworths Red Onions Bag",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg",
+        "is_on_special": false
+      },
+      "coles": {
+        "name": "Red Onion 1 Kg",
+        "price": 5.1,
+        "unit_price": 5.1,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-red-onion-1-kg-1kg-8467604",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8467604.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 0.1,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-06-01",
+          "price": 5
+        },
+        {
+          "date": "2026-06-03",
+          "price": 3.5
+        },
+        {
+          "date": "2026-06-11",
+          "price": 5
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-06-02",
+          "price": 3.5
+        },
+        {
+          "date": "2026-06-04",
+          "price": 5.1
+        },
+        {
+          "date": "2026-06-11",
+          "price": 5.1
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 0.5,
+      "per_100_coles": 0.51,
       "per_100_unit": "100g"
     },
     {
@@ -12549,79 +12660,6 @@
         },
         {
           "date": "2026-06-01",
-          "price": 3.5
-        },
-        {
-          "date": "2026-06-04",
-          "price": 5.1
-        },
-        {
-          "date": "2026-06-11",
-          "price": 5.1
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 0.5,
-      "per_100_coles": 0.51,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Red Onions",
-      "last_scraped": "2026-06-13T03:31:59.806142+00:00",
-      "trip_count": 3,
-      "price_history": [
-        {
-          "date": "2024-11-12",
-          "price": 4.9
-        },
-        {
-          "date": "2025-03-27",
-          "price": 3.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 5.5
-        }
-      ],
-      "category": "Fruit & Veg",
-      "woolworths": {
-        "name": "Woolworths Red Onions Bag",
-        "price": 5.0,
-        "unit_price": 5.0,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg",
-        "is_on_special": false
-      },
-      "coles": {
-        "name": "Red Onion 1 Kg",
-        "price": 5.1,
-        "unit_price": 5.1,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-red-onion-1-kg-1kg-8467604",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8467604.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 0.1,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2026-06-01",
-          "price": 5
-        },
-        {
-          "date": "2026-06-03",
-          "price": 3.5
-        },
-        {
-          "date": "2026-06-11",
-          "price": 5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-06-02",
           "price": 3.5
         },
         {
@@ -15757,10 +15795,10 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 100,
+    "done": 105,
     "total": 145,
     "started_at": "2026-06-13T06:11:01.636819+00:00",
-    "current_item": "Woolworths Cous Cous"
+    "current_item": "Woolworths Red Onions"
   },
   "pending_validation": [
     {
