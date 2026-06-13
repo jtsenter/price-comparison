@@ -1106,31 +1106,45 @@ function openEditModal(item) {
 
 let _historyItem = null;
 let _priceHistChart = null;
+let _pendingExcl = null; // staged exclusions (Set), null when modal is closed
+
+function _closePriceHistoryModal() {
+  const modal = $('priceHistoryModal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  _historyItem = null;
+  _pendingExcl = null;
+  if (_priceHistChart) { _priceHistChart.destroy(); _priceHistChart = null; }
+  document.body.style.overflow = '';
+  const leg = document.getElementById('priceHistChartLegend');
+  if (leg) leg.remove();
+}
 
 function initPriceHistoryModal() {
   const modal = $('priceHistoryModal');
   if (!modal) return;
 
-  const close = () => {
-    modal.classList.remove('open');
-    _historyItem = null;
-    if (_priceHistChart) { _priceHistChart.destroy(); _priceHistChart = null; }
-    document.body.style.overflow = '';
-    const leg = document.getElementById('priceHistChartLegend');
-    if (leg) leg.remove();
-  };
-
-  $('priceHistoryClose').addEventListener('click', close);
-  $('priceHistoryClose2').addEventListener('click', close);
-  modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+  $('priceHistoryClose').addEventListener('click', _closePriceHistoryModal);
+  $('priceHistoryClose2').addEventListener('click', _closePriceHistoryModal);
+  modal.addEventListener('click', (e) => { if (e.target === modal) _closePriceHistoryModal(); });
 
   $('priceHistoryReset').addEventListener('click', () => {
     if (!_historyItem) return;
-    const excl = loadExclusions();
-    delete excl[_historyItem.list_item];
-    saveExclusions(excl);
+    _pendingExcl = new Set();
     openPriceHistoryModal(_historyItem);
+  });
+
+  $('priceHistorySave').addEventListener('click', () => {
+    if (!_historyItem || _pendingExcl === null) return;
+    const ex = loadExclusions();
+    if (_pendingExcl.size === 0) {
+      delete ex[_historyItem.list_item];
+    } else {
+      ex[_historyItem.list_item] = [..._pendingExcl];
+    }
+    saveExclusions(ex);
     if (_lastData) renderPage(_lastData);
+    _closePriceHistoryModal();
   });
 }
 
@@ -1304,12 +1318,14 @@ function openPriceHistoryModal(item) {
   _historyItem = item;
   $('priceHistoryTitle').textContent = `Price History — ${stripWW(item.list_item)}`;
 
-  const excl = loadExclusions();
-  const exclKeys = new Set((excl[item.list_item] || []).map(k => String(k)));
-  const isWWExcl  = price => price != null && exclKeys.has(`ww:${Number(price).toFixed(2)}`);
-  const isCoExcl  = price => price != null && exclKeys.has(`coles:${Number(price).toFixed(2)}`);
-  // Build a Set in the format expected by buildPriceHistChart ("ww:X.XX" / "coles:X.XX")
-  const excludedPrices = exclKeys;
+  // Initialize pending on fresh open; re-renders reuse existing _pendingExcl
+  if (_pendingExcl === null) {
+    const excl = loadExclusions();
+    _pendingExcl = new Set((excl[item.list_item] || []).map(k => String(k)));
+  }
+  const isWWExcl  = price => price != null && _pendingExcl.has(`ww:${Number(price).toFixed(2)}`);
+  const isCoExcl  = price => price != null && _pendingExcl.has(`coles:${Number(price).toFixed(2)}`);
+  const excludedPrices = _pendingExcl;
 
   // Build unified timeline.
   // All price_history entries are WW prices (Coles not tracked historically).
@@ -1345,8 +1361,7 @@ function openPriceHistoryModal(item) {
   hdr.innerHTML = `
     <span class="price-history-date" style="color:var(--text-soft)">Date</span>
     <span class="price-history-store-col"><span class="store-chip sm ww">W</span></span>
-    <span class="price-history-store-col"><span class="store-chip sm coles">C</span></span>
-    <span class="price-history-actions-col"></span>`;
+    <span class="price-history-store-col"><span class="store-chip sm coles">C</span></span>`;
   listEl.appendChild(hdr);
 
   allEntries.forEach(entry => {
@@ -1359,55 +1374,46 @@ function openPriceHistoryModal(item) {
     const row = document.createElement('div');
     row.className = rowClass;
 
+    const forkSvg = `<svg class="fork-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="22" x2="12" y2="13"/><line x1="12" y1="13" x2="5" y2="6"/><line x1="12" y1="13" x2="19" y2="6"/><polyline points="2,6 5,3 5,9"/><polyline points="22,6 19,3 19,9"/></svg>`;
+
     const wwHtml = entry.ww != null
       ? `<span class="price-history-store-cell price-history-store-ww">
            <span class="price-history-price">${fmt(entry.ww)}</span>
-           <button class="price-excl-x" data-store="ww" data-price="${Number(entry.ww).toFixed(2)}" title="${wwExcluded ? 'Include' : 'Exclude'}">✕</button>
+           <button class="price-excl-x" data-store="ww" data-price="${Number(entry.ww).toFixed(2)}" title="${wwExcluded ? 'Re-include' : 'Exclude'}">✕</button>
+           <button class="price-fork-btn" data-store="ww" data-price="${Number(entry.ww).toFixed(2)}" title="Different item">${forkSvg}</button>
          </span>`
       : `<span style="color:var(--text-soft)">—</span>`;
 
     const coHtml = entry.coles != null
       ? `<span class="price-history-store-cell price-history-store-coles">
            <span class="price-history-price" style="color:var(--coles)">${fmt(entry.coles)}</span>
-           <button class="price-excl-x" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="${coExcluded ? 'Include' : 'Exclude'}">✕</button>
+           <button class="price-excl-x" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="${coExcluded ? 'Re-include' : 'Exclude'}">✕</button>
+           <button class="price-fork-btn" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="Different item">${forkSvg}</button>
          </span>`
       : `<span style="color:var(--text-soft)">—</span>`;
-
-    const hasDiffBtn = entry.ww != null || entry.coles != null;
-    const diffKey = entry.ww != null ? Number(entry.ww).toFixed(2) : Number(entry.coles).toFixed(2);
-    const actionsHtml = hasDiffBtn
-      ? `<button class="price-diff-btn" data-price="${diffKey}" title="Different item">⇄</button>`
-      : '';
 
     row.innerHTML = `
       <span class="price-history-date">${entry.date || 'Unknown date'}</span>
       ${wwHtml}
-      ${coHtml}
-      <span class="price-history-actions-col">${actionsHtml}</span>`;
+      ${coHtml}`;
 
     row.querySelectorAll('.price-excl-x').forEach(btn => {
       btn.addEventListener('click', () => {
-        const store = btn.dataset.store;
-        const price = btn.dataset.price;
-        const key = `${store}:${price}`;
-        const ex = loadExclusions();
-        const list = (ex[item.list_item] || []).map(String);
-        if (list.includes(key)) {
-          ex[item.list_item] = list.filter(k => k !== key);
+        const key = `${btn.dataset.store}:${btn.dataset.price}`;
+        if (_pendingExcl.has(key)) {
+          _pendingExcl.delete(key);
         } else {
-          ex[item.list_item] = [...list, key];
+          _pendingExcl.add(key);
         }
-        saveExclusions(ex);
         openPriceHistoryModal(item);
-        if (_lastData) renderPage(_lastData);
       });
     });
 
-    if (hasDiffBtn) {
-      row.querySelector('.price-diff-btn').addEventListener('click', () => {
-        openDiffItemModal(item, diffKey);
+    row.querySelectorAll('.price-fork-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        openDiffItemModal(item, btn.dataset.price);
       });
-    }
+    });
 
     listEl.appendChild(row);
   });
