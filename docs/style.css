@@ -1643,6 +1643,20 @@ td.priority-cell { text-align: center; }
   white-space: nowrap;
   pointer-events: none;
 }
+.toast-undo-btn {
+  pointer-events: auto;
+  margin-left: 14px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.4);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 3px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.toast-undo-btn:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
 
 /* ── Different item modal — priority badge ────────────────────── */
 .diff-item-priority-badge {

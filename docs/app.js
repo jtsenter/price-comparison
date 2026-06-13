@@ -1182,15 +1182,37 @@ function initPriceHistoryModal() {
 
   $('priceHistorySave').addEventListener('click', () => {
     if (!_historyItem || _pendingExcl === null) return;
+    const itemName = _historyItem.list_item;
+    // Snapshot the previously-saved exclusions for this item so Save is reversible.
+    const before = loadExclusions();
+    const prevForItem = before[itemName] ? [...before[itemName]] : null;
+    const newCount = _pendingExcl.size;
+
+    // Snapshot the new value BEFORE closing (close() nulls _pendingExcl).
+    const newForItem = newCount === 0 ? null : [..._pendingExcl];
+
     const ex = loadExclusions();
-    if (_pendingExcl.size === 0) {
-      delete ex[_historyItem.list_item];
+    if (newCount === 0) {
+      delete ex[itemName];
     } else {
-      ex[_historyItem.list_item] = [..._pendingExcl];
+      ex[itemName] = newForItem;
     }
     saveExclusions(ex);
     if (_lastData) renderPage(_lastData);
     _closePriceHistoryModal();
+
+    // Only offer Undo when something actually changed.
+    const changed = JSON.stringify(prevForItem) !== JSON.stringify(newForItem);
+    if (changed) {
+      showUndoToast(`Saved price exclusions for ${stripWW(itemName)}`, () => {
+        const cur = loadExclusions();
+        if (prevForItem) cur[itemName] = prevForItem;
+        else delete cur[itemName];
+        saveExclusions(cur);
+        if (_lastData) renderPage(_lastData);
+        showToast('Reverted');
+      });
+    }
   });
 }
 
@@ -1493,6 +1515,34 @@ function showToast(msg, durationMs = 3000) {
     toast.style.opacity = '0';
     setTimeout(() => { toast.style.display = 'none'; }, 300);
   }, durationMs);
+}
+
+// Toast with a one-click Undo button. `onUndo` is invoked if the user clicks
+// Undo before the toast auto-dismisses. Single-level (latest action only).
+function showUndoToast(msg, onUndo, durationMs = 8000) {
+  const toast = $('toastNotif');
+  if (!toast) { if (onUndo) {/* no UI: leave change applied */} return; }
+  clearTimeout(toast._timer);
+  toast.innerHTML = '';
+  const span = document.createElement('span');
+  span.textContent = msg;
+  const btn = document.createElement('button');
+  btn.className = 'toast-undo-btn';
+  btn.textContent = 'Undo';
+  const hide = () => {
+    toast.style.opacity = '0';
+    setTimeout(() => { toast.style.display = 'none'; toast.textContent = ''; }, 300);
+  };
+  btn.addEventListener('click', () => {
+    clearTimeout(toast._timer);
+    hide();
+    try { onUndo && onUndo(); } catch (e) { console.error('undo failed', e); }
+  });
+  toast.appendChild(span);
+  toast.appendChild(btn);
+  toast.style.display = 'block';
+  toast.style.opacity = '1';
+  toast._timer = setTimeout(hide, durationMs);
 }
 
 // ── Image hover preview + picker modal ───────────────────────────────────────
