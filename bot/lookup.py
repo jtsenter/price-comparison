@@ -124,10 +124,10 @@ def build_reply(queries: list) -> str:
         ww_total = sum(p for _, p, _, _ in ww_items)
         lines.append('<b>🟡 Woolworths</b>')
         for name, price, other, tag in ww_items:
-            other_str = f'  <s>${other:.2f}</s>' if other else ''
-            tag_str = '  <i>WW only</i>' if tag == 'ww_only' else ''
-            lines.append(f'{_h(name)}{other_str}{tag_str}  <b>${price:.2f}</b>')
-        lines.append(f'<i>Total: ${ww_total:.2f}</i>')
+            old_str = f'<s>${other:.2f}</s> ' if other else ''
+            tag_str = f'<i>WW only</i> · ' if tag == 'ww_only' else ''
+            lines.append(f'{_h(name)} · {tag_str}{old_str}<b>${price:.2f}</b>')
+        lines.append(f'<i>Total ${ww_total:.2f}</i>')
 
     if coles_items:
         if lines:
@@ -135,10 +135,10 @@ def build_reply(queries: list) -> str:
         coles_total = sum(p for _, p, _, _ in coles_items)
         lines.append('<b>🔴 Coles</b>')
         for name, price, other, tag in coles_items:
-            other_str = f'  <s>${other:.2f}</s>' if other else ''
-            tag_str = '  <i>Coles only</i>' if tag == 'coles_only' else ''
-            lines.append(f'{_h(name)}{other_str}{tag_str}  <b>${price:.2f}</b>')
-        lines.append(f'<i>Total: ${coles_total:.2f}</i>')
+            old_str = f'<s>${other:.2f}</s> ' if other else ''
+            tag_str = f'<i>Coles only</i> · ' if tag == 'coles_only' else ''
+            lines.append(f'{_h(name)} · {tag_str}{old_str}<b>${price:.2f}</b>')
+        lines.append(f'<i>Total ${coles_total:.2f}</i>')
 
     total_saving = (
         sum(o - p for _, p, o, _ in ww_items if o) +
