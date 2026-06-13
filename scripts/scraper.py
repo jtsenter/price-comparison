@@ -1118,39 +1118,36 @@ async def _scrape_single_item(
         print(f"[ERROR] Item lookup failed or invalid: {item!r}")
         return None, True, None
 
-    # Sanity check: reject suspicious price swings unless in historical range
-    def check_suspicious_jump(new_price, prev_price, item_dict, store):
+    # Detect implausible price swings (usually a wrong-product match). Per the
+    # "flag, don't delete" rule we KEEP the scraped price live and route it into
+    # pending_validation (see reasons merge below) instead of silently discarding
+    # it and carrying forward the old price. The user confirms/rejects on the
+    # validate page; nothing is mutated in history until then.
+    def _jump_reason(new_price, prev_price, item_dict):
         if new_price is None or prev_price is None or prev_price <= 0:
-            return False, None
+            return None
         change_pct = (new_price - prev_price) / prev_price
         all_hist = (
             [e['price'] for e in item_dict.get('ww_price_history', []) if e.get('price', 0) > 0] +
             [e['price'] for e in item_dict.get('coles_price_history', []) if e.get('price', 0) > 0] +
             [e['price'] for e in item_dict.get('price_history', []) if e.get('price', 0) > 0]
         )
-        if all_hist:
-            hist_min, hist_max = min(all_hist), max(all_hist)
-            if hist_min <= new_price <= hist_max:
-                return False, None  # Within known range -> OK
-        if change_pct > 1.00:  # >100% increase = data error (wrong page/product)
-            return True, f"jumped {change_pct*100:.0f}% up"
-        elif change_pct < -0.35:  # >35% drop = data error; real specials are typically less
-            return True, f"dropped {abs(change_pct)*100:.0f}%"
-        return False, None
+        if all_hist and min(all_hist) <= new_price <= max(all_hist):
+            return None  # within known historical range -> not suspicious
+        if change_pct > 1.00:   # >100% increase = likely wrong page/product
+            return f"jumped {change_pct*100:.0f}% up"
+        if change_pct < -0.35:  # >35% drop = likely data error (real specials are smaller)
+            return f"dropped {abs(change_pct)*100:.0f}%"
+        return None
 
-    # Apply to WW
-    ww_prev = existing_item['ww_price_history'][-1]['price'] if existing_item.get('ww_price_history') else None
-    is_suspicious_ww, reason_ww = check_suspicious_jump(ww_match['price'] if ww_match else None, ww_prev, existing_item, 'ww')
-    if is_suspicious_ww:
-        print(f"    [WARN] WW {reason_ww}: ${ww_prev}->${ww_match['price']} — carrying forward")
-        ww_match = None
-
-    # Apply to Coles
-    co_prev = existing_item['coles_price_history'][-1]['price'] if existing_item.get('coles_price_history') else None
-    is_suspicious_co, reason_co = check_suspicious_jump(coles_match['price'] if coles_match else None, co_prev, existing_item, 'coles')
-    if is_suspicious_co:
-        print(f"    [WARN] Coles {reason_co}: ${co_prev}->${coles_match['price']} — carrying forward")
-        coles_match = None
+    ww_prev_hist = existing_item['ww_price_history'][-1]['price'] if existing_item.get('ww_price_history') else None
+    co_prev_hist = existing_item['coles_price_history'][-1]['price'] if existing_item.get('coles_price_history') else None
+    _ww_jump = _jump_reason(ww_match['price'] if ww_match else None, ww_prev_hist, existing_item)
+    _co_jump = _jump_reason(coles_match['price'] if coles_match else None, co_prev_hist, existing_item)
+    if _ww_jump:
+        print(f"    [FLAG] WW {_ww_jump}: ${ww_prev_hist}->${ww_match['price']} — keeping live, flagging for validation")
+    if _co_jump:
+        print(f"    [FLAG] Coles {_co_jump}: ${co_prev_hist}->${coles_match['price']} — keeping live, flagging for validation")
 
     # Compute _ww_price_factor for per-kg items (used by UI for price_history normalisation).
     # WW sells loose produce (e.g. mushrooms) at $/kg; Coles sells fixed packs (e.g. 200g).
@@ -1226,6 +1223,14 @@ async def _scrape_single_item(
                      else _suspicious_reasons(ww_price,    prev_ww,    item_price_history))
     coles_reasons = ([] if _is_approved(coles_price, _item_approved.get("coles"))
                      else _suspicious_reasons(coles_price, prev_coles, item_price_history))
+
+    # Merge implausible-jump flags (computed above). This covers items with too
+    # little Excel price_history for _suspicious_reasons to fire, while keeping the
+    # scraped price live and routing it to pending_validation.
+    if _ww_jump and not _is_approved(ww_price, _item_approved.get("ww")):
+        ww_reasons = ww_reasons + [_ww_jump]
+    if _co_jump and not _is_approved(coles_price, _item_approved.get("coles")):
+        coles_reasons = coles_reasons + [_co_jump]
 
     # WW history: withhold if suspicious; append if price changed or ≥7 days since last entry
     if ww_reasons:
