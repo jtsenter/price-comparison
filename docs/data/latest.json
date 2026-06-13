@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-13T06:11:50.469452+00:00",
+  "last_updated": "2026-06-13T06:12:05.132989+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3126,7 +3126,7 @@
     },
     {
       "list_item": "The Odd Bunch Capsicum Prepacked",
-      "last_scraped": "2026-06-13T03:28:48.036758+00:00",
+      "last_scraped": "2026-06-13T06:11:54.071247+00:00",
       "trip_count": 15,
       "price_history": [
         {
@@ -3209,7 +3209,17 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 5.95,
-      "alternatives": [],
+      "alternatives": [
+        {
+          "name": "Coles Yellow Capsicum | approx. 220g",
+          "price": 2.4,
+          "unit_price": 2.4,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-yellow-capsicum-approx.-220g-7215355",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7215355.jpg",
+          "retailer": "coles"
+        }
+      ],
       "ww_price_history": [
         {
           "date": "2025-07-08",
@@ -3282,7 +3292,7 @@
           "price": 7.9
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 0.39,
       "per_100_coles": 1.58,
@@ -3291,7 +3301,7 @@
     },
     {
       "list_item": "The Odd Bunch Carrots",
-      "last_scraped": "2026-06-13T03:28:53.564676+00:00",
+      "last_scraped": "2026-06-13T06:11:56.291735+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -3339,7 +3349,7 @@
       },
       "coles": {
         "name": "I'm Perfect Carrots Prepacked",
-        "price": 2,
+        "price": 2.0,
         "unit_price": 1.33,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-i'm-perfect-carrots-prepacked-1.5kg-3609392",
@@ -3412,7 +3422,7 @@
           "price": 2
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.13,
       "per_100_coles": 0.13,
@@ -3420,7 +3430,7 @@
     },
     {
       "list_item": "The Odd Bunch Zucchini Prepacked",
-      "last_scraped": "2026-06-13T03:28:54.950579+00:00",
+      "last_scraped": "2026-06-13T06:12:00.196281+00:00",
       "trip_count": 20,
       "price_history": [
         {
@@ -3517,7 +3527,7 @@
       "coles": {
         "name": "Zucchini",
         "price": 7.5,
-        "unit_price": 15,
+        "unit_price": 15.0,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-organic-zucchini-500g-5032219",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5032219.jpg"
@@ -3597,123 +3607,15 @@
           "price": 7.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.47,
       "per_100_coles": 1.5,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Weet-Bix Little Kids Breakfast Cereal",
-      "last_scraped": "2026-06-13T03:28:59.825444+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2025-05-22",
-          "price": 3.0
-        },
-        {
-          "date": "2025-06-06",
-          "price": 4.5
-        },
-        {
-          "date": "2025-07-10",
-          "price": 4.5
-        },
-        {
-          "date": "2026-02-03",
-          "price": 5.0
-        },
-        {
-          "date": "2026-02-11",
-          "price": 5.0
-        },
-        {
-          "date": "2026-03-10",
-          "price": 5.0
-        },
-        {
-          "date": "2026-04-02",
-          "price": 4.0
-        }
-      ],
-      "category": "Other",
-      "woolworths": {
-        "name": "Weet-Bix Little Kids Breakfast Cereal",
-        "price": 5.0,
-        "unit_price": 1.25,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/142976/weet-bix-little-kids-breakfast-cereal",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/142976.jpg"
-      },
-      "coles": {
-        "name": "Sanitarium Weet-bix Little Kids Essentials Breakfast Cereal | 400g",
-        "price": 5,
-        "unit_price": 5,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/sanitarium-weet-bix-little-kids-essentials-breakfast-cereal-400g-4233292",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4233292.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0.0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2025-07-08",
-          "price": 4.5
-        },
-        {
-          "date": "2025-10-05",
-          "price": 3
-        },
-        {
-          "date": "2025-11-05",
-          "price": 5
-        },
-        {
-          "date": "2025-12-03",
-          "price": 5
-        },
-        {
-          "date": "2026-05-29",
-          "price": 5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 5
-        },
-        {
-          "date": "2026-06-08",
-          "price": 5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 4
-        },
-        {
-          "date": "2026-06-01",
-          "price": 4
-        },
-        {
-          "date": "2026-06-04",
-          "price": 5
-        },
-        {
-          "date": "2026-06-11",
-          "price": 5
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.25,
-      "per_100_coles": 1.25,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Truss Tomatoes",
-      "last_scraped": "2026-06-13T03:29:00.843307+00:00",
+      "last_scraped": "2026-06-13T06:12:01.975218+00:00",
       "trip_count": 35,
       "price_history": [
         {
@@ -3982,10 +3884,118 @@
           "price": 1.1
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.85,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Weet-Bix Little Kids Breakfast Cereal",
+      "last_scraped": "2026-06-13T06:12:05.126390+00:00",
+      "trip_count": 7,
+      "price_history": [
+        {
+          "date": "2025-05-22",
+          "price": 3.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 4.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 4.5
+        },
+        {
+          "date": "2026-02-03",
+          "price": 5.0
+        },
+        {
+          "date": "2026-02-11",
+          "price": 5.0
+        },
+        {
+          "date": "2026-03-10",
+          "price": 5.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 4.0
+        }
+      ],
+      "category": "Other",
+      "woolworths": {
+        "name": "Weet-Bix Little Kids Breakfast Cereal",
+        "price": 5.0,
+        "unit_price": 1.25,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/142976/weet-bix-little-kids-breakfast-cereal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/142976.jpg"
+      },
+      "coles": {
+        "name": "Sanitarium Weet-bix Little Kids Essentials Breakfast Cereal | 400g",
+        "price": 5.0,
+        "unit_price": 5.0,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/sanitarium-weet-bix-little-kids-essentials-breakfast-cereal-400g-4233292",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4233292.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2025-07-08",
+          "price": 4.5
+        },
+        {
+          "date": "2025-10-05",
+          "price": 3
+        },
+        {
+          "date": "2025-11-05",
+          "price": 5
+        },
+        {
+          "date": "2025-12-03",
+          "price": 5
+        },
+        {
+          "date": "2026-05-29",
+          "price": 5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 5
+        },
+        {
+          "date": "2026-06-08",
+          "price": 5
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 4
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4
+        },
+        {
+          "date": "2026-06-04",
+          "price": 5
+        },
+        {
+          "date": "2026-06-11",
+          "price": 5
+        }
+      ],
+      "match_confidence": "high",
+      "size_warning": false,
+      "per_100_ww": 1.25,
+      "per_100_coles": 1.25,
       "per_100_unit": "100g"
     },
     {
@@ -15177,9 +15187,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 20,
+    "done": 25,
     "total": 145,
     "started_at": "2026-06-13T06:11:01.636819+00:00",
-    "current_item": "The Dutch Company Confectionary 4 Syrup Wafers"
+    "current_item": "Weet-Bix Little Kids Breakfast Cereal"
   }
 }
