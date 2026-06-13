@@ -1,15 +1,15 @@
 {
-  "last_updated": "2026-06-13T03:27:53.104213+00:00",
+  "last_updated": "2026-06-13T03:28:07.758127+00:00",
   "trigger": "manual",
   "items": [
     {
       "list_item": "Blueberries Punnet",
-      "last_scraped": "2026-06-12T04:15:08.517209+00:00",
+      "last_scraped": "2026-06-13T03:27:58.090421+00:00",
       "trip_count": 21,
       "price_history": [
         {
           "date": "2024-11-12",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2025-01-29",
@@ -21,11 +21,11 @@
         },
         {
           "date": "2025-02-28",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2025-03-11",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2025-03-17",
@@ -85,7 +85,7 @@
         },
         {
           "date": "2025-07-26",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2026-02-03",
@@ -96,7 +96,7 @@
       "woolworths": {
         "name": "Blueberries Punnet",
         "price": 5.5,
-        "unit_price": 44,
+        "unit_price": 44.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/169792/blueberries-punnet",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/169792.jpg"
@@ -111,8 +111,17 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [
+        {
+          "name": "Blue Clouds - Blueberry 1kg",
+          "price": 13.99,
+          "unit_price": 1.4,
+          "unit": "100G",
+          "url": "https://www.woolworths.com.au/shop/productdetails/1120907673/blue-clouds-blueberry-1kg",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/1120907673.jpg",
+          "retailer": "woolworths"
+        },
         {
           "name": "Coles Blueberries | 125g",
           "price": 5.5,
@@ -129,15 +138,6 @@
           "unit": "100g",
           "url": "https://www.coles.com.au/product/st-dalfour-wild-blueberry-spread-284g-5704420",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5704420.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Yoplait Berry Punnet Yoghurt Strawberry Mixed Berries 6x160g | 960g",
-          "price": 7,
-          "unit_price": 7,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/yoplait-berry-punnet-yoghurt-strawberry-mixed-berries-6x160g-960g-3619567",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3619567.jpg",
           "retailer": "coles"
         }
       ],
@@ -241,7 +241,7 @@
     },
     {
       "list_item": "Baby Mum-Mum Snack Vegetable Rice Rusk",
-      "last_scraped": "2026-06-12T04:15:09.813422+00:00",
+      "last_scraped": "2026-06-13T03:28:00.090924+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -292,7 +292,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [
         {
           "name": "Baby Mum-mum First Rice Rusk Vegetable +6 Months | 36g",
@@ -386,48 +386,48 @@
     },
     {
       "list_item": "Cadbury Dairy Milk Large Chocolate Block",
-      "last_scraped": "2026-06-12T04:15:12.957093+00:00",
+      "last_scraped": "2026-06-13T03:28:02.150085+00:00",
       "trip_count": 11,
       "price_history": [
         {
           "date": "2024-10-27",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2024-11-12",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2024-11-20",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2024-12-02",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2024-12-09",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2024-12-19",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-02-28",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-03-11",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-03-27",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-04-05",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-04-14",
@@ -452,7 +452,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4229488.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [
         {
           "name": "Cadbury Dairy Milk Caramel Chocolate Caramello Large Block",
@@ -473,12 +473,12 @@
           "retailer": "woolworths"
         },
         {
-          "name": "Cadbury Dairy Milk Large Top Deck Chocolate Block",
+          "name": "Cadbury Dairy Milk Large Fruit & Nut Chocolate Block",
           "price": 8.5,
           "unit_price": 2.5,
           "unit": "100G",
-          "url": "https://www.woolworths.com.au/shop/productdetails/165352/cadbury-dairy-milk-large-top-deck-chocolate-block",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/165352.jpg",
+          "url": "https://www.woolworths.com.au/shop/productdetails/6022301/cadbury-dairy-milk-large-fruit-nut-chocolate-block",
+          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/6022301.jpg",
           "retailer": "woolworths"
         }
       ],
@@ -518,50 +518,50 @@
     },
     {
       "list_item": "Cadbury Dairy Milk Top Deck Chocolate Block",
-      "last_scraped": "2026-06-12T04:15:14.224806+00:00",
+      "last_scraped": "2026-06-13T03:28:04.893143+00:00",
       "trip_count": 9,
       "price_history": [
         {
           "date": "2024-11-12",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2024-11-20",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2024-12-02",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2024-12-09",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2024-12-19",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-02-02",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-02-28",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-03-11",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-03-27",
-          "price": 8
+          "price": 8.0
         }
       ],
       "category": "Sweets",
       "woolworths": {
         "name": "Cadbury Dairy Milk Top Deck Chocolate Block",
-        "price": 8,
+        "price": 8.0,
         "unit_price": 2.22,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/814624/cadbury-dairy-milk-top-deck-chocolate-block",
@@ -569,14 +569,14 @@
       },
       "coles": {
         "name": "Cadbury Dairy Milk Top Deck Chocolate Block | 180g",
-        "price": 8,
-        "unit_price": 10,
+        "price": 8.0,
+        "unit_price": 10.0,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/cadbury-dairy-milk-top-deck-chocolate-block-180g-2351607",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2351607.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -634,7 +634,7 @@
     },
     {
       "list_item": "Capsicum Yellow",
-      "last_scraped": "2026-06-12T04:15:17.593867+00:00",
+      "last_scraped": "2026-06-13T03:28:07.756496+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -15219,8 +15219,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 0,
+    "done": 5,
     "total": 145,
-    "started_at": "2026-06-13T03:27:53.102742+00:00"
+    "started_at": "2026-06-13T03:27:53.102742+00:00",
+    "current_item": "Capsicum Yellow"
   }
 }
