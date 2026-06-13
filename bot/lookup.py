@@ -74,10 +74,13 @@ def parse_queries(text: str) -> list:
 
 
 def _shorten(name: str) -> str:
-    for prefix in ('Woolworths ', 'The Odd Bunch ', 'Coles '):
+    for prefix in ('Woolworths ', 'The Odd Bunch ', 'Coles ', 'Fresh ', 'Whole Milk ', 'Continental '):
         if name.startswith(prefix):
             name = name[len(prefix):]
-    return name[:36] + '…' if len(name) > 36 else name
+    for suffix in (' With Grains', ' Full Cream', ' Prepacked', ' Bunch'):
+        if name.endswith(suffix):
+            name = name[:-len(suffix)]
+    return name[:26] + '…' if len(name) > 26 else name
 
 
 def _h(text: str) -> str:
@@ -122,7 +125,7 @@ def build_reply(queries: list) -> str:
 
     if ww_items:
         ww_total = sum(p for _, p, _, _ in ww_items)
-        lines.append('<b>🟡 Woolworths</b>')
+        lines.append('<b>🟢 Woolworths</b>')
         for name, price, other, tag in ww_items:
             old_str = f'<s>${other:.2f}</s> ' if other else ''
             tag_str = f'<i>WW only</i> · ' if tag == 'ww_only' else ''
