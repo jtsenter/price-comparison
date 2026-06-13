@@ -55,7 +55,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -126,7 +126,7 @@
       "price_history": [
         {
           "date": "2024-11-12",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-01-29",
@@ -138,11 +138,11 @@
         },
         {
           "date": "2025-02-28",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-03-11",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-03-17",
@@ -202,7 +202,7 @@
         },
         {
           "date": "2025-07-26",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2026-02-03",
@@ -213,7 +213,7 @@
       "woolworths": {
         "name": "Blueberries Punnet",
         "price": 5.5,
-        "unit_price": 44.0,
+        "unit_price": 44,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/169792/blueberries-punnet",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/169792.jpg"
@@ -228,7 +228,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Blue Clouds - Blueberry 1kg",
@@ -354,45 +354,45 @@
       "price_history": [
         {
           "date": "2024-11-12",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2024-11-20",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2024-12-02",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2024-12-09",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2024-12-19",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-02-02",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-02-28",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-03-11",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-03-27",
-          "price": 8.0
+          "price": 8
         }
       ],
       "category": "Sweets",
       "woolworths": {
         "name": "Cadbury Dairy Milk Top Deck Chocolate Block",
-        "price": 8.0,
+        "price": 8,
         "unit_price": 2.22,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/814624/cadbury-dairy-milk-top-deck-chocolate-block",
@@ -400,14 +400,14 @@
       },
       "coles": {
         "name": "Cadbury Dairy Milk Top Deck Chocolate Block | 180g",
-        "price": 8.0,
-        "unit_price": 10.0,
+        "price": 8,
+        "unit_price": 10,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/cadbury-dairy-milk-top-deck-chocolate-block-180g-2351607",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2351607.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -470,43 +470,43 @@
       "price_history": [
         {
           "date": "2024-10-27",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2024-11-12",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2024-11-20",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2024-12-02",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2024-12-09",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2024-12-19",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-02-28",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-03-11",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-03-27",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-04-05",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-04-14",
@@ -531,7 +531,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4229488.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Cadbury Dairy Milk Caramel Chocolate Caramello Large Block",
@@ -1088,7 +1088,7 @@
       "coles": {
         "name": "Broccoli Medium",
         "price": 1.36,
-        "unit_price": 4.0,
+        "unit_price": 4,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-broccoli-medium-approx.-340g-407755",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/407755.jpg"
@@ -1284,8 +1284,8 @@
       },
       "coles": {
         "name": "Cauliflower Half",
-        "price": 2.0,
-        "unit_price": 2.0,
+        "price": 2,
+        "unit_price": 2,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-cauliflower-half-1-each-4601320",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4601320.jpg",
@@ -1296,8 +1296,8 @@
       "alternatives": [
         {
           "name": "Cauliflower Half",
-          "price": 2.0,
-          "unit_price": 2.0,
+          "price": 2,
+          "unit_price": 2,
           "unit": "1ea",
           "url": "https://www.coles.com.au/product/coles-cauliflower-half-1-each-4601320",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4601320.jpg",
@@ -1435,8 +1435,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Hass Avocado",
-        "price": 2.0,
-        "unit_price": 2.0,
+        "price": 2,
+        "unit_price": 2,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/120080/hass-avocado",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/120080.jpg",
@@ -1545,51 +1545,51 @@
       "price_history": [
         {
           "date": "2024-10-27",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2024-11-12",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2024-12-02",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2025-02-02",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2025-03-17",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2025-04-05",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2025-04-25",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2025-05-12",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2025-05-22",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2025-06-21",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2025-07-03",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2025-07-26",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2026-04-13",
@@ -1623,7 +1623,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5969435.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -2116,7 +2116,7 @@
         },
         {
           "date": "2026-02-03",
-          "price": 9.0
+          "price": 9
         },
         {
           "date": "2026-04-29",
@@ -2130,7 +2130,7 @@
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Lurpak Butter Spreadable",
-        "price": 9.0,
+        "price": 9,
         "unit_price": 2.25,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/87702/lurpak-butter-spreadable",
@@ -2138,14 +2138,14 @@
       },
       "coles": {
         "name": "Lurpak Butter Spreadable Slightly Salted | 400g",
-        "price": 9.0,
-        "unit_price": 9.0,
+        "price": 9,
+        "unit_price": 9,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/lurpak-butter-spreadable-slightly-salted-400g-5376659",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5376659.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Lurpak Butter Spreadable Slightly Salted",
@@ -2356,49 +2356,49 @@
       "price_history": [
         {
           "date": "2025-05-04",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-05-22",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-06-06",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-06-21",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-07-10",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-07-26",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2026-02-03",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2026-02-23",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2026-03-10",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2026-04-02",
-          "price": 4.0
+          "price": 4
         }
       ],
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Philadelphia Original Cream Cheese Portions Snacks",
-        "price": 4.0,
+        "price": 4,
         "unit_price": 26.67,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/221027/philadelphia-original-cream-cheese-portions-snacks",
@@ -2407,14 +2407,14 @@
       },
       "coles": {
         "name": "Portions Cream Cheese Original Spread",
-        "price": 4.0,
+        "price": 4,
         "unit_price": 26.67,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/philadelphia-portions-cream-cheese-original-spread-150g-5432035",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5432035.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -2481,15 +2481,15 @@
       "price_history": [
         {
           "date": "2024-11-12",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2024-11-20",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2024-12-19",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-03-11",
@@ -2497,11 +2497,11 @@
         },
         {
           "date": "2025-03-27",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-04-14",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-05-04",
@@ -2509,17 +2509,17 @@
         },
         {
           "date": "2025-06-06",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2025-07-10",
-          "price": 2.0
+          "price": 2
         }
       ],
       "category": "Drinks & Alcohol",
       "woolworths": {
         "name": "Schweppes Lemon Lime Bitters Soft Drink Mixer Bottle",
-        "price": 3.0,
+        "price": 3,
         "unit_price": 2.73,
         "unit": "1L",
         "url": "https://www.woolworths.com.au/shop/productdetails/634290/schweppes-lemon-lime-bitters-soft-drink-mixer-bottle",
@@ -2527,14 +2527,14 @@
       },
       "coles": {
         "name": "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle | 1.1L",
-        "price": 3.0,
-        "unit_price": 3.0,
+        "price": 3,
+        "unit_price": 3,
         "unit": "1L",
         "url": "https://www.coles.com.au/product/schweppes-lemon-lime-bitters-soft-drink-classic-mixers-bottle-1.1l-3014839",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3014839.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -2605,7 +2605,7 @@
       "price_history": [
         {
           "date": "2024-12-19",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-02-28",
@@ -2629,7 +2629,7 @@
         },
         {
           "date": "2026-02-03",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2026-03-10",
@@ -2639,7 +2639,7 @@
       "category": "Drinks & Alcohol",
       "woolworths": {
         "name": "Schweppes Orange Mango Natural Mineral Water Bottle",
-        "price": 3.0,
+        "price": 3,
         "unit_price": 2.73,
         "unit": "1L",
         "url": "https://www.woolworths.com.au/shop/productdetails/634284/schweppes-orange-mango-natural-mineral-water-bottle",
@@ -2647,14 +2647,14 @@
       },
       "coles": {
         "name": "Schweppes Orange Mango Natural Mineral Water Bottle | 1.1L",
-        "price": 3.0,
-        "unit_price": 3.0,
+        "price": 3,
+        "unit_price": 3,
         "unit": "1L",
         "url": "https://www.coles.com.au/product/schweppes-orange-mango-natural-mineral-water-bottle-1.1l-3014930",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3014930.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -2709,42 +2709,42 @@
       "price_history": [
         {
           "date": "2024-12-02",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2025-02-02",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2025-03-11",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2025-04-14",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2025-06-06",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2025-07-10",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2026-03-10",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2026-04-02",
-          "price": 2.0
+          "price": 2
         }
       ],
       "category": "Household",
       "woolworths": {
         "name": "Strike Blue Toilet Cleaner Cistern Blocks",
-        "price": 2.0,
-        "unit_price": 1.0,
+        "price": 2,
+        "unit_price": 1,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/248546/strike-blue-toilet-cleaner-cistern-blocks",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/248546.jpg",
@@ -2752,14 +2752,14 @@
       },
       "coles": {
         "name": "In Cistern Marine Toilet Cleaner 2 Pack",
-        "price": 2.0,
-        "unit_price": 2.0,
+        "price": 2,
+        "unit_price": 2,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-ultra-in-cistern-marine-toilet-cleaner-2-pack-100g-1549030",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1549030.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -2820,7 +2820,7 @@
       "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
-      "per_100_coles": 2.0,
+      "per_100_coles": 2,
       "per_100_unit": "100g"
     },
     {
@@ -3139,7 +3139,7 @@
         },
         {
           "date": "2024-12-09",
-          "price": 7.0
+          "price": 7
         },
         {
           "date": "2025-02-02",
@@ -3155,11 +3155,11 @@
         },
         {
           "date": "2025-04-05",
-          "price": 7.0
+          "price": 7
         },
         {
           "date": "2025-04-14",
-          "price": 7.0
+          "price": 7
         },
         {
           "date": "2025-05-04",
@@ -3167,7 +3167,7 @@
         },
         {
           "date": "2025-05-22",
-          "price": 7.0
+          "price": 7
         },
         {
           "date": "2025-06-06",
@@ -3179,7 +3179,7 @@
         },
         {
           "date": "2025-07-10",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2026-02-23",
@@ -3318,7 +3318,7 @@
         },
         {
           "date": "2025-07-03",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2026-02-03",
@@ -3340,7 +3340,7 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "The Odd Bunch Carrots",
-        "price": 2.0,
+        "price": 2,
         "unit_price": 1.33,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/288440/the-odd-bunch-carrots",
@@ -3349,14 +3349,14 @@
       },
       "coles": {
         "name": "I'm Perfect Carrots Prepacked",
-        "price": 2.0,
+        "price": 2,
         "unit_price": 1.33,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-i'm-perfect-carrots-prepacked-1.5kg-3609392",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3609392.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -3455,15 +3455,15 @@
         },
         {
           "date": "2025-02-28",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-03-11",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-03-17",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-03-27",
@@ -3491,7 +3491,7 @@
         },
         {
           "date": "2025-07-10",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2026-02-03",
@@ -3527,13 +3527,13 @@
       "coles": {
         "name": "Zucchini",
         "price": 7.5,
-        "unit_price": 15.0,
+        "unit_price": 15,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-organic-zucchini-500g-5032219",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5032219.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 4.0,
+      "saving_per_item": 4,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -3897,7 +3897,7 @@
       "price_history": [
         {
           "date": "2025-05-22",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-06-06",
@@ -3909,25 +3909,25 @@
         },
         {
           "date": "2026-02-03",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2026-02-11",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2026-03-10",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2026-04-02",
-          "price": 4.0
+          "price": 4
         }
       ],
       "category": "Other",
       "woolworths": {
         "name": "Weet-Bix Little Kids Breakfast Cereal",
-        "price": 5.0,
+        "price": 5,
         "unit_price": 1.25,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/142976/weet-bix-little-kids-breakfast-cereal",
@@ -3935,14 +3935,14 @@
       },
       "coles": {
         "name": "Sanitarium Weet-bix Little Kids Essentials Breakfast Cereal | 400g",
-        "price": 5.0,
-        "unit_price": 5.0,
+        "price": 5,
+        "unit_price": 5,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/sanitarium-weet-bix-little-kids-essentials-breakfast-cereal-400g-4233292",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4233292.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -4156,7 +4156,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3900020.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -4265,7 +4265,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1499340.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -4324,7 +4324,7 @@
       "price_history": [
         {
           "date": "2024-10-27",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2024-11-20",
@@ -4368,7 +4368,7 @@
         },
         {
           "date": "2026-04-02",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2026-04-13",
@@ -4483,7 +4483,7 @@
       "price_history": [
         {
           "date": "2024-12-09",
-          "price": 15.0
+          "price": 15
         },
         {
           "date": "2025-02-02",
@@ -4491,15 +4491,15 @@
         },
         {
           "date": "2025-04-05",
-          "price": 16.0
+          "price": 16
         },
         {
           "date": "2025-05-12",
-          "price": 16.0
+          "price": 16
         },
         {
           "date": "2025-06-06",
-          "price": 16.0
+          "price": 16
         },
         {
           "date": "2026-02-03",
@@ -4507,22 +4507,22 @@
         },
         {
           "date": "2026-03-10",
-          "price": 18.0
+          "price": 18
         },
         {
           "date": "2026-04-02",
-          "price": 18.0
+          "price": 18
         },
         {
           "date": "2026-05-06",
-          "price": 15.0
+          "price": 15
         }
       ],
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Woolworths Beef Porterhouse Steak & Butter",
-        "price": 18.0,
-        "unit_price": 45.0,
+        "price": 18,
+        "unit_price": 45,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/243050/woolworths-beef-porterhouse-steak-butter",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/243050.jpg"
@@ -4540,8 +4540,8 @@
       "alternatives": [
         {
           "name": "Coles Pork Scotch Steak With Rosemary & Honey Butter | 280g",
-          "price": 8.0,
-          "unit_price": 8.0,
+          "price": 8,
+          "unit_price": 8,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/coles-pork-scotch-steak-with-rosemary-and-honey-butter-280g-5886429",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5886429.jpg",
@@ -4549,8 +4549,8 @@
         },
         {
           "name": "Coles Beef Scotch Steak With Bearnaise Butter | 265g",
-          "price": 13.0,
-          "unit_price": 13.0,
+          "price": 13,
+          "unit_price": 13,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/coles-beef-scotch-steak-with-bearnaise-butter-265g-6641427",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6641427.jpg",
@@ -4558,8 +4558,8 @@
         },
         {
           "name": "Coles No Added Hormone Beef Quick Cook Porterhouse Steak | 180g",
-          "price": 9.0,
-          "unit_price": 15.0,
+          "price": 9,
+          "unit_price": 15,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-quick-cook-porterhouse-steak-180g-3293583",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3293583.jpg",
@@ -4623,7 +4623,7 @@
       "price_history": [
         {
           "date": "2024-11-12",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2024-12-02",
@@ -4631,15 +4631,15 @@
         },
         {
           "date": "2024-12-09",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-01-29",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-02-02",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-02-28",
@@ -4671,11 +4671,11 @@
         },
         {
           "date": "2025-06-06",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2026-02-03",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2026-02-11",
@@ -4683,27 +4683,27 @@
         },
         {
           "date": "2026-02-23",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2026-03-02",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2026-03-10",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2026-04-02",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2026-04-21",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2026-05-06",
-          "price": 3.0
+          "price": 3
         }
       ],
       "category": "Fruit & Veg",
@@ -4717,8 +4717,8 @@
       },
       "coles": {
         "name": "Coles Cherry Tomatoes | 250g",
-        "price": 3.0,
-        "unit_price": 3.0,
+        "price": 3,
+        "unit_price": 3,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-cherry-tomatoes-250g-4834736",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4834736.jpg",
@@ -4729,8 +4729,8 @@
       "alternatives": [
         {
           "name": "Coles Cherry Tomatoes | 250g",
-          "price": 3.0,
-          "unit_price": 3.0,
+          "price": 3,
+          "unit_price": 3,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/coles-cherry-tomatoes-250g-4834736",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4834736.jpg",
@@ -4848,7 +4848,7 @@
         },
         {
           "date": "2025-04-14",
-          "price": 7.0
+          "price": 7
         },
         {
           "date": "2025-05-12",
@@ -4870,7 +4870,7 @@
       "category": "Sweets",
       "woolworths": {
         "name": "Woolworths Cookie Caramel Bar Slice",
-        "price": 8.0,
+        "price": 8,
         "unit_price": 2.86,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/61196/woolworths-cookie-caramel-bar-slice",
@@ -5022,7 +5022,7 @@
         },
         {
           "date": "2026-04-02",
-          "price": 1.0
+          "price": 1
         },
         {
           "date": "2026-04-21",
@@ -5037,7 +5037,7 @@
       "woolworths": {
         "name": "Woolworths Corn Sweet",
         "price": 5.5,
-        "unit_price": 11.0,
+        "unit_price": 11,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/139897/woolworths-corn-sweet",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/139897.jpg",
@@ -5053,7 +5053,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Sweet Corn",
@@ -5210,7 +5210,7 @@
         },
         {
           "date": "2026-03-02",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2026-03-10",
@@ -5364,7 +5364,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3214769.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -5405,7 +5405,7 @@
       "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 21.3,
-      "per_100_coles": 32.0,
+      "per_100_coles": 32,
       "per_100_unit": "100g"
     },
     {
@@ -5415,37 +5415,37 @@
       "price_history": [
         {
           "date": "2025-02-02",
-          "price": 18.0
+          "price": 18
         },
         {
           "date": "2025-03-11",
-          "price": 14.0
+          "price": 14
         },
         {
           "date": "2025-05-12",
-          "price": 14.0
+          "price": 14
         },
         {
           "date": "2025-06-06",
-          "price": 18.0
+          "price": 18
         },
         {
           "date": "2026-02-03",
-          "price": 15.0
+          "price": 15
         },
         {
           "date": "2026-03-10",
-          "price": 14.0
+          "price": 14
         },
         {
           "date": "2026-05-06",
-          "price": 14.0
+          "price": 14
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Extra Virgin Spanish Olive Oil",
-        "price": 14.0,
+        "price": 14,
         "unit_price": 1.4,
         "unit": "100ML",
         "url": "https://www.woolworths.com.au/shop/productdetails/698868/woolworths-extra-virgin-spanish-olive-oil",
@@ -5454,14 +5454,14 @@
       },
       "coles": {
         "name": "Extra Virgin Olive Oil",
-        "price": 15.0,
+        "price": 15,
         "unit_price": 1.5,
         "unit": "100mL",
         "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-1l-5607376",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5607376.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 1.0,
+      "saving_per_item": 1,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -5516,7 +5516,7 @@
         },
         {
           "date": "2025-02-02",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-02-28",
@@ -5678,7 +5678,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4575161.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -5782,7 +5782,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5181729.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -5861,7 +5861,7 @@
         },
         {
           "date": "2026-04-02",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2026-05-06",
@@ -5986,79 +5986,79 @@
         },
         {
           "date": "2025-02-02",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-02-28",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-03-11",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-03-17",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-03-27",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-04-05",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-04-14",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-04-25",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-05-04",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-05-12",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-05-22",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-05-29",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-06-06",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-06-13",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-06-21",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-07-03",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-07-10",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-07-26",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2026-02-03",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2026-02-07",
@@ -6187,7 +6187,7 @@
         },
         {
           "date": "2025-03-27",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2025-04-14",
@@ -6203,7 +6203,7 @@
         },
         {
           "date": "2025-06-06",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2025-07-10",
@@ -6227,7 +6227,7 @@
         },
         {
           "date": "2026-04-02",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2026-05-06",
@@ -6237,8 +6237,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Onion Brown Bag",
-        "price": 2.0,
-        "unit_price": 2.0,
+        "price": 2,
+        "unit_price": 2,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/144336/woolworths-onion-brown-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144336.jpg",
@@ -6379,8 +6379,8 @@
         },
         {
           "name": "Coles Red Split Lentils | 1kg",
-          "price": 4.0,
-          "unit_price": 4.0,
+          "price": 4,
+          "unit_price": 4,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/coles-red-split-lentils-1kg-9073535",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9073535.jpg",
@@ -6490,7 +6490,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3676946.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -6571,8 +6571,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Washed Potatoes Bag",
-        "price": 6.0,
-        "unit_price": 3.0,
+        "price": 6,
+        "unit_price": 3,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/262783/woolworths-washed-potatoes-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/262783.jpg",
@@ -6580,14 +6580,14 @@
       },
       "coles": {
         "name": "Potatoes Washed",
-        "price": 6.0,
-        "unit_price": 3.0,
+        "price": 6,
+        "unit_price": 3,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-potatoes-washed-2kg-1206748",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1206748.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -6688,7 +6688,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8150288.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -6782,19 +6782,19 @@
       "coles": {
         "name": "Carmelina Chick Peas | 400 GRAM",
         "price": 1.9,
-        "unit_price": 3.0,
+        "unit_price": 3,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Carmelina Chick Peas | 400 GRAM",
           "price": 1.9,
-          "unit_price": 3.0,
+          "unit_price": 3,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/carmelina-chick-peas-400-gram-8855498",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8855498.jpg",
@@ -6887,7 +6887,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3894277.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -6971,7 +6971,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5088122.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -7060,7 +7060,7 @@
       },
       "coles": {
         "name": "Beechworth Honey 100% Pure Australian Honey Jar | 500g",
-        "price": 7.0,
+        "price": 7,
         "unit_price": 1.4,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/beechworth-honey-100percent-pure-australian-honey-jar-500g-2624437",
@@ -7072,7 +7072,7 @@
       "alternatives": [
         {
           "name": "Beechworth Honey 100% Pure Australian Honey Jar | 500g",
-          "price": 7.0,
+          "price": 7,
           "unit_price": 1.4,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/beechworth-honey-100percent-pure-australian-honey-jar-500g-2624437",
@@ -7133,11 +7133,11 @@
       "price_history": [
         {
           "date": "2024-10-27",
-          "price": 9.0
+          "price": 9
         },
         {
           "date": "2024-12-02",
-          "price": 10.0
+          "price": 10
         },
         {
           "date": "2024-12-19",
@@ -7170,7 +7170,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7806125.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -7229,15 +7229,15 @@
       "price_history": [
         {
           "date": "2024-11-12",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2024-11-20",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2025-05-29",
-          "price": 5.0
+          "price": 5
         }
       ],
       "category": "Dairy & Eggs",
@@ -7259,7 +7259,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8453381.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -7318,11 +7318,11 @@
       "price_history": [
         {
           "date": "2025-05-22",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-05-29",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-06-06",
@@ -7330,7 +7330,7 @@
         },
         {
           "date": "2025-06-13",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2026-02-03",
@@ -7340,7 +7340,7 @@
       "category": "Sweets",
       "woolworths": {
         "name": "Cadbury Old Gold 70% Cocoa Dark Chocolate Block",
-        "price": 8.0,
+        "price": 8,
         "unit_price": 4.85,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/6064244/cadbury-old-gold-70-cocoa-dark-chocolate-block",
@@ -7550,13 +7550,13 @@
       "coles": {
         "name": "Dolmio Extra Italian Herb Pasta Sauce | 500g",
         "price": 4.6,
-        "unit_price": 7.0,
+        "unit_price": 7,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/dolmio-extra-italian-herb-pasta-sauce-500g-1274420",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1274420.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -7640,7 +7640,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/356472.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Continental Chicken Noodle Soup Serves 4 | 45g",
@@ -7713,21 +7713,21 @@
       "price_history": [
         {
           "date": "2024-11-20",
-          "price": 7.0
+          "price": 7
         },
         {
           "date": "2025-03-27",
-          "price": 7.0
+          "price": 7
         },
         {
           "date": "2025-05-12",
-          "price": 7.0
+          "price": 7
         }
       ],
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Essentials Unsalted Butter",
-        "price": 7.0,
+        "price": 7,
         "unit_price": 1.4,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/688962/essentials-unsalted-butter",
@@ -7735,14 +7735,14 @@
       },
       "coles": {
         "name": "Westgold Salted Butter | 400g",
-        "price": 7.0,
+        "price": 7,
         "unit_price": 1.75,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/westgold-salted-butter-400g-7075278",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7075278.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -8001,7 +8001,7 @@
         },
         {
           "date": "2026-02-07",
-          "price": 11.0
+          "price": 11
         }
       ],
       "category": "Other",
@@ -8022,7 +8022,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7388070.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -8073,7 +8073,7 @@
       "price_history": [
         {
           "date": "2025-03-11",
-          "price": 10.0
+          "price": 10
         },
         {
           "date": "2025-06-13",
@@ -8100,7 +8100,7 @@
       },
       "coles": {
         "name": "Medjool Dates",
-        "price": 14.0,
+        "price": 14,
         "unit_price": 30.84,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-medjool-dates-454g-5142013",
@@ -8170,46 +8170,46 @@
       "price_history": [
         {
           "date": "2025-06-06",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2026-03-10",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2026-04-02",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2026-05-06",
-          "price": 8.0
+          "price": 8
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Hellmann's Real Mayonnaise Squeeze",
-        "price": 8.0,
-        "unit_price": 2.0,
+        "price": 8,
+        "unit_price": 2,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/529030/hellmann-s-real-mayonnaise-squeeze",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/529030.jpg"
       },
       "coles": {
         "name": "Hellmann's Squeeze Real Mayonnaise | 400g",
-        "price": 4.0,
-        "unit_price": 1.0,
+        "price": 4,
+        "unit_price": 1,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/hellmann's-squeeze-real-mayonnaise-400g-3025755",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3025755.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 4.0,
+      "saving_per_item": 4,
       "alternatives": [
         {
           "name": "Hellmann's Squeeze Real Mayonnaise | 400g",
-          "price": 4.0,
-          "unit_price": 1.0,
+          "price": 4,
+          "unit_price": 1,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/hellmann's-squeeze-real-mayonnaise-400g-3025755",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3025755.jpg",
@@ -8266,8 +8266,8 @@
       ],
       "match_confidence": "medium",
       "size_warning": false,
-      "per_100_ww": 2.0,
-      "per_100_coles": 1.0,
+      "per_100_ww": 2,
+      "per_100_coles": 1,
       "per_100_unit": "100g"
     },
     {
@@ -8277,19 +8277,19 @@
       "price_history": [
         {
           "date": "2025-03-17",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-04-14",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-04-25",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-07-26",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2026-03-10",
@@ -8297,13 +8297,13 @@
         },
         {
           "date": "2026-05-06",
-          "price": 4.0
+          "price": 4
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Katoomba Ingredients Red Lentils",
-        "price": 4.0,
+        "price": 4,
         "unit_price": 0.4,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/753947/katoomba-ingredients-red-lentils",
@@ -8311,14 +8311,14 @@
       },
       "coles": {
         "name": "Katoomba Red Lentils | 1kg",
-        "price": 4.0,
-        "unit_price": 4.0,
+        "price": 4,
+        "unit_price": 4,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/katoomba-red-lentils-1kg-4683608",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4683608.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -8395,7 +8395,7 @@
       "category": "Sweets",
       "woolworths": {
         "name": "KitKat Milk Chocolate Mini Bars Share Pack",
-        "price": 8.0,
+        "price": 8,
         "unit_price": 3.17,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/347540/kitkat-milk-chocolate-mini-bars-share-pack",
@@ -8403,14 +8403,14 @@
       },
       "coles": {
         "name": "KitKat Milk Chocolate Value Share Pack 18 Pieces | 252g",
-        "price": 8.0,
-        "unit_price": 8.0,
+        "price": 8,
+        "unit_price": 8,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/kitkat-milk-chocolate-value-share-pack-18-pieces-252g-7018864",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7018864.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "KitKat Packed With Milo Milk Chocolate Block | 165g",
@@ -8496,7 +8496,7 @@
       "price_history": [
         {
           "date": "2025-03-11",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-07-10",
@@ -8508,28 +8508,28 @@
         },
         {
           "date": "2026-03-10",
-          "price": 5.0
+          "price": 5
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Macro Natural Sunflower Kernels",
-        "price": 5.0,
-        "unit_price": 10.0,
+        "price": 5,
+        "unit_price": 10,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/355131/macro-natural-sunflower-kernels",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/355131.jpg"
       },
       "coles": {
         "name": "Wellness Road Sunflower Kernels | 500g",
-        "price": 5.0,
-        "unit_price": 5.0,
+        "price": 5,
+        "unit_price": 5,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/wellness-road-sunflower-kernels-500g-8669642",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8669642.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Gaganis Premium Raw Sunflower Kernals | 500g",
@@ -8597,8 +8597,8 @@
       ],
       "match_confidence": "medium",
       "size_warning": false,
-      "per_100_ww": 1.0,
-      "per_100_coles": 1.0,
+      "per_100_ww": 1,
+      "per_100_coles": 1,
       "per_100_unit": "100g"
     },
     {
@@ -8639,8 +8639,8 @@
       },
       "coles": {
         "name": "Green Kiwifruit",
-        "price": 1.0,
-        "unit_price": 1.0,
+        "price": 1,
+        "unit_price": 1,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-green-kiwifruit-1-each-4425883",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4425883.jpg",
@@ -8651,8 +8651,8 @@
       "alternatives": [
         {
           "name": "Green Kiwifruit",
-          "price": 1.0,
-          "unit_price": 1.0,
+          "price": 1,
+          "unit_price": 1,
           "unit": "1ea",
           "url": "https://www.coles.com.au/product/coles-green-kiwifruit-1-each-4425883",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4425883.jpg",
@@ -8712,19 +8712,19 @@
       "price_history": [
         {
           "date": "2025-03-11",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2025-04-14",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2025-05-12",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2025-06-06",
-          "price": 5.0
+          "price": 5
         }
       ],
       "category": "Pantry",
@@ -8738,8 +8738,8 @@
       },
       "coles": {
         "name": "Coles Organic Pumpkin Kent | approx. 800g",
-        "price": 6.0,
-        "unit_price": 6.0,
+        "price": 6,
+        "unit_price": 6,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-organic-pumpkin-kent-approx.-800g-3119043",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3119043.jpg"
@@ -8767,8 +8767,8 @@
         },
         {
           "name": "Wellness Road Organic Buckwheat Kernels | 500g",
-          "price": 5.0,
-          "unit_price": 5.0,
+          "price": 5,
+          "unit_price": 5,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/wellness-road-organic-buckwheat-kernels-500g-3405803",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3405803.jpg",
@@ -8858,7 +8858,7 @@
       },
       "coles": {
         "name": "Coles Organic Bolognese Pasta Sauce | 500g",
-        "price": 2.0,
+        "price": 2,
         "unit_price": 0.4,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-organic-bolognese-pasta-sauce-500g-3664834",
@@ -8870,7 +8870,7 @@
       "alternatives": [
         {
           "name": "Coles Organic Bolognese Pasta Sauce | 500g",
-          "price": 2.0,
+          "price": 2,
           "unit_price": 0.4,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/coles-organic-bolognese-pasta-sauce-500g-3664834",
@@ -8923,15 +8923,15 @@
       "price_history": [
         {
           "date": "2025-02-28",
-          "price": 11.0
+          "price": 11
         },
         {
           "date": "2025-04-14",
-          "price": 11.0
+          "price": 11
         },
         {
           "date": "2025-05-12",
-          "price": 11.0
+          "price": 11
         },
         {
           "date": "2025-05-29",
@@ -8943,7 +8943,7 @@
         },
         {
           "date": "2026-02-03",
-          "price": 11.0
+          "price": 11
         }
       ],
       "category": "Dairy & Eggs",
@@ -9085,7 +9085,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/130039.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9182,7 +9182,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3465667.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9279,7 +9279,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9190991.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -9475,8 +9475,8 @@
       "alternatives": [
         {
           "name": "Mcvities Digestives Tops Biscuits Milk Chocolate | 100g",
-          "price": 1.0,
-          "unit_price": 1.0,
+          "price": 1,
+          "unit_price": 1,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/mcvities-digestives-tops-biscuits-milk-chocolate-100g-5777536",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5777536.jpg",
@@ -9493,8 +9493,8 @@
         },
         {
           "name": "McVitie's Digestives Choc Tops Milk Chocolate",
-          "price": 2.0,
-          "unit_price": 2.0,
+          "price": 2,
+          "unit_price": 2,
           "unit": "100G",
           "url": "https://www.woolworths.com.au/shop/productdetails/262411/mcvitie-s-digestives-choc-tops-milk-chocolate",
           "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/262411.jpg",
@@ -9669,7 +9669,7 @@
         },
         {
           "date": "2025-05-04",
-          "price": 6.0
+          "price": 6
         },
         {
           "date": "2025-05-12",
@@ -9685,14 +9685,14 @@
         },
         {
           "date": "2026-02-23",
-          "price": 6.0
+          "price": 6
         }
       ],
       "category": "Dairy & Eggs",
       "woolworths": {
         "name": "Mon Ami French Camembert Cheese",
         "price": 7.2,
-        "unit_price": 36.0,
+        "unit_price": 36,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/751148/mon-ami-french-camembert-cheese",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/751148.jpg"
@@ -9707,7 +9707,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Jindi Camembert | 125g",
@@ -9720,8 +9720,8 @@
         },
         {
           "name": "South Cape Camembert | 200g",
-          "price": 7.0,
-          "unit_price": 7.0,
+          "price": 7,
+          "unit_price": 7,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/south-cape-camembert-200g-5269091",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5269091.jpg",
@@ -9798,15 +9798,15 @@
       "price_history": [
         {
           "date": "2024-11-20",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-04-14",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-07-10",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2026-03-10",
@@ -9832,7 +9832,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Old El Paso Mild Fajita Kit Mexican Style | 485g",
@@ -10037,7 +10037,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Philadelphia Original Cream Cheese Block | 250g",
@@ -10050,8 +10050,8 @@
         },
         {
           "name": "Philadelphia Cream Cheese Original Block 2 Pack | 500g",
-          "price": 9.0,
-          "unit_price": 9.0,
+          "price": 9,
+          "unit_price": 9,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/philadelphia-cream-cheese-original-block-2-pack-500g-5081291",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5081291.jpg",
@@ -10059,8 +10059,8 @@
         },
         {
           "name": "Philadelphia Original Cream Cheese Twin Block",
-          "price": 9.0,
-          "unit_price": 18.0,
+          "price": 9,
+          "unit_price": 18,
           "unit": "1KG",
           "url": "https://www.woolworths.com.au/shop/productdetails/72546/philadelphia-original-cream-cheese-twin-block",
           "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/072546.jpg",
@@ -10230,7 +10230,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Philadelphia Original Soft Cream Cheese Tub | 250g",
@@ -10321,7 +10321,7 @@
       "category": "Sweets",
       "woolworths": {
         "name": "Snickers Milk Chocolate Party Share Bag",
-        "price": 8.0,
+        "price": 8,
         "unit_price": 2.67,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/206888/snickers-milk-chocolate-party-share-bag",
@@ -10329,14 +10329,14 @@
       },
       "coles": {
         "name": "Snickers Chocolate Party Share Bag 20 Pieces | 300g",
-        "price": 8.0,
-        "unit_price": 8.0,
+        "price": 8,
+        "unit_price": 8,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/snickers-chocolate-party-share-bag-20-pieces-300g-5369981",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5369981.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -10399,7 +10399,7 @@
         },
         {
           "date": "2026-02-03",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2026-04-02",
@@ -10413,22 +10413,22 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Spring Onion Bunch",
-        "price": 3.0,
-        "unit_price": 3.0,
+        "price": 3,
+        "unit_price": 3,
         "unit": "1EA",
         "url": "https://www.woolworths.com.au/shop/productdetails/147603/spring-onion-bunch",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/147603.jpg"
       },
       "coles": {
         "name": "Coles Spring Onions | 1 Bunch",
-        "price": 3.0,
-        "unit_price": 3.0,
+        "price": 3,
+        "unit_price": 3,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-spring-onions-1-bunch-408419",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/408419.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -10499,7 +10499,7 @@
         },
         {
           "date": "2025-05-22",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2025-07-03",
@@ -10513,8 +10513,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Strawberries Punnet",
-        "price": 6.0,
-        "unit_price": 24.0,
+        "price": 6,
+        "unit_price": 24,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/144607/strawberries-punnet",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/144607.jpg",
@@ -10522,14 +10522,14 @@
       },
       "coles": {
         "name": "Strawberries",
-        "price": 6.0,
-        "unit_price": 24.0,
+        "price": 6,
+        "unit_price": 24,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-strawberries-250g-5191256",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5191256.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -10645,7 +10645,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9161472.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -10808,11 +10808,11 @@
       "price_history": [
         {
           "date": "2025-04-14",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-05-12",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-07-10",
@@ -10820,7 +10820,7 @@
         },
         {
           "date": "2026-02-03",
-          "price": 3.0
+          "price": 3
         }
       ],
       "category": "Fruit & Veg",
@@ -10835,13 +10835,13 @@
       "coles": {
         "name": "Twinings Honeybush Orange Mandarin Tea Bags | 10 pack",
         "price": 2.7,
-        "unit_price": 5.0,
+        "unit_price": 5,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/twinings-honeybush-orange-mandarin-tea-bags-10-pack-8067560",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8067560.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -10990,19 +10990,19 @@
       "price_history": [
         {
           "date": "2025-03-17",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-04-14",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-05-12",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-06-06",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-07-10",
@@ -11021,13 +11021,13 @@
       "coles": {
         "name": "Twinings Infused Orange & Cinnamon Tea Bags | 10 pack",
         "price": 2.7,
-        "unit_price": 5.0,
+        "unit_price": 5,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/twinings-infused-orange-and-cinnamon-tea-bags-10-pack-2006132",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2006132.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -11078,25 +11078,25 @@
       "price_history": [
         {
           "date": "2026-02-03",
-          "price": 6.0
+          "price": 6
         },
         {
           "date": "2026-03-10",
-          "price": 6.0
+          "price": 6
         },
         {
           "date": "2026-04-02",
-          "price": 6.0
+          "price": 6
         },
         {
           "date": "2026-05-06",
-          "price": 6.0
+          "price": 6
         }
       ],
       "category": "Household",
       "woolworths": {
         "name": "Vevelle White 2 Ply Toilet Tissue",
-        "price": 6.0,
+        "price": 6,
         "unit_price": 0.19,
         "unit": null,
         "url": "https://www.woolworths.com.au/shop/productdetails/171303/vevelle-white-2-ply-toilet-tissue",
@@ -11408,17 +11408,17 @@
         },
         {
           "date": "2025-06-06",
-          "price": 6.0
+          "price": 6
         },
         {
           "date": "2026-05-06",
-          "price": 6.0
+          "price": 6
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths 100% Canadian Maple Syrup",
-        "price": 6.0,
+        "price": 6,
         "unit_price": 2.4,
         "unit": "100ML",
         "url": "https://www.woolworths.com.au/shop/productdetails/298476/woolworths-100-canadian-maple-syrup",
@@ -11426,18 +11426,18 @@
       },
       "coles": {
         "name": "Coles Finest Pure Canadian Maple Syrup | 250mL",
-        "price": 6.0,
-        "unit_price": 6.0,
+        "price": 6,
+        "unit_price": 6,
         "unit": "100mL",
         "url": "https://www.coles.com.au/product/coles-finest-pure-canadian-maple-syrup-250ml-1790270",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1790270.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Beechworth Honey 100% Pure Australian Honey Jar | 500g",
-          "price": 7.0,
+          "price": 7,
           "unit_price": 1.4,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/beechworth-honey-100percent-pure-australian-honey-jar-500g-2624437",
@@ -11527,7 +11527,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5178961.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -11574,7 +11574,7 @@
         },
         {
           "date": "2024-12-02",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2025-02-02",
@@ -11611,8 +11611,8 @@
       "alternatives": [
         {
           "name": "Coles Asparagus Spears | 425g",
-          "price": 3.0,
-          "unit_price": 3.0,
+          "price": 3,
+          "unit_price": 3,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/coles-asparagus-spears-425g-5841817",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5841817.jpg",
@@ -11827,7 +11827,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7214862.jpg"
       },
       "cheaper_store": "coles",
-      "saving_per_item": null,
+      "saving_per_item": 0.24,
       "alternatives": [
         {
           "name": "Woolworths Capsicum Green",
@@ -11853,7 +11853,12 @@
           "price": 1.98
         }
       ],
-      "coles_price_history": [],
+      "coles_price_history": [
+        {
+          "date": "2026-06-13",
+          "price": 1.74
+        }
+      ],
       "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": null,
@@ -11867,21 +11872,21 @@
       "price_history": [
         {
           "date": "2025-05-04",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2026-02-03",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2026-03-10",
-          "price": 4.0
+          "price": 4
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Basmati Rice",
-        "price": 4.0,
+        "price": 4,
         "unit_price": 0.4,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/694550/woolworths-basmati-rice",
@@ -11890,14 +11895,14 @@
       },
       "coles": {
         "name": "Basmati Rice",
-        "price": 4.0,
+        "price": 4,
         "unit_price": 0.4,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-basmati-rice-1kg-8703059",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8703059.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -11940,15 +11945,15 @@
       "price_history": [
         {
           "date": "2025-05-12",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2025-06-13",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2026-02-11",
-          "price": 4.0
+          "price": 4
         }
       ],
       "category": "Fruit & Veg",
@@ -11962,8 +11967,8 @@
       },
       "coles": {
         "name": "Coles Celery Bunch | 1 Each",
-        "price": 4.0,
-        "unit_price": 4.0,
+        "price": 4,
+        "unit_price": 4,
         "unit": "1ea",
         "url": "https://www.coles.com.au/product/coles-celery-bunch-1-each-4845732",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4845732.jpg",
@@ -11992,8 +11997,8 @@
         },
         {
           "name": "Coles Celery Bunch | 1 Each",
-          "price": 4.0,
-          "unit_price": 4.0,
+          "price": 4,
+          "unit_price": 4,
           "unit": "1ea",
           "url": "https://www.coles.com.au/product/coles-celery-bunch-1-each-4845732",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4845732.jpg",
@@ -12045,21 +12050,21 @@
       "price_history": [
         {
           "date": "2025-04-14",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2025-06-06",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2026-05-06",
-          "price": 2.0
+          "price": 2
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Cous Cous",
-        "price": 2.0,
+        "price": 2,
         "unit_price": 0.4,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/720060/woolworths-cous-cous",
@@ -12067,14 +12072,14 @@
       },
       "coles": {
         "name": "Coles Cous Cous | 500g",
-        "price": 2.0,
-        "unit_price": 2.0,
+        "price": 2,
+        "unit_price": 2,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-cous-cous-500g-8641268",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8641268.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -12148,7 +12153,7 @@
       },
       "coles": {
         "name": "Extra Virgin Olive Oil",
-        "price": 9.0,
+        "price": 9,
         "unit_price": 1.8,
         "unit": "100mL",
         "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
@@ -12160,7 +12165,7 @@
       "alternatives": [
         {
           "name": "Extra Virgin Olive Oil",
-          "price": 9.0,
+          "price": 9,
           "unit_price": 1.8,
           "unit": "100mL",
           "url": "https://www.coles.com.au/product/coles-extra-virgin-olive-oil-500ml-5449504",
@@ -12221,11 +12226,11 @@
         },
         {
           "date": "2025-03-17",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2025-04-14",
-          "price": 8.0
+          "price": 8
         }
       ],
       "category": "Meat & Seafood",
@@ -12239,20 +12244,20 @@
       },
       "coles": {
         "name": "Coles 3 Star Lamb Mince | 500g",
-        "price": 9.0,
-        "unit_price": 9.0,
+        "price": 9,
+        "unit_price": 9,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8850461.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Coles 3 Star Lamb Mince | 500g",
-          "price": 9.0,
-          "unit_price": 9.0,
+          "price": 9,
+          "unit_price": 9,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/coles-3-star-lamb-mince-500g-8850461",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8850461.jpg",
@@ -12260,8 +12265,8 @@
         },
         {
           "name": "Coles Perform Lamb With Mint Sauce | 360g",
-          "price": 10.0,
-          "unit_price": 10.0,
+          "price": 10,
+          "unit_price": 10,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/coles-perform-lamb-with-mint-sauce-360g-1756910",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1756910.jpg",
@@ -12330,11 +12335,11 @@
         },
         {
           "date": "2025-01-29",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2025-04-14",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2025-07-10",
@@ -12368,7 +12373,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5859834.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -12456,7 +12461,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5419660.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -12517,8 +12522,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Red Onions Bag",
-        "price": 5.0,
-        "unit_price": 5.0,
+        "price": 5,
+        "unit_price": 5,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg",
@@ -12576,21 +12581,21 @@
       "price_history": [
         {
           "date": "2025-01-29",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2025-03-17",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2026-03-02",
-          "price": 2.0
+          "price": 2
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Rosemary Leaves",
-        "price": 2.0,
+        "price": 2,
         "unit_price": 1.11,
         "unit": "10G",
         "url": "https://www.woolworths.com.au/shop/productdetails/251141/woolworths-rosemary-leaves",
@@ -12646,7 +12651,7 @@
       "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 11.1,
-      "per_100_coles": 10.0,
+      "per_100_coles": 10,
       "per_100_unit": "100g"
     },
     {
@@ -12656,11 +12661,11 @@
       "price_history": [
         {
           "date": "2025-06-06",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-07-10",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2026-03-10",
@@ -12668,7 +12673,7 @@
         },
         {
           "date": "2026-04-02",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2026-05-06",
@@ -12678,8 +12683,8 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Red Onions Bag",
-        "price": 5.0,
-        "unit_price": 5.0,
+        "price": 5,
+        "unit_price": 5,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/124751/woolworths-red-onions-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/124751.jpg"
@@ -12787,11 +12792,11 @@
         },
         {
           "date": "2025-05-12",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-06-06",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2026-02-11",
@@ -12916,7 +12921,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3731716.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -12975,11 +12980,11 @@
         },
         {
           "date": "2026-02-03",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2026-04-02",
-          "price": 5.0
+          "price": 5
         },
         {
           "date": "2026-05-06",
@@ -12989,7 +12994,7 @@
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Yumi's Eggplant Mediterranean Dip",
-        "price": 5.0,
+        "price": 5,
         "unit_price": 1.88,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/139881/yumi-s-eggplant-mediterranean-dip",
@@ -12997,14 +13002,14 @@
       },
       "coles": {
         "name": "Yumi's Mediterranean Eggplant Dip | 200g",
-        "price": 5.0,
-        "unit_price": 5.0,
+        "price": 5,
+        "unit_price": 5,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/yumi's-mediterranean-eggplant-dip-200g-8670878",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8670878.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -13234,7 +13239,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Baby Mum-mum Rice Rusk Organic Blueberry & Carrot +8 Months | 36g",
@@ -13301,8 +13306,8 @@
       "category": "Drinks & Alcohol",
       "woolworths": {
         "name": "Coca-Cola Zero Sugar Soft Drink Bottle",
-        "price": 4.0,
-        "unit_price": 2.0,
+        "price": 4,
+        "unit_price": 2,
         "unit": "1L",
         "url": "https://www.woolworths.com.au/shop/productdetails/672966/coca-cola-zero-sugar-soft-drink-bottle",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/672966.jpg"
@@ -13310,7 +13315,7 @@
       "coles": {
         "name": "Coca-Cola Zero Sugar Soft Drink Bottle | 1.25L",
         "price": 4.2,
-        "unit_price": 6.0,
+        "unit_price": 6,
         "unit": "1L",
         "url": "https://www.coles.com.au/product/coca-cola-zero-sugar-soft-drink-bottle-1.25l-2993706",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2993706.jpg"
@@ -13389,7 +13394,7 @@
       "price_history": [
         {
           "date": "2025-05-12",
-          "price": 3.0
+          "price": 3
         },
         {
           "date": "2025-07-10",
@@ -13399,7 +13404,7 @@
       "category": "Pantry",
       "woolworths": {
         "name": "Colman's Ingredients English Mustard",
-        "price": 5.0,
+        "price": 5,
         "unit_price": 4.5,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/88972/colman-s-ingredients-english-mustard",
@@ -13407,14 +13412,14 @@
       },
       "coles": {
         "name": "Colman's Old English Mustard | 100g",
-        "price": 5.0,
-        "unit_price": 5.0,
+        "price": 5,
+        "unit_price": 5,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/colman's-old-english-mustard-100g-6921434",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6921434.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Coles Mild American Mustard | 260g",
@@ -13474,7 +13479,7 @@
       "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 4.5,
-      "per_100_coles": 5.0,
+      "per_100_coles": 5,
       "per_100_unit": "100g"
     },
     {
@@ -13509,7 +13514,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5342920.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -13593,7 +13598,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9151344.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -13674,7 +13679,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6373554.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -13751,7 +13756,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7752300.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -13828,7 +13833,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3056249.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -13972,7 +13977,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4910506.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -14023,7 +14028,7 @@
       "price_history": [
         {
           "date": "2024-12-19",
-          "price": 7.0
+          "price": 7
         },
         {
           "date": "2025-05-04",
@@ -14050,7 +14055,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 3.0,
+      "saving_per_item": 3,
       "alternatives": [
         {
           "name": "Choc Little Ones Share Pack 16 Pack",
@@ -14123,7 +14128,7 @@
         },
         {
           "date": "2025-04-14",
-          "price": 5.0
+          "price": 5
         }
       ],
       "category": "Sweets",
@@ -14207,7 +14212,7 @@
       "price_history": [
         {
           "date": "2025-02-02",
-          "price": 6.0
+          "price": 6
         },
         {
           "date": "2025-03-11",
@@ -14232,11 +14237,11 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3577219.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Lotus Biscoff Spread Smooth",
-          "price": 12.0,
+          "price": 12,
           "unit_price": 1.67,
           "unit": "100G",
           "url": "https://www.woolworths.com.au/shop/productdetails/6021133/lotus-biscoff-spread-smooth",
@@ -14245,7 +14250,7 @@
         },
         {
           "name": "Lotus Biscoff Spread Crunchy",
-          "price": 12.0,
+          "price": 12,
           "unit_price": 1.71,
           "unit": "100G",
           "url": "https://www.woolworths.com.au/shop/productdetails/6021132/lotus-biscoff-spread-crunchy",
@@ -14315,29 +14320,29 @@
         },
         {
           "date": "2025-06-13",
-          "price": 13.0
+          "price": 13
         }
       ],
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Macro Grass Fed Australian Stir-Fry Beef",
-        "price": 13.0,
-        "unit_price": 26.0,
+        "price": 13,
+        "unit_price": 26,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/175569/macro-grass-fed-australian-stir-fry-beef",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/175569.jpg"
       },
       "coles": {
         "name": "Coles Graze Grassfed Beef Stir Fry | 500g",
-        "price": 13.0,
-        "unit_price": 13.0,
+        "price": 13,
+        "unit_price": 13,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-graze-grassfed-beef-stir-fry-500g-2023765",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2023765.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Drovers Choice Beef Stir Fry | 500g",
@@ -14359,8 +14364,8 @@
         },
         {
           "name": "Coles Graze Grassfed Beef Stir Fry | 500g",
-          "price": 13.0,
-          "unit_price": 13.0,
+          "price": 13,
+          "unit_price": 13,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/coles-graze-grassfed-beef-stir-fry-500g-2023765",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2023765.jpg",
@@ -14430,7 +14435,7 @@
       },
       "coles": {
         "name": "Maltesers Milk Chocolate Party Gift Box | 400g",
-        "price": 10.0,
+        "price": 10,
         "unit_price": 2.5,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/maltesers-milk-chocolate-party-gift-box-400g-3609268",
@@ -14442,7 +14447,7 @@
       "alternatives": [
         {
           "name": "Maltesers Milk Chocolate Party Gift Box | 400g",
-          "price": 10.0,
+          "price": 10,
           "unit_price": 2.5,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/maltesers-milk-chocolate-party-gift-box-400g-3609268",
@@ -14579,11 +14584,11 @@
       "price_history": [
         {
           "date": "2026-02-03",
-          "price": 4.0
+          "price": 4
         },
         {
           "date": "2026-03-02",
-          "price": 4.0
+          "price": 4
         }
       ],
       "category": "Pantry",
@@ -14597,7 +14602,7 @@
       },
       "coles": {
         "name": "Obela Garnished Dip Garlic Hommus With Smashed Falafel | 220g",
-        "price": 4.0,
+        "price": 4,
         "unit_price": 1.82,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/obela-garnished-dip-garlic-hommus-with-smashed-falafel-220g-1048818",
@@ -14609,7 +14614,7 @@
       "alternatives": [
         {
           "name": "Obela Garnished Dip Garlic Hommus With Smashed Falafel | 220g",
-          "price": 4.0,
+          "price": 4,
           "unit_price": 1.82,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/obela-garnished-dip-garlic-hommus-with-smashed-falafel-220g-1048818",
@@ -14772,7 +14777,7 @@
       },
       "coles": {
         "name": "Rexona Men Deodorant 48hr Stick Sport Defence | 52g",
-        "price": 5.0,
+        "price": 5,
         "unit_price": null,
         "unit": null,
         "url": "https://www.coles.com.au/product/rexona-men-deodorant-48hr-stick-sport-defence-52g-8448304",
@@ -14826,13 +14831,13 @@
         },
         {
           "date": "2026-03-10",
-          "price": 5.0
+          "price": 5
         }
       ],
       "category": "Sweets",
       "woolworths": {
         "name": "Sam's Pantry Caramel Brownie Low Sugar Protein Bars",
-        "price": 5.0,
+        "price": 5,
         "unit_price": 2.63,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/175803/sam-s-pantry-caramel-brownie-low-sugar-protein-bars",
@@ -14847,7 +14852,7 @@
         "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4312843.jpg&w=640&q=90"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 4.0,
+      "saving_per_item": 4,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -14892,7 +14897,7 @@
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.63,
-      "per_100_coles": 2.0,
+      "per_100_coles": 2,
       "per_100_unit": "100g"
     },
     {
@@ -14902,17 +14907,17 @@
       "price_history": [
         {
           "date": "2026-04-02",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2026-05-06",
-          "price": 8.0
+          "price": 8
         }
       ],
       "category": "Sweets",
       "woolworths": {
         "name": "Snickers Milk Chocolate Party Share Bag",
-        "price": 8.0,
+        "price": 8,
         "unit_price": 2.67,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/206888/snickers-milk-chocolate-party-share-bag",
@@ -14956,7 +14961,7 @@
         },
         {
           "date": "2026-06-13",
-          "price": 8.0
+          "price": 8
         }
       ],
       "coles_price_history": [
@@ -14994,17 +14999,17 @@
       "price_history": [
         {
           "date": "2025-05-12",
-          "price": 19.0
+          "price": 19
         },
         {
           "date": "2025-07-10",
-          "price": 19.0
+          "price": 19
         }
       ],
       "category": "Household",
       "woolworths": {
         "name": "Vanish Napisan Stain Remover Powder",
-        "price": 19.0,
+        "price": 19,
         "unit_price": 9.5,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/192217/vanish-napisan-stain-remover-powder",
@@ -15082,17 +15087,17 @@
       "price_history": [
         {
           "date": "2025-01-29",
-          "price": 9.0
+          "price": 9
         },
         {
           "date": "2026-03-02",
-          "price": 9.0
+          "price": 9
         }
       ],
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Woolworths 4 Angus Quarter Pound Beef Burgers",
-        "price": 9.0,
+        "price": 9,
         "unit_price": 17.62,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/901703/woolworths-4-angus-quarter-pound-beef-burgers",
@@ -15100,14 +15105,14 @@
       },
       "coles": {
         "name": "Coles Finest Angus Beef Burgers | 300g",
-        "price": 8.0,
+        "price": 8,
         "unit_price": 26.67,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-finest-angus-beef-burgers-300g-1327877",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1327877.jpg"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 1.0,
+      "saving_per_item": 1,
       "alternatives": [
         {
           "name": "Coles Simply Australian Beef Burgers | 800g",
@@ -15120,8 +15125,8 @@
         },
         {
           "name": "V2 Burger Beef 4pk 452g | 452GRAM",
-          "price": 10.0,
-          "unit_price": 10.0,
+          "price": 10,
+          "unit_price": 10,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/v2-burger-beef-4pk-452g-452gram-8851668",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8851668.jpg",
@@ -15190,33 +15195,33 @@
       "price_history": [
         {
           "date": "2024-10-27",
-          "price": 8.0
+          "price": 8
         },
         {
           "date": "2024-11-12",
-          "price": 8.0
+          "price": 8
         }
       ],
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Woolworths Beef & Lamb Meatballs",
-        "price": 8.0,
-        "unit_price": 20.0,
+        "price": 8,
+        "unit_price": 20,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/764264/woolworths-beef-lamb-meatballs",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/764264.jpg"
       },
       "coles": {
         "name": "Coles Beef & Pork Meatballs | 560g",
-        "price": 7.0,
-        "unit_price": 7.0,
+        "price": 7,
+        "unit_price": 7,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-beef-and-pork-meatballs-560g-3569447",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3569447.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 1.0,
+      "saving_per_item": 1,
       "alternatives": [
         {
           "name": "V.I.P Dog Chunkers Meatballs Lamb | 1Kg",
@@ -15229,8 +15234,8 @@
         },
         {
           "name": "Coles Beef & Pork Meatballs | 560g",
-          "price": 7.0,
-          "unit_price": 7.0,
+          "price": 7,
+          "unit_price": 7,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/coles-beef-and-pork-meatballs-560g-3569447",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3569447.jpg",
@@ -15276,7 +15281,7 @@
       ],
       "match_confidence": "medium",
       "size_warning": false,
-      "per_100_ww": 2.0,
+      "per_100_ww": 2,
       "per_100_coles": 1.25,
       "per_100_unit": "100g"
     },
@@ -15287,17 +15292,17 @@
       "price_history": [
         {
           "date": "2026-04-02",
-          "price": 1.0
+          "price": 1
         },
         {
           "date": "2026-05-06",
-          "price": 1.0
+          "price": 1
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Black Beans",
-        "price": 1.0,
+        "price": 1,
         "unit_price": 2.38,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/907377/woolworths-black-beans",
@@ -15305,20 +15310,20 @@
       },
       "coles": {
         "name": "Coles Black Beans | 420g",
-        "price": 1.0,
-        "unit_price": 1.0,
+        "price": 1,
+        "unit_price": 1,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3812975.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Coles Black Beans | 420g",
-          "price": 1.0,
-          "unit_price": 1.0,
+          "price": 1,
+          "unit_price": 1,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/coles-black-beans-420g-3812975",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3812975.jpg",
@@ -15326,7 +15331,7 @@
         },
         {
           "name": "Woolworths Beef & Black Bean With Rice",
-          "price": 8.0,
+          "price": 8,
           "unit_price": 2.29,
           "unit": "100G",
           "url": "https://www.woolworths.com.au/shop/productdetails/6038388/woolworths-beef-black-bean-with-rice",
@@ -15405,7 +15410,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Coles Corn Kernels | 420g",
@@ -15554,7 +15559,7 @@
       "woolworths": {
         "name": "Woolworths Greek Style Fetta",
         "price": 3.2,
-        "unit_price": 16.0,
+        "unit_price": 16,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/452083/woolworths-greek-style-fetta",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/452083.jpg"
@@ -15682,8 +15687,8 @@
       "alternatives": [
         {
           "name": "Coles Asparagus Spears | 425g",
-          "price": 3.0,
-          "unit_price": 3.0,
+          "price": 3,
+          "unit_price": 3,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/coles-asparagus-spears-425g-5841817",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5841817.jpg",
@@ -15756,17 +15761,17 @@
       "price_history": [
         {
           "date": "2025-03-17",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2026-02-03",
-          "price": 2.0
+          "price": 2
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Mixed Herbs Dried",
-        "price": 2.0,
+        "price": 2,
         "unit_price": 1.67,
         "unit": "10G",
         "url": "https://www.woolworths.com.au/shop/productdetails/251120/woolworths-mixed-herbs-dried",
@@ -15834,18 +15839,18 @@
       "price_history": [
         {
           "date": "2026-04-21",
-          "price": 6.0
+          "price": 6
         },
         {
           "date": "2026-05-06",
-          "price": 6.0
+          "price": 6
         }
       ],
       "category": "Fruit & Veg",
       "woolworths": {
         "name": "Woolworths Red Washed Potatoes Bag",
-        "price": 8.0,
-        "unit_price": 4.0,
+        "price": 8,
+        "unit_price": 4,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/101638/woolworths-red-washed-potatoes-bag",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/101638.jpg",
@@ -15853,20 +15858,20 @@
       },
       "coles": {
         "name": "Red Royale Washed Potatoes",
-        "price": 6.0,
-        "unit_price": 3.0,
+        "price": 6,
+        "unit_price": 3,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-red-royale-washed-potatoes-2kg-7963859",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7963859.jpg",
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 2.0,
+      "saving_per_item": 2,
       "alternatives": [
         {
           "name": "Red Royale Washed Potatoes",
-          "price": 6.0,
-          "unit_price": 3.0,
+          "price": 6,
+          "unit_price": 3,
           "unit": "1kg",
           "url": "https://www.coles.com.au/product/coles-red-royale-washed-potatoes-2kg-7963859",
           "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7963859.jpg",
@@ -15942,17 +15947,17 @@
       "price_history": [
         {
           "date": "2025-07-10",
-          "price": 2.0
+          "price": 2
         },
         {
           "date": "2026-03-02",
-          "price": 2.0
+          "price": 2
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Woolworths Thyme Leaves",
-        "price": 2.0,
+        "price": 2,
         "unit_price": 1.67,
         "unit": "10G",
         "url": "https://www.woolworths.com.au/shop/productdetails/251228/woolworths-thyme-leaves",
@@ -15960,14 +15965,14 @@
       },
       "coles": {
         "name": "Coles Thyme Leaves | 18g",
-        "price": 2.0,
-        "unit_price": 2.0,
+        "price": 2,
+        "unit_price": 2,
         "unit": "10g",
         "url": "https://www.coles.com.au/product/coles-thyme-leaves-18g-8983046",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8983046.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0.0,
+      "saving_per_item": 0,
       "alternatives": [
         {
           "name": "Hoyts Thyme | 15g",
@@ -16071,7 +16076,7 @@
         },
         {
           "name": "Springhill Farm Choc Coconut Slice | 180g",
-          "price": 6.0,
+          "price": 6,
           "unit_price": 3.33,
           "unit": "100g",
           "url": "https://www.coles.com.au/product/springhill-farm-choc-coconut-slice-180g-1593305",
@@ -16133,9 +16138,9 @@
   "pending_validation": [
     {
       "item": "Vevelle White 2 Ply Toilet Tissue",
-      "ww_price": 6.0,
+      "ww_price": 6,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/171303/vevelle-white-2-ply-toilet-tissue",
-      "ww_prev_price": 6.0,
+      "ww_prev_price": 6,
       "ww_suspicious": false,
       "coles_price": 3.25,
       "coles_url": "https://www.coles.com.au/product/quilton-white-toilet-tissue-6-pack-3055257",
@@ -16144,22 +16149,6 @@
       "flagged_date": "2026-06-13",
       "reason": [
         "suspicious_drop_gt20pct",
-        "30pct_change",
-        "outside_historical_range"
-      ]
-    },
-    {
-      "item": "Woolworths Capsicum Green",
-      "ww_price": null,
-      "ww_url": "",
-      "ww_prev_price": 1.98,
-      "ww_suspicious": false,
-      "coles_price": 1.74,
-      "coles_url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
-      "coles_prev_price": 1.3,
-      "coles_suspicious": true,
-      "flagged_date": "2026-06-13",
-      "reason": [
         "30pct_change",
         "outside_historical_range"
       ]
@@ -16368,8 +16357,9 @@
       "coles": 1.95
     },
     "Woolworths Capsicum Green": {
-      "approved_date": "2026-05-31",
-      "ww": 1.98
+      "approved_date": "2026-06-13",
+      "ww": 1.98,
+      "coles": 1.74
     },
     "Woolworths Celery Heart": {
       "approved_date": "2026-05-31",
