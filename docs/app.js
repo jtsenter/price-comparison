@@ -1455,7 +1455,7 @@ function openPriceHistoryModal(item) {
 
     // Horizontal stem on the left that splits into two diverging arrows (one up,
     // one down) on the right — matches the requested "split into two directions" icon.
-    const forkSvg = `<svg class="fork-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12 H10"/><path d="M10 12 C15 12, 19 11, 19 5"/><path d="M10 12 C15 12, 19 13, 19 19"/><polyline points="15.5,8 19,4.5 22.5,8"/><polyline points="15.5,16 19,19.5 22.5,16"/></svg>`;
+    const forkSvg = `<svg class="fork-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="10" y2="12"/><line x1="10" y1="12" x2="21" y2="4"/><line x1="10" y1="12" x2="21" y2="20"/><polyline points="19,8 21,4 17,5"/><polyline points="19,16 21,20 17,19"/></svg>`;
 
     const wwHtml = entry.ww != null
       ? `<span class="price-history-store-cell price-history-store-ww">
