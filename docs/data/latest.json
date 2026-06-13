@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-13T03:32:44.785638+00:00",
+  "last_updated": "2026-06-13T03:32:55.223441+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -14073,7 +14073,7 @@
     },
     {
       "list_item": "Sam's Pantry Caramel Brownie Low Sugar Protein Bars",
-      "last_scraped": "2026-06-12T04:19:27.746119+00:00",
+      "last_scraped": "2026-06-13T03:32:46.467866+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -14082,13 +14082,13 @@
         },
         {
           "date": "2026-03-10",
-          "price": 5
+          "price": 5.0
         }
       ],
       "category": "Sweets",
       "woolworths": {
         "name": "Sam's Pantry Caramel Brownie Low Sugar Protein Bars",
-        "price": 5,
+        "price": 5.0,
         "unit_price": 2.63,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/175803/sam-s-pantry-caramel-brownie-low-sugar-protein-bars",
@@ -14103,7 +14103,7 @@
         "image_url": "https://www.coles.com.au/_next/image?url=https%3A%2F%2Fcdn.productimages.coles.com.au%2Fproductimages%2F4%2F4312843.jpg&w=640&q=90"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 4,
+      "saving_per_item": 4.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -14148,31 +14148,31 @@
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.63,
-      "per_100_coles": 2,
+      "per_100_coles": 2.0,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Snickers Milk Chocolate Party Share Bag",
-      "last_scraped": "2026-06-12T04:19:28.011043+00:00",
+      "last_scraped": "2026-06-13T03:32:48.653235+00:00",
       "trip_count": 2,
       "price_history": [
         {
           "date": "2026-04-02",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2026-05-06",
-          "price": 8
+          "price": 8.0
         }
       ],
       "category": "Sweets",
       "woolworths": {
         "name": "Snickers Milk Chocolate Party Share Bag",
-        "price": 7.5,
-        "unit_price": 2.5,
+        "price": 8.0,
+        "unit_price": 2.67,
         "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/206889/snickers-milk-chocolate-party-share-bag",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/206889.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/206888/snickers-milk-chocolate-party-share-bag",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/206888.jpg"
       },
       "coles": {
         "name": "Snickers Chocolate Party Share Bag 12 Pieces | 180g",
@@ -14182,8 +14182,8 @@
         "url": "https://www.coles.com.au/product/snickers-chocolate-party-share-bag-12-pieces-180g-5369879",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5369879.jpg"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "cheaper_store": "coles",
+      "saving_per_item": 0.5,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -14209,6 +14209,10 @@
         {
           "date": "2026-06-10",
           "price": 7.5
+        },
+        {
+          "date": "2026-06-13",
+          "price": 8.0
         }
       ],
       "coles_price_history": [
@@ -14235,108 +14239,28 @@
       ],
       "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 2.5,
+      "per_100_ww": 2.67,
       "per_100_coles": 4.17,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Woolworths 4 Angus Quarter Pound Beef Burgers",
-      "last_scraped": "2026-06-12T04:19:33.514007+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-01-29",
-          "price": 9
-        },
-        {
-          "date": "2026-03-02",
-          "price": 9
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths 4 Angus Quarter Pound Beef Burgers",
-        "price": 9,
-        "unit_price": 17.62,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/901703/woolworths-4-angus-quarter-pound-beef-burgers",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/901703.jpg"
-      },
-      "coles": {
-        "name": "Coles Finest Angus Beef Burgers | 300g",
-        "price": 8,
-        "unit_price": 26.67,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-finest-angus-beef-burgers-300g-1327877",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1327877.jpg"
-      },
-      "cheaper_store": "coles",
-      "saving_per_item": 1,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2025-12-03",
-          "price": 9
-        },
-        {
-          "date": "2026-03-22",
-          "price": 9
-        },
-        {
-          "date": "2026-05-29",
-          "price": 9
-        },
-        {
-          "date": "2026-06-01",
-          "price": 9
-        },
-        {
-          "date": "2026-06-08",
-          "price": 9
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 9
-        },
-        {
-          "date": "2026-06-01",
-          "price": 9
-        },
-        {
-          "date": "2026-06-08",
-          "price": 9
-        },
-        {
-          "date": "2026-06-11",
-          "price": 8
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 1.76,
-      "per_100_coles": 2.67,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Vanish Napisan Stain Remover Powder",
-      "last_scraped": "2026-06-12T04:19:33.809330+00:00",
+      "last_scraped": "2026-06-13T03:32:53.084287+00:00",
       "trip_count": 2,
       "price_history": [
         {
           "date": "2025-05-12",
-          "price": 19
+          "price": 19.0
         },
         {
           "date": "2025-07-10",
-          "price": 19
+          "price": 19.0
         }
       ],
       "category": "Household",
       "woolworths": {
         "name": "Vanish Napisan Stain Remover Powder",
-        "price": 19,
+        "price": 19.0,
         "unit_price": 9.5,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/192217/vanish-napisan-stain-remover-powder",
@@ -14395,6 +14319,86 @@
       "size_warning": false,
       "per_100_ww": 0.95,
       "per_100_coles": 0.82,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths 4 Angus Quarter Pound Beef Burgers",
+      "last_scraped": "2026-06-13T03:32:55.207145+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-01-29",
+          "price": 9.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 9.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths 4 Angus Quarter Pound Beef Burgers",
+        "price": 9.0,
+        "unit_price": 17.62,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/901703/woolworths-4-angus-quarter-pound-beef-burgers",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/901703.jpg"
+      },
+      "coles": {
+        "name": "Coles Finest Angus Beef Burgers | 300g",
+        "price": 8,
+        "unit_price": 26.67,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-finest-angus-beef-burgers-300g-1327877",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1327877.jpg"
+      },
+      "cheaper_store": "coles",
+      "saving_per_item": 1.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2025-12-03",
+          "price": 9
+        },
+        {
+          "date": "2026-03-22",
+          "price": 9
+        },
+        {
+          "date": "2026-05-29",
+          "price": 9
+        },
+        {
+          "date": "2026-06-01",
+          "price": 9
+        },
+        {
+          "date": "2026-06-08",
+          "price": 9
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 9
+        },
+        {
+          "date": "2026-06-01",
+          "price": 9
+        },
+        {
+          "date": "2026-06-08",
+          "price": 9
+        },
+        {
+          "date": "2026-06-11",
+          "price": 8
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 1.76,
+      "per_100_coles": 2.67,
       "per_100_unit": "100g"
     },
     {
@@ -15170,20 +15174,22 @@
       "per_100_unit": "100g"
     }
   ],
-  "not_found_items": [],
+  "not_found_items": [
+    "Washed Potato Bag 4kg"
+  ],
   "summary": {
-    "total_woolworths": 723.05,
+    "total_woolworths": 723.55,
     "total_coles": 738.56,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 15.51,
+    "total_saving": 15.01,
     "items_compared": 144,
-    "items_not_found": 0
+    "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 130,
+    "done": 135,
     "total": 145,
     "started_at": "2026-06-13T03:27:53.102742+00:00",
-    "current_item": "Rexona Men 48hr Deodorant Stick Sport Defence"
+    "current_item": "Woolworths 4 Angus Quarter Pound Beef Burgers"
   }
 }
