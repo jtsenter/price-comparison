@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-13T06:17:48.073737+00:00",
+  "last_updated": "2026-06-13T06:48:04.352653+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -11073,56 +11073,47 @@
     },
     {
       "list_item": "Vevelle White 2 Ply Toilet Tissue",
-      "last_scraped": "2026-06-13T06:15:11.749224+00:00",
+      "last_scraped": "2026-06-13T06:48:04.141312+00:00",
       "trip_count": 4,
       "price_history": [
         {
           "date": "2026-02-03",
-          "price": 6
+          "price": 6.0
         },
         {
           "date": "2026-03-10",
-          "price": 6
+          "price": 6.0
         },
         {
           "date": "2026-04-02",
-          "price": 6
+          "price": 6.0
         },
         {
           "date": "2026-05-06",
-          "price": 6
+          "price": 6.0
         }
       ],
       "category": "Household",
       "woolworths": {
         "name": "Vevelle White 2 Ply Toilet Tissue",
-        "price": 6,
+        "price": 6.0,
         "unit_price": 0.19,
         "unit": null,
         "url": "https://www.woolworths.com.au/shop/productdetails/171303/vevelle-white-2-ply-toilet-tissue",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/171303.jpg"
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/171303.jpg",
+        "is_on_special": false
       },
       "coles": {
-        "name": "Quilton White Toilet Tissue | 6 pack",
-        "price": 3.25,
-        "unit_price": 0.3,
+        "name": "3 Ply Unscented White Toilet Paper",
+        "price": 8.5,
+        "unit_price": 0.39,
         "unit": "100ea",
-        "url": "https://www.coles.com.au/product/quilton-white-toilet-tissue-6-pack-3055257",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3055257.jpg"
+        "url": "https://www.coles.com.au/product/quilton-3-ply-unscented-white-toilet-paper-12-pack-5034134",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5034134.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 2.75,
-      "alternatives": [
-        {
-          "name": "Coles Simply 2-ply White Toilet Paper | 18 Pack",
-          "price": 7.5,
-          "unit_price": 0.16,
-          "unit": "100ea",
-          "url": "https://www.coles.com.au/product/coles-simply-2-ply-white-toilet-paper-18-pack-9152405",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/9/9152405.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.5,
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2025-07-08",
@@ -11183,7 +11174,7 @@
           "price": 4.55
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
@@ -16128,27 +16119,26 @@
   ],
   "summary": {
     "total_woolworths": 729.95,
-    "total_coles": 732.09,
+    "total_coles": 737.34,
     "cheaper_store": "woolworths",
     "ww_data_available": true,
-    "total_saving": 2.14,
+    "total_saving": 7.39,
     "items_compared": 144,
     "items_not_found": 1
   },
   "pending_validation": [
     {
       "item": "Vevelle White 2 Ply Toilet Tissue",
-      "ww_price": 6,
+      "ww_price": 6.0,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/171303/vevelle-white-2-ply-toilet-tissue",
       "ww_prev_price": 6,
       "ww_suspicious": false,
-      "coles_price": 3.25,
-      "coles_url": "https://www.coles.com.au/product/quilton-white-toilet-tissue-6-pack-3055257",
-      "coles_prev_price": 6.5,
+      "coles_price": 8.5,
+      "coles_url": "https://www.coles.com.au/product/quilton-3-ply-unscented-white-toilet-paper-12-pack-5034134",
+      "coles_prev_price": 3.25,
       "coles_suspicious": true,
       "flagged_date": "2026-06-13",
       "reason": [
-        "suspicious_drop_gt20pct",
         "30pct_change",
         "outside_historical_range"
       ]
