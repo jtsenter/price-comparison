@@ -1212,7 +1212,7 @@ td.priority-cell { text-align: center; }
   align-items: center;
 }
 .price-fork-btn:hover { opacity: 0.85; }
-.fork-icon { width: 14px; height: 14px; display: block; }
+.fork-icon { width: 14px; height: 14px; display: block; transform: rotate(90deg); }
 
 /* ── Heat chart off-range markers ────────────────────────────── */
 .price-bar-outer { overflow: visible; }

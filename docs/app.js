@@ -1545,7 +1545,15 @@ let _diffItemContext = null; // { item, priceKey, priority }
 function initDiffItemModal() {
   const modal = $('diffItemModal');
   if (!modal) return;
-  const close = () => { modal.classList.remove('open'); _diffItemContext = null; };
+  const close = () => {
+    modal.classList.remove('open');
+    // If price history modal was open behind this, reopen it
+    if (_diffItemContext?.fromHistory && _historyItem) {
+      $('priceHistoryModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    _diffItemContext = null;
+  };
   $('diffItemClose').addEventListener('click', close);
   $('diffItemCancel').addEventListener('click', close);
   modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
@@ -1571,42 +1579,9 @@ function initDiffItemModal() {
 }
 
 async function openDiffItemModal(item, priceKey) {
-  // Step 1: mutate _lastData in memory — delete all entries with this price
-  const priceNum = Number(priceKey);
-  const liveItem = _lastData?.items?.find(i => i.list_item === item.list_item);
-  if (liveItem) {
-    liveItem.price_history       = (liveItem.price_history       || []).filter(e => e.price !== priceNum);
-    liveItem.ww_price_history    = (liveItem.ww_price_history    || []).filter(e => e.price !== priceNum);
-    liveItem.coles_price_history = (liveItem.coles_price_history || []).filter(e => e.price !== priceNum);
-  }
-  // Clean up exclusions for this price (no longer in history)
-  const ex = loadExclusions();
-  if (ex[item.list_item]) {
-    ex[item.list_item] = ex[item.list_item].filter(p => Number(p).toFixed(2) !== priceKey);
-    saveExclusions(ex);
-  }
-
-  // Step 1 cont: persist to GitHub — must succeed before dialog opens
-  const s = loadSettings();
-  if (s.user && s.repo && s.token) {
-    try {
-      await persistLatestJson(_lastData, `fix: remove misidentified price entries for "${item.list_item}"`);
-    } catch (_e) {
-      showToast('⚠ Could not save changes — check your GitHub token');
-      if (_lastData) renderPage(_lastData);
-      return; // do NOT open modal
-    }
-  }
-
-  // Re-render table with cleaned history
-  if (_lastData) renderPage(_lastData);
-  const cleanItem = _lastData?.items?.find(i => i.list_item === item.list_item) || item;
-
-  // Step 2: close price history modal, open diff-item modal
-  $('priceHistoryModal').classList.remove('open');
-
   const priority = getPriority(item.list_item);
-  _diffItemContext = { item: cleanItem, priceKey, priority };
+  // Store context — mutation deferred until Confirm is clicked
+  _diffItemContext = { item, priceKey, priority, fromHistory: true };
 
   const badge = $('diffItemPriorityBadge');
   if (badge) {
@@ -1614,17 +1589,44 @@ async function openDiffItemModal(item, priceKey) {
     badge.className = `diff-item-priority-badge ${priority}`;
   }
   const priceEl = $('diffItemPrice');
-  if (priceEl) priceEl.textContent = fmt(priceNum);
+  if (priceEl) priceEl.textContent = fmt(Number(priceKey));
 
   $('diffItemInput').value = '';
   $('diffItemConfirm').disabled = true;
   $('diffItemConfirm').textContent = 'Add Item & Scrape';
+  // Keep price history modal in the DOM (just hidden) so Cancel can restore it
+  $('priceHistoryModal').classList.remove('open');
   $('diffItemModal').classList.add('open');
   setTimeout(() => $('diffItemInput')?.focus(), 80);
 }
 
 async function doDiffItemAdd(newName, ctx) {
   const s = loadSettings();
+  const priceNum = Number(ctx.priceKey);
+
+  // Now that user confirmed — remove the misidentified price from history
+  const liveItem = _lastData?.items?.find(i => i.list_item === ctx.item.list_item);
+  if (liveItem) {
+    liveItem.price_history       = (liveItem.price_history       || []).filter(e => e.price !== priceNum);
+    liveItem.ww_price_history    = (liveItem.ww_price_history    || []).filter(e => e.price !== priceNum);
+    liveItem.coles_price_history = (liveItem.coles_price_history || []).filter(e => e.price !== priceNum);
+  }
+  const ex = loadExclusions();
+  if (ex[ctx.item.list_item]) {
+    ex[ctx.item.list_item] = ex[ctx.item.list_item].filter(p => Number(p).toFixed(2) !== ctx.priceKey);
+    saveExclusions(ex);
+  }
+
+  // Persist the removal to GitHub before adding new item
+  if (s.user && s.repo && s.token) {
+    try {
+      await persistLatestJson(_lastData, `fix: remove misidentified price entries for "${ctx.item.list_item}"`);
+    } catch (_e) {
+      showToast('⚠ Could not save changes — check your GitHub token');
+      if (_lastData) renderPage(_lastData);
+      return;
+    }
+  }
 
   // Duplicate check
   const exists = _lastData?.items?.some(i => i.list_item.toLowerCase() === newName.toLowerCase());

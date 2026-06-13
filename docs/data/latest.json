@@ -13902,8 +13902,38 @@
       "cheaper_store": "woolworths",
       "saving_per_item": 5.1,
       "alternatives": [],
-      "ww_price_history": [],
-      "coles_price_history": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-30",
+          "price": 8.4
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8.4
+        },
+        {
+          "date": "2026-06-08",
+          "price": 8.4
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-31",
+          "price": 12.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 12.5
+        },
+        {
+          "date": "2026-06-08",
+          "price": 12.5
+        },
+        {
+          "date": "2026-06-11",
+          "price": 13.5
+        }
+      ],
       "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.42,
