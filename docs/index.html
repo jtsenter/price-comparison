@@ -20,7 +20,7 @@
       <nav>
         <a href="hot-deals.html">🔥 Hot Deals</a>
         <a href="validate.html" id="validateNavLink" style="display:none">⚠️ Validate</a>
-        <a href="shopping-list.html">🛒 Basket</a>
+        <a href="shopping-list.html" id="basketNavLink">🛒 Basket</a>
       </nav>
     </div>
     <div class="header-right">
@@ -56,7 +56,7 @@
       </div>
       <button class="btn btn-primary" id="refreshBtn">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-        Update Prices
+        Update
       </button>
     </div>
   </div>
@@ -219,6 +219,8 @@
     <ul class="not-found-list" id="notFoundList"></ul>
   </div>
 </main>
+
+<button id="basketFab" aria-label="Add selected items to basket">＋ Basket (<span id="basketFabCount">0</span>)</button>
 
 <!-- Settings modal -->
 <div class="modal-overlay" id="settingsModal">

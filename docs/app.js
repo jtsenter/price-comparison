@@ -499,6 +499,7 @@ let _watchlist = new Set(); // loaded on boot from localStorage + watchlist.json
 let _approvedWarns = new Set(); // loaded from approved_warns.json
 let _selectedItems = new Set(); // session-only mobile card selection
 let _viewMode = localStorage.getItem('pw_view_mode') || 'table'; // 'table' | 'card'
+let _mcView = localStorage.getItem('pw_mc_view_v1') || 'detailed'; // mobile card view: 'detailed' | 'compact'
 
 // ── Bulk selection ────────────────────────────────────────────────────────────
 
@@ -1908,6 +1909,13 @@ function initPricesOnlyFilter() {
 // ── Mobile card selection pill ────────────────────────────────────────────────
 
 function _updateSelectedPill() {
+  // Floating "+ Basket (n)" button — visible whenever ≥1 item is selected
+  const fab = $('basketFab');
+  if (fab) {
+    const fc = $('basketFabCount');
+    if (fc) fc.textContent = _selectedItems.size;
+    fab.classList.toggle('show', _selectedItems.size > 0);
+  }
   const pill = $('selectedPill');
   const count = $('selectedCount');
   if (!pill) return;
@@ -2899,7 +2907,10 @@ function renderMobileCards(items, data) {
     displayItems.sort((a, b) => mul * (calcTrendPosition(a) - calcTrendPosition(b)));
   }
 
-  // Sort pill
+  // Toolbar: sort pill (left) + view toggle (right)
+  const toolbar = document.createElement('div');
+  toolbar.className = 'mc-toolbar';
+
   const sortLabels = { 'trend-asc': '⬆ Trend', 'trend-desc': '⬇ Trend', 'default': '↕ Default' };
   const pill = document.createElement('button');
   pill.id = 'mobileSortPill';
@@ -2910,7 +2921,24 @@ function renderMobileCards(items, data) {
     _mobileSortMode = modes[(modes.indexOf(_mobileSortMode) + 1) % modes.length];
     if (_lastData) renderPage(_lastData);
   });
-  container.appendChild(pill);
+  toolbar.appendChild(pill);
+
+  // View toggle — single icon-only button; glyph shows the layout you'll switch TO
+  const ICON_LIST = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>';
+  const ICON_CARDS = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="7" rx="1.5"/><rect x="3" y="14" width="18" height="7" rx="1.5"/></svg>';
+  const viewBtn = document.createElement('button');
+  viewBtn.id = 'mcViewToggle';
+  viewBtn.setAttribute('aria-label', _mcView === 'detailed' ? 'Switch to compact view' : 'Switch to detailed view');
+  viewBtn.title = _mcView === 'detailed' ? 'Compact view' : 'Detailed view';
+  viewBtn.innerHTML = _mcView === 'detailed' ? ICON_LIST : ICON_CARDS;
+  viewBtn.addEventListener('click', () => {
+    _mcView = _mcView === 'detailed' ? 'compact' : 'detailed';
+    localStorage.setItem('pw_mc_view_v1', _mcView);
+    if (_lastData) renderPage(_lastData);
+  });
+  toolbar.appendChild(viewBtn);
+
+  container.appendChild(toolbar);
 
   if (!displayItems.length) {
     const empty = document.createElement('div');
@@ -2964,11 +2992,26 @@ function renderMobileCards(items, data) {
 
     const isSelected = _selectedItems.has(item.list_item);
     const card = document.createElement('div');
-    card.className = `mobile-card${borderCls}${isSelected ? ' mc-selected' : ''}`;
+    const compact = _mcView === 'compact';
+    card.className = `mobile-card${borderCls}${isSelected ? ' mc-selected' : ''}${compact ? ' mobile-card-compact' : ''}`;
     card.dataset.item = item.list_item;
 
+    const watchBtn = isWatchedMC
+      ? `<button class="mc-watch-btn active" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Remove from watchlist">👁</button>`
+      : `<button class="mc-watch-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Add to watchlist">👁</button>`;
+
     const savingTag = saving && saving > 0 ? `<span class="mc-saving">Save ${fmt(saving)}</span>` : '';
-    card.innerHTML = `
+
+    if (compact) {
+      // Single-line row: fire, name, W chip + price, C chip + price (cheaper bold), watch eye
+      card.innerHTML = `
+        ${hotDeal ? '<span class="mc-hot">🔥</span>' : ''}
+        <span class="mcc-name">${displayName}</span>
+        <span class="mcc-price"><span class="store-chip sm ww">W</span><span class="${wwCheaper ? 'mcc-bold' : ''}">${ww ? fmt(ww.price) : '—'}</span></span>
+        <span class="mcc-price"><span class="store-chip sm coles">C</span><span class="${coCheaper ? 'mcc-bold' : ''}">${co ? fmt(co.price) : '—'}</span></span>
+        <span class="mc-icons">${watchBtn}${_activePriority === 'archive' ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : ''}</span>`;
+    } else {
+      card.innerHTML = `
       <div class="mc-top">
         ${imgHtml}
         <div class="mc-name-wrap">
@@ -2976,8 +3019,7 @@ function renderMobileCards(items, data) {
             <div class="mc-name">${displayName}</div>
             <span class="mc-icons">
               ${hotDeal ? '<span class="mc-hot">🔥</span>' : ''}
-              ${isWatchedMC ? `<button class="mc-watch-btn active" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Remove from watchlist">👁</button>` : `<button class="mc-watch-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Add to watchlist">👁</button>`}
-              <button class="mc-basket-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" aria-label="Add to basket">🛒</button>
+              ${watchBtn}
               ${_activePriority === 'archive' ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : ''}
             </span>
           </div>
@@ -3006,18 +3048,11 @@ function renderMobileCards(items, data) {
           ${wwCheaper ? '✓ WW cheaper' : coCheaper ? '✓ Coles cheaper' : '= Same price'}
         </span>
       </div>` : ''}`;
+    }
 
     card.addEventListener('click', (e) => {
       if (e.target.closest('.mc-watch-btn')) {
         toggleWatchlist(e.target.closest('.mc-watch-btn').dataset.item);
-        return;
-      }
-      if (e.target.closest('.mc-basket-btn')) {
-        e.stopPropagation();
-        const name = e.target.closest('.mc-basket-btn').dataset.item;
-        _selectedItems.add(name);
-        _updateSelectedPill();
-        exportShoppingList(true);
         return;
       }
       if (e.target.closest('.mc-unarchive-btn')) {
@@ -4153,7 +4188,19 @@ function exportShoppingList(useChecked) {
     note = `${pLabel} items${catSuffix}`;
   }
   const quantities = loadUnitOverrides();
-  const handoffPayload = { items: names, note, quantities };
+  let finalNames = names;
+  let finalNote = note;
+  // If the basket is locked (Save basket on the basket page), append to the
+  // existing basket instead of replacing it. Dedupe while preserving order.
+  if (localStorage.getItem('pw_sl_locked') === '1') {
+    let existing = [];
+    try { existing = JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}').items || []; } catch {}
+    const merged = [...existing];
+    names.forEach(n => { if (!merged.includes(n)) merged.push(n); });
+    finalNames = merged;
+    finalNote = `${merged.length} item${merged.length !== 1 ? 's' : ''} (basket locked)`;
+  }
+  const handoffPayload = { items: finalNames, note: finalNote, quantities };
   localStorage.setItem('pw_sl_handoff', JSON.stringify(handoffPayload));
   window.location.href = 'shopping-list.html';
 }
@@ -4182,6 +4229,24 @@ async function boot() {
   if (refreshBtn) refreshBtn.addEventListener('click', triggerRefresh);
 
   $('shopListBtn')?.addEventListener('click', () => exportShoppingList(false));
+
+  // Floating "+ Basket (n)" — sends the tap-selected items to the basket page
+  $('basketFab')?.addEventListener('click', () => {
+    if (_selectedItems.size > 0) exportShoppingList(true);
+  });
+
+  // Basket nav: with items selected → add them; nothing selected & unlocked →
+  // add everything currently showing. Locked + nothing selected → just view.
+  $('basketNavLink')?.addEventListener('click', (e) => {
+    const locked = localStorage.getItem('pw_sl_locked') === '1';
+    if (_selectedItems.size > 0) {
+      e.preventDefault();
+      exportShoppingList(true);
+    } else if (!locked) {
+      e.preventDefault();
+      exportShoppingList(false);
+    }
+  });
 
   // Scrape strip dismiss & retry
   // Scrape Archived button — persists archived list to GitHub then dispatches workflow

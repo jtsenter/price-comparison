@@ -169,10 +169,13 @@
     .btn-primary { background: var(--ww); color: #fff; border-color: var(--ww); box-shadow: 0 1px 3px rgba(0,132,61,0.35); }
     .btn-primary:hover { background: #006B31; transform: translateY(-1px); }
 
-    .sl-topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
-    .filter-note { font-size: 14px; color: var(--text-mid); background: #FFFBEB; border: 1px solid #FCD34D; border-radius: var(--radius); padding: 8px 14px; margin-bottom: 0; flex: 1; min-width: 0; }
+    .sl-topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+    .filter-note { font-size: 14px; color: var(--text-mid); background: #FFFBEB; border: 1px solid #FCD34D; border-radius: var(--radius); padding: 8px 14px; margin-bottom: 12px; }
     .btn-outline-danger { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid #FCA5A5; background: transparent; color: #DC2626; transition: all .15s; white-space: nowrap; }
     .btn-outline-danger:hover { background: #FEF2F2; border-color: #DC2626; }
+    .btn-outline-save { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid #93C5AA; background: transparent; color: var(--ww); transition: all .15s; white-space: nowrap; }
+    .btn-outline-save:hover { background: #F0FDF4; border-color: var(--ww); }
+    .btn-outline-save.locked { background: var(--ww); color: #fff; border-color: var(--ww); }
 
     .empty { text-align: center; padding: 60px 20px; color: var(--text-soft); }
     .empty a { color: var(--ww); text-decoration: underline; }
@@ -330,12 +333,15 @@ async function boot() {
     Object.assign(analysis, Object.fromEntries(Object.entries(prioOv).map(([k, v]) => [k, { ...(analysis[k] || {}), priority: v }])));
   } catch {}
 
-  // Read handoff written by app.js exportShoppingList()
+  // Read handoff written by app.js exportShoppingList().
+  // Normally consume-once (cleared after reading). But while the basket is
+  // LOCKED we keep it persistent so it survives refreshes and so additions from
+  // the main page can append to it.
   let handoff = null;
   try {
     const raw = localStorage.getItem('pw_sl_handoff');
     handoff = raw ? JSON.parse(raw) : null;
-    localStorage.removeItem('pw_sl_handoff');
+    if (localStorage.getItem('pw_sl_locked') !== '1') localStorage.removeItem('pw_sl_handoff');
   } catch {}
 
   const allItems = (data.items || []).filter(i => !i.archived);
@@ -531,9 +537,11 @@ async function boot() {
     ].join('');
 
     main.innerHTML = `
+      <div class="filter-note">📋 ${filterNoteHtml}</div>
       <div class="sl-topbar">
-        <div class="filter-note">📋 ${filterNoteHtml}</div>
         <button id="resetColWidthsBtn" class="btn btn-ghost" title="Reset column widths" style="white-space:nowrap">↺ Reset widths</button>
+        <div style="flex:1"></div>
+        <button id="saveBasketBtn" class="btn-outline-save">🔒 Save basket</button>
         <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
       </div>
 
@@ -626,6 +634,7 @@ async function boot() {
     document.getElementById('removeAllBtn')?.addEventListener('click', () => {
       if (confirm('Remove all items from your basket?')) {
         localStorage.removeItem('pw_sl_handoff');
+        localStorage.removeItem('pw_sl_locked');
         main.innerHTML = '<div class="empty">Your basket is empty. <a href="index.html">Go back to add items.</a></div>';
       }
     });
@@ -634,6 +643,31 @@ async function boot() {
       _slColWidths = {};
       localStorage.removeItem('pw_sl_col_widths');
       renderContent();
+    });
+
+    // Save basket — locks the current items so additions from the main page are
+    // appended (not replaced). Lock persists across refreshes until toggled off.
+    const saveBtn = document.getElementById('saveBasketBtn');
+    function reflectLock() {
+      const locked = localStorage.getItem('pw_sl_locked') === '1';
+      if (!saveBtn) return;
+      saveBtn.classList.toggle('locked', locked);
+      saveBtn.textContent = locked ? '🔒 Saved (locked)' : '🔒 Save basket';
+    }
+    reflectLock();
+    saveBtn?.addEventListener('click', () => {
+      const willLock = localStorage.getItem('pw_sl_locked') !== '1';
+      localStorage.setItem('pw_sl_locked', willLock ? '1' : '0');
+      if (willLock) {
+        // Persist the current basket so additions from the main page append to it
+        const names = displayItems.map(i => i.list_item);
+        localStorage.setItem('pw_sl_handoff', JSON.stringify({
+          items: names,
+          note: `${names.length} item${names.length !== 1 ? 's' : ''} (basket locked)`,
+          quantities: unitOv || {},
+        }));
+      }
+      reflectLock();
     });
 
     initSlResize();
