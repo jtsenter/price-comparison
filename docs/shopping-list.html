@@ -203,6 +203,49 @@
       main { padding: 12px; }
       table { box-shadow: none; }
     }
+
+    /* Bottom tab bar */
+    #bottomTabBar { display: none; }
+    @media (max-width: 700px) {
+      #bottomTabBar {
+        display: flex; position: fixed; bottom: 0; left: 0; right: 0; height: 56px;
+        background: var(--card); border-top: 1px solid var(--border);
+        box-shadow: 0 -2px 8px rgba(0,0,0,.08); z-index: 150;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      .btb-tab {
+        flex: 1; display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        gap: 2px; text-decoration: none; color: var(--text-soft);
+        font-size: 10px; font-weight: 600; letter-spacing: .03em;
+        padding: 5px 0; -webkit-tap-highlight-color: transparent;
+        transition: color 0.12s;
+      }
+      .btb-tab.active { color: var(--ww); }
+      .btb-tab svg { flex-shrink: 0; }
+      nav { display: none !important; }
+      main { padding-bottom: 80px !important; }
+    }
+
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f172a; --card: #1e293b; --border: #334155;
+        --text: #f1f5f9; --text-mid: #94a3b8; --text-soft: #64748b;
+      }
+      body { background: var(--bg); color: var(--text); }
+      header { background: var(--card); border-bottom-color: var(--border); }
+      .store-summary-wrap { background: var(--card); border-color: var(--border); }
+      .store-card-sl { background: var(--card); }
+      .store-card-sl.card-active { background: #052e16; border-bottom-color: var(--ww); }
+      .bar-ribbon { background: var(--card); border-top-color: var(--border); }
+      .bar-optimal { background: #052e16; border-color: #14532d; }
+      tbody tr:nth-child(even) { background: #182030; }
+      tfoot td { background: var(--bg); }
+      table { background: var(--card); }
+      .only-note { background: var(--card); border-color: var(--border); }
+      #bottomTabBar { background: var(--card); border-top-color: var(--border); }
+    }
   </style>
 </head>
 <body>
@@ -215,9 +258,9 @@
         <span class="brand-name">PriceWatch</span>
       </a>
       <nav>
-        <a href="hot-deals.html">🔥 Hot Deals</a>
+        <a href="hot-deals.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg> Hot Deals</a>
         <a href="validate.html" id="validateNavLink" style="display:none">⚠️ Validate</a>
-        <a href="shopping-list.html" class="active">🛒 Basket</a>
+        <a href="shopping-list.html" class="active"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Basket</a>
       </nav>
     </div>
     <div class="header-right">
@@ -732,5 +775,21 @@ window.addEventListener('load', setHeaderOffset);
 window.addEventListener('resize', setHeaderOffset);
 </script>
 <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
+
+<!-- Bottom tab bar (mobile) -->
+<nav id="bottomTabBar">
+  <a href="index.html" class="btb-tab">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Prices
+  </a>
+  <a href="hot-deals.html" class="btb-tab">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg>
+    Hot Deals
+  </a>
+  <a href="shopping-list.html" class="btb-tab active">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    Basket
+  </a>
+</nav>
 </body>
 </html>

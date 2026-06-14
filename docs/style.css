@@ -1918,3 +1918,199 @@ td.priority-cell { text-align: center; }
 }
 #basketFab.show { display: inline-flex; }
 #basketFab:active { background: #006B31; }
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* v6 UI improvements                                                          */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── 1 · Color-blind-safe winner checkmark ─────────────────────────────── */
+.cell-ww .price-main::after    { content: ' ✓'; font-size: 11px; font-weight: 700; color: #15803d; vertical-align: middle; }
+.cell-coles .price-main::after { content: ' ✓'; font-size: 11px; font-weight: 700; color: #b91c1c; vertical-align: middle; }
+.mc-price.cheaper::after       { content: ' ✓'; font-size: 12px; }
+.mc-price.cheaper-c::after     { content: ' ✓'; font-size: 12px; }
+
+/* ── 2 · Sticky first column ───────────────────────────────────────────── */
+#tableHead th:first-child {
+  position: sticky; left: 0; z-index: 52;
+  background: var(--bg);
+  box-shadow: inset -2px 0 0 var(--border-strong);
+}
+tbody td.item-name {
+  position: sticky; left: 0; z-index: 30;
+  background: var(--card);
+  box-shadow: inset -2px 0 0 var(--border);
+}
+tbody tr:nth-child(even) td.item-name { background: #FAFBFC; }
+tbody tr:hover            td.item-name { background: #FAFBFD; }
+
+/* ── 3 · Row density toggle ────────────────────────────────────────────── */
+.density-toggle-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 8px 12px; border-radius: var(--radius);
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border-strong);
+  background: var(--card); color: var(--text-mid);
+  transition: all 0.15s; white-space: nowrap;
+}
+.density-toggle-btn.compact-on {
+  background: var(--text); color: var(--card); border-color: var(--text);
+}
+.table-wrap.density-compact td,
+.table-wrap.density-compact #tableHead th { padding: 5px 10px; }
+.table-wrap.density-compact .item-img,
+.table-wrap.density-compact .item-img-placeholder { width: 30px; height: 30px; }
+.table-wrap.density-compact .price-main { font-size: 14px; }
+.table-wrap.density-compact .price-unit,
+.table-wrap.density-compact .price-per100 { display: none; }
+.table-wrap.density-compact .price-bar-outer { display: none !important; }
+
+/* ── 4 · Pull-to-refresh indicator ────────────────────────────────────── */
+#pullRefreshIndicator {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; height: 0; overflow: hidden; transition: height 0.2s;
+  font-size: 13px; font-weight: 600; color: var(--text-soft);
+}
+#pullRefreshIndicator.pulling   { height: 48px; }
+#pullRefreshIndicator.triggered { height: 48px; color: var(--ww); }
+.ptr-spinner {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid var(--border); border-top-color: var(--ww);
+  animation: ptr-spin 0.7s linear infinite; flex-shrink: 0;
+}
+@keyframes ptr-spin { to { transform: rotate(360deg); } }
+
+/* ── 5 · Sticky "who's cheaper" chip ──────────────────────────────────── */
+#cheaperChip {
+  display: none; position: fixed; top: 60px; left: 0; right: 0; z-index: 89;
+  background: #1e293b; color: #fff; font-size: 12px; font-weight: 600;
+  text-align: center; padding: 5px 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+  letter-spacing: .02em; pointer-events: none;
+}
+#cheaperChip.visible { display: block; }
+#cheaperChip .chip-green { color: #4ade80; }
+#cheaperChip .chip-red   { color: #f87171; }
+#cheaperChip .chip-dim   { opacity: .7; font-size: 11px; margin-left: 4px; }
+
+/* ── 6 · Bottom tab bar (mobile) ───────────────────────────────────────── */
+#bottomTabBar { display: none; }
+
+@media (max-width: 700px) {
+  #bottomTabBar {
+    display: flex;
+    position: fixed; bottom: 0; left: 0; right: 0; height: 56px;
+    background: var(--card); border-top: 1px solid var(--border);
+    box-shadow: 0 -2px 8px rgba(0,0,0,.08);
+    z-index: 150;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .btb-tab {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 2px; text-decoration: none; color: var(--text-soft);
+    font-size: 10px; font-weight: 600; letter-spacing: .03em;
+    padding: 5px 0; -webkit-tap-highlight-color: transparent;
+    transition: color 0.12s;
+  }
+  .btb-tab.active { color: var(--ww); }
+  .btb-tab svg { flex-shrink: 0; }
+
+  /* Shift fixed elements above the tab bar */
+  #basketFab    { bottom: 74px; }
+  .toast-notif  { bottom: 72px; }
+  .bulk-toolbar { bottom: 72px; }
+  main          { padding-bottom: 80px !important; }
+
+  /* Extra padding when FAB is also showing */
+  #mobileCards.fab-visible { padding-bottom: 80px; }
+
+  /* Hide top nav — replaced by bottom tab bar */
+  nav { display: none !important; }
+}
+
+/* ── 7 · Bigger tap targets (mobile) ──────────────────────────────────── */
+@media (max-width: 700px) {
+  .priority-pill    { padding: 7px 14px; font-size: 13px; min-height: 36px; }
+  .category-tab     { padding: 7px 14px; font-size: 13px; min-height: 36px; }
+  .mc-watch-btn     { min-width: 44px; min-height: 44px; font-size: 18px; }
+  .dm-watch         { min-width: 44px; min-height: 44px; }
+  .store-filter-btn { padding: 7px 12px; min-height: 36px; font-size: 13px; }
+}
+
+/* ── 8 · Dark mode ─────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ww-light:      #052e16;
+    --ww-mid:        #14532d;
+    --coles-light:   #450a0a;
+    --coles-mid:     #7f1d1d;
+    --green-light:   #052e16;
+    --bg:            #0f172a;
+    --bg-alt:        #0f172a;
+    --card:          #1e293b;
+    --surface:       #1e293b;
+    --border:        #334155;
+    --border-strong: #475569;
+    --text:          #f1f5f9;
+    --text-mid:      #94a3b8;
+    --text-soft:     #64748b;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.4);
+    --shadow:    0 2px 8px rgba(0,0,0,.5);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.55);
+  }
+
+  /* Table rows */
+  tbody tr:nth-child(even)              { background: #182030; }
+  tbody tr:nth-child(even) td.item-name { background: #182030; }
+  tbody tr:hover                        { background: #1a2540; }
+  tbody tr:hover td.item-name           { background: #1a2540; }
+  #tableHead th                         { background: var(--bg); }
+  .tfoot-row td                         { background: var(--bg); }
+
+  /* Ghost sticky header */
+  .sticky-header-ghost    { background: var(--bg); }
+  .sticky-header-ghost th { background: var(--bg); }
+
+  /* Category tabs */
+  .category-tab        { background: var(--card); color: var(--text-mid); }
+  .category-tab:hover  { background: var(--bg-alt); }
+  .category-tab.active { background: var(--bg-alt); color: var(--text); }
+
+  /* Modals */
+  .modal { background: var(--card); }
+  .form-group input { background: var(--bg); color: var(--text); border-color: var(--border); }
+
+  /* Mobile cards */
+  .mobile-card              { background: var(--card); }
+  .mobile-card.mc-selected  { background: rgba(0,132,61,0.15); }
+
+  /* Comparison banner */
+  .comparison-banner   { background: var(--card); }
+  .store-card          { background: var(--bg); }
+  .store-card.winner-ww    { background: var(--ww-light); }
+  .store-card.winner-coles { background: var(--coles-light); }
+
+  /* Not-found section */
+  .not-found-section { background: var(--card); }
+  .not-found-list li { background: var(--bg); }
+
+  /* Dropdowns */
+  .col-chooser-dropdown { background: var(--card); }
+  .more-dropdown        { background: var(--card); }
+
+  /* Banners */
+  .stale-banner          { background: #1a1400; color: #fcd34d; border-color: #854d0e; }
+  .runner-offline-banner { background: #1a0000; color: #fca5a5; border-color: #991b1b; }
+
+  /* Hot Deals page */
+  .deals-hero    { background: linear-gradient(135deg, #1a1000 0%, #221800 100%); border-bottom-color: #4a3800; }
+  .dm-card       { background: var(--card); }
+  .deals-filter-bar { background: var(--card); }
+
+  /* Bottom tab bar */
+  #bottomTabBar  { background: var(--card); border-top-color: var(--border); }
+
+  /* Checkmarks in dark — use softer colors */
+  .cell-ww .price-main::after    { color: #4ade80; }
+  .cell-coles .price-main::after { color: #f87171; }
+}

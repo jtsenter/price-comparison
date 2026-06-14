@@ -502,6 +502,7 @@ let _approvedWarns = new Set(); // loaded from approved_warns.json
 let _selectedItems = new Set(); // session-only mobile card selection
 let _viewMode = localStorage.getItem('pw_view_mode') || 'table'; // 'table' | 'card'
 let _mcView = localStorage.getItem('pw_mc_view_v1') || 'detailed'; // mobile card view: 'detailed' | 'compact'
+let _density = localStorage.getItem('pw_density') || 'comfortable'; // 'comfortable' | 'compact'
 
 // ── Bulk selection ────────────────────────────────────────────────────────────
 
@@ -1917,6 +1918,7 @@ function _updateSelectedPill() {
     const fc = $('basketFabCount');
     if (fc) fc.textContent = _selectedItems.size;
     fab.classList.toggle('show', _selectedItems.size > 0);
+    document.getElementById('mobileCards')?.classList.toggle('fab-visible', _selectedItems.size > 0);
   }
   const pill = $('selectedPill');
   const count = $('selectedCount');
@@ -3141,6 +3143,8 @@ function renderPage(data) {
     $('savingInfo').textContent = 'Same price at both stores';
   }
 
+  updateCheaperChip(s);
+
   const prog = data.scrape_progress;
 
   // ── Pre-scrape snapshot: keep all items visible while scraping ──
@@ -4220,6 +4224,92 @@ function exportShoppingList(useChecked) {
   window.location.href = 'shopping-list.html';
 }
 
+// ── Row density toggle ────────────────────────────────────────────────────────
+
+function initDensityToggle() {
+  const btn = document.getElementById('densityBtn');
+  if (!btn) return;
+  function applyDensity() {
+    const wrap = document.querySelector('.table-wrap');
+    if (wrap) wrap.classList.toggle('density-compact', _density === 'compact');
+    btn.classList.toggle('compact-on', _density === 'compact');
+    btn.title = _density === 'compact' ? 'Switch to comfortable view' : 'Compact rows';
+  }
+  applyDensity();
+  btn.addEventListener('click', () => {
+    _density = _density === 'compact' ? 'comfortable' : 'compact';
+    try { localStorage.setItem('pw_density', _density); } catch {}
+    applyDensity();
+  });
+}
+
+// ── Sticky "who's cheaper" chip ───────────────────────────────────────────────
+
+function updateCheaperChip(s) {
+  const chip = document.getElementById('cheaperChip');
+  if (!chip) return;
+  if (!s.ww_data_available) {
+    chip.innerHTML = `<span class="chip-red">Coles only</span><span class="chip-dim">· WW blocked</span>`;
+  } else if (s.cheaper_store === 'woolworths') {
+    chip.innerHTML = `<span class="chip-green">Woolworths cheaper</span><span class="chip-dim">· save ${fmt(s.total_saving)}</span>`;
+  } else if (s.cheaper_store === 'coles') {
+    chip.innerHTML = `<span class="chip-red">Coles cheaper</span><span class="chip-dim">· save ${fmt(s.total_saving)}</span>`;
+  } else {
+    chip.innerHTML = `Same price at both stores`;
+  }
+}
+
+function initCheaperChip() {
+  const banner = document.getElementById('banner');
+  const chip   = document.getElementById('cheaperChip');
+  if (!banner || !chip || typeof IntersectionObserver === 'undefined') return;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      const bannerVisible = getComputedStyle(banner).display !== 'none';
+      chip.classList.toggle('visible', !e.isIntersecting && bannerVisible);
+    });
+  }, { threshold: 0 });
+  obs.observe(banner);
+}
+
+// ── Pull-to-refresh ───────────────────────────────────────────────────────────
+
+function initPullToRefresh() {
+  const indicator = document.getElementById('pullRefreshIndicator');
+  if (!indicator) return;
+  let startY = 0, currentY = 0;
+  const THRESHOLD = 70;
+
+  document.addEventListener('touchstart', (e) => {
+    startY = currentY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', (e) => {
+    currentY = e.touches[0].clientY;
+    if (window.scrollY > 5) { indicator.classList.remove('pulling'); return; }
+    const dy = currentY - startY;
+    if (dy <= 10) { indicator.classList.remove('pulling'); return; }
+    indicator.classList.add('pulling');
+    indicator.innerHTML = dy >= THRESHOLD
+      ? '<div class="ptr-spinner"></div>&nbsp;Release to refresh'
+      : '<div class="ptr-spinner"></div>&nbsp;Pull down to refresh';
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => {
+    const dy = currentY - startY;
+    const wasTriggered = window.scrollY <= 5 && dy >= THRESHOLD;
+    indicator.classList.remove('pulling');
+    indicator.innerHTML = '';
+    if (wasTriggered) {
+      indicator.classList.add('triggered');
+      indicator.innerHTML = '<div class="ptr-spinner"></div>&nbsp;Refreshing…';
+      triggerRefresh();
+      setTimeout(() => { indicator.classList.remove('triggered'); indicator.innerHTML = ''; }, 2000);
+    }
+    startY = currentY = 0;
+  }, { passive: true });
+}
+
 // ── Boot ─────────────────────────────────────────────────────────────────────
 
 async function boot() {
@@ -4239,6 +4329,9 @@ async function boot() {
   initColumnChooser();
   initColFilterDropdown();
   updateImportBadge();
+  initDensityToggle();
+  initCheaperChip();
+  initPullToRefresh();
 
   const refreshBtn = $('refreshBtn');
   if (refreshBtn) refreshBtn.addEventListener('click', triggerRefresh);
@@ -4252,7 +4345,7 @@ async function boot() {
 
   // Basket nav: with items selected → add them; nothing selected & unlocked →
   // add everything currently showing. Locked + nothing selected → just view.
-  $('basketNavLink')?.addEventListener('click', (e) => {
+  const _basketNavHandler = (e) => {
     const locked = localStorage.getItem('pw_sl_locked') === '1';
     if (_selectedItems.size > 0) {
       e.preventDefault();
@@ -4261,7 +4354,9 @@ async function boot() {
       e.preventDefault();
       exportShoppingList(false);
     }
-  });
+  };
+  $('basketNavLink')?.addEventListener('click', _basketNavHandler);
+  document.getElementById('btbBasketLink')?.addEventListener('click', _basketNavHandler);
 
   // Scrape strip dismiss & retry
   // Scrape Archived button — persists archived list to GitHub then dispatches workflow
