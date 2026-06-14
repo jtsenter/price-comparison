@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-14T03:25:44.982486+00:00",
+  "last_updated": "2026-06-14T03:25:48.167616+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -14912,7 +14912,7 @@
     },
     {
       "list_item": "Woolworths Green Asparagus Bunch Green",
-      "last_scraped": "2026-06-13T06:17:35.593592+00:00",
+      "last_scraped": "2026-06-14T03:25:45.108252+00:00",
       "trip_count": 2,
       "price_history": [
         {
@@ -14944,26 +14944,7 @@
       },
       "cheaper_store": "coles",
       "saving_per_item": 0.2,
-      "alternatives": [
-        {
-          "name": "Coles Asparagus Spears | 425g",
-          "price": 3,
-          "unit_price": 3,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-asparagus-spears-425g-5841817",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5841817.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Green Asparagus | 1 each",
-          "price": 3.3,
-          "unit_price": 3.3,
-          "unit": "1ea",
-          "url": "https://www.coles.com.au/product/coles-green-asparagus-1-each-4838737",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4838737.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-05-29",
@@ -15008,10 +14989,82 @@
           "price": 3.3
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Thyme Leaves",
+      "last_scraped": "2026-06-14T03:25:48.155039+00:00",
+      "trip_count": 2,
+      "price_history": [
+        {
+          "date": "2025-07-10",
+          "price": 2.0
+        },
+        {
+          "date": "2026-03-02",
+          "price": 2.0
+        }
+      ],
+      "category": "Pantry",
+      "woolworths": {
+        "name": "Woolworths Thyme Leaves",
+        "price": 2.0,
+        "unit_price": 1.67,
+        "unit": "10G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/251228/woolworths-thyme-leaves",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251228.jpg"
+      },
+      "coles": {
+        "name": "Coles Thyme Leaves | 18g",
+        "price": 2,
+        "unit_price": 2,
+        "unit": "10g",
+        "url": "https://www.coles.com.au/product/coles-thyme-leaves-18g-8983046",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8983046.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-03-22",
+          "price": 1.75
+        },
+        {
+          "date": "2026-05-29",
+          "price": 2
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2
+        },
+        {
+          "date": "2026-06-08",
+          "price": 2
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 2
+        },
+        {
+          "date": "2026-06-01",
+          "price": 2
+        },
+        {
+          "date": "2026-06-08",
+          "price": 2
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 16.7,
+      "per_100_coles": 11.11,
       "per_100_unit": "100g"
     },
     {
@@ -15120,88 +15173,6 @@
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.3,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Thyme Leaves",
-      "last_scraped": "2026-06-13T06:17:43.879483+00:00",
-      "trip_count": 2,
-      "price_history": [
-        {
-          "date": "2025-07-10",
-          "price": 2
-        },
-        {
-          "date": "2026-03-02",
-          "price": 2
-        }
-      ],
-      "category": "Pantry",
-      "woolworths": {
-        "name": "Woolworths Thyme Leaves",
-        "price": 2,
-        "unit_price": 1.67,
-        "unit": "10G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/251228/woolworths-thyme-leaves",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/251228.jpg"
-      },
-      "coles": {
-        "name": "Coles Thyme Leaves | 18g",
-        "price": 2,
-        "unit_price": 2,
-        "unit": "10g",
-        "url": "https://www.coles.com.au/product/coles-thyme-leaves-18g-8983046",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8983046.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [
-        {
-          "name": "Hoyts Thyme | 15g",
-          "price": 1.6,
-          "unit_price": 1.6,
-          "unit": "10g",
-          "url": "https://www.coles.com.au/product/hoyts-thyme-15g-286901",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/286901.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-03-22",
-          "price": 1.75
-        },
-        {
-          "date": "2026-05-29",
-          "price": 2
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2
-        },
-        {
-          "date": "2026-06-08",
-          "price": 2
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2
-        },
-        {
-          "date": "2026-06-08",
-          "price": 2
-        }
-      ],
-      "match_confidence": "high",
-      "size_warning": false,
-      "per_100_ww": 16.7,
-      "per_100_coles": 11.11,
       "per_100_unit": "100g"
     },
     {
@@ -15318,10 +15289,10 @@
     "items_not_found": 1
   },
   "scrape_progress": {
-    "done": 141,
+    "done": 143,
     "total": 145,
     "started_at": "2026-06-14T03:20:12.978037+00:00",
-    "current_item": "Woolworths Mixed Herbs Dried"
+    "current_item": "Woolworths Thyme Leaves"
   },
   "pending_validation": [
     {
