@@ -590,7 +590,7 @@ function getColNumericValue(col, item) {
       if (ww == null || co == null) return null;
       return Math.abs(ww - co) / Math.max(ww, co) * 100;
     }
-    case 'saving':    return item.saving_per_item ?? null;
+    case 'saving':    { const s = savingAmount(item); return s != null ? s * getUnits(item.list_item) : null; }
     case 'units':     return getUnits(item.list_item);
     case 'trips':     return item.trip_count || 0;
     case 'ww_total':  return item.woolworths?.price != null ? item.woolworths.price * getUnits(item.list_item) : null;
@@ -627,7 +627,7 @@ function getColValue(col, item) {
       if (ww == null || co == null) return '—';
       return Math.round(Math.abs(ww - co) / Math.max(ww, co) * 100) + '%';
     }
-    case 'saving':       return item.saving_per_item > 0 ? fmt(item.saving_per_item) : '—';
+    case 'saving':       { const s = savingAmount(item); return s > 0 ? fmt(s * getUnits(item.list_item)) : '—'; }
     case 'trips':        return String(item.trip_count || 0);
     case 'units':        return String(getUnits(item.list_item));
     case 'category':     return getCategory(item);
