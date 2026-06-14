@@ -2977,6 +2977,7 @@ function renderMobileCards(items, data) {
             <span class="mc-icons">
               ${hotDeal ? '<span class="mc-hot">🔥</span>' : ''}
               ${isWatchedMC ? `<button class="mc-watch-btn active" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Remove from watchlist">👁</button>` : `<button class="mc-watch-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Add to watchlist">👁</button>`}
+              <button class="mc-basket-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" aria-label="Add to basket">🛒</button>
               ${_activePriority === 'archive' ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : ''}
             </span>
           </div>
@@ -3009,6 +3010,14 @@ function renderMobileCards(items, data) {
     card.addEventListener('click', (e) => {
       if (e.target.closest('.mc-watch-btn')) {
         toggleWatchlist(e.target.closest('.mc-watch-btn').dataset.item);
+        return;
+      }
+      if (e.target.closest('.mc-basket-btn')) {
+        e.stopPropagation();
+        const name = e.target.closest('.mc-basket-btn').dataset.item;
+        _selectedItems.add(name);
+        _updateSelectedPill();
+        exportShoppingList(true);
         return;
       }
       if (e.target.closest('.mc-unarchive-btn')) {

@@ -1624,6 +1624,23 @@ td.priority-cell { text-align: center; }
 }
 .mc-watch-btn:active { opacity: 1; }
 .mc-watch-btn.active { color: var(--ww); opacity: 1; }
+.mc-basket-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text-soft);
+  padding: 0 1px;
+  opacity: 0.35;
+  transition: opacity 0.15s;
+  line-height: 1;
+  min-width: 40px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.mc-basket-btn:active { opacity: 1; }
 
 /* Toast notification ───────────────────────────────────────── */
 .toast-notif {
