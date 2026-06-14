@@ -224,6 +224,28 @@
       max-width: 300px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.25);
     }
+
+    /* ── Mobile deal cards ─────────────────────────────────────── */
+    .deals-mobile { flex-direction: column; gap: 9px; padding-top: 12px; }
+    .dm-card { background: var(--card); border-radius: 12px; padding: 11px 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-left: 3px solid var(--ww); }
+    .dm-card.co { border-left-color: var(--coles); }
+    .dm-top { display: flex; align-items: flex-start; gap: 10px; }
+    .dm-img { width: 40px; height: 40px; object-fit: contain; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); flex: none; }
+    .dm-img-ph { background: var(--bg); }
+    .dm-info { flex: 1; min-width: 0; }
+    .dm-name { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.3; }
+    .dm-cat { font-size: 11px; color: var(--text-soft); margin-top: 1px; }
+    .dm-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; flex: none; }
+    .dm-badge.low { background: #FEF3C7; color: #92400E; }
+    .dm-badge.pct { background: #ECFDF5; color: var(--green); }
+    .dm-mid { display: flex; align-items: baseline; gap: 8px; margin-top: 8px; }
+    .dm-price { font-size: 20px; font-weight: 800; color: var(--green); letter-spacing: -0.5px; text-decoration: none; }
+    .dm-vs { font-size: 12px; color: var(--text-soft); flex: 1; min-width: 0; }
+    .dm-vs s { color: var(--coles); }
+    .dm-watch { background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.35; padding: 0 2px; line-height: 1; }
+    .dm-watch.active { opacity: 1; }
+    .dm-bar { margin-top: 9px; }
+    .dm-bar .price-bar-outer { display: block !important; }
   </style>
 </head>
 <body>
@@ -307,6 +329,7 @@
     Loading price data…
   </div>
   <div id="dealsContainer" style="display:none">
+    <div id="dealsMobile" class="deals-mobile" style="display:none"></div>
     <div class="deals-table-wrap">
       <table class="deals-table">
         <thead id="dealsHead">
@@ -338,6 +361,7 @@
 <div id="priceTooltip" class="price-tooltip-fixed" style="display:none"></div>
 
 <!-- Shared utilities — must load before inline script -->
+<script src="name_map.js"></script>
 <script src="utils.js"></script>
 <script>
 // ── Shared utilities ──────────────────────────────────────────────────────────
@@ -830,6 +854,19 @@ function renderDeals() {
 
   const overrides = (() => { try { return JSON.parse(localStorage.getItem('pw_overrides_v1') || '{}'); } catch { return {}; } })();
 
+  // Mobile: render scannable deal cards instead of the cramped table
+  const tableWrap = document.querySelector('.deals-table-wrap');
+  const mobileWrap = document.getElementById('dealsMobile');
+  if (window.innerWidth <= 700) {
+    if (tableWrap) tableWrap.style.display = 'none';
+    if (mobileWrap) mobileWrap.style.display = 'flex';
+    renderDealsMobile(sorted, exclusions, overrides);
+    updateValidateNavBadge(_data?.pending_validation?.length ?? 0);
+    return;
+  }
+  if (tableWrap) tableWrap.style.display = '';
+  if (mobileWrap) mobileWrap.style.display = 'none';
+
   sorted.forEach(item => {
     const deal = getSimpleDealInfo(item, exclusions);
     if (!deal) return;
@@ -914,6 +951,63 @@ function renderDeals() {
   });
 
   updateValidateNavBadge(_data?.pending_validation?.length ?? 0);
+}
+
+// ── Mobile deal cards ──────────────────────────────────────────────────────────
+function renderDealsMobile(sorted, exclusions, overrides) {
+  const wrap = document.getElementById('dealsMobile');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  sorted.forEach(item => {
+    const deal = getSimpleDealInfo(item, exclusions);
+    if (!deal) return;
+    const ww = item.woolworths, co = item.coles;
+    const ov = overrides[item.list_item] || {};
+    const name = ov.displayName || (window.PW_NAME_MAP && window.PW_NAME_MAP[item.list_item]) || stripWW(item.list_item);
+    const cat = getCategory(item);
+    const isW = deal.store === 'woolworths';
+
+    const imgSrc = resolveImgUrl(co?.image_url) || resolveImgUrl(ww?.image_url) || '';
+    const imgHtml = imgSrc
+      ? `<img class="dm-img" src="${imgSrc}" alt="" loading="lazy" onerror="this.style.display='none'">`
+      : '<div class="dm-img dm-img-ph"></div>';
+
+    const otherPrice = isW ? co?.price : ww?.price;
+    const pct = Math.round((deal.savingPct || 0) * 100);
+    const badge = deal.isAllTimeLow
+      ? '<span class="dm-badge low">🏆 All-time low</span>'
+      : (pct > 0 ? `<span class="dm-badge pct">${pct}% below</span>` : '');
+    const vs = (otherPrice != null)
+      ? `vs <s>${fmt(otherPrice)}</s> at ${isW ? 'Coles' : 'WW'}`
+      : '';
+
+    const _ts = getTrendSeries(item);
+    const bar = buildPriceBar(item.list_item, _ts.prices.map(p => ({ price: p })), _ts.current) || '';
+
+    const safe = item.list_item.replace(/"/g, '&quot;');
+    const watched = _watchlistHD.has(item.list_item);
+    const storeUrl = isW ? (ov.wwUrl || ww?.url) : (ov.colesUrl || co?.url);
+    const priceLink = storeUrl
+      ? `<a href="${storeUrl}" target="_blank" class="price-link dm-price">${fmt(deal.price)}</a>`
+      : `<span class="dm-price">${fmt(deal.price)}</span>`;
+
+    const card = document.createElement('div');
+    card.className = `dm-card ${isW ? 'ww' : 'co'}`;
+    card.innerHTML = `
+      <div class="dm-top">
+        ${imgHtml}
+        <div class="dm-info"><div class="dm-name">${name}</div><div class="dm-cat">${cat}</div></div>
+        ${badge}
+      </div>
+      <div class="dm-mid">
+        <span class="store-chip ${isW ? 'ww' : 'coles'} sm">${isW ? 'W' : 'C'}</span>
+        ${priceLink}
+        <span class="dm-vs">${vs}</span>
+        <button class="item-watch-btn dm-watch${watched ? ' active' : ''}" data-item="${safe}" title="${watched ? 'Remove from watchlist' : 'Add to watchlist'}">👁</button>
+      </div>
+      ${bar ? `<div class="dm-bar">${bar}</div>` : ''}`;
+    wrap.appendChild(card);
+  });
 }
 
 // ── Validate nav badge ────────────────────────────────────────────────────────
@@ -1223,6 +1317,22 @@ function initRefreshBtn() {
     if (wb) { e.stopPropagation(); toggleWatchlistHD(wb.dataset.item); return; }
     const db = e.target.closest('.dismiss-diff-btn');
     if (db) { e.stopPropagation(); dismissDiff(db.dataset.item, parseFloat(db.dataset.diff)); renderDeals(); }
+  });
+
+  // Mobile deal cards — watch toggle
+  document.getElementById('dealsMobile')?.addEventListener('click', (e) => {
+    const wb = e.target.closest('.item-watch-btn');
+    if (wb) { e.stopPropagation(); e.preventDefault(); toggleWatchlistHD(wb.dataset.item); }
+  });
+
+  // Re-render when crossing the mobile/desktop breakpoint (debounced)
+  let _hdResizeT = null, _hdWasMobile = window.innerWidth <= 700;
+  window.addEventListener('resize', () => {
+    clearTimeout(_hdResizeT);
+    _hdResizeT = setTimeout(() => {
+      const nowMobile = window.innerWidth <= 700;
+      if (nowMobile !== _hdWasMobile) { _hdWasMobile = nowMobile; if (_data) renderDeals(); }
+    }, 200);
   });
 
   // Scrape strip dismiss/retry

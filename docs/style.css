@@ -1744,9 +1744,7 @@ td.priority-cell { text-align: center; }
     box-sizing: border-box;
   }
 
-  /* ── Banner: full-width hero stats ──────────────────────────── */
-  .store-cards  { align-items: stretch; }
-  .store-divider { width: 100%; }
+  /* ── Banner: compact two-column strip so products show sooner ─── */
   .comparison-banner {
     border-radius: 0;
     border-left: none;
@@ -1755,18 +1753,28 @@ td.priority-cell { text-align: center; }
     padding: 0;
     box-shadow: none;
   }
-  .store-cards { gap: 0; }
+  /* WW | Coles on one row; the saving/updated divider wraps full-width below */
+  .store-cards { flex-direction: row; flex-wrap: wrap; gap: 0; align-items: stretch; }
   .store-card {
+    flex: 1 1 0; min-width: 0;
     border-radius: 0;
     border: none;
     border-bottom: 1px solid var(--border);
-    padding: 18px 20px 14px;
+    padding: 10px 14px;
   }
-  .store-card-total  { font-size: 48px; letter-spacing: -2px; line-height: 1.05; }
-  .store-card-label  { font-size: 17px; }
-  .store-chip.lg     { width: 36px; height: 36px; font-size: 18px; border-radius: 9px; }
-  .store-divider     { padding: 10px 20px; justify-content: space-between; border-bottom: 1px solid var(--border); }
-  .saving-chip       { font-size: 24px; padding: 6px 18px; }
+  .store-card:first-of-type { border-right: 1px solid var(--border); }
+  .store-card-top    { gap: 6px; margin-bottom: 2px; }
+  .store-card-total  { font-size: 24px; letter-spacing: -0.5px; line-height: 1.1; }
+  .store-card-label  { font-size: 13px; }
+  .store-card-badge  { min-height: 0; }
+  .store-chip.lg     { width: 22px; height: 22px; font-size: 12px; border-radius: 6px; }
+  .store-divider {
+    order: 3; flex-basis: 100%; width: 100%;
+    flex-direction: row; align-items: center; justify-content: space-between;
+    padding: 7px 14px; border-bottom: 1px solid var(--border);
+  }
+  .saving-info  { font-size: 12px; }
+  .saving-chip  { font-size: 15px; padding: 3px 10px; }
 
   /* ── Mobile cards container ─────────────────────────────────── */
   #mobileCards {

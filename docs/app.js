@@ -6,6 +6,8 @@ const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '—';
 // Strip "Woolworths " prefix for display. The underlying list_item key stays
 // unchanged so price history and localStorage keys keep working.
 const stripWW  = (name) => name.replace(/^Woolworths\s+/i, '');
+// Short telegram display name (from name_map.js); falls back to stripWW.
+const shortName = (name) => (window.PW_NAME_MAP && window.PW_NAME_MAP[name]) || stripWW(name);
 const isMobile = () => window.innerWidth < 640;
 
 const COLES_CDN = 'https://cdn.productimages.coles.com.au/productimages';
@@ -2597,7 +2599,7 @@ async function loadNameChanges() {
 // ── Sort state ───────────────────────────────────────────────────────────────
 
 let sortKeys = [{ col: 'trend', dir: 'asc' }];
-let _mobileSortMode = 'trend-asc'; // 'trend-asc' | 'trend-desc' | 'default'
+let _mobileSortMode = 'trend'; // 'default' | 'trend' | 'az' | 'savings'
 
 // Re-render when window crosses the 640px mobile breakpoint (e.g. device rotation)
 let _prevIsMobile = isMobile();
@@ -2901,24 +2903,29 @@ function renderMobileCards(items, data) {
 
   // Re-sort for mobile sort modes (desktop sortKeys sort already applied via sortItems())
   let displayItems = [...items];
-  if (_mobileSortMode !== 'default') {
+  if (_mobileSortMode === 'trend') {
     // calcTrendPosition() from utils.js: 0.0=best deal, 0.5=flat/middle, 999=no history
-    const mul = _mobileSortMode === 'trend-asc' ? 1 : -1;
-    displayItems.sort((a, b) => mul * (calcTrendPosition(a) - calcTrendPosition(b)));
+    displayItems.sort((a, b) => calcTrendPosition(a) - calcTrendPosition(b));
+  } else if (_mobileSortMode === 'az') {
+    displayItems.sort((a, b) => shortName(a.list_item).localeCompare(shortName(b.list_item)));
+  } else if (_mobileSortMode === 'savings') {
+    const sv = it => (savingAmount(it) || 0) * getUnits(it.list_item);
+    displayItems.sort((a, b) => sv(b) - sv(a));
   }
 
   // Toolbar: sort pill (left) + view toggle (right)
   const toolbar = document.createElement('div');
   toolbar.className = 'mc-toolbar';
 
-  const sortLabels = { 'trend-asc': '⬆ Trend', 'trend-desc': '⬇ Trend', 'default': '↕ Default' };
+  const sortLabels = { 'default': '↕ Default', 'trend': '🔥 Best deals', 'az': 'A–Z', 'savings': '💰 Savings' };
+  const sortModes = ['default', 'trend', 'az', 'savings'];
   const pill = document.createElement('button');
   pill.id = 'mobileSortPill';
-  pill.textContent = sortLabels[_mobileSortMode];
+  pill.textContent = sortLabels[_mobileSortMode] || sortLabels.default;
   pill.classList.toggle('active', _mobileSortMode !== 'default');
   pill.addEventListener('click', () => {
-    const modes = ['trend-asc', 'trend-desc', 'default'];
-    _mobileSortMode = modes[(modes.indexOf(_mobileSortMode) + 1) % modes.length];
+    const cur = sortModes.indexOf(_mobileSortMode);
+    _mobileSortMode = sortModes[(cur + 1) % sortModes.length];
     if (_lastData) renderPage(_lastData);
   });
   toolbar.appendChild(pill);
@@ -2934,7 +2941,10 @@ function renderMobileCards(items, data) {
   viewBtn.addEventListener('click', () => {
     _mcView = _mcView === 'detailed' ? 'compact' : 'detailed';
     localStorage.setItem('pw_mc_view_v1', _mcView);
+    // Preserve scroll position so toggling views doesn't jump to the top
+    const y = window.scrollY;
     if (_lastData) renderPage(_lastData);
+    window.scrollTo(0, y);
   });
   toolbar.appendChild(viewBtn);
 
@@ -3003,13 +3013,16 @@ function renderMobileCards(items, data) {
     const savingTag = saving && saving > 0 ? `<span class="mc-saving">Save ${fmt(saving)}</span>` : '';
 
     if (compact) {
-      // Single-line row: fire, name, W chip + price, C chip + price (cheaper bold), watch eye
+      // Single-line row: fire, SHORT name, W chip + price, C chip + price (cheaper bold).
+      // No eye — there's no horizontal room in this layout.
+      const unarch = _activePriority === 'archive'
+        ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : '';
       card.innerHTML = `
         ${hotDeal ? '<span class="mc-hot">🔥</span>' : ''}
-        <span class="mcc-name">${displayName}</span>
+        <span class="mcc-name">${ov.displayName || shortName(item.list_item)}</span>
         <span class="mcc-price"><span class="store-chip sm ww">W</span><span class="${wwCheaper ? 'mcc-bold' : ''}">${ww ? fmt(ww.price) : '—'}</span></span>
         <span class="mcc-price"><span class="store-chip sm coles">C</span><span class="${coCheaper ? 'mcc-bold' : ''}">${co ? fmt(co.price) : '—'}</span></span>
-        <span class="mc-icons">${watchBtn}${_activePriority === 'archive' ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : ''}</span>`;
+        ${unarch ? `<span class="mc-icons">${unarch}</span>` : ''}`;
     } else {
       card.innerHTML = `
       <div class="mc-top">
@@ -4176,12 +4189,14 @@ function buildShoppingListItems(useChecked) {
 function exportShoppingList(useChecked) {
   const items = buildShoppingListItems(useChecked);
   const names = items.map(i => i.list_item);
-  // Build a human-readable description of what's being exported
+  // Build a human-readable description of what's being exported.
+  // The basket page renders "Showing <N> <note>", so notes must NOT include a
+  // count of their own (avoids "Showing 4 4 selected items").
   let note;
   if (_selectedItems.size > 0 || (useChecked && _checkedItems && _checkedItems.size > 0)) {
-    note = `${names.length} selected item${names.length !== 1 ? 's' : ''}`;
+    note = 'selected items';
   } else if (_searchQuery && _searchQuery.trim().length > 0) {
-    note = `${names.length} item${names.length !== 1 ? 's' : ''} matching "${_searchQuery.trim()}"`;
+    note = `items matching "${_searchQuery.trim()}"`;
   } else {
     const pLabel = _activePriority === 'all' ? 'all' : `all ${_activePriority}`;
     const catSuffix = _activeCategory !== 'All' ? ` · ${_activeCategory}` : '';
@@ -4198,7 +4213,7 @@ function exportShoppingList(useChecked) {
     const merged = [...existing];
     names.forEach(n => { if (!merged.includes(n)) merged.push(n); });
     finalNames = merged;
-    finalNote = `${merged.length} item${merged.length !== 1 ? 's' : ''} (basket locked)`;
+    finalNote = 'items (basket locked)';
   }
   const handoffPayload = { items: finalNames, note: finalNote, quantities };
   localStorage.setItem('pw_sl_handoff', JSON.stringify(handoffPayload));

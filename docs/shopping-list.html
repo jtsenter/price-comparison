@@ -539,7 +539,6 @@ async function boot() {
     main.innerHTML = `
       <div class="filter-note">📋 ${filterNoteHtml}</div>
       <div class="sl-topbar">
-        <button id="resetColWidthsBtn" class="btn btn-ghost" title="Reset column widths" style="white-space:nowrap">↺ Reset widths</button>
         <div style="flex:1"></div>
         <button id="saveBasketBtn" class="btn-outline-save">🔒 Save basket</button>
         <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
@@ -639,11 +638,6 @@ async function boot() {
       }
     });
 
-    document.getElementById('resetColWidthsBtn')?.addEventListener('click', () => {
-      _slColWidths = {};
-      localStorage.removeItem('pw_sl_col_widths');
-      renderContent();
-    });
 
     // Save basket — locks the current items so additions from the main page are
     // appended (not replaced). Lock persists across refreshes until toggled off.
@@ -663,7 +657,7 @@ async function boot() {
         const names = displayItems.map(i => i.list_item);
         localStorage.setItem('pw_sl_handoff', JSON.stringify({
           items: names,
-          note: `${names.length} item${names.length !== 1 ? 's' : ''} (basket locked)`,
+          note: 'items (basket locked)',
           quantities: unitOv || {},
         }));
       }
