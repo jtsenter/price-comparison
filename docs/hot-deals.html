@@ -2,10 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>🔥 Hot Deals — PriceWatch</title>
+  <meta name="description" content="Grocery items currently at or near their lowest recorded price across Woolworths and Coles." />
+  <meta name="theme-color" content="#00843D" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="PriceWatch" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
+  <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="style.css?v=3" />
+  <link rel="stylesheet" href="style.css?v=5" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -361,8 +367,9 @@
 <div id="priceTooltip" class="price-tooltip-fixed" style="display:none"></div>
 
 <!-- Shared utilities — must load before inline script -->
-<script src="name_map.js"></script>
-<script src="utils.js"></script>
+<script src="name_map.js?v=5"></script>
+<script src="utils.js?v=5"></script>
+<script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 <script>
 // ── Shared utilities ──────────────────────────────────────────────────────────
 

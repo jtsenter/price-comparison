@@ -2,10 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>PriceWatch — Woolworths vs Coles</title>
+  <meta name="description" content="Compare Woolworths vs Coles grocery prices, track price history, and find the cheapest store for your basket." />
+  <meta name="theme-color" content="#00843D" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="PriceWatch" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
+  <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="style.css?v=4" />
+  <link rel="stylesheet" href="style.css?v=5" />
 </head>
 <body>
 
@@ -404,9 +411,10 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-<script src="name_map.js"></script>
-<script src="utils.js"></script>
+<script src="name_map.js?v=5"></script>
+<script src="utils.js?v=5"></script>
 <script src="app.js?v=5"></script>
+<script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 <script>
 // ── Dynamic sticky header offset ─────────────────────────────────────────────
 // Measures nav height and syncs it with sticky header ghost (ghost-header-ghost).

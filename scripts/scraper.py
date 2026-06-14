@@ -823,13 +823,14 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
     out = _build_output(items, not_found, trigger, progress=progress, pending_validation=pending_validation)
     os.makedirs(DATA_DIR, exist_ok=True)
     latest_path = os.path.join(DATA_DIR, "latest.json")
+    # Minified: latest.json is fetched by every page on every load — keep it small.
     with open(latest_path, "w") as f:
-        json.dump(out, f, indent=2)
+        json.dump(out, f, separators=(",", ":"))
     token = os.environ.get("GITHUB_TOKEN", "")
     if not token:
         print("  -> Progress push skipped (no GITHUB_TOKEN)")
         return
-    encoded = base64.b64encode(json.dumps(out, indent=2).encode("utf-8")).decode("ascii")
+    encoded = base64.b64encode(json.dumps(out, separators=(",", ":")).encode("utf-8")).decode("ascii")
     headers = {
         "Authorization": f"token {token}",
         "Accept": "application/vnd.github+json",
@@ -1670,8 +1671,10 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         print(f"\nDone. {len(items_output)} items compared, {len(not_found)} not found.")
         print(f"Woolworths total: ${s['total_woolworths']:.2f} | Coles total: ${s['total_coles']:.2f}")
 
+    # latest.json is served to every page on every load — minify it.
     with open(latest_path, "w") as f:
-        json.dump(output, f, indent=2)
+        json.dump(output, f, separators=(",", ":"))
+    # Dated snapshot is a local, gitignored archive — keep it human-readable.
     with open(os.path.join(DATA_DIR, f"{datetime.now().strftime('%Y-%m-%d')}.json"), "w") as f:
         json.dump(output, f, indent=2)
 
