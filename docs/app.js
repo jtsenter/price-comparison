@@ -704,7 +704,7 @@ function colHeadHtml(col) {
 function savingAmount(item) {
   const w = item.woolworths?.price, c = item.coles?.price;
   if (w == null || c == null) return item.saving_per_item ?? 0;
-  const wUnit = item.woolworths?.unit_price;
+  const wUnit = item.woolworths?.unit_price ?? null;
   // Pack price quoted per-kg => stored saving used a bad factor; use visible diff
   if (item._ww_price_factor && wUnit != null &&
       Math.abs(wUnit - w) > Math.max(0.05, w * 0.01)) {
