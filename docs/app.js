@@ -2602,6 +2602,7 @@ async function loadNameChanges() {
 
 let sortKeys = [{ col: 'trend', dir: 'asc' }];
 let _mobileSortMode = 'trend'; // 'default' | 'trend' | 'az' | 'savings'
+let _mobileSortDir  = 'asc';  // 'asc' | 'desc'
 
 // Re-render when window crosses the 640px mobile breakpoint (e.g. device rotation)
 let _prevIsMobile = isMobile();
@@ -2905,32 +2906,48 @@ function renderMobileCards(items, data) {
 
   // Re-sort for mobile sort modes (desktop sortKeys sort already applied via sortItems())
   let displayItems = [...items];
+  const sortDir = _mobileSortDir === 'asc' ? 1 : -1;
   if (_mobileSortMode === 'trend') {
     // calcTrendPosition() from utils.js: 0.0=best deal, 0.5=flat/middle, 999=no history
-    displayItems.sort((a, b) => calcTrendPosition(a) - calcTrendPosition(b));
+    displayItems.sort((a, b) => (calcTrendPosition(a) - calcTrendPosition(b)) * sortDir);
   } else if (_mobileSortMode === 'az') {
-    displayItems.sort((a, b) => shortName(a.list_item).localeCompare(shortName(b.list_item)));
+    displayItems.sort((a, b) => shortName(a.list_item).localeCompare(shortName(b.list_item)) * sortDir);
   } else if (_mobileSortMode === 'savings') {
     const sv = it => (savingAmount(it) || 0) * getUnits(it.list_item);
-    displayItems.sort((a, b) => sv(b) - sv(a));
+    displayItems.sort((a, b) => (sv(b) - sv(a)) * sortDir);
   }
 
-  // Toolbar: sort pill (left) + view toggle (right)
+  // Toolbar: sort chips (left) + view toggle (right)
   const toolbar = document.createElement('div');
   toolbar.className = 'mc-toolbar';
 
-  const sortLabels = { 'default': '↕ Default', 'trend': '🔥 Best deals', 'az': 'A–Z', 'savings': '💰 Savings' };
-  const sortModes = ['default', 'trend', 'az', 'savings'];
-  const pill = document.createElement('button');
-  pill.id = 'mobileSortPill';
-  pill.textContent = sortLabels[_mobileSortMode] || sortLabels.default;
-  pill.classList.toggle('active', _mobileSortMode !== 'default');
-  pill.addEventListener('click', () => {
-    const cur = sortModes.indexOf(_mobileSortMode);
-    _mobileSortMode = sortModes[(cur + 1) % sortModes.length];
-    if (_lastData) renderPage(_lastData);
+  const chipsWrap = document.createElement('div');
+  chipsWrap.className = 'mc-sort-chips';
+
+  const CHIPS = [
+    { mode: 'az',      label: 'A–Z'      },
+    { mode: 'savings', label: 'Savings'  },
+    { mode: 'trend',   label: 'Best deal'},
+  ];
+  CHIPS.forEach(({ mode, label }) => {
+    const chip = document.createElement('button');
+    chip.className = 'mc-sort-chip';
+    const isActive = _mobileSortMode === mode;
+    if (isActive) chip.classList.add('active');
+    const arrow = isActive ? (_mobileSortDir === 'asc' ? ' ↑' : ' ↓') : '';
+    chip.textContent = label + arrow;
+    chip.addEventListener('click', () => {
+      if (_mobileSortMode === mode) {
+        _mobileSortDir = _mobileSortDir === 'asc' ? 'desc' : 'asc';
+      } else {
+        _mobileSortMode = mode;
+        _mobileSortDir  = 'asc';
+      }
+      if (_lastData) renderPage(_lastData);
+    });
+    chipsWrap.appendChild(chip);
   });
-  toolbar.appendChild(pill);
+  toolbar.appendChild(chipsWrap);
 
   // View toggle — single icon-only button; glyph shows the layout you'll switch TO
   const ICON_LIST = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>';
