@@ -4152,8 +4152,7 @@ function exportShoppingList(useChecked) {
     const catSuffix = _activeCategory !== 'All' ? ` · ${_activeCategory}` : '';
     note = `${pLabel} items${catSuffix}`;
   }
-  let quantities = {};
-  try { quantities = JSON.parse(localStorage.getItem('pw_priorities_v1') || '{}'); } catch {}
+  const quantities = loadUnitOverrides();
   const handoffPayload = { items: names, note, quantities };
   localStorage.setItem('pw_sl_handoff', JSON.stringify(handoffPayload));
   window.location.href = 'shopping-list.html';
