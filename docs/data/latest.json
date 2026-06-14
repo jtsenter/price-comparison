@@ -1,132 +1,15 @@
 {
-  "last_updated": "2026-06-14T03:20:12.982675+00:00",
+  "last_updated": "2026-06-14T03:20:26.096327+00:00",
   "trigger": "manual",
   "items": [
     {
-      "list_item": "Baby Mum-Mum Snack Vegetable Rice Rusk",
-      "last_scraped": "2026-06-13T06:11:05.961349+00:00",
-      "trip_count": 7,
-      "price_history": [
-        {
-          "date": "2025-02-02",
-          "price": 3.85
-        },
-        {
-          "date": "2025-04-05",
-          "price": 3.85
-        },
-        {
-          "date": "2025-04-14",
-          "price": 3.85
-        },
-        {
-          "date": "2025-06-06",
-          "price": 3.85
-        },
-        {
-          "date": "2025-07-10",
-          "price": 3.85
-        },
-        {
-          "date": "2026-02-03",
-          "price": 2.3
-        },
-        {
-          "date": "2026-05-06",
-          "price": 3.85
-        }
-      ],
-      "category": "Baby",
-      "woolworths": {
-        "name": "Baby Mum-Mum Snack Vegetable Rice Rusk",
-        "price": 3.85,
-        "unit_price": 10.69,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/323375/baby-mum-mum-snack-vegetable-rice-rusk",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/323375.jpg"
-      },
-      "coles": {
-        "name": "Baby Mum-mum First Rice Rusk Vegetable +6 Months | 36g",
-        "price": 3.85,
-        "unit_price": 3.85,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/baby-mum-mum-first-rice-rusk-vegetable-+6-months-36g-8953861",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8953861.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2025-07-08",
-          "price": 3.85
-        },
-        {
-          "date": "2025-08-08",
-          "price": 2.85
-        },
-        {
-          "date": "2025-11-05",
-          "price": 2.85
-        },
-        {
-          "date": "2025-12-03",
-          "price": 3.85
-        },
-        {
-          "date": "2026-05-04",
-          "price": 3.85
-        },
-        {
-          "date": "2026-05-29",
-          "price": 3.85
-        },
-        {
-          "date": "2026-06-01",
-          "price": 3.85
-        },
-        {
-          "date": "2026-06-04",
-          "price": 2.85
-        },
-        {
-          "date": "2026-06-08",
-          "price": 3.85
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 2.85
-        },
-        {
-          "date": "2026-06-01",
-          "price": 2.85
-        },
-        {
-          "date": "2026-06-04",
-          "price": 3.85
-        },
-        {
-          "date": "2026-06-11",
-          "price": 3.85
-        }
-      ],
-      "match_confidence": "low",
-      "size_warning": false,
-      "per_100_ww": 10.69,
-      "per_100_coles": 10.69,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Blueberries Punnet",
-      "last_scraped": "2026-06-13T06:11:06.160833+00:00",
+      "last_scraped": "2026-06-14T03:20:18.378082+00:00",
       "trip_count": 21,
       "price_history": [
         {
           "date": "2024-11-12",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2025-01-29",
@@ -138,11 +21,11 @@
         },
         {
           "date": "2025-02-28",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2025-03-11",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2025-03-17",
@@ -202,7 +85,7 @@
         },
         {
           "date": "2025-07-26",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2026-02-03",
@@ -213,7 +96,7 @@
       "woolworths": {
         "name": "Blueberries Punnet",
         "price": 5.5,
-        "unit_price": 44,
+        "unit_price": 44.0,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/169792/blueberries-punnet",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/169792.jpg"
@@ -228,25 +111,34 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [
         {
-          "name": "Blue Clouds - Blueberry 1kg",
-          "price": 13.99,
-          "unit_price": 1.4,
-          "unit": "100G",
-          "url": "https://www.woolworths.com.au/shop/productdetails/1120907673/blue-clouds-blueberry-1kg",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/1120907673.jpg",
-          "retailer": "woolworths"
+          "name": "Coles Blueberries | 125g",
+          "price": 5.5,
+          "unit_price": 5.5,
+          "unit": "1kg",
+          "url": "https://www.coles.com.au/product/coles-blueberries-125g-5543535",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5543535.jpg",
+          "retailer": "coles"
         },
         {
-          "name": "Sprinks Blueberry Flavour 15ml",
-          "price": 5.75,
-          "unit_price": 38.33,
-          "unit": "100ML",
-          "url": "https://www.woolworths.com.au/shop/productdetails/1120902073/sprinks-blueberry-flavour-15ml",
-          "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/1120902073.jpg",
-          "retailer": "woolworths"
+          "name": "St Dalfour Wild Blueberry Spread | 284g",
+          "price": 6.2,
+          "unit_price": 6.2,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/st-dalfour-wild-blueberry-spread-284g-5704420",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5704420.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Yoplait Berry Punnet Yoghurt Strawberry Mixed Berries 6x160g | 960g",
+          "price": 7.0,
+          "unit_price": 7.0,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/yoplait-berry-punnet-yoghurt-strawberry-mixed-berries-6x160g-960g-3619567",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3619567.jpg",
+          "retailer": "coles"
         }
       ],
       "ww_price_history": [
@@ -341,172 +233,201 @@
           "price": 5.5
         }
       ],
-      "match_confidence": "low",
+      "match_confidence": "medium",
       "size_warning": false,
       "per_100_ww": 4.4,
       "per_100_coles": 4.4,
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Cadbury Dairy Milk Top Deck Chocolate Block",
-      "last_scraped": "2026-06-13T06:11:09.971465+00:00",
-      "trip_count": 9,
+      "list_item": "Baby Mum-Mum Snack Vegetable Rice Rusk",
+      "last_scraped": "2026-06-14T03:20:20.209241+00:00",
+      "trip_count": 7,
       "price_history": [
         {
-          "date": "2024-11-12",
-          "price": 8
-        },
-        {
-          "date": "2024-11-20",
-          "price": 8
-        },
-        {
-          "date": "2024-12-02",
-          "price": 8
-        },
-        {
-          "date": "2024-12-09",
-          "price": 8
-        },
-        {
-          "date": "2024-12-19",
-          "price": 8
-        },
-        {
           "date": "2025-02-02",
-          "price": 8
+          "price": 3.85
         },
         {
-          "date": "2025-02-28",
-          "price": 8
+          "date": "2025-04-05",
+          "price": 3.85
         },
         {
-          "date": "2025-03-11",
-          "price": 8
+          "date": "2025-04-14",
+          "price": 3.85
         },
         {
-          "date": "2025-03-27",
-          "price": 8
+          "date": "2025-06-06",
+          "price": 3.85
+        },
+        {
+          "date": "2025-07-10",
+          "price": 3.85
+        },
+        {
+          "date": "2026-02-03",
+          "price": 2.3
+        },
+        {
+          "date": "2026-05-06",
+          "price": 3.85
         }
       ],
-      "category": "Sweets",
+      "category": "Baby",
       "woolworths": {
-        "name": "Cadbury Dairy Milk Top Deck Chocolate Block",
-        "price": 8,
-        "unit_price": 2.22,
+        "name": "Baby Mum-Mum Snack Vegetable Rice Rusk",
+        "price": 3.85,
+        "unit_price": 10.69,
         "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/814624/cadbury-dairy-milk-top-deck-chocolate-block",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/814624.jpg"
+        "url": "https://www.woolworths.com.au/shop/productdetails/323375/baby-mum-mum-snack-vegetable-rice-rusk",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/323375.jpg"
       },
       "coles": {
-        "name": "Cadbury Dairy Milk Top Deck Chocolate Block | 180g",
-        "price": 8,
-        "unit_price": 10,
+        "name": "Baby Mum-mum First Rice Rusk Vegetable +6 Months | 36g",
+        "price": 3.85,
+        "unit_price": 3.85,
         "unit": "100g",
-        "url": "https://www.coles.com.au/product/cadbury-dairy-milk-top-deck-chocolate-block-180g-2351607",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2351607.jpg"
+        "url": "https://www.coles.com.au/product/baby-mum-mum-first-rice-rusk-vegetable-+6-months-36g-8953861",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8953861.jpg",
+        "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
-      "ww_price_history": [
+      "saving_per_item": 0.0,
+      "alternatives": [
         {
-          "date": "2025-09-27",
-          "price": 8.5
+          "name": "Baby Mum-mum First Rice Rusk Vegetable +6 Months | 36g",
+          "price": 3.85,
+          "unit_price": 3.85,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/baby-mum-mum-first-rice-rusk-vegetable-+6-months-36g-8953861",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8953861.jpg",
+          "retailer": "coles"
         },
         {
-          "date": "2025-10-05",
-          "price": 8.5
+          "name": "Baby Mum-mum Rice Rusk Organic Blueberry & Carrot +8 Months | 36g",
+          "price": 3.85,
+          "unit_price": 3.85,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/baby-mum-mum-rice-rusk-organic-blueberry-and-carrot-+8-months-36g-2800347",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2800347.jpg",
+          "retailer": "coles"
+        },
+        {
+          "name": "Baby Mum-Mum First Rice Rusk Apple & Pumpkin +6 Months | 36g",
+          "price": 3.85,
+          "unit_price": 3.85,
+          "unit": "100g",
+          "url": "https://www.coles.com.au/product/baby-mum-mum-first-rice-rusk-apple-and-pumpkin-+6-months-36g-2123227",
+          "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2123227.jpg",
+          "retailer": "coles"
+        }
+      ],
+      "ww_price_history": [
+        {
+          "date": "2025-07-08",
+          "price": 3.85
+        },
+        {
+          "date": "2025-08-08",
+          "price": 2.85
         },
         {
           "date": "2025-11-05",
-          "price": 8.5
+          "price": 2.85
         },
         {
           "date": "2025-12-03",
-          "price": 6.26
+          "price": 3.85
+        },
+        {
+          "date": "2026-05-04",
+          "price": 3.85
         },
         {
           "date": "2026-05-29",
-          "price": 4.8
-        },
-        {
-          "date": "2026-05-30",
-          "price": 4.8
+          "price": 3.85
         },
         {
           "date": "2026-06-01",
-          "price": 4.8
+          "price": 3.85
         },
         {
-          "date": "2026-06-10",
-          "price": 8
+          "date": "2026-06-04",
+          "price": 2.85
+        },
+        {
+          "date": "2026-06-08",
+          "price": 3.85
         }
       ],
       "coles_price_history": [
         {
           "date": "2026-05-29",
-          "price": 8
+          "price": 2.85
         },
         {
           "date": "2026-06-01",
-          "price": 8
+          "price": 2.85
         },
         {
-          "date": "2026-06-10",
-          "price": 8
+          "date": "2026-06-04",
+          "price": 3.85
+        },
+        {
+          "date": "2026-06-11",
+          "price": 3.85
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "medium",
       "size_warning": false,
-      "per_100_ww": 2.22,
-      "per_100_coles": 4.44,
+      "per_100_ww": 10.69,
+      "per_100_coles": 10.69,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Cadbury Dairy Milk Large Chocolate Block",
-      "last_scraped": "2026-06-13T06:11:10.824201+00:00",
+      "last_scraped": "2026-06-14T03:20:21.244149+00:00",
       "trip_count": 11,
       "price_history": [
         {
           "date": "2024-10-27",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2024-11-12",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2024-11-20",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2024-12-02",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2024-12-09",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2024-12-19",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-02-28",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-03-11",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-03-27",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-04-05",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2025-04-14",
@@ -531,7 +452,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4229488.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [
         {
           "name": "Cadbury Dairy Milk Caramel Chocolate Caramello Large Block",
@@ -589,15 +510,131 @@
           "price": 8.5
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.7,
       "per_100_coles": 2.5,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Cadbury Dairy Milk Top Deck Chocolate Block",
+      "last_scraped": "2026-06-14T03:20:23.173470+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-11-12",
+          "price": 8.0
+        },
+        {
+          "date": "2024-11-20",
+          "price": 8.0
+        },
+        {
+          "date": "2024-12-02",
+          "price": 8.0
+        },
+        {
+          "date": "2024-12-09",
+          "price": 8.0
+        },
+        {
+          "date": "2024-12-19",
+          "price": 8.0
+        },
+        {
+          "date": "2025-02-02",
+          "price": 8.0
+        },
+        {
+          "date": "2025-02-28",
+          "price": 8.0
+        },
+        {
+          "date": "2025-03-11",
+          "price": 8.0
+        },
+        {
+          "date": "2025-03-27",
+          "price": 8.0
+        }
+      ],
+      "category": "Sweets",
+      "woolworths": {
+        "name": "Cadbury Dairy Milk Top Deck Chocolate Block",
+        "price": 8.0,
+        "unit_price": 2.22,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/814624/cadbury-dairy-milk-top-deck-chocolate-block",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/814624.jpg"
+      },
+      "coles": {
+        "name": "Cadbury Dairy Milk Top Deck Chocolate Block | 180g",
+        "price": 8,
+        "unit_price": 10,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/cadbury-dairy-milk-top-deck-chocolate-block-180g-2351607",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/2/2351607.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2025-09-27",
+          "price": 8.5
+        },
+        {
+          "date": "2025-10-05",
+          "price": 8.5
+        },
+        {
+          "date": "2025-11-05",
+          "price": 8.5
+        },
+        {
+          "date": "2025-12-03",
+          "price": 6.26
+        },
+        {
+          "date": "2026-05-29",
+          "price": 4.8
+        },
+        {
+          "date": "2026-05-30",
+          "price": 4.8
+        },
+        {
+          "date": "2026-06-01",
+          "price": 4.8
+        },
+        {
+          "date": "2026-06-10",
+          "price": 8
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 8
+        },
+        {
+          "date": "2026-06-01",
+          "price": 8
+        },
+        {
+          "date": "2026-06-10",
+          "price": 8
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 2.22,
+      "per_100_coles": 4.44,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Capsicum Yellow",
-      "last_scraped": "2026-06-13T06:11:14.781393+00:00",
+      "last_scraped": "2026-06-14T03:20:26.094998+00:00",
       "trip_count": 10,
       "price_history": [
         {
@@ -16170,8 +16207,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 0,
+    "done": 5,
     "total": 145,
-    "started_at": "2026-06-14T03:20:12.978037+00:00"
+    "started_at": "2026-06-14T03:20:12.978037+00:00",
+    "current_item": "Capsicum Yellow"
   }
 }
