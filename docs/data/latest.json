@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-14T03:23:39.268220+00:00",
+  "last_updated": "2026-06-14T03:23:47.053657+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -9354,8 +9354,113 @@
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Mon Ami French Camembert Cheese",
+      "last_scraped": "2026-06-14T03:23:40.867635+00:00",
+      "trip_count": 6,
+      "price_history": [
+        {
+          "date": "2025-03-27",
+          "price": 7.2
+        },
+        {
+          "date": "2025-05-04",
+          "price": 6.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 7.2
+        },
+        {
+          "date": "2025-06-06",
+          "price": 7.2
+        },
+        {
+          "date": "2025-07-10",
+          "price": 7.2
+        },
+        {
+          "date": "2026-02-23",
+          "price": 6.0
+        }
+      ],
+      "category": "Dairy & Eggs",
+      "woolworths": {
+        "name": "Mon Ami French Camembert Cheese",
+        "price": 7.2,
+        "unit_price": 36.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/751148/mon-ami-french-camembert-cheese",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/751148.jpg"
+      },
+      "coles": {
+        "name": "Emborg French Camembert | 200g",
+        "price": 7.2,
+        "unit_price": 7.2,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/emborg-french-camembert-200g-4360529",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4360529.jpg",
+        "retailer": "coles"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2025-07-08",
+          "price": 7.2
+        },
+        {
+          "date": "2025-08-08",
+          "price": 7.2
+        },
+        {
+          "date": "2026-05-29",
+          "price": 6
+        },
+        {
+          "date": "2026-06-01",
+          "price": 6
+        },
+        {
+          "date": "2026-06-03",
+          "price": 7.2
+        },
+        {
+          "date": "2026-06-10",
+          "price": 7.2
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 6.4
+        },
+        {
+          "date": "2026-06-01",
+          "price": 6.4
+        },
+        {
+          "date": "2026-06-03",
+          "price": 7.2
+        },
+        {
+          "date": "2026-06-04",
+          "price": 7.2
+        },
+        {
+          "date": "2026-06-11",
+          "price": 7.2
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 3.6,
+      "per_100_coles": 3.6,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Mutti Tomato Paste Double Concentrate",
-      "last_scraped": "2026-06-13T06:14:30.669535+00:00",
+      "last_scraped": "2026-06-14T03:23:42.854112+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9395,17 +9500,7 @@
       },
       "cheaper_store": "woolworths",
       "saving_per_item": 1.4,
-      "alternatives": [
-        {
-          "name": "Mutti Tomato Passata With Basil | 700g",
-          "price": 3.8,
-          "unit_price": 0.54,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/mutti-tomato-passata-with-basil-700g-1809277",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1809277.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2025-08-08",
@@ -9461,154 +9556,21 @@
       "per_100_unit": "100g"
     },
     {
-      "list_item": "Mon Ami French Camembert Cheese",
-      "last_scraped": "2026-06-13T06:14:34.843885+00:00",
-      "trip_count": 6,
-      "price_history": [
-        {
-          "date": "2025-03-27",
-          "price": 7.2
-        },
-        {
-          "date": "2025-05-04",
-          "price": 6
-        },
-        {
-          "date": "2025-05-12",
-          "price": 7.2
-        },
-        {
-          "date": "2025-06-06",
-          "price": 7.2
-        },
-        {
-          "date": "2025-07-10",
-          "price": 7.2
-        },
-        {
-          "date": "2026-02-23",
-          "price": 6
-        }
-      ],
-      "category": "Dairy & Eggs",
-      "woolworths": {
-        "name": "Mon Ami French Camembert Cheese",
-        "price": 7.2,
-        "unit_price": 36,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/751148/mon-ami-french-camembert-cheese",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/751148.jpg"
-      },
-      "coles": {
-        "name": "Emborg French Camembert | 200g",
-        "price": 7.2,
-        "unit_price": 7.2,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/emborg-french-camembert-200g-4360529",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4360529.jpg",
-        "retailer": "coles"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [
-        {
-          "name": "Jindi Camembert | 125g",
-          "price": 4.6,
-          "unit_price": 4.6,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/jindi-camembert-125g-6139320",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6139320.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "South Cape Camembert | 200g",
-          "price": 7,
-          "unit_price": 7,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/south-cape-camembert-200g-5269091",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5269091.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Emborg French Camembert | 200g",
-          "price": 7.2,
-          "unit_price": 7.2,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/emborg-french-camembert-200g-4360529",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4360529.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2025-07-08",
-          "price": 7.2
-        },
-        {
-          "date": "2025-08-08",
-          "price": 7.2
-        },
-        {
-          "date": "2026-05-29",
-          "price": 6
-        },
-        {
-          "date": "2026-06-01",
-          "price": 6
-        },
-        {
-          "date": "2026-06-03",
-          "price": 7.2
-        },
-        {
-          "date": "2026-06-10",
-          "price": 7.2
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 6.4
-        },
-        {
-          "date": "2026-06-01",
-          "price": 6.4
-        },
-        {
-          "date": "2026-06-03",
-          "price": 7.2
-        },
-        {
-          "date": "2026-06-04",
-          "price": 7.2
-        },
-        {
-          "date": "2026-06-11",
-          "price": 7.2
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 3.6,
-      "per_100_coles": 3.6,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Old El Paso Fajita Spice Mix Mexican Style",
-      "last_scraped": "2026-06-13T06:14:36.523235+00:00",
+      "last_scraped": "2026-06-14T03:23:44.123654+00:00",
       "trip_count": 4,
       "price_history": [
         {
           "date": "2024-11-20",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-04-14",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-07-10",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2026-03-10",
@@ -9634,36 +9596,8 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [
-        {
-          "name": "Old El Paso Mild Fajita Kit Mexican Style | 485g",
-          "price": 5.95,
-          "unit_price": 1.23,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/old-el-paso-mild-fajita-kit-mexican-style-485g-5030450",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5030450.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Old El Paso Fajita Spice Mix | 40g",
-          "price": 2.7,
-          "unit_price": 2.7,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/old-el-paso-fajita-spice-mix-40g-5066050",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5066050.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Old El Paso Reduced Salt Taco Spice Mix | 30g",
-          "price": 2.7,
-          "unit_price": 2.7,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/old-el-paso-reduced-salt-taco-spice-mix-30g-5322591",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5322591.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "saving_per_item": 0.0,
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2025-07-08",
@@ -9708,7 +9642,7 @@
           "price": 2.7
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 6.75,
       "per_100_coles": 6.75,
@@ -9716,7 +9650,7 @@
     },
     {
       "list_item": "Parsnip Fresh",
-      "last_scraped": "2026-06-13T06:14:40.019473+00:00",
+      "last_scraped": "2026-06-14T03:23:45.419926+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -9804,7 +9738,7 @@
     },
     {
       "list_item": "Philadelphia Original Cream Cheese Block",
-      "last_scraped": "2026-06-13T06:14:40.499218+00:00",
+      "last_scraped": "2026-06-14T03:23:47.046645+00:00",
       "trip_count": 3,
       "price_history": [
         {
@@ -9839,30 +9773,12 @@
         "retailer": "coles"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [
         {
-          "name": "Philadelphia Original Cream Cheese Block | 250g",
-          "price": 5.7,
-          "unit_price": 5.7,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/philadelphia-original-cream-cheese-block-250g-192502",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/1/192502.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Philadelphia Cream Cheese Original Block 2 Pack | 500g",
-          "price": 9,
-          "unit_price": 9,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/philadelphia-cream-cheese-original-block-2-pack-500g-5081291",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5081291.jpg",
-          "retailer": "coles"
-        },
-        {
           "name": "Philadelphia Original Cream Cheese Twin Block",
-          "price": 9,
-          "unit_price": 18,
+          "price": 9.0,
+          "unit_price": 18.0,
           "unit": "1KG",
           "url": "https://www.woolworths.com.au/shop/productdetails/72546/philadelphia-original-cream-cheese-twin-block",
           "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/072546.jpg",
@@ -9905,7 +9821,7 @@
           "price": 5.7
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.28,
       "per_100_coles": 2.28,
@@ -15867,9 +15783,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 75,
+    "done": 80,
     "total": 145,
     "started_at": "2026-06-14T03:20:12.978037+00:00",
-    "current_item": "McVitie's Hobnobs Milk Chocolate"
+    "current_item": "Philadelphia Original Cream Cheese Block"
   }
 }
