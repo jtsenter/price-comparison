@@ -690,6 +690,8 @@ function initHdDrag() {
   const thead = document.getElementById('dealsHead');
   if (!thead) return;
   thead.querySelectorAll('th[data-col]').forEach(th => {
+    if (th.dataset.dragInit) return;
+    th.dataset.dragInit = '1';
     th.draggable = true;
     th.addEventListener('dragstart', (e) => {
       if (e.target.classList.contains('col-resize-handle')) { e.preventDefault(); return; }
@@ -733,7 +735,8 @@ function initHdResize() {
   if (!thead) return;
   thead.querySelectorAll('.col-resize-handle').forEach(handle => {
     const th = handle.closest('th');
-    if (!th) return;
+    if (!th || th.dataset.resizeInit) return;
+    th.dataset.resizeInit = '1';
     handle.addEventListener('mousedown', (e) => {
       e.preventDefault(); e.stopPropagation();
       const startX = e.clientX;
