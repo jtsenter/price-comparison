@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-14T03:23:07.362594+00:00",
+  "last_updated": "2026-06-14T03:23:16.921240+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -7924,101 +7924,13 @@
       "per_100_unit": "100ml"
     },
     {
-      "list_item": "Hedy's Fresh Quiche Lorraine Chilled Meal",
-      "last_scraped": "2026-06-13T06:13:49.439825+00:00",
-      "trip_count": 5,
-      "price_history": [
-        {
-          "date": "2024-12-19",
-          "price": 10.5
-        },
-        {
-          "date": "2025-05-12",
-          "price": 10.5
-        },
-        {
-          "date": "2025-07-10",
-          "price": 10.5
-        },
-        {
-          "date": "2025-07-26",
-          "price": 14.5
-        },
-        {
-          "date": "2026-02-07",
-          "price": 11
-        }
-      ],
-      "category": "Other",
-      "woolworths": {
-        "name": "Hedy's Fresh Quiche Lorraine Chilled Meal",
-        "price": 14.5,
-        "unit_price": 1.32,
-        "unit": "100G",
-        "url": "https://www.woolworths.com.au/shop/productdetails/162880/hedy-s-fresh-quiche-lorraine-chilled-meal",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/162880.jpg"
-      },
-      "coles": {
-        "name": "Hedys Quiche Lorraine | 1.1kg",
-        "price": 14.5,
-        "unit_price": 14.5,
-        "unit": "100g",
-        "url": "https://www.coles.com.au/product/hedys-quiche-lorraine-1.1kg-7388070",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7388070.jpg"
-      },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [],
-      "ww_price_history": [
-        {
-          "date": "2025-07-25",
-          "price": 14.5
-        },
-        {
-          "date": "2025-08-08",
-          "price": 14.5
-        },
-        {
-          "date": "2026-05-29",
-          "price": 14.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 14.5
-        },
-        {
-          "date": "2026-06-08",
-          "price": 14.5
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 14.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 14.5
-        },
-        {
-          "date": "2026-06-08",
-          "price": 14.5
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 1.32,
-      "per_100_coles": 1.32,
-      "per_100_unit": "100g"
-    },
-    {
       "list_item": "Golden Palm Medjool Dates Punnet",
-      "last_scraped": "2026-06-13T06:13:50.643983+00:00",
+      "last_scraped": "2026-06-14T03:23:10.712436+00:00",
       "trip_count": 4,
       "price_history": [
         {
           "date": "2025-03-11",
-          "price": 10
+          "price": 10.0
         },
         {
           "date": "2025-06-13",
@@ -8102,39 +8014,127 @@
           "price": 11
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.78,
       "per_100_coles": 3.08,
       "per_100_unit": "100g"
     },
     {
+      "list_item": "Hedy's Fresh Quiche Lorraine Chilled Meal",
+      "last_scraped": "2026-06-14T03:23:11.053976+00:00",
+      "trip_count": 5,
+      "price_history": [
+        {
+          "date": "2024-12-19",
+          "price": 10.5
+        },
+        {
+          "date": "2025-05-12",
+          "price": 10.5
+        },
+        {
+          "date": "2025-07-10",
+          "price": 10.5
+        },
+        {
+          "date": "2025-07-26",
+          "price": 14.5
+        },
+        {
+          "date": "2026-02-07",
+          "price": 11.0
+        }
+      ],
+      "category": "Other",
+      "woolworths": {
+        "name": "Hedy's Fresh Quiche Lorraine Chilled Meal",
+        "price": 14.5,
+        "unit_price": 1.32,
+        "unit": "100G",
+        "url": "https://www.woolworths.com.au/shop/productdetails/162880/hedy-s-fresh-quiche-lorraine-chilled-meal",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/162880.jpg"
+      },
+      "coles": {
+        "name": "Hedys Quiche Lorraine | 1.1kg",
+        "price": 14.5,
+        "unit_price": 14.5,
+        "unit": "100g",
+        "url": "https://www.coles.com.au/product/hedys-quiche-lorraine-1.1kg-7388070",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7388070.jpg"
+      },
+      "cheaper_store": "equal",
+      "saving_per_item": 0.0,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2025-07-25",
+          "price": 14.5
+        },
+        {
+          "date": "2025-08-08",
+          "price": 14.5
+        },
+        {
+          "date": "2026-05-29",
+          "price": 14.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 14.5
+        },
+        {
+          "date": "2026-06-08",
+          "price": 14.5
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 14.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 14.5
+        },
+        {
+          "date": "2026-06-08",
+          "price": 14.5
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 1.32,
+      "per_100_coles": 1.32,
+      "per_100_unit": "100g"
+    },
+    {
       "list_item": "Hellmann's Real Mayonnaise Squeeze",
-      "last_scraped": "2026-06-13T06:13:54.900888+00:00",
+      "last_scraped": "2026-06-14T03:23:13.523253+00:00",
       "trip_count": 4,
       "price_history": [
         {
           "date": "2025-06-06",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2026-03-10",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2026-04-02",
-          "price": 8
+          "price": 8.0
         },
         {
           "date": "2026-05-06",
-          "price": 8
+          "price": 8.0
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Hellmann's Real Mayonnaise Squeeze",
-        "price": 8,
-        "unit_price": 2,
+        "price": 8.0,
+        "unit_price": 2.0,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/529030/hellmann-s-real-mayonnaise-squeeze",
         "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/529030.jpg"
@@ -8149,18 +8149,8 @@
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 4,
-      "alternatives": [
-        {
-          "name": "Hellmann's Squeeze Real Mayonnaise | 400g",
-          "price": 4,
-          "unit_price": 1,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/hellmann's-squeeze-real-mayonnaise-400g-3025755",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3025755.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "saving_per_item": 4.0,
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2025-07-31",
@@ -8209,32 +8199,32 @@
           "price": 8
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
-      "per_100_ww": 2,
-      "per_100_coles": 1,
+      "per_100_ww": 2.0,
+      "per_100_coles": 1.0,
       "per_100_unit": "100g"
     },
     {
       "list_item": "Katoomba Ingredients Red Lentils",
-      "last_scraped": "2026-06-13T06:13:59.191081+00:00",
+      "last_scraped": "2026-06-14T03:23:14.465551+00:00",
       "trip_count": 6,
       "price_history": [
         {
           "date": "2025-03-17",
-          "price": 3
+          "price": 3.0
         },
         {
           "date": "2025-04-14",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2025-04-25",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2025-07-26",
-          "price": 4
+          "price": 4.0
         },
         {
           "date": "2026-03-10",
@@ -8242,13 +8232,13 @@
         },
         {
           "date": "2026-05-06",
-          "price": 4
+          "price": 4.0
         }
       ],
       "category": "Pantry",
       "woolworths": {
         "name": "Katoomba Ingredients Red Lentils",
-        "price": 4,
+        "price": 4.0,
         "unit_price": 0.4,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/753947/katoomba-ingredients-red-lentils",
@@ -8263,7 +8253,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4683608.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -8309,7 +8299,7 @@
           "price": 4
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.4,
       "per_100_coles": 0.4,
@@ -8317,7 +8307,7 @@
     },
     {
       "list_item": "KitKat Milk Chocolate Mini Bars Share Pack",
-      "last_scraped": "2026-06-13T06:14:00.022709+00:00",
+      "last_scraped": "2026-06-14T03:23:16.912791+00:00",
       "trip_count": 4,
       "price_history": [
         {
@@ -8340,7 +8330,7 @@
       "category": "Sweets",
       "woolworths": {
         "name": "KitKat Milk Chocolate Mini Bars Share Pack",
-        "price": 8,
+        "price": 8.0,
         "unit_price": 3.17,
         "unit": "100G",
         "url": "https://www.woolworths.com.au/shop/productdetails/347540/kitkat-milk-chocolate-mini-bars-share-pack",
@@ -8355,27 +8345,8 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7018864.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
-      "alternatives": [
-        {
-          "name": "KitKat Packed With Milo Milk Chocolate Block | 165g",
-          "price": 3.75,
-          "unit_price": 2.27,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/kitkat-packed-with-milo-milk-chocolate-block-165g-5389720",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5389720.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "KitKat Milk Chocolate Block | 160g",
-          "price": 3.75,
-          "unit_price": 2.34,
-          "unit": "100g",
-          "url": "https://www.coles.com.au/product/kitkat-milk-chocolate-block-160g-5872479",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5872479.jpg",
-          "retailer": "coles"
-        }
-      ],
+      "saving_per_item": 0.0,
+      "alternatives": [],
       "ww_price_history": [
         {
           "date": "2025-08-08",
@@ -8428,7 +8399,7 @@
           "price": 8
         }
       ],
-      "match_confidence": "medium",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 3.17,
       "per_100_coles": 3.17,
@@ -16010,9 +15981,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 60,
+    "done": 65,
     "total": 145,
     "started_at": "2026-06-14T03:20:12.978037+00:00",
-    "current_item": "Essentials White Vinegar"
+    "current_item": "KitKat Milk Chocolate Mini Bars Share Pack"
   }
 }
