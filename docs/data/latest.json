@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-14T03:21:47.401351+00:00",
+  "last_updated": "2026-06-14T03:22:00.301594+00:00",
   "trigger": "manual",
   "items": [
     {
@@ -3927,7 +3927,7 @@
     },
     {
       "list_item": "Truss Tomatoes",
-      "last_scraped": "2026-06-13T06:12:01.975218+00:00",
+      "last_scraped": "2026-06-14T03:21:50.842863+00:00",
       "trip_count": 35,
       "price_history": [
         {
@@ -4196,7 +4196,7 @@
           "price": 1.1
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": 0.85,
@@ -4204,7 +4204,7 @@
     },
     {
       "list_item": "Woolworths 12 Extra Large Free Range Eggs",
-      "last_scraped": "2026-06-13T06:12:07.292879+00:00",
+      "last_scraped": "2026-06-14T03:21:53.731349+00:00",
       "trip_count": 9,
       "price_history": [
         {
@@ -4301,7 +4301,7 @@
           "price": 6.4
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.93,
       "per_100_coles": 1.06,
@@ -4309,7 +4309,7 @@
     },
     {
       "list_item": "Woolworths BBQ Lamb Kebabs With Mint & Honey",
-      "last_scraped": "2026-06-13T06:12:12.725245+00:00",
+      "last_scraped": "2026-06-14T03:21:57.727172+00:00",
       "trip_count": 7,
       "price_history": [
         {
@@ -4360,7 +4360,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3900020.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -4406,7 +4406,7 @@
           "price": 8.5
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.89,
       "per_100_coles": 1.89,
@@ -4414,7 +4414,7 @@
     },
     {
       "list_item": "Woolworths Baby Leaf Spinach",
-      "last_scraped": "2026-06-13T06:12:16.114071+00:00",
+      "last_scraped": "2026-06-14T03:21:59.527881+00:00",
       "trip_count": 8,
       "price_history": [
         {
@@ -4469,7 +4469,7 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1499340.jpg"
       },
       "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "saving_per_item": 0.0,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -4515,10 +4515,122 @@
           "price": 3.3
         }
       ],
-      "match_confidence": "high",
+      "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 2.75,
       "per_100_coles": 2.75,
+      "per_100_unit": "100g"
+    },
+    {
+      "list_item": "Woolworths Beef Porterhouse Steak & Butter",
+      "last_scraped": "2026-06-14T03:22:00.296098+00:00",
+      "trip_count": 9,
+      "price_history": [
+        {
+          "date": "2024-12-09",
+          "price": 15.0
+        },
+        {
+          "date": "2025-02-02",
+          "price": 15.5
+        },
+        {
+          "date": "2025-04-05",
+          "price": 16.0
+        },
+        {
+          "date": "2025-05-12",
+          "price": 16.0
+        },
+        {
+          "date": "2025-06-06",
+          "price": 16.0
+        },
+        {
+          "date": "2026-02-03",
+          "price": 15.2
+        },
+        {
+          "date": "2026-03-10",
+          "price": 18.0
+        },
+        {
+          "date": "2026-04-02",
+          "price": 18.0
+        },
+        {
+          "date": "2026-05-06",
+          "price": 15.0
+        }
+      ],
+      "category": "Meat & Seafood",
+      "woolworths": {
+        "name": "Woolworths Beef Porterhouse Steak & Butter",
+        "price": 18.0,
+        "unit_price": 45.0,
+        "unit": "1KG",
+        "url": "https://www.woolworths.com.au/shop/productdetails/243050/woolworths-beef-porterhouse-steak-butter",
+        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/243050.jpg"
+      },
+      "coles": {
+        "name": "Coles No Added Hormone Beef Porterhouse Steak 2 Pack | 450g",
+        "price": 20.5,
+        "unit_price": 20.5,
+        "unit": "1kg",
+        "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-porterhouse-steak-2-pack-450g-4997140",
+        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4997140.jpg"
+      },
+      "cheaper_store": "woolworths",
+      "saving_per_item": 2.5,
+      "alternatives": [],
+      "ww_price_history": [
+        {
+          "date": "2026-05-04",
+          "price": 15
+        },
+        {
+          "date": "2026-05-29",
+          "price": 18
+        },
+        {
+          "date": "2026-06-01",
+          "price": 18
+        },
+        {
+          "date": "2026-06-04",
+          "price": 18
+        },
+        {
+          "date": "2026-06-08",
+          "price": 18
+        }
+      ],
+      "coles_price_history": [
+        {
+          "date": "2026-05-29",
+          "price": 20.5
+        },
+        {
+          "date": "2026-05-30",
+          "price": 20.5
+        },
+        {
+          "date": "2026-06-01",
+          "price": 20.5
+        },
+        {
+          "date": "2026-06-04",
+          "price": 18
+        },
+        {
+          "date": "2026-06-11",
+          "price": 18
+        }
+      ],
+      "match_confidence": "low",
+      "size_warning": false,
+      "per_100_ww": 4.5,
+      "per_100_coles": 4.56,
       "per_100_unit": "100g"
     },
     {
@@ -4678,146 +4790,6 @@
       "size_warning": false,
       "per_100_ww": null,
       "per_100_coles": null,
-      "per_100_unit": "100g"
-    },
-    {
-      "list_item": "Woolworths Beef Porterhouse Steak & Butter",
-      "last_scraped": "2026-06-13T06:12:24.112439+00:00",
-      "trip_count": 9,
-      "price_history": [
-        {
-          "date": "2024-12-09",
-          "price": 15
-        },
-        {
-          "date": "2025-02-02",
-          "price": 15.5
-        },
-        {
-          "date": "2025-04-05",
-          "price": 16
-        },
-        {
-          "date": "2025-05-12",
-          "price": 16
-        },
-        {
-          "date": "2025-06-06",
-          "price": 16
-        },
-        {
-          "date": "2026-02-03",
-          "price": 15.2
-        },
-        {
-          "date": "2026-03-10",
-          "price": 18
-        },
-        {
-          "date": "2026-04-02",
-          "price": 18
-        },
-        {
-          "date": "2026-05-06",
-          "price": 15
-        }
-      ],
-      "category": "Meat & Seafood",
-      "woolworths": {
-        "name": "Woolworths Beef Porterhouse Steak & Butter",
-        "price": 18,
-        "unit_price": 45,
-        "unit": "1KG",
-        "url": "https://www.woolworths.com.au/shop/productdetails/243050/woolworths-beef-porterhouse-steak-butter",
-        "image_url": "https://cdn0.woolworths.media/content/wowproductimages/large/243050.jpg"
-      },
-      "coles": {
-        "name": "Coles No Added Hormone Beef Porterhouse Steak 2 Pack | 450g",
-        "price": 20.5,
-        "unit_price": 20.5,
-        "unit": "1kg",
-        "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-porterhouse-steak-2-pack-450g-4997140",
-        "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4997140.jpg"
-      },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 2.5,
-      "alternatives": [
-        {
-          "name": "Coles Pork Scotch Steak With Rosemary & Honey Butter | 280g",
-          "price": 8,
-          "unit_price": 8,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-pork-scotch-steak-with-rosemary-and-honey-butter-280g-5886429",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/5/5886429.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles Beef Scotch Steak With Bearnaise Butter | 265g",
-          "price": 13,
-          "unit_price": 13,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-beef-scotch-steak-with-bearnaise-butter-265g-6641427",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6641427.jpg",
-          "retailer": "coles"
-        },
-        {
-          "name": "Coles No Added Hormone Beef Quick Cook Porterhouse Steak | 180g",
-          "price": 9,
-          "unit_price": 15,
-          "unit": "1kg",
-          "url": "https://www.coles.com.au/product/coles-no-added-hormone-beef-quick-cook-porterhouse-steak-180g-3293583",
-          "image_url": "https://cdn.productimages.coles.com.au/productimages/3/3293583.jpg",
-          "retailer": "coles"
-        }
-      ],
-      "ww_price_history": [
-        {
-          "date": "2026-05-04",
-          "price": 15
-        },
-        {
-          "date": "2026-05-29",
-          "price": 18
-        },
-        {
-          "date": "2026-06-01",
-          "price": 18
-        },
-        {
-          "date": "2026-06-04",
-          "price": 18
-        },
-        {
-          "date": "2026-06-08",
-          "price": 18
-        }
-      ],
-      "coles_price_history": [
-        {
-          "date": "2026-05-29",
-          "price": 20.5
-        },
-        {
-          "date": "2026-05-30",
-          "price": 20.5
-        },
-        {
-          "date": "2026-06-01",
-          "price": 20.5
-        },
-        {
-          "date": "2026-06-04",
-          "price": 18
-        },
-        {
-          "date": "2026-06-11",
-          "price": 18
-        }
-      ],
-      "match_confidence": "medium",
-      "size_warning": false,
-      "per_100_ww": 4.5,
-      "per_100_coles": 4.56,
       "per_100_unit": "100g"
     },
     {
@@ -16197,9 +16169,9 @@
     "items_not_found": 0
   },
   "scrape_progress": {
-    "done": 25,
+    "done": 30,
     "total": 145,
     "started_at": "2026-06-14T03:20:12.978037+00:00",
-    "current_item": "Weet-Bix Little Kids Breakfast Cereal"
+    "current_item": "Woolworths Beef Porterhouse Steak & Butter"
   }
 }
