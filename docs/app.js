@@ -1917,13 +1917,12 @@ function initPriorityFilter() {
           btn.classList.add('active');
           $('hotFilterBtn')?.classList.remove('active');
         }
-        const _cycleBtn = $('storeCycleBtn'); if (_cycleBtn) _cycleBtn.style.display = 'none';
-        _storeFilter = 'all'; _updateStoreCycleBtn();
+        _storeFilter = 'all';
         const scrapeArchBtn = $('scrapeArchivedBtn');
         if (scrapeArchBtn) scrapeArchBtn.style.display = _activePriority === 'archive' ? 'inline-flex' : 'none';
         // Keep the mobile frequency dropdown in sync with the active frequency.
         const fs = $('freqSelect');
-        if (fs && ['all', 'weekly', 'monthly', 'rare'].includes(_activePriority)) fs.value = _activePriority;
+        if (fs && ['all', 'weekly', 'monthly', 'rare', 'archive'].includes(_activePriority)) fs.value = _activePriority;
         // Search is intentionally preserved across priority/category tab switches
       }
       if (_lastData) renderPage(_lastData);
@@ -1933,7 +1932,7 @@ function initPriorityFilter() {
   // Mobile frequency dropdown — drives the same logic by clicking the hidden pill.
   const freqSelect = $('freqSelect');
   if (freqSelect) {
-    freqSelect.value = ['all', 'weekly', 'monthly', 'rare'].includes(_activePriority) ? _activePriority : 'weekly';
+    freqSelect.value = ['all', 'weekly', 'monthly', 'rare', 'archive'].includes(_activePriority) ? _activePriority : 'weekly';
     freqSelect.addEventListener('change', () => {
       container.querySelector(`.priority-pill[data-priority="${freqSelect.value}"]`)?.click();
     });
@@ -1954,6 +1953,16 @@ function initPriorityFilter() {
 
   const mobileHotBtn = $('mobileHotBtn');
   if (mobileHotBtn) mobileHotBtn.addEventListener('click', _toggleHotDeals);
+
+  // Mobile watchlist header icon — drives the (hidden-on-mobile) watchlist pill,
+  // which already toggles itself off when re-clicked.
+  const mobileWatchBtn = $('mobileWatchBtn');
+  if (mobileWatchBtn) {
+    mobileWatchBtn.addEventListener('click', () => {
+      container.querySelector('.watchlist-pill')?.click();
+      mobileWatchBtn.classList.toggle('active', _activePriority === 'watchlist');
+    });
+  }
 
   const cycleBtn = $('storeCycleBtn');
   if (cycleBtn) {
@@ -2750,6 +2759,12 @@ function sortItems(items) {
       const coP = item.coles?.price;
       if (!(wwP != null && wwP > 0 && coP != null && coP > 0)) return false;
     }
+    // Hide items priced at neither store by default — they're noise in the main
+    // list (the footer's coverage count still reports how many are missing).
+    // Single-store items stay visible since one price is still useful. The
+    // archive view is exempt so archived-but-unpriced items remain reachable.
+    if (_activePriority !== 'archive' &&
+        item.woolworths?.price == null && item.coles?.price == null) return false;
     return true;
   });
 
@@ -3216,6 +3231,10 @@ function renderPage(data) {
   }
 
   if (daysSince(data.last_updated) > STALE_DATA_DAYS) $('staleBanner').classList.add('visible');
+
+  // Keep the mobile header filter icons (🔥 / 👁) in sync with current state
+  $('mobileHotBtn')?.classList.toggle('active', _showHotOnly);
+  $('mobileWatchBtn')?.classList.toggle('active', _activePriority === 'watchlist');
 
   // Always compute banner stats client-side so savings are units-weighted
   const s = computeBannerStats(data.items);

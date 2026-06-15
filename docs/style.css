@@ -64,7 +64,7 @@ header {
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
   box-shadow: var(--shadow-sm);
 }
 .header-inner {
@@ -1196,9 +1196,10 @@ nav a[href="hot-deals.html"] svg,
   color: var(--text);
 }
 
-/* Mobile-only Hot Deals header button */
-.mobile-hot-btn { display: none; }
-.mobile-hot-btn.active { color: #f97316; }
+/* Mobile-only Hot Deals + Watchlist header buttons */
+.mobile-hot-btn, .mobile-watch-btn { display: none; }
+.mobile-hot-btn.active   { color: #f97316; }
+.mobile-watch-btn.active  { color: #0ea5e9; }
 
 /* ── Priority column dropdown ────────────────────────────────── */
 .priority-select {
@@ -1798,8 +1799,8 @@ td.priority-cell { text-align: center; }
   /* Hide desktop-only controls */
   .col-chooser-wrap, .view-toggle-btn { display: none !important; }
 
-  /* Show mobile-only header button */
-  .mobile-hot-btn { display: inline-flex; }
+  /* Show mobile-only header buttons */
+  .mobile-hot-btn, .mobile-watch-btn { display: inline-flex; }
 
   /* ── Search bar ─────────────────────────────────────────────── */
   .search-wrap {
@@ -1948,7 +1949,7 @@ td.priority-cell { text-align: center; }
   /* Toolbar: sort chips (left) + view toggle (right) */
   .mc-toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
   .mc-sort-chips {
-    display: flex; gap: 6px; flex: 1;
+    display: flex; gap: 6px; flex: 1; min-width: 0;
     overflow-x: auto; -webkit-overflow-scrolling: touch;
   }
   .mc-sort-chips::-webkit-scrollbar { display: none; }
@@ -1971,6 +1972,10 @@ td.priority-cell { text-align: center; }
     width: 38px; height: 34px; border-radius: 9px;
     border: 1px solid #BBD8C7; background: #EAF6EF; color: var(--ww);
     cursor: pointer;
+    flex-shrink: 0;            /* never let the sort chips squeeze it off-screen */
+    margin-left: 2px;
+    padding-left: 8px;
+    border-left-width: 1px;
   }
   #mcViewToggle:active { background: #D8EEE1; }
 
@@ -2115,6 +2120,15 @@ tbody tr:hover            td.item-name { background: #FAFBFD; }
 
   /* Frequency → dropdown; everything else → one horizontal-scroll row */
   .priority-filter { flex-direction: column; align-items: stretch; gap: 10px; }
+  /* Pills row is empty on mobile — all filters live in the header / dropdown / sort row.
+     🔥 + 👁 are header icons, Archived is in the Weekly ▾ dropdown, and unpriced
+     items are hidden by default so the "Priced only" toggle is unnecessary here. */
+  .priority-pill.fire-pill,
+  .priority-pill.archive-pill,
+  .priority-pill.watchlist-pill,
+  .prices-only-btn { display: none; }
+  /* Store cycle button only ever filtered Hot Deals — dropped from mobile entirely */
+  .store-cycle-btn { display: none !important; }
   .freq-select {
     display: inline-block; align-self: flex-start;
     padding: 8px 30px 8px 14px; border-radius: 20px;
