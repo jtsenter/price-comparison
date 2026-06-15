@@ -3004,7 +3004,7 @@ function renderMobileCards(items, data) {
   const CHIPS = [
     { mode: 'az',      label: 'A–Z'      },
     { mode: 'savings', label: 'Savings'  },
-    { mode: 'trend',   label: 'Best deal'},
+    { mode: 'trend',   label: 'Trend'},
   ];
   CHIPS.forEach(({ mode, label }) => {
     const chip = document.createElement('button');
