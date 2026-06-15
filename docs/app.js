@@ -222,7 +222,7 @@ function saveWatchlistLocal(set) {
 }
 async function persistWatchlistToRepo(names) {
   const s = loadSettings();
-  if (!s.user || !s.repo || !s.token) return;
+  if (!s.token) return;
   const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/watchlist.json`;
   const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
   const content = btoa(JSON.stringify(names, null, 2) + '\n');
@@ -257,7 +257,7 @@ function toggleWatchlist(itemName) {
 
 async function persistLatestJson(data, message = 'chore: update latest.json') {
   const s = loadSettings();
-  if (!s.user || !s.repo || !s.token) return;
+  if (!s.token) return;
   const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/latest.json`;
   const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
   const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2) + '\n')));
@@ -858,8 +858,8 @@ function initTooltip() {
 
 async function triggerItemRefresh(itemName, btn, urlOverrides) {
   const s = loadSettings();
-  if (!s.user || !s.repo || !s.token) {
-    alert('Please configure Auto-update Setup first (button in the top-right).');
+  if (!s.token) {
+    alert('Please add your GitHub token first (⚙ Auto-update Setup button).');
     return;
   }
 
@@ -1026,8 +1026,8 @@ async function retryRunnerCheck() {
 
 function loadSettings() {
   return {
-    user: localStorage.getItem('gh_user') || '',
-    repo: localStorage.getItem('gh_repo') || '',
+    user:  localStorage.getItem('gh_user')  || 'jtsenter',
+    repo:  localStorage.getItem('gh_repo')  || 'price-comparison',
     token: localStorage.getItem('gh_token') || '',
   };
 }
@@ -1832,7 +1832,7 @@ async function doDiffItemAdd(newName, ctx) {
   if (_lastData) renderPage(_lastData);
 
   // Step 4: single-item scrape
-  if (!s.user || !s.repo || !s.token) {
+  if (!s.token) {
     showToast(`✓ "${newName}" saved locally — configure GitHub settings to scrape prices`);
     return;
   }
@@ -2006,7 +2006,7 @@ function initSelectedPill() {
 let _archiveSyncTimer = null;
 async function syncArchivedToGitHub() {
   const s = loadSettings();
-  if (!s.user || !s.repo || !s.token) return;
+  if (!s.token) return;
   if (_archivedSaving) return;
   const pr = loadPriorities();
   const archivedNames = Object.keys(pr).filter(k => pr[k] === 'archive');
@@ -2479,8 +2479,8 @@ let refreshCooldown = false;
 
 async function triggerRefresh() {
   const s = loadSettings();
-  if (!s.user || !s.repo || !s.token) {
-    alert('Please configure your GitHub settings first (⚙ Auto-update Setup button).');
+  if (!s.token) {
+    alert('Please add your GitHub token first (⚙ Auto-update Setup button).');
     return;
   }
   if (refreshCooldown) return;
@@ -2655,7 +2655,7 @@ async function loadData() {
 // Authenticated request avoids CDN caching delays that affect raw.githubusercontent.com.
 async function loadProgressData() {
   const s = loadSettings();
-  if (!s.user || !s.repo || !s.token) return null;
+  if (!s.token) return null;
   try {
     const res = await fetch(
       `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/latest.json?ref=scrape-progress&t=${Date.now()}`,
@@ -3886,7 +3886,7 @@ async function processUploadFile(file) {
 async function writeNewItemToExcel(itemName) {
   if (!window.XLSX) throw new Error('SheetJS not loaded');
   const s = loadSettings();
-  if (!s.user || !s.repo || !s.token) throw new Error('GitHub settings not configured');
+  if (!s.token) throw new Error('GitHub settings not configured');
 
   // GET current file + SHA
   const getRes = await fetch(
@@ -3950,8 +3950,8 @@ async function writeNewItemToExcel(itemName) {
 async function addItemsToShoppingList(newItems) {
   if (!window.XLSX) { alert('SheetJS not loaded.'); return; }
   const s = loadSettings();
-  if (!s.user || !s.repo || !s.token) {
-    alert('Please configure GitHub settings (Auto-update Setup) first.');
+  if (!s.token) {
+    alert('Please add your GitHub token first (⚙ Auto-update Setup button).');
     return;
   }
 
@@ -4493,7 +4493,7 @@ async function boot() {
   // Scrape Archived button — persists archived list to GitHub then dispatches workflow
   $('scrapeArchivedBtn')?.addEventListener('click', async () => {
     const s = loadSettings();
-    if (!s.user || !s.repo || !s.token) {
+    if (!s.token) {
       alert('Please configure Auto-update Setup first.');
       return;
     }
@@ -4623,8 +4623,8 @@ async function boot() {
   // ── Sync URL overrides → GitHub ───────────────────────────────
   $('syncOverridesBtn')?.addEventListener('click', async () => {
     const s = loadSettings();
-    if (!s.user || !s.repo || !s.token) {
-      alert('Please save your GitHub settings first.');
+    if (!s.token) {
+      alert('Please add your GitHub token first (⚙ Auto-update Setup button).');
       return;
     }
     const overrides = loadOverrides();
