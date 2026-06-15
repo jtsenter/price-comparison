@@ -22,7 +22,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=15" />
+  <link rel="stylesheet" href="style.css?v=16" />
 </head>
 <body>
 
@@ -94,6 +94,9 @@
         </button>
         <div id="colChooserDropdown" class="col-chooser-dropdown" style="display:none"></div>
       </div>
+      <button class="btn btn-ghost btn-icon mobile-hot-btn" id="mobileHotBtn" title="Hot Deals">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg>
+      </button>
       <button class="btn btn-primary" id="refreshBtn">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
         Update
@@ -205,11 +208,7 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
       Refresh Archived
     </button>
-    <div class="store-filter" id="storeFilter" style="display:none">
-      <button class="store-filter-btn active" data-store="all">All Stores</button>
-      <button class="store-filter-btn" data-store="woolworths"><span class="store-chip ww sm">W</span> WW</button>
-      <button class="store-filter-btn" data-store="coles"><span class="store-chip coles sm">C</span> Coles</button>
-    </div>
+    <button class="priority-pill store-cycle-btn" id="storeCycleBtn" style="display:none">All stores</button>
   </div>
 
   <!-- Category filter tabs -->
@@ -458,9 +457,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-<script src="name_map.js?v=15"></script>
-<script src="utils.js?v=15"></script>
-<script src="app.js?v=15"></script>
+<script src="name_map.js?v=16"></script>
+<script src="utils.js?v=16"></script>
+<script src="app.js?v=16"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">

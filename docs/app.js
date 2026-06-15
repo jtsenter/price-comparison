@@ -519,6 +519,18 @@ let _activePriority = 'weekly';
 let _showHotOnly = false;
 let _storeFilter = 'all';
 let _showPricesOnly = false;
+
+function _updateStoreCycleBtn() {
+  const btn = $('storeCycleBtn');
+  if (!btn) return;
+  const faces = {
+    all:         'All stores',
+    woolworths:  '<span class="store-chip ww sm">W</span> only',
+    coles:       '<span class="store-chip coles sm">C</span> only',
+  };
+  btn.innerHTML = faces[_storeFilter] || faces.all;
+  btn.classList.toggle('active', _storeFilter !== 'all');
+}
 let _searchQuery = '';
 let _watchlist = new Set(); // loaded on boot from localStorage + watchlist.json
 let _approvedWarns = new Set(); // loaded from approved_warns.json
@@ -1905,7 +1917,8 @@ function initPriorityFilter() {
           btn.classList.add('active');
           $('hotFilterBtn')?.classList.remove('active');
         }
-        $('storeFilter').style.display = 'none';
+        const _cycleBtn = $('storeCycleBtn'); if (_cycleBtn) _cycleBtn.style.display = 'none';
+        _storeFilter = 'all'; _updateStoreCycleBtn();
         const scrapeArchBtn = $('scrapeArchivedBtn');
         if (scrapeArchBtn) scrapeArchBtn.style.display = _activePriority === 'archive' ? 'inline-flex' : 'none';
         // Keep the mobile frequency dropdown in sync with the active frequency.
@@ -1926,26 +1939,29 @@ function initPriorityFilter() {
     });
   }
 
-  const hotBtn = $('hotFilterBtn');
-  if (hotBtn) {
-    hotBtn.addEventListener('click', () => {
-      _showHotOnly = !_showHotOnly;
-      hotBtn.classList.toggle('active', _showHotOnly);
-      $('storeFilter').style.display = _showHotOnly ? 'flex' : 'none';
-      if (!_showHotOnly) _storeFilter = 'all';
-      if (_lastData) renderPage(_lastData);
-    });
+  function _toggleHotDeals() {
+    _showHotOnly = !_showHotOnly;
+    $('hotFilterBtn')?.classList.toggle('active', _showHotOnly);
+    $('mobileHotBtn')?.classList.toggle('active', _showHotOnly);
+    const cycleBtn = $('storeCycleBtn');
+    if (cycleBtn) cycleBtn.style.display = _showHotOnly ? 'inline-flex' : 'none';
+    if (!_showHotOnly) { _storeFilter = 'all'; _updateStoreCycleBtn(); }
+    if (_lastData) renderPage(_lastData);
   }
 
-  const storeFilter = $('storeFilter');
-  if (storeFilter) {
-    storeFilter.querySelectorAll('.store-filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        _storeFilter = btn.dataset.store;
-        storeFilter.querySelectorAll('.store-filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        if (_lastData) renderPage(_lastData);
-      });
+  const hotBtn = $('hotFilterBtn');
+  if (hotBtn) hotBtn.addEventListener('click', _toggleHotDeals);
+
+  const mobileHotBtn = $('mobileHotBtn');
+  if (mobileHotBtn) mobileHotBtn.addEventListener('click', _toggleHotDeals);
+
+  const cycleBtn = $('storeCycleBtn');
+  if (cycleBtn) {
+    cycleBtn.addEventListener('click', () => {
+      const order = ['all', 'woolworths', 'coles'];
+      _storeFilter = order[(order.indexOf(_storeFilter) + 1) % order.length];
+      _updateStoreCycleBtn();
+      if (_lastData) renderPage(_lastData);
     });
   }
 }
@@ -3648,28 +3664,21 @@ function renderPage(data) {
     if (priceChanged && _pendingRefreshItem === item.list_item) _pendingRefreshItem = null;
   });
 
-  // Tfoot — dynamic to match column order
-  // Single pass over sorted visible rows: base totals (qty=1) for the price columns,
-  // qty-adjusted totals for the total columns, and per-item savings for the savings cell.
-  let _fWWBase = 0, _fCoBase = 0, _fWWQty = 0, _fCoQty = 0, _fSaving = 0;
-  let _fWWAvail = false, _fCoAvail = false;
+  // Tfoot — use the same banner stats so the desktop footer and mobile banner
+  // always show identical basket totals (qty-weighted, items with both prices).
+  const footWWBase   = s.total_woolworths;
+  const footCoBase   = s.total_coles;
+  const _fWWAvail    = s.ww_data_available;
+  const _fCoAvail    = s.items_compared > 0;
+  const footerSaving = s.total_saving;
+  // ww_total / coles_total columns include all visible items, qty-weighted
+  let _fWWQty = 0, _fCoQty = 0;
   for (const item of sorted) {
-    const wwP = item.woolworths?.price ?? 0;
-    const coP = item.coles?.price ?? 0;
-    const qty = getUnits(item.list_item);
-    if (item.woolworths?.price != null) _fWWAvail = true;
-    if (item.coles?.price    != null)   _fCoAvail = true;
-    _fWWBase += wwP;
-    _fCoBase += coP;
-    _fWWQty  += wwP * qty;
-    _fCoQty  += coP * qty;
-    _fSaving += (savingAmount(item) ?? 0) * qty;
+    _fWWQty += (item.woolworths?.price ?? 0) * getUnits(item.list_item);
+    _fCoQty += (item.coles?.price    ?? 0) * getUnits(item.list_item);
   }
-  const footWWBase   = Math.round(_fWWBase  * 100) / 100;
-  const footCoBase   = Math.round(_fCoBase  * 100) / 100;
-  const footWWQty    = Math.round(_fWWQty   * 100) / 100;
-  const footCoQty    = Math.round(_fCoQty   * 100) / 100;
-  const footerSaving = Math.round(_fSaving  * 100) / 100;
+  const footWWQty  = Math.round(_fWWQty * 100) / 100;
+  const footCoQty  = Math.round(_fCoQty * 100) / 100;
 
   const tfootRow = document.querySelector('tfoot tr');
   if (tfootRow) {
