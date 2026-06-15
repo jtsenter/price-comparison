@@ -2230,7 +2230,12 @@ function buildCategoryTabs(items) {
   ];
   const cats = ['All', ...ordered];
 
+  // The frequency dropdown leads the category row on mobile (one row instead of
+  // two). Hold a reference across the innerHTML reset, then re-insert it first.
+  // It's display:none on desktop, so living here is harmless there.
+  const freqSel = $('freqSelect');
   container.innerHTML = '';
+  if (freqSel) container.appendChild(freqSel);
   cats.forEach(cat => {
     const btn = document.createElement('button');
     btn.className = `category-tab${cat === _activeCategory ? ' active' : ''}`;

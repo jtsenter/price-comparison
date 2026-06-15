@@ -1196,10 +1196,14 @@ nav a[href="hot-deals.html"] svg,
   color: var(--text);
 }
 
-/* Mobile-only Hot Deals + Watchlist header buttons */
+/* Mobile-only Hot Deals + Watchlist header buttons — icons are coloured at rest
+   (orange flame, blue eye) to match the desktop pills; the button fills with a
+   tint when the filter is active so the toggled state reads clearly. */
 .mobile-hot-btn, .mobile-watch-btn { display: none; }
-.mobile-hot-btn.active   { color: #f97316; }
-.mobile-watch-btn.active  { color: #0ea5e9; }
+.mobile-hot-btn svg   { color: #e0533a; }
+.mobile-watch-btn svg { color: #0ea5e9; }
+.mobile-hot-btn.active   { background: #fdece7; border-color: #e0533a; }
+.mobile-watch-btn.active { background: #e6f4fb; border-color: #0ea5e9; }
 
 /* ── Priority column dropdown ────────────────────────────────── */
 .priority-select {
@@ -1973,9 +1977,7 @@ td.priority-cell { text-align: center; }
     border: 1px solid #BBD8C7; background: #EAF6EF; color: var(--ww);
     cursor: pointer;
     flex-shrink: 0;            /* never let the sort chips squeeze it off-screen */
-    margin-left: 2px;
-    padding-left: 8px;
-    border-left-width: 1px;
+    margin-left: 6px;          /* small gap from the chips; icon stays centred */
   }
   #mcViewToggle:active { background: #D8EEE1; }
 
@@ -2118,8 +2120,10 @@ tbody tr:hover            td.item-name { background: #FAFBFD; }
   .dm-watch         { min-width: 44px; min-height: 44px; }
   .store-filter-btn { padding: 7px 12px; min-height: 36px; font-size: 13px; }
 
-  /* Frequency → dropdown; everything else → one horizontal-scroll row */
-  .priority-filter { flex-direction: column; align-items: stretch; gap: 10px; }
+  /* The frequency dropdown is relocated into the category row by buildCategoryTabs,
+     and every other control here is hidden on mobile — so this row collapses to
+     nothing (the Refresh Archived button is the only thing that can re-expand it). */
+  .priority-filter { flex-direction: column; align-items: stretch; gap: 0; padding: 0; }
   /* Pills row is empty on mobile — all filters live in the header / dropdown / sort row.
      🔥 + 👁 are header icons, Archived is in the Weekly ▾ dropdown, and unpriced
      items are hidden by default so the "Priced only" toggle is unnecessary here. */
@@ -2129,14 +2133,15 @@ tbody tr:hover            td.item-name { background: #FAFBFD; }
   .prices-only-btn { display: none; }
   /* Store cycle button only ever filtered Hot Deals — dropped from mobile entirely */
   .store-cycle-btn { display: none !important; }
+  /* Frequency dropdown now lives as the first chip in the category row */
   .freq-select {
-    display: inline-block; align-self: flex-start;
-    padding: 8px 30px 8px 14px; border-radius: 20px;
-    border: 1px solid var(--border); background: var(--surface);
-    color: var(--text); font-size: 14px; font-weight: 700; min-height: 38px;
+    display: inline-block; flex-shrink: 0;
+    padding: 7px 28px 7px 14px; border-radius: 20px;
+    border: 1px solid var(--border-strong); background: var(--surface);
+    color: var(--text); font-size: 13px; font-weight: 700; min-height: 36px;
     appearance: none; -webkit-appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='3'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 12px center;
+    background-repeat: no-repeat; background-position: right 10px center;
   }
   .priority-pill.freq-pill { display: none; }
   .priority-filter .filter-separator { display: none; }
