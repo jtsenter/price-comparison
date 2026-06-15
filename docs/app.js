@@ -3250,6 +3250,16 @@ function renderPage(data) {
   // "deals" = items matching the hot-deals page filter (price_history: all-time low or bottom 20% of range)
   const hotCount = (data.items || []).filter(i => !isUiArchived(i) && isHotDeal(i)).length;
   $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>${hotCount > 0 ? `<a href="hot-deals.html" class="hot-deals-link">🔥 ${hotCount} deal${hotCount !== 1 ? 's' : ''}</a>` : ''}`;
+  // Red dot on the Hot Deals bottom tab when there are active deals
+  const btbHotTab = document.querySelector('#bottomTabBar a[href="hot-deals.html"]');
+  if (btbHotTab) {
+    let dot = btbHotTab.querySelector('.btb-hot-dot');
+    if (hotCount > 0) {
+      if (!dot) { dot = document.createElement('span'); dot.className = 'btb-hot-dot'; btbHotTab.appendChild(dot); }
+    } else {
+      dot?.remove();
+    }
+  }
   $('banner').style.display = 'block';
   const _sw = $('searchWrap');
   if (_sw) _sw.style.display = '';

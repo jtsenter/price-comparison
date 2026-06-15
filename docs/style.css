@@ -1372,8 +1372,14 @@ td.priority-cell { text-align: center; }
   cursor: pointer; transition: background 0.1s, border-color 0.1s;
 }
 .card-btn:hover { background: var(--bg-alt); border-color: var(--text-mid); color: var(--text); }
-.hot-deals-link { color: var(--accent); font-weight: 600; text-decoration: none; }
+.hot-deals-link { color: #e05a00; font-weight: 600; text-decoration: none; }
 .hot-deals-link:hover { text-decoration: underline; }
+.btb-hot-dot {
+  position: absolute; top: 6px; right: calc(50% - 14px);
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #e05a00; border: 2px solid var(--card);
+  pointer-events: none;
+}
 .view-toggle-btn.view-active { background: var(--bg-alt); border-color: var(--text-mid); }
 
 /* ── Row checkbox ────────────────────────────────────────────── */
@@ -2019,7 +2025,7 @@ tbody tr:hover            td.item-name { background: #FAFBFD; }
     gap: 2px; text-decoration: none; color: var(--text-soft);
     font-size: 10px; font-weight: 600; letter-spacing: .03em;
     padding: 5px 0; -webkit-tap-highlight-color: transparent;
-    transition: color 0.12s;
+    transition: color 0.12s; position: relative;
   }
   .btb-tab.active { color: var(--ww); }
   .btb-tab svg { flex-shrink: 0; }

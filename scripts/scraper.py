@@ -1654,6 +1654,19 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             else:
                 existing_approved.pop(name, None)
 
+        if trigger == "scrape_archived":
+            # Merge archived results back into the full item list so non-archived items
+            # are not lost. Fresh scraped entries replace their existing counterparts;
+            # archived items that couldn't be scraped are carried forward from existing data.
+            freshly_scraped_names = {i["list_item"] for i in items_output}
+            carry_archived = [existing_map[n] for n in not_found if n in existing_map]
+            items_output = (
+                [i for i in existing_map.values() if i["list_item"] not in freshly_scraped_names]
+                + items_output
+                + carry_archived
+            )
+            not_found = [n for n in not_found if n not in existing_map]
+
         # Merge by item name: new entries replace old ones for the same item (last scrape wins)
         merged_pv_dict = {**existing_pv, **{e["item"]: e for e in new_validation_entries}}
         # Remove items that were scraped cleanly this run (no new validation entry)
