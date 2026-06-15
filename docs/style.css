@@ -953,6 +953,7 @@ tr:hover .item-refresh-btn { opacity: 1; pointer-events: auto; }
 }
 .price-history-row:last-child { border-bottom: none; }
 .price-history-date { color: var(--text-soft); font-size: 12px; }
+.price-history-date.ph-latest-date { font-weight: 700; color: var(--text); }
 .price-history-store-cell {
   display: flex;
   align-items: center;

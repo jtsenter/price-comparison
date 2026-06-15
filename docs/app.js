@@ -703,18 +703,10 @@ function colHeadHtml(col) {
 
 // ── Price history bar ────────────────────────────────────────────────────────
 
-// Guard against bad per-kg normalization. If a pack price was quoted per-kg,
-// the stored saving_per_item used a wrong factor. Recompute from visible prices.
 function savingAmount(item) {
   const w = item.woolworths?.price, c = item.coles?.price;
   if (w == null || c == null) return item.saving_per_item ?? 0;
-  const wUnit = item.woolworths?.unit_price ?? null;
-  // Pack price quoted per-kg => stored saving used a bad factor; use visible diff
-  if (item._ww_price_factor && wUnit != null &&
-      Math.abs(wUnit - w) > Math.max(0.05, w * 0.01)) {
-    return Math.abs(w - c);
-  }
-  return item.saving_per_item ?? Math.abs(w - c);
+  return Math.abs(w - c);
 }
 
 function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
@@ -1422,11 +1414,29 @@ function openPriceHistoryModal(item) {
   const liveDate = wwScraped || coScraped || today;
   const alreadyInHistory = wwMap.has(liveDate) || coMap.has(liveDate);
   const liveEntry = !alreadyInHistory && (wwLive != null || coLive != null)
-    ? [{ date: liveDate || 'Current', ww: wwLive, coles: coLive, source: 'live' }]
+    ? [{ date: liveDate, ww: wwLive, coles: coLive, source: 'live' }]
     : [];
 
   const allEntries = [...liveEntry, ...excelEntries, ...scrapeEntries]
     .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+  // Merge same-date entries: if prices match, collapse into one row; if prices differ, keep both
+  const _dateGroups = new Map();
+  allEntries.forEach(e => {
+    const g = _dateGroups.get(e.date);
+    if (g) g.push(e); else _dateGroups.set(e.date, [e]);
+  });
+  const dedupedEntries = [];
+  _dateGroups.forEach((group, date) => {
+    if (group.length === 1) { dedupedEntries.push(group[0]); return; }
+    const wwPrices = [...new Set(group.map(e => e.ww).filter(p => p != null))];
+    const coPrices = [...new Set(group.map(e => e.coles).filter(p => p != null))];
+    if (wwPrices.length <= 1 && coPrices.length <= 1) {
+      dedupedEntries.push({ date, ww: wwPrices[0] ?? null, coles: coPrices[0] ?? null, source: group.map(e => e.source).join(',') });
+    } else {
+      group.forEach(e => dedupedEntries.push(e));
+    }
+  });
 
   const listEl = $('priceHistoryList');
   listEl.innerHTML = '';
@@ -1437,6 +1447,7 @@ function openPriceHistoryModal(item) {
     $('priceHistoryModal').classList.add('open');
     return;
   }
+  const displayEntries = dedupedEntries.length ? dedupedEntries : allEntries;
 
   // Column header
   const hdr = document.createElement('div');
@@ -1448,7 +1459,7 @@ function openPriceHistoryModal(item) {
     <span class="price-history-store-col"><span class="store-chip sm coles">C</span></span>`;
   listEl.appendChild(hdr);
 
-  allEntries.forEach(entry => {
+  displayEntries.forEach((entry, idx) => {
     const wwExcluded = isWWExcl(entry.ww);
     const coExcluded = isCoExcl(entry.coles);
     let rowClass = 'price-history-row';
@@ -1479,7 +1490,7 @@ function openPriceHistoryModal(item) {
       : `<span style="color:var(--text-soft)">—</span>`;
 
     row.innerHTML = `
-      <span class="price-history-date">${entry.date || 'Unknown date'}</span>
+      <span class="price-history-date${idx === 0 ? ' ph-latest-date' : ''}">${entry.date || 'Unknown date'}</span>
       ${wwHtml}
       ${coHtml}`;
 
