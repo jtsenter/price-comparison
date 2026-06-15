@@ -3208,7 +3208,7 @@ function renderPage(data) {
   wwCard.className    = 'store-card';
   colesCard.className = 'store-card';
 
-  if (!s.ww_data_available) {
+  if (!s.ww_data_available && s.items_compared > 0) {
     wwTotalEl.innerHTML = '<span class="unavailable">Blocked by<br>Woolworths ⚠</span>';
     $('wwBadge').innerHTML = '<span class="blocked-note">Their site blocks automated price checks</span>';
     $('colesTotal').textContent = fmt(s.total_coles);

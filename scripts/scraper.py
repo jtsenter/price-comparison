@@ -1516,6 +1516,38 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                     to_scrape.append(name)
 
             items_output.extend(fresh_items)
+
+            # Pre-populate archived items so they appear in every progress push.
+            # The final write also appends them (else: branch below), but since
+            # the scrape often stalls before completing, the last progress push
+            # becomes the permanent latest.json — archived items must be in it.
+            if trigger != "scrape_archived":
+                _arch_present = {i["list_item"] for i in items_output}
+                for _arch_name in sorted(archived_set):
+                    if _arch_name in _arch_present:
+                        continue
+                    _arch_ex = existing_map.get(_arch_name)
+                    if _arch_ex is not None:
+                        items_output.append({**_arch_ex, "archived": True})
+                    else:
+                        _arch_hist = purchase_history.get(_arch_name)
+                        if not _arch_hist:
+                            continue
+                        items_output.append({
+                            "list_item": _arch_name,
+                            "archived": True,
+                            "trip_count": _arch_hist.get("trip_count", 0),
+                            "price_history": [e for e in _arch_hist.get("price_history", [])
+                                              if e.get("date", "") not in ("", "1970-01-01", None)],
+                            "category": guess_category(_arch_name),
+                            "woolworths": None,
+                            "coles": None,
+                            "cheaper_store": None,
+                            "saving_per_item": None,
+                            "ww_price_history": [],
+                            "coles_price_history": [],
+                        })
+
             total_all = len(shopping_list)
             total_to_scrape = len(to_scrape)
             skipped = len(fresh_items)
