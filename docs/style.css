@@ -310,8 +310,28 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
   margin-bottom: 4px;
   text-align: center;
 }
+.saving-line + .saving-line { margin-top: 10px; }
+.saving-chip.max {
+  font-size: 15px;
+  padding: 5px 14px;
+  background: var(--bg-alt);
+  color: var(--green);
+  border-color: var(--border-strong);
+}
 .last-updated { font-size: 11px; color: var(--text-soft); text-align: center; }
 .last-updated span { display: block; }
+
+/* Page-foot status line (freshness · coverage · deals) */
+.page-footer { padding: 18px 16px 32px; }
+.page-footer .last-updated {
+  display: flex; flex-wrap: wrap; gap: 4px 12px;
+  align-items: center; justify-content: center;
+  font-size: 12px;
+}
+.page-footer .last-updated > * { display: inline-flex; align-items: center; }
+.page-footer .last-updated > *:not(:first-child)::before {
+  content: "·"; margin-right: 12px; color: var(--text-soft);
+}
 
 /* ── Category tabs ───────────────────────────────────────────── */
 .category-tabs {
@@ -1068,6 +1088,8 @@ th.sort-active { color: var(--text); }
   border-radius: 1px;
   flex-shrink: 0;
 }
+/* Mobile frequency dropdown — hidden on desktop (pills are used instead) */
+.freq-select { display: none; }
 
 /* ── Units column ─────────────────────────────────────────────── */
 .units-cell { text-align: center; white-space: nowrap; }
@@ -1558,6 +1580,25 @@ td.priority-cell { text-align: center; }
 .more-dropdown-item:hover { background: var(--bg); }
 .more-dropdown-item svg { flex-shrink: 0; color: var(--text-mid); }
 .more-dropdown-sep { height: 1px; background: var(--border); margin: 4px 0; }
+
+/* Options menu — theme + density segmented controls */
+.options-dropdown { min-width: 200px; padding: 10px; }
+.options-group + .options-group { margin-top: 12px; }
+.options-group-label {
+  font-size: 11px; font-weight: 700; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--text-soft); margin-bottom: 6px;
+}
+.options-seg {
+  display: flex; gap: 4px; background: var(--bg);
+  border: 1px solid var(--border); border-radius: 8px; padding: 3px;
+}
+.opt-seg-btn {
+  flex: 1; padding: 6px 8px; font-size: 12px; font-weight: 600;
+  color: var(--text-mid); background: none; border: none; border-radius: 6px;
+  cursor: pointer; transition: background 0.12s, color 0.12s;
+}
+.opt-seg-btn:hover { color: var(--text); }
+.opt-seg-btn.active { background: var(--card); color: var(--text); box-shadow: var(--shadow-sm); }
 
 /* ── Empty state for filtered table ─────────────────────────── */
 .table-empty-state {
@@ -2050,82 +2091,103 @@ tbody tr:hover            td.item-name { background: #FAFBFD; }
   .mc-watch-btn     { min-width: 44px; min-height: 44px; font-size: 18px; }
   .dm-watch         { min-width: 44px; min-height: 44px; }
   .store-filter-btn { padding: 7px 12px; min-height: 36px; font-size: 13px; }
+
+  /* Frequency → dropdown; everything else → one horizontal-scroll row */
+  .priority-filter { flex-direction: column; align-items: stretch; gap: 10px; }
+  .freq-select {
+    display: inline-block; align-self: flex-start;
+    padding: 8px 30px 8px 14px; border-radius: 20px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text); font-size: 14px; font-weight: 700; min-height: 38px;
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='3'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center;
+  }
+  .priority-pill.freq-pill { display: none; }
+  .priority-filter .filter-separator { display: none; }
+  .priority-pills {
+    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    gap: 8px; padding-bottom: 2px;
+  }
+  .priority-pills::-webkit-scrollbar { display: none; }
+  .priority-pill { flex-shrink: 0; }
 }
 
 /* ── 8 · Dark mode ─────────────────────────────────────────────────────── */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ww-light:      #052e16;
-    --ww-mid:        #14532d;
-    --coles-light:   #450a0a;
-    --coles-mid:     #7f1d1d;
-    --green-light:   #052e16;
-    --bg:            #0f172a;
-    --bg-alt:        #0f172a;
-    --card:          #1e293b;
-    --surface:       #1e293b;
-    --border:        #334155;
-    --border-strong: #475569;
-    --text:          #f1f5f9;
-    --text-mid:      #94a3b8;
-    --text-soft:     #64748b;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,.4);
-    --shadow:    0 2px 8px rgba(0,0,0,.5);
-    --shadow-md: 0 4px 16px rgba(0,0,0,.55);
-  }
+/* Dark theme — opt-in via <html data-theme="dark">. Light is the default; a
+   FOUC-preventing head script resolves the stored preference (light/dark/auto)
+   to this attribute before first paint. */
+:root[data-theme="dark"] {
+  --ww-light:      #052e16;
+  --ww-mid:        #14532d;
+  --coles-light:   #450a0a;
+  --coles-mid:     #7f1d1d;
+  --green-light:   #052e16;
+  --bg:            #0f172a;
+  --bg-alt:        #0f172a;
+  --card:          #1e293b;
+  --surface:       #1e293b;
+  --border:        #334155;
+  --border-strong: #475569;
+  --text:          #f1f5f9;
+  --text-mid:      #94a3b8;
+  --text-soft:     #64748b;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.4);
+  --shadow:    0 2px 8px rgba(0,0,0,.5);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.55);
 
   /* Table rows */
-  tbody tr:nth-child(even)              { background: #182030; }
-  tbody tr:nth-child(even) td.item-name { background: #182030; }
-  tbody tr:hover                        { background: #1a2540; }
-  tbody tr:hover td.item-name           { background: #1a2540; }
-  #tableHead th                         { background: var(--bg); }
-  .tfoot-row td                         { background: var(--bg); }
+  & tbody tr:nth-child(even)              { background: #182030; }
+  & tbody tr:nth-child(even) td.item-name { background: #182030; }
+  & tbody tr:hover                        { background: #1a2540; }
+  & tbody tr:hover td.item-name           { background: #1a2540; }
+  & #tableHead th                         { background: var(--bg); }
+  & .tfoot-row td                         { background: var(--bg); }
 
   /* Ghost sticky header */
-  .sticky-header-ghost    { background: var(--bg); }
-  .sticky-header-ghost th { background: var(--bg); }
+  & .sticky-header-ghost    { background: var(--bg); }
+  & .sticky-header-ghost th { background: var(--bg); }
 
   /* Category tabs */
-  .category-tab        { background: var(--card); color: var(--text-mid); }
-  .category-tab:hover  { background: var(--bg-alt); }
-  .category-tab.active { background: var(--bg-alt); color: var(--text); }
+  & .category-tab        { background: var(--card); color: var(--text-mid); }
+  & .category-tab:hover  { background: var(--bg-alt); }
+  & .category-tab.active { background: var(--bg-alt); color: var(--text); }
 
   /* Modals */
-  .modal { background: var(--card); }
-  .form-group input { background: var(--bg); color: var(--text); border-color: var(--border); }
+  & .modal { background: var(--card); }
+  & .form-group input { background: var(--bg); color: var(--text); border-color: var(--border); }
 
   /* Mobile cards */
-  .mobile-card              { background: var(--card); }
-  .mobile-card.mc-selected  { background: rgba(0,132,61,0.15); }
+  & .mobile-card              { background: var(--card); }
+  & .mobile-card.mc-selected  { background: rgba(0,132,61,0.15); }
 
   /* Comparison banner */
-  .comparison-banner   { background: var(--card); }
-  .store-card          { background: var(--bg); }
-  .store-card.winner-ww    { background: var(--ww-light); }
-  .store-card.winner-coles { background: var(--coles-light); }
+  & .comparison-banner   { background: var(--card); }
+  & .store-card          { background: var(--bg); }
+  & .store-card.winner-ww    { background: var(--ww-light); }
+  & .store-card.winner-coles { background: var(--coles-light); }
 
   /* Not-found section */
-  .not-found-section { background: var(--card); }
-  .not-found-list li { background: var(--bg); }
+  & .not-found-section { background: var(--card); }
+  & .not-found-list li { background: var(--bg); }
 
   /* Dropdowns */
-  .col-chooser-dropdown { background: var(--card); }
-  .more-dropdown        { background: var(--card); }
+  & .col-chooser-dropdown { background: var(--card); }
+  & .more-dropdown        { background: var(--card); }
 
   /* Banners */
-  .stale-banner          { background: #1a1400; color: #fcd34d; border-color: #854d0e; }
-  .runner-offline-banner { background: #1a0000; color: #fca5a5; border-color: #991b1b; }
+  & .stale-banner          { background: #1a1400; color: #fcd34d; border-color: #854d0e; }
+  & .runner-offline-banner { background: #1a0000; color: #fca5a5; border-color: #991b1b; }
 
   /* Hot Deals page */
-  .deals-hero    { background: linear-gradient(135deg, #1a1000 0%, #221800 100%); border-bottom-color: #4a3800; }
-  .dm-card       { background: var(--card); }
-  .deals-filter-bar { background: var(--card); }
+  & .deals-hero    { background: linear-gradient(135deg, #1a1000 0%, #221800 100%); border-bottom-color: #4a3800; }
+  & .dm-card       { background: var(--card); }
+  & .deals-filter-bar { background: var(--card); }
 
   /* Bottom tab bar */
-  #bottomTabBar  { background: var(--card); border-top-color: var(--border); }
+  & #bottomTabBar  { background: var(--card); border-top-color: var(--border); }
 
   /* Checkmarks in dark — use softer colors */
-  .cell-ww .price-main::after    { color: #4ade80; }
-  .cell-coles .price-main::after { color: #f87171; }
+  & .cell-ww .price-main::after    { color: #4ade80; }
+  & .cell-coles .price-main::after { color: #f87171; }
 }

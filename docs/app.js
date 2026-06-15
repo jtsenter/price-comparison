@@ -345,12 +345,15 @@ function savePriorities(obj) {
 // priorities. On a fresh browser / cleared storage that view was empty even
 // though the repo file had items. Pull the file in and merge any names that
 // aren't already assigned a local priority, so archives show up everywhere.
+let _repoArchivedSet = new Set(); // names from docs/data/archived_items.json
+
 async function mergeArchivedFromRepo() {
   try {
     const res = await fetch(`data/archived_items.json?t=${Date.now()}`);
     if (!res.ok) return;
     const names = await res.json();
     if (!Array.isArray(names) || !names.length) return;
+    _repoArchivedSet = new Set(names);
     const pr = loadPriorities();
     let changed = false;
     names.forEach(name => {
@@ -1903,11 +1906,23 @@ function initPriorityFilter() {
         $('storeFilter').style.display = 'none';
         const scrapeArchBtn = $('scrapeArchivedBtn');
         if (scrapeArchBtn) scrapeArchBtn.style.display = _activePriority === 'archive' ? 'inline-flex' : 'none';
+        // Keep the mobile frequency dropdown in sync with the active frequency.
+        const fs = $('freqSelect');
+        if (fs && ['all', 'weekly', 'monthly', 'rare'].includes(_activePriority)) fs.value = _activePriority;
         // Search is intentionally preserved across priority/category tab switches
       }
       if (_lastData) renderPage(_lastData);
     });
   });
+
+  // Mobile frequency dropdown — drives the same logic by clicking the hidden pill.
+  const freqSelect = $('freqSelect');
+  if (freqSelect) {
+    freqSelect.value = ['all', 'weekly', 'monthly', 'rare'].includes(_activePriority) ? _activePriority : 'weekly';
+    freqSelect.addEventListener('change', () => {
+      container.querySelector(`.priority-pill[data-priority="${freqSelect.value}"]`)?.click();
+    });
+  }
 
   const hotBtn = $('hotFilterBtn');
   if (hotBtn) {
@@ -2125,6 +2140,14 @@ function computeBannerStats(items) {
     return s + (i.coles?.price ?? 0) * u;
   }, 0);
   const total_saving = Math.abs(ww_total - co_total);
+  // "Max saving": buy each item at whichever store is cheapest, vs doing the
+  // whole shop at the more expensive single store. This is the most you could
+  // possibly save by splitting the basket across both stores.
+  const cherry_total = filtered.reduce((s, i) => {
+    const u = getUnits(i.list_item);
+    return s + Math.min(i.woolworths.price, i.coles.price) * u;
+  }, 0);
+  const max_saving = Math.max(ww_total, co_total) - cherry_total;
   let cheaper_store;
   if (!ww_avail) cheaper_store = 'coles_only';
   else if (co_total === 0) cheaper_store = 'ww_only';
@@ -2137,8 +2160,22 @@ function computeBannerStats(items) {
     cheaper_store,
     ww_data_available: ww_avail,
     total_saving: Math.round(total_saving * 100) / 100,
+    max_saving: Math.round(max_saving * 100) / 100,
     items_compared: filtered.length,
   };
+}
+
+// Renders the two saving figures shown between the store cards:
+//   • Basket saving — the gap between the two whole-basket totals (matches the cards).
+//   • Max saving — buy each item at its cheaper store vs the dearer single store.
+//     Only shown when splitting the shop beats just visiting the cheaper store.
+function renderSavingInfo(s) {
+  const basket = `<div class="saving-line"><div class="saving-label">Basket saving</div><span class="saving-chip">${fmt(s.total_saving)}</span></div>`;
+  let maxRow = '';
+  if (s.max_saving > s.total_saving + 0.005) {
+    maxRow = `<div class="saving-line" title="Buy each item at whichever store is cheapest, vs doing your whole shop at the dearer store"><div class="saving-label">Max saving · split shop</div><span class="saving-chip max">${fmt(s.max_saving)}</span></div>`;
+  }
+  return basket + maxRow;
 }
 
 // ── Category tabs ────────────────────────────────────────────────────────────
@@ -3177,22 +3214,20 @@ function renderPage(data) {
     $('colesTotal').textContent = fmt(s.total_coles);
     $('wwBadge').innerHTML    = '<span class="winner-badge ww">✓ Cheaper</span>';
     $('colesBadge').innerHTML = '';
-    $('savingInfo').innerHTML = `<div class="saving-label">Basket saving</div><span class="saving-chip">${fmt(s.total_saving)}</span>`;
+    $('savingInfo').innerHTML = renderSavingInfo(s);
   } else if (s.cheaper_store === 'coles') {
     colesCard.classList.add('winner-coles');
     wwTotalEl.textContent = fmt(s.total_woolworths);
     $('colesTotal').textContent = fmt(s.total_coles);
     $('colesBadge').innerHTML = '<span class="winner-badge coles">✓ Cheaper</span>';
     $('wwBadge').innerHTML    = '';
-    $('savingInfo').innerHTML = `<div class="saving-label">Basket saving</div><span class="saving-chip">${fmt(s.total_saving)}</span>`;
+    $('savingInfo').innerHTML = renderSavingInfo(s);
   } else {
     wwTotalEl.textContent = fmt(s.total_woolworths);
     $('colesTotal').textContent = fmt(s.total_coles);
     $('wwBadge').innerHTML = $('colesBadge').innerHTML = '';
     $('savingInfo').textContent = 'Same price at both stores';
   }
-
-  updateCheaperChip(s);
 
   const prog = data.scrape_progress;
 
@@ -3247,8 +3282,13 @@ function renderPage(data) {
   const coverageText = missingCount > 0
     ? `${pricedBoth}/${totalNonArchived} priced · ${missingCount} missing`
     : `${totalNonArchived} items`;
-  // "deals" = items matching the hot-deals page filter (price_history: all-time low or bottom 20% of range)
-  const hotCount = (data.items || []).filter(i => !isUiArchived(i) && isHotDeal(i)).length;
+  // Deal count uses the SAME canonical function the Hot Deals page uses, with the
+  // same inputs, so this number always equals the rows shown there (no drift).
+  const hotCount = getHotDealItems(data.items, {
+    exclusions: _renderExclusions,
+    archivedSet: _repoArchivedSet,
+    priorities: _uiPriorities,
+  }).length;
   $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>${hotCount > 0 ? `<a href="hot-deals.html" class="hot-deals-link">🔥 ${hotCount} deal${hotCount !== 1 ? 's' : ''}</a>` : ''}`;
   // Red dot on the Hot Deals bottom tab when there are active deals
   const btbHotTab = document.querySelector('#bottomTabBar a[href="hot-deals.html"]');
@@ -4301,52 +4341,59 @@ function exportShoppingList(useChecked) {
   window.location.href = 'shopping-list.html';
 }
 
-// ── Row density toggle ────────────────────────────────────────────────────────
+// ── Options menu (theme + row density) ─────────────────────────────────────────
 
-function initDensityToggle() {
-  const btn = document.getElementById('densityBtn');
-  if (!btn) return;
-  function applyDensity() {
-    const wrap = document.querySelector('.table-wrap');
-    if (wrap) wrap.classList.toggle('density-compact', _density === 'compact');
-    btn.classList.toggle('compact-on', _density === 'compact');
-    btn.title = _density === 'compact' ? 'Switch to comfortable view' : 'Compact rows';
-  }
+let _theme = localStorage.getItem('pw_theme') || 'light'; // 'light' | 'dark' | 'auto'
+
+function applyTheme() {
+  const dark = _theme === 'dark' ||
+    (_theme === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  document.querySelectorAll('#themeSeg .opt-seg-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.themeOpt === _theme));
+}
+
+function applyDensity() {
+  const wrap = document.querySelector('.table-wrap');
+  if (wrap) wrap.classList.toggle('density-compact', _density === 'compact');
+  document.querySelectorAll('#densitySeg .opt-seg-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.densityOpt === _density));
+}
+
+function initOptionsMenu() {
+  const btn = $('optionsBtn');
+  const dd  = $('optionsDropdown');
+
+  applyTheme();
   applyDensity();
-  btn.addEventListener('click', () => {
-    _density = _density === 'compact' ? 'comfortable' : 'compact';
+
+  // Keep 'auto' in sync if the OS theme flips while the page is open.
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => {
+    if (_theme === 'auto') applyTheme();
+  });
+
+  $('themeSeg')?.addEventListener('click', (e) => {
+    const b = e.target.closest('.opt-seg-btn'); if (!b) return;
+    _theme = b.dataset.themeOpt;
+    try { localStorage.setItem('pw_theme', _theme); } catch {}
+    applyTheme();
+  });
+
+  $('densitySeg')?.addEventListener('click', (e) => {
+    const b = e.target.closest('.opt-seg-btn'); if (!b) return;
+    _density = b.dataset.densityOpt;
     try { localStorage.setItem('pw_density', _density); } catch {}
     applyDensity();
   });
-}
 
-// ── Sticky "who's cheaper" chip ───────────────────────────────────────────────
-
-function updateCheaperChip(s) {
-  const chip = document.getElementById('cheaperChip');
-  if (!chip) return;
-  if (!s.ww_data_available) {
-    chip.innerHTML = `<span class="chip-red">Coles only</span><span class="chip-dim">· WW blocked</span>`;
-  } else if (s.cheaper_store === 'woolworths') {
-    chip.innerHTML = `<span class="chip-green">Woolworths cheaper</span><span class="chip-dim">· save ${fmt(s.total_saving)}</span>`;
-  } else if (s.cheaper_store === 'coles') {
-    chip.innerHTML = `<span class="chip-red">Coles cheaper</span><span class="chip-dim">· save ${fmt(s.total_saving)}</span>`;
-  } else {
-    chip.innerHTML = `Same price at both stores`;
-  }
-}
-
-function initCheaperChip() {
-  const banner = document.getElementById('banner');
-  const chip   = document.getElementById('cheaperChip');
-  if (!banner || !chip || typeof IntersectionObserver === 'undefined') return;
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      const bannerVisible = getComputedStyle(banner).display !== 'none';
-      chip.classList.toggle('visible', !e.isIntersecting && bannerVisible);
+  if (btn && dd) {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
     });
-  }, { threshold: 0 });
-  obs.observe(banner);
+    dd.addEventListener('click', (e) => e.stopPropagation());
+    document.addEventListener('click', () => { dd.style.display = 'none'; });
+  }
 }
 
 // ── Pull-to-refresh ───────────────────────────────────────────────────────────
@@ -4406,8 +4453,7 @@ async function boot() {
   initColumnChooser();
   initColFilterDropdown();
   updateImportBadge();
-  initDensityToggle();
-  initCheaperChip();
+  initOptionsMenu();
   initPullToRefresh();
 
   const refreshBtn = $('refreshBtn');

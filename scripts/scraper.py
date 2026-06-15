@@ -1666,6 +1666,36 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                 + carry_archived
             )
             not_found = [n for n in not_found if n not in existing_map]
+        else:
+            # Normal/scheduled run: we don't fetch live prices for archived items (to
+            # save scrape time), but we DO keep them in latest.json so the archive view
+            # has data. Carry forward any previously-scraped archived item; otherwise
+            # build a price-history-only entry straight from the Excel purchase history.
+            present = {i["list_item"] for i in items_output}
+            for name in sorted(archived_set):
+                if name in present:
+                    continue
+                ex = existing_map.get(name)
+                if ex is not None:
+                    items_output.append({**ex, "archived": True})
+                    continue
+                hist = purchase_history.get(name)
+                if not hist:
+                    continue
+                items_output.append({
+                    "list_item": name,
+                    "archived": True,
+                    "trip_count": hist.get("trip_count", 0),
+                    "price_history": [e for e in hist.get("price_history", [])
+                                      if e.get("date", "") not in ("", "1970-01-01", None)],
+                    "category": guess_category(name),
+                    "woolworths": None,
+                    "coles": None,
+                    "cheaper_store": None,
+                    "saving_per_item": None,
+                    "ww_price_history": [],
+                    "coles_price_history": [],
+                })
 
         # Merge by item name: new entries replace old ones for the same item (last scrape wins)
         merged_pv_dict = {**existing_pv, **{e["item"]: e for e in new_validation_entries}}

@@ -11,7 +11,16 @@
   <link rel="apple-touch-icon" href="favicon.svg" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="style.css?v=9" />
+  <script>
+  (function () {
+    try {
+      var t = localStorage.getItem('pw_theme') || 'light';
+      var dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+      if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+    } catch (e) {}
+  })();
+  </script>
+  <link rel="stylesheet" href="style.css?v=10" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -398,8 +407,8 @@
 <div id="priceTooltip" class="price-tooltip-fixed" style="display:none"></div>
 
 <!-- Shared utilities — must load before inline script -->
-<script src="name_map.js?v=9"></script>
-<script src="utils.js?v=9"></script>
+<script src="name_map.js?v=10"></script>
+<script src="utils.js?v=10"></script>
 <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 <script>
 // ── Shared utilities ──────────────────────────────────────────────────────────
@@ -884,19 +893,14 @@ function renderDeals() {
   if (!_data) return;
 
   const priorities = loadPriorities();
-  const items = (_data.items || []).filter(item =>
-    !item.archived &&
-    priorities[item.list_item] !== 'archive' &&
-    !_archivedSet.has(item.list_item)
-  );
-
   const exclusions = loadExclusions();
 
-  // Collect all deal items: pass isHotDeal gate first, then require a store comparison for display
-  const allDeals = items
-    .filter(item => isHotDeal(item))
-    .map(item => ({ item, deal: getSimpleDealInfo(item, exclusions) }))
-    .filter(({ deal }) => deal != null);
+  // SINGLE source of truth — identical to the main page's deal count.
+  const allDeals = getHotDealItems(_data.items, {
+    exclusions,
+    archivedSet: _archivedSet,
+    priorities,
+  });
 
   buildCategoryTabs(allDeals.map(d => d.item));
 

@@ -132,3 +132,24 @@ function getDealQuality(item, exclusions) {
 function isHotDeal(item) {
   return getDealQuality(item).qualifies;
 }
+
+// Canonical hot-deal list — the SINGLE source of truth shared by the main page
+// (which only needs the COUNT) and the Hot Deals page (which renders the list).
+// Both call this with the same inputs so the "🔥 N deals" number on the main
+// page always equals the number of rows shown on the Hot Deals page.
+//   opts.exclusions  — per-item excluded historical prices (pw_exclusions_v1)
+//   opts.archivedSet — names archived in docs/data/archived_items.json
+//   opts.priorities  — localStorage priorities (pw_priorities_v1); 'archive' hides
+function getHotDealItems(items, opts) {
+  opts = opts || {};
+  const exclusions  = opts.exclusions  || {};
+  const archivedSet = opts.archivedSet || new Set();
+  const priorities  = opts.priorities  || {};
+  return (items || [])
+    .filter(item =>
+      !item.archived &&
+      priorities[item.list_item] !== 'archive' &&
+      !archivedSet.has(item.list_item))
+    .map(item => ({ item, deal: getDealQuality(item, exclusions) }))
+    .filter(({ deal }) => deal.qualifies);
+}

@@ -12,7 +12,17 @@
   <link rel="apple-touch-icon" href="favicon.svg" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="style.css?v=9" />
+  <script>
+  // Resolve the stored theme preference before first paint (light is default).
+  (function () {
+    try {
+      var t = localStorage.getItem('pw_theme') || 'light';
+      var dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+      if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+    } catch (e) {}
+  })();
+  </script>
+  <link rel="stylesheet" href="style.css?v=10" />
 </head>
 <body>
 
@@ -51,10 +61,29 @@
           </button>
         </div>
       </div>
-      <button class="btn btn-ghost density-toggle-btn" id="densityBtn" title="Compact rows">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="5" x2="21" y2="5"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="13" x2="21" y2="13"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
-        Compact
-      </button>
+      <div class="col-chooser-wrap" id="optionsWrap">
+        <button class="btn btn-ghost" id="optionsBtn" title="Options">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Options
+        </button>
+        <div id="optionsDropdown" class="col-chooser-dropdown more-dropdown options-dropdown" style="display:none">
+          <div class="options-group">
+            <div class="options-group-label">Theme</div>
+            <div class="options-seg" id="themeSeg">
+              <button class="opt-seg-btn" data-theme-opt="light">Light</button>
+              <button class="opt-seg-btn" data-theme-opt="dark">Dark</button>
+              <button class="opt-seg-btn" data-theme-opt="auto">Auto</button>
+            </div>
+          </div>
+          <div class="options-group">
+            <div class="options-group-label">Row density</div>
+            <div class="options-seg" id="densitySeg">
+              <button class="opt-seg-btn" data-density-opt="comfortable">Comfortable</button>
+              <button class="opt-seg-btn" data-density-opt="compact">Compact</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <button class="btn btn-ghost btn-icon view-toggle-btn" id="viewToggleBtn" title="Switch to card view">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       </button>
@@ -118,9 +147,6 @@
     <button class="runner-dismiss-btn" onclick="document.getElementById('runnerOfflineBanner').classList.remove('visible')">✕</button>
   </div>
 
-  <!-- Cheaper chip: fixed bar shown when banner scrolls out of view -->
-  <div id="cheaperChip"></div>
-
   <!-- Comparison banner -->
   <div id="banner" class="comparison-banner" style="display:none">
     <div class="store-cards">
@@ -136,7 +162,6 @@
 
       <div class="store-divider">
         <div class="saving-info" id="savingInfo"></div>
-        <div class="last-updated" id="lastUpdated"></div>
       </div>
 
       <div class="store-card" id="colesCard">
@@ -153,11 +178,18 @@
 
   <!-- Priority / filter bar -->
   <div id="priorityFilter" class="priority-filter">
+    <!-- Mobile-only frequency selector (replaces the 4 frequency pills < 700px) -->
+    <select class="freq-select" id="freqSelect" aria-label="Shopping frequency">
+      <option value="all">All items</option>
+      <option value="weekly" selected>Weekly</option>
+      <option value="monthly">Monthly</option>
+      <option value="rare">Rare</option>
+    </select>
     <div class="priority-pills">
-      <button class="priority-pill" data-priority="all">All</button>
-      <button class="priority-pill active" data-priority="weekly">Weekly</button>
-      <button class="priority-pill" data-priority="monthly">Monthly</button>
-      <button class="priority-pill" data-priority="rare">Rare</button>
+      <button class="priority-pill freq-pill" data-priority="all">All</button>
+      <button class="priority-pill freq-pill active" data-priority="weekly">Weekly</button>
+      <button class="priority-pill freq-pill" data-priority="monthly">Monthly</button>
+      <button class="priority-pill freq-pill" data-priority="rare">Rare</button>
       <span class="filter-separator"></span>
       <button class="priority-pill fire-pill" id="hotFilterBtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg> Hot Deals</button>
       <span class="filter-separator"></span>
@@ -235,6 +267,11 @@
     <h3>Not found on either store</h3>
     <ul class="not-found-list" id="notFoundList"></ul>
   </div>
+
+  <!-- Status line: freshness, coverage, deal count — lives at the page foot -->
+  <footer class="page-footer">
+    <div class="last-updated" id="lastUpdated"></div>
+  </footer>
 </main>
 
 <button id="basketFab" aria-label="Add selected items to basket">＋ Basket (<span id="basketFabCount">0</span>)</button>
@@ -421,9 +458,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-<script src="name_map.js?v=9"></script>
-<script src="utils.js?v=9"></script>
-<script src="app.js?v=9"></script>
+<script src="name_map.js?v=10"></script>
+<script src="utils.js?v=10"></script>
+<script src="app.js?v=10"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">

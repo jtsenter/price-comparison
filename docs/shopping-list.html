@@ -11,6 +11,15 @@
   <link rel="apple-touch-icon" href="favicon.svg" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <script>
+  (function () {
+    try {
+      var t = localStorage.getItem('pw_theme') || 'light';
+      var dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+      if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+    } catch (e) {}
+  })();
+  </script>
   <style>
     :root {
       --ww: #00843D; --coles: #CC0000; --bg: #F0F4F8; --card: #fff;
@@ -228,23 +237,22 @@
     }
 
     /* Dark mode */
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0f172a; --card: #1e293b; --border: #334155;
-        --text: #f1f5f9; --text-mid: #94a3b8; --text-soft: #64748b;
-      }
-      body { background: var(--bg); color: var(--text); }
-      header { background: var(--card); border-bottom-color: var(--border); }
-      .store-summary-wrap { background: var(--card); border-color: var(--border); }
-      .store-card-sl { background: var(--card); }
-      .store-card-sl.card-active { background: #052e16; border-bottom-color: var(--ww); }
-      .bar-ribbon { background: var(--card); border-top-color: var(--border); }
-      .bar-optimal { background: #052e16; border-color: #14532d; }
-      tbody tr:nth-child(even) { background: #182030; }
-      tfoot td { background: var(--bg); }
-      table { background: var(--card); }
-      .only-note { background: var(--card); border-color: var(--border); }
-      #bottomTabBar { background: var(--card); border-top-color: var(--border); }
+    :root[data-theme="dark"] {
+      --bg: #0f172a; --card: #1e293b; --border: #334155;
+      --text: #f1f5f9; --text-mid: #94a3b8; --text-soft: #64748b;
+
+      & body { background: var(--bg); color: var(--text); }
+      & header { background: var(--card); border-bottom-color: var(--border); }
+      & .store-summary-wrap { background: var(--card); border-color: var(--border); }
+      & .store-card-sl { background: var(--card); }
+      & .store-card-sl.card-active { background: #052e16; border-bottom-color: var(--ww); }
+      & .bar-ribbon { background: var(--card); border-top-color: var(--border); }
+      & .bar-optimal { background: #052e16; border-color: #14532d; }
+      & tbody tr:nth-child(even) { background: #182030; }
+      & tfoot td { background: var(--bg); }
+      & table { background: var(--card); }
+      & .only-note { background: var(--card); border-color: var(--border); }
+      & #bottomTabBar { background: var(--card); border-top-color: var(--border); }
     }
   </style>
 </head>
