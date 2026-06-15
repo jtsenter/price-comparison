@@ -1435,7 +1435,9 @@ function openPriceHistoryModal(item) {
   const coScraped = item.coles?.scraped_at?.slice(0, 10) ?? null;
   const today = new Date().toISOString().slice(0, 10);
   const liveDate = wwScraped || coScraped || today;
-  const alreadyInHistory = wwMap.has(liveDate) || coMap.has(liveDate);
+  const wwAlreadyIn = wwLive == null || wwMap.has(liveDate);
+  const coAlreadyIn = coLive == null || coMap.has(liveDate);
+  const alreadyInHistory = wwAlreadyIn && coAlreadyIn;
   const liveEntry = !alreadyInHistory && (wwLive != null || coLive != null)
     ? [{ date: liveDate, ww: wwLive, coles: coLive, source: 'live' }]
     : [];
