@@ -255,6 +255,55 @@ function toggleWatchlist(itemName) {
   if (_lastData) renderPage(_lastData);
 }
 
+// ── Cross-device sync of priorities + unit quantities ─────────────────────────
+// Item priorities (weekly/monthly/rare) and per-item quantities live only in
+// localStorage, so two devices can disagree on which items the "Weekly" basket
+// contains and how many of each — which makes the basket total, basket saving
+// and max saving differ between phone and computer. We mirror both maps to
+// docs/data/user_settings.json (same mechanism as watchlist.json): the device
+// holding a token publishes on change; every device merges the file in on boot
+// so the baskets always agree.
+let _userSettingsTimer = null;
+function scheduleUserSettingsSync() {
+  clearTimeout(_userSettingsTimer);
+  _userSettingsTimer = setTimeout(persistUserSettingsToRepo, 1500);
+}
+async function persistUserSettingsToRepo() {
+  const s = loadSettings();
+  if (!s.token) return;
+  const payload = { priorities: loadPriorities(), units: loadUnitOverrides() };
+  const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/user_settings.json`;
+  const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2) + '\n')));
+  const doPut = async () => {
+    const getRes = await fetch(apiPath, { headers });
+    const meta = getRes.ok ? await getRes.json() : {};
+    const body = { message: 'chore: sync user settings (priorities + quantities)', content };
+    if (meta.sha) body.sha = meta.sha;
+    return fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
+  };
+  let putRes = await doPut();
+  if (putRes.status === 409) putRes = await doPut();
+  // fire-and-forget — errors are silently ignored
+}
+async function initUserSettings() {
+  try {
+    const res = await fetch(`data/user_settings.json?t=${Date.now()}`);
+    if (res.ok) {
+      const remote = await res.json();
+      if (remote && typeof remote === 'object') {
+        // Merge so the repo and this device agree. Repo values win on conflict
+        // (changes push immediately, so the repo is the freshest source); any
+        // local-only keys are preserved, so nothing is ever silently deleted.
+        localStorage.setItem('pw_priorities_v1', JSON.stringify({ ...loadPriorities(), ...(remote.priorities || {}) }));
+        localStorage.setItem('pw_units_v1',      JSON.stringify({ ...loadUnitOverrides(), ...(remote.units || {}) }));
+      }
+    }
+  } catch {}
+  // Publish the merged set so any local-only tags on this device reach the repo.
+  scheduleUserSettingsSync();
+}
+
 async function persistLatestJson(data, message = 'chore: update latest.json') {
   const s = loadSettings();
   if (!s.token) return;
@@ -338,6 +387,7 @@ function loadPriorities() {
 }
 function savePriorities(obj) {
   localStorage.setItem('pw_priorities_v1', JSON.stringify(obj));
+  scheduleUserSettingsSync();
 }
 
 // Archived items are persisted to docs/data/archived_items.json (the shared,
@@ -393,6 +443,7 @@ function loadUnitOverrides() {
 }
 function saveUnitOverrides(obj) {
   localStorage.setItem('pw_units_v1', JSON.stringify(obj));
+  scheduleUserSettingsSync();
 }
 
 // ── Category overrides ───────────────────────────────────────────────────────
@@ -3189,8 +3240,11 @@ function renderMobileCards(items, data) {
       </div>
       ${ww && co ? `
       <div class="mc-summary">
-        <span class="mc-winner-badge ${wwCheaper ? 'ww' : coCheaper ? 'coles' : 'equal'}">
-          ${wwCheaper ? '✓ WW cheaper' : coCheaper ? '✓ Coles cheaper' : '= Same price'}
+        <span class="mc-cheaper-tag ${wwCheaper ? 'ww' : coCheaper ? 'coles' : 'equal'}" title="${wwCheaper ? 'Woolworths is cheaper' : coCheaper ? 'Coles is cheaper' : 'Same price at both stores'}">
+          ${wwCheaper ? '<span class="store-chip sm ww">W</span>' : coCheaper ? '<span class="store-chip sm coles">C</span>' : ''}
+          ${(wwCheaper || coCheaper)
+            ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+            : '<span class="mc-eq">=</span>'}
         </span>
       </div>` : ''}`;
     }
@@ -4733,7 +4787,7 @@ async function boot() {
   });
 
   // Load analysis data and watchlist before first render
-  await Promise.all([loadItemAnalysis(), initWatchlist(), mergeArchivedFromRepo(), (async () => {
+  await Promise.all([loadItemAnalysis(), initWatchlist(), initUserSettings(), mergeArchivedFromRepo(), (async () => {
     try { const r = await fetch(`data/approved_warns.json?t=${Date.now()}`); if (r.ok) _approvedWarns = new Set(await r.json()); } catch {}
   })() ]);
   const data = await loadData();

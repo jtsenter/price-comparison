@@ -1948,6 +1948,15 @@ td.priority-cell { text-align: center; }
   .mc-winner-badge.ww    { background: var(--ww); color: #fff; }
   .mc-winner-badge.coles { background: var(--coles); color: #fff; }
   .mc-winner-badge.equal { background: var(--bg); color: var(--text-mid); border: 1px solid var(--border); }
+
+  /* Cheaper indicator — store chip + check (icon, not words). The check colour
+     follows the cheaper store; "=" shows when both stores match. */
+  .mc-cheaper-tag { display: inline-flex; align-items: center; gap: 4px; }
+  .mc-cheaper-tag.ww    { color: var(--ww); }
+  .mc-cheaper-tag.coles { color: var(--coles); }
+  .mc-cheaper-tag.equal { color: var(--text-soft); font-weight: 800; }
+  .mc-cheaper-tag svg   { display: block; }
+  .mc-eq { font-size: 16px; line-height: 1; }
   .mc-saving { font-size: 13px; font-weight: 700; color: var(--green); }
 
   /* Toolbar: sort chips (left) + view toggle (right) */
