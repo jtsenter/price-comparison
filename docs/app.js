@@ -340,6 +340,26 @@ function savePriorities(obj) {
   localStorage.setItem('pw_priorities_v1', JSON.stringify(obj));
 }
 
+// Archived items are persisted to docs/data/archived_items.json (the shared,
+// cross-device source of truth) but the archive VIEW reads only from local
+// priorities. On a fresh browser / cleared storage that view was empty even
+// though the repo file had items. Pull the file in and merge any names that
+// aren't already assigned a local priority, so archives show up everywhere.
+async function mergeArchivedFromRepo() {
+  try {
+    const res = await fetch(`data/archived_items.json?t=${Date.now()}`);
+    if (!res.ok) return;
+    const names = await res.json();
+    if (!Array.isArray(names) || !names.length) return;
+    const pr = loadPriorities();
+    let changed = false;
+    names.forEach(name => {
+      if (pr[name] == null) { pr[name] = 'archive'; changed = true; }
+    });
+    if (changed) savePriorities(pr);
+  } catch { /* offline / missing file — non-fatal */ }
+}
+
 // ── Pending items (from "different item" in price history) ───────────────────
 
 function loadPending() {
@@ -3296,6 +3316,24 @@ function renderPage(data) {
   }
 
   const priorities = loadPriorities();
+
+  // Archived items are excluded from latest.json by the scraper, so the archive
+  // view would otherwise be empty (no item objects to render). Inject lightweight
+  // stub rows for any archived name not already present, so the user can always
+  // see, manage, and unarchive them. Stubs carry no price data until re-scraped.
+  {
+    const present = new Set(allDisplayItems.map(i => i.list_item));
+    Object.keys(priorities).forEach(name => {
+      if (priorities[name] === 'archive' && !present.has(name)) {
+        allDisplayItems.push({
+          list_item: name, archived: true, woolworths: null, coles: null,
+          cheaper_store: null, saving_per_item: null, trip_count: 0,
+          price_history: [], category: '',
+        });
+      }
+    });
+  }
+
   const categoryTabItems = _activePriority === 'archive'
     ? allDisplayItems.filter(i => i.archived || priorities[i.list_item] === 'archive')
     : _activePriority === 'watchlist'
@@ -4598,7 +4636,7 @@ async function boot() {
   });
 
   // Load analysis data and watchlist before first render
-  await Promise.all([loadItemAnalysis(), initWatchlist(), (async () => {
+  await Promise.all([loadItemAnalysis(), initWatchlist(), mergeArchivedFromRepo(), (async () => {
     try { const r = await fetch(`data/approved_warns.json?t=${Date.now()}`); if (r.ok) _approvedWarns = new Set(await r.json()); } catch {}
   })() ]);
   const data = await loadData();
