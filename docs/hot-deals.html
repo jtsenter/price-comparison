@@ -416,7 +416,7 @@
 <!-- Shared utilities — must load before inline script -->
 <script src="name_map.js?v=13"></script>
 <script src="utils.js?v=13"></script>
-<script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
+<script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(r => r.update()).catch(() => {}));</script>
 <script>
 // ── Shared utilities ──────────────────────────────────────────────────────────
 

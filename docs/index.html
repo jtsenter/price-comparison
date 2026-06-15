@@ -22,7 +22,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=16" />
+  <link rel="stylesheet" href="style.css?v=17" />
 </head>
 <body>
 
@@ -457,9 +457,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-<script src="name_map.js?v=16"></script>
-<script src="utils.js?v=16"></script>
-<script src="app.js?v=16"></script>
+<script src="name_map.js?v=17"></script>
+<script src="utils.js?v=17"></script>
+<script src="app.js?v=17"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">
@@ -476,7 +476,7 @@
   </a>
 </nav>
 
-<script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
+<script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(r => r.update()).catch(() => {}));</script>
 <script>
 // ── Dynamic sticky header offset ─────────────────────────────────────────────
 // Measures nav height and syncs it with sticky header ghost (ghost-header-ghost).
