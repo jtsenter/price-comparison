@@ -2170,10 +2170,16 @@ function computeBannerStats(items) {
 //   • Max saving — buy each item at its cheaper store vs the dearer single store.
 //     Only shown when splitting the shop beats just visiting the cheaper store.
 function renderSavingInfo(s) {
-  const basket = `<div class="saving-line"><div class="saving-label">Basket saving</div><span class="saving-chip">${fmt(s.total_saving)}</span></div>`;
+  // Basket saving carries the cheaper store's logo; max saving carries a split
+  // W│C disc to signal "buy across both stores".
+  const cheaperChip = s.cheaper_store === 'coles'
+    ? '<span class="store-chip coles sm">C</span>'
+    : '<span class="store-chip ww sm">W</span>';
+  const splitIcon = `<svg class="split-icon" width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 A14 14 0 0 0 16 30 Z" fill="var(--ww)"/><path d="M16 2 A14 14 0 0 1 16 30 Z" fill="var(--coles)"/><line x1="16" y1="2" x2="16" y2="30" stroke="var(--card)" stroke-width="2.5"/></svg>`;
+  const basket = `<div class="saving-line"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
   let maxRow = '';
   if (s.max_saving > s.total_saving + 0.005) {
-    maxRow = `<div class="saving-line" title="Buy each item at whichever store is cheapest, vs doing your whole shop at the dearer store"><div class="saving-label">Max saving · split shop</div><span class="saving-chip max">${fmt(s.max_saving)}</span></div>`;
+    maxRow = `<div class="saving-line" title="Buy each item at whichever store is cheapest, vs doing your whole shop at the dearer store"><span class="saving-icon">${splitIcon}</span><div class="saving-text"><div class="saving-label">Max saving · split shop</div><span class="saving-amount">${fmt(s.max_saving)}</span></div></div>`;
   }
   return basket + maxRow;
 }

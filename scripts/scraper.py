@@ -16,7 +16,7 @@ from playwright.async_api import async_playwright
 sys.path.insert(0, os.path.dirname(__file__))
 from categories import guess_category
 from matcher import pick_best_match, validate_pair, extract_weight_g
-from shopping_list import detect_fuzzy_changes, get_purchase_history
+from shopping_list import detect_fuzzy_changes, get_purchase_history, clean_name
 
 WOOLWORTHS_BASE = "https://www.woolworths.com.au"
 COLES_BASE = "https://www.coles.com.au"
@@ -767,6 +767,25 @@ def find_alternatives(all_results: list[dict], matched: dict | None, max_alts: i
 # ---------------------------------------------------------------------------
 # Incremental push helpers
 # ---------------------------------------------------------------------------
+
+def _purge_alias_items(items: list) -> list:
+    """Drop items recorded under a stale alias name when their canonical name
+    (per KNOWN_NAME_CHANGES) is also present. Without this, a renamed/merged
+    product can linger as a duplicate forever via carry-forward and single-item
+    runs (e.g. "Capsicum Green" alongside "Woolworths Capsicum Green")."""
+    present = {i["list_item"] for i in items}
+    out, seen = [], set()
+    for it in items:
+        name = it["list_item"]
+        canon = clean_name(name)
+        if canon != name and canon in present:
+            continue                      # alias whose canonical entry exists — drop it
+        if name in seen:
+            continue                      # exact duplicate guard
+        seen.add(name)
+        out.append(it)
+    return out
+
 
 def _build_output(items: list, not_found: list, trigger: str, progress: dict | None = None, pending_validation: list | None = None, approved_prices: dict | None = None) -> dict:
     # Only compare items where both prices are present — avoids single-store items skewing the totals
@@ -1713,6 +1732,10 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         s = output["summary"]
         print(f"\nDone. {len(items_output)} items compared, {len(not_found)} not found.")
         print(f"Woolworths total: ${s['total_woolworths']:.2f} | Coles total: ${s['total_coles']:.2f}")
+
+    # Drop any stale alias duplicates before publishing (e.g. an old product name
+    # that has since been merged into a canonical "Woolworths …" name).
+    output["items"] = _purge_alias_items(output["items"])
 
     # latest.json is served to every page on every load — minify it.
     with open(latest_path, "w") as f:

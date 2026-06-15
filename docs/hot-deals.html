@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=10" />
+  <link rel="stylesheet" href="style.css?v=11" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -407,8 +407,8 @@
 <div id="priceTooltip" class="price-tooltip-fixed" style="display:none"></div>
 
 <!-- Shared utilities — must load before inline script -->
-<script src="name_map.js?v=10"></script>
-<script src="utils.js?v=10"></script>
+<script src="name_map.js?v=11"></script>
+<script src="utils.js?v=11"></script>
 <script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));</script>
 <script>
 // ── Shared utilities ──────────────────────────────────────────────────────────
@@ -616,6 +616,7 @@ function getSortValue(col, item, dealInfo) {
     // Deal strength = discount depth vs usual price. Higher dropPct = better
     // deal, so on a desc sort the deepest discounts rise to the top.
     case 'deal':     return dealInfo != null ? dealInfo.dropPct : -Infinity;
+    case 'store':    return dealInfo != null ? dealInfo.store : 'zzz';
     case 'save':     return dealInfo != null ? dealInfo.saveAmount : -Infinity;
     case 'ww':       return item.woolworths?.price ?? Infinity;
     case 'coles':    return item.coles?.price ?? Infinity;
@@ -692,10 +693,10 @@ function renderSortBar() {
 }
 
 // ── Column order / widths / visibility (Hot Deals) ───────────────────────────
-const HD_ALL_COLS       = ['name','deal','save','ww','coles','category','avg','watch'];
-const HD_DEFAULT_WIDTHS = { name:240, deal:150, save:90, ww:140, coles:140, category:110, avg:160, watch:60 };
+const HD_ALL_COLS       = ['name','deal','store','save','ww','coles','category','avg','watch'];
+const HD_DEFAULT_WIDTHS = { name:240, deal:140, store:64, save:90, ww:140, coles:140, category:110, avg:160, watch:60 };
 const HD_COL_LABELS     = {
-  name: 'Product', deal: 'Deal (why)', save: 'Save vs usual', ww: 'WW price',
+  name: 'Product', deal: 'Deal (why)', store: 'Best store', save: 'Save vs usual', ww: 'WW price',
   coles: 'Coles price', category: 'Category', avg: 'Trend', watch: 'Watch',
 };
 
@@ -784,6 +785,7 @@ function hdColHtml(col) {
   switch (col) {
     case 'name':     return `<th data-col="name" style="${ws}">Product <span class="sort-arrow"></span>${rh}</th>`;
     case 'deal':     return `<th data-col="deal" style="${ws}">Deal <span class="sort-arrow"></span>${rh}</th>`;
+    case 'store':    return `<th data-col="store" style="${ws}text-align:center">Store <span class="sort-arrow"></span>${rh}</th>`;
     case 'save':     return `<th data-col="save" style="${ws}text-align:right">Save <span class="sort-arrow"></span>${rh}</th>`;
     case 'ww':       return `<th data-col="ww" style="${ws}"><span class="store-chip ww sm">W</span> WW Price <span class="sort-arrow"></span>${rh}</th>`;
     case 'coles':    return `<th data-col="coles" style="${ws}"><span class="store-chip coles sm">C</span> Coles Price <span class="sort-arrow"></span>${rh}</th>`;
@@ -983,21 +985,20 @@ function renderDeals() {
       ? `<span class="discrepancy-warn" title="Large price difference — double check the match is correct">⚠<button class="dismiss-diff-btn" data-item="${safeNameHD}" data-diff="${_hdDiff.toFixed(4)}" title="Dismiss warning">✕</button></span>`
       : '';
 
-    // Deal cell — explains WHY this is a hot deal: the discount depth (or
-    // all-time-low badge) plus which store has the deal price.
+    // Deal cell — explains WHY this is a hot deal (one line): the discount depth
+    // or all-time-low badge. The store now has its own column; the usual price
+    // moved to the Save column's subtext.
+    const reasonClass = deal.isAllTimeLow ? 'deal-reason atl' : 'deal-reason';
+    const dealCell = `<span class="${reasonClass}">${deal.reason}</span>`;
+
+    // Store cell — which supermarket has the deal price (own column).
     const storeChip = deal.store === 'woolworths'
       ? '<span class="store-chip ww sm">W</span>'
       : '<span class="store-chip coles sm">C</span>';
-    const reasonClass = deal.isAllTimeLow ? 'deal-reason atl' : 'deal-reason';
-    const dealCell = `
-      <div class="deal-reason-cell">
-        <span class="${reasonClass}">${deal.reason}</span>
-        <div class="deal-reason-sub">${storeChip} usually ${fmt(deal.typical)}</div>
-      </div>`;
 
-    // Save cell — dollars below the usual (median) price
+    // Save cell — dollars below the usual (median) price; sub shows that usual price.
     const saveCell = deal.saveAmount > 0
-      ? `<div class="deal-save">${fmt(deal.saveAmount)}</div><div class="deal-save-sub">vs usual</div>`
+      ? `<div class="deal-save">${fmt(deal.saveAmount)}</div><div class="deal-save-sub">vs ${fmt(deal.typical)}</div>`
       : '<span style="color:var(--text-soft)">—</span>';
 
     // WW cell
@@ -1040,6 +1041,7 @@ function renderDeals() {
     const _hdCellMap = {
       name:     `<td class="item-name"><div class="deal-item-cell">${imgHtml}<div><div class="deal-item-name">${displayName}${discWarn}</div></div></div></td>`,
       deal:     `<td>${dealCell}</td>`,
+      store:    `<td style="text-align:center">${storeChip}</td>`,
       save:     `<td style="text-align:right">${saveCell}</td>`,
       ww:       `<td class="${wwClass}">${wwHtml}</td>`,
       coles:    `<td class="${coClass}">${coHtml}</td>`,
