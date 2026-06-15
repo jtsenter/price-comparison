@@ -2017,10 +2017,22 @@ td.priority-cell { text-align: center; }
 /* ─────────────────────────────────────────────────────────────────────────── */
 
 /* ── 1 · Color-blind-safe winner checkmark ─────────────────────────────── */
-.cell-ww .price-main::after    { content: ' ✓'; font-size: 11px; font-weight: 700; color: #15803d; vertical-align: middle; }
-.cell-coles .price-main::after { content: ' ✓'; font-size: 11px; font-weight: 700; color: #b91c1c; vertical-align: middle; }
-.mc-price.cheaper::after       { content: ' ✓'; font-size: 12px; }
-.mc-price.cheaper-c::after     { content: ' ✓'; font-size: 12px; }
+/* Cheaper marker — a filled circle "winner stamp" (clearer than a bare ✓):
+   green disc for Woolworths, red for Coles, white check inside. */
+.cell-ww .price-main::after,
+.cell-coles .price-main::after,
+.mc-price.cheaper::after,
+.mc-price.cheaper-c::after {
+  content: '✓';
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 15px; height: 15px; border-radius: 50%;
+  margin-left: 5px; vertical-align: middle;
+  font-size: 9px; font-weight: 700; line-height: 1; color: #fff;
+}
+.cell-ww .price-main::after,
+.mc-price.cheaper::after   { background: #15803d; }
+.cell-coles .price-main::after,
+.mc-price.cheaper-c::after { background: #b91c1c; }
 
 /* ── 2 · Sticky first column ───────────────────────────────────────────── */
 #tableHead th:first-child {
@@ -2237,6 +2249,8 @@ tbody tr:hover            td.item-name { background: #FAFBFD; }
   & #bottomTabBar  { background: var(--card); border-top-color: var(--border); }
 
   /* Checkmarks in dark — use softer colors */
-  & .cell-ww .price-main::after    { color: #4ade80; }
-  & .cell-coles .price-main::after { color: #f87171; }
+  & .cell-ww .price-main::after,
+  & .mc-price.cheaper::after   { background: #16a34a; color: #fff; }
+  & .cell-coles .price-main::after,
+  & .mc-price.cheaper-c::after { background: #dc2626; color: #fff; }
 }
