@@ -1418,8 +1418,9 @@ function openPriceHistoryModal(item) {
   const coLive = item.coles?.price ?? null;
   const wwScraped = item.woolworths?.scraped_at?.slice(0, 10) ?? null;
   const coScraped = item.coles?.scraped_at?.slice(0, 10) ?? null;
-  const liveDate = wwScraped || coScraped || null;
-  const alreadyInHistory = liveDate && (wwMap.has(liveDate) || coMap.has(liveDate));
+  const today = new Date().toISOString().slice(0, 10);
+  const liveDate = wwScraped || coScraped || today;
+  const alreadyInHistory = wwMap.has(liveDate) || coMap.has(liveDate);
   const liveEntry = !alreadyInHistory && (wwLive != null || coLive != null)
     ? [{ date: liveDate || 'Current', ww: wwLive, coles: coLive, source: 'live' }]
     : [];
