@@ -4545,18 +4545,24 @@ async function boot() {
   });
 
   // Store banner clicks → show that store's total column
-  $('wwCard')?.addEventListener('click', () => {
-    _colVisibility.ww_total    = true;
-    _colVisibility.coles_total = false;
+  function _activateTotalCol(show, hide) {
+    // Swap positions in _colOrder so `show` takes the slot `hide` currently holds.
+    // This guarantees the visible column always appears at the same table position
+    // regardless of how the user has reordered or customised the column list.
+    const showIdx = _colOrder.indexOf(show);
+    const hideIdx = _colOrder.indexOf(hide);
+    if (showIdx !== -1 && hideIdx !== -1 && showIdx !== hideIdx) {
+      _colOrder[showIdx] = hide;
+      _colOrder[hideIdx] = show;
+      saveColOrder();
+    }
+    _colVisibility[show] = true;
+    _colVisibility[hide] = false;
     saveColVisibility();
     if (_lastData) renderPage(_lastData);
-  });
-  $('colesCard')?.addEventListener('click', () => {
-    _colVisibility.coles_total = true;
-    _colVisibility.ww_total    = false;
-    saveColVisibility();
-    if (_lastData) renderPage(_lastData);
-  });
+  }
+  $('wwCard')?.addEventListener('click',    () => _activateTotalCol('ww_total',    'coles_total'));
+  $('colesCard')?.addEventListener('click', () => _activateTotalCol('coles_total', 'ww_total'));
 
   // More menu dropdown
   const moreBtn = $('moreMenuBtn');
