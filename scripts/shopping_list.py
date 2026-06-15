@@ -14,6 +14,10 @@ KNOWN_NAME_CHANGES = {
     "Radish Fresh": "Fresh Radish Bunch",
     "Woolworths Short Cut Bacon": "Woolworths Shortcut Bacon",
     "Corn Sweet": "Woolworths Corn Sweet",
+    # Same product recorded under an older prefix-less name — merge the history
+    # into the current "Woolworths …" name so it shows as one item.
+    "Capsicum Green": "Woolworths Capsicum Green",
+    "Salmon Tasmanian Atlantic Fillets Skin On": "Woolworths Salmon Tasmanian Atlantic Fillets Skin On",
 }
 
 FUZZY_THRESHOLD = 85
