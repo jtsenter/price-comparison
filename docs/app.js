@@ -493,6 +493,7 @@ function getAnalysisData(itemName) {
 }
 
 function getPriority(itemName) {
+  if (typeof itemName === 'string' && itemName.startsWith('__group_')) return 'weekly';
   const p = loadPriorities()[itemName];
   if (p) return p;  // explicit user override always wins
   const d = getAnalysisData(itemName);
@@ -505,7 +506,7 @@ function getPriority(itemName) {
 function getUnits(itemName) {
   const ov = loadUnitOverrides()[itemName];
   if (ov != null) return ov;
-  if (_perkgSet.has(itemName)) return 1.0;
+  if (_perkgSet.has(itemName) || (typeof itemName === 'string' && itemName.startsWith('__group_'))) return 1.0;
   const qty = getAnalysisData(itemName).avg_qty;
   return qty != null ? Math.round(qty) : 1;
 }
@@ -2832,8 +2833,8 @@ const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
 function sortItems(items) {
   const exclusions = loadExclusions();
   let filtered = items.filter(item => {
-    // TEMP dev filter (web only): show only the per-kg items, ignore all else
-    if (_showPerKgOnly) return _perkgSet.has(item.list_item);
+    // TEMP dev filter (web only): show only the per-kg variant groups, ignore all else
+    if (_showPerKgOnly) return !!item._isGroup;
     // Watchlist filter: show only watchlisted items; bypass archive/priority checks
     if (_activePriority === 'watchlist') return _watchlist.has(item.list_item);
     // Mobile selection filter
@@ -3102,301 +3103,267 @@ function renderCards(items) {
   grid.innerHTML = parts.join('');
 }
 
-// ── Variant group rendering (desktop table) ───────────────────────────────────
+// ── Variant groups (per-kg comparison) ────────────────────────────────────────
+// Per-kg items (meat/fish) are collapsed into one synthetic "group" row each, so
+// they render inline in the main table looking like normal product rows — image,
+// WW-vs-Coles columns, links — but with $/kg as the headline (pack size varies
+// across stores, so only $/kg is comparable). Expanding lists every member
+// product as its own row with $/kg at each store.
 
-function renderVariantGroupsTable(tbody, items) {
-  tbody.innerHTML = '';
-  const colCount = getVisibleCols().length + 2; // +1 check-cell +1 for extra td
+// Pull a human pack-size label ("600g", "1.2kg") out of a scraped product name.
+function perKgPackLabel(result) {
+  if (!result) return '';
+  const m = (result.name || '').match(/(\d[\d.]*\s*(?:kg|g|ml|l))\b/i);
+  return m ? m[1].replace(/\s+/g, '') : '';
+}
 
-  const itemMap = new Map(items.map(i => [i.list_item, i]));
+// Build synthetic group items from the per-kg member products present in the list.
+function buildVariantGroups(byName) {
+  const out = [];
+  for (const g of VARIANT_GROUPS) {
+    const members = g.items.map(n => byName.get(n)).filter(Boolean);
+    if (!members.length) continue;
 
-  VARIANT_GROUPS.forEach(group => {
-    const groupItems = group.items.map(n => itemMap.get(n)).filter(Boolean);
-    if (!groupItems.length) return;
+    // Each member carries BOTH a WW and a Coles price, so collect per-store rankings.
+    const ww = members
+      .map(m => ({ name: m.list_item, result: m.woolworths, perkg: clientPerKg(m.woolworths) }))
+      .filter(v => v.perkg != null).sort((a, b) => a.perkg - b.perkg);
+    const co = members
+      .map(m => ({ name: m.list_item, result: m.coles, perkg: clientPerKg(m.coles) }))
+      .filter(v => v.perkg != null).sort((a, b) => a.perkg - b.perkg);
 
-    // Gather WW and Coles variants with $/kg
-    const wwVariants = groupItems
-      .map(i => ({ item: i, perkg: clientPerKg(i.woolworths), name: i.list_item, result: i.woolworths }))
-      .filter(v => v.perkg != null)
-      .sort((a, b) => a.perkg - b.perkg);
-    const coVariants = groupItems
-      .map(i => ({ item: i, perkg: clientPerKg(i.coles), name: i.list_item, result: i.coles }))
-      .filter(v => v.perkg != null)
-      .sort((a, b) => a.perkg - b.perkg);
+    const wwBest = ww[0] || null;
+    const coBest = co[0] || null;
+    let cheaper = null;
+    if (wwBest && coBest) cheaper = wwBest.perkg < coBest.perkg ? 'woolworths' : (coBest.perkg < wwBest.perkg ? 'coles' : 'equal');
+    else if (wwBest) cheaper = 'woolworths';
+    else if (coBest) cheaper = 'coles';
 
-    const wwCount = wwVariants.length;
-    const coCount = coVariants.length;
-    const wwBest = wwVariants[0];
-    const coBest = coVariants[0];
-
-    const isExpanded = _expandedGroups.has(group.key);
-
-    // ── Collapsed header row ──
-    const headerTr = document.createElement('tr');
-    headerTr.className = 'vg-header-row';
-
-    const checkTd = document.createElement('td');
-    checkTd.className = 'check-cell';
-    headerTr.appendChild(checkTd);
-
-    const mainTd = document.createElement('td');
-    mainTd.className = 'vg-main-cell';
-    mainTd.colSpan = colCount - 1;
-
-    const inner = document.createElement('div');
-    inner.className = 'vg-header-inner';
-
-    const titleLine = document.createElement('div');
-    titleLine.className = 'vg-title-line';
-
-    const labelEl = document.createElement('span');
-    labelEl.className = 'vg-label';
-    labelEl.textContent = group.label;
-    titleLine.appendChild(labelEl);
-
-    const countEl = document.createElement('span');
-    countEl.className = 'vg-count';
-    countEl.textContent = `${wwCount} WW · ${coCount} Coles`;
-    titleLine.appendChild(countEl);
-
-    inner.appendChild(titleLine);
-
-    const bestsLine = document.createElement('div');
-    bestsLine.className = 'vg-bests-line';
-
-    [{ store: 'WW', best: wwBest, cls: 'store-chip ww sm' }, { store: 'Coles', best: coBest, cls: 'store-chip coles sm' }].forEach(({ store, best, cls }) => {
-      if (!best) return;
-      const line = document.createElement('div');
-      line.className = 'vg-best-line';
-
-      const chip = document.createElement('span');
-      chip.className = cls;
-      chip.textContent = store === 'WW' ? 'W' : 'C';
-      line.appendChild(chip);
-
-      const nameEl = document.createElement('span');
-      nameEl.className = 'vg-best-name';
-      const ov = (loadOverrides()[best.name] || {}).displayName;
-      nameEl.textContent = ov || stripWW(best.name);
-      line.appendChild(nameEl);
-
-      const pkEl = document.createElement('span');
-      pkEl.className = 'vg-best-perkg';
-      pkEl.textContent = `$${best.perkg.toFixed(2)}/kg`;
-      line.appendChild(pkEl);
-
-      bestsLine.appendChild(line);
+    out.push({
+      list_item: `__group_${g.key}`,
+      _isGroup: true,
+      _groupKey: g.key,
+      _groupLabel: g.label,
+      _members: members,
+      _wwBest: wwBest,
+      _coBest: coBest,
+      _wwPerKg: wwBest ? wwBest.perkg : null,
+      _coPerKg: coBest ? coBest.perkg : null,
+      // Shape like a normal item so sort/helpers work; price = best variant's pack price.
+      woolworths: wwBest ? wwBest.result : null,
+      coles: coBest ? coBest.result : null,
+      cheaper_store: cheaper,
+      category: 'Meat & Seafood',
+      trip_count: null,
+      price_history: [],
     });
+  }
+  return out;
+}
 
-    inner.appendChild(bestsLine);
+// A $/kg price cell: big $/kg headline (linked), small actual pack price beneath.
+function perKgCellHTML(result, perkg, url, isWinner) {
+  if (perkg == null) return '<span class="no-data">—</span>';
+  const head = `$${perkg.toFixed(2)}<span class="perkg-suffix">/kg</span>`;
+  const linked = url ? `<a href="${url}" target="_blank" class="price-link">${head}</a>` : head;
+  const win = isWinner ? '<span class="vg-win" title="Cheapest in this group">✓</span>' : '';
+  const pack = result && result.price != null
+    ? `${fmt(result.price)}${perKgPackLabel(result) ? ` / ${perKgPackLabel(result)}` : ''}`
+    : '';
+  return `<div class="price-main">${linked}${win}</div><div class="price-unit">${pack}</div>`;
+}
 
-    const expandBtn = document.createElement('button');
-    expandBtn.className = 'vg-expand-btn';
-    expandBtn.dataset.group = group.key;
-    expandBtn.textContent = isExpanded ? `Hide variants ▴` : `Show ${groupItems.length} variants ▾`;
-    inner.appendChild(expandBtn);
+// Assemble a <tr> from a column→<td> map, respecting current visible columns.
+function assembleGroupTr(tds, { rowClass, dataAttrs = '' } = {}) {
+  return `<tr${rowClass ? ` class="${rowClass}"` : ''}${dataAttrs}>`
+    + `<td class="check-cell"></td>`
+    + getVisibleCols().map(c => tds[c] || '<td></td>').join('')
+    + `<td class="actions-cell"></td></tr>`;
+}
 
-    mainTd.appendChild(inner);
-    headerTr.appendChild(mainTd);
-    tbody.appendChild(headerTr);
+// Render one variant group (collapsed row + expanded member rows) into the tbody.
+function appendGroupRowDesktop(tbody, group, overrides) {
+  const isExpanded = _expandedGroups.has(group._groupKey);
+  const wwBest = group._wwBest, coBest = group._coBest;
+  const cheaper = group.cheaper_store;
 
-    if (!isExpanded) return;
+  // Image: prefer the cheaper store's best variant, fall back to the other.
+  const bestResult = (cheaper === 'coles' ? coBest : wwBest) || wwBest || coBest;
+  const imgSrc = resolveImgUrl(bestResult?.result?.image_url) || '';
+  const imgHtml = imgSrc
+    ? `<img class="item-img" src="${imgSrc}" alt="" loading="lazy" />`
+    : '<div class="item-img-placeholder">No Photo</div>';
 
-    // ── Expanded: WW block then Coles block ──
-    ['woolworths', 'coles'].forEach(store => {
-      const variants = store === 'woolworths' ? wwVariants : coVariants;
-      if (!variants.length) return;
+  const chev = isExpanded ? '▾' : '▸';
+  const nameCell = `<td class="item-name vg-group-name-cell">
+    <div class="item-row">
+      ${imgHtml}
+      <div class="item-info">
+        <button class="vg-expand-btn vg-group-title" data-group="${group._groupKey}">
+          <span class="vg-chevron">${chev}</span>
+          <span class="vg-group-label">${group._groupLabel}</span>
+          <span class="vg-group-count">${group._members.length} options</span>
+        </button>
+      </div>
+    </div></td>`;
 
-      const sepTr = document.createElement('tr');
-      sepTr.className = 'vg-store-sep';
-      const sepCheckTd = document.createElement('td');
-      sepCheckTd.className = 'check-cell';
-      sepTr.appendChild(sepCheckTd);
-      const sepTd = document.createElement('td');
-      sepTd.colSpan = colCount - 1;
-      const sepCell = document.createElement('div');
-      sepCell.className = 'vg-store-sep-cell';
-      const storeChip = document.createElement('span');
-      storeChip.className = store === 'woolworths' ? 'store-chip ww sm' : 'store-chip coles sm';
-      storeChip.textContent = store === 'woolworths' ? 'W' : 'C';
-      sepCell.appendChild(storeChip);
-      const storeLabel = document.createElement('span');
-      storeLabel.textContent = store === 'woolworths' ? 'Woolworths' : 'Coles';
-      sepCell.appendChild(storeLabel);
-      sepTd.appendChild(sepCell);
-      sepTr.appendChild(sepTd);
-      tbody.appendChild(sepTr);
+  const wwUrl = wwBest ? (overrides[wwBest.name]?.wwUrl || wwBest.result?.url || null) : null;
+  const coUrl = coBest ? (overrides[coBest.name]?.colesUrl || coBest.result?.url || null) : null;
 
-      variants.forEach((v, idx) => {
-        const isCheapest = idx === 0;
-        const tr = document.createElement('tr');
-        tr.className = isCheapest ? 'vg-variant-row vg-cheapest-row' : 'vg-variant-row';
+  const wwClass = cheaper === 'woolworths' ? 'cell-ww' : '';
+  const coClass = cheaper === 'coles' ? 'cell-coles' : '';
 
-        const vtCheckTd = document.createElement('td');
-        vtCheckTd.className = 'check-cell';
-        tr.appendChild(vtCheckTd);
+  // % cheaper by $/kg
+  let pctHtml = '';
+  if (group._wwPerKg != null && group._coPerKg != null && group._wwPerKg !== group._coPerKg) {
+    const pct = Math.round(Math.abs(group._wwPerKg - group._coPerKg) / Math.max(group._wwPerKg, group._coPerKg) * 100);
+    pctHtml = `<span class="${cheaper === 'woolworths' ? 'pct-ww' : 'pct-coles'}">${pct}%</span>`;
+  }
 
-        const vtTd = document.createElement('td');
-        vtTd.colSpan = colCount - 1;
-        const vtCell = document.createElement('div');
-        vtCell.className = 'vg-variant-cell';
+  let badgeHtml = '';
+  if (!wwBest || !coBest) badgeHtml = '<span class="cheaper-badge na">N/A</span>';
+  else if (cheaper === 'woolworths') badgeHtml = '<span class="store-chip ww sm">W</span>';
+  else if (cheaper === 'coles') badgeHtml = '<span class="store-chip coles sm">C</span>';
+  else badgeHtml = '<span class="cheaper-badge equal">=</span>';
 
-        const vname = document.createElement('span');
-        vname.className = 'vg-vname';
-        const ovName = (loadOverrides()[v.name] || {}).displayName;
-        vname.textContent = ovName || stripWW(v.name);
-        vtCell.appendChild(vname);
+  const units = getUnits(group.list_item);
+  const unitsCell = `<td class="units-cell">
+    <div class="units-ctrl">
+      <button class="units-dec" data-item="${group.list_item}">−</button>
+      <span class="units-val">${units.toFixed(1)} kg</span>
+      <button class="units-inc" data-item="${group.list_item}">+</button>
+    </div></td>`;
 
-        if (v.result) {
-          const vsize = document.createElement('span');
-          vsize.className = 'vg-vsize';
-          const p100 = clientPer100(v.result);
-          const sizeMatch = v.result.name?.match(/(\d[\d.]*\s*(?:kg|g|ml|l))/i);
-          vsize.textContent = sizeMatch ? sizeMatch[1] : '';
-          vtCell.appendChild(vsize);
-        }
+  const wwTotal = group._wwPerKg != null ? group._wwPerKg * units : null;
+  const coTotal = group._coPerKg != null ? group._coPerKg * units : null;
+  let savingContent = '<span class="no-data">—</span>';
+  if (group._wwPerKg != null && group._coPerKg != null) {
+    const sav = Math.abs(group._wwPerKg - group._coPerKg) * units;
+    savingContent = sav > 0 ? `<span class="saving-cell">${fmt(sav)}</span>` : '<span class="no-data">$0.00</span>';
+  }
 
-        const vpk = document.createElement('span');
-        vpk.className = isCheapest ? 'vg-vperkg vg-cheapest-kg' : 'vg-vperkg';
-        vpk.textContent = `$${v.perkg.toFixed(2)}/kg`;
-        vtCell.appendChild(vpk);
+  const tds = {
+    name:         nameCell,
+    trend:        `<td class="trend-cell"></td>`,
+    priority:     `<td class="priority-cell"><span class="vg-priority-tag">per kg</span></td>`,
+    units:        unitsCell,
+    ww:           `<td class="price-cell ${wwClass}">${perKgCellHTML(wwBest?.result, group._wwPerKg, wwUrl, false)}</td>`,
+    coles:        `<td class="price-cell ${coClass}">${perKgCellHTML(coBest?.result, group._coPerKg, coUrl, false)}</td>`,
+    cheaper:      `<td class="cheaper-cell">${badgeHtml}</td>`,
+    pct:          `<td class="pct-cell">${pctHtml}</td>`,
+    saving:       `<td><div class="saving-row">${savingContent}</div></td>`,
+    trips:        `<td class="trips-cell"></td>`,
+    category:     `<td style="font-size:12px;color:var(--text-mid)">${getCategory(group)}</td>`,
+    last_scraped: `<td></td>`,
+    ww_total:     `<td style="font-size:13px;font-weight:600">${wwTotal != null ? fmt(wwTotal) : '<span class="no-data">—</span>'}</td>`,
+    coles_total:  `<td style="font-size:13px;font-weight:600">${coTotal != null ? fmt(coTotal) : '<span class="no-data">—</span>'}</td>`,
+  };
 
-        if (isCheapest) {
-          const badge = document.createElement('span');
-          badge.className = 'vg-cheapest-badge';
-          badge.textContent = '✓ cheapest';
-          vtCell.appendChild(badge);
-        }
+  tbody.insertAdjacentHTML('beforeend', assembleGroupTr(tds, {
+    rowClass: `vg-group-row${isExpanded ? ' vg-group-open' : ''}`,
+    dataAttrs: ` data-group="${group._groupKey}"`,
+  }));
 
-        vtTd.appendChild(vtCell);
-        tr.appendChild(vtTd);
-        tbody.appendChild(tr);
-      });
-    });
+  if (!isExpanded) return;
+
+  // Expanded: one row per member product, $/kg at each store, winner per store marked.
+  group._members.forEach(m => {
+    const wwPk = clientPerKg(m.woolworths);
+    const coPk = clientPerKg(m.coles);
+    const ov = overrides[m.list_item] || {};
+    const dispName = ov.displayName || stripWW(m.list_item);
+    const isWwWin = wwPk != null && group._wwPerKg != null && Math.abs(wwPk - group._wwPerKg) < 0.005;
+    const isCoWin = coPk != null && group._coPerKg != null && Math.abs(coPk - group._coPerKg) < 0.005;
+
+    let vCheaper = null;
+    if (wwPk != null && coPk != null) vCheaper = wwPk < coPk ? 'woolworths' : (coPk < wwPk ? 'coles' : 'equal');
+    let vBadge = '';
+    if (wwPk == null || coPk == null) vBadge = '';
+    else if (vCheaper === 'woolworths') vBadge = '<span class="store-chip ww sm">W</span>';
+    else if (vCheaper === 'coles') vBadge = '<span class="store-chip coles sm">C</span>';
+    else vBadge = '<span class="cheaper-badge equal">=</span>';
+
+    const wwUrlV = ov.wwUrl || m.woolworths?.url || null;
+    const coUrlV = ov.colesUrl || m.coles?.url || null;
+
+    const vtds = {
+      name:        `<td class="item-name vg-variant-name"><span class="vg-variant-label">${dispName}</span></td>`,
+      trend:       `<td class="trend-cell"></td>`,
+      priority:    `<td class="priority-cell"></td>`,
+      units:       `<td class="units-cell"></td>`,
+      ww:          `<td class="price-cell ${isWwWin ? 'cell-ww' : ''}">${perKgCellHTML(m.woolworths, wwPk, wwUrlV, isWwWin)}</td>`,
+      coles:       `<td class="price-cell ${isCoWin ? 'cell-coles' : ''}">${perKgCellHTML(m.coles, coPk, coUrlV, isCoWin)}</td>`,
+      cheaper:     `<td class="cheaper-cell">${vBadge}</td>`,
+      pct:         `<td class="pct-cell"></td>`,
+      saving:      `<td></td>`,
+      trips:       `<td class="trips-cell"></td>`,
+      category:    `<td></td>`,
+      last_scraped:`<td></td>`,
+      ww_total:    `<td></td>`,
+      coles_total: `<td></td>`,
+    };
+    tbody.insertAdjacentHTML('beforeend', assembleGroupTr(vtds, { rowClass: 'vg-variant-row' }));
   });
 }
 
-// ── Variant group rendering (mobile cards) ────────────────────────────────────
+// Render one variant group as a mobile card (collapsed + expanded member rows).
+function appendGroupCardMobile(container, group, overrides) {
+  const isExpanded = _expandedGroups.has(group._groupKey);
+  const wwBest = group._wwBest, coBest = group._coBest;
+  const cheaper = group.cheaper_store;
 
-function renderMobileVariantGroups(container, items) {
-  const itemMap = new Map(items.map(i => [i.list_item, i]));
+  const card = document.createElement('div');
+  card.className = 'mc-card vg-mobile-card' + (isExpanded ? ' vg-mobile-open' : '');
 
-  VARIANT_GROUPS.forEach(group => {
-    const groupItems = group.items.map(n => itemMap.get(n)).filter(Boolean);
-    if (!groupItems.length) return;
+  const head = document.createElement('button');
+  head.className = 'vg-expand-btn vgm-head';
+  head.dataset.group = group._groupKey;
+  head.innerHTML = `
+    <span class="vg-chevron">${isExpanded ? '▾' : '▸'}</span>
+    <span class="vgm-head-label">${group._groupLabel}</span>
+    <span class="vgm-head-count">${group._members.length} options</span>`;
+  card.appendChild(head);
 
-    const wwVariants = groupItems
-      .map(i => ({ item: i, perkg: clientPerKg(i.woolworths), name: i.list_item, result: i.woolworths }))
-      .filter(v => v.perkg != null)
-      .sort((a, b) => a.perkg - b.perkg);
-    const coVariants = groupItems
-      .map(i => ({ item: i, perkg: clientPerKg(i.coles), name: i.list_item, result: i.coles }))
-      .filter(v => v.perkg != null)
-      .sort((a, b) => a.perkg - b.perkg);
+  const cmp = document.createElement('div');
+  cmp.className = 'vgm-cmp';
+  const wwWin = cheaper === 'woolworths', coWin = cheaper === 'coles';
+  cmp.innerHTML = `
+    <div class="vgm-cmp-store ${wwWin ? 'win' : ''}">
+      <span class="store-chip ww sm">W</span>
+      <span class="vgm-cmp-kg">${group._wwPerKg != null ? `$${group._wwPerKg.toFixed(2)}/kg` : '—'}</span>
+      ${wwWin ? '<span class="vgm-cmp-tag">cheaper</span>' : ''}
+    </div>
+    <div class="vgm-cmp-store ${coWin ? 'win' : ''}">
+      <span class="store-chip coles sm">C</span>
+      <span class="vgm-cmp-kg">${group._coPerKg != null ? `$${group._coPerKg.toFixed(2)}/kg` : '—'}</span>
+      ${coWin ? '<span class="vgm-cmp-tag">cheaper</span>' : ''}
+    </div>`;
+  card.appendChild(cmp);
 
-    const wwBest = wwVariants[0];
-    const coBest = coVariants[0];
-    const isExpanded = _expandedGroups.has(group.key);
-
-    const card = document.createElement('div');
-    card.className = 'vg-mobile-card';
-
-    const header = document.createElement('div');
-    header.className = 'vgm-header';
-
-    const titleRow = document.createElement('div');
-    titleRow.className = 'vgm-title-row';
-    const labelEl = document.createElement('span');
-    labelEl.className = 'vgm-label';
-    labelEl.textContent = group.label;
-    titleRow.appendChild(labelEl);
-    const countEl = document.createElement('span');
-    countEl.className = 'vgm-count';
-    countEl.textContent = `${wwVariants.length} WW · ${coVariants.length} Coles`;
-    titleRow.appendChild(countEl);
-    header.appendChild(titleRow);
-
-    const bests = document.createElement('div');
-    bests.className = 'vgm-bests';
-    [{ store: 'WW', best: wwBest, chip: 'store-chip ww sm', letter: 'W' }, { store: 'Coles', best: coBest, chip: 'store-chip coles sm', letter: 'C' }].forEach(({ store, best, chip, letter }) => {
-      if (!best) return;
-      const line = document.createElement('div');
-      line.className = 'vgm-store-line';
-      const chipEl = document.createElement('span');
-      chipEl.className = chip;
-      chipEl.textContent = letter;
-      line.appendChild(chipEl);
-      const nameEl = document.createElement('span');
-      nameEl.className = 'vgm-name';
-      const ov = (loadOverrides()[best.name] || {}).displayName;
-      nameEl.textContent = ov || stripWW(best.name);
-      line.appendChild(nameEl);
-      const pkEl = document.createElement('span');
-      pkEl.className = 'vgm-perkg';
-      pkEl.textContent = `$${best.perkg.toFixed(2)}/kg`;
-      line.appendChild(pkEl);
-      bests.appendChild(line);
+  if (isExpanded) {
+    const body = document.createElement('div');
+    body.className = 'vgm-body';
+    group._members.forEach(m => {
+      const wwPk = clientPerKg(m.woolworths);
+      const coPk = clientPerKg(m.coles);
+      const ov = overrides[m.list_item] || {};
+      const dispName = ov.displayName || stripWW(m.list_item);
+      const isWwWin = wwPk != null && group._wwPerKg != null && Math.abs(wwPk - group._wwPerKg) < 0.005;
+      const isCoWin = coPk != null && group._coPerKg != null && Math.abs(coPk - group._coPerKg) < 0.005;
+      const row = document.createElement('div');
+      row.className = 'vgm-variant';
+      row.innerHTML = `
+        <div class="vgm-variant-name">${dispName}</div>
+        <div class="vgm-variant-prices">
+          <span class="vgm-variant-px ${isWwWin ? 'win' : ''}"><span class="store-chip ww sm">W</span> ${wwPk != null ? `$${wwPk.toFixed(2)}/kg` : '—'}</span>
+          <span class="vgm-variant-px ${isCoWin ? 'win' : ''}"><span class="store-chip coles sm">C</span> ${coPk != null ? `$${coPk.toFixed(2)}/kg` : '—'}</span>
+        </div>`;
+      body.appendChild(row);
     });
-    header.appendChild(bests);
+    card.appendChild(body);
+  }
 
-    const expandBtn = document.createElement('button');
-    expandBtn.className = 'vgm-expand-btn vg-expand-btn';
-    expandBtn.dataset.group = group.key;
-    expandBtn.textContent = isExpanded ? 'Hide variants ▴' : `Show ${groupItems.length} variants ▾`;
-    header.appendChild(expandBtn);
-
-    card.appendChild(header);
-
-    if (isExpanded) {
-      const body = document.createElement('div');
-      body.className = 'vgm-expanded-body';
-
-      ['woolworths', 'coles'].forEach(store => {
-        const variants = store === 'woolworths' ? wwVariants : coVariants;
-        if (!variants.length) return;
-
-        const storeHeader = document.createElement('div');
-        storeHeader.className = 'vgm-store-header';
-        const chip = document.createElement('span');
-        chip.className = store === 'woolworths' ? 'store-chip ww sm' : 'store-chip coles sm';
-        chip.textContent = store === 'woolworths' ? 'W' : 'C';
-        storeHeader.appendChild(chip);
-        storeHeader.appendChild(document.createTextNode(store === 'woolworths' ? ' Woolworths' : ' Coles'));
-        body.appendChild(storeHeader);
-
-        variants.forEach((v, idx) => {
-          const isCheapest = idx === 0;
-          const row = document.createElement('div');
-          row.className = isCheapest ? 'vgm-variant-row vgm-cheapest' : 'vgm-variant-row';
-
-          const nameEl = document.createElement('span');
-          nameEl.className = 'vgm-vname';
-          const ov = (loadOverrides()[v.name] || {}).displayName;
-          nameEl.textContent = ov || stripWW(v.name);
-          row.appendChild(nameEl);
-
-          const sizeMatch = v.result?.name?.match(/(\d[\d.]*\s*(?:kg|g|ml|l))/i);
-          if (sizeMatch) {
-            const packEl = document.createElement('span');
-            packEl.className = 'vgm-vpack';
-            packEl.textContent = sizeMatch[1];
-            row.appendChild(packEl);
-          }
-
-          const pkEl = document.createElement('span');
-          pkEl.className = isCheapest ? 'vgm-vperkg vgm-cheapest-kg' : 'vgm-vperkg';
-          pkEl.textContent = `$${v.perkg.toFixed(2)}/kg`;
-          row.appendChild(pkEl);
-
-          body.appendChild(row);
-        });
-      });
-
-      card.appendChild(body);
-    }
-
-    container.appendChild(card);
-  });
+  container.appendChild(card);
 }
 
 // ── Mobile card view (≤640px) ─────────────────────────────────────────────────
@@ -3475,11 +3442,6 @@ function renderMobileCards(items, data) {
 
   container.appendChild(toolbar);
 
-  if (_showPerKgOnly) {
-    renderMobileVariantGroups(container, displayItems);
-    return;
-  }
-
   if (!displayItems.length) {
     const empty = document.createElement('div');
     empty.style.cssText = 'padding:40px 20px;text-align:center;color:var(--text-soft);font-size:14px;';
@@ -3489,6 +3451,7 @@ function renderMobileCards(items, data) {
   }
 
   displayItems.forEach(item => {
+    if (item._isGroup) { appendGroupCardMobile(container, item, overrides); return; }
     const ww      = item.woolworths;
     const co      = item.coles;
     const cheaper = item.cheaper_store;
@@ -3833,6 +3796,19 @@ function renderPage(data) {
     });
   }
 
+  // Collapse per-kg member products into synthetic variant-group rows so they
+  // render inline as normal-looking rows (treated as Weekly). Skip in archive
+  // view so the raw items remain individually reachable/unarchivable there.
+  if (_activePriority !== 'archive') {
+    const memberNames = new Set(VARIANT_GROUPS.flatMap(g => g.items));
+    const byName = new Map(allDisplayItems.map(i => [i.list_item, i]));
+    const groups = buildVariantGroups(byName);
+    if (groups.length) {
+      allDisplayItems = allDisplayItems.filter(i => !memberNames.has(i.list_item));
+      allDisplayItems.push(...groups);
+    }
+  }
+
   const categoryTabItems = _activePriority === 'archive'
     ? allDisplayItems.filter(i => i.archived || priorities[i.list_item] === 'archive')
     : _activePriority === 'watchlist'
@@ -3892,12 +3868,8 @@ function renderPage(data) {
 
   const overrides = loadOverrides();
 
-  if (_showPerKgOnly) {
-    renderVariantGroupsTable(tbody, sorted);
-    return;
-  }
-
   sorted.forEach((item) => {
+    if (item._isGroup) { appendGroupRowDesktop(tbody, item, overrides); return; }
     const ww = item.woolworths;
     const co = item.coles;
     const cheaper = item.cheaper_store;
@@ -4107,8 +4079,11 @@ function renderPage(data) {
   // ww_total / coles_total columns include all visible items, qty-weighted
   let _fWWQty = 0, _fCoQty = 0;
   for (const item of sorted) {
-    _fWWQty += (item.woolworths?.price ?? 0) * getUnits(item.list_item);
-    _fCoQty += (item.coles?.price    ?? 0) * getUnits(item.list_item);
+    // Per-kg groups contribute $/kg × weight; normal items contribute pack price × qty.
+    const wwUnit = item._isGroup ? (item._wwPerKg ?? 0) : (item.woolworths?.price ?? 0);
+    const coUnit = item._isGroup ? (item._coPerKg ?? 0) : (item.coles?.price ?? 0);
+    _fWWQty += wwUnit * getUnits(item.list_item);
+    _fCoQty += coUnit * getUnits(item.list_item);
   }
   const footWWQty  = Math.round(_fWWQty * 100) / 100;
   const footCoQty  = Math.round(_fCoQty * 100) / 100;
@@ -5194,7 +5169,7 @@ async function boot() {
         const incBtn = e.target.closest('.units-inc, .units-dec');
         if (incBtn) {
           const itemName = incBtn.dataset.item;
-          const isPerkg = _perkgSet.has(itemName);
+          const isPerkg = _perkgSet.has(itemName) || itemName.startsWith('__group_');
           const isInc = incBtn.classList.contains('units-inc');
           const ov = loadUnitOverrides();
           const cur = getUnits(itemName);

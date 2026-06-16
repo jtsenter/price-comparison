@@ -3,15 +3,15 @@
 // always get fresh HTML/CSS/JS (no stale-shell trap). The cache only serves when
 // the network is unavailable, giving an instant offline view of last-known prices.
 
-const CACHE = 'pricewatch-v23';
+const CACHE = 'pricewatch-v24';
 const SHELL = [
   'index.html',
   'hot-deals.html',
   'shopping-list.html',
-  'style.css?v=23',
-  'app.js?v=23',
-  'utils.js?v=23',
-  'name_map.js?v=23',
+  'style.css?v=24',
+  'app.js?v=24',
+  'utils.js?v=24',
+  'name_map.js?v=24',
   'manifest.webmanifest',
   'favicon.svg',
 ];
