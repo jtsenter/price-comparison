@@ -3513,6 +3513,47 @@ function openCategoryEditModal(groupKey) {
     return (lines || '<div class="cat-prod-empty">No product at this store yet</div>') + addBtn;
   };
 
+  // Add button handler: show inline form to add a new product candidate
+  const addProductHandler = (e) => {
+    const btn = e.target.closest('.cat-add-product');
+    if (!btn) return;
+    const store = btn.dataset.store;
+    const col = btn.closest('.cat-col');
+    // Hide the button and show an add-form
+    btn.style.display = 'none';
+    const form = document.createElement('div');
+    form.className = 'cat-add-form';
+    form.innerHTML = `
+      <input type="text" class="cat-add-name" placeholder="Product name" />
+      <input type="text" class="cat-add-url" placeholder="Product URL" />
+      <button class="cat-add-save">Save</button>
+      <button class="cat-add-cancel">Cancel</button>`;
+    col.appendChild(form);
+    form.querySelector('.cat-add-save').addEventListener('click', (ev) => {
+      const name = form.querySelector('.cat-add-name').value.trim();
+      const url = form.querySelector('.cat-add-url').value.trim();
+      if (name && url) {
+        // Add row to the dialog (will be saved via saveCategoryEdit)
+        const newRow = document.createElement('div');
+        newRow.className = 'cat-prod cat-prod-temp';
+        newRow.dataset.store = store;
+        newRow.innerHTML = `
+          <input type="checkbox" class="cat-incl" checked title="Include in this category" />
+          <div class="cat-prod-main">
+            <input type="text" class="cat-name" value="${name.replace(/"/g, '&quot;')}" placeholder="Name" />
+            <input type="text" class="cat-url" value="${url.replace(/"/g, '&quot;')}" placeholder="URL" />
+          </div>`;
+        col.insertBefore(newRow, form);
+      }
+      form.remove();
+      btn.style.display = '';
+    });
+    form.querySelector('.cat-add-cancel').addEventListener('click', () => {
+      form.remove();
+      btn.style.display = '';
+    });
+  };
+
   $('catEditBody').innerHTML = `
     <div class="cat-cols">
       <div class="cat-col">
@@ -3524,6 +3565,12 @@ function openCategoryEditModal(groupKey) {
         ${colHTML('coles')}
       </div>
     </div>`;
+
+  // Wire up Add product buttons
+  const editBody = $('catEditBody');
+  [...editBody.querySelectorAll('.cat-add-product')].forEach(btn => {
+    btn.addEventListener('click', addProductHandler);
+  });
 
   document.body.style.overflow = 'hidden';
   $('categoryEditModal').classList.add('open');
