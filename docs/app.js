@@ -634,7 +634,6 @@ const DEFAULT_VARIANT_GROUPS = [
   ]},
   { key: 'basa_fillets', label: 'Basa Fillets', items: [
     'Woolworths Basa Fillets Boneless With Skin Off',
-    'Basa Thawed Freshwater Basa Fillets',
   ]},
   { key: 'beef_mince', label: 'Beef Mince', items: [
     'Woolworths Lean Beef Mince',
@@ -3316,6 +3315,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
         <span class="vg-group-title">
           <span class="vg-chevron">${chev}</span>
           <span class="vg-group-label">${group._groupLabel}</span>
+          <button class="item-edit-btn" data-edit-item="${group.list_item}" title="Edit category">✎</button>
         </span>
         <span class="vg-group-sub">${group._members.length} ${group._members.length === 1 ? 'product' : 'products'}</span>
       </div>
@@ -3385,12 +3385,12 @@ function appendGroupRowDesktop(tbody, group, overrides) {
   const checked = _checkedItems.has(group.list_item) ? ' checked' : '';
   const checkCell = `<td class="check-cell"><input type="checkbox" class="row-check" data-item="${group.list_item}"${checked}></td>`;
 
-  // Actions: edit category, watchlist, refresh — mirror normal product rows.
+  // Actions: watchlist + refresh — identical classes/markup to normal product rows
+  // (edit ✎ lives in the name cell, same as normal items).
   const isWatched = _watchlist.has(group.list_item);
   const actionsCell = `<td class="actions-cell">
-    <button class="vg-cat-edit-btn" data-group="${group._groupKey}" title="Edit category">✎</button>
     <button class="item-watch-btn${isWatched ? ' active' : ''}" data-item="${group.list_item}" title="${isWatched ? 'Remove from watchlist' : 'Add to watchlist'}">👁</button>
-    <button class="vg-cat-refresh-btn" data-group="${group._groupKey}" title="Refresh prices for this category">↻</button>
+    <button class="item-refresh-btn" data-item="${group.list_item}" title="Refresh prices for this category">↻</button>
   </td>`;
 
   tbody.insertAdjacentHTML('beforeend', assembleGroupTr(tds, {
@@ -5363,12 +5363,6 @@ async function boot() {
           return;
         }
 
-        // Category edit / refresh buttons
-        const catEditBtn = e.target.closest('.vg-cat-edit-btn');
-        if (catEditBtn) { openCategoryEditModal(catEditBtn.dataset.group); return; }
-        const catRefreshBtn = e.target.closest('.vg-cat-refresh-btn');
-        if (catRefreshBtn) { refreshCategory(catRefreshBtn.dataset.group, catRefreshBtn); return; }
-
         // Row checkbox
         const rowCheck = e.target.closest('.row-check');
         if (rowCheck) {
@@ -5405,8 +5399,10 @@ async function boot() {
 
         const refreshBtn = e.target.closest('.item-refresh-btn');
         if (refreshBtn) {
-          const ov = loadOverrides()[refreshBtn.dataset.item] || {};
-          triggerItemRefresh(refreshBtn.dataset.item, refreshBtn, { wwUrl: ov.wwUrl, colesUrl: ov.colesUrl });
+          const rItem = refreshBtn.dataset.item;
+          if (rItem.startsWith('__group_')) { refreshCategory(rItem.replace('__group_', ''), refreshBtn); return; }
+          const ov = loadOverrides()[rItem] || {};
+          triggerItemRefresh(rItem, refreshBtn, { wwUrl: ov.wwUrl, colesUrl: ov.colesUrl });
           return;
         }
         const discrepEl = e.target.closest('.discrepancy-warn, .dismiss-diff-btn');
@@ -5442,6 +5438,7 @@ async function boot() {
         const editBtn = e.target.closest('.item-edit-btn');
         if (editBtn && _lastData) {
           const itemName = editBtn.dataset.editItem;
+          if (itemName.startsWith('__group_')) { openCategoryEditModal(itemName.replace('__group_', '')); return; }
           const item = _lastData.items.find(i => i.list_item === itemName);
           if (item) openEditModal(item);
           return;
