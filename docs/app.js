@@ -3173,29 +3173,18 @@ function perKgCellHTML(perkg, url) {
   return `<div class="price-main">${linked}</div>`;
 }
 
-// Trend cell for a group: a WW↔Coles $/kg spread bar (cheaper store green end,
-// dearer store red end) so the store gap reads at a glance.
-function perKgSpreadBar(group) {
-  const w = group._wwPerKg, c = group._coPerKg;
-  if (w == null && c == null) return '';
-  if (w == null || c == null) {
-    const only = w != null ? w : c;
-    const cls = w != null ? 'ww' : 'coles';
-    const lbl = w != null ? 'W' : 'C';
-    return `<div class="vg-spread single"><span class="store-chip ${cls} sm">${lbl}</span> $${only.toFixed(2)}/kg</div>`;
-  }
-  if (Math.abs(w - c) < 0.005) {
-    return `<div class="vg-spread"><span class="vg-spread-eq">both $${w.toFixed(2)}/kg</span></div>`;
-  }
-  const wwCheaper = w < c;
-  const lo = wwCheaper ? w : c, hi = wwCheaper ? c : w;
-  const loCls = wwCheaper ? 'ww' : 'coles', loLbl = wwCheaper ? 'W' : 'C';
-  const hiCls = wwCheaper ? 'coles' : 'ww', hiLbl = wwCheaper ? 'C' : 'W';
-  return `<div class="vg-spread" title="Woolworths $${w.toFixed(2)}/kg · Coles $${c.toFixed(2)}/kg">
-      <span class="vg-spread-end cheap"><span class="store-chip ${loCls} sm">${loLbl}</span>$${lo.toFixed(2)}</span>
-      <span class="vg-spread-bar"></span>
-      <span class="vg-spread-end dear">$${hi.toFixed(2)}<span class="store-chip ${hiCls} sm">${hiLbl}</span></span>
-    </div>`;
+// Trend cell for a group: the historic price bar of the group's cheapest current
+// variant, with a Manage button. The variant is a real item still in data.items,
+// so buildPriceBar's Manage button opens its real price-history modal unchanged.
+function groupTrendCellHTML(group) {
+  const cands = [group._wwBest, group._coBest].filter(Boolean);
+  if (!cands.length) return '';
+  const best = cands.reduce((a, b) => (a.perkg <= b.perkg ? a : b));
+  const member = group._members.find(m => m.list_item === best.name);
+  if (!member) return '';
+  // Compare the current best $/kg against the recorded purchase prices (per-kg
+  // for these meat items), so the marker reflects whether the rate is good now.
+  return buildPriceBar(member.list_item, member.price_history, best.perkg);
 }
 
 // Assemble a <tr> from a column→<td> map, respecting current visible columns.
@@ -3223,8 +3212,21 @@ function groupStoreVariantsHTML(group, store, overrides) {
     const name = ov.displayName || stripWW(v.name);
     const size = perKgPackLabel(v.res);
     const pack = v.res.price != null ? `${fmt(v.res.price)}${size ? ` / ${size}` : ''}` : '';
+    const safeKey = v.name.replace(/"/g, '&quot;');
+    const url = (store === 'woolworths' ? ov.wwUrl : ov.colesUrl) || v.res.url || null;
+    const wwImg = resolveImgUrl(group._members.find(m => m.list_item === v.name)?.woolworths?.image_url) || '';
+    const coImg = resolveImgUrl(group._members.find(m => m.list_item === v.name)?.coles?.image_url) || '';
+    const ownImg = resolveImgUrl(v.res.image_url) || coImg || wwImg;
+    const imgHtml = ownImg
+      ? `<img class="vg-pv-img img-hoverable" src="${ownImg}" alt="" loading="lazy" data-item="${safeKey}" data-ww-img="${wwImg}" data-co-img="${coImg}" />`
+      : '<span class="vg-pv-img vg-pv-noimg"></span>';
+    const nameHtml = url
+      ? `<a class="vg-pv-name" href="${url}" target="_blank" rel="noopener">${name}</a>`
+      : `<span class="vg-pv-name">${name}</span>`;
     return `<div class="vg-pv${i === 0 ? ' win' : ''}">
-        <span class="vg-pv-name">${name}</span>
+        ${imgHtml}
+        ${nameHtml}
+        <button class="item-edit-btn vg-pv-edit" data-edit-item="${safeKey}" title="Edit name / links / picture">✎</button>
         <span class="vg-pv-pack">${pack}</span>
         <span class="vg-pv-kg">$${v.pk.toFixed(2)}/kg</span>
       </div>`;
@@ -3238,11 +3240,15 @@ function appendGroupRowDesktop(tbody, group, overrides) {
   const wwBest = group._wwBest, coBest = group._coBest;
   const cheaper = group.cheaper_store;
 
-  // Image: prefer the cheaper store's best variant, fall back to the other.
-  const bestResult = (cheaper === 'coles' ? coBest : wwBest) || wwBest || coBest;
-  const imgSrc = resolveImgUrl(bestResult?.result?.image_url) || '';
+  // Group image is editable like any product: hover to preview, click to pick the
+  // WW or Coles photo. Keyed under the group key via the shared image picker.
+  const wwImg = resolveImgUrl(wwBest?.result?.image_url) || '';
+  const coImg = resolveImgUrl(coBest?.result?.image_url) || '';
+  const imgPref = loadImgOverrides()[group.list_item];
+  const imgSrc = (imgPref === 'ww' ? wwImg : imgPref === 'coles' ? coImg : null)
+    || (cheaper === 'coles' ? (coImg || wwImg) : (wwImg || coImg));
   const imgHtml = imgSrc
-    ? `<img class="item-img" src="${imgSrc}" alt="" loading="lazy" />`
+    ? `<img class="item-img img-hoverable" src="${imgSrc}" alt="" loading="lazy" data-item="${group.list_item}" data-ww-img="${wwImg}" data-co-img="${coImg}" />`
     : '<div class="item-img-placeholder">No Photo</div>';
 
   const chev = isExpanded ? '▾' : '▸';
@@ -3303,7 +3309,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
 
   const tds = {
     name:         nameCell,
-    trend:        `<td class="trend-cell">${perKgSpreadBar(group)}</td>`,
+    trend:        `<td class="trend-cell">${groupTrendCellHTML(group)}</td>`,
     priority:     priorityCell,
     units:        unitsCell,
     ww:           `<td class="price-cell ${wwClass}">${perKgCellHTML(group._wwPerKg, wwUrl)}</td>`,
@@ -5178,7 +5184,7 @@ async function boot() {
         // Variant group expand/collapse — click anywhere on the group row (or its
         // panel header), except on the interactive controls it hosts.
         const groupRow = e.target.closest('.vg-group-row, .vg-panel-row');
-        if (groupRow && !e.target.closest('.priority-select, .units-ctrl, a, button')) {
+        if (groupRow && !e.target.closest('.priority-select, .units-ctrl, a, button, .img-hoverable')) {
           const key = groupRow.dataset.group;
           if (_expandedGroups.has(key)) _expandedGroups.delete(key);
           else _expandedGroups.add(key);
@@ -5290,6 +5296,8 @@ async function boot() {
   const mobileCardsEl = $('mobileCards');
   if (mobileCardsEl) {
     mobileCardsEl.addEventListener('click', (e) => {
+      // Don't toggle when interacting with an option's link, edit button, or image.
+      if (e.target.closest('a, button, .img-hoverable')) return;
       const vgBtn = e.target.closest('.vg-expand-btn');
       if (vgBtn) {
         const key = vgBtn.dataset.group;
