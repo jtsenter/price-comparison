@@ -22,7 +22,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=22" />
+  <link rel="stylesheet" href="style.css?v=23" />
 </head>
 <body>
 
@@ -206,6 +206,8 @@
       <span class="filter-separator"></span>
       <button class="priority-pill prices-only-btn" id="pricesOnlyBtn">✓ Priced only</button>
       <span class="filter-separator"></span>
+      <button id="perkgDevBtn" type="button">⚙ /kg</button>
+      <span class="filter-separator"></span>
       <button class="priority-pill selected-pill" id="selectedPill" style="display:none">☑ Selected (<span id="selectedCount">0</span>)</button>
     </div>
     <button class="btn btn-ghost" id="scrapeArchivedBtn" style="display:none;margin-left:auto" title="Refresh prices for archived items">
@@ -276,9 +278,6 @@
     <div class="last-updated" id="lastUpdated"></div>
   </footer>
 
-  <!-- TEMPORARY dev-only control (web): isolate the per-kg items to tune their
-       scraping. Deliberately ugly so it's obvious this is not a finished feature. -->
-  <button id="perkgDevBtn" type="button">⚙ TEMP: show per-kg items only (dev)</button>
 </main>
 
 <button id="basketFab" aria-label="Add selected items to basket">＋ Basket (<span id="basketFabCount">0</span>)</button>
@@ -465,9 +464,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-<script src="name_map.js?v=22"></script>
-<script src="utils.js?v=22"></script>
-<script src="app.js?v=22"></script>
+<script src="name_map.js?v=23"></script>
+<script src="utils.js?v=23"></script>
+<script src="app.js?v=23"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">
