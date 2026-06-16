@@ -3509,7 +3509,8 @@ function openCategoryEditModal(groupKey) {
           </div>
         </div>`;
     }).filter(Boolean).join('');
-    return lines || '<div class="cat-prod-empty">No product at this store yet</div>';
+    const addBtn = `<button class="cat-add-product" data-store="${store}">+ Add ${store === 'ww' ? 'Woolworths' : 'Coles'} product</button>`;
+    return (lines || '<div class="cat-prod-empty">No product at this store yet</div>') + addBtn;
   };
 
   $('catEditBody').innerHTML = `
