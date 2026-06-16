@@ -263,6 +263,12 @@ function toggleWatchlist(itemName) {
 // docs/data/user_settings.json (same mechanism as watchlist.json): the device
 // holding a token publishes on change; every device merges the file in on boot
 // so the baskets always agree.
+function loadPerkgLocal() {
+  try { return new Set(JSON.parse(localStorage.getItem('pw_perkg_v1') || '[]')); } catch { return new Set(); }
+}
+function savePerkgLocal(set) {
+  localStorage.setItem('pw_perkg_v1', JSON.stringify([...set]));
+}
 let _userSettingsTimer = null;
 function scheduleUserSettingsSync() {
   clearTimeout(_userSettingsTimer);
@@ -271,7 +277,7 @@ function scheduleUserSettingsSync() {
 async function persistUserSettingsToRepo() {
   const s = loadSettings();
   if (!s.token) return;
-  const payload = { priorities: loadPriorities(), units: loadUnitOverrides() };
+  const payload = { priorities: loadPriorities(), units: loadUnitOverrides(), perkg: [..._perkgSet] };
   const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/user_settings.json`;
   const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
   const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2) + '\n')));
@@ -287,6 +293,7 @@ async function persistUserSettingsToRepo() {
   // fire-and-forget — errors are silently ignored
 }
 async function initUserSettings() {
+  _perkgSet = loadPerkgLocal();
   try {
     const res = await fetch(`data/user_settings.json?t=${Date.now()}`);
     if (res.ok) {
@@ -297,6 +304,10 @@ async function initUserSettings() {
         // local-only keys are preserved, so nothing is ever silently deleted.
         localStorage.setItem('pw_priorities_v1', JSON.stringify({ ...loadPriorities(), ...(remote.priorities || {}) }));
         localStorage.setItem('pw_units_v1',      JSON.stringify({ ...loadUnitOverrides(), ...(remote.units || {}) }));
+        if (Array.isArray(remote.perkg)) {
+          _perkgSet = new Set([..._perkgSet, ...remote.perkg]);
+          savePerkgLocal(_perkgSet);
+        }
       }
     }
   } catch {}
@@ -583,6 +594,8 @@ function _updateStoreCycleBtn() {
   btn.classList.toggle('active', _storeFilter !== 'all');
 }
 let _searchQuery = '';
+let _perkgSet = new Set();   // items compared by $/kg (synced via user_settings.json)
+let _showPerKgOnly = false;  // TEMP dev filter (web only) — show only per-kg items
 let _watchlist = new Set(); // loaded on boot from localStorage + watchlist.json
 let _approvedWarns = new Set(); // loaded from approved_warns.json
 let _selectedItems = new Set(); // session-only mobile card selection
@@ -2789,6 +2802,8 @@ const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
 function sortItems(items) {
   const exclusions = loadExclusions();
   let filtered = items.filter(item => {
+    // TEMP dev filter (web only): show only the per-kg items, ignore all else
+    if (_showPerKgOnly) return _perkgSet.has(item.list_item);
     // Watchlist filter: show only watchlisted items; bypass archive/priority checks
     if (_activePriority === 'watchlist') return _watchlist.has(item.list_item);
     // Mobile selection filter
@@ -4795,6 +4810,19 @@ async function boot() {
   {
     renderPage(data);
     showNameChangesNotice();
+
+    // TEMP dev button (web): isolate the per-kg items so their scraping can be tuned.
+    const perkgBtn = $('perkgDevBtn');
+    if (perkgBtn) {
+      perkgBtn.addEventListener('click', () => {
+        _showPerKgOnly = !_showPerKgOnly;
+        perkgBtn.classList.toggle('on', _showPerKgOnly);
+        perkgBtn.textContent = _showPerKgOnly
+          ? `⚙ TEMP: showing ${_perkgSet.size} per-kg items — click to exit`
+          : '⚙ TEMP: show per-kg items only (dev)';
+        if (_lastData) renderPage(_lastData);
+      });
+    }
 
     const tbody = $('tableBody');
     if (tbody) {

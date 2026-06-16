@@ -58,6 +58,7 @@ COLES_SCROLL_WAIT_MS = 600      # post-scroll wait for lazy-loaded tiles
 MAX_PRODUCT_PRICE    = 50.0     # upper bound for plausible product prices
 CONCURRENCY          = 2        # parallel page-pairs (don't exceed 3)
 MAX_RESULTS          = 5        # search results fetched per store
+ARCHIVED_REFRESH_DAYS = 7       # scheduled runs refresh archived items only if older than this (else carried forward)
 SUSPICIOUS_CHANGE_PCT   = 0.30  # flag if price changed by more than this fraction
 SUSPICIOUS_MIN_HISTORY  = 3     # minimum price_history entries to run suspicion check
 
@@ -946,13 +947,19 @@ def should_skip_item(ex_data: dict | None, trigger: str) -> bool:
     """Return True if item was recently scraped and can be skipped on scheduled runs."""
     if not ex_data:
         return False
-    # Archived items: skip unless this is an explicit archived-only scrape
-    if ex_data.get("archived") and trigger != "scrape_archived":
-        return True
+    # Archived items refresh on scheduled runs too, but "in a different way":
+    # only when their data is stale (older than ARCHIVED_REFRESH_DAYS). This way
+    # they update automatically — no separate tool — without scraping every run.
+    if ex_data.get("archived") and trigger not in ("scrape_archived", "manual"):
+        last_scraped = ex_data.get("last_scraped")
+        if not last_scraped:
+            return False  # never scraped → fetch it now
+        try:
+            age_days = (datetime.now(timezone.utc) - datetime.fromisoformat(last_scraped)).days
+        except Exception:
+            return False
+        return age_days < ARCHIVED_REFRESH_DAYS
     if trigger == "manual":
-        return False
-    last_scraped = ex_data.get("last_scraped")
-    if not last_scraped:
         return False
     return False
 
@@ -1434,12 +1441,16 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         def _priority_key(name):
             trips = purchase_history.get(name, {}).get("trip_count", 0)
             return 0 if trips >= 7 else (1 if trips >= 3 else 2)
-        # Exclude archived items from normal scrapes
-        shopping_list = sorted(
+        # Active items first (by priority); archived items appended LAST so they
+        # refresh in the same scheduled run but never delay active items. The
+        # staleness gate in should_skip_item keeps them to ~weekly, not every run.
+        active = sorted(
             [n for n in purchase_history.keys() if n not in archived_set],
             key=_priority_key,
         )
-        print(f"Active shopping list: {len(shopping_list)} items (excluding {len(archived_set)} archived)")
+        archived_list = sorted(n for n in archived_set if n in purchase_history)
+        shopping_list = active + archived_list
+        print(f"Active shopping list: {len(active)} items + {len(archived_list)} archived (refreshed if older than {ARCHIVED_REFRESH_DAYS}d)")
 
     detect_fuzzy_changes(shopping_list, FLAG_PATH)
 
@@ -1718,10 +1729,14 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             )
             not_found = [n for n in not_found if n not in existing_map]
         else:
-            # Normal/scheduled run: we don't fetch live prices for archived items (to
-            # save scrape time), but we DO keep them in latest.json so the archive view
-            # has data. Carry forward any previously-scraped archived item; otherwise
-            # build a price-history-only entry straight from the Excel purchase history.
+            # Normal/scheduled run. Archived items we refreshed this run are already
+            # in items_output but the scrape result doesn't carry the archived flag —
+            # re-stamp it so the archive view still recognises them.
+            for _it in items_output:
+                if _it.get("list_item") in archived_set:
+                    _it["archived"] = True
+            # Any archived item NOT refreshed this run (still fresh, or no history to
+            # scrape) is carried forward so latest.json keeps full archive coverage.
             present = {i["list_item"] for i in items_output}
             for name in sorted(archived_set):
                 if name in present:

@@ -321,6 +321,17 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
   content: "·"; margin-right: 12px; color: var(--text-soft);
 }
 
+/* TEMPORARY dev-only per-kg filter button (web). Intentionally ugly so it's
+   obvious this is scaffolding, not a finished feature. Hidden on mobile.
+   Remove once the per-kg comparison ships properly. */
+#perkgDevBtn {
+  display: block; margin: 8px auto 28px; padding: 10px 18px;
+  background: #ff00ff; color: #000; font-weight: 700; font-size: 13px;
+  border: 3px dashed #000; border-radius: 0; cursor: pointer; font-family: monospace;
+}
+#perkgDevBtn.on { background: #00e5ff; outline: 4px solid red; }
+@media (max-width: 700px) { #perkgDevBtn { display: none; } }
+
 /* ── Category tabs ───────────────────────────────────────────── */
 .category-tabs {
   display: flex;
