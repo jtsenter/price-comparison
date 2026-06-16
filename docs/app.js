@@ -3498,26 +3498,13 @@ function openCategoryEditModal(groupKey) {
       if (!res) return '';
       const o = ov[m.list_item] || {};
       const name = (o.displayName || stripWW(m.list_item)).replace(/"/g, '&quot;');
-      const pk = clientPerKg(res);
-      const size = perKgPackLabel(res);
-      const meta = res.price != null
-        ? `${fmt(res.price)}${size ? ` / ${size}` : ''}${pk != null ? ` · <strong>$${pk.toFixed(2)}/kg</strong>` : ''}`
-        : 'no price';
       const included = !excl.has(`${groupKey}::${m.list_item}::${store}`);
       const url = ((store === 'ww' ? o.wwUrl : o.colesUrl) || res.url || '').replace(/"/g, '&quot;');
-      const wwImg = resolveImgUrl(m.woolworths?.image_url) || '';
-      const coImg = resolveImgUrl(m.coles?.image_url) || '';
-      const img = resolveImgUrl(res.image_url) || '';
       const safeKey = m.list_item.replace(/"/g, '&quot;');
-      const imgHtml = img
-        ? `<img class="cat-prod-img img-hoverable" src="${img}" alt="" data-item="${safeKey}" data-ww-img="${wwImg}" data-co-img="${coImg}" />`
-        : '<span class="cat-prod-img cat-prod-noimg"></span>';
       return `<div class="cat-prod" data-item="${safeKey}" data-store="${store}">
           <input type="checkbox" class="cat-incl"${included ? ' checked' : ''} title="Include in this category" />
-          ${imgHtml}
           <div class="cat-prod-main">
-            <input type="text" class="cat-name" value="${name}" />
-            <div class="cat-prod-meta">${meta}</div>
+            <input type="text" class="cat-name" value="${name}" placeholder="Name" />
             <input type="text" class="cat-url" value="${url}" placeholder="Pinned ${store === 'ww' ? 'Woolworths' : 'Coles'} URL" />
           </div>
         </div>`;
