@@ -493,7 +493,10 @@ function getAnalysisData(itemName) {
 }
 
 function getPriority(itemName) {
-  if (typeof itemName === 'string' && itemName.startsWith('__group_')) return 'weekly';
+  // Variant groups carry their own priority under the synthetic group key; default Weekly.
+  if (typeof itemName === 'string' && itemName.startsWith('__group_')) {
+    return loadPriorities()[itemName] || 'weekly';
+  }
   const p = loadPriorities()[itemName];
   if (p) return p;  // explicit user override always wins
   const d = getAnalysisData(itemName);
@@ -3161,16 +3164,38 @@ function buildVariantGroups(byName) {
   return out;
 }
 
-// A $/kg price cell: big $/kg headline (linked), small actual pack price beneath.
-function perKgCellHTML(result, perkg, url, isWinner) {
+// A $/kg price cell: just the $/kg headline (linked). No pack-price subline —
+// that lives in the expanded panel, where pack size actually matters.
+function perKgCellHTML(perkg, url) {
   if (perkg == null) return '<span class="no-data">—</span>';
   const head = `$${perkg.toFixed(2)}<span class="perkg-suffix">/kg</span>`;
   const linked = url ? `<a href="${url}" target="_blank" class="price-link">${head}</a>` : head;
-  const win = isWinner ? '<span class="vg-win" title="Cheapest in this group">✓</span>' : '';
-  const pack = result && result.price != null
-    ? `${fmt(result.price)}${perKgPackLabel(result) ? ` / ${perKgPackLabel(result)}` : ''}`
-    : '';
-  return `<div class="price-main">${linked}${win}</div><div class="price-unit">${pack}</div>`;
+  return `<div class="price-main">${linked}</div>`;
+}
+
+// Trend cell for a group: a WW↔Coles $/kg spread bar (cheaper store green end,
+// dearer store red end) so the store gap reads at a glance.
+function perKgSpreadBar(group) {
+  const w = group._wwPerKg, c = group._coPerKg;
+  if (w == null && c == null) return '';
+  if (w == null || c == null) {
+    const only = w != null ? w : c;
+    const cls = w != null ? 'ww' : 'coles';
+    const lbl = w != null ? 'W' : 'C';
+    return `<div class="vg-spread single"><span class="store-chip ${cls} sm">${lbl}</span> $${only.toFixed(2)}/kg</div>`;
+  }
+  if (Math.abs(w - c) < 0.005) {
+    return `<div class="vg-spread"><span class="vg-spread-eq">both $${w.toFixed(2)}/kg</span></div>`;
+  }
+  const wwCheaper = w < c;
+  const lo = wwCheaper ? w : c, hi = wwCheaper ? c : w;
+  const loCls = wwCheaper ? 'ww' : 'coles', loLbl = wwCheaper ? 'W' : 'C';
+  const hiCls = wwCheaper ? 'coles' : 'ww', hiLbl = wwCheaper ? 'C' : 'W';
+  return `<div class="vg-spread" title="Woolworths $${w.toFixed(2)}/kg · Coles $${c.toFixed(2)}/kg">
+      <span class="vg-spread-end cheap"><span class="store-chip ${loCls} sm">${loLbl}</span>$${lo.toFixed(2)}</span>
+      <span class="vg-spread-bar"></span>
+      <span class="vg-spread-end dear">$${hi.toFixed(2)}<span class="store-chip ${hiCls} sm">${hiLbl}</span></span>
+    </div>`;
 }
 
 // Assemble a <tr> from a column→<td> map, respecting current visible columns.
@@ -3181,7 +3206,33 @@ function assembleGroupTr(tds, { rowClass, dataAttrs = '' } = {}) {
     + `<td class="actions-cell"></td></tr>`;
 }
 
-// Render one variant group (collapsed row + expanded member rows) into the tbody.
+// Build the per-store variant list for the expanded panel: every member that has
+// a price at `store`, sorted by $/kg ascending, cheapest flagged as the winner.
+function groupStoreVariantsHTML(group, store, overrides) {
+  const variants = group._members
+    .map(m => {
+      const res = store === 'woolworths' ? m.woolworths : m.coles;
+      return { name: m.list_item, res, pk: clientPerKg(res) };
+    })
+    .filter(v => v.pk != null)
+    .sort((a, b) => a.pk - b.pk);
+  if (!variants.length) return '<div class="vg-pv empty">No matches at this store</div>';
+
+  return variants.map((v, i) => {
+    const ov = overrides[v.name] || {};
+    const name = ov.displayName || stripWW(v.name);
+    const size = perKgPackLabel(v.res);
+    const pack = v.res.price != null ? `${fmt(v.res.price)}${size ? ` / ${size}` : ''}` : '';
+    return `<div class="vg-pv${i === 0 ? ' win' : ''}">
+        <span class="vg-pv-name">${name}</span>
+        <span class="vg-pv-pack">${pack}</span>
+        <span class="vg-pv-kg">$${v.pk.toFixed(2)}/kg</span>
+      </div>`;
+  }).join('');
+}
+
+// Render one variant group: a collapsed table row, plus (if open) a full-width
+// panel row that lays out each store's variants ranked by $/kg.
 function appendGroupRowDesktop(tbody, group, overrides) {
   const isExpanded = _expandedGroups.has(group._groupKey);
   const wwBest = group._wwBest, coBest = group._coBest;
@@ -3199,11 +3250,11 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     <div class="item-row">
       ${imgHtml}
       <div class="item-info">
-        <button class="vg-expand-btn vg-group-title" data-group="${group._groupKey}">
+        <span class="vg-group-title">
           <span class="vg-chevron">${chev}</span>
           <span class="vg-group-label">${group._groupLabel}</span>
-          <span class="vg-group-count">${group._members.length} options</span>
-        </button>
+        </span>
+        <span class="vg-group-sub">${group._members.length} options · tap row to ${isExpanded ? 'hide' : 'compare'}</span>
       </div>
     </div></td>`;
 
@@ -3234,6 +3285,14 @@ function appendGroupRowDesktop(tbody, group, overrides) {
       <button class="units-inc" data-item="${group.list_item}">+</button>
     </div></td>`;
 
+  // Per-group priority (stored under the synthetic group key, shared by all members).
+  const gp = getPriority(group.list_item);
+  const priorityCell = `<td class="priority-cell"><select class="priority-select" data-item="${group.list_item}">
+      <option value="weekly"${gp === 'weekly' ? ' selected' : ''}>Weekly</option>
+      <option value="monthly"${gp === 'monthly' ? ' selected' : ''}>Monthly</option>
+      <option value="rare"${gp === 'rare' ? ' selected' : ''}>Rare</option>
+    </select></td>`;
+
   const wwTotal = group._wwPerKg != null ? group._wwPerKg * units : null;
   const coTotal = group._coPerKg != null ? group._coPerKg * units : null;
   let savingContent = '<span class="no-data">—</span>';
@@ -3244,11 +3303,11 @@ function appendGroupRowDesktop(tbody, group, overrides) {
 
   const tds = {
     name:         nameCell,
-    trend:        `<td class="trend-cell"></td>`,
-    priority:     `<td class="priority-cell"><span class="vg-priority-tag">per kg</span></td>`,
+    trend:        `<td class="trend-cell">${perKgSpreadBar(group)}</td>`,
+    priority:     priorityCell,
     units:        unitsCell,
-    ww:           `<td class="price-cell ${wwClass}">${perKgCellHTML(wwBest?.result, group._wwPerKg, wwUrl, false)}</td>`,
-    coles:        `<td class="price-cell ${coClass}">${perKgCellHTML(coBest?.result, group._coPerKg, coUrl, false)}</td>`,
+    ww:           `<td class="price-cell ${wwClass}">${perKgCellHTML(group._wwPerKg, wwUrl)}</td>`,
+    coles:        `<td class="price-cell ${coClass}">${perKgCellHTML(group._coPerKg, coUrl)}</td>`,
     cheaper:      `<td class="cheaper-cell">${badgeHtml}</td>`,
     pct:          `<td class="pct-cell">${pctHtml}</td>`,
     saving:       `<td><div class="saving-row">${savingContent}</div></td>`,
@@ -3266,103 +3325,79 @@ function appendGroupRowDesktop(tbody, group, overrides) {
 
   if (!isExpanded) return;
 
-  // Expanded: one row per member product, $/kg at each store, winner per store marked.
-  group._members.forEach(m => {
-    const wwPk = clientPerKg(m.woolworths);
-    const coPk = clientPerKg(m.coles);
-    const ov = overrides[m.list_item] || {};
-    const dispName = ov.displayName || stripWW(m.list_item);
-    const isWwWin = wwPk != null && group._wwPerKg != null && Math.abs(wwPk - group._wwPerKg) < 0.005;
-    const isCoWin = coPk != null && group._coPerKg != null && Math.abs(coPk - group._coPerKg) < 0.005;
+  // Expanded: one full-width panel row laying out WW and Coles variants side by side.
+  const winnerTag = (!wwBest || !coBest) ? ''
+    : cheaper === 'woolworths' ? '<span class="vg-panel-winner ww">Cheapest: Woolworths</span>'
+    : cheaper === 'coles' ? '<span class="vg-panel-winner coles">Cheapest: Coles</span>'
+    : '<span class="vg-panel-winner">Same price</span>';
 
-    let vCheaper = null;
-    if (wwPk != null && coPk != null) vCheaper = wwPk < coPk ? 'woolworths' : (coPk < wwPk ? 'coles' : 'equal');
-    let vBadge = '';
-    if (wwPk == null || coPk == null) vBadge = '';
-    else if (vCheaper === 'woolworths') vBadge = '<span class="store-chip ww sm">W</span>';
-    else if (vCheaper === 'coles') vBadge = '<span class="store-chip coles sm">C</span>';
-    else vBadge = '<span class="cheaper-badge equal">=</span>';
-
-    const wwUrlV = ov.wwUrl || m.woolworths?.url || null;
-    const coUrlV = ov.colesUrl || m.coles?.url || null;
-
-    const vtds = {
-      name:        `<td class="item-name vg-variant-name"><span class="vg-variant-label">${dispName}</span></td>`,
-      trend:       `<td class="trend-cell"></td>`,
-      priority:    `<td class="priority-cell"></td>`,
-      units:       `<td class="units-cell"></td>`,
-      ww:          `<td class="price-cell ${isWwWin ? 'cell-ww' : ''}">${perKgCellHTML(m.woolworths, wwPk, wwUrlV, isWwWin)}</td>`,
-      coles:       `<td class="price-cell ${isCoWin ? 'cell-coles' : ''}">${perKgCellHTML(m.coles, coPk, coUrlV, isCoWin)}</td>`,
-      cheaper:     `<td class="cheaper-cell">${vBadge}</td>`,
-      pct:         `<td class="pct-cell"></td>`,
-      saving:      `<td></td>`,
-      trips:       `<td class="trips-cell"></td>`,
-      category:    `<td></td>`,
-      last_scraped:`<td></td>`,
-      ww_total:    `<td></td>`,
-      coles_total: `<td></td>`,
-    };
-    tbody.insertAdjacentHTML('beforeend', assembleGroupTr(vtds, { rowClass: 'vg-variant-row' }));
-  });
+  const colSpan = getVisibleCols().length + 2;
+  const panel = `<tr class="vg-panel-row" data-group="${group._groupKey}"><td colspan="${colSpan}">
+    <div class="vg-panel">
+      <div class="vg-panel-head">
+        <span class="vg-panel-title">${group._groupLabel}</span>
+        ${winnerTag}
+      </div>
+      <div class="vg-panel-cols">
+        <div class="vg-panel-store">
+          <div class="vg-store-h"><span class="store-chip ww sm">W</span> Woolworths</div>
+          ${groupStoreVariantsHTML(group, 'woolworths', overrides)}
+        </div>
+        <div class="vg-panel-store">
+          <div class="vg-store-h"><span class="store-chip coles sm">C</span> Coles</div>
+          ${groupStoreVariantsHTML(group, 'coles', overrides)}
+        </div>
+      </div>
+      <div class="vg-panel-note">Highlighted = lowest $/kg at each store. The cheapest sticker price isn't always cheapest per kilo.</div>
+    </div>
+  </td></tr>`;
+  tbody.insertAdjacentHTML('beforeend', panel);
 }
 
-// Render one variant group as a mobile card (collapsed + expanded member rows).
+// Render one variant group as a mobile card: collapsed comparison + expanded
+// per-store variant lists (cheapest highlighted).
 function appendGroupCardMobile(container, group, overrides) {
   const isExpanded = _expandedGroups.has(group._groupKey);
-  const wwBest = group._wwBest, coBest = group._coBest;
   const cheaper = group.cheaper_store;
 
   const card = document.createElement('div');
-  card.className = 'mc-card vg-mobile-card' + (isExpanded ? ' vg-mobile-open' : '');
+  card.className = 'mc-card vg-mobile-card vg-expand-btn' + (isExpanded ? ' vg-mobile-open' : '');
+  card.dataset.group = group._groupKey;
 
-  const head = document.createElement('button');
-  head.className = 'vg-expand-btn vgm-head';
-  head.dataset.group = group._groupKey;
-  head.innerHTML = `
-    <span class="vg-chevron">${isExpanded ? '▾' : '▸'}</span>
-    <span class="vgm-head-label">${group._groupLabel}</span>
-    <span class="vgm-head-count">${group._members.length} options</span>`;
-  card.appendChild(head);
-
-  const cmp = document.createElement('div');
-  cmp.className = 'vgm-cmp';
   const wwWin = cheaper === 'woolworths', coWin = cheaper === 'coles';
-  cmp.innerHTML = `
-    <div class="vgm-cmp-store ${wwWin ? 'win' : ''}">
-      <span class="store-chip ww sm">W</span>
-      <span class="vgm-cmp-kg">${group._wwPerKg != null ? `$${group._wwPerKg.toFixed(2)}/kg` : '—'}</span>
-      ${wwWin ? '<span class="vgm-cmp-tag">cheaper</span>' : ''}
+  let html = `
+    <div class="vgm-head">
+      <span class="vg-chevron">${isExpanded ? '▾' : '▸'}</span>
+      <span class="vgm-head-label">${group._groupLabel}</span>
+      <span class="vgm-head-count">${group._members.length} options</span>
     </div>
-    <div class="vgm-cmp-store ${coWin ? 'win' : ''}">
-      <span class="store-chip coles sm">C</span>
-      <span class="vgm-cmp-kg">${group._coPerKg != null ? `$${group._coPerKg.toFixed(2)}/kg` : '—'}</span>
-      ${coWin ? '<span class="vgm-cmp-tag">cheaper</span>' : ''}
+    <div class="vgm-cmp">
+      <div class="vgm-cmp-store ${wwWin ? 'win' : ''}">
+        <span class="store-chip ww sm">W</span>
+        <span class="vgm-cmp-kg">${group._wwPerKg != null ? `$${group._wwPerKg.toFixed(2)}/kg` : '—'}</span>
+        ${wwWin ? '<span class="vgm-cmp-tag">cheaper</span>' : ''}
+      </div>
+      <div class="vgm-cmp-store ${coWin ? 'win' : ''}">
+        <span class="store-chip coles sm">C</span>
+        <span class="vgm-cmp-kg">${group._coPerKg != null ? `$${group._coPerKg.toFixed(2)}/kg` : '—'}</span>
+        ${coWin ? '<span class="vgm-cmp-tag">cheaper</span>' : ''}
+      </div>
     </div>`;
-  card.appendChild(cmp);
 
   if (isExpanded) {
-    const body = document.createElement('div');
-    body.className = 'vgm-body';
-    group._members.forEach(m => {
-      const wwPk = clientPerKg(m.woolworths);
-      const coPk = clientPerKg(m.coles);
-      const ov = overrides[m.list_item] || {};
-      const dispName = ov.displayName || stripWW(m.list_item);
-      const isWwWin = wwPk != null && group._wwPerKg != null && Math.abs(wwPk - group._wwPerKg) < 0.005;
-      const isCoWin = coPk != null && group._coPerKg != null && Math.abs(coPk - group._coPerKg) < 0.005;
-      const row = document.createElement('div');
-      row.className = 'vgm-variant';
-      row.innerHTML = `
-        <div class="vgm-variant-name">${dispName}</div>
-        <div class="vgm-variant-prices">
-          <span class="vgm-variant-px ${isWwWin ? 'win' : ''}"><span class="store-chip ww sm">W</span> ${wwPk != null ? `$${wwPk.toFixed(2)}/kg` : '—'}</span>
-          <span class="vgm-variant-px ${isCoWin ? 'win' : ''}"><span class="store-chip coles sm">C</span> ${coPk != null ? `$${coPk.toFixed(2)}/kg` : '—'}</span>
-        </div>`;
-      body.appendChild(row);
-    });
-    card.appendChild(body);
+    html += `<div class="vgm-body">
+      <div class="vgm-store-sec">
+        <div class="vg-store-h"><span class="store-chip ww sm">W</span> Woolworths</div>
+        ${groupStoreVariantsHTML(group, 'woolworths', overrides)}
+      </div>
+      <div class="vgm-store-sec">
+        <div class="vg-store-h"><span class="store-chip coles sm">C</span> Coles</div>
+        ${groupStoreVariantsHTML(group, 'coles', overrides)}
+      </div>
+    </div>`;
   }
 
+  card.innerHTML = html;
   container.appendChild(card);
 }
 
@@ -5140,10 +5175,11 @@ async function boot() {
     const tbody = $('tableBody');
     if (tbody) {
       tbody.addEventListener('click', (e) => {
-        // Variant group expand/collapse
-        const vgBtn = e.target.closest('.vg-expand-btn');
-        if (vgBtn) {
-          const key = vgBtn.dataset.group;
+        // Variant group expand/collapse — click anywhere on the group row (or its
+        // panel header), except on the interactive controls it hosts.
+        const groupRow = e.target.closest('.vg-group-row, .vg-panel-row');
+        if (groupRow && !e.target.closest('.priority-select, .units-ctrl, a, button')) {
+          const key = groupRow.dataset.group;
           if (_expandedGroups.has(key)) _expandedGroups.delete(key);
           else _expandedGroups.add(key);
           if (_lastData) renderPage(_lastData);
