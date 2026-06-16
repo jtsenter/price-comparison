@@ -22,7 +22,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=26" />
+  <link rel="stylesheet" href="style.css?v=27" />
 </head>
 <body>
 
@@ -338,6 +338,26 @@
   </div>
 </div>
 
+<!-- Per-kg category edit modal -->
+<div class="modal-overlay" id="categoryEditModal">
+  <div class="modal modal-wide modal-scrollable">
+    <div class="modal-header">
+      <h2 id="catEditTitle">Edit category</h2>
+      <button class="modal-close" id="catEditClose">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Category name</label>
+      <input type="text" id="catEditName" />
+    </div>
+    <div id="catEditBody"></div>
+    <p class="cat-edit-note">Tick the products that belong in this category. The cheapest ticked product at each store sets the category's $/kg.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="catEditCancel">Cancel</button>
+      <button class="btn btn-primary" id="catEditSave">Save category</button>
+    </div>
+  </div>
+</div>
+
 <!-- Price History modal -->
 <div class="modal-overlay" id="priceHistoryModal">
   <div class="modal modal-wide modal-scrollable">
@@ -464,9 +484,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-<script src="name_map.js?v=26"></script>
-<script src="utils.js?v=26"></script>
-<script src="app.js?v=26"></script>
+<script src="name_map.js?v=27"></script>
+<script src="utils.js?v=27"></script>
+<script src="app.js?v=27"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">

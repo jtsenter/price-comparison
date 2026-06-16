@@ -608,27 +608,70 @@ let _searchQuery = '';
 let _perkgSet = new Set();   // items compared by $/kg (synced via user_settings.json)
 let _showPerKgOnly = false;  // TEMP dev filter (web only) — show only per-kg items
 
-const VARIANT_GROUPS = [
-  { key: 'chicken', label: 'Chicken', items: [
+// Per-kg categories. Each is a comparable product type; the two near-identical
+// salmon-fillet and basa entries are merged so each category holds its real
+// equivalents. Membership can be fine-tuned in the edit dialog (DEFAULT_VARIANT_GROUPS
+// is the seed; user overrides live in localStorage — see loadVariantGroups()).
+const DEFAULT_VARIANT_GROUPS = [
+  { key: 'chicken_breast', label: 'Chicken Breast', items: [
     'Woolworths RSPCA Approved Chicken Breast Fillet',
+  ]},
+  { key: 'chicken_drumsticks', label: 'Chicken Drumsticks', items: [
     'Woolworths RSPCA Approved Chicken Drumsticks',
+  ]},
+  { key: 'chicken_thigh', label: 'Chicken Thigh', items: [
     'Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In',
+  ]},
+  { key: 'chicken_roast', label: 'Chicken Roast Portions', items: [
     'Woolworths Cook Chicken Roasting Portions Italian Style',
   ]},
-  { key: 'salmon', label: 'Salmon', items: [
+  { key: 'salmon_fillets', label: 'Salmon Fillets', items: [
     'Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets',
     'Woolworths Salmon Tasmanian Atlantic Fillets Skin On',
+  ]},
+  { key: 'salmon_portions', label: 'Salmon Portions', items: [
     'Woolworths Salmon Portions Skin On',
   ]},
-  { key: 'basa', label: 'Basa', items: [
+  { key: 'basa_fillets', label: 'Basa Fillets', items: [
     'Woolworths Basa Fillets Boneless With Skin Off',
     'Basa Thawed Freshwater Basa Fillets',
   ]},
-  { key: 'mince', label: 'Mince', items: [
+  { key: 'beef_mince', label: 'Beef Mince', items: [
     'Woolworths Lean Beef Mince',
+  ]},
+  { key: 'lamb_mince', label: 'Lamb Mince', items: [
     'Woolworths Lamb Mince',
   ]},
 ];
+
+// Effective categories = seed defaults merged with the user's saved label/membership
+// overrides (pw_perkg_cats_v1). Returns a fresh array each call.
+function loadVariantGroups() {
+  let ov = {};
+  try { ov = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}
+  return DEFAULT_VARIANT_GROUPS.map(g => {
+    const o = ov[g.key] || {};
+    return {
+      key: g.key,
+      label: o.label || g.label,
+      items: Array.isArray(o.items) ? o.items : g.items.slice(),
+    };
+  });
+}
+function saveVariantGroupOverride(key, patch) {
+  let ov = {};
+  try { ov = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}
+  ov[key] = { ...(ov[key] || {}), ...patch };
+  localStorage.setItem('pw_perkg_cats_v1', JSON.stringify(ov));
+}
+// Products excluded from a category's $/kg (per category+item+store). Key form:
+// "catKey::list_item::ww|coles". Stored in pw_perkg_excl_v1.
+function loadPerKgExclusions() {
+  try { return new Set(JSON.parse(localStorage.getItem('pw_perkg_excl_v1') || '[]')); } catch { return new Set(); }
+}
+function savePerKgExclusions(set) {
+  localStorage.setItem('pw_perkg_excl_v1', JSON.stringify([...set]));
+}
 let _expandedGroups = new Set();
 let _watchlist = new Set(); // loaded on boot from localStorage + watchlist.json
 let _approvedWarns = new Set(); // loaded from approved_warns.json
@@ -3123,15 +3166,19 @@ function perKgPackLabel(result) {
 // Build synthetic group items from the per-kg member products present in the list.
 function buildVariantGroups(byName) {
   const out = [];
-  for (const g of VARIANT_GROUPS) {
+  const excl = loadPerKgExclusions();
+  for (const g of loadVariantGroups()) {
     const members = g.items.map(n => byName.get(n)).filter(Boolean);
     if (!members.length) continue;
 
     // Each member carries BOTH a WW and a Coles price, so collect per-store rankings.
+    // A product excluded for this category (via the edit dialog) is skipped here.
     const ww = members
+      .filter(m => !excl.has(`${g.key}::${m.list_item}::ww`))
       .map(m => ({ name: m.list_item, result: m.woolworths, perkg: clientPerKg(m.woolworths) }))
       .filter(v => v.perkg != null).sort((a, b) => a.perkg - b.perkg);
     const co = members
+      .filter(m => !excl.has(`${g.key}::${m.list_item}::coles`))
       .map(m => ({ name: m.list_item, result: m.coles, perkg: clientPerKg(m.coles) }))
       .filter(v => v.perkg != null).sort((a, b) => a.perkg - b.perkg);
 
@@ -3181,18 +3228,28 @@ function groupTrendCellHTML(group) {
   if (!cands.length) return '';
   const best = cands.reduce((a, b) => (a.perkg <= b.perkg ? a : b));
   const member = group._members.find(m => m.list_item === best.name);
-  if (!member) return '';
-  // Compare the current best $/kg against the recorded purchase prices (per-kg
-  // for these meat items), so the marker reflects whether the rate is good now.
-  return buildPriceBar(member.list_item, member.price_history, best.perkg);
+  if (!member || !best.result?.price) return '';
+  // Convert the recorded pack prices to $/kg using the current pack→$/kg ratio,
+  // so the bar and its current marker are both in $/kg (assumes pack size is
+  // stable). Pre-drop any prices the user excluded so Manage still curates them.
+  const ratio = best.perkg / best.result.price;
+  const exArr = loadExclusions()[member.list_item] || [];
+  const exSet = new Set(exArr.map(k => {
+    if (typeof k === 'number') return Number(k).toFixed(2);
+    const s = String(k); return s.includes(':') ? s.split(':')[1] : Number(s).toFixed(2);
+  }));
+  const hist = (member.price_history || [])
+    .filter(e => e.price > 0 && !exSet.has(Number(e.price).toFixed(2)))
+    .map(e => ({ date: e.date, price: +(e.price * ratio).toFixed(2) }));
+  return buildPriceBar(member.list_item, hist, best.perkg);
 }
 
 // Assemble a <tr> from a column→<td> map, respecting current visible columns.
-function assembleGroupTr(tds, { rowClass, dataAttrs = '' } = {}) {
+function assembleGroupTr(tds, { rowClass, dataAttrs = '', checkCell = '<td class="check-cell"></td>', actionsCell = '<td class="actions-cell"></td>' } = {}) {
   return `<tr${rowClass ? ` class="${rowClass}"` : ''}${dataAttrs}>`
-    + `<td class="check-cell"></td>`
+    + checkCell
     + getVisibleCols().map(c => tds[c] || '<td></td>').join('')
-    + `<td class="actions-cell"></td></tr>`;
+    + actionsCell + '</tr>';
 }
 
 // Build the per-store variant list for the expanded panel: every member that has
@@ -3260,7 +3317,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
           <span class="vg-chevron">${chev}</span>
           <span class="vg-group-label">${group._groupLabel}</span>
         </span>
-        <span class="vg-group-sub">${group._members.length} options · tap row to ${isExpanded ? 'hide' : 'compare'}</span>
+        <span class="vg-group-sub">${group._members.length} ${group._members.length === 1 ? 'product' : 'products'}</span>
       </div>
     </div></td>`;
 
@@ -3324,9 +3381,23 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     coles_total:  `<td style="font-size:13px;font-weight:600">${coTotal != null ? fmt(coTotal) : '<span class="no-data">—</span>'}</td>`,
   };
 
+  // Selection checkbox (selects the whole category — basket uses its cheapest option).
+  const checked = _checkedItems.has(group.list_item) ? ' checked' : '';
+  const checkCell = `<td class="check-cell"><input type="checkbox" class="row-check" data-item="${group.list_item}"${checked}></td>`;
+
+  // Actions: edit category, watchlist, refresh — mirror normal product rows.
+  const isWatched = _watchlist.has(group.list_item);
+  const actionsCell = `<td class="actions-cell">
+    <button class="vg-cat-edit-btn" data-group="${group._groupKey}" title="Edit category">✎</button>
+    <button class="item-watch-btn${isWatched ? ' active' : ''}" data-item="${group.list_item}" title="${isWatched ? 'Remove from watchlist' : 'Add to watchlist'}">👁</button>
+    <button class="vg-cat-refresh-btn" data-group="${group._groupKey}" title="Refresh prices for this category">↻</button>
+  </td>`;
+
   tbody.insertAdjacentHTML('beforeend', assembleGroupTr(tds, {
     rowClass: `vg-group-row${isExpanded ? ' vg-group-open' : ''}`,
     dataAttrs: ` data-group="${group._groupKey}"`,
+    checkCell,
+    actionsCell,
   }));
 
   if (!isExpanded) return;
@@ -3405,6 +3476,118 @@ function appendGroupCardMobile(container, group, overrides) {
 
   card.innerHTML = html;
   container.appendChild(card);
+}
+
+// ── Per-kg category edit modal ────────────────────────────────────────────────
+let _catEditKey = null;
+
+function openCategoryEditModal(groupKey) {
+  const cat = loadVariantGroups().find(g => g.key === groupKey);
+  if (!cat || !_lastData) return;
+  _catEditKey = groupKey;
+  const byName = new Map(_lastData.items.map(i => [i.list_item, i]));
+  const members = cat.items.map(n => byName.get(n)).filter(Boolean);
+  const ov = loadOverrides();
+  const excl = loadPerKgExclusions();
+
+  $('catEditName').value = cat.label;
+
+  const colHTML = (store) => {
+    const lines = members.map(m => {
+      const res = store === 'ww' ? m.woolworths : m.coles;
+      if (!res) return '';
+      const o = ov[m.list_item] || {};
+      const name = (o.displayName || stripWW(m.list_item)).replace(/"/g, '&quot;');
+      const pk = clientPerKg(res);
+      const size = perKgPackLabel(res);
+      const meta = res.price != null
+        ? `${fmt(res.price)}${size ? ` / ${size}` : ''}${pk != null ? ` · <strong>$${pk.toFixed(2)}/kg</strong>` : ''}`
+        : 'no price';
+      const included = !excl.has(`${groupKey}::${m.list_item}::${store}`);
+      const url = ((store === 'ww' ? o.wwUrl : o.colesUrl) || res.url || '').replace(/"/g, '&quot;');
+      const wwImg = resolveImgUrl(m.woolworths?.image_url) || '';
+      const coImg = resolveImgUrl(m.coles?.image_url) || '';
+      const img = resolveImgUrl(res.image_url) || '';
+      const safeKey = m.list_item.replace(/"/g, '&quot;');
+      const imgHtml = img
+        ? `<img class="cat-prod-img img-hoverable" src="${img}" alt="" data-item="${safeKey}" data-ww-img="${wwImg}" data-co-img="${coImg}" />`
+        : '<span class="cat-prod-img cat-prod-noimg"></span>';
+      return `<div class="cat-prod" data-item="${safeKey}" data-store="${store}">
+          <input type="checkbox" class="cat-incl"${included ? ' checked' : ''} title="Include in this category" />
+          ${imgHtml}
+          <div class="cat-prod-main">
+            <input type="text" class="cat-name" value="${name}" />
+            <div class="cat-prod-meta">${meta}</div>
+            <input type="text" class="cat-url" value="${url}" placeholder="Pinned ${store === 'ww' ? 'Woolworths' : 'Coles'} URL" />
+          </div>
+        </div>`;
+    }).filter(Boolean).join('');
+    return lines || '<div class="cat-prod-empty">No product at this store yet</div>';
+  };
+
+  $('catEditBody').innerHTML = `
+    <div class="cat-cols">
+      <div class="cat-col">
+        <div class="cat-col-h"><span class="store-chip ww sm">W</span> Woolworths</div>
+        ${colHTML('ww')}
+      </div>
+      <div class="cat-col">
+        <div class="cat-col-h"><span class="store-chip coles sm">C</span> Coles</div>
+        ${colHTML('coles')}
+      </div>
+    </div>`;
+
+  document.body.style.overflow = 'hidden';
+  $('categoryEditModal').classList.add('open');
+}
+
+function saveCategoryEdit() {
+  if (!_catEditKey) return;
+  const key = _catEditKey;
+  const label = $('catEditName').value.trim();
+  if (label) saveVariantGroupOverride(key, { label });
+
+  const ov = loadOverrides();
+  const excl = loadPerKgExclusions();
+  document.querySelectorAll('#catEditBody .cat-prod').forEach(row => {
+    const item = row.dataset.item, store = row.dataset.store;
+    const ek = `${key}::${item}::${store}`;
+    if (row.querySelector('.cat-incl').checked) excl.delete(ek); else excl.add(ek);
+    const nm = row.querySelector('.cat-name').value.trim();
+    ov[item] = ov[item] || {};
+    if (nm) ov[item].displayName = nm; else delete ov[item].displayName;
+    const url = row.querySelector('.cat-url').value.trim();
+    if (store === 'ww') { url ? ov[item].wwUrl = url : delete ov[item].wwUrl; }
+    else { url ? ov[item].colesUrl = url : delete ov[item].colesUrl; }
+  });
+  savePerKgExclusions(excl);
+  saveOverrides(ov);
+  closeCategoryEditModal();
+  if (_lastData) renderPage(_lastData);
+}
+
+function closeCategoryEditModal() {
+  _catEditKey = null;
+  document.body.style.overflow = '';
+  $('categoryEditModal')?.classList.remove('open');
+}
+
+function initCategoryEditModal() {
+  $('catEditClose')?.addEventListener('click', closeCategoryEditModal);
+  $('catEditCancel')?.addEventListener('click', closeCategoryEditModal);
+  $('catEditSave')?.addEventListener('click', saveCategoryEdit);
+  $('categoryEditModal')?.addEventListener('click', (e) => { if (e.target.id === 'categoryEditModal') closeCategoryEditModal(); });
+}
+
+// Refresh every product in a category (each is a real item; dispatch one scrape each).
+function refreshCategory(groupKey, btn) {
+  const cat = loadVariantGroups().find(g => g.key === groupKey);
+  if (!cat) return;
+  const ov = loadOverrides();
+  cat.items.forEach((name, i) => {
+    const o = ov[name] || {};
+    triggerItemRefresh(name, i === 0 ? btn : null, { wwUrl: o.wwUrl, colesUrl: o.colesUrl });
+  });
 }
 
 // ── Mobile card view (≤640px) ─────────────────────────────────────────────────
@@ -3841,7 +4024,7 @@ function renderPage(data) {
   // render inline as normal-looking rows (treated as Weekly). Skip in archive
   // view so the raw items remain individually reachable/unarchivable there.
   if (_activePriority !== 'archive') {
-    const memberNames = new Set(VARIANT_GROUPS.flatMap(g => g.items));
+    const memberNames = new Set(loadVariantGroups().flatMap(g => g.items));
     const byName = new Map(allDisplayItems.map(i => [i.list_item, i]));
     const groups = buildVariantGroups(byName);
     if (groups.length) {
@@ -4912,6 +5095,7 @@ async function boot() {
   initSearch();
   initDiffItemModal();
   initImgPicker();
+  initCategoryEditModal();
   initPriorityFilter();
   initPricesOnlyFilter();
   initSelectedPill();
@@ -5184,13 +5368,19 @@ async function boot() {
         // Variant group expand/collapse — click anywhere on the group row (or its
         // panel header), except on the interactive controls it hosts.
         const groupRow = e.target.closest('.vg-group-row, .vg-panel-row');
-        if (groupRow && !e.target.closest('.priority-select, .units-ctrl, a, button, .img-hoverable')) {
+        if (groupRow && !e.target.closest('.priority-select, .units-ctrl, a, button, input, .img-hoverable')) {
           const key = groupRow.dataset.group;
           if (_expandedGroups.has(key)) _expandedGroups.delete(key);
           else _expandedGroups.add(key);
           if (_lastData) renderPage(_lastData);
           return;
         }
+
+        // Category edit / refresh buttons
+        const catEditBtn = e.target.closest('.vg-cat-edit-btn');
+        if (catEditBtn) { openCategoryEditModal(catEditBtn.dataset.group); return; }
+        const catRefreshBtn = e.target.closest('.vg-cat-refresh-btn');
+        if (catRefreshBtn) { refreshCategory(catRefreshBtn.dataset.group, catRefreshBtn); return; }
 
         // Row checkbox
         const rowCheck = e.target.closest('.row-check');
