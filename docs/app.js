@@ -3519,6 +3519,23 @@ function openCategoryEditModal(groupKey) {
 
   $('catEditName').value = cat.label;
 
+  // One store's slot: a full input row if `shown`, otherwise a compact
+  // "+ Woolworths"/"+ Coles" link that reveals the input when clicked. This keeps
+  // a row from displaying an empty field for a store the product isn't sold at.
+  const storeSlot = (store, url, incl, shown) => {
+    const label = store === 'ww' ? 'Woolworths' : 'Coles';
+    if (!shown) {
+      return `<button type="button" class="cat-url-add" data-store="${store}">+ ${label}</button>`;
+    }
+    const chip = store === 'ww' ? 'ww' : 'coles';
+    const letter = store === 'ww' ? 'W' : 'C';
+    return `<div class="cat-url-pair" data-store="${store}">
+        <span class="store-chip ${chip} sm">${letter}</span>
+        <input type="checkbox" class="cat-incl-${store}"${incl ? ' checked' : ''} title="Include in category" />
+        <input type="text" class="cat-url-${store}" value="${url}" placeholder="${label} URL" />
+      </div>`;
+  };
+
   const makeItemRow = (itemName, data) => {
     const o = ov[itemName] || {};
     const name = (o.displayName || stripWW(itemName)).replace(/"/g, '&quot;');
@@ -3526,22 +3543,17 @@ function openCategoryEditModal(groupKey) {
     const coUrl = (o.colesUrl || data?.coles?.url || '').replace(/"/g, '&quot;');
     const wwIncl = !excl.has(`${groupKey}::${itemName}::ww`);
     const coIncl = !excl.has(`${groupKey}::${itemName}::coles`);
+    // Show a store's field only if the item has a URL or a price there.
+    const wwShown = !!(wwUrl || data?.woolworths?.price);
+    const coShown = !!(coUrl || data?.coles?.price);
     const safeItem = itemName.replace(/"/g, '&quot;');
     return `<div class="cat-item" data-item="${safeItem}" draggable="true">
         <span class="cat-item-handle">⠿</span>
         <div class="cat-item-body">
           <input type="text" class="cat-name" value="${name}" placeholder="Display name" />
           <div class="cat-item-urls">
-            <div class="cat-url-pair">
-              <span class="store-chip ww sm">W</span>
-              <input type="checkbox" class="cat-incl-ww"${wwIncl ? ' checked' : ''} title="Include in category" />
-              <input type="text" class="cat-url-ww" value="${wwUrl}" placeholder="Woolworths URL" />
-            </div>
-            <div class="cat-url-pair">
-              <span class="store-chip coles sm">C</span>
-              <input type="checkbox" class="cat-incl-coles"${coIncl ? ' checked' : ''} title="Include in category" />
-              <input type="text" class="cat-url-coles" value="${coUrl}" placeholder="Coles URL" />
-            </div>
+            ${storeSlot('ww', wwUrl, wwIncl, wwShown)}
+            ${storeSlot('coles', coUrl, coIncl, coShown)}
           </div>
         </div>
         <button class="cat-item-remove" title="Remove from category">✕</button>
@@ -3567,7 +3579,8 @@ function openCategoryEditModal(groupKey) {
     if (removeBtn) removeBtn.closest('.cat-item').remove();
   });
 
-  // Add product buttons (per store)
+  // Add product buttons (per store): the clicked store gets a field, the other
+  // store shows only its compact "+ Coles"/"+ Woolworths" link.
   list.addEventListener('click', (e) => {
     const addBtn = e.target.closest('.cat-add-product');
     if (!addBtn) return;
@@ -3580,22 +3593,26 @@ function openCategoryEditModal(groupKey) {
       <div class="cat-item-body">
         <input type="text" class="cat-name" placeholder="New product name" />
         <div class="cat-item-urls">
-          <div class="cat-url-pair">
-            <span class="store-chip ww sm">W</span>
-            <input type="checkbox" class="cat-incl-ww"${store === 'ww' ? ' checked' : ''} title="Include in category" />
-            <input type="text" class="cat-url-ww" placeholder="Woolworths URL" />
-          </div>
-          <div class="cat-url-pair">
-            <span class="store-chip coles sm">C</span>
-            <input type="checkbox" class="cat-incl-coles"${store === 'coles' ? ' checked' : ''} title="Include in category" />
-            <input type="text" class="cat-url-coles" placeholder="Coles URL" />
-          </div>
+          ${storeSlot('ww', '', store === 'ww', store === 'ww')}
+          ${storeSlot('coles', '', store === 'coles', store === 'coles')}
         </div>
       </div>
       <button class="cat-item-remove" title="Discard">✕</button>`;
     list.insertBefore(row, list.querySelector('.cat-add-btns'));
     // Focus the relevant store's URL field
     row.querySelector(store === 'ww' ? '.cat-url-ww' : '.cat-url-coles').focus();
+  });
+
+  // "+ Woolworths"/"+ Coles" reveal links: expand a collapsed store slot in place.
+  list.addEventListener('click', (e) => {
+    const addLink = e.target.closest('.cat-url-add');
+    if (!addLink) return;
+    const store = addLink.dataset.store;
+    const wrap = document.createElement('div');
+    wrap.innerHTML = storeSlot(store, '', true, true).trim();
+    const slot = wrap.firstElementChild;
+    addLink.replaceWith(slot);
+    slot.querySelector('input[type=text]').focus();
   });
 
   // HTML5 drag-and-drop reordering
@@ -3653,10 +3670,12 @@ function saveCategoryEdit() {
   document.querySelectorAll('#catItemsList .cat-item').forEach(row => {
     const isNew = !row.dataset.item;
     const nm = row.querySelector('.cat-name').value.trim();
-    const wwUrl = row.querySelector('.cat-url-ww').value.trim();
-    const coUrl = row.querySelector('.cat-url-coles').value.trim();
-    const wwIncl = row.querySelector('.cat-incl-ww').checked;
-    const coIncl = row.querySelector('.cat-incl-coles').checked;
+    // A store field is only present if its slot was shown/revealed; a collapsed
+    // slot means no URL there and "included" by default.
+    const wwUrl = (row.querySelector('.cat-url-ww')?.value || '').trim();
+    const coUrl = (row.querySelector('.cat-url-coles')?.value || '').trim();
+    const wwIncl = row.querySelector('.cat-incl-ww')?.checked ?? true;
+    const coIncl = row.querySelector('.cat-incl-coles')?.checked ?? true;
 
     if (isNew) {
       // Brand-new product: needs a name and at least one URL.
