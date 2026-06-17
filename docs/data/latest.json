@@ -9172,6 +9172,10 @@
         {
           "date": "2026-06-03",
           "price": 1.98
+        },
+        {
+          "date": "2026-06-17",
+          "price": 1.48
         }
       ],
       "coles_price_history": [
@@ -19895,23 +19899,6 @@
     "items_compared": 278,
     "items_not_found": 3
   },
-  "pending_validation": [
-    {
-      "item": "Woolworths Capsicum Green",
-      "ww_price": 1.48,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/135156/woolworths-capsicum-green",
-      "ww_prev_price": 1.25,
-      "ww_suspicious": true,
-      "coles_price": 1.74,
-      "coles_url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
-      "coles_prev_price": 1.74,
-      "coles_suspicious": false,
-      "flagged_date": "2026-06-17",
-      "reason": [
-        "outside_historical_range"
-      ]
-    }
-  ],
   "approved_prices": {
     "Cadbury Dairy Milk Top Deck Chocolate Block": {
       "approved_date": "2026-05-31"
@@ -20097,7 +20084,8 @@
     },
     "White Seedless Grapes Bag Approx. 900g": {
       "approved_date": "2026-06-17",
-      "ww": 7.9
+      "ww": 7.9,
+      "coles": 6.5
     },
     "Woolworths 12 Extra Large Cage Free Eggs": {
       "approved_date": "2026-05-31",
@@ -20110,8 +20098,9 @@
       "coles": 1.95
     },
     "Woolworths Capsicum Green": {
-      "approved_date": "2026-06-13",
-      "coles": 1.74
+      "approved_date": "2026-06-17",
+      "coles": 1.74,
+      "ww": 1.48
     },
     "Woolworths Celery Heart": {
       "approved_date": "2026-05-31",
