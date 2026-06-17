@@ -1450,6 +1450,27 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         )
         archived_list = sorted(n for n in archived_set if n in purchase_history)
         shopping_list = active + archived_list
+
+        # Also include any items pinned via url_overrides.json that aren't in
+        # the Excel shopping list (e.g. manually added via the category dialog).
+        # Without this they get dropped on every full scrape because the Excel
+        # is the only source of truth the scraper otherwise knows about.
+        overrides_path = os.path.join(DATA_DIR, "url_overrides.json")
+        if os.path.exists(overrides_path):
+            try:
+                with open(overrides_path) as _f:
+                    _url_ov = json.load(_f)
+                shopping_set = set(shopping_list)
+                manually_added = [
+                    n for n, v in _url_ov.items()
+                    if n not in shopping_set and (v.get("ww_url") or v.get("coles_url"))
+                ]
+                if manually_added:
+                    shopping_list = shopping_list + manually_added
+                    print(f"  + {len(manually_added)} manually-pinned item(s) from url_overrides.json")
+            except Exception:
+                pass
+
         print(f"Active shopping list: {len(active)} items + {len(archived_list)} archived (refreshed if older than {ARCHIVED_REFRESH_DAYS}d)")
 
     detect_fuzzy_changes(shopping_list, FLAG_PATH)

@@ -3603,12 +3603,15 @@ function saveCategoryEdit() {
   closeCategoryEditModal();
   if (_lastData) renderPage(_lastData);
 
-  // Fetch any brand-new products so they get scraped into latest.json.
+  // Persist new products' URLs to url_overrides.json so the scraper includes
+  // them on every full run (otherwise they vanish the next time a full scrape
+  // overwrites latest.json — the Excel shopping list doesn't know about them).
   if (newFetches.length) {
     const s = loadSettings();
     if (!s.token) {
       alert(`Saved. ${newFetches.length} new product(s) added — add your GitHub token (Auto-update Setup) then hit ↻ on the category to fetch their prices.`);
     } else {
+      persistUrlOverridesToRepo(s, ov).catch(() => {});
       newFetches.forEach(f => triggerItemRefresh(f.name, null, { wwUrl: f.wwUrl, colesUrl: f.colesUrl }));
       alert(`Saved. Fetching ${newFetches.length} new product(s) — they'll appear once the next price check finishes.`);
     }
