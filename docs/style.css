@@ -369,6 +369,9 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 .vg-pv-kg { font-weight: 700; white-space: nowrap; }
 .vg-pv.win .vg-pv-kg { color: var(--accent); }
 .vg-pv.empty { color: var(--text-soft); font-style: italic; }
+.vg-pv.vg-pv-pending { opacity: 0.7; border: 1px dashed var(--border); }
+.vg-pv-pending-tag { font-style: italic; color: var(--text-soft); }
+.vg-pv-fetch { flex-shrink: 0; padding: 3px 8px !important; font-size: 12px !important; }
 .vg-panel-note { margin-top: 10px; font-size: 11px; color: var(--text-soft); }
 
 /* Category edit modal */

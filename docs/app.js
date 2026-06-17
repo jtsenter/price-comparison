@@ -3167,7 +3167,9 @@ function buildVariantGroups(byName) {
   const out = [];
   const excl = loadPerKgExclusions();
   for (const g of loadVariantGroups()) {
-    const members = g.items.map(n => byName.get(n)).filter(Boolean);
+    // Members that aren't in latest.json yet (never scraped / scrape failed)
+    // are kept as pending placeholders so they remain visible in the panel.
+    const members = g.items.map(n => byName.get(n) || { list_item: n, _pending: true, woolworths: null, coles: null, price_history: [] });
     if (!members.length) continue;
 
     // Each member carries BOTH a WW and a Coles price, so collect per-store rankings.
@@ -3254,16 +3256,37 @@ function assembleGroupTr(tds, { rowClass, dataAttrs = '', checkCell = '<td class
 // Build the per-store variant list for the expanded panel: every member that has
 // a price at `store`, sorted by $/kg ascending, cheapest flagged as the winner.
 function groupStoreVariantsHTML(group, store, overrides) {
+  const storeKey = store === 'woolworths' ? 'ww' : 'coles';
+
+  // Pending members: in the category but never scraped / scrape failed.
+  const pendingRows = group._members
+    .filter(m => m._pending)
+    .map(m => {
+      const ov = overrides[m.list_item] || {};
+      const hasUrl = storeKey === 'ww' ? ov.wwUrl : ov.colesUrl;
+      if (!hasUrl) return '';
+      const name = ov.displayName || stripWW(m.list_item);
+      const safeItem = m.list_item.replace(/"/g, '&quot;');
+      return `<div class="vg-pv vg-pv-pending">
+          <span class="vg-pv-img vg-pv-noimg"></span>
+          <a class="vg-pv-name" href="${hasUrl}" target="_blank" rel="noopener">${name}</a>
+          <span class="vg-pv-pack vg-pv-pending-tag">Pending price fetch</span>
+          <button class="vg-pv-fetch btn btn-ghost" data-item="${safeItem}" data-store="${storeKey}" title="Fetch price now">↻</button>
+        </div>`;
+    }).filter(Boolean).join('');
+
   const variants = group._members
+    .filter(m => !m._pending)
     .map(m => {
       const res = store === 'woolworths' ? m.woolworths : m.coles;
       return { name: m.list_item, res, pk: clientPerKg(res) };
     })
     .filter(v => v.pk != null)
     .sort((a, b) => a.pk - b.pk);
-  if (!variants.length) return '<div class="vg-pv empty">No matches at this store</div>';
 
-  return variants.map((v, i) => {
+  if (!variants.length && !pendingRows) return '<div class="vg-pv empty">No matches at this store</div>';
+
+  const variantRows = variants.map((v, i) => {
     const ov = overrides[v.name] || {};
     const name = ov.displayName || stripWW(v.name);
     const size = perKgPackLabel(v.res);
@@ -3286,6 +3309,8 @@ function groupStoreVariantsHTML(group, store, overrides) {
         <span class="vg-pv-kg">$${v.pk.toFixed(2)}/kg</span>
       </div>`;
   }).join('');
+
+  return variantRows + pendingRows;
 }
 
 // Render one variant group: a collapsed table row, plus (if open) a full-width
@@ -5468,6 +5493,16 @@ async function boot() {
           if (rItem.startsWith('__group_')) { refreshCategory(rItem.replace('__group_', ''), refreshBtn); return; }
           const ov = loadOverrides()[rItem] || {};
           triggerItemRefresh(rItem, refreshBtn, { wwUrl: ov.wwUrl, colesUrl: ov.colesUrl });
+          return;
+        }
+
+        // Pending-item fetch button inside expanded category panel
+        const fetchBtn = e.target.closest('.vg-pv-fetch');
+        if (fetchBtn) {
+          const itemName = fetchBtn.dataset.item;
+          const store = fetchBtn.dataset.store;
+          const ov = loadOverrides()[itemName] || {};
+          triggerItemRefresh(itemName, fetchBtn, { wwUrl: ov.wwUrl, colesUrl: ov.colesUrl });
           return;
         }
         const discrepEl = e.target.closest('.discrepancy-warn, .dismiss-diff-btn');
