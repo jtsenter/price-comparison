@@ -4964,10 +4964,6 @@
         {
           "date": "2026-06-17",
           "price": 8
-        },
-        {
-          "date": "2026-06-17",
-          "price": 4
         }
       ],
       "match_confidence": "high",
@@ -5101,6 +5097,10 @@
         {
           "date": "2026-06-12",
           "price": 2.4
+        },
+        {
+          "date": "2026-06-17",
+          "price": 1.08
         }
       ],
       "match_confidence": "high",
@@ -20063,21 +20063,21 @@
   },
   "pending_validation": [
     {
-      "item": "Capsicum Yellow",
-      "ww_price": 1.98,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/135324/capsicum-yellow",
-      "ww_prev_price": 1.98,
+      "item": "Cadbury Dairy Milk Top Deck Chocolate Block",
+      "ww_price": 8,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/814624/cadbury-dairy-milk-top-deck-chocolate-block",
+      "ww_prev_price": 8,
       "ww_suspicious": false,
-      "coles_price": 1.08,
-      "coles_url": "https://www.coles.com.au/product/coles-yellow-capsicum-approx.-220g-7215355",
-      "coles_prev_price": 2.4,
+      "coles_price": 4,
+      "coles_url": "https://www.coles.com.au/product/cadbury-dairy-milk-top-deck-chocolate-block-180g-2351607",
+      "coles_prev_price": 8,
       "coles_suspicious": true,
       "flagged_date": "2026-06-17",
       "reason": [
         "suspicious_drop_gt20pct",
         "30pct_change",
         "outside_historical_range",
-        "dropped 55%"
+        "dropped 50%"
       ]
     },
     {
@@ -20099,11 +20099,11 @@
   ],
   "approved_prices": {
     "Cadbury Dairy Milk Top Deck Chocolate Block": {
-      "approved_date": "2026-06-17",
-      "coles": 4
+      "approved_date": "2026-05-31"
     },
     "Capsicum Yellow": {
-      "approved_date": "2026-05-31"
+      "approved_date": "2026-06-17",
+      "coles": 1.08
     },
     "Hass Avocado": {
       "approved_date": "2026-06-11"
