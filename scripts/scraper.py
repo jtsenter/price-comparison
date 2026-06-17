@@ -1699,6 +1699,36 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                 still_not_found.append(name)
         not_found = [n for n in not_found if n in still_not_found]
 
+        # Placeholder pass: any item that was in the shopping list but is STILL
+        # absent from items_output (failed scrape AND no prior latest.json entry
+        # to carry forward) gets a minimal placeholder so it is never silently
+        # dropped.  The UI shows pending:true items as "Pending price fetch".
+        final_names = {i["list_item"] for i in items_output}
+        for name in shopping_list:
+            if name in final_names:
+                continue
+            print(f"  [placeholder] No data for shopping-list item — writing stub: {name}")
+            items_output.append({
+                "list_item": name,
+                "last_scraped": datetime.now(timezone.utc).isoformat(),
+                "trip_count": purchase_history.get(name, {}).get("trip_count", 0),
+                "price_history": [],
+                "category": guess_category(name),
+                "woolworths": None,
+                "coles": None,
+                "cheaper_store": None,
+                "saving_per_item": None,
+                "alternatives": [],
+                "ww_price_history": [],
+                "coles_price_history": [],
+                "match_confidence": "none",
+                "size_warning": False,
+                "per_100_ww": None,
+                "per_100_coles": None,
+                "per_100_unit": "100g",
+                "pending": True,
+            })
+
     if single_item:
         existing = {}
         if os.path.exists(latest_path):
