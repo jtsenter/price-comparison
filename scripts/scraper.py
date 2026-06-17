@@ -1451,10 +1451,9 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         archived_list = sorted(n for n in archived_set if n in purchase_history)
         shopping_list = active + archived_list
 
-        # Also include any items pinned via url_overrides.json that aren't in
-        # the Excel shopping list (e.g. manually added via the category dialog).
-        # Without this they get dropped on every full scrape because the Excel
-        # is the only source of truth the scraper otherwise knows about.
+        # Items pinned via url_overrides.json but not in the Excel get added here
+        # so they are actively re-scraped each run (fresh prices).  The universal
+        # carry-forward below handles the fallback if the scrape fails.
         overrides_path = os.path.join(DATA_DIR, "url_overrides.json")
         if os.path.exists(overrides_path):
             try:
@@ -1676,20 +1675,29 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
     os.makedirs(DATA_DIR, exist_ok=True)
 
     if not single_item:
-        # Final carry-forward: for any item that failed scraping (in not_found) but has
-        # existing data, restore it into items_output so it isn't lost from the JSON.
-        # This mirrors the push_progress_bg carry-forward but for the final write.
+        # Carry-forward: any item already in latest.json that wasn't produced by
+        # this scrape run gets preserved with its last-known prices.  This is the
+        # single rule that prevents items from disappearing — regardless of whether
+        # they failed to scrape, are not in the Excel, or were added manually via
+        # the UI.  Items with pinned URLs are already in the shopping list (added
+        # earlier) so they will have been re-scraped fresh; everything else just
+        # keeps its previous data until a future run can reach it.
         scraped_names = {i["list_item"] for i in items_output}
         still_not_found = []
-        for name in not_found:
-            ex = existing_map.get(name)
-            if ex and (ex.get("woolworths", {}) or {}).get("price") is not None \
-                   or ex and (ex.get("coles", {}) or {}).get("price") is not None:
-                print(f"  [carry-forward] Restoring existing data for failed item: {name}")
+        for name, ex in existing_map.items():
+            if name in scraped_names:
+                continue  # already in output — fresh data takes priority
+            has_ww = (ex.get("woolworths") or {}).get("price") is not None
+            has_co = (ex.get("coles") or {}).get("price") is not None
+            if has_ww or has_co:
                 items_output.append(ex)
-            else:
+                if name in not_found:
+                    print(f"  [carry-forward] Restoring existing data for failed item: {name}")
+                else:
+                    print(f"  [carry-forward] Preserving item not in shopping list: {name}")
+            elif name in not_found:
                 still_not_found.append(name)
-        not_found = still_not_found
+        not_found = [n for n in not_found if n in still_not_found]
 
     if single_item:
         existing = {}
