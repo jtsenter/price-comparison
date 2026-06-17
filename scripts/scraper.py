@@ -1476,7 +1476,8 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                 shopping_set = set(shopping_list)
                 manually_added = [
                     n for n, v in _url_ov.items()
-                    if n not in shopping_set and (v.get("ww_url") or v.get("coles_url"))
+                    if n and n != "undefined" and n not in shopping_set
+                    and (v.get("ww_url") or v.get("coles_url"))
                 ]
                 if manually_added:
                     shopping_list = shopping_list + manually_added
