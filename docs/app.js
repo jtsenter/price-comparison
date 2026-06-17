@@ -3282,7 +3282,6 @@ function groupStoreVariantsHTML(group, store, overrides) {
     return `<div class="vg-pv${i === 0 ? ' win' : ''}">
         ${imgHtml}
         ${nameHtml}
-        <button class="item-edit-btn vg-pv-edit" data-edit-item="${safeKey}" title="Edit name / links / picture">✎</button>
         <span class="vg-pv-pack">${pack}</span>
         <span class="vg-pv-kg">$${v.pk.toFixed(2)}/kg</span>
       </div>`;
@@ -3513,45 +3512,26 @@ function openCategoryEditModal(groupKey) {
     return (lines || '<div class="cat-prod-empty">No product at this store yet</div>') + addBtn;
   };
 
-  // Add button handler: show inline form to add a new product candidate
+  // Add button handler: drop an empty, editable product row right above the button
+  // (same look as existing rows, plus a ✕ to discard). It's committed on Save category.
   const addProductHandler = (e) => {
     const btn = e.target.closest('.cat-add-product');
     if (!btn) return;
     const store = btn.dataset.store;
     const col = btn.closest('.cat-col');
-    // Hide the button and show an add-form
-    btn.style.display = 'none';
-    const form = document.createElement('div');
-    form.className = 'cat-add-form';
-    form.innerHTML = `
-      <input type="text" class="cat-add-name" placeholder="Product name" />
-      <input type="text" class="cat-add-url" placeholder="Product URL" />
-      <button class="cat-add-save">Save</button>
-      <button class="cat-add-cancel">Cancel</button>`;
-    col.appendChild(form);
-    form.querySelector('.cat-add-save').addEventListener('click', (ev) => {
-      const name = form.querySelector('.cat-add-name').value.trim();
-      const url = form.querySelector('.cat-add-url').value.trim();
-      if (name && url) {
-        // Add row to the dialog (will be saved via saveCategoryEdit)
-        const newRow = document.createElement('div');
-        newRow.className = 'cat-prod cat-prod-temp';
-        newRow.dataset.store = store;
-        newRow.innerHTML = `
-          <input type="checkbox" class="cat-incl" checked title="Include in this category" />
-          <div class="cat-prod-main">
-            <input type="text" class="cat-name" value="${name.replace(/"/g, '&quot;')}" placeholder="Name" />
-            <input type="text" class="cat-url" value="${url.replace(/"/g, '&quot;')}" placeholder="URL" />
-          </div>`;
-        col.insertBefore(newRow, form);
-      }
-      form.remove();
-      btn.style.display = '';
-    });
-    form.querySelector('.cat-add-cancel').addEventListener('click', () => {
-      form.remove();
-      btn.style.display = '';
-    });
+    const row = document.createElement('div');
+    row.className = 'cat-prod cat-prod-new';
+    row.dataset.store = store;
+    row.innerHTML = `
+      <input type="checkbox" class="cat-incl" checked title="Include in this category" />
+      <div class="cat-prod-main">
+        <input type="text" class="cat-name" placeholder="New product name" />
+        <input type="text" class="cat-url" placeholder="${store === 'ww' ? 'Woolworths' : 'Coles'} product URL" />
+      </div>
+      <button class="cat-prod-remove" title="Discard">✕</button>`;
+    col.insertBefore(row, btn);
+    row.querySelector('.cat-prod-remove').addEventListener('click', () => row.remove());
+    row.querySelector('.cat-name').focus();
   };
 
   $('catEditBody').innerHTML = `
@@ -3584,21 +3564,55 @@ function saveCategoryEdit() {
 
   const ov = loadOverrides();
   const excl = loadPerKgExclusions();
+
+  // New (URL-added) products aren't in _lastData yet — collect them so we can add
+  // their name to the category, pin the URL, and fetch them into latest.json.
+  const cat = loadVariantGroups().find(g => g.key === key);
+  const items = cat ? [...cat.items] : [];
+  const newFetches = [];
+
   document.querySelectorAll('#catEditBody .cat-prod').forEach(row => {
-    const item = row.dataset.item, store = row.dataset.store;
-    const ek = `${key}::${item}::${store}`;
-    if (row.querySelector('.cat-incl').checked) excl.delete(ek); else excl.add(ek);
+    const store = row.dataset.store;
+    const included = row.querySelector('.cat-incl').checked;
     const nm = row.querySelector('.cat-name').value.trim();
+    const url = row.querySelector('.cat-url').value.trim();
+
+    if (!row.dataset.item) {
+      // Brand-new product: needs a name and a URL to be fetchable.
+      if (!nm || !url) return;
+      if (!items.includes(nm)) items.push(nm);
+      ov[nm] = ov[nm] || {};
+      if (store === 'ww') ov[nm].wwUrl = url; else ov[nm].colesUrl = url;
+      if (!included) excl.add(`${key}::${nm}::${store}`);
+      newFetches.push({ name: nm, wwUrl: store === 'ww' ? url : undefined, colesUrl: store === 'coles' ? url : undefined });
+      return;
+    }
+
+    const item = row.dataset.item;
+    const ek = `${key}::${item}::${store}`;
+    if (included) excl.delete(ek); else excl.add(ek);
     ov[item] = ov[item] || {};
     if (nm) ov[item].displayName = nm; else delete ov[item].displayName;
-    const url = row.querySelector('.cat-url').value.trim();
     if (store === 'ww') { url ? ov[item].wwUrl = url : delete ov[item].wwUrl; }
     else { url ? ov[item].colesUrl = url : delete ov[item].colesUrl; }
   });
+
+  if (cat && items.length !== cat.items.length) saveVariantGroupOverride(key, { items });
   savePerKgExclusions(excl);
   saveOverrides(ov);
   closeCategoryEditModal();
   if (_lastData) renderPage(_lastData);
+
+  // Fetch any brand-new products so they get scraped into latest.json.
+  if (newFetches.length) {
+    const s = loadSettings();
+    if (!s.token) {
+      alert(`Saved. ${newFetches.length} new product(s) added — add your GitHub token (Auto-update Setup) then hit ↻ on the category to fetch their prices.`);
+    } else {
+      newFetches.forEach(f => triggerItemRefresh(f.name, null, { wwUrl: f.wwUrl, colesUrl: f.colesUrl }));
+      alert(`Saved. Fetching ${newFetches.length} new product(s) — they'll appear once the next price check finishes.`);
+    }
+  }
 }
 
 function closeCategoryEditModal() {

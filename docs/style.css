@@ -385,14 +385,21 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 .cat-prod-meta { font-size: 12px; color: var(--text-soft); }
 .cat-prod-empty, .cat-prod-meta strong { color: var(--text); }
 .cat-prod-empty { font-size: 12px; color: var(--text-soft); font-style: italic; padding: 6px; }
-.cat-add-form { display: flex; flex-direction: column; gap: 6px; padding: 8px; border: 1px dashed var(--border); border-radius: 8px; margin-bottom: 8px; }
-.cat-add-form input { padding: 6px; font-size: 13px; border: 1px solid var(--border); border-radius: 4px; }
-.cat-add-form button { padding: 6px 12px; font-size: 12px; border-radius: 4px; cursor: pointer; }
-.cat-add-save { background: #007c3d; color: white; border: none; }
-.cat-add-save:hover { opacity: 0.9; }
-.cat-add-cancel { background: transparent; border: 1px solid var(--border); color: var(--text); }
-.cat-add-cancel:hover { background: var(--bg); }
-.cat-prod-temp { opacity: 0.7; }
+.cat-add-product {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; padding: 9px; margin-top: 2px;
+  font-size: 13px; font-weight: 600; color: var(--ww);
+  background: transparent; border: 1px dashed var(--border-strong);
+  border-radius: 8px; cursor: pointer; transition: all 0.15s;
+}
+.cat-add-product:hover { background: var(--bg); border-color: var(--ww); }
+.cat-prod-new { border-color: var(--ww); background: rgba(0,132,61,0.05); }
+.cat-prod-remove {
+  flex-shrink: 0; margin-top: 2px; width: 22px; height: 22px; line-height: 1;
+  border: none; background: transparent; color: var(--text-soft);
+  font-size: 13px; border-radius: 4px; cursor: pointer;
+}
+.cat-prod-remove:hover { background: var(--bg); color: #c0392b; }
 @media (max-width: 700px) { .cat-cols { grid-template-columns: 1fr; } }
 
 /* Mobile variant group cards */
