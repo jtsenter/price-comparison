@@ -3553,7 +3553,10 @@ function openCategoryEditModal(groupKey) {
   $('catEditBody').innerHTML = `
     <div class="cat-items-list" id="catItemsList">
       ${rowsHTML}
-      <button class="cat-add-product" id="catAddProduct">+ Add product</button>
+      <div class="cat-add-btns">
+        <button class="cat-add-product" data-store="ww">+ Add Woolworths product</button>
+        <button class="cat-add-product cat-add-coles" data-store="coles">+ Add Coles product</button>
+      </div>
     </div>`;
 
   const list = $('catItemsList');
@@ -3564,8 +3567,11 @@ function openCategoryEditModal(groupKey) {
     if (removeBtn) removeBtn.closest('.cat-item').remove();
   });
 
-  // Add product button
-  $('catAddProduct').addEventListener('click', () => {
+  // Add product buttons (per store)
+  list.addEventListener('click', (e) => {
+    const addBtn = e.target.closest('.cat-add-product');
+    if (!addBtn) return;
+    const store = addBtn.dataset.store;
     const row = document.createElement('div');
     row.className = 'cat-item';
     row.setAttribute('draggable', 'true');
@@ -3576,19 +3582,20 @@ function openCategoryEditModal(groupKey) {
         <div class="cat-item-urls">
           <div class="cat-url-pair">
             <span class="store-chip ww sm">W</span>
-            <input type="checkbox" class="cat-incl-ww" checked title="Include in category" />
+            <input type="checkbox" class="cat-incl-ww"${store === 'ww' ? ' checked' : ''} title="Include in category" />
             <input type="text" class="cat-url-ww" placeholder="Woolworths URL" />
           </div>
           <div class="cat-url-pair">
             <span class="store-chip coles sm">C</span>
-            <input type="checkbox" class="cat-incl-coles" checked title="Include in category" />
+            <input type="checkbox" class="cat-incl-coles"${store === 'coles' ? ' checked' : ''} title="Include in category" />
             <input type="text" class="cat-url-coles" placeholder="Coles URL" />
           </div>
         </div>
       </div>
       <button class="cat-item-remove" title="Discard">✕</button>`;
-    list.insertBefore(row, $('catAddProduct'));
-    row.querySelector('.cat-name').focus();
+    list.insertBefore(row, list.querySelector('.cat-add-btns'));
+    // Focus the relevant store's URL field
+    row.querySelector(store === 'ww' ? '.cat-url-ww' : '.cat-url-coles').focus();
   });
 
   // HTML5 drag-and-drop reordering

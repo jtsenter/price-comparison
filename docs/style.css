@@ -402,15 +402,17 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
   font-size: 13px; border-radius: 4px; cursor: pointer;
 }
 .cat-item-remove:hover { background: var(--bg); color: #c0392b; }
+.cat-add-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 2px; }
 .cat-add-product {
   display: flex; align-items: center; justify-content: center; gap: 6px;
-  width: 100%; padding: 9px; margin-top: 2px;
-  font-size: 13px; font-weight: 600; color: var(--ww);
+  padding: 9px; font-size: 13px; font-weight: 600; color: var(--ww);
   background: transparent; border: 1px dashed var(--border-strong);
   border-radius: 8px; cursor: pointer; transition: all 0.15s;
 }
 .cat-add-product:hover { background: var(--bg); border-color: var(--ww); }
-@media (max-width: 700px) { .cat-item-urls { grid-template-columns: 1fr; } }
+.cat-add-coles { color: var(--coles, #e2001a); }
+.cat-add-coles:hover { border-color: var(--coles, #e2001a); }
+@media (max-width: 700px) { .cat-item-urls { grid-template-columns: 1fr; } .cat-add-btns { grid-template-columns: 1fr; } }
 
 /* Mobile variant group cards */
 .vg-mobile-card { display: flex; flex-direction: column; gap: 10px; cursor: pointer; }
