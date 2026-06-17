@@ -1394,8 +1394,22 @@ async def _scrape_single_item(
     # If a store returned no result this run (and _carry also found nothing), preserve
     # whatever was in the previous latest.json rather than overwriting with None.
     # This prevents a single bot-detection miss from permanently erasing valid data.
-    _final_ww = ww_match if ww_match is not None else existing_item.get("woolworths")
-    _final_co = coles_match if coles_match is not None else existing_item.get("coles")
+    # _nonzero: discard any store entry whose price is 0 or missing — $0 is not a
+    # real price (Woolworths serves it for products that load but aren't priced).
+    def _nonzero(store_data):
+        if store_data is None:
+            return None
+        p = store_data.get("price")
+        return None if (p is not None and p <= 0) else store_data
+
+    _raw_ww = ww_match if ww_match is not None else existing_item.get("woolworths")
+    _raw_co = coles_match if coles_match is not None else existing_item.get("coles")
+    if ww_match is not None and (ww_match.get("price") or 0) <= 0:
+        print(f"  WW: price=${ww_match.get('price')} treated as unavailable (null)")
+    if coles_match is not None and (coles_match.get("price") or 0) <= 0:
+        print(f"  Coles: price=${coles_match.get('price')} treated as unavailable (null)")
+    _final_ww = _nonzero(_raw_ww)
+    _final_co = _nonzero(_raw_co)
 
     result = {
         "list_item": item,
@@ -1687,8 +1701,8 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         for name, ex in existing_map.items():
             if name in scraped_names:
                 continue  # already in output — fresh data takes priority
-            has_ww = (ex.get("woolworths") or {}).get("price") is not None
-            has_co = (ex.get("coles") or {}).get("price") is not None
+            has_ww = (ex.get("woolworths") or {}).get("price") not in (None, 0, 0.0)
+            has_co = (ex.get("coles") or {}).get("price") not in (None, 0, 0.0)
             if has_ww or has_co:
                 items_output.append(ex)
                 if name in not_found:
