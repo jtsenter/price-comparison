@@ -5097,10 +5097,6 @@
         {
           "date": "2026-06-12",
           "price": 2.4
-        },
-        {
-          "date": "2026-06-17",
-          "price": 1.08
         }
       ],
       "match_confidence": "high",
@@ -5784,6 +5780,10 @@
         {
           "date": "2026-06-17",
           "price": 2
+        },
+        {
+          "date": "2026-06-17",
+          "price": 4
         }
       ],
       "match_confidence": "high",
@@ -20081,19 +20081,21 @@
       ]
     },
     {
-      "item": "Fresh Cauliflower Half",
-      "ww_price": 1.75,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/135568/fresh-cauliflower-half",
-      "ww_prev_price": 1.75,
+      "item": "Capsicum Yellow",
+      "ww_price": 1.98,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/135324/capsicum-yellow",
+      "ww_prev_price": 1.98,
       "ww_suspicious": false,
-      "coles_price": 4,
-      "coles_url": "https://www.coles.com.au/product/coles-cauliflower-half-1-each-4601320",
-      "coles_prev_price": 2,
+      "coles_price": 1.08,
+      "coles_url": "https://www.coles.com.au/product/coles-yellow-capsicum-approx.-220g-7215355",
+      "coles_prev_price": 2.4,
       "coles_suspicious": true,
       "flagged_date": "2026-06-17",
       "reason": [
+        "suspicious_drop_gt20pct",
         "30pct_change",
-        "outside_historical_range"
+        "outside_historical_range",
+        "dropped 55%"
       ]
     }
   ],
@@ -20102,8 +20104,7 @@
       "approved_date": "2026-05-31"
     },
     "Capsicum Yellow": {
-      "approved_date": "2026-06-17",
-      "coles": 1.08
+      "approved_date": "2026-05-31"
     },
     "Hass Avocado": {
       "approved_date": "2026-06-11"
@@ -20343,7 +20344,8 @@
       "coles": 1.7
     },
     "Fresh Cauliflower Half": {
-      "approved_date": "2026-06-01"
+      "approved_date": "2026-06-17",
+      "coles": 4
     },
     "Woolworths Red Watermelon Cut Quarter": {
       "approved_date": "2026-06-01"
