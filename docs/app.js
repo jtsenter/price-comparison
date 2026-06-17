@@ -3281,12 +3281,13 @@ function groupStoreVariantsHTML(group, store, overrides) {
       const res = store === 'woolworths' ? m.woolworths : m.coles;
       return { name: m.list_item, res, pk: clientPerKg(res) };
     })
-    .filter(v => v.pk != null)
-    .sort((a, b) => a.pk - b.pk);
+    .filter(v => v.pk != null);
+  // Order follows g.items order (no $/kg sort); winner = cheapest by $/kg
+  const cheapestPk = variants.length ? Math.min(...variants.map(v => v.pk)) : null;
 
   if (!variants.length && !pendingRows) return '<div class="vg-pv empty">No matches at this store</div>';
 
-  const variantRows = variants.map((v, i) => {
+  const variantRows = variants.map((v) => {
     const ov = overrides[v.name] || {};
     const name = ov.displayName || stripWW(v.name);
     const size = perKgPackLabel(v.res);
@@ -3302,7 +3303,8 @@ function groupStoreVariantsHTML(group, store, overrides) {
     const nameHtml = url
       ? `<a class="vg-pv-name" href="${url}" target="_blank" rel="noopener">${name}</a>`
       : `<span class="vg-pv-name">${name}</span>`;
-    return `<div class="vg-pv${i === 0 ? ' win' : ''}">
+    const isWin = v.pk === cheapestPk;
+    return `<div class="vg-pv${isWin ? ' win' : ''}">
         ${imgHtml}
         ${nameHtml}
         <span class="vg-pv-pack">${pack}</span>
@@ -3510,71 +3512,117 @@ function openCategoryEditModal(groupKey) {
   if (!cat || !_lastData) return;
   _catEditKey = groupKey;
   const byName = new Map(_lastData.items.map(i => [i.list_item, i]));
-  const members = cat.items.map(n => byName.get(n)).filter(Boolean);
+  // Include pending items (in cat.items but not yet scraped)
+  const members = cat.items.map(n => byName.get(n) || { list_item: n, _pending: true });
   const ov = loadOverrides();
   const excl = loadPerKgExclusions();
 
   $('catEditName').value = cat.label;
 
-  const colHTML = (store) => {
-    const lines = members.map(m => {
-      const res = store === 'ww' ? m.woolworths : m.coles;
-      if (!res) return '';
-      const o = ov[m.list_item] || {};
-      const name = (o.displayName || stripWW(m.list_item)).replace(/"/g, '&quot;');
-      const included = !excl.has(`${groupKey}::${m.list_item}::${store}`);
-      const url = ((store === 'ww' ? o.wwUrl : o.colesUrl) || res.url || '').replace(/"/g, '&quot;');
-      const safeKey = m.list_item.replace(/"/g, '&quot;');
-      return `<div class="cat-prod" data-item="${safeKey}" data-store="${store}">
-          <input type="checkbox" class="cat-incl"${included ? ' checked' : ''} title="Include in this category" />
-          <div class="cat-prod-main">
-            <input type="text" class="cat-name" value="${name}" placeholder="Name" />
-            <input type="text" class="cat-url" value="${url}" placeholder="Pinned ${store === 'ww' ? 'Woolworths' : 'Coles'} URL" />
+  const makeItemRow = (itemName, data) => {
+    const o = ov[itemName] || {};
+    const name = (o.displayName || stripWW(itemName)).replace(/"/g, '&quot;');
+    const wwUrl = (o.wwUrl || data?.woolworths?.url || '').replace(/"/g, '&quot;');
+    const coUrl = (o.colesUrl || data?.coles?.url || '').replace(/"/g, '&quot;');
+    const wwIncl = !excl.has(`${groupKey}::${itemName}::ww`);
+    const coIncl = !excl.has(`${groupKey}::${itemName}::coles`);
+    const safeItem = itemName.replace(/"/g, '&quot;');
+    return `<div class="cat-item" data-item="${safeItem}" draggable="true">
+        <span class="cat-item-handle">⠿</span>
+        <div class="cat-item-body">
+          <input type="text" class="cat-name" value="${name}" placeholder="Display name" />
+          <div class="cat-item-urls">
+            <div class="cat-url-pair">
+              <span class="store-chip ww sm">W</span>
+              <input type="checkbox" class="cat-incl-ww"${wwIncl ? ' checked' : ''} title="Include in category" />
+              <input type="text" class="cat-url-ww" value="${wwUrl}" placeholder="Woolworths URL" />
+            </div>
+            <div class="cat-url-pair">
+              <span class="store-chip coles sm">C</span>
+              <input type="checkbox" class="cat-incl-coles"${coIncl ? ' checked' : ''} title="Include in category" />
+              <input type="text" class="cat-url-coles" value="${coUrl}" placeholder="Coles URL" />
+            </div>
           </div>
-        </div>`;
-    }).filter(Boolean).join('');
-    const addBtn = `<button class="cat-add-product" data-store="${store}">+ Add ${store === 'ww' ? 'Woolworths' : 'Coles'} product</button>`;
-    return (lines || '<div class="cat-prod-empty">No product at this store yet</div>') + addBtn;
+        </div>
+        <button class="cat-item-remove" title="Remove from category">✕</button>
+      </div>`;
   };
 
-  // Add button handler: drop an empty, editable product row right above the button
-  // (same look as existing rows, plus a ✕ to discard). It's committed on Save category.
-  const addProductHandler = (e) => {
-    const btn = e.target.closest('.cat-add-product');
-    if (!btn) return;
-    const store = btn.dataset.store;
-    const col = btn.closest('.cat-col');
-    const row = document.createElement('div');
-    row.className = 'cat-prod cat-prod-new';
-    row.dataset.store = store;
-    row.innerHTML = `
-      <input type="checkbox" class="cat-incl" checked title="Include in this category" />
-      <div class="cat-prod-main">
-        <input type="text" class="cat-name" placeholder="New product name" />
-        <input type="text" class="cat-url" placeholder="${store === 'ww' ? 'Woolworths' : 'Coles'} product URL" />
-      </div>
-      <button class="cat-prod-remove" title="Discard">✕</button>`;
-    col.insertBefore(row, btn);
-    row.querySelector('.cat-prod-remove').addEventListener('click', () => row.remove());
-    row.querySelector('.cat-name').focus();
-  };
+  const rowsHTML = members.map(m => makeItemRow(m.list_item, m._pending ? null : m)).join('');
 
   $('catEditBody').innerHTML = `
-    <div class="cat-cols">
-      <div class="cat-col">
-        <div class="cat-col-h"><span class="store-chip ww sm">W</span> Woolworths</div>
-        ${colHTML('ww')}
-      </div>
-      <div class="cat-col">
-        <div class="cat-col-h"><span class="store-chip coles sm">C</span> Coles</div>
-        ${colHTML('coles')}
-      </div>
+    <div class="cat-items-list" id="catItemsList">
+      ${rowsHTML}
+      <button class="cat-add-product" id="catAddProduct">+ Add product</button>
     </div>`;
 
-  // Wire up Add product buttons
-  const editBody = $('catEditBody');
-  [...editBody.querySelectorAll('.cat-add-product')].forEach(btn => {
-    btn.addEventListener('click', addProductHandler);
+  const list = $('catItemsList');
+
+  // Remove buttons
+  list.addEventListener('click', (e) => {
+    const removeBtn = e.target.closest('.cat-item-remove');
+    if (removeBtn) removeBtn.closest('.cat-item').remove();
+  });
+
+  // Add product button
+  $('catAddProduct').addEventListener('click', () => {
+    const row = document.createElement('div');
+    row.className = 'cat-item';
+    row.setAttribute('draggable', 'true');
+    row.innerHTML = `
+      <span class="cat-item-handle">⠿</span>
+      <div class="cat-item-body">
+        <input type="text" class="cat-name" placeholder="New product name" />
+        <div class="cat-item-urls">
+          <div class="cat-url-pair">
+            <span class="store-chip ww sm">W</span>
+            <input type="checkbox" class="cat-incl-ww" checked title="Include in category" />
+            <input type="text" class="cat-url-ww" placeholder="Woolworths URL" />
+          </div>
+          <div class="cat-url-pair">
+            <span class="store-chip coles sm">C</span>
+            <input type="checkbox" class="cat-incl-coles" checked title="Include in category" />
+            <input type="text" class="cat-url-coles" placeholder="Coles URL" />
+          </div>
+        </div>
+      </div>
+      <button class="cat-item-remove" title="Discard">✕</button>`;
+    list.insertBefore(row, $('catAddProduct'));
+    row.querySelector('.cat-name').focus();
+  });
+
+  // HTML5 drag-and-drop reordering
+  let _dragSrc = null;
+  list.addEventListener('dragstart', (e) => {
+    const item = e.target.closest('.cat-item[draggable]');
+    if (!item) return;
+    _dragSrc = item;
+    item.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  list.addEventListener('dragend', () => {
+    list.querySelectorAll('.cat-item').forEach(el => el.classList.remove('dragging', 'drag-over'));
+    _dragSrc = null;
+  });
+  list.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    const over = e.target.closest('.cat-item[draggable]');
+    if (!over || over === _dragSrc) return;
+    list.querySelectorAll('.cat-item').forEach(el => el.classList.remove('drag-over'));
+    over.classList.add('drag-over');
+  });
+  list.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const over = e.target.closest('.cat-item[draggable]');
+    if (!over || !_dragSrc || over === _dragSrc) return;
+    over.classList.remove('drag-over');
+    const rect = over.getBoundingClientRect();
+    if (e.clientY < rect.top + rect.height / 2) {
+      list.insertBefore(_dragSrc, over);
+    } else {
+      list.insertBefore(_dragSrc, over.nextSibling);
+    }
   });
 
   document.body.style.overflow = 'hidden';
@@ -3589,48 +3637,56 @@ function saveCategoryEdit() {
 
   const ov = loadOverrides();
   const excl = loadPerKgExclusions();
-
-  // New (URL-added) products aren't in _lastData yet — collect them so we can add
-  // their name to the category, pin the URL, and fetch them into latest.json.
   const cat = loadVariantGroups().find(g => g.key === key);
-  const items = cat ? [...cat.items] : [];
   const newFetches = [];
 
-  document.querySelectorAll('#catEditBody .cat-prod').forEach(row => {
-    const store = row.dataset.store;
-    const included = row.querySelector('.cat-incl').checked;
-    const nm = row.querySelector('.cat-name').value.trim();
-    const url = row.querySelector('.cat-url').value.trim();
+  // Rows are in DOM order — that becomes the new items array order.
+  const newItems = [];
 
-    if (!row.dataset.item) {
-      // Brand-new product: needs a name and a URL to be fetchable.
-      if (!nm || !url) return;
-      if (!items.includes(nm)) items.push(nm);
+  document.querySelectorAll('#catItemsList .cat-item').forEach(row => {
+    const isNew = !row.dataset.item;
+    const nm = row.querySelector('.cat-name').value.trim();
+    const wwUrl = row.querySelector('.cat-url-ww').value.trim();
+    const coUrl = row.querySelector('.cat-url-coles').value.trim();
+    const wwIncl = row.querySelector('.cat-incl-ww').checked;
+    const coIncl = row.querySelector('.cat-incl-coles').checked;
+
+    if (isNew) {
+      // Brand-new product: needs a name and at least one URL.
+      if (!nm || (!wwUrl && !coUrl)) return;
+      newItems.push(nm);
       ov[nm] = ov[nm] || {};
-      if (store === 'ww') ov[nm].wwUrl = url; else ov[nm].colesUrl = url;
-      if (!included) excl.add(`${key}::${nm}::${store}`);
-      newFetches.push({ name: nm, wwUrl: store === 'ww' ? url : undefined, colesUrl: store === 'coles' ? url : undefined });
+      if (wwUrl) ov[nm].wwUrl = wwUrl; else delete ov[nm].wwUrl;
+      if (coUrl) ov[nm].colesUrl = coUrl; else delete ov[nm].colesUrl;
+      if (!wwIncl) excl.add(`${key}::${nm}::ww`);
+      if (!coIncl) excl.add(`${key}::${nm}::coles`);
+      newFetches.push({ name: nm, wwUrl: wwUrl || undefined, colesUrl: coUrl || undefined });
       return;
     }
 
     const item = row.dataset.item;
-    const ek = `${key}::${item}::${store}`;
-    if (included) excl.delete(ek); else excl.add(ek);
+    newItems.push(item);
     ov[item] = ov[item] || {};
     if (nm) ov[item].displayName = nm; else delete ov[item].displayName;
-    if (store === 'ww') { url ? ov[item].wwUrl = url : delete ov[item].wwUrl; }
-    else { url ? ov[item].colesUrl = url : delete ov[item].colesUrl; }
+    if (wwUrl) ov[item].wwUrl = wwUrl; else delete ov[item].wwUrl;
+    if (coUrl) ov[item].colesUrl = coUrl; else delete ov[item].colesUrl;
+    const wwEk = `${key}::${item}::ww`;
+    const coEk = `${key}::${item}::coles`;
+    if (wwIncl) excl.delete(wwEk); else excl.add(wwEk);
+    if (coIncl) excl.delete(coEk); else excl.add(coEk);
   });
 
-  if (cat && items.length !== cat.items.length) saveVariantGroupOverride(key, { items });
+  // Save new item order if it changed at all (ordering or additions/removals).
+  const orderChanged = newItems.join('\n') !== (cat?.items || []).join('\n');
+  if (orderChanged) saveVariantGroupOverride(key, { items: newItems });
+
   savePerKgExclusions(excl);
   saveOverrides(ov);
   closeCategoryEditModal();
   if (_lastData) renderPage(_lastData);
 
-  // Persist new products' URLs to url_overrides.json so the scraper includes
-  // them on every full run (otherwise they vanish the next time a full scrape
-  // overwrites latest.json — the Excel shopping list doesn't know about them).
+  // Persist new products' URLs to url_overrides.json so the scraper re-scrapes
+  // them on every full run (they'd vanish otherwise — they're not in the Excel).
   if (newFetches.length) {
     const s = loadSettings();
     if (!s.token) {
