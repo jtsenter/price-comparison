@@ -3342,9 +3342,16 @@ function groupStoreVariantsHTML(group, store, overrides) {
   const nameFor = storeKey === 'ww' ? wwNameFor : coNameFor;
 
   // Pending members (in this store's list, no price yet) shown with a fetch button.
+  // Includes both truly-pending items (_pending flag) and scraped items whose store
+  // price came back null (e.g. WW returned $0 → treated as null by _nonzero).
   const pendingRows = order
     .map(n => memberByName.get(n))
-    .filter(m => m && m._pending)
+    .filter(m => {
+      if (!m) return false;
+      if (m._pending) return true;
+      const res = store === 'woolworths' ? m.woolworths : m.coles;
+      return res == null;
+    })
     .map(m => {
       const ov = overrides[m.list_item] || {};
       const hasUrl = storeKey === 'ww' ? ov.wwUrl : ov.colesUrl;
