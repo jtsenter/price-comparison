@@ -3032,7 +3032,7 @@
       "category": "Meat & Seafood",
       "woolworths": {
         "name": "Basa Thawed Freshwater Basa Fillets",
-        "price": 11,
+        "price": 2.2,
         "unit_price": 11,
         "unit": "1KG",
         "url": "https://www.woolworths.com.au/shop/productdetails/87465/basa-thawed-freshwater-basa-fillets",
@@ -3047,13 +3047,17 @@
         "url": "https://www.coles.com.au/product/coles-basa-portions-skin-off-2-pack-260g-1567000",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1567000.jpg"
       },
-      "cheaper_store": "coles",
-      "saving_per_item": 5,
+      "cheaper_store": "woolworths",
+      "saving_per_item": 3.8,
       "alternatives": [],
       "ww_price_history": [
         {
           "date": "2026-06-15",
           "price": 11
+        },
+        {
+          "date": "2026-06-18",
+          "price": 2.2
         }
       ],
       "coles_price_history": [],
@@ -10227,6 +10231,10 @@
         {
           "date": "2026-06-15",
           "price": 3.2
+        },
+        {
+          "date": "2026-06-18",
+          "price": 3.3
         }
       ],
       "match_confidence": "high",
@@ -11180,7 +11188,7 @@
       },
       "coles": {
         "name": "Coles Sour Watermelon Slices | 150g",
-        "price": 7.02,
+        "price": 1.5,
         "unit_price": 1.5,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-sour-watermelon-slices-150g-1601028",
@@ -11188,7 +11196,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 2.88,
+      "saving_per_item": 8.4,
       "alternatives": [
         {
           "name": "Coles Sour Watermelon Slices | 150g",
@@ -21358,24 +21366,6 @@
   },
   "pending_validation": [
     {
-      "item": "Woolworths Basa Fillets Boneless With Skin Off",
-      "ww_price": 2.2,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/87465/basa-thawed-freshwater-basa-fillets",
-      "ww_prev_price": 11,
-      "ww_suspicious": true,
-      "coles_price": 6,
-      "coles_url": "https://www.coles.com.au/product/coles-basa-portions-skin-off-2-pack-260g-1567000",
-      "coles_prev_price": 6,
-      "coles_suspicious": false,
-      "flagged_date": "2026-06-18",
-      "reason": [
-        "suspicious_drop_gt20pct",
-        "30pct_change",
-        "outside_historical_range",
-        "dropped 80%"
-      ]
-    },
-    {
       "item": "Woolworths Capsicum Green",
       "ww_price": 1.48,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/135156/woolworths-capsicum-green",
@@ -21394,21 +21384,6 @@
       ]
     },
     {
-      "item": "Woolworths Dill Fresh Herb",
-      "ww_price": 3.2,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/707365/woolworths-dill-fresh-herb",
-      "ww_prev_price": 3.2,
-      "ww_suspicious": false,
-      "coles_price": 3.3,
-      "coles_url": "https://www.coles.com.au/product/coles-herb-punnets-dill-10g-3214769",
-      "coles_prev_price": 3.2,
-      "coles_suspicious": true,
-      "flagged_date": "2026-06-18",
-      "reason": [
-        "outside_historical_range"
-      ]
-    },
-    {
       "item": "Woolworths Fresh Continental Parsley Bunch",
       "ww_price": 3.2,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/144785/woolworths-fresh-continental-parsley-bunch",
@@ -21421,6 +21396,24 @@
       "flagged_date": "2026-06-18",
       "reason": [
         "outside_historical_range"
+      ]
+    },
+    {
+      "item": "Woolworths Red Watermelon Cut Quarter",
+      "ww_price": 9.9,
+      "ww_url": "https://www.woolworths.com.au/shop/productdetails/120384/woolworths-red-watermelon-cut-quarter",
+      "ww_prev_price": 9.9,
+      "ww_suspicious": false,
+      "coles_price": 1.5,
+      "coles_url": "https://www.coles.com.au/product/coles-sour-watermelon-slices-150g-1601028",
+      "coles_prev_price": 7.02,
+      "coles_suspicious": true,
+      "flagged_date": "2026-06-18",
+      "reason": [
+        "suspicious_drop_gt20pct",
+        "30pct_change",
+        "outside_historical_range",
+        "dropped 79%"
       ]
     },
     {
@@ -21723,6 +21716,14 @@
     "Capsicum Green": {
       "ww": 1.25,
       "approved_date": "2026-06-15"
+    },
+    "Woolworths Basa Fillets Boneless With Skin Off": {
+      "ww": 2.2,
+      "approved_date": "2026-06-18"
+    },
+    "Woolworths Dill Fresh Herb": {
+      "coles": 3.3,
+      "approved_date": "2026-06-18"
     }
   }
 }
