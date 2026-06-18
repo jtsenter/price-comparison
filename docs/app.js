@@ -3240,7 +3240,11 @@ function buildVariantGroups(byName) {
   for (const g of loadVariantGroups()) {
     // Members that aren't in latest.json yet (never scraped / scrape failed)
     // are kept as pending placeholders so they remain visible in the panel.
-    const members = g.items.map(n => byName.get(n) || { list_item: n, _pending: true, woolworths: null, coles: null, price_history: [] });
+    const members = g.items.map(n => {
+      const item = byName.get(n);
+      if (!item) return { list_item: n, _pending: true, woolworths: null, coles: null, price_history: [] };
+      return item.pending ? { ...item, _pending: true } : item;
+    });
     if (!members.length) continue;
 
     // Woolworths and Coles are independent lists — a product contributes to a store
