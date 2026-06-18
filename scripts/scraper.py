@@ -422,7 +422,29 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                             }
                             if (found.length > 0) return found; // High-confidence result
 
-                            // 2. Class-based: [class*="regular"][class*="price"] (case-insensitive contains)
+                            // 2a. Any [data-testid*="price"] element (catches split-text renders like $<span>5.30</span>)
+                            // Uses element.textContent which concatenates all child text nodes.
+                            const notMember = el => {
+                                let p = el;
+                                for (let i = 0; i < 8 && p; i++) {
+                                    const c = (typeof p.className === 'string' ? p.className : (p.className?.toString() || '')).toLowerCase();
+                                    if (c.includes('member') || c.includes('reward') || c.includes('loyalty')) return false;
+                                    p = p.parentElement;
+                                }
+                                return true;
+                            };
+                            for (const el of document.querySelectorAll('[data-testid*="price"]')) {
+                                if (!notMember(el)) continue;
+                                const t = (el.textContent || '').replace(/\\s+/g, '').replace(',', '.');
+                                const m = t.match(/\\$([\\d]+\\.[\\d]{2})/);
+                                if (m) {
+                                    const p = parseFloat(m[1]);
+                                    if (rangeOk(p)) found.push({ p, src: 'data-testid-price' });
+                                }
+                            }
+                            if (found.length > 0) return found;
+
+                            // 2b. Class-based: [class*="regular"][class*="price"] (case-insensitive contains)
                             const allEls = document.querySelectorAll('*');
                             for (const el of allEls) {
                                 const cls = (typeof el.className === 'string' ? el.className : (el.className?.toString() || '')).toLowerCase();
@@ -1055,7 +1077,9 @@ async def _scrape_single_item(
             if pinned_ww:
                 _had_pinned_ww = True
                 _ww = await fetch_ww_by_url(ww_page, pinned_ww)
-                if _ww:
+                # Treat price=0 the same as a fetch failure — WW sometimes SSR-serves $0
+                # for products whose real price is only set client-side (EDLP products).
+                if _ww and (_ww.get('price') or 0) > 0:
                     ww_results = [_ww]
                     _skip_picker_ww = True
                 else:
