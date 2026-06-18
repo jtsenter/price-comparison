@@ -246,7 +246,10 @@ async function persistWatchlistToRepo(names) {
   };
   let putRes = await doPut();
   if (putRes.status === 409) putRes = await doPut();
-  // fire-and-forget — errors are silently ignored
+  if (!putRes.ok) {
+    const msg = await putRes.text().catch(() => String(putRes.status));
+    showSyncError('watchlist', new Error(`HTTP ${putRes.status}: ${msg}`));
+  }
 }
 async function initWatchlist() {
   _watchlist = loadWatchlistLocal();
@@ -301,7 +304,10 @@ async function persistUserSettingsToRepo() {
   };
   let putRes = await doPut();
   if (putRes.status === 409) putRes = await doPut();
-  // fire-and-forget — errors are silently ignored
+  if (!putRes.ok) {
+    const msg = await putRes.text().catch(() => String(putRes.status));
+    showSyncError('priorities & quantities', new Error(`HTTP ${putRes.status}: ${msg}`));
+  }
 }
 async function initUserSettings() {
   _perkgSet = loadPerkgLocal();
@@ -1306,10 +1312,10 @@ function initEditModal() {
         // If a URL was added/changed, trigger an immediate single-item scrape
         if (urlChanged && (newWwUrl || newCoUrl)) {
           triggerItemRefresh(item.list_item, null, { wwUrl: newWwUrl, colesUrl: newCoUrl });
-          alert(`Scrape triggered for "${item.list_item}" with the new URL.`);
+          showToast(`✓ Scrape triggered for "${item.list_item}" with the new URL.`);
         }
       } catch (e) {
-        alert(`⚠ Could not save URL override to GitHub — check your token.\n${e.message}`);
+        showSyncError('URL override', e);
       } finally {
         _overridesSaving = false;
         $('editSave').disabled = false;
@@ -1332,7 +1338,7 @@ function initEditModal() {
       try {
         await persistUrlOverridesToRepo(s, overrides);
       } catch (e) {
-        alert(`⚠ Could not remove URL override from GitHub — check your token.\n${e.message}`);
+        showSyncError('URL override (reset)', e);
       } finally {
         _overridesSaving = false;
         $('editSave').disabled = false;
@@ -1780,6 +1786,31 @@ function showUndoToast(msg, onUndo, durationMs = 8000) {
   toast._timer = setTimeout(hide, durationMs);
 }
 
+function showSyncError(thing, err, onRetry) {
+  console.error(`[PriceWatch] Failed to sync ${thing} to GitHub:`, err);
+  const toast = $('toastNotif');
+  if (!toast) return;
+  clearTimeout(toast._timer);
+  toast.innerHTML = '';
+  const span = document.createElement('span');
+  span.textContent = `⚠ Couldn't sync ${thing} to the cloud — saved locally, NOT synced.`;
+  toast.appendChild(span);
+  if (onRetry) {
+    const btn = document.createElement('button');
+    btn.className = 'toast-undo-btn';
+    btn.textContent = 'Retry';
+    const hide = () => { toast.style.opacity = '0'; setTimeout(() => { toast.style.display = 'none'; toast.innerHTML = ''; }, 300); };
+    btn.addEventListener('click', () => { clearTimeout(toast._timer); hide(); try { onRetry(); } catch {} });
+    toast.appendChild(btn);
+  }
+  toast.style.display = 'block';
+  toast.style.opacity = '1';
+  toast._timer = setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => { toast.style.display = 'none'; toast.innerHTML = ''; }, 300);
+  }, 12000);
+}
+
 // ── Image hover preview + picker modal ───────────────────────────────────────
 
 function initImgPicker() {
@@ -2218,7 +2249,7 @@ async function syncArchivedToGitHub() {
   _archivedSaving = true;
   try {
     await persistArchivedToRepo(s, archivedNames);
-  } catch (_) { /* silently ignore */ }
+  } catch (err) { showSyncError('archived items list', err); }
   finally { _archivedSaving = false; }
 }
 function scheduleArchiveSync() {
@@ -3719,7 +3750,7 @@ function saveCategoryEdit() {
     if (!s.token) {
       alert(`Saved. ${newFetches.length} new product(s) added — add your GitHub token (Auto-update Setup) then hit ↻ on the category to fetch their prices.`);
     } else {
-      persistUrlOverridesToRepo(s, ov).catch(() => {});
+      persistUrlOverridesToRepo(s, ov).catch(err => showSyncError('URL overrides', err, () => persistUrlOverridesToRepo(s, ov).catch(() => {})));
       newFetches.forEach(f => triggerItemRefresh(f.name, null, { wwUrl: f.wwUrl, colesUrl: f.colesUrl }));
       alert(`Saved. Fetching ${newFetches.length} new product(s) — they'll appear once the next price check finishes.`);
     }
@@ -5682,8 +5713,8 @@ async function boot() {
       const _bootOv = loadOverrides();
       const _hasUrls = Object.values(_bootOv).some(v => v.wwUrl || v.colesUrl);
       if (_hasUrls) {
-        persistUrlOverridesToRepo(_bootOvSettings, _bootOv).catch(() => {
-          // Silent — failure will be visible on next manual save attempt
+        persistUrlOverridesToRepo(_bootOvSettings, _bootOv).catch(err => {
+          console.error('[PriceWatch] Boot-time URL overrides sync failed (will retry on next manual save):', err);
         });
       }
     }
