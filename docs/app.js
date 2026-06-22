@@ -3575,7 +3575,7 @@ function appendGroupCardMobile(container, group, overrides) {
     <div class="vgm-head">
       <span class="vg-chevron">${isExpanded ? '▾' : '▸'}</span>
       <span class="vgm-head-label">${group._groupLabel}</span>
-      <span class="vgm-head-count">${group._members.length} options</span>
+      <span class="vgm-head-count">${groupSubLabel(group)}</span>
     </div>
     <div class="vgm-cmp">
       <div class="vgm-cmp-store ${wwWin ? 'win' : ''}">
@@ -3609,6 +3609,21 @@ function appendGroupCardMobile(container, group, overrides) {
 
 // ── Per-kg category edit modal ────────────────────────────────────────────────
 let _catEditKey = null;
+let _catDragSrc = null;  // drag source row, shared by the once-bound drag handlers
+
+// A blank product row for the "+ Add product" action. Matches makeRow(isNew).
+function catEditNewRow(store) {
+  const label = store === 'ww' ? 'Woolworths' : 'Coles';
+  return `<div class="cat-prod" data-store="${store}" draggable="true">
+        <span class="cat-item-handle">⠿</span>
+        <input type="checkbox" class="cat-incl" checked title="Include in cheapest $/kg" />
+        <div class="cat-prod-main">
+          <input type="text" class="cat-name" value="" placeholder="${label} product name" />
+          <input type="text" class="cat-url" value="" placeholder="${label} product URL" />
+        </div>
+        <button class="cat-prod-remove" title="Remove from this store">✕</button>
+      </div>`;
+}
 
 function openCategoryEditModal(groupKey) {
   const cat = loadVariantGroups().find(g => g.key === groupKey);
@@ -3624,15 +3639,16 @@ function openCategoryEditModal(groupKey) {
   // One product row, scoped to a single store. Woolworths and Coles each have
   // their own independent column — separate products, names, URLs, and order.
   const makeRow = (store, itemName, isNew) => {
+    if (isNew) return catEditNewRow(store);
     const o = ov[itemName] || {};
     const data = byName.get(itemName);
     const nameFor = store === 'ww' ? wwNameFor : coNameFor;
     const label = store === 'ww' ? 'Woolworths' : 'Coles';
-    const name = isNew ? '' : nameFor(itemName, o, data).replace(/"/g, '&quot;');
-    const url = isNew ? '' : ((store === 'ww' ? o.wwUrl : o.colesUrl) ||
+    const name = nameFor(itemName, o, data).replace(/"/g, '&quot;');
+    const url = ((store === 'ww' ? o.wwUrl : o.colesUrl) ||
       (store === 'ww' ? data?.woolworths?.url : data?.coles?.url) || '').replace(/"/g, '&quot;');
-    const incl = isNew ? true : !excl.has(`${groupKey}::${itemName}::${store}`);
-    const attrs = isNew ? '' : ` data-item="${itemName.replace(/"/g, '&quot;')}"`;
+    const incl = !excl.has(`${groupKey}::${itemName}::${store}`);
+    const attrs = ` data-item="${itemName.replace(/"/g, '&quot;')}"`;
     return `<div class="cat-prod" data-store="${store}"${attrs} draggable="true">
         <span class="cat-item-handle">⠿</span>
         <input type="checkbox" class="cat-incl"${incl ? ' checked' : ''} title="Include in cheapest $/kg" />
@@ -3663,7 +3679,18 @@ function openCategoryEditModal(groupKey) {
       ${colHTML('coles', stores.coles)}
     </div>`;
 
+  bindCategoryEditBody();
+  document.body.style.overflow = 'hidden';
+  $('categoryEditModal').classList.add('open');
+}
+
+// Bind the add/remove + drag-reorder handlers to the (persistent) modal body ONCE.
+// Previously these lived inside openCategoryEditModal, so each reopen stacked another
+// copy — making "+ Add product" insert multiple rows and drops fire repeatedly.
+function bindCategoryEditBody() {
   const body = $('catEditBody');
+  if (!body || body._catBound) return;
+  body._catBound = true;
 
   // Remove + add buttons (delegated across both columns).
   body.addEventListener('click', (e) => {
@@ -3675,7 +3702,7 @@ function openCategoryEditModal(groupKey) {
       const listEl = addBtn.closest('.cat-col').querySelector('.cat-col-list');
       listEl.querySelector('.cat-prod-empty')?.remove();
       const wrap = document.createElement('div');
-      wrap.innerHTML = makeRow(store, '', true).trim();
+      wrap.innerHTML = catEditNewRow(store).trim();
       const row = wrap.firstElementChild;
       listEl.appendChild(row);
       row.querySelector('.cat-name').focus();
@@ -3683,22 +3710,21 @@ function openCategoryEditModal(groupKey) {
   });
 
   // HTML5 drag-and-drop — reordering is scoped to within a single column.
-  let _dragSrc = null;
   body.addEventListener('dragstart', (e) => {
     const row = e.target.closest('.cat-prod[draggable]');
     if (!row) return;
-    _dragSrc = row;
+    _catDragSrc = row;
     row.classList.add('dragging');
     e.dataTransfer.effectAllowed = 'move';
   });
   body.addEventListener('dragend', () => {
     body.querySelectorAll('.cat-prod').forEach(el => el.classList.remove('dragging', 'drag-over'));
-    _dragSrc = null;
+    _catDragSrc = null;
   });
   body.addEventListener('dragover', (e) => {
     const over = e.target.closest('.cat-prod[draggable]');
-    if (!over || over === _dragSrc) return;
-    if (!_dragSrc || over.parentElement !== _dragSrc.parentElement) return; // same column only
+    if (!over || over === _catDragSrc) return;
+    if (!_catDragSrc || over.parentElement !== _catDragSrc.parentElement) return; // same column only
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
     body.querySelectorAll('.cat-prod').forEach(el => el.classList.remove('drag-over'));
@@ -3706,18 +3732,15 @@ function openCategoryEditModal(groupKey) {
   });
   body.addEventListener('drop', (e) => {
     const over = e.target.closest('.cat-prod[draggable]');
-    if (!over || !_dragSrc || over === _dragSrc) return;
-    if (over.parentElement !== _dragSrc.parentElement) return;
+    if (!over || !_catDragSrc || over === _catDragSrc) return;
+    if (over.parentElement !== _catDragSrc.parentElement) return;
     e.preventDefault();
     over.classList.remove('drag-over');
     const rect = over.getBoundingClientRect();
     const listEl = over.parentElement;
-    if (e.clientY < rect.top + rect.height / 2) listEl.insertBefore(_dragSrc, over);
-    else listEl.insertBefore(_dragSrc, over.nextSibling);
+    if (e.clientY < rect.top + rect.height / 2) listEl.insertBefore(_catDragSrc, over);
+    else listEl.insertBefore(_catDragSrc, over.nextSibling);
   });
-
-  document.body.style.overflow = 'hidden';
-  $('categoryEditModal').classList.add('open');
 }
 
 function saveCategoryEdit() {
