@@ -225,6 +225,32 @@ def resolve_url(href: str, base: str) -> str:
 # Woolworths — blocked by 403 from GitHub Actions IPs; kept for local use
 # ---------------------------------------------------------------------------
 
+def _ww_portion_price(price, cup_price, product_unit, package_size):
+    """WW prices some fresh items per kg (Unit='KG') but sells a fixed portion shown
+    as 'per 200g' — there Price equals the per-kg CupPrice, not the shelf price the
+    shopper pays. Convert it to the portion price (e.g. $38/kg × 200g = $7.60).
+
+    Guards:
+    - only Unit KG/1KG, and only the explicit 'per <N>g' pattern, so by-weight produce
+      (PackageSize like 'Approx. 180g') is left untouched;
+    - idempotent — only fires while price still equals the per-kg CupPrice, so it can't
+      double-apply after a DOM-derived shelf price has already replaced Price.
+    The per-kg figure survives as unit_price/CupPrice, which drives the $/kg comparison.
+    """
+    if price is None:
+        return price
+    if (product_unit or "").strip().upper() not in ("KG", "1KG"):
+        return price
+    if cup_price is None or abs(float(price) - float(cup_price)) > 0.005:
+        return price
+    m = re.search(r'per\s*(\d+(?:\.\d+)?)\s*g\b', package_size or "", re.IGNORECASE)
+    if m:
+        grams = float(m.group(1))
+        if grams > 0:
+            return round(float(price) * grams / 1000, 2)
+    return price
+
+
 def _parse_ww_products(product_list: list) -> list[dict]:
     results = []
     for p in product_list:
@@ -252,6 +278,9 @@ def _parse_ww_products(product_list: list) -> list[dict]:
             if stockcode else ""
         )
         _, unit = parse_unit_price(cup_string)
+        # Per-kg-priced fixed portions ("per 200g"): Price is the per-kg rate; convert
+        # to the portion shelf price. CupPrice keeps the per-kg figure for $/kg.
+        price = _ww_portion_price(price, cup_price, p.get("Unit"), p.get("PackageSize"))
         results.append({
             "name": name,
             "price": float(price),
@@ -514,6 +543,12 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                         print(f"    [WW] DOM found no price elements — keeping __NEXT_DATA__ ${price}")
                 if name and price is not None:
                     _, unit = parse_unit_price(cup_string)
+                    # Per-kg-priced fixed portion ("per 200g"): show the portion shelf
+                    # price, not the per-kg rate. No-op unless Unit=KG and price==CupPrice.
+                    _portion = _ww_portion_price(price, cup_price, product.get("Unit"), product.get("PackageSize"))
+                    if _portion != price:
+                        print(f"    [WW] per-kg portion '{product.get('PackageSize')}': ${price}/kg -> ${_portion}")
+                        price = _portion
                     product_url = (
                         f"{WOOLWORTHS_BASE}/shop/productdetails/{stockcode}/{url_name}"
                         if stockcode else url
