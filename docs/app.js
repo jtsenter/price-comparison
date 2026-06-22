@@ -3226,13 +3226,6 @@ function renderCards(items) {
 // across stores, so only $/kg is comparable). Expanding lists every member
 // product as its own row with $/kg at each store.
 
-// Pull a human pack-size label ("600g", "1.2kg") out of a scraped product name.
-function perKgPackLabel(result) {
-  if (!result) return '';
-  const m = (result.name || '').match(/(\d[\d.]*\s*(?:kg|g|ml|l))\b/i);
-  return m ? m[1].replace(/\s+/g, '') : '';
-}
-
 // Build synthetic group items from the per-kg member products present in the list.
 function buildVariantGroups(byName) {
   const out = [];
@@ -3260,6 +3253,11 @@ function buildVariantGroups(byName) {
       .map(n => ({ name: n, result: memberByName.get(n)?.coles, perkg: clientPerKg(memberByName.get(n)?.coles) }))
       .filter(v => v.perkg != null).sort((a, b) => a.perkg - b.perkg);
 
+    // Per-store member counts (exclusion-filtered, includes pending/unpriced rows)
+    // so the group sub-label matches what each column actually shows.
+    const wwCount = stores.ww.filter(n => !excl.has(`${g.key}::${n}::ww`)).length;
+    const coCount = stores.coles.filter(n => !excl.has(`${g.key}::${n}::coles`)).length;
+
     const wwBest = ww[0] || null;
     const coBest = co[0] || null;
     let cheaper = null;
@@ -3275,6 +3273,8 @@ function buildVariantGroups(byName) {
       _members: members,
       _wwList: stores.ww,
       _coList: stores.coles,
+      _wwCount: wwCount,
+      _coCount: coCount,
       _wwBest: wwBest,
       _coBest: coBest,
       _wwPerKg: wwBest ? wwBest.perkg : null,
@@ -3382,8 +3382,9 @@ function groupStoreVariantsHTML(group, store, overrides) {
   const variantRows = variants.map((v) => {
     const ov = overrides[v.name] || {};
     const name = nameFor(v.name, ov, memberByName.get(v.name));
-    const size = perKgPackLabel(v.res);
-    const pack = v.res.price != null ? `${fmt(v.res.price)}${size ? ` / ${size}` : ''}` : '';
+    // Pack price only (e.g. "$6.00"); pack size already lives in the name, and the
+    // $/kg normalisation is the green figure beside it.
+    const pack = v.res.price != null ? fmt(v.res.price) : '';
     const safeKey = v.name.replace(/"/g, '&quot;');
     const url = (store === 'woolworths' ? ov.wwUrl : ov.colesUrl) || v.res.url || null;
     const wwImg = resolveImgUrl(group._members.find(m => m.list_item === v.name)?.woolworths?.image_url) || '';
@@ -3405,6 +3406,16 @@ function groupStoreVariantsHTML(group, store, overrides) {
   }).join('');
 
   return variantRows + pendingRows;
+}
+
+// Group sub-label: per-store product counts (e.g. "2 Woolworths · 1 Coles").
+// "N products" was ambiguous — it counted the deduped union of list-items, which
+// rarely matched the two store columns the user actually sees.
+function groupSubLabel(group) {
+  const parts = [];
+  if (group._wwCount) parts.push(`${group._wwCount} Woolworths`);
+  if (group._coCount) parts.push(`${group._coCount} Coles`);
+  return parts.join(' · ') || 'No products';
 }
 
 // Render one variant group: a collapsed table row, plus (if open) a full-width
@@ -3435,7 +3446,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
           <span class="vg-group-label">${group._groupLabel}</span>
           <button class="item-edit-btn" data-edit-item="${group.list_item}" title="Edit category">✎</button>
         </span>
-        <span class="vg-group-sub">${group._members.length} ${group._members.length === 1 ? 'product' : 'products'}</span>
+        <span class="vg-group-sub">${groupSubLabel(group)}</span>
       </div>
     </div></td>`;
 
