@@ -1690,7 +1690,12 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                             merged_pv = list(_pv_snap.values())
                             push_progress_bg(
                                 items_output, not_found,
-                                len(items_output) + len(not_found) + skipped,
+                                # done = items actually processed this run (completed[0],
+                                # which counts found + not-found + timed-out + errored)
+                                # plus carry-forward skips. items_output can't be used here:
+                                # it already includes skips AND pre-populated archived rows,
+                                # so len(items_output)+skipped double-counts → "274 of 214".
+                                completed[0] + skipped,
                                 total_all, trigger,
                                 existing_items=list(existing_map.values()),
                                 current_item=name,
