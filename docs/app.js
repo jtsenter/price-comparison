@@ -1468,8 +1468,11 @@ function buildPriceHistChart(item, excludedPrices) {
   const exclCo = new Set([...excludedPrices].filter(k => k.startsWith('coles:')).map(k => k.split(':')[1]));
   const isExclWW = v => v != null && exclWW.has(Number(v).toFixed(2));
   const isExclCo = v => v != null && exclCo.has(Number(v).toFixed(2));
-  const wwFullMap = new Map(wwRaw.filter(e => !isExclWW(e.price)).map(e => [e.date, e.price]));
-  const coMap     = new Map(coRaw.filter(e => !isExclCo(e.price)).map(e => [e.date, e.price]));
+  // Exclusions filter on the raw stored price; plotted values are then converted to
+  // $/kg for per-kg group members so the chart matches the table (kgR = 1 otherwise).
+  const kgR = histKgRatios(item);
+  const wwFullMap = new Map(wwRaw.filter(e => !isExclWW(e.price)).map(e => [e.date, e.price * kgR.ww]));
+  const coMap     = new Map(coRaw.filter(e => !isExclCo(e.price)).map(e => [e.date, e.price * kgR.coles]));
 
   const allDates = [...new Set([...wwFullMap.keys(), ...coMap.keys()])].sort();
   if (allDates.length < 2) {
@@ -1599,9 +1602,24 @@ function buildPriceHistChart(item, excludedPrices) {
   });
 }
 
+// For per-kg group members the history is a $/kg comparison, so each store's stored
+// price (a pack price like Coles $10/200g) is shown converted to $/kg ($50). Returns
+// per-store multipliers (raw price → $/kg) using the current pack ratio, mirroring
+// groupTrendCellHTML. {perKg:false, ww:1, coles:1} for normal items (no conversion).
+function histKgRatios(item) {
+  const isMember = loadVariantGroups().some(g => (g.items || []).includes(item.list_item));
+  if (!isMember) return { perKg: false, ww: 1, coles: 1 };
+  const r = (res) => {
+    const kg = clientPerKg(res);
+    return (kg != null && res?.price) ? kg / res.price : 1;
+  };
+  return { perKg: true, ww: r(item.woolworths), coles: r(item.coles) };
+}
+
 function openPriceHistoryModal(item) {
   _historyItem = item;
-  $('priceHistoryTitle').textContent = `Price History — ${stripWW(item.list_item)}`;
+  const kgR = histKgRatios(item);
+  $('priceHistoryTitle').textContent = `Price History — ${stripWW(item.list_item)}${kgR.perKg ? ' ($/kg)' : ''}`;
 
   // Initialize pending on fresh open; re-renders reuse existing _pendingExcl
   if (_pendingExcl === null) {
@@ -1696,9 +1714,11 @@ function openPriceHistoryModal(item) {
     // one down) on the right — matches the requested "split into two directions" icon.
     const forkSvg = `<svg class="fork-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="10" y2="12"/><line x1="10" y1="12" x2="21" y2="4"/><line x1="10" y1="12" x2="21" y2="20"/><polyline points="19,8 21,4 17,5"/><polyline points="19,16 21,20 17,19"/></svg>`;
 
+    // Display in $/kg for per-kg members (kgR.ww/coles); data-price stays the raw
+    // stored price so exclusions and the "different item" fork keep matching the data.
     const wwHtml = entry.ww != null
       ? `<span class="price-history-store-cell price-history-store-ww">
-           <span class="price-history-price">${fmt(entry.ww)}</span>
+           <span class="price-history-price">${fmt(entry.ww * kgR.ww)}</span>
            <button class="price-excl-x" data-store="ww" data-price="${Number(entry.ww).toFixed(2)}" title="${wwExcluded ? 'Re-include' : 'Exclude'}">✕</button>
            <button class="price-fork-btn" data-store="ww" data-price="${Number(entry.ww).toFixed(2)}" title="Different item">${forkSvg}</button>
          </span>`
@@ -1706,7 +1726,7 @@ function openPriceHistoryModal(item) {
 
     const coHtml = entry.coles != null
       ? `<span class="price-history-store-cell price-history-store-coles">
-           <span class="price-history-price" style="color:var(--coles)">${fmt(entry.coles)}</span>
+           <span class="price-history-price" style="color:var(--coles)">${fmt(entry.coles * kgR.coles)}</span>
            <button class="price-excl-x" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="${coExcluded ? 'Re-include' : 'Exclude'}">✕</button>
            <button class="price-fork-btn" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="Different item">${forkSvg}</button>
          </span>`
