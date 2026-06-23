@@ -1463,6 +1463,15 @@ function buildPriceHistChart(item, excludedPrices) {
     .filter(e => e.date && e.price > 0)
     .sort((a, b) => a.date.localeCompare(b.date));
 
+  // Include today's live scraped price so the current point shows on the chart (the
+  // table already injects it). Without this, the current Coles point never appears —
+  // coles_price_history is usually empty — and the WW line stops at its last recorded date.
+  const liveDate = item.woolworths?.scraped_at?.slice(0, 10) || item.coles?.scraped_at?.slice(0, 10) || new Date().toISOString().slice(0, 10);
+  if (item.woolworths?.price > 0 && !wwRaw.some(e => e.date === liveDate)) wwRaw.push({ date: liveDate, price: item.woolworths.price });
+  if (item.coles?.price > 0 && !coRaw.some(e => e.date === liveDate)) coRaw.push({ date: liveDate, price: item.coles.price });
+  wwRaw.sort((a, b) => a.date.localeCompare(b.date));
+  coRaw.sort((a, b) => a.date.localeCompare(b.date));
+
   // excludedPrices is now a Set of "ww:X.XX" / "coles:X.XX" keys (or legacy bare numbers → ww)
   const exclWW = new Set([...excludedPrices].filter(k => !k.includes(':') || k.startsWith('ww:')).map(k => k.includes(':') ? k.split(':')[1] : k));
   const exclCo = new Set([...excludedPrices].filter(k => k.startsWith('coles:')).map(k => k.split(':')[1]));
