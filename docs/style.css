@@ -1886,6 +1886,8 @@ td.priority-cell { text-align: center; }
   box-sizing: border-box;
 }
 #searchInput:focus { border-color: var(--accent); }
+/* Hide the native type=search clear button — we render our own .search-clear ✕. */
+#searchInput::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
 .search-clear {
   position: absolute;
   right: 8px;
