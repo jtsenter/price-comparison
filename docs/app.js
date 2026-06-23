@@ -636,12 +636,12 @@ const DEFAULT_VARIANT_GROUPS = [
   { key: 'chicken_roast', label: 'Chicken Roast Portions', items: [
     'Woolworths Cook Chicken Roasting Portions Italian Style',
   ]},
-  { key: 'salmon_fillets', label: 'Salmon Fillets', items: [
+  { key: 'salmon', label: 'Salmon', items: [
     'Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets',
-    'Woolworths Salmon Tasmanian Atlantic Fillets Skin On',
-  ]},
-  { key: 'salmon_portions', label: 'Salmon Portions', items: [
     'Woolworths Salmon Portions Skin On',
+    'Tassal Atlantic Salmon Skin On 300g',
+    'Tassal Atlantic Salmon Skin Off 300g',
+    'Woolworths Diced Tasmanian Salmon Skin Off 300g',
   ]},
   { key: 'basa_fillets', label: 'Basa Fillets', items: [
     'Woolworths Basa Fillets Boneless With Skin Off',

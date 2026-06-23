@@ -17,7 +17,11 @@ KNOWN_NAME_CHANGES = {
     # Same product recorded under an older prefix-less name — merge the history
     # into the current "Woolworths …" name so it shows as one item.
     "Capsicum Green": "Woolworths Capsicum Green",
-    "Salmon Tasmanian Atlantic Fillets Skin On": "Woolworths Salmon Tasmanian Atlantic Fillets Skin On",
+    # All name variants of WW product 95171 (fresh Tasmanian Atlantic skin-on
+    # fillets) map to one canonical name so their split purchase history merges
+    # into a single item instead of showing as duplicates.
+    "Salmon Tasmanian Atlantic Fillets Skin On": "Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets",
+    "Woolworths Salmon Tasmanian Atlantic Fillets Skin On": "Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets",
 }
 
 FUZZY_THRESHOLD = 85
