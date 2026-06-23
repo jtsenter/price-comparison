@@ -3382,9 +3382,10 @@ function groupStoreVariantsHTML(group, store, overrides) {
   const variantRows = variants.map((v) => {
     const ov = overrides[v.name] || {};
     const name = nameFor(v.name, ov, memberByName.get(v.name));
-    // Pack price only (e.g. "$6.00"); pack size already lives in the name, and the
-    // $/kg normalisation is the green figure beside it.
-    const pack = v.res.price != null ? fmt(v.res.price) : '';
+    // Grey shelf price: the portion price for weight-priced items (pack_price, e.g.
+    // $7.60 for a 200g salmon portion), else the pack price. The green $/kg beside it
+    // stays the comparison metric; pack size already lives in the name.
+    const pack = (v.res.pack_price ?? v.res.price) != null ? fmt(v.res.pack_price ?? v.res.price) : '';
     const safeKey = v.name.replace(/"/g, '&quot;');
     const url = (store === 'woolworths' ? ov.wwUrl : ov.colesUrl) || v.res.url || null;
     const wwImg = resolveImgUrl(group._members.find(m => m.list_item === v.name)?.woolworths?.image_url) || '';
