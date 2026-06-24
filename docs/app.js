@@ -772,14 +772,14 @@ let _colOrder = (() => {
 })();
 
 const DEFAULT_COL_WIDTHS = {
-  name:         340,
+  name:         260,
   priority:      90,
   ww:            85,
   coles:         85,
-  cheaper:       90,
-  pct:           80,
-  saving:       110,
-  units:         80,
+  cheaper:       80,
+  pct:           70,
+  saving:        90,
+  units:         70,
   trips:         65,
   category:     110,
   last_scraped: 130,
@@ -3348,10 +3348,14 @@ function groupTrendCellHTML(group) {
   const best = cands.reduce((a, b) => (a.perkg <= b.perkg ? a : b));
   const member = group._members.find(m => m.list_item === best.name);
   if (!member || !best.result?.price) return '';
-  // Convert the recorded pack prices to $/kg using the current pack→$/kg ratio,
-  // so the bar and its current marker are both in $/kg (assumes pack size is
-  // stable). Pre-drop any prices the user excluded so Manage still curates them.
-  const ratio = best.perkg / best.result.price;
+  // price_history records WW Excel pack prices. Always convert with the WW
+  // member's own ratio (ww perkg / ww pack price), even when Coles is the
+  // cheapest store — using the Coles ratio on WW pack prices gives wrong numbers.
+  const wwRes = member.woolworths;
+  const wwKg  = clientPerKg(wwRes);
+  const ratio = (wwRes?.price && wwKg != null)
+    ? wwKg / wwRes.price
+    : best.perkg / best.result.price; // fallback: no WW data
   const exArr = loadExclusions()[member.list_item] || [];
   const exSet = new Set(exArr.map(k => {
     if (typeof k === 'number') return Number(k).toFixed(2);
