@@ -3348,22 +3348,34 @@ function groupTrendCellHTML(group) {
   const best = cands.reduce((a, b) => (a.perkg <= b.perkg ? a : b));
   const member = group._members.find(m => m.list_item === best.name);
   if (!member || !best.result?.price) return '';
-  // price_history records WW Excel pack prices. Always convert with the WW
-  // member's own ratio (ww perkg / ww pack price), even when Coles is the
-  // cheapest store — using the Coles ratio on WW pack prices gives wrong numbers.
-  const wwRes = member.woolworths;
-  const wwKg  = clientPerKg(wwRes);
-  const ratio = (wwRes?.price && wwKg != null)
-    ? wwKg / wwRes.price
-    : best.perkg / best.result.price; // fallback: no WW data
+
+  // Build per-store $/kg ratios (pack price → $/kg).
+  // price_history / ww_price_history hold WW pack prices; coles_price_history holds Coles pack prices.
+  const wwRes   = member.woolworths;
+  const wwKg    = clientPerKg(wwRes);
+  const wwRatio = (wwRes?.price && wwKg != null) ? wwKg / wwRes.price : 1;
+  const coRes   = member.coles;
+  const coKg    = clientPerKg(coRes);
+  const coRatio = (coRes?.price && coKg != null) ? coKg / coRes.price : 1;
+
   const exArr = loadExclusions()[member.list_item] || [];
   const exSet = new Set(exArr.map(k => {
     if (typeof k === 'number') return Number(k).toFixed(2);
     const s = String(k); return s.includes(':') ? s.split(':')[1] : Number(s).toFixed(2);
   }));
-  const hist = (member.price_history || [])
+  const toKg = (arr, r) => (arr || [])
     .filter(e => e.price > 0 && !exSet.has(Number(e.price).toFixed(2)))
-    .map(e => ({ date: e.date, price: +(e.price * ratio).toFixed(2) }));
+    .map(e => ({ price: +(e.price * r).toFixed(2) }));
+
+  // Combine all history sources (same as getTrendSeries for normal items) and
+  // include the current live $/kg prices so the marker never falls off the bar.
+  const hist = [
+    ...toKg(member.price_history,       wwRatio),
+    ...toKg(member.ww_price_history,    wwRatio),
+    ...toKg(member.coles_price_history, coRatio),
+    ...(group._wwBest ? [{ price: group._wwBest.perkg }] : []),
+    ...(group._coBest ? [{ price: group._coBest.perkg }] : []),
+  ];
   return buildPriceBar(member.list_item, hist, best.perkg);
 }
 
