@@ -96,6 +96,60 @@ function clientPerKg(result) {
   return p.value != null ? +(p.value * 10).toFixed(2) : null;
 }
 
+// ── Per-kg single source of truth ────────────────────────────────────────────
+// Every per-kg number in the UI (current price, history modal, trend bar) is
+// derived through these three helpers so the values can never diverge.
+
+// Pack-price → $/kg multiplier for one store's result. Ratio is the store's own
+// current $/kg over its current pack price; applied to that store's historical
+// pack prices. Returns null when the store has no usable size/price data — the
+// caller must then DROP that store's history rather than treat raw pack prices
+// as $/kg (that mislabelling was a recurring source of wrong trend numbers).
+// ponytail: assumes pack size is stable over the item's history — if a product's
+// pack size changed, older points convert with the current ratio. Acceptable for
+// a personal grocery tracker; the upgrade path is storing size per history entry.
+function perKgRatio(res) {
+  const kg = clientPerKg(res);
+  return (kg != null && res?.price) ? kg / res.price : null;
+}
+
+// A member's exclusions split into per-store price sets ("12.34" strings).
+// Supports "ww:X"/"coles:X" and the legacy bare-number format (treated as WW).
+function exclSetsFor(itemName) {
+  const ww = new Set(), co = new Set();
+  for (const k of (loadExclusions()[itemName] || [])) {
+    if (typeof k === 'number') { ww.add(k.toFixed(2)); continue; }
+    const s = String(k);
+    if (s.startsWith('coles:'))  co.add(Number(s.slice(6)).toFixed(2));
+    else if (s.startsWith('ww:')) ww.add(Number(s.slice(3)).toFixed(2));
+    else ww.add(Number(s).toFixed(2));
+  }
+  return { ww, co };
+}
+
+// A member's full $/kg price series: every history source + the current live
+// price, each converted with its own store's ratio, exclusions applied.
+// price_history and ww_price_history hold WW pack prices; coles_price_history
+// holds Coles pack prices.
+function memberPerKgPrices(m) {
+  if (!m) return [];
+  const wwR = perKgRatio(m.woolworths);
+  const coR = perKgRatio(m.coles);
+  const { ww: wwEx, co: coEx } = exclSetsFor(m.list_item);
+  // r == null → can't convert this store's pack prices to $/kg; drop the source.
+  const conv = (arr, r, ex) => (r == null ? [] : (arr || [])
+    .filter(e => e.price > 0 && !ex.has(Number(e.price).toFixed(2)))
+    .map(e => +(e.price * r).toFixed(2)));
+  const out = [
+    ...conv(m.price_history,       wwR, wwEx),
+    ...conv(m.ww_price_history,    wwR, wwEx),
+    ...conv(m.coles_price_history, coR, coEx),
+  ];
+  const wk = clientPerKg(m.woolworths); if (wk != null) out.push(wk);
+  const ck = clientPerKg(m.coles);      if (ck != null) out.push(ck);
+  return out;
+}
+
 function daysSince(isoString) {
   return (Date.now() - new Date(isoString).getTime()) / (1000 * 60 * 60 * 24);
 }
@@ -1628,11 +1682,10 @@ function buildPriceHistChart(item, excludedPrices) {
 function histKgRatios(item) {
   const isMember = loadVariantGroups().some(g => (g.items || []).includes(item.list_item));
   if (!isMember) return { perKg: false, ww: 1, coles: 1 };
-  const r = (res) => {
-    const kg = clientPerKg(res);
-    return (kg != null && res?.price) ? kg / res.price : 1;
-  };
-  return { perKg: true, ww: r(item.woolworths), coles: r(item.coles) };
+  // Same per-store conversion the trend bar uses (perKgRatio) → modal and trend agree.
+  // null ratio (store unconvertible) falls back to 1 so the modal shows that
+  // store's raw price instead of NaN; the trend bar drops it (memberPerKgPrices).
+  return { perKg: true, ww: perKgRatio(item.woolworths) ?? 1, coles: perKgRatio(item.coles) ?? 1 };
 }
 
 function openPriceHistoryModal(item) {
@@ -3339,44 +3392,23 @@ function perKgCellHTML(perkg, url) {
   return `<div class="price-main">${linked}</div>`;
 }
 
-// Trend cell for a group: the historic price bar of the group's cheapest current
-// variant, with a Manage button. The variant is a real item still in data.items,
-// so buildPriceBar's Manage button opens its real price-history modal unchanged.
+// Trend cell for a group. The bar is built from EVERY member's $/kg series
+// (memberPerKgPrices — the same conversion the price column and history modal
+// use), and the marker is the group's current best $/kg (best.perkg, the exact
+// number shown in the price column). History, current price and trend therefore
+// all share one source of truth and cannot diverge.
 function groupTrendCellHTML(group) {
   const cands = [group._wwBest, group._coBest].filter(Boolean);
   if (!cands.length) return '';
   const best = cands.reduce((a, b) => (a.perkg <= b.perkg ? a : b));
-  const member = group._members.find(m => m.list_item === best.name);
-  if (!member || !best.result?.price) return '';
 
-  // Build per-store $/kg ratios (pack price → $/kg).
-  // price_history / ww_price_history hold WW pack prices; coles_price_history holds Coles pack prices.
-  const wwRes   = member.woolworths;
-  const wwKg    = clientPerKg(wwRes);
-  const wwRatio = (wwRes?.price && wwKg != null) ? wwKg / wwRes.price : 1;
-  const coRes   = member.coles;
-  const coKg    = clientPerKg(coRes);
-  const coRatio = (coRes?.price && coKg != null) ? coKg / coRes.price : 1;
-
-  const exArr = loadExclusions()[member.list_item] || [];
-  const exSet = new Set(exArr.map(k => {
-    if (typeof k === 'number') return Number(k).toFixed(2);
-    const s = String(k); return s.includes(':') ? s.split(':')[1] : Number(s).toFixed(2);
-  }));
-  const toKg = (arr, r) => (arr || [])
-    .filter(e => e.price > 0 && !exSet.has(Number(e.price).toFixed(2)))
-    .map(e => ({ price: +(e.price * r).toFixed(2) }));
-
-  // Combine all history sources (same as getTrendSeries for normal items) and
-  // include the current live $/kg prices so the marker never falls off the bar.
-  const hist = [
-    ...toKg(member.price_history,       wwRatio),
-    ...toKg(member.ww_price_history,    wwRatio),
-    ...toKg(member.coles_price_history, coRatio),
-    ...(group._wwBest ? [{ price: group._wwBest.perkg }] : []),
-    ...(group._coBest ? [{ price: group._coBest.perkg }] : []),
-  ];
-  return buildPriceBar(member.list_item, hist, best.perkg);
+  const prices = group._members.flatMap(memberPerKgPrices);
+  if (prices.length < 2) return '';
+  const hist = prices.map(p => ({ price: p }));
+  // Manage button targets the cheapest member so it opens a real history modal.
+  // buildPriceBar re-checks that member's exclusions, but prices here are already
+  // $/kg-converted and exclusion-filtered, so its re-check matches nothing.
+  return buildPriceBar(best.name, hist, best.perkg);
 }
 
 // Assemble a <tr> from a column→<td> map, respecting current visible columns.
