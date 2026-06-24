@@ -996,6 +996,7 @@ tr:hover .item-refresh-btn { opacity: 1; pointer-events: auto; }
   position: relative;
 }
 .modal.modal-wide { max-width: 560px; }
+.modal.modal-xl { max-width: 860px; }
 .modal h2 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
 .modal p { font-size: 13px; color: var(--text-mid); margin-bottom: 24px; line-height: 1.6; }
 
