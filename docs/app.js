@@ -764,14 +764,13 @@ function loadVariantGroups() {
 function resolveStoreLists(group, byName) {
   const qualifies = (name, store) => {
     const data = byName.get(name);
-    const url = pinnedUrlFor(name, store); // localStorage OR repo url_overrides.json
     const price = store === 'ww' ? data?.woolworths?.price : data?.coles?.price;
-    return !!(url || (price != null && price > 0));
+    return price != null && price > 0;
   };
   const build = (orderArr, store) => {
     let names;
     if (Array.isArray(orderArr)) {
-      names = orderArr.filter(n => group.items.includes(n));
+      names = orderArr.filter(n => group.items.includes(n) && qualifies(n, store));
       // Append any union item that now qualifies for this store but isn't listed yet.
       for (const it of group.items) if (!names.includes(it) && qualifies(it, store)) names.push(it);
     } else {
@@ -844,13 +843,13 @@ let _colOrder = (() => {
 
 const DEFAULT_COL_WIDTHS = {
   name:         210,
-  trend:        150,
+  trend:        125,
   priority:      90,
   ww:            85,
   coles:         85,
-  cheaper:       80,
-  pct:           70,
-  saving:        90,
+  cheaper:       72,
+  pct:           68,
+  saving:        78,
   units:         70,
   trips:         65,
   category:     110,
@@ -3447,31 +3446,6 @@ function groupStoreVariantsHTML(group, store, overrides) {
   const memberByName = new Map(group._members.map(m => [m.list_item, m]));
   const nameFor = storeKey === 'ww' ? wwNameFor : coNameFor;
 
-  // Pending members (in this store's list, no price yet) shown with a fetch button.
-  // Includes both truly-pending items (_pending flag) and scraped items whose store
-  // price came back null (e.g. WW returned $0 → treated as null by _nonzero).
-  const pendingRows = order
-    .map(n => memberByName.get(n))
-    .filter(m => {
-      if (!m) return false;
-      if (m._pending) return true;
-      const res = store === 'woolworths' ? m.woolworths : m.coles;
-      return res == null;
-    })
-    .map(m => {
-      const ov = overrides[m.list_item] || {};
-      const hasUrl = pinnedUrlFor(m.list_item, storeKey); // localStorage OR repo url_overrides.json
-      if (!hasUrl) return '';
-      const name = nameFor(m.list_item, ov, m);
-      const safeItem = m.list_item.replace(/"/g, '&quot;');
-      return `<div class="vg-pv vg-pv-pending">
-          <span class="vg-pv-img vg-pv-noimg"></span>
-          <a class="vg-pv-name" href="${hasUrl}" target="_blank" rel="noopener">${name}</a>
-          <span class="vg-pv-pack vg-pv-pending-tag">Pending price fetch</span>
-          <button class="vg-pv-fetch btn btn-ghost" data-item="${safeItem}" data-store="${storeKey}" title="Fetch price now">↻</button>
-        </div>`;
-    }).filter(Boolean).join('');
-
   const variants = order
     .map(n => memberByName.get(n))
     .filter(m => m && !m._pending)
@@ -3483,7 +3457,7 @@ function groupStoreVariantsHTML(group, store, overrides) {
     .sort((a, b) => a.pk - b.pk);
   const cheapestPk = variants.length ? variants[0].pk : null;
 
-  if (!variants.length && !pendingRows) return '<div class="vg-pv empty">No matches at this store</div>';
+  if (!variants.length) return '<div class="vg-pv empty">No matches at this store</div>';
 
   const variantRows = variants.map((v) => {
     const ov = overrides[v.name] || {};
@@ -3512,7 +3486,7 @@ function groupStoreVariantsHTML(group, store, overrides) {
       </div>`;
   }).join('');
 
-  return variantRows + pendingRows;
+  return variantRows;
 }
 
 // Group sub-label: per-store product counts (e.g. "2 Woolworths · 1 Coles").
