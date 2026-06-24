@@ -843,7 +843,7 @@ let _colOrder = (() => {
 })();
 
 const DEFAULT_COL_WIDTHS = {
-  name:         260,
+  name:         210,
   priority:      90,
   ww:            85,
   coles:         85,
@@ -1168,6 +1168,7 @@ async function triggerItemRefresh(itemName, btn, urlOverrides) {
     );
 
     if (res.status === 204) {
+      showToast(`⏳ Scraping "${stripWW(itemName)}"… this usually takes 1–2 min`, 6000);
       if (btn) pollItemRefresh(s, btn, itemName);
     } else {
       const err = await res.json().catch(() => ({}));
@@ -1191,8 +1192,8 @@ async function pollItemRefresh(s, btn, itemName) {
   const finish = (fresh) => {
     _pendingRefreshItem = null;
     if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
-    if (fresh) renderPage(fresh);
-    else if (_lastData) renderPage(_lastData);
+    if (fresh) { showToast(`✓ "${stripWW(itemName)}" updated`); renderPage(fresh); }
+    else { showToast(`⚠ "${stripWW(itemName)}" scrape didn't complete — check GitHub Actions`, 5000); if (_lastData) renderPage(_lastData); }
   };
 
   // Phase 1: find the run created after dispatchedAt.
@@ -1208,7 +1209,7 @@ async function pollItemRefresh(s, btn, itemName) {
       );
       const data = await res.json();
       const run = data.workflow_runs?.find(r => r.created_at >= dispatchedAt);
-      if (run) { setTimeout(() => waitForRun(run.id), 5000); return; }
+      if (run) { showToast(`⏳ "${stripWW(itemName)}" scrape running on the runner…`, 5000); setTimeout(() => waitForRun(run.id), 5000); return; }
     } catch (_) {}
     setTimeout(findRun, 5000);
   };
@@ -3458,7 +3459,7 @@ function groupStoreVariantsHTML(group, store, overrides) {
     })
     .map(m => {
       const ov = overrides[m.list_item] || {};
-      const hasUrl = storeKey === 'ww' ? ov.wwUrl : ov.colesUrl;
+      const hasUrl = pinnedUrlFor(m.list_item, storeKey); // localStorage OR repo url_overrides.json
       if (!hasUrl) return '';
       const name = nameFor(m.list_item, ov, m);
       const safeItem = m.list_item.replace(/"/g, '&quot;');
@@ -3491,7 +3492,7 @@ function groupStoreVariantsHTML(group, store, overrides) {
     // stays the comparison metric; pack size already lives in the name.
     const pack = (v.res.pack_price ?? v.res.price) != null ? fmt(v.res.pack_price ?? v.res.price) : '';
     const safeKey = v.name.replace(/"/g, '&quot;');
-    const url = (store === 'woolworths' ? ov.wwUrl : ov.colesUrl) || v.res.url || null;
+    const url = pinnedUrlFor(v.name, storeKey) || v.res.url || null;
     const wwImg = resolveImgUrl(group._members.find(m => m.list_item === v.name)?.woolworths?.image_url) || '';
     const coImg = resolveImgUrl(group._members.find(m => m.list_item === v.name)?.coles?.image_url) || '';
     const ownImg = resolveImgUrl(v.res.image_url) || coImg || wwImg;
@@ -5761,8 +5762,7 @@ async function boot() {
         if (refreshBtn) {
           const rItem = refreshBtn.dataset.item;
           if (rItem.startsWith('__group_')) { refreshCategory(rItem.replace('__group_', ''), refreshBtn); return; }
-          const ov = loadOverrides()[rItem] || {};
-          triggerItemRefresh(rItem, refreshBtn, { wwUrl: ov.wwUrl, colesUrl: ov.colesUrl });
+          triggerItemRefresh(rItem, refreshBtn, { wwUrl: pinnedUrlFor(rItem, 'ww'), colesUrl: pinnedUrlFor(rItem, 'coles') });
           return;
         }
 
@@ -5770,9 +5770,7 @@ async function boot() {
         const fetchBtn = e.target.closest('.vg-pv-fetch');
         if (fetchBtn) {
           const itemName = fetchBtn.dataset.item;
-          const store = fetchBtn.dataset.store;
-          const ov = loadOverrides()[itemName] || {};
-          triggerItemRefresh(itemName, fetchBtn, { wwUrl: ov.wwUrl, colesUrl: ov.colesUrl });
+          triggerItemRefresh(itemName, fetchBtn, { wwUrl: pinnedUrlFor(itemName, 'ww'), colesUrl: pinnedUrlFor(itemName, 'coles') });
           return;
         }
         const discrepEl = e.target.closest('.discrepancy-warn, .dismiss-diff-btn');
