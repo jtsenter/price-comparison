@@ -632,6 +632,16 @@ const DEFAULT_VARIANT_GROUPS = [
   ]},
   { key: 'chicken_thigh', label: 'Chicken Thigh', items: [
     'Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In',
+    'Coles RSPCA Approved Chicken Thigh Fillets Large Pack',
+    'Coles RSPCA Chicken Thigh Fillets Small Pack',
+    'Coles RSPCA Approved Chicken Thigh Cutlets',
+    'Coles RSPCA Approved Free Range Chicken Thigh Large Pack',
+    'Lilydale Free Range Chicken Thigh Fillets Bulk',
+    'Coles RSPCA Approved Chicken Southern Fried Thigh Burger',
+    'Inglewood Farms Chicken Thigh Fillets Skin Off',
+    'El-Amins Halal Chicken Thigh Fillets Large Pack',
+    'The Bare Bird Chicken Thigh Fillets',
+    'El Amins Halal Chicken Thigh Cutlets',
   ]},
   { key: 'chicken_roast', label: 'Chicken Roast Portions', items: [
     'Woolworths Cook Chicken Roasting Portions Italian Style',
