@@ -747,7 +747,7 @@ function loadVariantGroups() {
     return {
       key: g.key,
       label: o.label || g.label,
-      items: Array.isArray(o.items) ? o.items : g.items.slice(),
+      items: Array.isArray(o.items) ? [...new Set([...o.items, ...g.items])] : g.items.slice(),
       // Per-store ordered member lists. Woolworths and Coles are independent:
       // different products, names, and counts. Undefined until the user saves the
       // category once — derived from `items` by store presence in resolveStoreLists.
@@ -844,6 +844,7 @@ let _colOrder = (() => {
 
 const DEFAULT_COL_WIDTHS = {
   name:         210,
+  trend:        150,
   priority:      90,
   ww:            85,
   coles:         85,
@@ -873,11 +874,11 @@ let _colVisibility = (() => {
 })();
 
 let _colWidths = (() => {
-  try { return JSON.parse(localStorage.getItem('pw_col_widths')) || {}; } catch { return {}; }
+  try { return JSON.parse(localStorage.getItem('pw_col_widths_v2')) || {}; } catch { return {}; }
 })();
 
 function saveColOrder()      { localStorage.setItem('pw_col_order', JSON.stringify(_colOrder)); }
-function saveColWidths()     { localStorage.setItem('pw_col_widths', JSON.stringify(_colWidths)); }
+function saveColWidths()     { localStorage.setItem('pw_col_widths_v2', JSON.stringify(_colWidths)); }
 function saveColVisibility() { localStorage.setItem('pw_col_vis', JSON.stringify(_colVisibility)); }
 
 // ── Column filters (per-column value sets) ───────────────────────────────────
