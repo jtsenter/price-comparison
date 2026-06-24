@@ -196,6 +196,25 @@ function saveOverrides(obj) {
   localStorage.setItem('pw_overrides_v1', JSON.stringify(obj));
 }
 
+// Pinned URLs committed to the repo (docs/data/url_overrides.json), keyed by
+// item with {ww_url, coles_url}. This is the DURABLE record the scraper reads;
+// localStorage (pw_overrides_v1) only holds pins made in this browser. Loading it
+// lets the UI show items pinned from anywhere as pending members before a scrape.
+let _repoUrlOverrides = {};
+async function loadRepoUrlOverrides() {
+  try {
+    const r = await fetch(`data/url_overrides.json?t=${Date.now()}`);
+    if (r.ok) _repoUrlOverrides = await r.json();
+  } catch {}
+}
+// A pinned URL for a store from either source. localStorage uses wwUrl/colesUrl;
+// the repo file uses ww_url/coles_url.
+function pinnedUrlFor(name, store) {
+  const o = loadOverrides()[name] || {};
+  const repo = _repoUrlOverrides[name] || {};
+  return store === 'ww' ? (o.wwUrl || repo.ww_url) : (o.colesUrl || repo.coles_url);
+}
+
 // ── Rejected product URLs (from "Different item") ────────────────────────────
 // Shape: { "<item>": { "ww": ["url", ...], "coles": ["url", ...] } }
 // The scraper reads docs/data/rejected_urls.json and drops these candidates so
@@ -743,11 +762,9 @@ function loadVariantGroups() {
 // even pending items). Otherwise derive: an item belongs to a store's list if it
 // has a pinned URL or a real (>0) price there.
 function resolveStoreLists(group, byName) {
-  const ov = loadOverrides();
   const qualifies = (name, store) => {
-    const o = ov[name] || {};
     const data = byName.get(name);
-    const url = store === 'ww' ? o.wwUrl : o.colesUrl;
+    const url = pinnedUrlFor(name, store); // localStorage OR repo url_overrides.json
     const price = store === 'ww' ? data?.woolworths?.price : data?.coles?.price;
     return !!(url || (price != null && price > 0));
   };
@@ -5672,7 +5689,7 @@ async function boot() {
   });
 
   // Load analysis data and watchlist before first render
-  await Promise.all([loadItemAnalysis(), initWatchlist(), initUserSettings(), mergeArchivedFromRepo(), (async () => {
+  await Promise.all([loadItemAnalysis(), initWatchlist(), initUserSettings(), mergeArchivedFromRepo(), loadRepoUrlOverrides(), (async () => {
     try { const r = await fetch(`data/approved_warns.json?t=${Date.now()}`); if (r.ok) _approvedWarns = new Set(await r.json()); } catch {}
   })() ]);
   const data = await loadData();
