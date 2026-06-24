@@ -22,7 +22,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=49" />
+  <link rel="stylesheet" href="style.css?v=50" />
 </head>
 <body>
 
@@ -222,7 +222,9 @@
 
   <!-- Search bar (desktop + mobile) -->
   <div class="search-wrap" id="searchWrap" style="display:none">
-    <input type="search" id="searchInput" placeholder="Search items…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-1p-ignore data-lpignore="true">
+    <!-- readonly until focus: Chrome won't offer a saved credential on a read-only
+         field; the focus handler makes it editable the instant you click/tab in. -->
+    <input type="search" id="searchInput" placeholder="Search items…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-1p-ignore data-lpignore="true" readonly onfocus="this.removeAttribute('readonly')">
     <button class="search-clear" id="searchClear" style="display:none" title="Clear search">✕</button>
   </div>
 
@@ -484,9 +486,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-<script src="name_map.js?v=49"></script>
-<script src="utils.js?v=49"></script>
-<script src="app.js?v=49"></script>
+<script src="name_map.js?v=50"></script>
+<script src="utils.js?v=50"></script>
+<script src="app.js?v=50"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">
