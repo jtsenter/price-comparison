@@ -782,7 +782,18 @@ function setHeaderOffset() {
 window.addEventListener('load', setHeaderOffset);
 window.addEventListener('resize', setHeaderOffset);
 </script>
-<script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(r => r.update()).catch(() => {}));</script>
+<script>
+if ('serviceWorker' in navigator) {
+  const hadController = !!navigator.serviceWorker.controller;
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!hadController || reloaded) return;
+    reloaded = true;
+    location.reload();
+  });
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(r => r.update()).catch(() => {}));
+}
+</script>
 
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">

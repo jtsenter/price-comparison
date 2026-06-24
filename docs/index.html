@@ -505,7 +505,22 @@
   </a>
 </nav>
 
-<script>if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(r => r.update()).catch(() => {}));</script>
+<script>
+// Register the service worker AND auto-reload when a new version takes control,
+// so deploys apply themselves without the user ever needing a hard refresh.
+// Guard: only reload if a SW already controlled this page (a real update), not
+// on first install, and only once (no reload loop).
+if ('serviceWorker' in navigator) {
+  const hadController = !!navigator.serviceWorker.controller;
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!hadController || reloaded) return;
+    reloaded = true;
+    location.reload();
+  });
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(r => r.update()).catch(() => {}));
+}
+</script>
 <script>
 // ── Dynamic sticky header offset ─────────────────────────────────────────────
 // Measures nav height and syncs it with sticky header ghost (ghost-header-ghost).
