@@ -3402,9 +3402,9 @@ function groupStoreVariantsHTML(group, store, overrides) {
       const res = store === 'woolworths' ? m.woolworths : m.coles;
       return { name: m.list_item, res, pk: clientPerKg(res) };
     })
-    .filter(v => v.pk != null);
-  // Order follows the store's member list (no $/kg sort); winner = cheapest by $/kg
-  const cheapestPk = variants.length ? Math.min(...variants.map(v => v.pk)) : null;
+    .filter(v => v.pk != null)
+    .sort((a, b) => a.pk - b.pk);
+  const cheapestPk = variants.length ? variants[0].pk : null;
 
   if (!variants.length && !pendingRows) return '<div class="vg-pv empty">No matches at this store</div>';
 
@@ -3690,11 +3690,17 @@ function openCategoryEditModal(groupKey) {
       </div>`;
   };
 
+  const priceFor = (name, store) => {
+    const d = byName.get(name);
+    return clientPerKg(store === 'ww' ? d?.woolworths : d?.coles) ?? Infinity;
+  };
+
   const colHTML = (store, names) => {
     const chip = store === 'ww' ? 'ww' : 'coles';
     const letter = store === 'ww' ? 'W' : 'C';
     const label = store === 'ww' ? 'Woolworths' : 'Coles';
-    const rows = names.map(n => makeRow(store, n, false)).join('')
+    const sorted = [...names].sort((a, b) => priceFor(a, store) - priceFor(b, store));
+    const rows = sorted.map(n => makeRow(store, n, false)).join('')
       || '<div class="cat-prod-empty">No products yet</div>';
     return `<div class="cat-col">
         <div class="cat-col-h"><span class="store-chip ${chip} sm">${letter}</span> ${label}</div>
