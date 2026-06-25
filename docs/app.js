@@ -792,20 +792,48 @@ const DEFAULT_VARIANT_GROUPS = [
 
 // Effective categories = seed defaults merged with the user's saved label/membership
 // overrides (pw_perkg_cats_v1). Returns a fresh array each call.
+// ── Per-kg override model (pure helpers; unit-tested in scripts/perkg_selfcheck.js) ──
+// The override is a DIFF against the code defaults, not a frozen snapshot. This is the
+// whole point: defaults stay authoritative, so a member removed in code disappears and
+// a member added in code appears — while the user's own add/remove/rename still stick.
+// The old snapshot form ({items, ww_items, coles_items}) is migrated on read.
+//
+//   v2 shape: { v:2, label?, add:[], remove:[], ww_order?, coles_order? }
+//
+// Known migration limit: a union snapshot can't tell a user-added item from a default
+// that was later pruned in code — both look like "extra" names — so on upgrade they're
+// kept as `add`. The user can remove such a straggler once and it now stays removed.
+function migratePerKgOverride(o, defaultItems) {
+  if (!o || typeof o !== 'object') return { v: 2, add: [], remove: [] };
+  if (o.v === 2) return o;
+  const out = { v: 2, label: o.label, add: [], remove: [] };
+  if (Array.isArray(o.items)) out.add = o.items.filter(n => !defaultItems.includes(n));
+  if (Array.isArray(o.ww_items)) out.ww_order = o.ww_items;
+  if (Array.isArray(o.coles_items)) out.coles_order = o.coles_items;
+  return out;
+}
+
+// Flat member list = (defaults minus user-removed) then user-added, de-duped vs defaults.
+function computePerKgItems(defaultItems, override) {
+  const o = migratePerKgOverride(override, defaultItems);
+  const remove = new Set(o.remove || []);
+  const add = (o.add || []).filter(n => !defaultItems.includes(n));
+  return [...defaultItems.filter(n => !remove.has(n)), ...add];
+}
+
 function loadVariantGroups() {
   let ov = {};
   try { ov = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}
   return DEFAULT_VARIANT_GROUPS.map(g => {
-    const o = ov[g.key] || {};
+    const o = migratePerKgOverride(ov[g.key], g.items);
     return {
       key: g.key,
       label: o.label || g.label,
-      items: Array.isArray(o.items) ? [...new Set([...o.items, ...g.items])] : g.items.slice(),
-      // Per-store ordered member lists. Woolworths and Coles are independent:
-      // different products, names, and counts. Undefined until the user saves the
-      // category once — derived from `items` by store presence in resolveStoreLists.
-      ww_items: Array.isArray(o.ww_items) ? o.ww_items : null,
-      coles_items: Array.isArray(o.coles_items) ? o.coles_items : null,
+      items: computePerKgItems(g.items, o),
+      // Per-store ordered member lists (display order hints; membership comes from
+      // `items` + price qualification in resolveStoreLists). Null until the user saves.
+      ww_items: Array.isArray(o.ww_order) ? o.ww_order : null,
+      coles_items: Array.isArray(o.coles_order) ? o.coles_order : null,
     };
   });
 }
@@ -839,7 +867,10 @@ function resolveStoreLists(group, byName) {
 function saveVariantGroupOverride(key, patch) {
   let ov = {};
   try { ov = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}
-  ov[key] = { ...(ov[key] || {}), ...patch };
+  const def = DEFAULT_VARIANT_GROUPS.find(d => d.key === key);
+  const cur = migratePerKgOverride(ov[key], def ? def.items : []); // upgrade legacy in place
+  ov[key] = { ...cur, ...patch, v: 2 };
+  delete ov[key].items; delete ov[key].ww_items; delete ov[key].coles_items; // strip legacy snapshot keys
   localStorage.setItem('pw_perkg_cats_v1', JSON.stringify(ov));
 }
 // Products excluded from a category's $/kg (per category+item+store). Key form:
@@ -3745,6 +3776,29 @@ let _catEditKey = null;
 let _catDragSrc = null;  // drag source row, shared by the once-bound drag handlers
 
 // A blank product row for the "+ Add product" action. Matches makeRow(isNew).
+// Best-effort human product name from a Coles/WW product URL slug. Used to auto-fill the
+// name field when a URL is pasted into a new category row, so you don't retype it.
+// Pure (no DOM) — unit-tested in scripts/perkg_selfcheck.js.
+function deriveNameFromUrl(url) {
+  if (!url) return '';
+  let slug = '';
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes('woolworths')) {
+      const m = u.pathname.match(/\/productdetails\/\d+\/([^/?]+)/);
+      slug = m ? m[1] : '';
+    } else if (u.hostname.includes('coles')) {
+      const m = u.pathname.match(/\/product\/(.+?)-\d+\/?$/); // strip trailing -<id>
+      slug = m ? m[1] : '';
+    }
+  } catch { return ''; }
+  if (!slug) return '';
+  const words = decodeURIComponent(slug).replace(/-/g, ' ').replace(/\s+/g, ' ').trim().split(' ');
+  // Title-case each word, but leave size tokens like "1.4kg" untouched.
+  const name = words.map(w => /^\d/.test(w) ? w : w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  return name.replace(/\bRspca\b/g, 'RSPCA').replace(/\bBbq\b/g, 'BBQ').replace(/\bIandj\b/gi, 'I&J');
+}
+
 function catEditNewRow(store) {
   const label = store === 'ww' ? 'Woolworths' : 'Coles';
   return `<div class="cat-prod" data-store="${store}" draggable="true">
@@ -3844,7 +3898,21 @@ function bindCategoryEditBody() {
       wrap.innerHTML = catEditNewRow(store).trim();
       const row = wrap.firstElementChild;
       listEl.appendChild(row);
-      row.querySelector('.cat-name').focus();
+      row.querySelector('.cat-url').focus();
+    }
+  });
+
+  // Paste a product URL into a NEW row → auto-fill the name from the URL slug (only
+  // while the name is still blank, so manual edits are never clobbered).
+  body.addEventListener('input', (e) => {
+    const urlInput = e.target.closest('.cat-url');
+    if (!urlInput) return;
+    const row = urlInput.closest('.cat-prod');
+    if (!row || row.dataset.item) return;            // existing rows keep their name
+    const nameInput = row.querySelector('.cat-name');
+    if (nameInput && !nameInput.value.trim()) {
+      const derived = deriveNameFromUrl(urlInput.value.trim());
+      if (derived) nameInput.value = derived;
     }
   });
 
@@ -3886,7 +3954,6 @@ function saveCategoryEdit() {
   if (!_catEditKey) return;
   const key = _catEditKey;
   const label = $('catEditName').value.trim();
-  if (label) saveVariantGroupOverride(key, { label });
 
   const ov = loadOverrides();
   const excl = loadPerKgExclusions();
@@ -3918,10 +3985,15 @@ function saveCategoryEdit() {
 
   const wwItems = collectColumn('ww');
   const coItems = collectColumn('coles');
-  // Union (WW order first, then Coles-only items) for readers that use the flat list.
+  // Union (WW order first, then Coles-only items) = the membership the user just defined.
   const items = [...wwItems, ...coItems.filter(n => !wwItems.includes(n))];
 
-  saveVariantGroupOverride(key, { items, ww_items: wwItems, coles_items: coItems });
+  // Persist as a diff vs the current code defaults so removals stick and future default
+  // changes flow through. `remove` = defaults the user dropped; `add` = everything else.
+  const defItems = (DEFAULT_VARIANT_GROUPS.find(d => d.key === key) || {}).items || [];
+  const add = items.filter(n => !defItems.includes(n));
+  const remove = defItems.filter(n => !items.includes(n));
+  saveVariantGroupOverride(key, { label: label || undefined, add, remove, ww_order: wwItems, coles_order: coItems });
   savePerKgExclusions(excl);
   saveOverrides(ov);
   closeCategoryEditModal();
