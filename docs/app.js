@@ -3836,30 +3836,65 @@ function appendGroupRowDesktop(tbody, group, overrides) {
 function appendGroupCardMobile(container, group, overrides) {
   const isExpanded = _expandedGroups.has(group._groupKey);
   const cheaper = group.cheaper_store;
+  const wwWin = cheaper === 'woolworths', coWin = cheaper === 'coles';
+  const borderCls = wwWin ? ' cheaper-ww' : coWin ? ' cheaper-coles' : '';
+
+  // Same layout as a normal mobile card (image, name, trend bar, two store prices,
+  // cheaper tag) so per-kg groups read consistently — the differences that mark it as
+  // per-kg are the "$/kg" badge, the /kg price suffix, and the expand chevron.
+  const wwImg = resolveImgUrl(group._wwBest?.result?.image_url) || '';
+  const coImg = resolveImgUrl(group._coBest?.result?.image_url) || '';
+  const imgPref = loadImgOverrides()[group.list_item];
+  const imgSrc = (imgPref === 'ww' ? wwImg : imgPref === 'coles' ? coImg : null)
+    || (cheaper === 'coles' ? (coImg || wwImg) : (wwImg || coImg));
+  const imgHtml = imgSrc
+    ? `<img class="mc-img" src="${imgSrc}" alt="" loading="lazy">`
+    : '<div class="mc-img-placeholder"></div>';
+  const bar = groupTrendCellHTML(group);
+  const wwKg = group._wwPerKg != null ? `$${group._wwPerKg.toFixed(2)}` : '—';
+  const coKg = group._coPerKg != null ? `$${group._coPerKg.toFixed(2)}` : '—';
 
   const card = document.createElement('div');
-  card.className = 'mc-card vg-mobile-card vg-expand-btn' + (isExpanded ? ' vg-mobile-open' : '');
+  card.className = `mobile-card vg-mobile-card vg-expand-btn${borderCls}${isExpanded ? ' vg-mobile-open' : ''}`;
   card.dataset.group = group._groupKey;
 
-  const wwWin = cheaper === 'woolworths', coWin = cheaper === 'coles';
   let html = `
-    <div class="vgm-head">
-      <span class="vg-chevron">${isExpanded ? '▾' : '▸'}</span>
-      <span class="vgm-head-label">${group._groupLabel}</span>
-      <span class="vgm-head-count">${groupSubLabel(group)}</span>
+    <div class="mc-top">
+      ${imgHtml}
+      <div class="mc-name-wrap">
+        <div class="mc-name-row">
+          <div class="mc-name">${group._groupLabel}</div>
+          <span class="mc-icons">
+            <span class="vgm-perkg-badge">$/kg</span>
+            <span class="vgm-chevron" aria-hidden="true">${isExpanded ? '▾' : '▸'}</span>
+          </span>
+        </div>
+        <div class="mc-badges">
+          <div class="mc-badges-left"><span class="mc-cat">${groupSubLabel(group)}</span></div>
+        </div>
+      </div>
     </div>
-    <div class="vgm-cmp">
-      <div class="vgm-cmp-store ${wwWin ? 'win' : ''}">
-        <span class="store-chip ww sm">W</span>
-        <span class="vgm-cmp-kg">${group._wwPerKg != null ? `$${group._wwPerKg.toFixed(2)}/kg` : '—'}</span>
-        ${wwWin ? '<span class="vgm-cmp-tag">cheaper</span>' : ''}
+    ${bar ? `<div class="mc-bar">${bar}</div>` : ''}
+    <div class="mc-prices">
+      <div class="mc-store-col">
+        <div class="mc-store-label ww-col"><span class="store-chip sm ww">W</span> Woolworths</div>
+        <div class="mc-price${wwWin ? ' cheaper' : ''}">${wwKg}<span class="vgm-kg-suffix">/kg</span></div>
       </div>
-      <div class="vgm-cmp-store ${coWin ? 'win' : ''}">
-        <span class="store-chip coles sm">C</span>
-        <span class="vgm-cmp-kg">${group._coPerKg != null ? `$${group._coPerKg.toFixed(2)}/kg` : '—'}</span>
-        ${coWin ? '<span class="vgm-cmp-tag">cheaper</span>' : ''}
+      <div class="mc-store-col">
+        <div class="mc-store-label coles-col"><span class="store-chip sm coles">C</span> Coles</div>
+        <div class="mc-price${coWin ? ' cheaper-c' : ''}">${coKg}<span class="vgm-kg-suffix">/kg</span></div>
       </div>
-    </div>`;
+    </div>
+    ${(group._wwPerKg != null && group._coPerKg != null) ? `
+    <div class="mc-summary">
+      <span class="mc-cheaper-tag ${wwWin ? 'ww' : coWin ? 'coles' : 'equal'}">
+        ${wwWin ? '<span class="store-chip sm ww">W</span>' : coWin ? '<span class="store-chip sm coles">C</span>' : ''}
+        ${(wwWin || coWin)
+          ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> cheapest $/kg'
+          : '<span class="mc-eq">=</span> same $/kg'}
+      </span>
+      <span class="vgm-tap-hint">${isExpanded ? 'tap to collapse' : 'tap for options'}</span>
+    </div>` : ''}`;
 
   if (isExpanded) {
     html += `<div class="vgm-body">
