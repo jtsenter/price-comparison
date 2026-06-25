@@ -2936,6 +2936,11 @@ function renderTableHead() {
   // re-sync it now so it never displays a stale/blank header until the next scroll —
   // the "headline freezes / shows nothing until I expand a row" symptom.
   if (_stickyGhost && _stickyGhost.style.display !== 'none') syncStickyNow();
+
+  // Expose the visible table width so an expanded per-kg panel can size itself to the
+  // viewport (sticky-left) instead of the full overflowing table — keeps Coles on screen.
+  const _tw = thead.closest('.table-wrap');
+  if (_tw) _tw.style.setProperty('--pw-panelw', _tw.clientWidth + 'px');
 }
 
 // ── Refresh / GitHub Actions trigger ─────────────────────────────────────────

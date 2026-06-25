@@ -346,7 +346,12 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
 
 /* Expanded full-width panel. */
 .vg-panel-row > td { padding: 0 !important; background: color-mix(in srgb, var(--accent) 5%, transparent); border-bottom: 2px solid color-mix(in srgb, var(--accent) 35%, var(--border)); cursor: pointer; }
-.vg-panel { padding: 14px 18px 16px; }
+/* The panel lives in a full-width colspan cell, so on a wide (overflowing) table its
+   right half — the Coles column — fell off-screen. Pin it to the left of the scroll
+   viewport and size it to the visible width so both stores stay on screen; the main
+   table columns still scroll left of it. --pw-panelw is set to the table-wrap's
+   clientWidth in JS (renderTableHead). */
+.vg-panel { padding: 14px 18px 16px; position: sticky; left: 0; box-sizing: border-box; width: var(--pw-panelw, 100%); }
 .vg-panel-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .vg-panel-title { font-weight: 800; font-size: 16px; }
 .vg-panel-winner { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 10px; background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
