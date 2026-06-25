@@ -1764,6 +1764,19 @@ td.priority-cell { text-align: center; }
   .price-bar-outer { display: none; }
 }
 
+/* Narrower desktop widths (e.g. a 1366px screen at 125% OS scaling ≈ 1092 CSS px):
+   the comfortable 16px horizontal cell padding pushed the dense table into a
+   horizontal scrollbar — the long-standing "only good at 90% zoom" problem. Trim the
+   horizontal padding (body + header + sticky-header ghost, kept in sync so columns
+   stay aligned) so every column fits at 100% without hiding price bars or per-unit. */
+@media (min-width: 641px) and (max-width: 1180px) {
+  .table-wrap td,
+  .table-wrap #tableHead th,
+  .sticky-header-ghost th { padding-left: 8px; padding-right: 8px; }
+  /* Reclaim side gutter for the table too, so the fit isn't razor-thin. */
+  main { padding-left: 14px; padding-right: 14px; }
+}
+
 /* ── Watchlist buttons ────────────────────────────────────────── */
 .item-watch-btn {
   background: none;
