@@ -1160,7 +1160,11 @@ async def _scrape_single_item(
                                     ww_results = []
                                     _skip_picker_ww = True
             else:
-                ww_results = await search_with_retry(search_woolworths, ww_page, item)
+                # Reached only when pinned_co is set but pinned_ww is not — i.e. a
+                # Coles-only product. Do NOT name-search Woolworths: it mis-matches
+                # unrelated WW items (e.g. "Coles 3 Star Lamb Mince" → "Woolworths Lamb
+                # Mince"), polluting the data. A single-store pin means a single store.
+                ww_results = []
             if pinned_co:
                 _co = await fetch_coles_by_url(coles_page, pinned_co)
                 if _co:
@@ -1186,7 +1190,8 @@ async def _scrape_single_item(
                                 print(f"  Coles: using top search result (pinned slug not in results)")
                         _skip_picker_co = True  # bypass matcher; user chose this product
             else:
-                coles_results = await search_with_retry(search_coles, coles_page, item)
+                # Woolworths-only pinned item — don't name-search Coles (same mis-match risk).
+                coles_results = []
         else:
             ww_results, coles_results = await asyncio.gather(
                 search_with_retry(search_woolworths, ww_page, item),
@@ -1597,11 +1602,17 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             need_ww = not (coles_url and not ww_url)
             need_coles = not (ww_url and not coles_url)
             if need_ww:
-                await ww_page.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
-                await delay()
+                try:
+                    await ww_page.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
+                    await delay()
+                except Exception as e:
+                    print(f"  WW warm-up navigation failed (continuing): {e}")
             if need_coles:
-                await coles_page.goto(COLES_BASE, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
-                await delay()
+                try:
+                    await coles_page.goto(COLES_BASE, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
+                    await delay()
+                except Exception as e:
+                    print(f"  Coles warm-up navigation failed (continuing): {e}")
 
             result, is_nf, _ve = await _scrape_single_item(
                 single_item, purchase_history, ww_page, coles_page,
@@ -1669,10 +1680,20 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             co_pool: asyncio.Queue = asyncio.Queue()
             for _ in range(CONCURRENCY):
                 p = await context.new_page()
-                await p.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
+                # Warm-up navigation. MUST NOT be fatal: Woolworths intermittently blocks
+                # the runner IP, and an unguarded goto here would crash the entire scrape
+                # (exit 1) before a single item is processed. The page is still usable —
+                # search_* navigate to their own URLs — so on failure we just continue.
+                try:
+                    await p.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
+                except Exception as e:
+                    print(f"  WW warm-up navigation failed (continuing): {e}")
                 await ww_pool.put(p)
                 p = await context.new_page()
-                await p.goto(COLES_BASE, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
+                try:
+                    await p.goto(COLES_BASE, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
+                except Exception as e:
+                    print(f"  Coles warm-up navigation failed (continuing): {e}")
                 await co_pool.put(p)
 
             # Push an initial progress marker before scraping begins so the UI
