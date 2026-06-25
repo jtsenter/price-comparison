@@ -2678,8 +2678,29 @@ function initStickyHeader() {
 
   // Sync horizontal scroll from table-wrap
   document.querySelector('.table-wrap')?.addEventListener('scroll', (e) => {
-    if (_stickyGhostTable) _stickyGhostTable.style.marginLeft = `-${e.target.scrollLeft}px`;
+    if (_stickyGhostTable) {
+      _stickyGhostTable.style.marginLeft = `-${e.target.scrollLeft}px`;
+      pinGhostFrozenCols();
+    }
   }, { passive: true });
+}
+
+// The ghost header is shifted with marginLeft to mirror horizontal scroll, so native
+// position:sticky can't pin its first columns. The cells' offsetLeft (relative to the
+// fixed ghost container) already reflects that shift, so to freeze the checkbox + Product
+// at a fixed cumulative offset (0, then checkbox width) we just translate each by
+// (intended - offsetLeft). This stays aligned with the body's sticky columns regardless
+// of scroll position or any internal width quirk in the cloned ghost table.
+function pinGhostFrozenCols() {
+  if (!_stickyGhostTable) return;
+  let intended = 0;
+  _stickyGhostTable.querySelectorAll('th.check-cell, th[data-col="name"]').forEach(c => {
+    c.style.position = 'relative';
+    c.style.zIndex = '2';
+    c.style.background = 'var(--bg)';
+    c.style.transform = `translateX(${intended - c.offsetLeft}px)`;
+    intended += c.getBoundingClientRect().width;
+  });
 }
 
 function syncStickyNow() {
@@ -2715,6 +2736,7 @@ function syncStickyNow() {
   if (realTable) _stickyGhostTable.style.width = realTable.getBoundingClientRect().width + 'px';
 
   _stickyGhostTable.style.marginLeft = `-${tableWrap.scrollLeft}px`;
+  pinGhostFrozenCols();
 
   // Attach sort + update sort arrow state
   updateSortHeaders(cloned);
