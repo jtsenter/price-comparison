@@ -699,6 +699,19 @@ let _showPerKgOnly = false;  // TEMP dev filter (web only) — show only per-kg 
 const DEFAULT_VARIANT_GROUPS = [
   { key: 'chicken_breast', label: 'Chicken Breast', items: [
     'Woolworths RSPCA Approved Chicken Breast Fillet',
+    'Woolworths RSPCA Approved Chicken Breast Fillets Skinless Small 450g - 715g',
+    'Woolworths RSPCA Approved Chicken Single Breast Fillet 300g',
+    'Macro Chicken Breast Fillets Free Range 700g - 1.4kg',
+    'Macro Free Range Australian Chicken Breast 500g - 1kg',
+    'Macro RSPCA Approved Chicken Breast Free Range Single 300g',
+    'Macro Organic Chicken Breast Fillet 500g - 750g',
+    'The Bare Bird Free Range Chicken Breast Fillets 600g',
+    'Al Sadiq Halal Chicken Breast Fillets Skinless Bulk Pack 1.1kg - 1.65kg',
+    'Coles RSPCA Approved Chicken Breast Fillets Large Pack 1.4kg',
+    'Coles RSPCA Approved Chicken Breast Fillets Small Pack 600g',
+    'Coles RSPCA Approved Free Range Chicken Breast Large Pack 1.25kg',
+    'Coles RSPCA Approved Free Range Chicken Breast Fillet Small Pack 600g',
+    'Lilydale Free Range Chicken Breast Fillets Bulk 1kg',
   ]},
   { key: 'chicken_drumsticks', label: 'Chicken Drumsticks', items: [
     'Woolworths RSPCA Approved Chicken Drumsticks',
