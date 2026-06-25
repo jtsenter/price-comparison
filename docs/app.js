@@ -1177,7 +1177,6 @@ async function triggerItemRefresh(itemName, btn, urlOverrides) {
     );
 
     if (res.status === 204) {
-      showToast(`⏳ Scraping "${stripWW(itemName)}"… this usually takes 1–2 min`, 6000);
       if (btn) pollItemRefresh(s, btn, itemName);
     } else {
       const err = await res.json().catch(() => ({}));
@@ -1191,7 +1190,7 @@ async function triggerItemRefresh(itemName, btn, urlOverrides) {
 }
 
 async function pollItemRefresh(s, btn, itemName) {
-  _pendingRefreshItem = itemName;
+  _pendingRefreshItems.add(itemName);
   if (_lastData) renderPage(_lastData);
 
   const dispatchedAt = new Date().toISOString();
@@ -1199,7 +1198,7 @@ async function pollItemRefresh(s, btn, itemName) {
   const apiHeaders = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' };
 
   const finish = (fresh) => {
-    _pendingRefreshItem = null;
+    _pendingRefreshItems.delete(itemName);
     if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
     if (fresh) { showToast(`✓ "${stripWW(itemName)}" updated`); renderPage(fresh); }
     else { showToast(`⚠ "${stripWW(itemName)}" scrape didn't complete — check GitHub Actions`, 5000); if (_lastData) renderPage(_lastData); }
@@ -1218,7 +1217,7 @@ async function pollItemRefresh(s, btn, itemName) {
       );
       const data = await res.json();
       const run = data.workflow_runs?.find(r => r.created_at >= dispatchedAt);
-      if (run) { showToast(`⏳ "${stripWW(itemName)}" scrape running on the runner…`, 5000); setTimeout(() => waitForRun(run.id), 5000); return; }
+      if (run) { setTimeout(() => waitForRun(run.id), 5000); return; }
     } catch (_) {}
     setTimeout(findRun, 5000);
   };
@@ -3056,7 +3055,7 @@ window.addEventListener('resize', () => {
 });
 let _lastData = null;
 let _prevPrices = {};
-let _pendingRefreshItem = null;
+const _pendingRefreshItems = new Set();
 let _preScrapeData = null;          // snapshot of data when scrape started
 let _progressLastDone = null;       // last seen done count
 let _progressLastChangeTime = null; // timestamp of last progress change
@@ -4236,6 +4235,15 @@ function renderPage(data) {
       $('scrapeStripPct').textContent = `${pct}%`;
       const retryBtn = $('scrapeStripRetry');
       if (retryBtn) retryBtn.style.display = isStale ? 'inline-block' : 'none';
+    } else if (_pendingRefreshItems.size > 0) {
+      strip.style.display = 'flex';
+      strip.classList.remove('stale');
+      const names = [..._pendingRefreshItems].map(stripWW).join(', ');
+      $('scrapeStripLabel').textContent = `⏳ Scraping: ${names}…`;
+      $('scrapeStripFill').style.width = '0%';
+      $('scrapeStripPct').textContent = '';
+      const retryBtn = $('scrapeStripRetry');
+      if (retryBtn) retryBtn.style.display = 'none';
     } else {
       strip.style.display = 'none';
     }
@@ -4614,7 +4622,7 @@ function renderPage(data) {
     };
 
     const checked = _checkedItems.has(item.list_item) ? ' checked' : '';
-    const isPending = _pendingRefreshItem === item.list_item;
+    const isPending = _pendingRefreshItems.has(item.list_item);
     const prevWw = _prevPrices[item.list_item]?.ww;
     const prevCo = _prevPrices[item.list_item]?.co;
     const priceChanged = (prevWw != null && prevWw !== ww?.price) || (prevCo != null && prevCo !== co?.price);
@@ -4622,7 +4630,7 @@ function renderPage(data) {
     tbody.insertAdjacentHTML('beforeend', `<tr${rowClass} data-item="${safeKey}"><td class="check-cell"><input type="checkbox" class="row-check" data-item="${safeKey}"${checked}></td>${getVisibleCols().map(col => tdMap[col] || '').join('')}<td class="actions-cell">${unarchiveBtn}${watchBtn}${refreshBtn}</td></tr>`);
 
     _prevPrices[item.list_item] = { ww: ww?.price, co: co?.price };
-    if (priceChanged && _pendingRefreshItem === item.list_item) _pendingRefreshItem = null;
+    if (priceChanged && _pendingRefreshItems.has(item.list_item)) _pendingRefreshItems.delete(item.list_item);
   });
 
   // Tfoot — use the same banner stats so the desktop footer and mobile banner
