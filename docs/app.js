@@ -731,6 +731,15 @@ const DEFAULT_VARIANT_GROUPS = [
   ]},
   { key: 'beef_mince', label: 'Beef Mince', items: [
     'Woolworths Lean Beef Mince',
+    'Woolworths Heart Smart Extra Lean Beef Mince 500g',
+    'Woolworths Lean Beef Mince 500g',
+    'Macro Grass Fed Lean Beef Mince 500g',
+    'Macro Organic Extra Lean Beef Mince 500g',
+    'Coles No Added Hormone Beef 5 Star Extra Lean Mince 500g',
+    'Coles No Added Hormone Beef 4 Star Lean Mince 500g',
+    'Coles No Added Hormone Beef 4 Star Lean Mince 800g',
+    "Cleaver's Organic Grass-fed Extra Lean Beef Mince 500g",
+    "El-Amin's Beef Lean Mince 500g",
   ]},
   { key: 'lamb_mince', label: 'Lamb Mince', items: [
     'Woolworths Lamb Mince',
