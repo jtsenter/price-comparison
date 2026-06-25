@@ -2713,6 +2713,10 @@ function syncStickyNow() {
   // Clone thead, removing resize handles from ghost (they'd interfere)
   while (_stickyGhostTable.firstChild) _stickyGhostTable.removeChild(_stickyGhostTable.firstChild);
   const cloned = realThead.cloneNode(true);
+  // Strip ids from the clone — cloneNode copies id="tableHead", and a duplicate id makes
+  // later $('tableHead') / querySelector('#tableHead') ambiguous (can return the ghost).
+  cloned.removeAttribute('id');
+  cloned.querySelectorAll('[id]').forEach(e => e.removeAttribute('id'));
   cloned.querySelectorAll('.col-resize-handle').forEach(h => h.remove());
   _stickyGhostTable.appendChild(cloned);
 
@@ -2927,6 +2931,11 @@ function renderTableHead() {
   initSortHeaders();
   initColumnDrag();
   initColumnResize();
+
+  // The header was just rebuilt. If the sticky ghost is showing (page scrolled down),
+  // re-sync it now so it never displays a stale/blank header until the next scroll —
+  // the "headline freezes / shows nothing until I expand a row" symptom.
+  if (_stickyGhost && _stickyGhost.style.display !== 'none') syncStickyNow();
 }
 
 // ── Refresh / GitHub Actions trigger ─────────────────────────────────────────
@@ -3245,7 +3254,7 @@ function sortItems(items) {
         const ww = item.woolworths?.price, co = item.coles?.price;
         return (ww != null && co != null) ? Math.abs(ww - co) / Math.max(ww, co) : -Infinity;
       }
-      case 'trend': return calcTrendPosition(item); // 0.0=best deal, 1.0=expensive, 999=no history (sorts last)
+      case 'trend': return trendPositionOf(item); // 0.0=best deal, 1.0=expensive, 999=no history (sorts last)
       case 'category':     return getCategory(item).toLowerCase();
       case 'last_scraped': return item.last_scraped || '';
       case 'ww_total':     return (item.woolworths?.price ?? 0) * getUnits(item.list_item);
@@ -3534,6 +3543,28 @@ function groupTrendCellHTML(group) {
   // buildPriceBar re-checks that member's exclusions, but prices here are already
   // $/kg-converted and exclusion-filtered, so its re-check matches nothing.
   return buildPriceBar(best.name, hist, best.perkg);
+}
+
+// Trend SORT position for a per-kg group. Mirrors the bar in groupTrendCellHTML — built
+// from the members' $/kg series with the best $/kg as "current" — so sorting by trend
+// orders groups by the same metric the bar shows. calcTrendPosition can't be used on a
+// group: its price_history is empty and woolworths.price is a pack price, not $/kg, so it
+// returned a meaningless value (the "per-kg items sort weird" bug).
+function groupTrendPosition(group) {
+  const cands = [group._wwBest, group._coBest].filter(Boolean);
+  if (!cands.length) return 999;
+  const best = cands.reduce((a, b) => (a.perkg <= b.perkg ? a : b));
+  const prices = group._members.flatMap(memberPerKgPrices);
+  if (prices.length < 2) return 999;
+  const lo = Math.min(...prices), hi = Math.max(...prices);
+  if (lo === hi) return 0.5;
+  return Math.max(0, Math.min(1, (best.perkg - lo) / (hi - lo)));
+}
+
+// Trend position for any row: groups use their $/kg series, normal items use the shared
+// calcTrendPosition. One dispatcher so desktop and mobile trend sorts stay consistent.
+function trendPositionOf(item) {
+  return item._isGroup ? groupTrendPosition(item) : calcTrendPosition(item);
 }
 
 // Assemble a <tr> from a column→<td> map, respecting current visible columns.
@@ -4123,8 +4154,8 @@ function renderMobileCards(items, data) {
   let displayItems = [...items];
   const sortDir = _mobileSortDir === 'asc' ? 1 : -1;
   if (_mobileSortMode === 'trend') {
-    // calcTrendPosition() from utils.js: 0.0=best deal, 0.5=flat/middle, 999=no history
-    displayItems.sort((a, b) => (calcTrendPosition(a) - calcTrendPosition(b)) * sortDir);
+    // trendPositionOf(): groups use their $/kg series, normal items use calcTrendPosition.
+    displayItems.sort((a, b) => (trendPositionOf(a) - trendPositionOf(b)) * sortDir);
   } else if (_mobileSortMode === 'az') {
     displayItems.sort((a, b) => shortName(a.list_item).localeCompare(shortName(b.list_item)) * sortDir);
   } else if (_mobileSortMode === 'savings') {
