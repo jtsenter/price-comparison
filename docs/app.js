@@ -3468,10 +3468,12 @@ function buildVariantGroups(byName) {
       .map(n => ({ name: n, result: memberByName.get(n)?.coles, perkg: clientPerKg(memberByName.get(n)?.coles) }))
       .filter(v => v.perkg != null).sort((a, b) => a.perkg - b.perkg);
 
-    // Per-store member counts (exclusion-filtered, includes pending/unpriced rows)
-    // so the group sub-label matches what each column actually shows.
-    const wwCount = stores.ww.filter(n => !excl.has(`${g.key}::${n}::ww`)).length;
-    const coCount = stores.coles.filter(n => !excl.has(`${g.key}::${n}::coles`)).length;
+    // Per-store member counts, deduped the same way the expanded panel is, so the group
+    // sub-label ("N Woolworths · M Coles") matches the rows actually shown (no inflated
+    // counts from product aliases or wrong cross-store matches).
+    const ovr = loadOverrides();
+    const wwCount = dedupePerKgVariants(ww.map(x => ({ name: x.name, res: x.result, pk: x.perkg })), 'ww', ovr, memberByName).length;
+    const coCount = dedupePerKgVariants(co.map(x => ({ name: x.name, res: x.result, pk: x.perkg })), 'coles', ovr, memberByName).length;
 
     const wwBest = ww[0] || null;
     const coBest = co[0] || null;
@@ -3544,6 +3546,42 @@ function assembleGroupTr(tds, { rowClass, dataAttrs = '', checkCell = '<td class
 
 // Build the per-store variant list for the expanded panel: every member that has
 // a price at `store`, sorted by $/kg ascending, cheapest flagged as the winner.
+// Stable product identity from a WW/Coles product URL (stockcode / trailing id), so
+// different list_item aliases for the same product collapse to one row in the panel.
+function perKgProductIdentity(url) {
+  if (!url) return '';
+  let m = url.match(/\/productdetails\/(\d+)/);   // Woolworths stockcode
+  if (m) return 'ww:' + m[1];
+  m = url.match(/-(\d+)(?:[/?#]|$)/);              // Coles trailing numeric id
+  if (m) return 'co:' + m[1];
+  return url.split('?')[0];
+}
+
+// Collapse per-kg variant rows that are duplicates to the shopper. Two stages:
+//  (1) same pinned/scraped product URL — handles the many name-key aliases one product
+//      accrued over time (with/without size, "(15% fat)", "Woolworths " prefix), INCLUDING
+//      ones the user renamed and ones a Coles-only item wrongly matched on WW;
+//  (2) same display name + same $/kg — handles genuinely distinct SKUs that read identically.
+// The entry whose per-store name the user set always wins, so the named version survives.
+// `variants` is [{ name, res, pk }]. Returns a new array sorted by $/kg ascending.
+function dedupePerKgVariants(variants, storeKey, overrides, memberByName) {
+  const nameFor = storeKey === 'ww' ? wwNameFor : coNameFor;
+  const customName = (n) => storeKey === 'ww' ? (overrides[n] || {}).wwName : (overrides[n] || {}).colesName;
+  const dispName = (v) => nameFor(v.name, overrides[v.name] || {}, memberByName.get(v.name)) || '';
+  const pick = (map, key, v) => {
+    const cur = map.get(key);
+    if (!cur || (customName(v.name) && !customName(cur.name))) map.set(key, v);
+  };
+  const byId = new Map();
+  for (const v of variants) {
+    const url = pinnedUrlFor(v.name, storeKey) || v.res?.url || '';
+    pick(byId, perKgProductIdentity(url) || `${(v.res?.name || '').toLowerCase()}|${v.res?.price}`, v);
+  }
+  const byLook = new Map();
+  for (const v of byId.values()) pick(byLook, `${dispName(v).toLowerCase().trim()}|${v.pk.toFixed(2)}`, v);
+  return [...byLook.values()].sort((a, b) => a.pk - b.pk);
+}
+
 function groupStoreVariantsHTML(group, store, overrides) {
   const storeKey = store === 'woolworths' ? 'ww' : 'coles';
   // This store's ordered member list (independent of the other store).
@@ -3551,22 +3589,33 @@ function groupStoreVariantsHTML(group, store, overrides) {
   const memberByName = new Map(group._members.map(m => [m.list_item, m]));
   const nameFor = storeKey === 'ww' ? wwNameFor : coNameFor;
 
-  const variants = order
+  const raw = order
     .map(n => memberByName.get(n))
     .filter(m => m && !m._pending)
     .map(m => {
       const res = store === 'woolworths' ? m.woolworths : m.coles;
       return { name: m.list_item, res, pk: clientPerKg(res) };
     })
-    .filter(v => v.pk != null)
-    .sort((a, b) => a.pk - b.pk);
+    .filter(v => v.pk != null);
+  const variants = dedupePerKgVariants(raw, storeKey, overrides, memberByName);
   const cheapestPk = variants.length ? variants[0].pk : null;
 
   if (!variants.length) return '<div class="vg-pv empty">No matches at this store</div>';
 
+  // Distinct SKUs sometimes share a scraped name (e.g. WW sells two "Woolworths Lean
+  // Beef Mince" at different $/kg). Where display names collide, append the size token
+  // from the list_item key so the rows read as different products, not duplicates.
+  const displayName = (v) => nameFor(v.name, overrides[v.name] || {}, memberByName.get(v.name));
+  const nameCount = {};
+  variants.forEach(v => { const n = displayName(v); nameCount[n] = (nameCount[n] || 0) + 1; });
+
   const variantRows = variants.map((v) => {
     const ov = overrides[v.name] || {};
-    const name = nameFor(v.name, ov, memberByName.get(v.name));
+    let name = displayName(v);
+    if (nameCount[name] > 1) {
+      const sz = v.name.match(/(\d+(?:\.\d+)?\s*(?:kg|g|ml|l|pk|pack)\b)/i);
+      if (sz && !new RegExp(sz[1].replace(/\s+/g, '\\s*'), 'i').test(name)) name += ` (${sz[1].trim()})`;
+    }
     // Grey shelf price: the portion price for weight-priced items (pack_price, e.g.
     // $7.60 for a 200g salmon portion), else the pack price. The green $/kg beside it
     // stays the comparison metric; pack size already lives in the name.
