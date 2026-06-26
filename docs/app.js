@@ -3172,6 +3172,8 @@ let _progressLastDone = null;       // last seen done count
 let _progressLastChangeTime = null; // timestamp of last progress change
 let _progressDismissed = false;     // user dismissed the header progress widget
 let _progressSeenThisSession = false; // true once scrape_progress first appeared this trigger
+let _lastProgress = null;           // last scrape_progress we saw (keeps the strip up across transient no-progress fetches)
+let _scrapeActive = false;          // true between first progress and confirmed completion (3-strike)
 
 const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
 
@@ -4454,7 +4456,14 @@ function renderPage(data) {
     $('savingInfo').textContent = 'Same price at both stores';
   }
 
-  const prog = data.scrape_progress;
+  // A single fetch can momentarily lack scrape_progress (CDN hiccup or the window
+  // between two of the scraper's progress pushes). Don't let that flicker the bar off:
+  // keep showing the last-known progress until the auto-poll CONFIRMS completion
+  // (3-strike, below) and clears _scrapeActive. This is what stopped the bar
+  // "disappearing midway with no feedback".
+  const rawProg = data.scrape_progress;
+  if (rawProg) { _lastProgress = rawProg; _scrapeActive = true; }
+  const prog = rawProg || (_scrapeActive ? _lastProgress : null);
 
   // ── Pre-scrape snapshot: keep all items visible while scraping ──
   if (prog) {
@@ -4541,7 +4550,7 @@ function renderPage(data) {
   _lastData = data;
 
   // Auto-poll progress while scraping
-  if (data.scrape_progress) {
+  if (rawProg) {
     window._progressNoDataStreak = 0; // reset streak whenever we see progress
     if (!window._progressPollTimer) {
       window._progressPollTimer = setInterval(async () => {
@@ -4549,13 +4558,16 @@ function renderPage(data) {
         if (!fresh) return;
         if (!fresh.scrape_progress) {
           // Require 3 consecutive no-progress responses before declaring done.
-          // A single missing response could be a CDN hiccup or a between-push window.
+          // A single missing response could be a CDN hiccup or a between-push window —
+          // the strip stays up (via _scrapeActive/_lastProgress) until we're sure.
           window._progressNoDataStreak = (window._progressNoDataStreak || 0) + 1;
           if (window._progressNoDataStreak >= 3) {
             clearInterval(window._progressPollTimer);
             window._progressPollTimer = null;
             window._progressNoDataStreak = 0;
-            renderPage(fresh); // final render to hide bar
+            _scrapeActive = false;   // confirmed done → allow the strip to hide
+            _lastProgress = null;
+            renderPage(fresh);       // final render hides the bar
           }
           return; // don't hide bar yet
         }
@@ -4565,7 +4577,9 @@ function renderPage(data) {
         }
       }, 7000);
     }
-  } else {
+  } else if (!_scrapeActive) {
+    // Only tear the poll timer down when no scrape is active. A transient no-progress
+    // render mid-scrape must NOT stop polling (that would freeze the strip).
     if (window._progressPollTimer) {
       clearInterval(window._progressPollTimer);
       window._progressPollTimer = null;
