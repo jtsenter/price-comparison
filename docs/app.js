@@ -2413,6 +2413,15 @@ function _updateSelectedPill() {
   }
 }
 
+// Add one real product (not the synthetic group key — those aren't in _lastData.items,
+// so the basket export would silently drop them) to the basket selection.
+function addPerKgToBasket(name) {
+  if (!name) return;
+  _selectedItems.add(name);
+  _updateSelectedPill();
+  showToast(`✓ Added ${stripWW(name)} to basket`);
+}
+
 function initSelectedPill() {
   $('selectedPill')?.addEventListener('click', () => {
     if (_selectedItems.size === 0) return;
@@ -3675,6 +3684,7 @@ function groupStoreVariantsHTML(group, store, overrides) {
         ${nameHtml}
         <span class="vg-pv-pack">${pack}</span>
         <span class="vg-pv-kg">$${v.pk.toFixed(2)}/kg</span>
+        <button class="vg-pv-basket" data-item="${safeKey}" title="Add to basket" aria-label="Add to basket">＋</button>
       </div>`;
   }).join('');
 
@@ -3855,6 +3865,9 @@ function appendGroupCardMobile(container, group, overrides) {
   const bar = groupTrendCellHTML(group);
   const wwKg = group._wwPerKg != null ? `$${group._wwPerKg.toFixed(2)}` : '—';
   const coKg = group._coPerKg != null ? `$${group._coPerKg.toFixed(2)}` : '—';
+  // Cheapest variant across both stores (a REAL product) for the quick add-to-basket.
+  const cheapestVar = [group._wwBest, group._coBest].filter(Boolean).sort((a, b) => a.perkg - b.perkg)[0];
+  const cheapestName = cheapestVar ? cheapestVar.name.replace(/"/g, '&quot;') : '';
 
   const card = document.createElement('div');
   card.className = `mobile-card vg-mobile-card vg-expand-btn${borderCls}${isExpanded ? ' vg-mobile-open' : ''}`;
@@ -3895,7 +3908,9 @@ function appendGroupCardMobile(container, group, overrides) {
           ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> cheapest $/kg'
           : '<span class="mc-eq">=</span> same $/kg'}
       </span>
-      <span class="vgm-tap-hint">${isExpanded ? 'tap to collapse' : 'tap for options'}</span>
+      ${cheapestName
+        ? `<button class="vgm-basket-btn" data-item="${cheapestName}" title="Add cheapest to basket">＋ Basket</button>`
+        : `<span class="vgm-tap-hint">tap for options</span>`}
     </div>` : ''}`;
 
   if (isExpanded) {
@@ -5977,6 +5992,10 @@ async function boot() {
     const tbody = $('tableBody');
     if (tbody) {
       tbody.addEventListener('click', (e) => {
+        // Per-kg variant "＋" → add that exact product to the basket (the group toggle
+        // below already ignores button clicks, so this won't collapse the panel).
+        const pvBasket = e.target.closest('.vg-pv-basket');
+        if (pvBasket) { addPerKgToBasket(pvBasket.dataset.item); return; }
         // Variant group expand/collapse — click anywhere on the group row (or its
         // panel header), except on the interactive controls it hosts.
         const groupRow = e.target.closest('.vg-group-row, .vg-panel-row');
@@ -6102,6 +6121,10 @@ async function boot() {
   const mobileCardsEl = $('mobileCards');
   if (mobileCardsEl) {
     mobileCardsEl.addEventListener('click', (e) => {
+      // Per-kg add-to-basket: card "＋ Basket" (cheapest) or a variant's "＋". Handled
+      // before the generic button guard below, which would otherwise swallow these.
+      const bb = e.target.closest('.vgm-basket-btn, .vg-pv-basket');
+      if (bb) { addPerKgToBasket(bb.dataset.item); return; }
       // Don't toggle when interacting with an option's link, edit button, or image.
       if (e.target.closest('a, button, .img-hoverable')) return;
       const vgBtn = e.target.closest('.vg-expand-btn');
