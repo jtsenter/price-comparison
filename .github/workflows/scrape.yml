@@ -71,6 +71,15 @@ jobs:
           git pull --no-rebase -X ours origin main
           git push
 
+      - name: Clear stalled scrape_progress
+        if: always()
+        run: |
+          "%PYTHON%" -c "import json; p='docs/data/latest.json'; d=json.load(open(p)); sp=d.pop('scrape_progress',None); sp and open(p,'w').write(json.dumps(d,separators=(',',':')))"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/data/latest.json
+          git diff --cached --quiet || (git pull --no-rebase -X ours origin main && git commit -m "chore: clear stalled scrape_progress" && git push)
+
   scrape-archived:
     runs-on: self-hosted
     needs: [scrape]
