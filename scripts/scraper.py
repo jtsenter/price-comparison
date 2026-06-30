@@ -61,8 +61,35 @@ MAX_RESULTS          = 5        # search results fetched per store
 ARCHIVED_REFRESH_DAYS = 7       # scheduled runs refresh archived items only if older than this (else carried forward)
 SUSPICIOUS_CHANGE_PCT   = 0.30  # flag if price changed by more than this fraction
 SUSPICIOUS_MIN_HISTORY  = 3     # minimum price_history entries to run suspicion check
+SCRAPE_LOG_MAX          = 30    # scrape-log runs kept in docs/data/scrape_log.json
 
 _ww_debug_done = False
+# Per-store fresh misses for the in-progress run: [(item, ww_missed, co_missed)].
+# Reset at the start of each full run; read after it to write the scrape log.
+_run_store_misses: list = []
+
+
+def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed: list) -> None:
+    """Append one run's per-store miss summary to docs/data/scrape_log.json (capped).
+    Lets the UI show miss rates over time and which products get skipped most."""
+    path = os.path.join(DATA_DIR, "scrape_log.json")
+    log = []
+    if os.path.exists(path):
+        try:
+            with open(path) as f:
+                log = json.load(f)
+        except Exception:
+            log = []
+    log.append({
+        "date": datetime.now(timezone.utc).isoformat(),
+        "trigger": trigger,
+        "scraped": scraped,
+        "ww_missed": ww_missed,
+        "coles_missed": coles_missed,
+    })
+    log = log[-SCRAPE_LOG_MAX:]
+    with open(path, "w") as f:
+        json.dump(log, f, separators=(",", ":"))
 
 
 def _iso_week(d) -> tuple[int, int]:
@@ -1241,6 +1268,11 @@ async def _scrape_single_item(
         if coles_match:
             print(f"    Coles match ({co_conf}): {coles_match['name']}")
 
+    # Record fresh per-store misses for this run's scrape log, BEFORE carry-forward
+    # masks a miss with the last-known price. This is the signal that surfaces
+    # chronically-skipped products in the UI summary (a carried price still hides a gap).
+    _run_store_misses.append((item, ww_match is None, coles_match is None))
+
     # Carry forward existing store data when no fresh result is available.
     # Always carry forward when the matcher produced no usable result — whether because
     # the search returned nothing, the URL fetch failed, or the matcher rejected all
@@ -1782,7 +1814,16 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                         await ww_pool.put(ww_page)
                         await co_pool.put(co_page)
 
+            _run_store_misses.clear()
             await asyncio.gather(*[scrape_one(name) for name in to_scrape])
+
+            # Scrape log: record this run's per-store fresh misses so the UI can show
+            # miss rates over time and which products get skipped most. Items that timed
+            # out or errored never reached the match phase, so they're absent here —
+            # `scraped` counts items that completed matching, not total attempted.
+            _ww_missed = sorted(it for it, _ww, _co in _run_store_misses if _ww)
+            _co_missed = sorted(it for it, _ww, _co in _run_store_misses if _co)
+            _append_scrape_log(trigger, len(_run_store_misses), _ww_missed, _co_missed)
 
         await browser.close()
 
