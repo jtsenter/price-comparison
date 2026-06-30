@@ -319,13 +319,22 @@ async def delay():
 
 
 async def search_with_retry(search_fn, page, query, retries=0):
+    # An empty result is usually a transient miss (timeout, bot challenge, a slow
+    # SSR payload) rather than "product doesn't exist". One retry recovers a large
+    # share of those gaps. search_fn does a full page.goto, so the retry already
+    # navigates a fresh DOM — a brand-new page object would share the context's
+    # cookies and shed nothing extra.
+    # ponytail: same-page re-navigation, not a fresh browser context. Ceiling — if a
+    # store hard-bans the runner cookie/IP for a whole run, every item still retries
+    # and wastes ~backoff each; upgrade path is a new context on repeated misses.
     for attempt in range(retries + 1):
         results = await search_fn(page, query)
         if results:
             return results
         if attempt < retries:
-            print(f"    No results for '{query}', retrying in 5s…")
-            await asyncio.sleep(5)
+            backoff = random.uniform(2.5, 4.0)
+            print(f"    No results for '{query}', retrying in {backoff:.0f}s…")
+            await asyncio.sleep(backoff)
     return []
 
 
@@ -1194,8 +1203,8 @@ async def _scrape_single_item(
                 coles_results = []
         else:
             ww_results, coles_results = await asyncio.gather(
-                search_with_retry(search_woolworths, ww_page, item),
-                search_with_retry(search_coles, coles_page, item),
+                search_with_retry(search_woolworths, ww_page, item, retries=1),
+                search_with_retry(search_coles, coles_page, item, retries=1),
             )
         await delay()
 
