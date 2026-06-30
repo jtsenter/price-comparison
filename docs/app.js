@@ -1792,7 +1792,7 @@ function histKgRatios(item) {
 function openPriceHistoryModal(item) {
   _historyItem = item;
   const kgR = histKgRatios(item);
-  $('priceHistoryTitle').textContent = `Price History — ${stripWW(item.list_item)}${kgR.perKg ? ' ($/kg)' : ''}`;
+  $('priceHistoryTitle').textContent = `Price History - ${stripWW(item.list_item)}${kgR.perKg ? ' ($/kg)' : ''}`;
 
   // Initialize pending on fresh open; re-renders reuse existing _pendingExcl
   if (_pendingExcl === null) {
