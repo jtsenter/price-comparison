@@ -22,6 +22,32 @@ KNOWN_NAME_CHANGES = {
     # into a single item instead of showing as duplicates.
     "Salmon Tasmanian Atlantic Fillets Skin On": "Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets",
     "Woolworths Salmon Tasmanian Atlantic Fillets Skin On": "Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets",
+    # 2026-07-02 dedup: URL-level duplicates (same store product under two list
+    # names). Alias → kept name; Excel history merges under the kept name and
+    # _purge_alias_items drops lingering alias rows from scraper output.
+    "Balconi Mix Max Spgnckes Cocoa": "Balconi Mix Max Cake Cocoa 350g",
+    "Basa Thawed Freshwater Basa Fillets": "Woolworths Basa Fillets Boneless With Skin Off",
+    "Vevelle 2 Ply White Toilet Tissue": "Vevelle White 2 Ply Toilet Tissue",
+    "Woolworths Whole Milk Full Cream Milk": "Woolworths Full Cream Milk",
+    "Snickers Milk Chocolate Party Share Bag": "Snickers Milk Chocolate Party Share Bag 20 Pieces",
+    "Strike 2 Ply Paper Towel 2 Ply": "Strike Paper Towels Embossed 2 Ply",
+    "Woolworths Green Asparagus Bunch Green": "Woolworths Asparagus Green Bunch",
+    "Woolworths Lamb Mince": "Lamb Mince",
+    "Woolworths Red Onions": "Woolworths Red Onions Bag",
+    "Arnold's Farm Granola Pink Lady Apple & Cinnamon": "Sam's Pantry Granola Pink Lady Apple & Cinnamon",
+    "Eat Now Hass Avocado": "Hass Avocado",
+    "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone In 500g - 650g": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In",
+    "Coles RSPCA Approved Chicken Thigh Cutlets": "Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In",
+    "Macro Grass Fed Australian Lamb Mince 450g (15% fat)": "Macro Grass Fed Australian Lamb Mince 450g",
+    "El- Amin's Halal Lamb Mince | 500g": "El-Amin's Halal Lamb Mince 500g",
+    "Woolworths Basa Portions 260g": "Woolworths Basa Fillets Boneless With Skin Off",
+    "I&J Frozen Basa Fillets 750g": "Woolworths Basa Fillets Boneless With Skin Off",
+    "Coles Frozen Basa Fillet": "Woolworths Basa Fillets Boneless With Skin Off",
+    "Coles 3 Star Lamb Mince 500g": "Lamb Mince",
+    "Coles RSPCA Approved Free Range Chicken Breast Fillet Small Pack 600g": "Woolworths RSPCA Approved Chicken Breast Fillet",
+    "Coles RSPCA Approved Chicken Drumsticks 2kg": "Woolworths RSPCA Approved Chicken Drumsticks",
+    "Tassal Salmon Portions Skin On 300g": "Woolworths Salmon Portions Skin On",
+    "El-Amin's Beef Lean Mince 500g": "Woolworths Lean Beef Mince",
 }
 
 FUZZY_THRESHOLD = 85
