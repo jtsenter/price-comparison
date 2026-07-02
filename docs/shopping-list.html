@@ -61,8 +61,10 @@
       transition: background .15s, border-bottom-color .15s;
     }
     .store-card-sl + .store-card-sl { border-left: 1px solid var(--border); }
-    .store-card-sl.card-active   { background: #F0FDF4; border-bottom-color: #00843D; }
-    .store-card-sl.card-inactive:hover { background: #FFF8F8; }
+    /* Active card carries its store identity, not a fixed green */
+    .store-card-sl.ww.card-active    { background: #F0FDF4; border-bottom-color: var(--ww); }
+    .store-card-sl.coles.card-active { background: #FEF5F5; border-bottom-color: var(--coles); }
+    .store-card-sl.card-inactive:hover { background: var(--bg); }
     .sc-icon { margin-bottom: 12px; }
     .sc-icon-chip {
       display: inline-flex; align-items: center; justify-content: center;
@@ -245,7 +247,8 @@
       & header { background: var(--card); border-bottom-color: var(--border); }
       & .store-summary-wrap { background: var(--card); border-color: var(--border); }
       & .store-card-sl { background: var(--card); }
-      & .store-card-sl.card-active { background: #052e16; border-bottom-color: var(--ww); }
+      & .store-card-sl.ww.card-active    { background: #052e16; border-bottom-color: var(--ww); }
+      & .store-card-sl.coles.card-active { background: #450a0a; border-bottom-color: var(--coles); }
       & .bar-ribbon { background: var(--card); border-top-color: var(--border); }
       & .bar-optimal { background: #052e16; border-color: #14532d; }
       & tbody tr:nth-child(even) { background: #182030; }
@@ -554,9 +557,9 @@ async function boot() {
     const ec = equalItems.length;
     const wwActive = equalStore === 'ww';
 
-    // Card classes
-    const wwCardCls = `store-card-sl ${wwActive ? 'card-active' : 'card-inactive'}`;
-    const coCardCls = `store-card-sl ${!wwActive ? 'card-active' : 'card-inactive'}`;
+    // Card classes — the store class lets the active card carry its own store colour
+    const wwCardCls = `store-card-sl ww ${wwActive ? 'card-active' : 'card-inactive'}`;
+    const coCardCls = `store-card-sl coles ${!wwActive ? 'card-active' : 'card-inactive'}`;
 
     // Price colour — active card always green, inactive always grey
     const wwPriceCls = wwActive ? 'price-active' : 'price-inactive';
