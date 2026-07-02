@@ -75,7 +75,7 @@ cd docs && python -m http.server 8080
 - Fall back to the store-scraped cup price only for loose/bulk goods.
 - **Never trust Coles `unit_price`** for pack goods — Coles frequently stores the pack
   price as `unit_price` with `unit='1kg'`, giving a wrong per-kg figure.
-- Both `app.js` and `hot-deals.html` implement `clientPer100()` client-side.
+- `clientPer100()` lives in `utils.js` (single copy, loaded by both pages).
 
 **Multi-key sort**
 - `sortKeys` array in `app.js`. Clicking a column **prepends** it as the primary key;
@@ -146,10 +146,6 @@ Verify online status: https://github.com/jtsenter/price-comparison/settings/acti
 
 ## Known gaps / work in progress
 
-- `clientPer100()` is duplicated in `app.js` and `hot-deals.html` — should be extracted
-  to a shared `utils.js`.
-- `isHotDeal()` in `app.js` and `getDealInfo()` in `hot-deals.html` share the same
-  threshold logic but are separate functions.
 - `renderPage()` in `app.js` is ~400 lines. Candidates for extraction: `renderBanner()`,
   `renderProgress()`, `renderRows()`.
 - `_scrape_single_item()` in `scraper.py` is ~200 lines — could split into fetch + match +
