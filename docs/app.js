@@ -658,7 +658,7 @@ function _updateStoreCycleBtn() {
 }
 let _searchQuery = '';
 let _perkgSet = new Set();   // items compared by $/kg (synced via user_settings.json)
-let _showPerKgOnly = false;  // TEMP dev filter (web only) — show only per-kg items
+let _perkgFilter = 'all';  // per-kg group visibility: 'all' | 'only' | 'hidden' (⚙ /kg button cycles)
 
 // Per-kg categories. Each is a comparable product type; the two near-identical
 // salmon-fillet and basa entries are merged so each category holds its real
@@ -3157,8 +3157,9 @@ const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
 function sortItems(items) {
   const exclusions = loadExclusions();
   let filtered = items.filter(item => {
-    // TEMP dev filter (web only): show only the per-kg variant groups, ignore all else
-    if (_showPerKgOnly) return !!item._isGroup;
+    // Per-kg group visibility (⚙ /kg button): isolate the groups, or hide them entirely
+    if (_perkgFilter === 'only') return !!item._isGroup;
+    if (_perkgFilter === 'hidden' && item._isGroup) return false;
     // Watchlist filter: show only watchlisted items; bypass archive/priority checks
     if (_activePriority === 'watchlist') return _watchlist.has(item.list_item);
     // Mobile selection filter
@@ -5635,7 +5636,11 @@ function initOptionsMenu() {
       e.stopPropagation();
       dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
     });
-    dd.addEventListener('click', (e) => e.stopPropagation());
+    dd.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // Menu items (Import / Auto-update Setup) open a modal — close the menu behind it.
+      if (e.target.closest('.more-dropdown-item')) dd.style.display = 'none';
+    });
     document.addEventListener('click', () => { dd.style.display = 'none'; });
   }
 }
@@ -5780,7 +5785,8 @@ async function boot() {
 
   // ── View toggle ──────────────────────────────────────────────
   const viewToggleBtn = $('viewToggleBtn');
-  const TABLE_ICON = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
+  // Bordered rows-in-a-frame icon — must stay visually distinct from the Columns button (bare lines + dots).
+  const TABLE_ICON = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="3" y1="15" x2="21" y2="15"/></svg>`;
   const CARD_ICON  = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>`;
   function syncViewToggleBtn() {
     if (!viewToggleBtn) return;
@@ -5914,18 +5920,6 @@ async function boot() {
   $('wwCard')?.addEventListener('click',    () => _activateTotalCol('ww_total',    'coles_total'));
   $('colesCard')?.addEventListener('click', () => _activateTotalCol('coles_total', 'ww_total'));
 
-  // More menu dropdown
-  const moreBtn = $('moreMenuBtn');
-  const moreDd  = $('moreMenuDropdown');
-  if (moreBtn && moreDd) {
-    moreBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      moreDd.style.display = moreDd.style.display === 'none' ? 'block' : 'none';
-    });
-    moreDd.addEventListener('click', (e) => e.stopPropagation());
-    document.addEventListener('click', () => { if (moreDd) moreDd.style.display = 'none'; });
-  }
-
   // Column filter button clicks (delegated from thead, re-bound after each render via renderTableHead)
   document.addEventListener('click', (e) => {
     const fb = e.target.closest('.col-filter-btn');
@@ -5946,13 +5940,19 @@ async function boot() {
     renderPage(data);
     showNameChangesNotice();
 
-    // TEMP dev button (web): isolate the per-kg items so their scraping can be tuned.
+    // ⚙ /kg button (web): cycles all → only per-kg groups → hide per-kg groups.
     const perkgBtn = $('perkgDevBtn');
     if (perkgBtn) {
+      const PERKG_CYCLE = { all: 'only', only: 'hidden', hidden: 'all' };
+      const PERKG_LABEL = { all: '⚙ /kg', only: '⚙ /kg ✓', hidden: '⚙ /kg ✕' };
       perkgBtn.addEventListener('click', () => {
-        _showPerKgOnly = !_showPerKgOnly;
-        perkgBtn.classList.toggle('on', _showPerKgOnly);
-        perkgBtn.textContent = _showPerKgOnly ? '⚙ /kg ✓' : '⚙ /kg';
+        _perkgFilter = PERKG_CYCLE[_perkgFilter];
+        perkgBtn.classList.toggle('on', _perkgFilter === 'only');
+        perkgBtn.classList.toggle('off', _perkgFilter === 'hidden');
+        perkgBtn.textContent = PERKG_LABEL[_perkgFilter];
+        perkgBtn.title = { all: 'Showing everything — click to isolate per-kg groups',
+                           only: 'Only per-kg groups — click to hide them',
+                           hidden: 'Per-kg groups hidden — click to show everything' }[_perkgFilter];
         if (_lastData) renderPage(_lastData);
       });
     }
