@@ -1114,7 +1114,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
       ${flatTrack}
       <div class="price-bar-labels price-bar-labels-flat"><span class="price-bar-always">${fmt(minP)}</span></div>
     </div>
-    <button class="price-bar-manage" data-manage-item="${safeItemName}">Manage</button>`;
+    <button class="price-bar-manage" data-manage-item="${safeItemName}">History</button>`;
   }
 
   const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
@@ -1162,7 +1162,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
         <span>${fmt(maxP)}</span>
       </div>
     </div>
-    <button class="price-bar-manage" data-manage-item="${safeItemName}">Manage</button>`;
+    <button class="price-bar-manage" data-manage-item="${safeItemName}">History</button>`;
 }
 
 // ── Tooltip (fixed, not clipped by overflow:hidden) ──────────────────────────
@@ -1170,8 +1170,13 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
 function initTooltip() {
   const tip = $('priceTooltip');
   if (!tip) return;
+  // Touch browsers fire a synthetic mouseover on first tap (hover emulation), which
+  // popped this raw-text tooltip up on mobile — confusing, since there's no mouse to
+  // move away and dismiss it with. Mobile has its own "History" button instead.
+  const hasRealHover = () => matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   document.addEventListener('mouseover', (e) => {
+    if (!hasRealHover()) return;
     const el = e.target.closest('.price-bar-outer[data-tooltip]');
     if (!el) return;
     tip.textContent = el.dataset.tooltip;
@@ -1762,12 +1767,29 @@ function buildPriceHistChart(item, excludedPrices) {
 // per-store multipliers (raw price → $/kg) using the current pack ratio, mirroring
 // groupTrendCellHTML. {perKg:false, ww:1, coles:1} for normal items (no conversion).
 function histKgRatios(item) {
+  // buildGroupHistoryItem() already stores $/kg-converted values — no further conversion.
+  if (item._isGroupHistory) return { perKg: true, ww: 1, coles: 1, groupLabel: null };
   const group = loadVariantGroups().find(g => (g.items || []).includes(item.list_item));
   if (!group) return { perKg: false, ww: 1, coles: 1, groupLabel: null };
   // Same per-store conversion the trend bar uses (perKgRatio) → modal and trend agree.
   // null ratio (store unconvertible) falls back to 1 so the modal shows that
   // store's raw price instead of NaN; the trend bar drops it (memberPerKgPrices).
   return { perKg: true, ww: perKgRatio(item.woolworths) ?? 1, coles: perKgRatio(item.coles) ?? 1, groupLabel: group.label };
+}
+
+// Shared by every "History"/"Manage" button click handler (desktop table, desktop
+// card view, mobile cards) so a __group_ key always resolves to the group's merged
+// history the same way regardless of which view it was clicked from.
+function openHistoryFromManageBtn(itemName) {
+  if (!_lastData || !itemName) return;
+  if (itemName.startsWith('__group_')) {
+    const byName = new Map(_lastData.items.map(i => [i.list_item, i]));
+    const group = buildVariantGroups(byName).find(g => g._groupKey === itemName.replace('__group_', ''));
+    if (group) openPriceHistoryModal(buildGroupHistoryItem(group));
+    return;
+  }
+  const item = _lastData.items.find(i => i.list_item === itemName);
+  if (item) openPriceHistoryModal(item);
 }
 
 function openPriceHistoryModal(item) {
@@ -1779,6 +1801,16 @@ function openPriceHistoryModal(item) {
   // can legitimately show nothing for the store the group's headline price came from.
   const titleName = kgR.groupLabel ? `${kgR.groupLabel} — ${stripWW(item.list_item)}` : stripWW(item.list_item);
   $('priceHistoryTitle').textContent = `Price History - ${titleName}${kgR.perKg ? ' ($/kg)' : ''}`;
+
+  // Simplified view: no per-row exclude/"different item" editing, no Save/Reset —
+  // just the read-only chart + list. Always on for a group's merged history (points
+  // come from whichever member was cheapest that day, so there's no single item's
+  // exclusion list to edit); on mobile it's a deliberate simplification the narrow
+  // screen doesn't have room for.
+  const simplified = !!item._isGroupHistory || innerWidth <= 700;
+  document.querySelectorAll('.price-history-edit-actions').forEach(el => el.style.display = simplified ? 'none' : '');
+  const closeOnlyBtn = $('priceHistoryClose2');
+  if (closeOnlyBtn) closeOnlyBtn.textContent = simplified ? 'Close' : 'Cancel';
 
   // Initialize pending on fresh open; re-renders reuse existing _pendingExcl
   if (_pendingExcl === null) {
@@ -1875,19 +1907,21 @@ function openPriceHistoryModal(item) {
 
     // Display in $/kg for per-kg members (kgR.ww/coles); data-price stays the raw
     // stored price so exclusions and the "different item" fork keep matching the data.
+    const wwEditBtns = simplified ? '' : `
+           <button class="price-excl-x" data-store="ww" data-price="${Number(entry.ww).toFixed(2)}" title="${wwExcluded ? 'Re-include' : 'Exclude'}">✕</button>
+           <button class="price-fork-btn" data-store="ww" data-price="${Number(entry.ww).toFixed(2)}" title="Different item">${forkSvg}</button>`;
+    const coEditBtns = simplified ? '' : `
+           <button class="price-excl-x" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="${coExcluded ? 'Re-include' : 'Exclude'}">✕</button>
+           <button class="price-fork-btn" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="Different item">${forkSvg}</button>`;
     const wwHtml = entry.ww != null
       ? `<span class="price-history-store-cell price-history-store-ww">
-           <span class="price-history-price">${fmt(entry.ww * kgR.ww)}</span>
-           <button class="price-excl-x" data-store="ww" data-price="${Number(entry.ww).toFixed(2)}" title="${wwExcluded ? 'Re-include' : 'Exclude'}">✕</button>
-           <button class="price-fork-btn" data-store="ww" data-price="${Number(entry.ww).toFixed(2)}" title="Different item">${forkSvg}</button>
+           <span class="price-history-price">${fmt(entry.ww * kgR.ww)}</span>${wwEditBtns}
          </span>`
       : `<span style="color:var(--text-soft)">—</span>`;
 
     const coHtml = entry.coles != null
       ? `<span class="price-history-store-cell price-history-store-coles">
-           <span class="price-history-price" style="color:var(--coles)">${fmt(entry.coles * kgR.coles)}</span>
-           <button class="price-excl-x" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="${coExcluded ? 'Re-include' : 'Exclude'}">✕</button>
-           <button class="price-fork-btn" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="Different item">${forkSvg}</button>
+           <span class="price-history-price" style="color:var(--coles)">${fmt(entry.coles * kgR.coles)}</span>${coEditBtns}
          </span>`
       : `<span style="color:var(--text-soft)">—</span>`;
 
@@ -2401,11 +2435,13 @@ function _updateSelectedPill() {
 
 // Add one real product (not the synthetic group key — those aren't in _lastData.items,
 // so the basket export would silently drop them) to the basket selection.
+// No toast here: the floating "+ Basket (n)" button already shows the updated count,
+// and the toast — full-width on mobile — sat right on top of it at almost the same
+// bottom offset, hiding the icon it was supposed to confirm.
 function addPerKgToBasket(name) {
   if (!name) return;
   _selectedItems.add(name);
   _updateSelectedPill();
-  showToast(`✓ Added ${stripWW(name)} to basket`);
 }
 
 function initSelectedPill() {
@@ -3549,10 +3585,50 @@ function groupTrendCellHTML(group) {
   const prices = group._members.flatMap(memberPerKgPrices);
   if (prices.length < 2) return '';
   const hist = prices.map(p => ({ price: p }));
-  // Manage button targets the cheapest member so it opens a real history modal.
-  // buildPriceBar re-checks that member's exclusions, but prices here are already
-  // $/kg-converted and exclusion-filtered, so its re-check matches nothing.
-  return buildPriceBar(best.name, hist, best.perkg);
+  // History button opens the group's own merged history (see buildGroupHistoryItem),
+  // not one member's — a group can mix a WW-only and a Coles-only product, so
+  // picking a single member's history hides whichever store that member doesn't sell at.
+  return buildPriceBar(`__group_${group._groupKey}`, hist, best.perkg);
+}
+
+// Synthesizes a "price history" item for a per-kg group: for each store, at every
+// date any member was seen, take the CHEAPEST $/kg any member had that store that
+// day. The result is "what did this category cost at each store over time",
+// independent of which specific product happened to be cheapest — matches what the
+// group's own headline $/kg numbers already mean (group._wwPerKg/_coPerKg are each
+// the current cheapest member at that store).
+function buildGroupHistoryItem(group) {
+  const wwMap = new Map(), coMap = new Map();
+  const takeMin = (map, date, price) => {
+    if (!date || price == null) return;
+    const cur = map.get(date);
+    if (cur == null || price < cur) map.set(date, price);
+  };
+  group._members.forEach(m => {
+    const wwR = perKgRatio(m.woolworths);
+    const coR = perKgRatio(m.coles);
+    const { ww: wwEx, co: coEx } = exclSetsFor(m.list_item);
+    [...(m.price_history || []), ...(m.ww_price_history || [])].forEach(e => {
+      if (e.price > 0 && wwR != null && !wwEx.has(Number(e.price).toFixed(2))) {
+        takeMin(wwMap, e.date, +(e.price * wwR).toFixed(2));
+      }
+    });
+    (m.coles_price_history || []).forEach(e => {
+      if (e.price > 0 && coR != null && !coEx.has(Number(e.price).toFixed(2))) {
+        takeMin(coMap, e.date, +(e.price * coR).toFixed(2));
+      }
+    });
+  });
+  const toEntries = (map) => [...map.entries()].map(([date, price]) => ({ date, price })).sort((a, b) => a.date.localeCompare(b.date));
+  return {
+    list_item: group._groupLabel,
+    _isGroupHistory: true,
+    price_history: [],
+    ww_price_history: toEntries(wwMap),
+    coles_price_history: toEntries(coMap),
+    woolworths: group._wwBest ? { price: group._wwPerKg, scraped_at: group._wwBest.result?.scraped_at } : null,
+    coles: group._coBest ? { price: group._coPerKg, scraped_at: group._coBest.result?.scraped_at } : null,
+  };
 }
 
 // Trend SORT position for a per-kg group. Mirrors the bar in groupTrendCellHTML — built
@@ -5854,6 +5930,8 @@ async function boot() {
         warnEl.closest('.match-warn') ? warnEl.closest('.match-warn').remove() : warnEl.remove();
         return;
       }
+      const manageBtn = e.target.closest('.price-bar-manage');
+      if (manageBtn) { openHistoryFromManageBtn(manageBtn.dataset.manageItem); return; }
       const rowCheck = e.target.closest('.row-check');
       if (rowCheck) {
         const name = rowCheck.dataset.item;
@@ -6094,12 +6172,7 @@ async function boot() {
           return;
         }
         const manageBtn = e.target.closest('.price-bar-manage');
-        if (manageBtn && _lastData) {
-          const itemName = manageBtn.dataset.manageItem;
-          const item = _lastData.items.find(i => i.list_item === itemName);
-          if (item) openPriceHistoryModal(item);
-          return;
-        }
+        if (manageBtn) { openHistoryFromManageBtn(manageBtn.dataset.manageItem); return; }
       });
 
       // Priority dropdown changes
@@ -6124,6 +6197,8 @@ async function boot() {
       // before the generic button guard below, which would otherwise swallow these.
       const bb = e.target.closest('.vgm-basket-btn, .vg-pv-basket');
       if (bb) { addPerKgToBasket(bb.dataset.item); return; }
+      const manageBtn = e.target.closest('.price-bar-manage');
+      if (manageBtn) { openHistoryFromManageBtn(manageBtn.dataset.manageItem); return; }
       // Don't toggle when interacting with an option's link, edit button, or image.
       if (e.target.closest('a, button, .img-hoverable')) return;
       const vgBtn = e.target.closest('.vg-expand-btn');

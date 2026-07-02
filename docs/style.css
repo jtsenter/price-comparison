@@ -1569,6 +1569,8 @@ td.priority-cell { text-align: center; }
   margin-bottom: 8px;
 }
 .card-bar { margin-bottom: 8px; }
+/* Same hover-reveal problem as .mc-bar: no <tr> to hover here, so it was invisible. */
+.card-bar .price-bar-manage { opacity: 1; }
 .card-footer {
   display: flex; align-items: center; justify-content: flex-end; gap: 8px;
 }
@@ -2109,6 +2111,15 @@ td.priority-cell { text-align: center; }
   .mc-bar .price-marker { width: 12px; height: 12px; top: -4px; }
   .mc-bar .price-marker-off-left,
   .mc-bar .price-marker-off-right { width: 12px; height: 12px; }
+  /* "History" button: hover-reveal (opacity:0 by default) never applies outside a
+     hovered <tr>, so on cards it was permanently invisible. Show it as a small
+     tappable pill instead. */
+  .mc-bar .price-bar-manage {
+    opacity: 1; display: inline-block; margin-top: 8px;
+    font-size: 12px; font-weight: 600; text-decoration: none;
+    color: var(--accent); border: 1px solid var(--border-strong);
+    border-radius: 7px; padding: 5px 10px;
+  }
 
   /* Price grid */
   .mc-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
