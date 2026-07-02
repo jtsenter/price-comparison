@@ -164,8 +164,10 @@ function getDealQuality(item, exclusions) {
   };
 }
 
-function isHotDeal(item) {
-  return getDealQuality(item).qualifies;
+// Pass the pw_exclusions_v1 map so the 🔥 filter/badges agree with the
+// Hot Deals page (getHotDealItems), which always applies exclusions.
+function isHotDeal(item, exclusions) {
+  return getDealQuality(item, exclusions).qualifies;
 }
 
 // Canonical hot-deal list — the SINGLE source of truth shared by the main page

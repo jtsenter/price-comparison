@@ -2532,7 +2532,7 @@ function computeBannerStats(items) {
       }
     }
     if (_activeCategory !== 'All' && getCategory(item) !== _activeCategory) return false;
-    if (_showHotOnly && !isHotDeal(item)) return false;
+    if (_showHotOnly && !isHotDeal(item, exclusions)) return false;
     // Only include items that have prices at both stores
     if (item.woolworths?.price == null || item.coles?.price == null) return false;
     return true;
@@ -3173,7 +3173,7 @@ function sortItems(items) {
       if (_activePriority !== 'all' && p !== _activePriority) return false;
     }
     // Hot deals filter
-    if (_showHotOnly && !isHotDeal(item)) return false;
+    if (_showHotOnly && !isHotDeal(item, exclusions)) return false;
     // Store filter (only active when hot filter is on)
     if (_showHotOnly && _storeFilter !== 'all') {
       if (_storeFilter === 'woolworths' && item.cheaper_store !== 'woolworths') return false;
@@ -3331,7 +3331,7 @@ function renderCards(items) {
     const displayName = ov.displayName || stripWW(item.list_item);
     const cat = getCategory(item);
     const p = getPriority(item.list_item);
-    const hotDeal = isHotDeal(item);
+    const hotDeal = isHotDeal(item, exclusions);
     const wwUrl  = ov.wwUrl    || ww?.url || '';
     const coUrl  = ov.colesUrl || co?.url || '';
     const safeKey = item.list_item.replace(/"/g, '&quot;');
@@ -4757,7 +4757,7 @@ function renderPage(data) {
       </div>`;
 
     // Hot deal: fire goes on the cheaper store's price cell
-    const hotDeal = isHotDeal(item);
+    const hotDeal = isHotDeal(item, _renderExclusions);
     const hotBadge = `<span class="hot-badge" title="Hot Deal!">🔥</span>`;
 
     // Per-100g/ml — computed from product name (reliable for packs); falls back to scraped cup price
