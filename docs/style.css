@@ -2257,7 +2257,9 @@ tbody tr:hover td.item-name { background: #FAFBFD; }
 .table-wrap.density-compact .price-main { font-size: 14px; }
 .table-wrap.density-compact .price-unit,
 .table-wrap.density-compact .price-per100 { display: none; }
-.table-wrap.density-compact .price-bar-outer { display: none !important; }
+/* Hide the in-cell price bars in compact rows — but never the Trend column,
+   whose whole content is a .price-bar-outer. */
+.table-wrap.density-compact td:not(.trend-cell) .price-bar-outer { display: none !important; }
 
 /* ── 4 · Pull-to-refresh indicator ────────────────────────────────────── */
 #pullRefreshIndicator {
