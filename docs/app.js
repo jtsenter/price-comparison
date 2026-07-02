@@ -3156,6 +3156,7 @@ const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
 
 function sortItems(items) {
   const exclusions = loadExclusions();
+  const _sortOvr = loadOverrides(); // hoisted: name sort uses displayed names (renames included)
   let filtered = items.filter(item => {
     // Per-kg group visibility (⚙ /kg button): isolate the groups, or hide them entirely
     if (_perkgFilter === 'only') return !!item._isGroup;
@@ -3226,24 +3227,30 @@ function sortItems(items) {
   }
 
   function getSortVal(col, item) {
+    // Price columns must sort by the number the cell DISPLAYS: per-kg groups show
+    // $/kg, normal items show pack price. Missing values return NaN so the NaN
+    // guard below sinks them to the bottom in BOTH directions (?? Infinity floated
+    // priceless rows to the top on descending sorts).
+    const wwShown = item._isGroup ? item._wwPerKg : item.woolworths?.price;
+    const coShown = item._isGroup ? item._coPerKg : item.coles?.price;
     switch (col) {
-      case 'name':     return item.list_item.toLowerCase();
-      case 'ww':       return item.woolworths?.price ?? Infinity;
-      case 'coles':    return item.coles?.price ?? Infinity;
+      case 'name':     return item._isGroup ? item._groupLabel.toLowerCase()
+        : (_sortOvr[item.list_item]?.displayName || stripWW(item.list_item)).toLowerCase();
+      case 'ww':       return wwShown ?? NaN;
+      case 'coles':    return coShown ?? NaN;
       case 'cheaper':  return item.cheaper_store ?? 'zzz';
-      case 'saving':   return savingAmount(item) ?? -Infinity;
+      case 'saving':   return savingAmount(item) ?? NaN;
       case 'trips':    return item.trip_count || 0;
       case 'units':    return getUnits(item.list_item);
       case 'priority': return PRIORITY_ORDER[getPriority(item.list_item)] ?? 99;
-      case 'pct': {
-        const ww = item.woolworths?.price, co = item.coles?.price;
-        return (ww != null && co != null) ? Math.abs(ww - co) / Math.max(ww, co) : -Infinity;
-      }
+      case 'pct':
+        return (wwShown != null && coShown != null)
+          ? Math.abs(wwShown - coShown) / Math.max(wwShown, coShown) : NaN;
       case 'trend': return trendPositionOf(item); // 0.0=best deal, 1.0=expensive, 999=no history (sorts last)
       case 'category':     return getCategory(item).toLowerCase();
       case 'last_scraped': return item.last_scraped || '';
-      case 'ww_total':     return (item.woolworths?.price ?? 0) * getUnits(item.list_item);
-      case 'coles_total':  return (item.coles?.price ?? 0) * getUnits(item.list_item);
+      case 'ww_total':     return wwShown != null ? wwShown * getUnits(item.list_item) : NaN;
+      case 'coles_total':  return coShown != null ? coShown * getUnits(item.list_item) : NaN;
       default: return item.trip_count || 0;
     }
   }
