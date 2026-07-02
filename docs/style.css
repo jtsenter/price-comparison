@@ -1819,9 +1819,9 @@ td.priority-cell { text-align: center; }
   .alt-grid { grid-template-columns: 1fr; }
   .btn span.btn-label { display: none; }
   .price-bar-outer { display: none; }
-  /* Mobile: the bottom tab bar already has Hot Deals + Basket, so drop them from the
-     header to give the search room; keep the action icons. */
-  .hot-deals-pill, #basketNavLink, .header-div { display: none; }
+  /* Mobile: the header action icons already cover Hot Deals + Basket, so drop the
+     main-page nav to give the search room. */
+  #mainNav, .hot-deals-pill, .header-div { display: none; }
   .header-search { min-width: 60px; }
 }
 
