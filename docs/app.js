@@ -3,6 +3,19 @@
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '—';
 
+// Header dropdowns (notif / options / columns) each stop click propagation so
+// the page-level "click outside closes it" listener doesn't fire on their own
+// button — but that also means clicking one button never closes a sibling
+// dropdown left open. Each button calls this before toggling its own.
+const _headerDropdownIds = ['notifDropdown', 'optionsDropdown', 'colChooserDropdown'];
+function closeHeaderDropdowns(exceptId) {
+  _headerDropdownIds.forEach(id => {
+    if (id === exceptId) return;
+    const el = $(id);
+    if (el) el.style.display = 'none';
+  });
+}
+
 // Strip "Woolworths " prefix for display. The underlying list_item key stays
 // unchanged so price history and localStorage keys keep working.
 const stripWW  = (name) => name.replace(/^Woolworths\s+/i, '');
@@ -1140,7 +1153,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
     trackHtml = `<div class="price-bar"><div class="price-marker" style="left:${pos.toFixed(1)}%"></div></div>`;
   }
 
-  const allTimeLowBadge = rawPos === 0 ? '<span class="trophy-icon">🏆</span>' : '';
+  const allTimeLowBadge = rawPos === 0 ? '<span class="trophy-icon" title="All-time low — the cheapest this item has ever been recorded at">🏆</span>' : '';
   return `
     <div class="price-bar-outer" data-tooltip="${safeTooltip}">
       ${trackHtml}
@@ -1749,18 +1762,23 @@ function buildPriceHistChart(item, excludedPrices) {
 // per-store multipliers (raw price → $/kg) using the current pack ratio, mirroring
 // groupTrendCellHTML. {perKg:false, ww:1, coles:1} for normal items (no conversion).
 function histKgRatios(item) {
-  const isMember = loadVariantGroups().some(g => (g.items || []).includes(item.list_item));
-  if (!isMember) return { perKg: false, ww: 1, coles: 1 };
+  const group = loadVariantGroups().find(g => (g.items || []).includes(item.list_item));
+  if (!group) return { perKg: false, ww: 1, coles: 1, groupLabel: null };
   // Same per-store conversion the trend bar uses (perKgRatio) → modal and trend agree.
   // null ratio (store unconvertible) falls back to 1 so the modal shows that
   // store's raw price instead of NaN; the trend bar drops it (memberPerKgPrices).
-  return { perKg: true, ww: perKgRatio(item.woolworths) ?? 1, coles: perKgRatio(item.coles) ?? 1 };
+  return { perKg: true, ww: perKgRatio(item.woolworths) ?? 1, coles: perKgRatio(item.coles) ?? 1, groupLabel: group.label };
 }
 
 function openPriceHistoryModal(item) {
   _historyItem = item;
   const kgR = histKgRatios(item);
-  $('priceHistoryTitle').textContent = `Price History - ${stripWW(item.list_item)}${kgR.perKg ? ' ($/kg)' : ''}`;
+  // Group members show a "GroupLabel — Product name" title so it's clear this is one
+  // variant's history within the per-kg comparison, not the whole group's — a group can
+  // mix WW-only and Coles-only products (e.g. "Lamb Mince"), so a single member's history
+  // can legitimately show nothing for the store the group's headline price came from.
+  const titleName = kgR.groupLabel ? `${kgR.groupLabel} — ${stripWW(item.list_item)}` : stripWW(item.list_item);
+  $('priceHistoryTitle').textContent = `Price History - ${titleName}${kgR.perKg ? ' ($/kg)' : ''}`;
 
   // Initialize pending on fresh open; re-renders reuse existing _pendingExcl
   if (_pendingExcl === null) {
@@ -3359,7 +3377,7 @@ function renderCards(items) {
     // Prices
     const wwP100 = clientPer100(ww);
     const coP100 = clientPer100(co);
-    const hotBadge = hotDeal ? ' <span class="hot-badge" title="Hot Deal!">🔥</span>' : '';
+    const hotBadge = hotDeal ? ' <span class="hot-badge" title="Hot Deal — meaningfully cheaper than its usual price right now">🔥</span>' : '';
 
     let wwHtml;
     if (ww) {
@@ -4317,7 +4335,7 @@ function renderMobileCards(items, data) {
       const unarch = _activePriority === 'archive'
         ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : '';
       card.innerHTML = `
-        ${hotDeal ? '<span class="mc-hot">🔥</span>' : ''}
+        ${hotDeal ? '<span class="mc-hot" title="Hot Deal — meaningfully cheaper than its usual price right now">🔥</span>' : ''}
         <span class="mcc-name">${ov.displayName || shortName(item.list_item)}</span>
         <span class="mcc-price"><span class="store-chip sm ww">W</span><span class="${wwCheaper ? 'mcc-bold' : ''}">${ww ? fmt(ww.price) : '—'}</span></span>
         <span class="mcc-price"><span class="store-chip sm coles">C</span><span class="${coCheaper ? 'mcc-bold' : ''}">${co ? fmt(co.price) : '—'}</span></span>
@@ -4330,7 +4348,7 @@ function renderMobileCards(items, data) {
           <div class="mc-name-row">
             <div class="mc-name">${displayName}</div>
             <span class="mc-icons">
-              ${hotDeal ? '<span class="mc-hot">🔥</span>' : ''}
+              ${hotDeal ? '<span class="mc-hot" title="Hot Deal — meaningfully cheaper than its usual price right now">🔥</span>' : ''}
               ${watchBtn}
               ${_activePriority === 'archive' ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : ''}
             </span>
@@ -4766,7 +4784,7 @@ function renderPage(data) {
 
     // Hot deal: fire goes on the cheaper store's price cell
     const hotDeal = isHotDeal(item, _renderExclusions);
-    const hotBadge = `<span class="hot-badge" title="Hot Deal!">🔥</span>`;
+    const hotBadge = `<span class="hot-badge" title="Hot Deal — meaningfully cheaper than its usual price right now">🔥</span>`;
 
     // Per-100g/ml — computed from product name (reliable for packs); falls back to scraped cup price
     const wwP100 = clientPer100(ww);
@@ -4988,7 +5006,9 @@ async function showNameChangesNotice() {
   notifBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     const dd = $('notifDropdown');
-    dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+    const opening = dd.style.display === 'none';
+    closeHeaderDropdowns('notifDropdown');
+    dd.style.display = opening ? 'block' : 'none';
   });
   document.addEventListener('click', () => { $('notifDropdown').style.display = 'none'; });
   $('notifDismissAll')?.addEventListener('click', () => {
@@ -5332,7 +5352,9 @@ function initColumnChooser() {
 
   btn.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (dropdown.style.display === 'none') {
+    const opening = dropdown.style.display === 'none';
+    closeHeaderDropdowns('colChooserDropdown');
+    if (opening) {
       renderDropdown();
       dropdown.style.display = 'block';
     } else {
@@ -5641,7 +5663,9 @@ function initOptionsMenu() {
   if (btn && dd) {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+      const opening = dd.style.display === 'none';
+      closeHeaderDropdowns('optionsDropdown');
+      dd.style.display = opening ? 'block' : 'none';
     });
     dd.addEventListener('click', (e) => {
       e.stopPropagation();

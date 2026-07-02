@@ -49,9 +49,22 @@ function getTrendSeries(item) {
     ...(item.price_history || []),
     ...(item.ww_price_history || []),
     ...(item.coles_price_history || []),
-  ].map(h => Number(h.price));
+  ];
+  // Honour the user's excluded history points (pw_exclusions_v1) here so the
+  // sort ranks items by the same series the bar draws. loadExclusions() is a
+  // function declaration in app.js/hot-deals.html — hoisted and available by
+  // the time this actually runs (renders always happen after page scripts
+  // finish loading), even though this file is included first.
+  const excluded = new Set((loadExclusions()[item.list_item] || []).map(k => {
+    if (typeof k === 'number') return Number(k).toFixed(2);
+    const str = String(k);
+    return str.includes(':') ? str.split(':')[1] : Number(str).toFixed(2);
+  }));
+  const histPrices = hist
+    .map(h => Number(h.price))
+    .filter(p => p > 0 && !excluded.has(p.toFixed(2)));
   const w = item.woolworths?.price, c = item.coles?.price;
-  const prices = [...hist, w, c].filter(p => typeof p === 'number' && p > 0);
+  const prices = [...histPrices, w, c].filter(p => typeof p === 'number' && p > 0);
   const current = Math.min(
     w != null ? w : Infinity,
     c != null ? c : Infinity
