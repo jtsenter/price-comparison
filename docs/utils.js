@@ -3,6 +3,41 @@
 // Both app.js (index.html) and hot-deals.html load this file before their own code
 // Do NOT redefine these functions elsewhere or divergence will occur
 
+// ── Per-100g / per-100ml price ─────────────────────────────────────────────
+// Compute per-100g or per-100ml price from a product result object.
+// Prioritises size extracted from the product name (reliable for pack goods)
+// over the store-scraped cup price (which is often wrong for Coles packs).
+function clientPer100(result) {
+  if (!result || result.price == null) return { value: null, label: '100g' };
+  const price = result.price;
+  const name  = result.name || '';
+
+  // Strategy 1: extract size from product name
+  const kgM = name.match(/(\d+(?:\.\d+)?)\s*kg\b/i);
+  if (kgM) { const g = +kgM[1] * 1000; return { value: +(price * 100 / g).toFixed(2), label: '100g' }; }
+  const gM = name.match(/(\d+(?:\.\d+)?)\s*g\b/i);
+  if (gM && +gM[1] > 0) return { value: +(price * 100 / +gM[1]).toFixed(2), label: '100g' };
+  const lM = name.match(/(\d+(?:\.\d+)?)\s*l(?:it(?:re|er)s?)?\b(?!\w)/i);
+  if (lM) { const ml = +lM[1] * 1000; return { value: +(price * 100 / ml).toFixed(2), label: '100ml' }; }
+  const mlM = name.match(/(\d+(?:\.\d+)?)\s*ml\b/i);
+  if (mlM && +mlM[1] > 0) return { value: +(price * 100 / +mlM[1]).toFixed(2), label: '100ml' };
+
+  // Strategy 2: use store-provided cup price + unit (for loose/weight goods)
+  const unit = (result.unit || '').toLowerCase().trim();
+  const up   = result.unit_price;
+  if (up != null && unit) {
+    const uM = unit.match(/^(\d*\.?\d*)?\s*(g|kg|ml|l)\b/);
+    if (uM) {
+      let qty = parseFloat(uM[1]) || 1.0;
+      const uom = uM[2];
+      if (uom === 'kg') qty *= 1000;
+      else if (uom === 'l') qty *= 1000;
+      if (qty > 0) return { value: +(up * 100 / qty).toFixed(2), label: (uom === 'ml' || uom === 'l') ? '100ml' : '100g' };
+    }
+  }
+  return { value: null, label: '100g' };
+}
+
 // ── Unified trend data source ──────────────────────────────────────────────
 // Single series for both slider and sort: includes price_history + current prices.
 function getTrendSeries(item) {
