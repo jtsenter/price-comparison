@@ -1769,6 +1769,7 @@ td.priority-cell { text-align: center; }
   border: none;
   cursor: pointer;
   text-align: left;
+  text-decoration: none;
   transition: background 0.1s;
 }
 .more-dropdown-item:hover { background: var(--bg); }

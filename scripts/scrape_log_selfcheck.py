@@ -1,7 +1,8 @@
-"""Self-check for _append_scrape_log (scrape-miss summary backend).
+"""Self-check for _append_scrape_log (scrape-miss summary backend) and _miss_reason.
 
 Run: python scripts/scrape_log_selfcheck.py
-Asserts the log appends, keeps per-store missed lists, and caps at SCRAPE_LOG_MAX.
+Asserts the log appends, keeps per-store missed lists, caps at SCRAPE_LOG_MAX, and
+that _miss_reason classifies no_results vs no_match vs matched correctly.
 Writes to a throwaway temp dir, not the real docs/data.
 """
 import json
@@ -12,16 +13,24 @@ import scraper
 
 
 def _run():
+    # _miss_reason: the no_results/no_match split the scrape-log page relies on to
+    # tell "site is blocking us" apart from "matcher needs tuning".
+    assert scraper._miss_reason({"name": "x"}, [{"name": "x"}]) is None
+    assert scraper._miss_reason(None, []) == "no_results"
+    assert scraper._miss_reason(None, [{"name": "x"}, {"name": "y"}]) == "no_match"
+
     with tempfile.TemporaryDirectory() as tmp:
         scraper.DATA_DIR = tmp
         path = os.path.join(tmp, "scrape_log.json")
 
-        scraper._append_scrape_log("scheduled", 200, ["WW A", "WW B"], ["Coles X"])
+        ww_missed = [{"item": "WW A", "reason": "no_results"}, {"item": "WW B", "reason": "no_match"}]
+        co_missed = [{"item": "Coles X", "reason": "no_results"}]
+        scraper._append_scrape_log("scheduled", 200, ww_missed, co_missed)
         log = json.load(open(path))
         assert len(log) == 1, log
         assert log[0]["scraped"] == 200
-        assert log[0]["ww_missed"] == ["WW A", "WW B"]
-        assert log[0]["coles_missed"] == ["Coles X"]
+        assert log[0]["ww_missed"] == ww_missed
+        assert log[0]["coles_missed"] == co_missed
         assert log[0]["trigger"] == "scheduled"
 
         # Cap: write well past SCRAPE_LOG_MAX, keep only the newest N, in order.

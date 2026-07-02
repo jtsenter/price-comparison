@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>📋 Scrape Log — PriceWatch</title>
+  <meta name="description" content="History of PriceWatch scrape runs: per-store success rates and which items were missed." />
+  <meta name="theme-color" content="#00843D" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="PriceWatch" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <script>
+  (function () {
+    try {
+      var t = localStorage.getItem('pw_theme') || 'light';
+      var dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+      if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+    } catch (e) {}
+  })();
+  </script>
+  <link rel="stylesheet" href="style.css?v=71" />
+  <style>
+    .sl-main { max-width: 900px; margin: 0 auto; padding: 20px 24px 60px; }
+    .sl-info-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius, 10px);
+      padding: 16px 20px; margin-bottom: 20px;
+    }
+    .sl-info-card h2 { font-size: 14px; font-weight: 700; margin: 0 0 10px; color: var(--text); }
+    .sl-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 12px; }
+    .sl-info-stat { }
+    .sl-info-stat .n { font-size: 20px; font-weight: 700; color: var(--text); }
+    .sl-info-stat .l { font-size: 11px; color: var(--text-soft); text-transform: uppercase; letter-spacing: .04em; }
+    .sl-info-notes { list-style: none; padding: 0; margin: 10px 0 0; font-size: 12px; color: var(--text-mid); border-top: 1px solid var(--border); padding-top: 10px; }
+    .sl-info-notes li { padding: 3px 0 3px 16px; position: relative; }
+    .sl-info-notes li::before { content: '•'; position: absolute; left: 0; color: var(--text-soft); }
+    .sl-info-notes a { color: var(--ww); }
+
+    .sl-runs { display: flex; flex-direction: column; gap: 10px; }
+    .sl-run { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius, 10px); overflow: hidden; }
+    .sl-run-head {
+      display: flex; align-items: center; gap: 14px; padding: 12px 16px; cursor: pointer;
+      flex-wrap: wrap;
+    }
+    .sl-run-head:hover { background: var(--bg); }
+    .sl-run-date { font-size: 13px; font-weight: 700; color: var(--text); min-width: 150px; }
+    .sl-run-date .rel { font-weight: 500; color: var(--text-soft); font-size: 11px; display: block; }
+    .sl-run-trigger {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+      padding: 2px 8px; border-radius: 10px; background: var(--bg); color: var(--text-mid); border: 1px solid var(--border);
+    }
+    .sl-store-stat { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
+    .sl-store-stat .bar-track { width: 60px; height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
+    .sl-store-stat .bar-fill { height: 100%; border-radius: 3px; }
+    .sl-store-stat.ww .bar-fill { background: var(--ww); }
+    .sl-store-stat.coles .bar-fill { background: var(--coles); }
+    .sl-run-spacer { flex: 1; }
+    .sl-chevron { font-size: 12px; color: var(--text-soft); transition: transform .15s; }
+    .sl-run.open .sl-chevron { transform: rotate(90deg); }
+    .sl-run-body { display: none; border-top: 1px solid var(--border); padding: 14px 16px; }
+    .sl-run.open .sl-run-body { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 640px) { .sl-run.open .sl-run-body { grid-template-columns: 1fr; } }
+    .sl-miss-col h3 { font-size: 12px; font-weight: 700; margin: 0 0 8px; }
+    .sl-miss-col.ww h3 { color: var(--ww); }
+    .sl-miss-col.coles h3 { color: var(--coles); }
+    .sl-miss-empty { font-size: 12px; color: var(--text-soft); font-style: italic; }
+    .sl-miss-list { list-style: none; margin: 0; padding: 0; max-height: 320px; overflow-y: auto; }
+    .sl-miss-list li { font-size: 12px; padding: 4px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; gap: 8px; }
+    .sl-miss-list li:last-child { border-bottom: none; }
+    .sl-miss-reason { font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 8px; white-space: nowrap; flex-shrink: 0; }
+    .sl-miss-reason.no_results { background: #FEE2E2; color: #991B1B; }
+    .sl-miss-reason.no_match { background: #FEF3C7; color: #92400E; }
+    .sl-miss-reason.unknown { background: var(--bg); color: var(--text-soft); }
+    :root[data-theme="dark"] .sl-miss-reason.no_results { background: #450a0a; color: #fca5a5; }
+    :root[data-theme="dark"] .sl-miss-reason.no_match { background: #422006; color: #fcd34d; }
+    .sl-empty-state { text-align: center; padding: 60px 20px; color: var(--text-soft); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <a href="index.html" class="brand">
+        <span class="store-chip ww">W</span>
+        <span class="store-chip coles">C</span>
+        <span class="brand-name">PriceWatch</span>
+      </a>
+      <nav>
+        <a href="hot-deals.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg> Hot Deals</a>
+        <a href="shopping-list.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Basket</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-ghost" id="slRefreshBtn" title="Reload log">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Refresh
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="sl-main">
+  <div class="sl-info-card">
+    <h2>Scrape log</h2>
+    <div class="sl-info-grid" id="slInfoGrid"></div>
+    <ul class="sl-info-notes" id="slInfoNotes"></ul>
+  </div>
+
+  <div id="slRuns" class="sl-runs"></div>
+</main>
+
+<script src="utils.js?v=54"></script>
+<script>
+function $(id) { return document.getElementById(id); }
+
+function timeAgo(iso) {
+  if (!iso) return '';
+  const ms = Date.now() - new Date(iso).getTime();
+  const mins = Math.round(ms / 60000);
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.round(mins / 60);
+  if (hrs < 48) return `${hrs}h ago`;
+  return `${Math.round(hrs / 24)}d ago`;
+}
+
+function fmtDate(iso) {
+  if (!iso) return 'Unknown';
+  return new Date(iso).toLocaleString('en-AU', {
+    weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
+  });
+}
+
+// Log entries before this feature's reason-tracking upgrade store missed items as
+// plain strings ("Item Name"); newer entries store {item, reason}. Normalise both
+// to the same shape so the page renders either without a special case at call sites.
+function normaliseMissed(list) {
+  return (list || []).map(e => typeof e === 'string' ? { item: e, reason: null } : e);
+}
+
+function renderMissList(list) {
+  if (!list.length) return '<div class="sl-miss-empty">None — every item matched.</div>';
+  const REASON_LABEL = { no_results: 'no results', no_match: 'no match', null: 'unrecorded' };
+  return '<ul class="sl-miss-list">' + list.map(e => {
+    const cls = e.reason || 'unknown';
+    const label = REASON_LABEL[e.reason] || 'unrecorded';
+    const title = cls === 'no_results' ? 'Search or page fetch returned nothing this run — likely a block or a broken page selector'
+      : cls === 'no_match' ? 'Got search results back, but none matched the product name well enough'
+      : 'Reason not recorded (older log entry)';
+    return `<li><span>${e.item}</span><span class="sl-miss-reason ${cls}" title="${title}">${label}</span></li>`;
+  }).join('') + '</ul>';
+}
+
+function renderRun(run, prevRun) {
+  const wwMissed = normaliseMissed(run.ww_missed);
+  const coMissed = normaliseMissed(run.coles_missed);
+  const total = run.scraped || 0;
+  const wwOk = Math.max(0, total - wwMissed.length);
+  const coOk = Math.max(0, total - coMissed.length);
+  const wwPct = total ? Math.round(wwOk / total * 100) : 0;
+  const coPct = total ? Math.round(coOk / total * 100) : 0;
+
+  let trend = '';
+  if (prevRun) {
+    const prevWwMissed = normaliseMissed(prevRun.ww_missed).length;
+    const prevTotal = prevRun.scraped || 1;
+    const prevWwPct = Math.round((prevTotal - prevWwMissed) / prevTotal * 100);
+    const prevCoMissed = normaliseMissed(prevRun.coles_missed).length;
+    const prevCoPct = Math.round((prevTotal - prevCoMissed) / prevTotal * 100);
+    const d = (wwPct - prevWwPct) + (coPct - prevCoPct);
+    if (d > 4) trend = ' <span style="color:var(--ww);font-size:11px">▲ improving</span>';
+    else if (d < -4) trend = ' <span style="color:var(--coles);font-size:11px">▼ worse</span>';
+  }
+
+  const el = document.createElement('div');
+  el.className = 'sl-run';
+  el.innerHTML = `
+    <div class="sl-run-head">
+      <div class="sl-run-date">${fmtDate(run.date)}<span class="rel">${timeAgo(run.date)}</span></div>
+      <span class="sl-run-trigger">${run.trigger || 'unknown'}</span>
+      <div class="sl-store-stat ww" title="${wwOk} of ${total} items had a Woolworths match this run">
+        <span class="store-chip sm ww">W</span> ${wwPct}%
+        <span class="bar-track"><span class="bar-fill" style="width:${wwPct}%"></span></span>
+      </div>
+      <div class="sl-store-stat coles" title="${coOk} of ${total} items had a Coles match this run">
+        <span class="store-chip sm coles">C</span> ${coPct}%
+        <span class="bar-track"><span class="bar-fill" style="width:${coPct}%"></span></span>
+      </div>
+      ${trend}
+      <div class="sl-run-spacer"></div>
+      <span class="sl-chevron">▸</span>
+    </div>
+    <div class="sl-run-body">
+      <div class="sl-miss-col ww">
+        <h3>Woolworths missed (${wwMissed.length})</h3>
+        ${renderMissList(wwMissed)}
+      </div>
+      <div class="sl-miss-col coles">
+        <h3>Coles missed (${coMissed.length})</h3>
+        ${renderMissList(coMissed)}
+      </div>
+    </div>`;
+  el.querySelector('.sl-run-head').addEventListener('click', () => el.classList.toggle('open'));
+  return el;
+}
+
+async function load() {
+  const runsEl = $('slRuns');
+  runsEl.innerHTML = '<div class="sl-empty-state">Loading…</div>';
+  let log = [];
+  let latest = null;
+  try {
+    const [logRes, latestRes] = await Promise.all([
+      fetch(`data/scrape_log.json?t=${Date.now()}`),
+      fetch(`data/latest.json?t=${Date.now()}`),
+    ]);
+    if (logRes.ok) log = await logRes.json();
+    if (latestRes.ok) latest = await latestRes.json();
+  } catch (e) {
+    runsEl.innerHTML = `<div class="sl-empty-state">Could not load the scrape log: ${e.message}</div>`;
+    return;
+  }
+
+  // Info card
+  const items = latest?.items || [];
+  const archivedCount = items.filter(i => i.archived).length;
+  const lastRun = log[log.length - 1];
+  const lastRunWwPct = lastRun
+    ? Math.round((lastRun.scraped - normaliseMissed(lastRun.ww_missed).length) / (lastRun.scraped || 1) * 100)
+    : null;
+  const lastRunCoPct = lastRun
+    ? Math.round((lastRun.scraped - normaliseMissed(lastRun.coles_missed).length) / (lastRun.scraped || 1) * 100)
+    : null;
+
+  $('slInfoGrid').innerHTML = `
+    <div class="sl-info-stat"><div class="n">${log.length}</div><div class="l">Runs logged</div></div>
+    <div class="sl-info-stat"><div class="n">${items.length}</div><div class="l">Items tracked</div></div>
+    <div class="sl-info-stat"><div class="n">${archivedCount}</div><div class="l">Archived (skipped weekly)</div></div>
+    <div class="sl-info-stat"><div class="n">${lastRun ? timeAgo(lastRun.date) : '—'}</div><div class="l">Last scrape</div></div>
+    <div class="sl-info-stat"><div class="n">${lastRunWwPct != null ? lastRunWwPct + '%' : '—'}</div><div class="l">WW success (last run)</div></div>
+    <div class="sl-info-stat"><div class="n">${lastRunCoPct != null ? lastRunCoPct + '%' : '—'}</div><div class="l">Coles success (last run)</div></div>
+  `;
+  $('slInfoNotes').innerHTML = `
+    <li>Only full scrapes (scheduled or manual "Update Prices") are logged here — single-item refreshes from the ✎ Edit dialog aren't.</li>
+    <li>A missed item's price isn't blank on the main site — the last known price carries forward, so a chronic miss can look fine there while quietly going stale. This page is the place to catch that.</li>
+    <li><strong>no results</strong> = the search/page fetch returned nothing this run (usually the store blocking the runner, or its page layout changing). <strong>no match</strong> = we got candidates back but none matched the product name closely enough.</li>
+    <li>Only the last 30 runs are kept — older ones are dropped automatically to keep the file small.</li>
+    <li><a href="data/scrape_log.json" target="_blank" rel="noopener">View raw scrape_log.json</a></li>
+  `;
+
+  if (!log.length) {
+    runsEl.innerHTML = '<div class="sl-empty-state">No scrape runs logged yet.</div>';
+    return;
+  }
+  runsEl.innerHTML = '';
+  const reversed = [...log].reverse();
+  reversed.forEach((run, i) => {
+    const prevRun = reversed[i + 1]; // one run older, chronologically previous
+    runsEl.appendChild(renderRun(run, prevRun));
+  });
+  // Most recent run starts expanded — it's what you came here to check.
+  runsEl.firstElementChild?.classList.add('open');
+}
+
+$('slRefreshBtn').addEventListener('click', load);
+load();
+</script>
+</body>
+</html>

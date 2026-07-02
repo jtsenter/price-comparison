@@ -55,7 +55,12 @@ EXCEL_PATH = os.path.join(os.path.dirname(__file__), "..", "shopping_list.xlsx")
 PAGE_TIMEOUT_MS      = 20_000   # page.goto timeout
 COLES_WAIT_MS        = 1_100    # post-navigation wait for Coles pages
 COLES_SCROLL_WAIT_MS = 600      # post-scroll wait for lazy-loaded tiles
-MAX_PRODUCT_PRICE    = 50.0     # upper bound for plausible product prices
+MAX_PRODUCT_PRICE    = 80.0     # ceiling used by COLES_PRODUCT_PAGE_JS's DOM-selector fallback
+                                 # to reject unrelated on-page dollar figures (e.g. "spend $100,
+                                 # save $X" promo text). Only the last-resort strategy — real
+                                 # grocery items rarely exceed $50, but bulk packs/multipacks
+                                 # legitimately can, so this was previously hardcoded lower (50)
+                                 # and could silently drop a genuine price on that fallback path.
 CONCURRENCY          = 2        # parallel page-pairs (don't exceed 3)
 MAX_RESULTS          = 5        # search results fetched per store
 ARCHIVED_REFRESH_DAYS = 7       # scheduled runs refresh archived items only if older than this (else carried forward)
@@ -71,7 +76,10 @@ _run_store_misses: list = []
 
 def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed: list) -> None:
     """Append one run's per-store miss summary to docs/data/scrape_log.json (capped).
-    Lets the UI show miss rates over time and which products get skipped most."""
+    ww_missed/coles_missed: [{"item": str, "reason": "no_results"|"no_match"}, ...].
+    Lets the UI (scrape-log.html) show miss rates over time and which products get
+    skipped most, and whether misses are a block/selector break (no_results) or a
+    matcher/naming problem (no_match)."""
     path = os.path.join(DATA_DIR, "scrape_log.json")
     log = []
     if os.path.exists(path):
@@ -167,6 +175,18 @@ def _should_add_history_entry(history: list, new_price: float, today: str) -> bo
         return days_since >= 7
     except Exception:
         return True   # date parsing failed — add to be safe
+
+
+def _miss_reason(match: dict | None, results: list) -> str | None:
+    """Classify why a store fetch/match failed for the scrape log.
+    None = matched. "no_results" = search/fetch returned nothing — points at a
+    block or a broken page selector. "no_match" = got candidates but none scored
+    well enough — points at a naming/matcher problem instead. The distinction
+    matters: no_results across nearly every item means the SITE is blocking or its
+    markup changed; no_match spread across items means the matcher needs tuning."""
+    if match is not None:
+        return None
+    return 'no_results' if not results else 'no_match'
 
 
 def _is_approved(price: float | None, approved_price: float | None, tolerance: float = 0.05) -> bool:
@@ -769,7 +789,7 @@ COLES_PRODUCT_PAGE_JS = """
             const m = t.match(/\\$\\s*([\\d,]+(?:\\.\\d{1,2})?)/);
             if (m) {
                 const v = parseFloat(m[1].replace(',',''));
-                if (v > 0 && v < 50 && v < bestPrice) { bestPrice = v; priceText = t; }
+                if (v > 0 && v < __MAX_PRODUCT_PRICE__ && v < bestPrice) { bestPrice = v; priceText = t; }
             }
         }
         if (priceText) break;
@@ -797,6 +817,13 @@ COLES_PRODUCT_PAGE_JS = """
 """
 
 
+def _coles_product_page_js() -> str:
+    """COLES_PRODUCT_PAGE_JS with MAX_PRODUCT_PRICE substituted in — a plain
+    .replace() rather than an f-string/`.format()` because the JS body is full of
+    literal `{`/`}` braces that would otherwise need escaping throughout."""
+    return COLES_PRODUCT_PAGE_JS.replace('__MAX_PRODUCT_PRICE__', str(MAX_PRODUCT_PRICE))
+
+
 _COLES_BOT_KEYWORDS = ('interruption', 'captcha', 'access denied', 'challenge', 'verify')
 
 async def fetch_coles_by_url(page, url: str) -> dict | None:
@@ -811,7 +838,7 @@ async def fetch_coles_by_url(page, url: str) -> dict | None:
         try:
             await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
             await page.wait_for_timeout(COLES_WAIT_MS)
-            raw = await page.evaluate(COLES_PRODUCT_PAGE_JS)
+            raw = await page.evaluate(_coles_product_page_js())
             name = raw.get("name", "")
             price = parse_price(raw.get("price_text", ""))
             unit_price, unit = parse_unit_price(raw.get("unit_price_text", ""))
@@ -1271,7 +1298,9 @@ async def _scrape_single_item(
     # Record fresh per-store misses for this run's scrape log, BEFORE carry-forward
     # masks a miss with the last-known price. This is the signal that surfaces
     # chronically-skipped products in the UI summary (a carried price still hides a gap).
-    _run_store_misses.append((item, ww_match is None, coles_match is None))
+    _ww_reason = _miss_reason(ww_match, ww_results)
+    _co_reason = _miss_reason(coles_match, coles_results)
+    _run_store_misses.append((item, ww_match is None, coles_match is None, _ww_reason, _co_reason))
 
     # Carry forward existing store data when no fresh result is available.
     # Always carry forward when the matcher produced no usable result — whether because
@@ -1821,8 +1850,17 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             # miss rates over time and which products get skipped most. Items that timed
             # out or errored never reached the match phase, so they're absent here —
             # `scraped` counts items that completed matching, not total attempted.
-            _ww_missed = sorted(it for it, _ww, _co in _run_store_misses if _ww)
-            _co_missed = sorted(it for it, _ww, _co in _run_store_misses if _co)
+            # Each entry is {item, reason}: "no_results" (search/fetch returned nothing —
+            # points at a block or a broken selector) vs "no_match" (got candidates, none
+            # matched the query well enough — points at a naming/matcher issue instead).
+            _ww_missed = sorted(
+                ({"item": it, "reason": r} for it, _ww, _co, r, _ in _run_store_misses if _ww),
+                key=lambda e: e["item"],
+            )
+            _co_missed = sorted(
+                ({"item": it, "reason": r} for it, _ww, _co, _, r in _run_store_misses if _co),
+                key=lambda e: e["item"],
+            )
             _append_scrape_log(trigger, len(_run_store_misses), _ww_missed, _co_missed)
 
         await browser.close()

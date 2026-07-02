@@ -2,8 +2,9 @@ name: Scrape Prices
 
 on:
   schedule:
-    # Mon and Thu at 11am AEST (01:00 UTC)
-    - cron: '0 1 * * 1,4'
+    # Mon, Wed and Thu at 11am AEST (01:00 UTC) — Wed added to catch AU supermarket
+    # specials, which typically change Wednesday.
+    - cron: '0 1 * * 1,3,4'
   workflow_dispatch:
     inputs:
       trigger:
