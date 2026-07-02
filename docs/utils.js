@@ -38,6 +38,19 @@ function clientPer100(result) {
   return { value: null, label: '100g' };
 }
 
+// ── Exclusion-key parsing ───────────────────────────────────────────────────
+// One parser for pw_exclusions_v1 keys, which exist in three historical formats:
+// bare numbers, bare strings ("3.50"), and store-prefixed strings ("ww:3.50" /
+// "coles:3.50"). Returns a Set of "X.XX" price strings with prefixes stripped —
+// for mixed WW+Coles series a price excluded at either store is dropped entirely
+// (matches buildPriceBar's documented behaviour).
+function exclPriceSet(exclKeys) {
+  return new Set((exclKeys || []).map(k => {
+    const s = String(k);
+    return Number(s.includes(':') ? s.split(':')[1] : s).toFixed(2);
+  }));
+}
+
 // ── Unified trend data source ──────────────────────────────────────────────
 // Single series for both slider and sort: includes price_history + current prices.
 function getTrendSeries(item) {
@@ -55,11 +68,7 @@ function getTrendSeries(item) {
   // function declaration in app.js/hot-deals.html — hoisted and available by
   // the time this actually runs (renders always happen after page scripts
   // finish loading), even though this file is included first.
-  const excluded = new Set((loadExclusions()[item.list_item] || []).map(k => {
-    if (typeof k === 'number') return Number(k).toFixed(2);
-    const str = String(k);
-    return str.includes(':') ? str.split(':')[1] : Number(str).toFixed(2);
-  }));
+  const excluded = exclPriceSet(loadExclusions()[item.list_item]);
   const histPrices = hist
     .map(h => Number(h.price))
     .filter(p => p > 0 && !excluded.has(p.toFixed(2)));
@@ -135,9 +144,10 @@ function getDealQuality(item, exclusions) {
   if (item.archived) return empty;
 
   // Historical (past) prices only — the "usual" price is what it cost before now.
-  const excludedSet = new Set(
-    ((exclusions && exclusions[item.list_item]) || []).map(p => Number(p).toFixed(2))
-  );
+  // exclPriceSet handles the "ww:X.XX"/"coles:X.XX" key format — the old inline
+  // Number(p).toFixed(2) turned prefixed keys into "NaN", silently disabling
+  // exclusions for hot-deal detection (an excluded bogus low still made a 🔥).
+  const excludedSet = exclPriceSet(exclusions && exclusions[item.list_item]);
   const hist = [
     ...(item.price_history || []),
     ...(item.ww_price_history || []),

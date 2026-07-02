@@ -50,6 +50,15 @@ KNOWN_NAME_CHANGES = {
     "El-Amin's Beef Lean Mince 500g": "Woolworths Lean Beef Mince",
 }
 
+# Resolve alias chains (A→B plus B→C would leave A pointing at a name that itself
+# renames — one clean_name() pass would then split A's history from C's). Fixpoint
+# here means a single dict lookup is always final. Self-maps (X→X) terminate naturally.
+for _k in list(KNOWN_NAME_CHANGES):
+    _v, _hops = KNOWN_NAME_CHANGES[_k], 0
+    while _v in KNOWN_NAME_CHANGES and KNOWN_NAME_CHANGES[_v] != _v and _hops < 10:
+        _v, _hops = KNOWN_NAME_CHANGES[_v], _hops + 1
+    KNOWN_NAME_CHANGES[_k] = _v
+
 FUZZY_THRESHOLD = 85
 
 

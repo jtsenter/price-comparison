@@ -3,6 +3,11 @@
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '—';
 
+// Icon states for the per-kg group card's basket button (icon-only; swapped in
+// place by addPerKgToBasket so toggling never triggers a scroll-jumping re-render).
+const CART_PLUS_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/><line x1="13.5" y1="8.5" x2="13.5" y2="12.5"/><line x1="11.5" y1="10.5" x2="15.5" y2="10.5"/></svg>';
+const CART_CHECK_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
+
 // Header dropdowns (notif / options / columns) each stop click propagation so
 // the page-level "click outside closes it" listener doesn't fire on their own
 // button — but that also means clicking one button never closes a sibling
@@ -1079,14 +1084,9 @@ function savingAmount(item) {
 function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   if (!priceHistory?.length || currentPrice == null) return '';
 
-  const exclusions = loadExclusions();
-  // Support new "ww:X.XX"/"coles:X.XX" format and old bare-number format (treated as ww).
-  // For trend bars (mixed WW+Coles series) we exclude a price if excluded for any store.
-  const excluded = new Set((exclusions[itemName] || []).map(k => {
-    if (typeof k === 'number') return Number(k).toFixed(2);
-    const str = String(k);
-    return str.includes(':') ? str.split(':')[1] : Number(str).toFixed(2);
-  }));
+  // exclPriceSet (utils.js) handles both "ww:X.XX"/"coles:X.XX" and legacy bare keys.
+  // For trend bars (mixed WW+Coles series) a price excluded at either store is dropped.
+  const excluded = exclPriceSet(loadExclusions()[itemName]);
   // Use raw history prices — they are already in the same monetary units (pack/shelf price)
   // as currentPrice. _ww_price_factor is only used for cheaper_store comparison in the scraper.
   const prices = priceHistory
@@ -1114,7 +1114,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
       ${flatTrack}
       <div class="price-bar-labels price-bar-labels-flat"><span class="price-bar-always">${fmt(minP)}</span></div>
     </div>
-    <button class="price-bar-manage" data-manage-item="${safeItemName}">History</button>`;
+    <button class="price-bar-manage" data-manage-item="${safeItemName}" aria-label="View price history"><svg class="pbm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg><span class="pbm-txt">History</span></button>`;
   }
 
   const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
@@ -1162,7 +1162,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
         <span>${fmt(maxP)}</span>
       </div>
     </div>
-    <button class="price-bar-manage" data-manage-item="${safeItemName}">History</button>`;
+    <button class="price-bar-manage" data-manage-item="${safeItemName}" aria-label="View price history"><svg class="pbm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg><span class="pbm-txt">History</span></button>`;
 }
 
 // ── Tooltip (fixed, not clipped by overflow:hidden) ──────────────────────────
@@ -2433,14 +2433,31 @@ function _updateSelectedPill() {
   }
 }
 
-// Add one real product (not the synthetic group key — those aren't in _lastData.items,
-// so the basket export would silently drop them) to the basket selection.
-// No toast here: the floating "+ Basket (n)" button already shows the updated count,
+// Toggle one real product (not the synthetic group key — those aren't in
+// _lastData.items, so the basket export would silently drop them) in the basket
+// selection. Every matching button gets patched directly (no full re-render — that
+// would jump mobile's scroll position back to the top) so tapping again to remove
+// has the same immediate visual feedback as tapping to add.
+// No toast: the floating "+ Basket (n)" button already shows the updated count,
 // and the toast — full-width on mobile — sat right on top of it at almost the same
 // bottom offset, hiding the icon it was supposed to confirm.
 function addPerKgToBasket(name) {
   if (!name) return;
-  _selectedItems.add(name);
+  if (_selectedItems.has(name)) _selectedItems.delete(name);
+  else _selectedItems.add(name);
+  const selected = _selectedItems.has(name);
+  // A group's cheapest member can appear as both the card-level "+ Basket" button
+  // and its own row inside the expanded member list — keep every matching button
+  // in sync, not just the one that was clicked.
+  document.querySelectorAll(`[data-item="${CSS.escape(name)}"].vgm-basket-btn, [data-item="${CSS.escape(name)}"].vg-pv-basket`)
+    .forEach(el => {
+      el.classList.toggle('selected', selected);
+      const isIconBtn = el.classList.contains('vgm-basket-btn');
+      el.title = selected ? 'Remove from basket' : (isIconBtn ? 'Add cheapest to basket' : 'Add to basket');
+      el.setAttribute('aria-label', el.title);
+      if (isIconBtn) el.innerHTML = selected ? CART_CHECK_SVG : CART_PLUS_SVG;
+      else el.textContent = selected ? '✓' : '＋';
+    });
   _updateSelectedPill();
 }
 
@@ -3749,12 +3766,13 @@ function groupStoreVariantsHTML(group, store, overrides) {
       ? `<a class="vg-pv-name" href="${url}" target="_blank" rel="noopener">${name}</a>`
       : `<span class="vg-pv-name">${name}</span>`;
     const isWin = v.pk === cheapestPk;
+    const inBasket = _selectedItems.has(v.name);
     return `<div class="vg-pv${isWin ? ' win' : ''}">
         ${imgHtml}
         ${nameHtml}
         <span class="vg-pv-pack">${pack}</span>
         <span class="vg-pv-kg">$${v.pk.toFixed(2)}/kg</span>
-        <button class="vg-pv-basket" data-item="${safeKey}" title="Add to basket" aria-label="Add to basket">＋</button>
+        <button class="vg-pv-basket${inBasket ? ' selected' : ''}" data-item="${safeKey}" title="${inBasket ? 'Remove from basket' : 'Add to basket'}" aria-label="${inBasket ? 'Remove from basket' : 'Add to basket'}">${inBasket ? '✓' : '＋'}</button>
       </div>`;
   }).join('');
 
@@ -3921,9 +3939,11 @@ function appendGroupCardMobile(container, group, overrides) {
   const wwWin = cheaper === 'woolworths', coWin = cheaper === 'coles';
   const borderCls = wwWin ? ' cheaper-ww' : coWin ? ' cheaper-coles' : '';
 
-  // Same layout as a normal mobile card (image, name, trend bar, two store prices,
-  // cheaper tag) so per-kg groups read consistently — the differences that mark it as
-  // per-kg are the "$/kg" badge, the /kg price suffix, and the expand chevron.
+  // Same layout as a normal mobile card (image, name, trend bar, two store prices)
+  // so per-kg groups read consistently — the differences that mark it as per-kg are
+  // the "$/kg" badge, the /kg price suffix, and the expand chevron. No cheaper-tag
+  // row: the ✓ stamp on the winning price already says which store is cheapest, and
+  // the basket button lives at the end of the prices row instead of its own line.
   const wwImg = resolveImgUrl(group._wwBest?.result?.image_url) || '';
   const coImg = resolveImgUrl(group._coBest?.result?.image_url) || '';
   const imgPref = loadImgOverrides()[group.list_item];
@@ -3943,6 +3963,11 @@ function appendGroupCardMobile(container, group, overrides) {
   card.className = `mobile-card vg-mobile-card vg-expand-btn${borderCls}${isExpanded ? ' vg-mobile-open' : ''}`;
   card.dataset.group = group._groupKey;
 
+  const inBasket = cheapestVar ? _selectedItems.has(cheapestVar.name) : false;
+  const basketBtnHtml = cheapestName
+    ? `<button class="vgm-basket-btn${inBasket ? ' selected' : ''}" data-item="${cheapestName}" title="${inBasket ? 'Remove from basket' : 'Add cheapest to basket'}" aria-label="${inBasket ? 'Remove from basket' : 'Add cheapest to basket'}">${inBasket ? CART_CHECK_SVG : CART_PLUS_SVG}</button>`
+    : '';
+
   let html = `
     <div class="mc-top">
       ${imgHtml}
@@ -3954,13 +3979,10 @@ function appendGroupCardMobile(container, group, overrides) {
             <span class="vgm-chevron" aria-hidden="true">${isExpanded ? '▾' : '▸'}</span>
           </span>
         </div>
-        <div class="mc-badges">
-          <div class="mc-badges-left"><span class="mc-cat">${groupSubLabel(group)}</span></div>
-        </div>
       </div>
     </div>
     ${bar ? `<div class="mc-bar">${bar}</div>` : ''}
-    <div class="mc-prices">
+    <div class="mc-prices vgm-prices">
       <div class="mc-store-col">
         <div class="mc-store-label ww-col"><span class="store-chip sm ww">W</span> Woolworths</div>
         <div class="mc-price${wwWin ? ' cheaper' : ''}">${wwKg}<span class="vgm-kg-suffix">/kg</span></div>
@@ -3969,19 +3991,8 @@ function appendGroupCardMobile(container, group, overrides) {
         <div class="mc-store-label coles-col"><span class="store-chip sm coles">C</span> Coles</div>
         <div class="mc-price${coWin ? ' cheaper-c' : ''}">${coKg}<span class="vgm-kg-suffix">/kg</span></div>
       </div>
-    </div>
-    ${(group._wwPerKg != null && group._coPerKg != null) ? `
-    <div class="mc-summary">
-      <span class="mc-cheaper-tag ${wwWin ? 'ww' : coWin ? 'coles' : 'equal'}">
-        ${wwWin ? '<span class="store-chip sm ww">W</span>' : coWin ? '<span class="store-chip sm coles">C</span>' : ''}
-        ${(wwWin || coWin)
-          ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> cheapest $/kg'
-          : '<span class="mc-eq">=</span> same $/kg'}
-      </span>
-      ${cheapestName
-        ? `<button class="vgm-basket-btn" data-item="${cheapestName}" title="Add cheapest to basket">＋ Basket</button>`
-        : `<span class="vgm-tap-hint">tap for options</span>`}
-    </div>` : ''}`;
+      ${basketBtnHtml}
+    </div>`;
 
   if (isExpanded) {
     html += `<div class="vgm-body">
@@ -4333,10 +4344,7 @@ function renderMobileCards(items, data) {
   viewBtn.addEventListener('click', () => {
     _mcView = _mcView === 'detailed' ? 'compact' : 'detailed';
     localStorage.setItem('pw_mc_view_v1', _mcView);
-    // Preserve scroll position so toggling views doesn't jump to the top
-    const y = window.scrollY;
-    if (_lastData) renderPage(_lastData);
-    window.scrollTo(0, y);
+    if (_lastData) renderPage(_lastData); // renderPage preserves scroll itself
   });
   toolbar.appendChild(viewBtn);
 
@@ -4357,7 +4365,6 @@ function renderMobileCards(items, data) {
     const cheaper = item.cheaper_store;
     const ov      = overrides[item.list_item] || {};
     const displayName = ov.displayName || stripWW(item.list_item);
-    const cat     = getCategory(item);
     const priority = getPriority(item.list_item);
     const hotDeal  = isHotDeal(item, exclusions);
     const isWatchedMC = _watchlist.has(item.list_item);
@@ -4386,7 +4393,6 @@ function renderMobileCards(items, data) {
     const prioLabels = { weekly: 'Weekly', monthly: 'Monthly', rare: 'Rare' };
     const prioHtml = prioLabels[priority]
       ? `<span class="mc-priority ${priority}">${prioLabels[priority]}</span>` : '';
-    const catHtml = cat ? `<span class="mc-cat">${cat}</span>` : '';
 
     const wwCheaper = cheaper === 'woolworths';
     const coCheaper = cheaper === 'coles';
@@ -4430,7 +4436,7 @@ function renderMobileCards(items, data) {
             </span>
           </div>
           <div class="mc-badges">
-            <div class="mc-badges-left">${catHtml}${prioHtml}</div>
+            <div class="mc-badges-left">${prioHtml}</div>
             ${savingTag}
           </div>
         </div>
@@ -4447,16 +4453,7 @@ function renderMobileCards(items, data) {
           <div class="mc-price${coCheaper ? ' cheaper-c' : ''}">${co ? fmt(co.price) : '—'}</div>
           ${coUnit ? `<div class="mc-unit">${coUnit}</div>` : ''}
         </div>
-      </div>
-      ${ww && co ? `
-      <div class="mc-summary">
-        <span class="mc-cheaper-tag ${wwCheaper ? 'ww' : coCheaper ? 'coles' : 'equal'}" title="${wwCheaper ? 'Woolworths is cheaper' : coCheaper ? 'Coles is cheaper' : 'Same price at both stores'}">
-          ${wwCheaper ? '<span class="store-chip sm ww">W</span>' : coCheaper ? '<span class="store-chip sm coles">C</span>' : ''}
-          ${(wwCheaper || coCheaper)
-            ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
-            : '<span class="mc-eq">=</span>'}
-        </span>
-      </div>` : ''}`;
+      </div>`;
     }
 
     card.addEventListener('click', (e) => {
@@ -4487,7 +4484,18 @@ function renderMobileCards(items, data) {
 
 // ── Index page rendering ─────────────────────────────────────────────────────
 
+// Full re-render rebuilds the table/cards DOM, which resets the scroll position —
+// on mobile that meant any tap that re-renders (priority change, group expand,
+// exclusion save, filter toggle) jumped the view back to the top. Wrap the real
+// renderer so EVERY exit path restores scroll: the initial load is at scrollY 0
+// anyway, and the browser clamps to the new content height.
 function renderPage(data) {
+  const y = window.scrollY;
+  _renderPageInner(data);
+  window.scrollTo(0, y);
+}
+
+function _renderPageInner(data) {
   $('loading').style.display = 'none';
   // Reset mobile container on every render; renderMobileCards() re-shows it when on mobile
   const _mcEl = $('mobileCards');
@@ -6206,7 +6214,7 @@ async function boot() {
         const key = vgBtn.dataset.group;
         if (_expandedGroups.has(key)) _expandedGroups.delete(key);
         else _expandedGroups.add(key);
-        if (_lastData) renderPage(_lastData);
+        if (_lastData) renderPage(_lastData); // renderPage preserves scroll itself
       }
     });
   }
