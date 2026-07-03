@@ -3,10 +3,9 @@
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '—';
 
-// Icon states for the per-kg group card's basket button (icon-only; swapped in
-// place by addPerKgToBasket so toggling never triggers a scroll-jumping re-render).
-const CART_PLUS_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/><line x1="13.5" y1="8.5" x2="13.5" y2="12.5"/><line x1="11.5" y1="10.5" x2="15.5" y2="10.5"/></svg>';
-const CART_CHECK_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
+// Clock icon for the mobile cards' History button (lives in the card's icon row,
+// next to 🔥/👁, so it never crowds the trend bar's min/max labels).
+const HIST_CLOCK_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>';
 
 // Header dropdowns (notif / options / columns) each stop click propagation so
 // the page-level "click outside closes it" listener doesn't fire on their own
@@ -535,9 +534,11 @@ function saveUnitOverrides(obj) {
 
 // ── Category overrides ───────────────────────────────────────────────────────
 
+// The 9 live categories (grocery-store walk order); 'Other' is appended
+// dynamically as the fallback. Old names remap via CATEGORY_REMAP in utils.js.
 const KNOWN_CATEGORIES = [
-  'Fruit & Veg', 'Meat & Seafood', 'Dairy & Eggs', 'Bakery', 'Frozen Foods',
-  'Pantry', 'Drinks & Alcohol', 'Sweets', 'Personal Care', 'Household', 'Baby', 'Ready Meals',
+  'Fruit & Veg', 'Meat & Seafood', 'Dairy & Eggs', 'Pantry', 'Sweets',
+  'Frozen & Ready Meals', 'Drinks & Alcohol', 'Household', 'Personal Care & Baby',
 ];
 
 function loadCategoryOverrides() {
@@ -585,22 +586,8 @@ function getUnits(itemName) {
 }
 
 // ── Category normalisation ────────────────────────────────────────────────────
-
-const CATEGORY_REMAP = {
-  // old scraper names → new names
-  'Fruit':                  'Fruit & Veg',
-  'Vegetables':             'Fruit & Veg',
-  'Bread & Bakery':         'Bakery',
-  'Frozen':                 'Frozen Foods',
-  'Snacks & Confectionery': 'Sweets',
-  'Snacks':                 'Sweets',
-  'Drinks':                 'Drinks & Alcohol',
-  'Health & Beauty':        'Personal Care',
-  // flatten sub-categories into parent
-  'Spices & Herbs':         'Pantry',
-  'Spreads & Dips':         'Pantry',
-  'Nuts & Seeds':           'Pantry',
-};
+// CATEGORY_REMAP + normalizeCategory() live in utils.js (shared with hot-deals
+// and shopping-list, so the three pages can't drift on category names again).
 
 // Per-item category corrections — applied after CATEGORY_REMAP, before user localStorage overrides win.
 // These fix scraper mismatches without needing to edit latest.json.
@@ -649,11 +636,13 @@ const ITEM_CATEGORY_DEFAULTS = {
 };
 
 function getCategory(item) {
-  const ov = loadCategoryOverrides()[item.list_item];
-  if (ov) return ov;
-  const c = (item.category || '').trim();
-  const remapped = CATEGORY_REMAP[c] || c || 'Other';
-  return ITEM_CATEGORY_DEFAULTS[item.list_item] || remapped;
+  // Precedence: user override → per-item default → scraped category. Normalising
+  // LAST is the whole trick: an old override or default naming a merged/renamed
+  // category still resolves to the live one.
+  const raw = loadCategoryOverrides()[item.list_item]
+    || ITEM_CATEGORY_DEFAULTS[item.list_item]
+    || item.category;
+  return normalizeCategory(raw);
 }
 
 // ── Filter state ─────────────────────────────────────────────────────────────
@@ -2435,7 +2424,7 @@ function _updateSelectedPill() {
 
 // Toggle one real product (not the synthetic group key — those aren't in
 // _lastData.items, so the basket export would silently drop them) in the basket
-// selection. Every matching button gets patched directly (no full re-render — that
+// selection. Every matching element gets patched directly (no full re-render — that
 // would jump mobile's scroll position back to the top) so tapping again to remove
 // has the same immediate visual feedback as tapping to add.
 // No toast: the floating "+ Basket (n)" button already shows the updated count,
@@ -2446,18 +2435,17 @@ function addPerKgToBasket(name) {
   if (_selectedItems.has(name)) _selectedItems.delete(name);
   else _selectedItems.add(name);
   const selected = _selectedItems.has(name);
-  // A group's cheapest member can appear as both the card-level "+ Basket" button
-  // and its own row inside the expanded member list — keep every matching button
-  // in sync, not just the one that was clicked.
-  document.querySelectorAll(`[data-item="${CSS.escape(name)}"].vgm-basket-btn, [data-item="${CSS.escape(name)}"].vg-pv-basket`)
+  // The same product can be the tap-target of the group card (data-cheapest) AND
+  // its own "＋" row inside the expanded member list — keep both in sync.
+  document.querySelectorAll(`[data-item="${CSS.escape(name)}"].vg-pv-basket`)
     .forEach(el => {
       el.classList.toggle('selected', selected);
-      const isIconBtn = el.classList.contains('vgm-basket-btn');
-      el.title = selected ? 'Remove from basket' : (isIconBtn ? 'Add cheapest to basket' : 'Add to basket');
+      el.title = selected ? 'Remove from basket' : 'Add to basket';
       el.setAttribute('aria-label', el.title);
-      if (isIconBtn) el.innerHTML = selected ? CART_CHECK_SVG : CART_PLUS_SVG;
-      else el.textContent = selected ? '✓' : '＋';
+      el.textContent = selected ? '✓' : '＋';
     });
+  document.querySelectorAll(`.vg-mobile-card[data-cheapest="${CSS.escape(name)}"]`)
+    .forEach(c => c.classList.toggle('mc-selected', selected));
   _updateSelectedPill();
 }
 
@@ -3100,7 +3088,7 @@ async function pollForCompletion(s, dispatchedAt) {
     if (strip && strip.style.display !== 'none') {
       $('scrapeStripLabel').innerHTML =
         '⚠ Lost connection — <a href="https://github.com/' +
-        `${s.user}/${s.repo}/actions" target="_blank" style="color:inherit">check GitHub Actions</a>`;
+        `${s.user}/${s.repo}/actions" target="_blank" rel="noopener" style="color:inherit">check GitHub Actions</a>`;
       const retryBtn = $('scrapeStripRetry');
       if (retryBtn) retryBtn.style.display = 'inline-block';
     }
@@ -3434,22 +3422,22 @@ function renderCards(items) {
 
     let wwHtml;
     if (ww) {
-      const pv = wwUrl ? `<a href="${wwUrl}" target="_blank" class="price-link">${fmt(ww.price)}</a>` : fmt(ww.price);
+      const pv = wwUrl ? `<a href="${wwUrl}" target="_blank" rel="noopener" class="price-link">${fmt(ww.price)}</a>` : fmt(ww.price);
       const fire = hotDeal && cheaper === 'woolworths' ? hotBadge : '';
       const unit = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : fmtUnit(ww.unit_price, ww.unit);
       wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}</div>`;
     } else {
-      wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span> <a href="https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}" target="_blank" class="search-link">Find →</a></div>`;
+      wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span> <a href="https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}" target="_blank" rel="noopener" class="search-link">Find →</a></div>`;
     }
 
     let coHtml;
     if (co) {
-      const pv = coUrl ? `<a href="${coUrl}" target="_blank" class="price-link">${fmt(co.price)}</a>` : fmt(co.price);
+      const pv = coUrl ? `<a href="${coUrl}" target="_blank" rel="noopener" class="price-link">${fmt(co.price)}</a>` : fmt(co.price);
       const fire = hotDeal && cheaper === 'coles' ? hotBadge : '';
       const unit = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : fmtUnit(co.unit_price, co.unit);
       coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}</div>`;
     } else {
-      coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span> <a href="https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}" target="_blank" class="search-link">Find →</a></div>`;
+      coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span> <a href="https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}" target="_blank" rel="noopener" class="search-link">Find →</a></div>`;
     }
 
     const wwClass   = cheaper === 'woolworths' ? 'winner-ww' : '';
@@ -3585,7 +3573,7 @@ function buildVariantGroups(byName) {
 function perKgCellHTML(perkg, url) {
   if (perkg == null) return '<span class="no-data">—</span>';
   const head = `$${perkg.toFixed(2)}<span class="perkg-suffix">/kg</span>`;
-  const linked = url ? `<a href="${url}" target="_blank" class="price-link">${head}</a>` : head;
+  const linked = url ? `<a href="${url}" target="_blank" rel="noopener" class="price-link">${head}</a>` : head;
   return `<div class="price-main">${linked}</div>`;
 }
 
@@ -3959,14 +3947,15 @@ function appendGroupCardMobile(container, group, overrides) {
   const cheapestVar = [group._wwBest, group._coBest].filter(Boolean).sort((a, b) => a.perkg - b.perkg)[0];
   const cheapestName = cheapestVar ? cheapestVar.name.replace(/"/g, '&quot;') : '';
 
-  const card = document.createElement('div');
-  card.className = `mobile-card vg-mobile-card vg-expand-btn${borderCls}${isExpanded ? ' vg-mobile-open' : ''}`;
-  card.dataset.group = group._groupKey;
-
+  // Tap-to-add works like a normal card: tapping the card toggles the group's
+  // CHEAPEST variant in the basket (mc-selected highlight and all), and the
+  // expand/collapse that used to be the whole-card tap moved to an explicit
+  // chevron button — one consistent gesture across every mobile card.
   const inBasket = cheapestVar ? _selectedItems.has(cheapestVar.name) : false;
-  const basketBtnHtml = cheapestName
-    ? `<button class="vgm-basket-btn${inBasket ? ' selected' : ''}" data-item="${cheapestName}" title="${inBasket ? 'Remove from basket' : 'Add cheapest to basket'}" aria-label="${inBasket ? 'Remove from basket' : 'Add cheapest to basket'}">${inBasket ? CART_CHECK_SVG : CART_PLUS_SVG}</button>`
-    : '';
+  const card = document.createElement('div');
+  card.className = `mobile-card vg-mobile-card${borderCls}${inBasket ? ' mc-selected' : ''}${isExpanded ? ' vg-mobile-open' : ''}`;
+  card.dataset.group = group._groupKey;
+  if (cheapestVar) card.dataset.cheapest = cheapestVar.name;
 
   let html = `
     <div class="mc-top">
@@ -3975,14 +3964,15 @@ function appendGroupCardMobile(container, group, overrides) {
         <div class="mc-name-row">
           <div class="mc-name">${group._groupLabel}</div>
           <span class="mc-icons">
+            ${bar ? `<button class="mc-hist-btn" data-manage-item="__group_${group._groupKey}" title="Price history" aria-label="View price history">${HIST_CLOCK_SVG}</button>` : ''}
             <span class="vgm-perkg-badge">$/kg</span>
-            <span class="vgm-chevron" aria-hidden="true">${isExpanded ? '▾' : '▸'}</span>
+            <button class="vgm-chevron-btn" aria-expanded="${isExpanded}" aria-label="${isExpanded ? 'Hide store options' : 'Show store options'}" title="${isExpanded ? 'Hide store options' : 'Show store options'}">${isExpanded ? '▾' : '▸'}</button>
           </span>
         </div>
       </div>
     </div>
     ${bar ? `<div class="mc-bar">${bar}</div>` : ''}
-    <div class="mc-prices vgm-prices">
+    <div class="mc-prices">
       <div class="mc-store-col">
         <div class="mc-store-label ww-col"><span class="store-chip sm ww">W</span> Woolworths</div>
         <div class="mc-price${wwWin ? ' cheaper' : ''}">${wwKg}<span class="vgm-kg-suffix">/kg</span></div>
@@ -3991,7 +3981,6 @@ function appendGroupCardMobile(container, group, overrides) {
         <div class="mc-store-label coles-col"><span class="store-chip sm coles">C</span> Coles</div>
         <div class="mc-price${coWin ? ' cheaper-c' : ''}">${coKg}<span class="vgm-kg-suffix">/kg</span></div>
       </div>
-      ${basketBtnHtml}
     </div>`;
 
   if (isExpanded) {
@@ -4431,6 +4420,7 @@ function renderMobileCards(items, data) {
             <div class="mc-name">${displayName}</div>
             <span class="mc-icons">
               ${hotDeal ? '<span class="mc-hot" title="Hot Deal — meaningfully cheaper than its usual price right now">🔥</span>' : ''}
+              ${barHtml ? `<button class="mc-hist-btn" data-manage-item="${item.list_item.replace(/"/g,'&quot;')}" title="Price history" aria-label="View price history">${HIST_CLOCK_SVG}</button>` : ''}
               ${watchBtn}
               ${_activePriority === 'archive' ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : ''}
             </span>
@@ -4465,6 +4455,9 @@ function renderMobileCards(items, data) {
         unarchiveItem(e.target.closest('.mc-unarchive-btn').dataset.item);
         return;
       }
+      // Any other button/link (History clock, product links) is handled by the
+      // container's delegated listener — a tap on it must NOT also toggle selection.
+      if (e.target.closest('button, a')) return;
       // Mobile-only (≤700px): tap card to toggle selection
       if (window.innerWidth <= 700) {
         const name = item.list_item;
@@ -4878,7 +4871,7 @@ function _renderPageInner(data) {
     let wwCellContent;
     if (ww) {
       const wwPriceVal = wwUrl
-        ? `<a href="${wwUrl}" target="_blank" class="price-link">${fmt(ww.price)}</a>`
+        ? `<a href="${wwUrl}" target="_blank" rel="noopener" class="price-link">${fmt(ww.price)}</a>`
         : fmt(ww.price);
       const wwFire = hotDeal && (cheaper === 'woolworths' || (cheaper == null && ww && !co)) ? hotBadge : '';
       const wwNameTip = ww.name ? ` title="${ww.name.replace(/"/g, '&quot;')}"` : '';
@@ -4886,14 +4879,14 @@ function _renderPageInner(data) {
       wwCellContent = `<div class="price-main"${wwNameTip}>${wwPriceVal}${wwFire}</div><div class="price-unit">${wwUnitStr}</div>`;
     } else {
       const searchUrl = `https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}`;
-      wwCellContent = `<a href="${searchUrl}" target="_blank" class="search-link">Find on WW →</a>`;
+      wwCellContent = `<a href="${searchUrl}" target="_blank" rel="noopener" class="search-link">Find on WW →</a>`;
     }
 
     // Coles price cell
     let coCellContent;
     if (co) {
       const coPriceVal = coUrl
-        ? `<a href="${coUrl}" target="_blank" class="price-link">${fmt(co.price)}</a>`
+        ? `<a href="${coUrl}" target="_blank" rel="noopener" class="price-link">${fmt(co.price)}</a>`
         : fmt(co.price);
       const coFire = hotDeal && (cheaper === 'coles' || (cheaper == null && co && !ww)) ? hotBadge : '';
       const coNameTip = co.name ? ` title="${co.name.replace(/"/g, '&quot;')}"` : '';
@@ -4901,7 +4894,7 @@ function _renderPageInner(data) {
       coCellContent = `<div class="price-main"${coNameTip}>${coPriceVal}${coFire}</div><div class="price-unit">${coUnitStr}</div>`;
     } else {
       const searchUrl = `https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}`;
-      coCellContent = `<a href="${searchUrl}" target="_blank" class="search-link">Find on Coles →</a>`;
+      coCellContent = `<a href="${searchUrl}" target="_blank" rel="noopener" class="search-link">Find on Coles →</a>`;
     }
 
     // Best Price — N/A when one store is missing
@@ -6197,25 +6190,33 @@ async function boot() {
     }
   }
 
-  // Mobile variant group expand/collapse (delegated; persists across innerHTML rebuilds)
+  // Mobile per-kg group cards (delegated; persists across innerHTML rebuilds).
+  // Gesture model matches normal cards: tap the card = toggle the group's cheapest
+  // variant in the basket; the chevron button = expand/collapse; History clock =
+  // history modal; a variant row's "＋" = add that exact product.
   const mobileCardsEl = $('mobileCards');
   if (mobileCardsEl) {
     mobileCardsEl.addEventListener('click', (e) => {
-      // Per-kg add-to-basket: card "＋ Basket" (cheapest) or a variant's "＋". Handled
-      // before the generic button guard below, which would otherwise swallow these.
-      const bb = e.target.closest('.vgm-basket-btn, .vg-pv-basket');
+      const bb = e.target.closest('.vg-pv-basket');
       if (bb) { addPerKgToBasket(bb.dataset.item); return; }
-      const manageBtn = e.target.closest('.price-bar-manage');
+      const manageBtn = e.target.closest('.price-bar-manage, .mc-hist-btn');
       if (manageBtn) { openHistoryFromManageBtn(manageBtn.dataset.manageItem); return; }
-      // Don't toggle when interacting with an option's link, edit button, or image.
-      if (e.target.closest('a, button, .img-hoverable')) return;
-      const vgBtn = e.target.closest('.vg-expand-btn');
-      if (vgBtn) {
-        const key = vgBtn.dataset.group;
+      const chev = e.target.closest('.vgm-chevron-btn');
+      if (chev) {
+        const key = chev.closest('.vg-mobile-card')?.dataset.group;
+        if (!key) return;
         if (_expandedGroups.has(key)) _expandedGroups.delete(key);
         else _expandedGroups.add(key);
         if (_lastData) renderPage(_lastData); // renderPage preserves scroll itself
+        return;
       }
+      // Other links/buttons/images (product links, edit, image hover) handle themselves.
+      if (e.target.closest('a, button, .img-hoverable')) return;
+      // Whitespace inside the expanded variant list is inert — only the collapsed
+      // card face is the tap-to-add surface.
+      if (e.target.closest('.vgm-body')) return;
+      const vgCard = e.target.closest('.vg-mobile-card');
+      if (vgCard && vgCard.dataset.cheapest) addPerKgToBasket(vgCard.dataset.cheapest);
     });
   }
 

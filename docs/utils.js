@@ -193,6 +193,36 @@ function isHotDeal(item, exclusions) {
   return getDealQuality(item, exclusions).qualifies;
 }
 
+// ── Category normalisation ──────────────────────────────────────────────────
+// SINGLE map for every page (index, hot-deals, shopping-list). Covers the old
+// scraper names AND the 2026-07 category consolidation (13 → 10: Bakery folded
+// into Pantry, Frozen Foods + Ready Meals merged, Personal Care + Baby merged) —
+// so stale latest.json values and old user overrides in pw_categories_v1 keep
+// resolving to a live category instead of resurrecting a dead tab.
+const CATEGORY_REMAP = {
+  'Fruit':                  'Fruit & Veg',
+  'Vegetables':             'Fruit & Veg',
+  'Bakery':                 'Pantry',
+  'Bread & Bakery':         'Pantry',
+  'Spices & Herbs':         'Pantry',
+  'Spreads & Dips':         'Pantry',
+  'Nuts & Seeds':           'Pantry',
+  'Frozen Foods':           'Frozen & Ready Meals',
+  'Frozen':                 'Frozen & Ready Meals',
+  'Ready Meals':            'Frozen & Ready Meals',
+  'Snacks & Confectionery': 'Sweets',
+  'Snacks':                 'Sweets',
+  'Drinks':                 'Drinks & Alcohol',
+  'Personal Care':          'Personal Care & Baby',
+  'Baby':                   'Personal Care & Baby',
+  'Health & Beauty':        'Personal Care & Baby',
+};
+
+function normalizeCategory(raw) {
+  const c = (raw || '').trim() || 'Other';
+  return CATEGORY_REMAP[c] || c;
+}
+
 // Canonical hot-deal list — the SINGLE source of truth shared by the main page
 // (which only needs the COUNT) and the Hot Deals page (which renders the list).
 // Both call this with the same inputs so the "🔥 N deals" number on the main

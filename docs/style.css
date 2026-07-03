@@ -463,8 +463,15 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 /* Per-kg mobile card markers (card otherwise looks like a normal mobile card). */
 .vgm-perkg-badge { font-size: 10px; font-weight: 700; color: #0F6E56; background: rgba(29,158,117,.14); border-radius: 5px; padding: 1px 6px; white-space: nowrap; }
 :root[data-theme="dark"] .vgm-perkg-badge { color: #34D399; } /* dark cards need a light green, not #0F6E56 */
-.vgm-chevron { color: var(--text-soft); font-size: 13px; line-height: 1; }
-.vg-mobile-open .vgm-chevron { color: var(--accent); }
+/* Expand/collapse is an explicit button (tap-on-card now toggles the basket,
+   matching normal cards) — sized for a thumb, not just the glyph. */
+.vgm-chevron-btn {
+  border: 1px solid var(--border-strong); background: var(--card); color: var(--text-mid);
+  border-radius: 7px; width: 30px; height: 30px; padding: 0; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 13px; line-height: 1; flex-shrink: 0;
+}
+.vg-mobile-open .vgm-chevron-btn { color: var(--accent); border-color: var(--accent); }
 .vgm-kg-suffix { font-size: 11px; font-weight: 400; color: var(--text-soft); margin-left: 1px; }
 
 /* Mobile per-kg product rows: a 2-line grid so long product names wrap (no harsh
@@ -482,15 +489,6 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 .vgm-store-sec .vg-pv-kg   { grid-area: kg; font-size: 15px; padding-left: 8px; }
 .vgm-store-sec .vg-pv-basket { grid-area: basket; align-self: center; }
 
-/* Icon-only quick-add on the per-kg mobile card (adds the cheapest variant).
-   Sits in the third column of .vgm-prices, bottom-aligned with the price figures. */
-.vgm-basket-btn {
-  border: 1px solid var(--border-strong); background: var(--card); color: var(--accent);
-  border-radius: 9px; width: 38px; height: 38px; padding: 0; cursor: pointer;
-  display: inline-flex; align-items: center; justify-content: center;
-}
-.vgm-basket-btn:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
-.vgm-basket-btn.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
 
 /* ── Category tabs ───────────────────────────────────────────── */
 .category-tabs {
@@ -2113,35 +2111,25 @@ td.priority-cell { text-align: center; }
   .mc-hot { font-size: 16px; flex-shrink: 0; line-height: 1; }
 
   /* Trend bar (re-enable; 700px rule hides .price-bar-outer globally) */
-  .mc-bar { margin: 6px 0 0; position: relative; }
+  .mc-bar { margin: 6px 0 0; }
   .mc-bar .price-bar-outer { display: block !important; }
   .mc-bar .price-bar { height: 8px; }
+  .mc-bar .price-bar-labels { font-size: 10px; }
   .mc-bar .price-marker { width: 12px; height: 12px; top: -4px; }
   .mc-bar .price-marker-off-left,
   .mc-bar .price-marker-off-right { width: 12px; height: 12px; }
-  /* "History" button: hover-reveal (opacity:0 by default) never applies outside a
-     hovered <tr>, so on cards it was permanently invisible. Render it as a circular
-     clock-icon button on the LEFT of the min/max label row (right-handed thumbs
-     hover over the right edge — keeping it left avoids accidental taps). The label
-     row grows to the button's height and pads left so min/max stay edge-aligned. */
-  .mc-bar .price-bar-manage {
-    opacity: 1; position: absolute; left: 0; bottom: 0; margin: 0; padding: 0;
-    width: 34px; height: 34px; border-radius: 50%;
-    border: 1px solid var(--border-strong); background: var(--card);
-    color: var(--text-mid); text-decoration: none;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .mc-bar .price-bar-manage .pbm-ico { display: block; width: 18px; height: 18px; }
-  .mc-bar .price-bar-manage .pbm-txt { display: none; }
-  .mc-bar .price-bar-labels {
-    font-size: 10px; min-height: 34px; align-items: center;
-    padding-left: 42px; margin-top: 2px;
+  /* buildPriceBar's own History button stays desktop-only — the mobile card has a
+     clock icon in its icon row instead (.mc-hist-btn, next to 🔥/👁), so the min/max
+     labels keep the full bar width. */
+  .mc-bar .price-bar-manage { display: none; }
+  .mc-hist-btn {
+    border: 1px solid var(--border-strong); background: var(--card); color: var(--text-mid);
+    border-radius: 7px; width: 30px; height: 30px; padding: 0; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
 
-  /* Price grid. Per-kg group cards (.vgm-prices) get a third auto column that
-     holds the icon basket button, bottom-aligned with the prices. */
+  /* Price grid */
   .mc-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-  .mc-prices.vgm-prices { grid-template-columns: 1fr 1fr auto; align-items: end; }
   .mc-store-col { display: flex; flex-direction: column; gap: 2px; }
   .mc-store-label {
     font-size: 11px; font-weight: 700; text-transform: uppercase;

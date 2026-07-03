@@ -22,10 +22,9 @@ CATEGORY_KEYWORDS = {
         "radish", "eggplant", "broccolini", "spring onion", "eschallot", "beetroot",
         "parsley",
     ],
-    "Bakery": [
-        "bread", "wrap", "pizza base", "crispbread", "sourdough", "grain", "helga",
-        "salada", "roll", "bun",
-    ],
+    # 2026-07 consolidation (13 → 10 categories): Bakery folded into Pantry,
+    # Frozen Foods + Ready Meals merged, Personal Care + Baby merged. The UI's
+    # CATEGORY_REMAP (docs/utils.js) maps the old names for data scraped before this.
     "Pantry": [
         "pasta", "rice", "flour", "sugar", "oil", "olive oil", "sauce", "tomato paste",
         "lentil", "barley", "chickpea", "oat", "granola", "baked beans", "tuna",
@@ -36,6 +35,9 @@ CATEGORY_KEYWORDS = {
         "hoyt", "peanut butter", "biscoff", "hommus", "hummus",
         "eggplant dip", "beetroot hommus", "obela", "wilma",
         "walnut", "macadamia", "sunflower kernel", "pumpkin kernel", "almond", "nut",
+        # former Bakery bucket
+        "bread", "wrap", "pizza base", "crispbread", "sourdough", "grain", "helga",
+        "salada", "roll", "bun",
     ],
     "Sweets": [
         "chocolate", "chips", "biscuit", "cookie", "protein bar", "muesli bar",
@@ -48,9 +50,12 @@ CATEGORY_KEYWORDS = {
         "mineral water", "lemon lime", "sauvignon blanc", "beer", "cider",
         "kombucha", "energy drink",
     ],
-    "Frozen Foods": [
+    "Frozen & Ready Meals": [
         "frozen", "ice cream", "meat pies", "pizza", "ben & jerry", "bulla crunch",
         "ristorante",
+        # former Ready Meals bucket
+        "meal kit", "ready meal", "instant noodle", "cup a soup", "continental cup",
+        "frozen meal", "microwave meal",
     ],
     "Household": [
         "toilet tissue", "toilet paper", "paper towel", "wipes", "cleaner",
@@ -58,17 +63,12 @@ CATEGORY_KEYWORDS = {
         "sandwich bag", "sponge", "gloves", "paper cups", "resealable", "cistern",
         "ecostore", "vanish", "napisan", "shine dishwash", "ajax", "strike",
     ],
-    "Baby": [
-        "nappies", "formula", "baby food", "rafferty", "mum-mum", "aptamil",
-        "trainer cup", "little one", "munchkin",
-    ],
-    "Personal Care": [
+    "Personal Care & Baby": [
         "toothbrush", "hand wash", "hand soap", "dettol", "palmolive", "toothpaste",
         "shampoo", "conditioner", "deodorant", "sunscreen",
-    ],
-    "Ready Meals": [
-        "meal kit", "ready meal", "instant noodle", "cup a soup", "continental cup",
-        "frozen meal", "microwave meal",
+        # former Baby bucket
+        "nappies", "formula", "baby food", "rafferty", "mum-mum", "aptamil",
+        "trainer cup", "little one", "munchkin",
     ],
 }
 

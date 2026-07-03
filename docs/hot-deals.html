@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=72" />
+  <link rel="stylesheet" href="style.css?v=73" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -415,7 +415,7 @@
 
 <!-- Shared utilities — must load before inline script -->
 <script src="name_map.js?v=13"></script>
-<script src="utils.js?v=17"></script>
+<script src="utils.js?v=55"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -462,16 +462,7 @@ const fmtUnit = (price, unit) => {
   return m ? `${fmt(price)}/${m[0].trim()}` : fmt(price);
 };
 
-// clientPer100() is provided by utils.js (loaded above).
-
-const CATEGORY_REMAP = {
-  'Fruit': 'Fruit & Veg', 'Vegetables': 'Fruit & Veg',
-  'Bread & Bakery': 'Bakery', 'Frozen': 'Frozen Foods',
-  'Snacks & Confectionery': 'Sweets', 'Snacks': 'Sweets',
-  'Drinks': 'Drinks & Alcohol', 'Health & Beauty': 'Personal Care',
-  'Spices & Herbs': 'Pantry', 'Spreads & Dips': 'Pantry',
-  'Nuts & Seeds': 'Pantry',
-};
+// clientPer100(), CATEGORY_REMAP and normalizeCategory() come from utils.js (loaded above).
 
 // ── Dynamic sticky header offset ─────────────────────────────────────────────
 // Calculates actual nav height and applies it to thead th sticky offset.
@@ -485,9 +476,9 @@ window.addEventListener('load', fixStickyOffset);
 window.addEventListener('resize', fixStickyOffset);
 
 function getCategory(item) {
-  try { const ov = JSON.parse(localStorage.getItem('pw_categories_v1') || '{}'); if (ov[item.list_item]) return ov[item.list_item]; } catch {}
-  const c = (item.category || '').trim();
-  return CATEGORY_REMAP[c] || c || 'Other';
+  let ov = null;
+  try { ov = JSON.parse(localStorage.getItem('pw_categories_v1') || '{}')[item.list_item]; } catch {}
+  return normalizeCategory(ov || item.category);
 }
 
 // ── Deal computation ──────────────────────────────────────────────────────────
@@ -999,13 +990,13 @@ function renderDeals() {
     const wwP100 = clientPer100(ww);
     let wwHtml = '';
     if (ww) {
-      const link = wwUrl ? `<a href="${wwUrl}" target="_blank" class="price-link">${fmt(ww.price)}</a>` : fmt(ww.price);
+      const link = wwUrl ? `<a href="${wwUrl}" target="_blank" rel="noopener" class="price-link">${fmt(ww.price)}</a>` : fmt(ww.price);
       const fire = deal.store === 'woolworths' ? ' 🔥' : '';
       const unitStr = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : fmtUnit(ww.unit_price, ww.unit);
       const nameTip = ww.name ? ` title="${ww.name.replace(/"/g, '&quot;')}"` : '';
       wwHtml = `<div class="deal-price-main"${nameTip}>${link}${fire}</div><div class="deal-price-unit">${unitStr}</div>`;
     } else {
-      wwHtml = `<a href="https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}" target="_blank" class="search-link">Find →</a>`;
+      wwHtml = `<a href="https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}" target="_blank" rel="noopener" class="search-link">Find →</a>`;
     }
 
     // Coles cell
@@ -1013,13 +1004,13 @@ function renderDeals() {
     const coP100 = clientPer100(co);
     let coHtml = '';
     if (co) {
-      const link = coUrl ? `<a href="${coUrl}" target="_blank" class="price-link">${fmt(co.price)}</a>` : fmt(co.price);
+      const link = coUrl ? `<a href="${coUrl}" target="_blank" rel="noopener" class="price-link">${fmt(co.price)}</a>` : fmt(co.price);
       const fire = deal.store === 'coles' ? ' 🔥' : '';
       const unitStr = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : fmtUnit(co.unit_price, co.unit);
       const nameTip = co.name ? ` title="${co.name.replace(/"/g, '&quot;')}"` : '';
       coHtml = `<div class="deal-price-main"${nameTip}>${link}${fire}</div><div class="deal-price-unit">${unitStr}</div>`;
     } else {
-      coHtml = `<a href="https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}" target="_blank" class="search-link">Find →</a>`;
+      coHtml = `<a href="https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}" target="_blank" rel="noopener" class="search-link">Find →</a>`;
     }
 
     // Trend cell — price bar only, same as main page
@@ -1084,7 +1075,7 @@ function renderDealsMobile(sorted, exclusions, overrides) {
     const watched = _watchlistHD.has(item.list_item);
     const storeUrl = isW ? (ov.wwUrl || ww?.url) : (ov.colesUrl || co?.url);
     const priceLink = storeUrl
-      ? `<a href="${storeUrl}" target="_blank" class="price-link dm-price">${fmt(deal.price)}</a>`
+      ? `<a href="${storeUrl}" target="_blank" rel="noopener" class="price-link dm-price">${fmt(deal.price)}</a>`
       : `<span class="dm-price">${fmt(deal.price)}</span>`;
 
     const card = document.createElement('div');

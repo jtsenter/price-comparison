@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=71" />
+  <link rel="stylesheet" href="style.css?v=73" />
   <style>
     .sl-main { max-width: 900px; margin: 0 auto; padding: 20px 24px 60px; }
     .sl-info-card {
@@ -60,7 +60,10 @@
     .sl-run.open .sl-chevron { transform: rotate(90deg); }
     .sl-run-body { display: none; border-top: 1px solid var(--border); padding: 14px 16px; }
     .sl-run.open .sl-run-body { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    @media (max-width: 640px) { .sl-run.open .sl-run-body { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) {
+      .sl-run.open .sl-run-body { grid-template-columns: 1fr; }
+      .sl-chronic-cols { grid-template-columns: 1fr !important; }
+    }
     .sl-miss-col h3 { font-size: 12px; font-weight: 700; margin: 0 0 8px; }
     .sl-miss-col.ww h3 { color: var(--ww); }
     .sl-miss-col.coles h3 { color: var(--coles); }
@@ -108,12 +111,27 @@
     <ul class="sl-info-notes" id="slInfoNotes"></ul>
   </div>
 
+  <div class="sl-info-card" id="slChronicCard" style="display:none">
+    <h2>Chronic misses — items to track down</h2>
+    <p style="font-size:12px;color:var(--text-mid);margin:0 0 10px">
+      Missed in more than one logged run. A one-off miss is noise; a repeat miss means
+      the price is quietly going stale — usually a broken match or a delisted product
+      worth re-pinning via ✎ Edit on the main page.
+    </p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" class="sl-chronic-cols" id="slChronicCols"></div>
+  </div>
+
   <div id="slRuns" class="sl-runs"></div>
 </main>
 
-<script src="utils.js?v=54"></script>
+<script src="utils.js?v=55"></script>
 <script>
 function $(id) { return document.getElementById(id); }
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, ch =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
 
 function timeAgo(iso) {
   if (!iso) return '';
@@ -148,8 +166,32 @@ function renderMissList(list) {
     const title = cls === 'no_results' ? 'Search or page fetch returned nothing this run — likely a block or a broken page selector'
       : cls === 'no_match' ? 'Got search results back, but none matched the product name well enough'
       : 'Reason not recorded (older log entry)';
-    return `<li><span>${e.item}</span><span class="sl-miss-reason ${cls}" title="${title}">${label}</span></li>`;
+    return `<li><span>${escapeHtml(e.item)}</span><span class="sl-miss-reason ${cls}" title="${title}">${label}</span></li>`;
   }).join('') + '</ul>';
+}
+
+// Aggregate misses across every logged run: {item → times missed} per store.
+// Only items missed MORE THAN ONCE make the chronic list — single misses are noise.
+function renderChronicMisses(log) {
+  const card = $('slChronicCard');
+  if (log.length < 2) { card.style.display = 'none'; return; }
+  const tally = (key) => {
+    const counts = new Map();
+    log.forEach(run => normaliseMissed(run[key]).forEach(e => counts.set(e.item, (counts.get(e.item) || 0) + 1)));
+    return [...counts.entries()].filter(([, n]) => n > 1).sort((a, b) => b[1] - a[1]).slice(0, 15);
+  };
+  const col = (label, cls, rows) => `
+    <div class="sl-miss-col ${cls}">
+      <h3>${label} (${rows.length})</h3>
+      ${rows.length
+        ? '<ul class="sl-miss-list">' + rows.map(([item, n]) =>
+            `<li><span>${escapeHtml(item)}</span><span class="sl-miss-reason unknown" title="Missed in ${n} of the last ${log.length} logged runs">×${n}</span></li>`
+          ).join('') + '</ul>'
+        : '<div class="sl-miss-empty">No repeat offenders.</div>'}
+    </div>`;
+  $('slChronicCols').innerHTML =
+    col('Woolworths', 'ww', tally('ww_missed')) + col('Coles', 'coles', tally('coles_missed'));
+  card.style.display = '';
 }
 
 function renderRun(run, prevRun) {
@@ -248,6 +290,8 @@ async function load() {
     <li>Only the last 30 runs are kept — older ones are dropped automatically to keep the file small.</li>
     <li><a href="data/scrape_log.json" target="_blank" rel="noopener">View raw scrape_log.json</a></li>
   `;
+
+  renderChronicMisses(log);
 
   if (!log.length) {
     runsEl.innerHTML = '<div class="sl-empty-state">No scrape runs logged yet.</div>';
