@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=73" />
+  <link rel="stylesheet" href="style.css?v=74" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -784,7 +784,12 @@ function initHdColChooser() {
 
 function hdColHtml(col) {
   const w  = _hdColWidths[col] ?? HD_DEFAULT_WIDTHS[col];
-  const ws = w ? `width:${w}px;min-width:${w}px;` : '';
+  // width WITHOUT min-width: the wrap is overflow-x: clip (a scroll container would
+  // break the sticky thead), so hard minimums let saved widths push the table past
+  // the container and silently amputate the rightmost columns — no scrollbar, no
+  // hint. A preferred width lets auto layout compress columns to fit instead;
+  // every column stays visible even when the saved total exceeds the window.
+  const ws = w ? `width:${w}px;` : '';
   const rh = `<div class="col-resize-handle"></div>`;
   switch (col) {
     case 'name':     return `<th data-col="name" style="${ws}">Product <span class="sort-arrow"></span>${rh}</th>`;

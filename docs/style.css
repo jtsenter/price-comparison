@@ -2232,16 +2232,20 @@ td.priority-cell { text-align: center; }
   background: var(--bg);
   box-shadow: inset -2px 0 0 var(--border-strong);
 }
-tbody td.check-cell { position: sticky; left: 0; z-index: 31; background: var(--card); }
-tbody td.item-name {
+/* Scoped to the MAIN table's tbody (#tableBody): hot-deals' product cells also use
+   .item-name, and an unscoped sticky left:36px displaced them 12px right (its table
+   has no 36px checkbox column), painting their opaque background over the first
+   12px of the neighbouring column — clipped trend markers, immune to col-resize. */
+#tableBody td.check-cell { position: sticky; left: 0; z-index: 31; background: var(--card); }
+#tableBody td.item-name {
   position: sticky; left: 36px; z-index: 30;
   background: var(--card);
   box-shadow: inset -2px 0 0 var(--border);
 }
-tbody tr:nth-child(even) td.check-cell,
-tbody tr:nth-child(even) td.item-name { background: #FAFBFC; }
-tbody tr:hover td.check-cell,
-tbody tr:hover td.item-name { background: #FAFBFD; }
+#tableBody tr:nth-child(even) td.check-cell,
+#tableBody tr:nth-child(even) td.item-name { background: #FAFBFC; }
+#tableBody tr:hover td.check-cell,
+#tableBody tr:hover td.item-name { background: #FAFBFD; }
 
 /* ── 3 · Row density toggle ────────────────────────────────────────────── */
 .density-toggle-btn {
@@ -2394,13 +2398,14 @@ tbody tr:hover td.item-name { background: #FAFBFD; }
   --shadow:    0 2px 8px rgba(0,0,0,.5);
   --shadow-md: 0 4px 16px rgba(0,0,0,.55);
 
-  /* Table rows */
+  /* Table rows (sticky-cell backgrounds scoped to #tableBody, same as light mode —
+     hot-deals' .item-name cells are NOT sticky and must not get opaque overrides) */
   & tbody tr:nth-child(even)              { background: #182030; }
-  & tbody tr:nth-child(even) td.item-name,
-  & tbody tr:nth-child(even) td.check-cell { background: #182030; }
+  & #tableBody tr:nth-child(even) td.item-name,
+  & #tableBody tr:nth-child(even) td.check-cell { background: #182030; }
   & tbody tr:hover                        { background: #1a2540; }
-  & tbody tr:hover td.item-name,
-  & tbody tr:hover td.check-cell          { background: #1a2540; }
+  & #tableBody tr:hover td.item-name,
+  & #tableBody tr:hover td.check-cell          { background: #1a2540; }
   & #tableHead th                         { background: var(--bg); }
   & .tfoot-row td                         { background: var(--bg); }
 
