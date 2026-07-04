@@ -113,15 +113,22 @@ nav a.active { background: var(--bg); color: var(--text); font-weight: 600; }
 .header-search-ico { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-soft); pointer-events: none; }
 .header-search .search-clear { right: 10px; }
 .header-div { width: 1px; height: 24px; background: var(--border); flex-shrink: 0; margin: 0 2px; }
-/* Hot Deals as a red pill with a solid red flame, pinned to the right of the cluster. */
-.hot-deals-pill {
-  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
-  padding: 7px 13px; border-radius: 999px; text-decoration: none;
-  background: rgba(226,75,74,.12); color: #b91c1c;
-  font-size: 13px; font-weight: 600; white-space: nowrap;
-  border: 1px solid rgba(226,75,74,.30);
-}
-.hot-deals-pill:hover { background: rgba(226,75,74,.20); }
+
+/* Icon-only nav destinations in the header action cluster (Hot Deals, Basket,
+   Alerts). Same ghost-button chrome as the utility buttons beside them, but each
+   destination keeps a small colour identity so they read at a glance. Hidden on
+   mobile — the bottom tab bar covers navigation there. */
+.nav-icon-btn { text-decoration: none; }
+.nav-icon-btn svg { display: block; }
+.nav-icon-btn.nav-hot        { color: #DC2626; }
+.nav-icon-btn.nav-basket     { color: var(--ww); }
+.nav-icon-btn.nav-alerts     { color: #D97706; }
+.nav-icon-btn.nav-hot:hover     { color: #B91C1C; background: rgba(220,38,38,.08); }
+.nav-icon-btn.nav-basket:hover  { color: #006B31; background: rgba(0,132,61,.08); }
+.nav-icon-btn.nav-alerts:hover  { color: #B45309; background: rgba(217,119,6,.08); }
+.nav-icon-btn.here.nav-hot      { background: rgba(220,38,38,.10); border-color: rgba(220,38,38,.35); }
+.nav-icon-btn.here.nav-basket   { background: rgba(0,132,61,.10);  border-color: rgba(0,132,61,.35); }
+.nav-icon-btn.here.nav-alerts   { background: rgba(217,119,6,.10); border-color: rgba(217,119,6,.35); }
 
 /* ── Buttons ─────────────────────────────────────────────────── */
 .btn {
@@ -338,25 +345,43 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
   content: "·"; margin-right: 12px; color: var(--text-soft);
 }
 
-/* TEMPORARY dev-only per-kg filter pill. Intentionally ugly — remove once the
-   per-kg comparison ships properly. Hidden on mobile. */
-#perkgDevBtn {
-  display: inline-flex; align-items: center; padding: 3px 9px; margin: 0;
-  background: #ff00ff; color: #000; font-weight: 700; font-size: 11px;
-  border: 2px dashed #000; border-radius: 4px; cursor: pointer;
-  font-family: monospace; white-space: nowrap; line-height: 1.4;
-}
-#perkgDevBtn.on { background: #00e5ff; outline: 3px solid red; }
-#perkgDevBtn.off { background: #64748b; color: #fff; }
+/* Per-kg filter pill — cycles all → only groups → hide groups. Out of its dev-trial
+   dress: styled like every other filter pill, with teal accents matching the $/kg
+   badges the groups use. Hidden on mobile (no cycle control there; groups always show). */
+#perkgDevBtn svg { color: #0F6E56; }
+#perkgDevBtn.on  { background: #0F6E56; border-color: #0F6E56; color: #fff; }
+#perkgDevBtn.on svg { color: #fff; }
+#perkgDevBtn.off { opacity: 0.55; text-decoration: line-through; }
+:root[data-theme="dark"] #perkgDevBtn svg { color: #34D399; }
+:root[data-theme="dark"] #perkgDevBtn.on { background: #0F6E56; color: #fff; }
+:root[data-theme="dark"] #perkgDevBtn.on svg { color: #fff; }
 @media (max-width: 700px) { #perkgDevBtn { display: none; } }
 
+/* ── Cheaper-alternative hint (💡 under the product name) ─────────────────── */
+.alt-hint {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--text-soft); margin-top: 3px; min-width: 0;
+}
+.alt-hint b { color: #0F6E56; font-weight: 700; white-space: nowrap; }
+.alt-hint a, .alt-hint > span[title] {
+  color: var(--text-mid); text-decoration: none;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 300px;
+}
+.alt-hint a:hover { text-decoration: underline; color: var(--text); }
+.alt-store {
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  width: 14px; height: 14px; border-radius: 4px; color: #fff; font-size: 9px; font-weight: 800;
+}
+.alt-store.ww    { background: var(--ww); }
+.alt-store.coles { background: var(--coles); }
+:root[data-theme="dark"] .alt-hint b { color: #34D399; }
+
 /* ── Variant groups (per-kg comparison) — inline rows + full-width expand panel ── */
-/* Collapsed group row: a normal product row; the whole row toggles the panel. */
+/* Collapsed group row: a normal product row; the whole row toggles the panel.
+   (The 2px accent frame lines from the trial period are gone — per-kg groups are a
+   shipped feature now and read like ordinary rows; the $/kg badge and chevron are
+   enough to mark them.) */
 .vg-group-row { cursor: pointer; }
-.vg-group-row > td { border-top: 2px solid color-mix(in srgb, var(--accent) 35%, var(--border)); }
-/* Collapsed groups get a matching bottom line so the accent frames the row; when
-   open, the expand panel supplies the closing border instead. */
-.vg-group-row:not(.vg-group-open) > td { border-bottom: 2px solid color-mix(in srgb, var(--accent) 35%, var(--border)); }
 .vg-group-row:hover > td { background: color-mix(in srgb, var(--accent) 5%, transparent); }
 .vg-group-row.vg-group-open > td { background: color-mix(in srgb, var(--accent) 7%, transparent); }
 .vg-group-title { display: flex; align-items: center; gap: 7px; color: var(--text); }
@@ -366,7 +391,7 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
 .perkg-suffix { font-size: 11px; font-weight: 600; color: var(--text-soft); }
 
 /* Expanded full-width panel. */
-.vg-panel-row > td { padding: 0 !important; background: color-mix(in srgb, var(--accent) 5%, transparent); border-bottom: 2px solid color-mix(in srgb, var(--accent) 35%, var(--border)); cursor: pointer; }
+.vg-panel-row > td { padding: 0 !important; background: color-mix(in srgb, var(--accent) 5%, transparent); border-bottom: 1px solid var(--border); cursor: pointer; }
 /* The panel lives in a full-width colspan cell, so on a wide (overflowing) table its
    right half — the Coles column — fell off-screen. Pin it to the left of the scroll
    viewport and size it to the visible width so both stores stay on screen; the main
@@ -1828,9 +1853,9 @@ td.priority-cell { text-align: center; }
   .alt-grid { grid-template-columns: 1fr; }
   .btn span.btn-label { display: none; }
   .price-bar-outer { display: none; }
-  /* Mobile: the header action icons already cover Hot Deals + Basket, so drop the
-     main-page nav to give the search room. */
-  #mainNav, .hot-deals-pill, .header-div { display: none; }
+  /* Mobile: the bottom tab bar + header action icons cover navigation, so drop
+     the left nav and the desktop nav-icon cluster to give the search room. */
+  #mainNav, .nav-icon-btn, .header-div { display: none; }
   .header-search { min-width: 60px; }
 }
 
@@ -2330,8 +2355,10 @@ td.priority-cell { text-align: center; }
   /* Extra padding when FAB is also showing */
   #mobileCards.fab-visible { padding-bottom: 80px; }
 
-  /* Hide top nav — replaced by bottom tab bar */
-  nav { display: none !important; }
+  /* Hide the top (header) nav — replaced by the bottom tab bar. Must NOT match
+     #bottomTabBar itself: it's also a <nav>, and a bare `nav !important` beat the
+     id rule and silently hid the tab bar on every page. */
+  header nav { display: none !important; }
 }
 
 /* ── 7 · Bigger tap targets (mobile) ──────────────────────────────────── */

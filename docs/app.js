@@ -393,6 +393,14 @@ async function initUserSettings() {
 async function persistLatestJson(data, message = 'chore: update latest.json') {
   const s = loadSettings();
   if (!s.token) return;
+  // Race guard: the scraper snapshots latest.json at boot and rebuilds it at the
+  // end of a run, so an edit saved mid-scrape gets silently resurrected from that
+  // boot snapshot (progress pushes even pull with -X ours). scrape_progress is
+  // present exactly while a run is live — warn before writing into that window.
+  if (data?.scrape_progress &&
+      !confirm('A scrape is running right now — the scraper may overwrite this change when it finishes.\n\nSave anyway?')) {
+    throw new Error('Save cancelled — scrape in progress');
+  }
   const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/latest.json`;
   const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
   const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2) + '\n')));
@@ -4464,6 +4472,7 @@ function renderMobileCards(items, data) {
             <div class="mc-badges-left">${prioHtml}</div>
             ${savingTag}
           </div>
+          ${altHintHTML(item)}
         </div>
       </div>
       ${barHtml ? `<div class="mc-bar">${barHtml}</div>` : ''}
@@ -4508,6 +4517,27 @@ function renderMobileCards(items, data) {
 
     container.appendChild(card);
   });
+}
+
+// ── Cheaper-alternative hint (find_alternatives data) ────────────────────────
+// The scraper stores same-form cheaper products in item.alternatives; until now
+// nothing rendered them. Show the cheapest one as a one-line hint under the
+// product name. Re-checked against the CURRENT best price (scraper data can lag a
+// price drop), so the hint only appears when the swap is genuinely cheaper today.
+function altHintHTML(item) {
+  const alts = Array.isArray(item.alternatives)
+    ? item.alternatives.filter(a => a && a.price != null && a.price > 0) : [];
+  if (!alts.length) return '';
+  const best = [...alts].sort((a, b) => a.price - b.price)[0];
+  const cur = Math.min(item.woolworths?.price ?? Infinity, item.coles?.price ?? Infinity);
+  if (!isFinite(cur) || best.price >= cur) return '';
+  const store = best.retailer === 'coles' ? 'coles' : 'ww';
+  const chip = `<span class="alt-store ${store}">${store === 'coles' ? 'C' : 'W'}</span>`;
+  const label = `${esc(best.name)}`;
+  const body = best.url
+    ? `<a href="${escAttr(best.url)}" target="_blank" rel="noopener" title="${escAttr(best.name)}">${label}</a>`
+    : `<span title="${escAttr(best.name)}">${label}</span>`;
+  return `<div class="alt-hint" title="Cheaper alternative found during the last scrape">💡 <b>${fmt(best.price)}</b> ${chip} ${body}</div>`;
 }
 
 // ── Index page rendering ─────────────────────────────────────────────────────
@@ -4891,6 +4921,7 @@ function _renderPageInner(data) {
         ${imgHtml}
         <div class="item-info">
           <div class="item-title-row">${esc(displayName)}${discrepancyWarning}${matchWarnHtml}${editBtn}</div>
+          ${altHintHTML(item)}
         </div>
       </div>`;
 
@@ -6085,16 +6116,18 @@ async function boot() {
     renderPage(data);
     showNameChangesNotice();
 
-    // ⚙ /kg button (web): cycles all → only per-kg groups → hide per-kg groups.
+    // $/kg pill (web): cycles all → only per-kg groups → hide per-kg groups.
+    // Only the label span is swapped so the scales icon survives the cycle.
     const perkgBtn = $('perkgDevBtn');
     if (perkgBtn) {
       const PERKG_CYCLE = { all: 'only', only: 'hidden', hidden: 'all' };
-      const PERKG_LABEL = { all: '⚙ /kg', only: '⚙ /kg ✓', hidden: '⚙ /kg ✕' };
+      const PERKG_LABEL = { all: '$/kg', only: '$/kg only', hidden: '$/kg hidden' };
       perkgBtn.addEventListener('click', () => {
         _perkgFilter = PERKG_CYCLE[_perkgFilter];
         perkgBtn.classList.toggle('on', _perkgFilter === 'only');
         perkgBtn.classList.toggle('off', _perkgFilter === 'hidden');
-        perkgBtn.textContent = PERKG_LABEL[_perkgFilter];
+        const lbl = perkgBtn.querySelector('.perkg-lbl');
+        if (lbl) lbl.textContent = PERKG_LABEL[_perkgFilter];
         perkgBtn.title = { all: 'Showing everything — click to isolate per-kg groups',
                            only: 'Only per-kg groups — click to hide them',
                            hidden: 'Per-kg groups hidden — click to show everything' }[_perkgFilter];
