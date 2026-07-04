@@ -212,16 +212,8 @@ function saveRejected(obj) {
 }
 async function persistRejectedToRepo(s, rejected) {
   if (!s?.user || !s?.repo || !s?.token) return;
-  const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/rejected_urls.json`;
-  const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
-
   // Merge with repo copy so entries from other sessions are preserved.
-  const getRes = await fetch(apiPath, { headers });
-  const getJson = getRes.ok ? await getRes.json() : {};
-  let existing = {};
-  if (getJson.content) {
-    try { existing = JSON.parse(atob(getJson.content.replace(/\n/g, ''))); } catch {}
-  }
+  const existing = await githubGetJson(s, 'docs/data/rejected_urls.json');
   const merged = { ...existing };
   for (const [item, stores] of Object.entries(rejected)) {
     merged[item] = merged[item] || {};
@@ -230,20 +222,7 @@ async function persistRejectedToRepo(s, rejected) {
       if (urls.size) merged[item][store] = [...urls];
     }
   }
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(merged, null, 2) + '\n')));
-  const doPut = async () => {
-    const shaRes = await fetch(apiPath, { headers });
-    const shaJson = shaRes.ok ? await shaRes.json() : {};
-    const body = { message: 'chore: sync rejected product URLs', content };
-    if (shaJson.sha) body.sha = shaJson.sha;
-    return fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
-  };
-  let putRes = await doPut();
-  if (putRes.status === 409) putRes = await doPut();
-  if (!putRes.ok) {
-    const msg = await putRes.text().catch(() => String(putRes.status));
-    throw new Error(`GitHub PUT failed (${putRes.status}): ${msg}`);
-  }
+  await githubPutJson(s, 'docs/data/rejected_urls.json', merged, 'chore: sync rejected product URLs');
 }
 
 // ── Image overrides ───────────────────────────────────────────────────────────
@@ -260,25 +239,7 @@ let _archivedSaving = false;
 
 async function persistArchivedToRepo(s, archivedNames, message = 'chore: sync archived items list') {
   if (!s?.user || !s?.repo || !s?.token) return;
-  const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/archived_items.json`;
-  const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
-  const content = btoa(JSON.stringify(archivedNames, null, 2) + '\n');
-
-  // Always re-fetch SHA immediately before PUT; retry once on 409 (stale SHA from concurrent call)
-  const doPut = async () => {
-    const getRes = await fetch(apiPath, { headers });
-    const shaJson = getRes.ok ? await getRes.json() : {};
-    const putBody = { message, content };
-    if (shaJson.sha) putBody.sha = shaJson.sha;
-    return fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(putBody) });
-  };
-
-  let putRes = await doPut();
-  if (putRes.status === 409) putRes = await doPut(); // retry with fresh SHA
-  if (!putRes.ok) {
-    const msg = await putRes.text().catch(() => String(putRes.status));
-    throw new Error(`GitHub PUT failed (${putRes.status}): ${msg}`);
-  }
+  await githubPutJson(s, 'docs/data/archived_items.json', archivedNames, message);
 }
 
 // ── Watchlist persistence ─────────────────────────────────────────────────────
@@ -292,21 +253,10 @@ function saveWatchlistLocal(set) {
 async function persistWatchlistToRepo(names) {
   const s = loadSettings();
   if (!s.token) return;
-  const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/watchlist.json`;
-  const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
-  const content = btoa(JSON.stringify(names, null, 2) + '\n');
-  const doPut = async () => {
-    const getRes = await fetch(apiPath, { headers });
-    const meta = getRes.ok ? await getRes.json() : {};
-    const body = { message: 'chore: sync watchlist', content };
-    if (meta.sha) body.sha = meta.sha;
-    return fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
-  };
-  let putRes = await doPut();
-  if (putRes.status === 409) putRes = await doPut();
-  if (!putRes.ok) {
-    const msg = await putRes.text().catch(() => String(putRes.status));
-    showSyncError('watchlist', new Error(`HTTP ${putRes.status}: ${msg}`));
+  try {
+    await githubPutJson(s, 'docs/data/watchlist.json', names, 'chore: sync watchlist');
+  } catch (e) {
+    showSyncError('watchlist', e);
   }
 }
 async function initWatchlist() {
@@ -350,21 +300,10 @@ async function persistUserSettingsToRepo() {
   const s = loadSettings();
   if (!s.token) return;
   const payload = { priorities: loadPriorities(), units: loadUnitOverrides(), perkg: [..._perkgSet] };
-  const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/user_settings.json`;
-  const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2) + '\n')));
-  const doPut = async () => {
-    const getRes = await fetch(apiPath, { headers });
-    const meta = getRes.ok ? await getRes.json() : {};
-    const body = { message: 'chore: sync user settings (priorities + quantities)', content };
-    if (meta.sha) body.sha = meta.sha;
-    return fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
-  };
-  let putRes = await doPut();
-  if (putRes.status === 409) putRes = await doPut();
-  if (!putRes.ok) {
-    const msg = await putRes.text().catch(() => String(putRes.status));
-    showSyncError('priorities & quantities', new Error(`HTTP ${putRes.status}: ${msg}`));
+  try {
+    await githubPutJson(s, 'docs/data/user_settings.json', payload, 'chore: sync user settings (priorities + quantities)');
+  } catch (e) {
+    showSyncError('priorities & quantities', e);
   }
 }
 async function initUserSettings() {
@@ -401,40 +340,15 @@ async function persistLatestJson(data, message = 'chore: update latest.json') {
       !confirm('A scrape is running right now — the scraper may overwrite this change when it finishes.\n\nSave anyway?')) {
     throw new Error('Save cancelled — scrape in progress');
   }
-  const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/latest.json`;
-  const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2) + '\n')));
-  const doPut = async () => {
-    const getRes = await fetch(apiPath, { headers });
-    const meta = getRes.ok ? await getRes.json() : {};
-    const body = { message, content };
-    if (meta.sha) body.sha = meta.sha;
-    return fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
-  };
-  let putRes = await doPut();
-  if (putRes.status === 409) putRes = await doPut();
-  if (!putRes.ok) {
-    const err = await putRes.json().catch(() => ({}));
-    throw new Error(err.message || `HTTP ${putRes.status}`);
-  }
+  await githubPutJson(s, 'docs/data/latest.json', data, message);
 }
 
 async function persistUrlOverridesToRepo(s, overrides) {
   if (!s?.user || !s?.repo || !s?.token) return;
-  const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/url_overrides.json`;
-  const headers = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
-
-  // Fetch the current file so we can merge rather than overwrite.
-  // Entries already in the repo but not in localStorage (e.g. manually added by Claude)
-  // are preserved; localStorage entries take priority on conflict.
-  const getRes = await fetch(apiPath, { headers });
-  const getJson = getRes.ok ? await getRes.json() : {};
-  let existing = {};
-  if (getJson.content) {
-    try { existing = JSON.parse(atob(getJson.content.replace(/\n/g, ''))); } catch {}
-  }
-
-  // Merge: start with repo copy, then overlay localStorage entries
+  // Merge rather than overwrite: entries already in the repo but not in
+  // localStorage (e.g. manually added by Claude) are preserved; localStorage
+  // entries take priority on conflict.
+  const existing = await githubGetJson(s, 'docs/data/url_overrides.json');
   const merged = { ...existing };
   for (const [item, ov] of Object.entries(overrides)) {
     if (ov.wwUrl || ov.colesUrl) {
@@ -443,25 +357,7 @@ async function persistUrlOverridesToRepo(s, overrides) {
       if (ov.colesUrl) merged[item].coles_url = ov.colesUrl;
     }
   }
-
-  const content = JSON.stringify(merged, null, 2) + '\n';
-  const encoded = btoa(unescape(encodeURIComponent(content)));
-
-  // PUT with retry on 409 (stale SHA)
-  const doPut = async () => {
-    const shaRes = await fetch(apiPath, { headers });
-    const shaJson = shaRes.ok ? await shaRes.json() : {};
-    const putBody = { message: 'Update URL overrides', content: encoded };
-    if (shaJson.sha) putBody.sha = shaJson.sha;
-    return fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(putBody) });
-  };
-
-  let putRes = await doPut();
-  if (putRes.status === 409) putRes = await doPut();
-  if (!putRes.ok) {
-    const msg = await putRes.text().catch(() => String(putRes.status));
-    throw new Error(`GitHub PUT failed (${putRes.status}): ${msg}`);
-  }
+  await githubPutJson(s, 'docs/data/url_overrides.json', merged, 'Update URL overrides');
 }
 
 // ── Exclusions (price range manager) ────────────────────────────────────────
@@ -2490,7 +2386,10 @@ function addPerKgToBasket(name) {
       el.textContent = selected ? '✓' : '＋';
     });
   document.querySelectorAll(`.vg-mobile-card[data-cheapest="${CSS.escape(name)}"]`)
-    .forEach(c => c.classList.toggle('mc-selected', selected));
+    .forEach(c => {
+      c.classList.toggle('mc-selected', selected);
+      c.setAttribute('aria-pressed', String(selected));
+    });
   _updateSelectedPill();
 }
 
@@ -3999,6 +3898,11 @@ function appendGroupCardMobile(container, group, overrides) {
   card.className = `mobile-card vg-mobile-card${borderCls}${inBasket ? ' mc-selected' : ''}${isExpanded ? ' vg-mobile-open' : ''}`;
   card.dataset.group = group._groupKey;
   if (cheapestVar) card.dataset.cheapest = cheapestVar.name;
+  // Same keyboard/screen-reader contract as normal cards (see renderMobileCards).
+  card.tabIndex = 0;
+  card.setAttribute('role', 'button');
+  card.setAttribute('aria-pressed', String(inBasket));
+  card.setAttribute('aria-label', group._groupLabel);
 
   let html = `
     <div class="mc-top">
@@ -4436,6 +4340,13 @@ function renderMobileCards(items, data) {
     const compact = _mcView === 'compact';
     card.className = `mobile-card${borderCls}${isSelected ? ' mc-selected' : ''}${compact ? ' mobile-card-compact' : ''}`;
     card.dataset.item = item.list_item;
+    // Keyboard/screen-reader access: the card is a tap-to-select toggle, so it
+    // must be reachable by Tab and announce its pressed state. Enter/Space is
+    // handled by one delegated keydown on #mobileCards.
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-pressed', String(isSelected));
+    card.setAttribute('aria-label', displayName);
 
     const watchBtn = isWatchedMC
       ? `<button class="mc-watch-btn active" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Remove from watchlist">👁</button>`
@@ -4508,6 +4419,7 @@ function renderMobileCards(items, data) {
         if (_selectedItems.has(name)) _selectedItems.delete(name);
         else _selectedItems.add(name);
         card.classList.toggle('mc-selected', _selectedItems.has(name));
+        card.setAttribute('aria-pressed', String(_selectedItems.has(name)));
         _updateSelectedPill();
         return;
       }
@@ -6293,6 +6205,16 @@ async function boot() {
       if (e.target.closest('.vgm-body')) return;
       const vgCard = e.target.closest('.vg-mobile-card');
       if (vgCard && vgCard.dataset.cheapest) addPerKgToBasket(vgCard.dataset.cheapest);
+    });
+    // Keyboard: cards are focusable role=button divs — Enter/Space triggers the
+    // same gesture as a tap. Only fires when the card ITSELF has focus; inner
+    // real <button>/<a> elements handle their own keys natively.
+    mobileCardsEl.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const card = e.target.closest('.mobile-card');
+      if (!card || e.target !== card) return;
+      e.preventDefault(); // Space must not scroll the page
+      card.click();
     });
   }
 

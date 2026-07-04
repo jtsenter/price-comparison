@@ -210,6 +210,44 @@ function isHotDeal(item, exclusions) {
   return getDealQuality(item, exclusions).qualifies;
 }
 
+// ── GitHub Contents-API JSON read/write ─────────────────────────────────────
+// Single reader/writer for every synced data file (was 7 near-identical copies
+// across app.js and hot-deals.html). githubPutJson GETs the fresh blob sha
+// immediately before the PUT and retries once on 409 (stale sha from a
+// concurrent writer). Base64 is unicode-safe both ways — plain btoa() throws on
+// non-Latin-1 product names, and plain atob() mangles them on read. Throws on
+// failure so each caller keeps its own reporting (alert / showSyncError /
+// fire-and-forget). validate.html keeps its own githubPut: it threads a known
+// sha end-to-end for its stale-read race fix, different semantics.
+function _ghHeaders(s) {
+  return { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
+}
+async function githubGetJson(s, repoPath) {
+  const res = await fetch(`https://api.github.com/repos/${s.user}/${s.repo}/contents/${repoPath}`, { headers: _ghHeaders(s) });
+  if (!res.ok) return {};
+  const meta = await res.json();
+  if (!meta.content) return {};
+  try { return JSON.parse(decodeURIComponent(escape(atob(meta.content.replace(/\n/g, ''))))); } catch { return {}; }
+}
+async function githubPutJson(s, repoPath, data, message) {
+  const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/${repoPath}`;
+  const headers = _ghHeaders(s);
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2) + '\n')));
+  const doPut = async () => {
+    const getRes = await fetch(apiPath, { headers });
+    const meta = getRes.ok ? await getRes.json() : {};
+    const body = { message, content };
+    if (meta.sha) body.sha = meta.sha;
+    return fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
+  };
+  let putRes = await doPut();
+  if (putRes.status === 409) putRes = await doPut();
+  if (!putRes.ok) {
+    const msg = await putRes.text().catch(() => String(putRes.status));
+    throw new Error(`GitHub PUT failed (${putRes.status}): ${msg}`);
+  }
+}
+
 // ── Category normalisation ──────────────────────────────────────────────────
 // SINGLE map for every page (index, hot-deals, shopping-list). Covers the old
 // scraper names AND the 2026-07 category consolidation (13 → 10: Bakery folded

@@ -38,6 +38,7 @@ jobs:
         run: |
           node scripts/utils_selfcheck.js
           node scripts/perkg_selfcheck.js
+          node scripts/github_put_selfcheck.js
 
       - name: Python self-checks
         working-directory: scripts

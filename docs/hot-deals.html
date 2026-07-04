@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=75" />
+  <link rel="stylesheet" href="style.css?v=76" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -430,7 +430,7 @@
 
 <!-- Shared utilities — must load before inline script -->
 <script src="name_map.js?v=13"></script>
-<script src="utils.js?v=56"></script>
+<script src="utils.js?v=57"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -1194,25 +1194,9 @@ function toggleWatchlistHD(itemName) {
   const repo = localStorage.getItem('gh_repo') || '';
   const token = localStorage.getItem('gh_token') || '';
   if (user && repo && token) {
-    const names = [..._watchlistHD];
-    const apiPath = `https://api.github.com/repos/${user}/${repo}/contents/docs/data/watchlist.json`;
-    const headers = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
-    const content = btoa(JSON.stringify(names, null, 2) + '\n');
-    (async () => {
-      try {
-        const getRes = await fetch(apiPath, { headers });
-        const meta = getRes.ok ? await getRes.json() : {};
-        const body = { message: 'chore: sync watchlist', content };
-        if (meta.sha) body.sha = meta.sha;
-        let putRes = await fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
-        if (putRes.status === 409) {
-          const getRes2 = await fetch(apiPath, { headers });
-          const meta2 = getRes2.ok ? await getRes2.json() : {};
-          if (meta2.sha) body.sha = meta2.sha;
-          await fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
-        }
-      } catch {}
-    })();
+    // githubPutJson comes from utils.js (loaded above); errors stay swallowed —
+    // the watchlist is already saved locally and re-syncs on the next toggle.
+    githubPutJson({ user, repo, token }, 'docs/data/watchlist.json', [..._watchlistHD], 'chore: sync watchlist').catch(() => {});
   }
   renderDeals();
 }
