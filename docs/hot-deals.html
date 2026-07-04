@@ -72,6 +72,13 @@
       border-bottom: 1px solid var(--border);
       flex-wrap: wrap;
     }
+    /* Desktop: category tabs + store filter stick under the header (JS sets `top`),
+       forming one opaque block with the header and thead — no scroll seam, and the
+       filters stay reachable down a long list. Mobile keeps them in normal flow. */
+    @media (min-width: 701px) {
+      #categoryTabs   { position: sticky; z-index: 60; }
+      .deals-filter-bar { position: sticky; z-index: 59; }
+    }
     .deals-filter-label {
       font-size: 12px;
       color: var(--text-soft);
@@ -415,7 +422,7 @@
 
 <!-- Shared utilities — must load before inline script -->
 <script src="name_map.js?v=13"></script>
-<script src="utils.js?v=55"></script>
+<script src="utils.js?v=56"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -464,12 +471,25 @@ const fmtUnit = (price, unit) => {
 
 // clientPer100(), CATEGORY_REMAP and normalizeCategory() come from utils.js (loaded above).
 
-// ── Dynamic sticky header offset ─────────────────────────────────────────────
-// Calculates actual nav height and applies it to thead th sticky offset.
+// ── Dynamic sticky offsets (desktop sub-header stack) ────────────────────────
+// On desktop the category tabs + store-filter bar are sticky, stacked directly
+// under the main header, with the table head sticking below THEM. This keeps the
+// filters visible while scrolling a long deals list, and — because header, tabs,
+// filter and thead form one contiguous opaque stack — removes the transient seam
+// where a row could flash in the gap as the thead settled. Heights are measured
+// live (tabs wrap differently at each width) and re-applied on resize + re-render.
+// Mobile keeps everything scrolling away (space is tight) with the thead at navH.
 function fixStickyOffset() {
   const navH = document.querySelector('header')?.offsetHeight || 60;
+  const desktop = window.innerWidth > 700;
+  const tabs = document.getElementById('categoryTabs');
+  const filter = document.querySelector('.deals-filter-bar');
+  let top = navH;
+  if (desktop && tabs) { tabs.style.top = top + 'px'; top += tabs.offsetHeight; }
+  if (desktop && filter) { filter.style.top = top + 'px'; top += filter.offsetHeight; }
+  const theadTop = desktop ? top : navH;
   document.querySelectorAll('.deals-table thead th').forEach(th => {
-    th.style.top = navH + 'px';
+    th.style.top = theadTop + 'px';
   });
 }
 window.addEventListener('load', fixStickyOffset);
@@ -1023,18 +1043,23 @@ function renderDeals() {
     const isWatchedHD = _watchlistHD.has(item.list_item);
     const watchBtnHD = `<button class="item-watch-btn${isWatchedHD ? ' active' : ''}" data-item="${safeNameHD}" title="${isWatchedHD ? 'Remove from watchlist' : 'Add to watchlist'}">👁</button>`;
     const _hdCellMap = {
-      name:     `<td class="item-name"><div class="deal-item-cell">${imgHtml}<div><div class="deal-item-name">${displayName}${discWarn}</div></div></div></td>`,
+      name:     `<td class="item-name"><div class="deal-item-cell">${imgHtml}<div><div class="deal-item-name">${esc(displayName)}${discWarn}</div></div></div></td>`,
       deal:     `<td>${dealCell}</td>`,
       store:    `<td style="text-align:center">${storeChip}</td>`,
       save:     `<td>${saveCell}</td>`,
       ww:       `<td class="${wwClass}">${wwHtml}</td>`,
       coles:    `<td class="${coClass}">${coHtml}</td>`,
-      category: `<td style="font-size:12px;color:var(--text-mid)">${cat}</td>`,
+      category: `<td style="font-size:12px;color:var(--text-mid)">${esc(cat)}</td>`,
       avg:      `<td class="trend-cell">${avgCell}</td>`,
       watch:    `<td style="text-align:center">${watchBtnHD}</td>`,
     };
     tbody.insertAdjacentHTML('beforeend', `<tr>${getVisibleHdCols().map(c => _hdCellMap[c] || '').join('')}</tr>`);
   });
+
+  // Recompute the sticky sub-header stack now that the category tabs are populated
+  // (their height feeds the thead's top offset). Synchronous here = tabs already
+  // laid out, so heights are final — unlike an rAF that can fire mid-layout.
+  fixStickyOffset();
 
   updateValidateNavBadge(_data?.pending_validation?.length ?? 0);
 }
@@ -1083,7 +1108,7 @@ function renderDealsMobile(sorted, exclusions, overrides) {
     card.innerHTML = `
       <div class="dm-top">
         ${imgHtml}
-        <div class="dm-info"><div class="dm-name">${name}</div><div class="dm-cat">${cat}</div></div>
+        <div class="dm-info"><div class="dm-name">${esc(name)}</div><div class="dm-cat">${esc(cat)}</div></div>
         ${badge}
       </div>
       <div class="dm-mid">

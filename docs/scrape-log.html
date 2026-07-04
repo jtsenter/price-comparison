@@ -121,10 +121,22 @@
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" class="sl-chronic-cols" id="slChronicCols"></div>
   </div>
 
+  <div class="sl-info-card" id="slWishlistCard" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <h2>Searches with no results</h2>
+      <button class="btn btn-ghost" id="slWishlistClear" style="font-size:12px">Clear</button>
+    </div>
+    <p style="font-size:12px;color:var(--text-mid);margin:0 0 10px">
+      Things you searched for that aren't in your list yet — candidates to add to
+      <code>shopping_list.xlsx</code>. Recorded on this device only.
+    </p>
+    <ul class="sl-miss-list" id="slWishlist" style="max-height:none"></ul>
+  </div>
+
   <div id="slRuns" class="sl-runs"></div>
 </main>
 
-<script src="utils.js?v=55"></script>
+<script src="utils.js?v=56"></script>
 <script>
 function $(id) { return document.getElementById(id); }
 
@@ -292,6 +304,7 @@ async function load() {
   `;
 
   renderChronicMisses(log);
+  renderWishlist();
 
   if (!log.length) {
     runsEl.innerHTML = '<div class="sl-empty-state">No scrape runs logged yet.</div>';
@@ -307,6 +320,23 @@ async function load() {
   runsEl.firstElementChild?.classList.add('open');
 }
 
+// "Searches with no results" — written to localStorage by app.js's maybeLogNoResults.
+function renderWishlist() {
+  const card = $('slWishlistCard');
+  let log = {};
+  try { log = JSON.parse(localStorage.getItem('pw_search_misses_v1') || '{}'); } catch {}
+  const rows = Object.values(log).sort((a, b) => b.count - a.count || (b.last || '').localeCompare(a.last || ''));
+  if (!rows.length) { card.style.display = 'none'; return; }
+  $('slWishlist').innerHTML = rows.map(e =>
+    `<li><span>${escapeHtml(e.sample)}</span><span class="sl-miss-reason unknown" title="Searched ${e.count} time(s); last ${e.last || '—'}">×${e.count}</span></li>`
+  ).join('');
+  card.style.display = '';
+}
+
+$('slWishlistClear').addEventListener('click', () => {
+  try { localStorage.removeItem('pw_search_misses_v1'); } catch {}
+  renderWishlist();
+});
 $('slRefreshBtn').addEventListener('click', load);
 load();
 </script>

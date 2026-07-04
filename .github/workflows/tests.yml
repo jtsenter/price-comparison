@@ -1,0 +1,49 @@
+name: Tests
+
+# Runs the repo's self-checks on every push/PR. These files already existed but
+# nothing executed them — a broken edit could land silently. GitHub-hosted
+# ubuntu-latest (free, always-on) is used, NOT the self-hosted scraper runner.
+on:
+  push:
+    paths:
+      - 'docs/app.js'
+      - 'docs/utils.js'
+      - 'scripts/**'
+      - 'requirements.txt'
+      - '.github/workflows/tests.yml'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  selfchecks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      # Only the Playwright pip PACKAGE is needed for `import scraper` — the
+      # browsers (the slow part) are not, since no self-check launches one.
+      - name: Install Python deps
+        run: pip install -r requirements.txt
+
+      - name: JS self-checks
+        run: |
+          node scripts/utils_selfcheck.js
+          node scripts/perkg_selfcheck.js
+
+      - name: Python self-checks
+        working-directory: scripts
+        run: |
+          python retry_selfcheck.py
+          python scrape_log_selfcheck.py
+          python coles_price_ceiling_selfcheck.py
+          python matcher_selfcheck.py
+          python categories_selfcheck.py

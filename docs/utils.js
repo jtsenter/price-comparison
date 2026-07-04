@@ -3,6 +3,23 @@
 // Both app.js (index.html) and hot-deals.html load this file before their own code
 // Do NOT redefine these functions elsewhere or divergence will occur
 
+// ── HTML escape ─────────────────────────────────────────────────────────────
+// Escape a value for safe interpolation into an innerHTML template. Store-scraped
+// product names and user-typed strings (search, renames) are untrusted: a name
+// containing "<" or "&" both breaks rendering AND is an XSS vector (the GitHub
+// token in localStorage is the prize). Use esc() for TEXT content and escAttr()
+// inside a double-quoted attribute (escAttr also neutralises the quote). Numbers
+// from fmt()/toFixed() and hardcoded markup never need escaping.
+function esc(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ch]));
+}
+function escAttr(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, ch =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+
 // ── Per-100g / per-100ml price ─────────────────────────────────────────────
 // Compute per-100g or per-100ml price from a product result object.
 // Prioritises size extracted from the product name (reliable for pack goods)

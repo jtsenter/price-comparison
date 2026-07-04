@@ -2288,6 +2288,41 @@ async function doDiffItemAdd(newName, ctx) {
   }
 }
 
+// Search matching: token-AND. Every whitespace-separated term must appear somewhere
+// in the name, so word order and multi-term queries work ("milk full cream" matches
+// "Woolworths Full Cream Milk"). Previously a single contiguous-substring test.
+function searchTerms(q) { return (q || '').toLowerCase().split(/\s+/).filter(Boolean); }
+function nameMatchesSearch(name, terms) {
+  const n = (name || '').toLowerCase();
+  return terms.every(t => n.includes(t));
+}
+
+// Record searches that match NOTHING in the current list — the cheapest useful
+// analytics: each one is a candidate to add to shopping_list.xlsx. Kept in
+// localStorage (no backend); the Scrape Log page surfaces them. Debounced by the
+// caller so mid-typing prefixes aren't logged.
+function maybeLogNoResults(q) {
+  q = (q || '').trim();
+  if (q.length < 3 || !_lastData?.items) return;
+  const terms = searchTerms(q);
+  const ovr = loadOverrides();
+  const anyMatch = _lastData.items.some(i =>
+    !i.archived && nameMatchesSearch(ovr[i.list_item]?.displayName || i.list_item, terms));
+  if (anyMatch) return;
+  try {
+    const key = 'pw_search_misses_v1';
+    const log = JSON.parse(localStorage.getItem(key) || '{}');
+    const nq = q.toLowerCase();
+    const e = log[nq] || { count: 0 };
+    e.count += 1;
+    e.last = new Date().toISOString().slice(0, 10);
+    e.sample = q;
+    log[nq] = e;
+    localStorage.setItem(key, JSON.stringify(log));
+  } catch {}
+}
+
+let _searchLogTimer = null;
 function initSearch() {
   const input = $('searchInput');
   const clear = $('searchClear');
@@ -2297,6 +2332,8 @@ function initSearch() {
     _searchQuery = input.value.trim();
     if (clear) clear.style.display = _searchQuery ? 'block' : 'none';
     if (_lastData) renderPage(_lastData);
+    clearTimeout(_searchLogTimer);
+    _searchLogTimer = setTimeout(() => maybeLogNoResults(_searchQuery), 1000);
   });
   if (clear) {
     clear.addEventListener('click', () => {
@@ -3277,12 +3314,10 @@ function sortItems(items) {
 
   // Search query filter
   if (_searchQuery) {
-    const q = _searchQuery.toLowerCase();
+    const terms = searchTerms(_searchQuery);
     const ovr = loadOverrides();
-    filtered = filtered.filter(i => {
-      const name = (ovr[i.list_item]?.displayName || i.list_item).toLowerCase();
-      return name.includes(q);
-    });
+    filtered = filtered.filter(i =>
+      nameMatchesSearch(ovr[i.list_item]?.displayName || i.list_item, terms));
   }
 
   function getSortVal(col, item) {
@@ -3467,8 +3502,8 @@ function renderCards(items) {
       <div class="card-top">
         <div class="card-img-wrap">${imgHtml}</div>
         <div class="card-info">
-          <div class="card-name">${displayName}${warnHtml}</div>
-          <div class="card-cat">${cat}</div>
+          <div class="card-name">${esc(displayName)}${warnHtml}</div>
+          <div class="card-cat">${esc(cat)}</div>
         </div>
         <div class="card-right">
           <input type="checkbox" class="row-check card-check" data-item="${safeKey}"${isChecked?' checked':''}>
@@ -3751,8 +3786,8 @@ function groupStoreVariantsHTML(group, store, overrides) {
       ? `<img class="vg-pv-img img-hoverable" src="${ownImg}" alt="" loading="lazy" data-item="${safeKey}" data-ww-img="${wwImg}" data-co-img="${coImg}" />`
       : '<span class="vg-pv-img vg-pv-noimg"></span>';
     const nameHtml = url
-      ? `<a class="vg-pv-name" href="${url}" target="_blank" rel="noopener">${name}</a>`
-      : `<span class="vg-pv-name">${name}</span>`;
+      ? `<a class="vg-pv-name" href="${escAttr(url)}" target="_blank" rel="noopener">${esc(name)}</a>`
+      : `<span class="vg-pv-name">${esc(name)}</span>`;
     const isWin = v.pk === cheapestPk;
     const inBasket = _selectedItems.has(v.name);
     return `<div class="vg-pv${isWin ? ' win' : ''}">
@@ -3802,7 +3837,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
       <div class="item-info">
         <span class="vg-group-title">
           <span class="vg-chevron">${chev}</span>
-          <span class="vg-group-label">${group._groupLabel}</span>
+          <span class="vg-group-label">${esc(group._groupLabel)}</span>
           <button class="item-edit-btn" data-edit-item="${group.list_item}" title="Edit category">✎</button>
         </span>
         <span class="vg-group-sub">${groupSubLabel(group)}</span>
@@ -3900,7 +3935,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
   const panel = `<tr class="vg-panel-row" data-group="${group._groupKey}"><td colspan="${colSpan}">
     <div class="vg-panel">
       <div class="vg-panel-head">
-        <span class="vg-panel-title">${group._groupLabel}</span>
+        <span class="vg-panel-title">${esc(group._groupLabel)}</span>
         ${winnerTag}
       </div>
       <div class="vg-panel-cols">
@@ -3962,7 +3997,7 @@ function appendGroupCardMobile(container, group, overrides) {
       ${imgHtml}
       <div class="mc-name-wrap">
         <div class="mc-name-row">
-          <div class="mc-name">${group._groupLabel}</div>
+          <div class="mc-name">${esc(group._groupLabel)}</div>
           <span class="mc-icons">
             ${bar ? `<button class="mc-hist-btn" data-manage-item="__group_${group._groupKey}" title="Price history" aria-label="View price history">${HIST_CLOCK_SVG}</button>` : ''}
             <span class="vgm-perkg-badge">$/kg</span>
@@ -4069,7 +4104,7 @@ function openCategoryEditModal(groupKey) {
         <span class="cat-item-handle">⠿</span>
         <input type="checkbox" class="cat-incl"${incl ? ' checked' : ''} title="Include in cheapest $/kg" />
         <div class="cat-prod-main">
-          <input type="text" class="cat-name" value="${name}" placeholder="${label} product name" />
+          <input type="text" class="cat-name" value="${escAttr(name)}" placeholder="${escAttr(label)} product name" />
           <input type="text" class="cat-url" value="${url}" placeholder="${label} product URL" />
         </div>
         <button class="cat-prod-remove" title="Remove from this store">✕</button>
@@ -4407,7 +4442,7 @@ function renderMobileCards(items, data) {
         ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : '';
       card.innerHTML = `
         ${hotDeal ? '<span class="mc-hot" title="Hot Deal — meaningfully cheaper than its usual price right now">🔥</span>' : ''}
-        <span class="mcc-name">${ov.displayName || shortName(item.list_item)}</span>
+        <span class="mcc-name">${esc(ov.displayName || shortName(item.list_item))}</span>
         <span class="mcc-price"><span class="store-chip sm ww">W</span><span class="${wwCheaper ? 'mcc-bold' : ''}">${ww ? fmt(ww.price) : '—'}</span></span>
         <span class="mcc-price"><span class="store-chip sm coles">C</span><span class="${coCheaper ? 'mcc-bold' : ''}">${co ? fmt(co.price) : '—'}</span></span>
         ${unarch ? `<span class="mc-icons">${unarch}</span>` : ''}`;
@@ -4417,7 +4452,7 @@ function renderMobileCards(items, data) {
         ${imgHtml}
         <div class="mc-name-wrap">
           <div class="mc-name-row">
-            <div class="mc-name">${displayName}</div>
+            <div class="mc-name">${esc(displayName)}</div>
             <span class="mc-icons">
               ${hotDeal ? '<span class="mc-hot" title="Hot Deal — meaningfully cheaper than its usual price right now">🔥</span>' : ''}
               ${barHtml ? `<button class="mc-hist-btn" data-manage-item="${item.list_item.replace(/"/g,'&quot;')}" title="Price history" aria-label="View price history">${HIST_CLOCK_SVG}</button>` : ''}
@@ -4855,7 +4890,7 @@ function _renderPageInner(data) {
       <div class="item-row">
         ${imgHtml}
         <div class="item-info">
-          <div class="item-title-row">${displayName}${discrepancyWarning}${matchWarnHtml}${editBtn}</div>
+          <div class="item-title-row">${esc(displayName)}${discrepancyWarning}${matchWarnHtml}${editBtn}</div>
         </div>
       </div>`;
 
@@ -5078,7 +5113,7 @@ async function showNameChangesNotice() {
 
   notifBadge.textContent = keys.length;
   notifBtn.style.display = 'inline-flex';
-  notifItems.innerHTML = keys.map(k => `<span class="notif-item">${k}</span>`).join('');
+  notifItems.innerHTML = keys.map(k => `<span class="notif-item">${esc(k)}</span>`).join('');
 
   notifBtn.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -5668,7 +5703,7 @@ function exportShoppingList(useChecked) {
   if (_selectedItems.size > 0 || (useChecked && _checkedItems && _checkedItems.size > 0)) {
     note = 'selected items';
   } else if (_searchQuery && _searchQuery.trim().length > 0) {
-    note = `items matching "${_searchQuery.trim()}"`;
+    note = `items matching "${esc(_searchQuery.trim())}"`;
   } else {
     const pLabel = _activePriority === 'all' ? 'all' : `all ${_activePriority}`;
     const catSuffix = _activeCategory !== 'All' ? ` · ${_activeCategory}` : '';
