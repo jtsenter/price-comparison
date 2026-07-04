@@ -363,19 +363,26 @@ function showGlobalError(msg) {
 
 // ── GitHub API write ──────────────────────────────────────────────────────────
 
-async function githubPut(s, path, content, commitMsg) {
+async function githubPut(s, path, content, commitMsg, knownSha) {
   const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/${path}`;
   const headers = {
     Authorization: `Bearer ${s.token}`,
     Accept: 'application/vnd.github+json',
     'Content-Type': 'application/json',
   };
-  // Always re-fetch SHA fresh — never use a cached value
-  const getRes = await fetch(apiPath, { headers });
-  const existing = getRes.ok ? await getRes.json() : {};
+  // Prefer the SHA of the exact revision we patched (passed by loadLatest). Writing
+  // against that SHA makes read-modify-write atomic: if the repo changed underneath
+  // us (e.g. a scrape landed between read and write) the PUT 409s instead of silently
+  // clobbering it. Only fall back to a fresh GET when no SHA was threaded through.
+  let sha = knownSha;
+  if (!sha) {
+    const getRes = await fetch(apiPath, { headers, cache: 'no-store' });
+    const existing = getRes.ok ? await getRes.json() : {};
+    sha = existing.sha;
+  }
   const encoded = btoa(unescape(encodeURIComponent(content)));
   const body = { message: commitMsg, content: encoded };
-  if (existing.sha) body.sha = existing.sha;
+  if (sha) body.sha = sha;
   const putRes = await fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
   if (!putRes.ok) {
     const err = await putRes.json().catch(() => ({}));
@@ -387,9 +394,34 @@ async function githubPut(s, path, content, commitMsg) {
 // ── Data ──────────────────────────────────────────────────────────────────────
 
 let _latestData = null;
+let _latestSha = null;  // blob SHA of the revision loadLatest() last returned (API reads only)
 
+// Read latest.json. When GitHub settings exist, read from the Contents API — it
+// reflects the repo the instant a commit lands. The GitHub Pages copy (the relative
+// `data/latest.json` path) lags the repo by the Pages deploy (1–5 min), which made
+// approved items reappear after navigation and let sequential approvals resurrect
+// one another (each edit was based on a pre-deploy snapshot). The returned blob SHA
+// is stashed in _latestSha so the follow-up PUT writes against this exact revision.
 async function loadLatest() {
-  const res = await fetch(`data/latest.json?t=${Date.now()}`);
+  const s = loadSettings();
+  if (s.token && s.user && s.repo) {
+    try {
+      const apiPath = `https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/latest.json`;
+      const res = await fetch(apiPath, {
+        headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' },
+        cache: 'no-store',
+      });
+      if (res.ok) {
+        const j = await res.json();
+        // Inverse of githubPut's btoa(unescape(encodeURIComponent(...))) UTF-8 encode.
+        const text = decodeURIComponent(escape(atob((j.content || '').replace(/\s/g, ''))));
+        _latestSha = j.sha || null;
+        return JSON.parse(text);
+      }
+    } catch (_) { /* fall through to the Pages copy below */ }
+  }
+  _latestSha = null;
+  const res = await fetch(`data/latest.json?t=${Date.now()}`, { cache: 'no-store' });
   if (!res.ok) throw new Error('Could not load latest.json');
   return res.json();
 }
@@ -508,7 +540,7 @@ async function handleAction(entry, store, action, cardEl) {
 
     const content = JSON.stringify(updated, null, 2) + '\n';
     await githubPut(s, 'docs/data/latest.json', content,
-      `validate: ${entry.item} — ww:${dec.ww ?? 'n/a'} coles:${dec.coles ?? 'n/a'}`);
+      `validate: ${entry.item} — ww:${dec.ww ?? 'n/a'} coles:${dec.coles ?? 'n/a'}`, _latestSha);
 
     _latestData = updated;
     updateCardStatus(cardEl, '✅ Saved', 'resolved');
@@ -612,7 +644,7 @@ async function confirmAll() {
     delete updated.pending_validation;
 
     await githubPut(s, 'docs/data/latest.json', JSON.stringify(updated, null, 2) + '\n',
-      `validate: confirm all (${toConfirm.length} item${toConfirm.length !== 1 ? 's' : ''})`);
+      `validate: confirm all (${toConfirm.length} item${toConfirm.length !== 1 ? 's' : ''})`, _latestSha);
 
     _latestData = updated;
 
@@ -775,7 +807,7 @@ function renderEntry(entry) {
     if (s.token && s.user && s.repo) {
       try {
         await githubPut(s, 'docs/data/latest.json', JSON.stringify(_latestData, null, 2) + '\n',
-          'chore: remove week_conflict from pending_validation');
+          'chore: remove week_conflict from pending_validation', _latestSha);
       } catch (_) { /* non-fatal — cleanup will retry on next load */ }
     }
   }
