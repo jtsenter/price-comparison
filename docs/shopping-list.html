@@ -262,10 +262,16 @@
       nav { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
       nav::-webkit-scrollbar { display: none; }
       nav a { white-space: nowrap; font-size: 13px; padding: 6px 8px; }
-      .store-cards-grid { grid-template-columns: 1fr; }
-      .store-card-sl + .store-card-sl { border-left: none; border-top: 1px solid var(--border); }
+      /* Compact W-vs-C cards side by side: the stacked full-height cards ate a
+         whole phone screen before the first item. Icon row, explainer line and
+         hint are droppable padding on mobile — store, count, total and the
+         "Selected store" badge carry all the signal. */
+      .store-card-sl { padding: 12px 14px; grid-template-rows: none; }
+      .sc-icon, .sc-subtitle, .sc-spacer, .sc-hint { display: none; }
+      .sc-name-row { flex-wrap: wrap; row-gap: 2px; margin-bottom: 4px; }
+      .sc-badge-row { margin-top: 6px; }
       .bar-ribbon { gap: 8px; padding: 10px 14px; }
-      .sc-price { font-size: 26px; }
+      .sc-price { font-size: 24px; margin-bottom: 2px; }
       /* Fixed column widths (110+100+70+85) overflow a 375px phone — drop the
          Category column and slim the paddings so the table fits without a
          page-level horizontal scroll. */
@@ -352,7 +358,7 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.83z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
       </a>
       <span class="header-div"></span>
-      <button class="btn btn-ghost btn-icon" id="notifBtn" style="display:none">
+      <button class="btn btn-ghost btn-icon" id="notifBtn" aria-label="Notifications" title="Notifications" style="display:none">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <span class="notif-badge" id="notifBadge"></span>
       </button>

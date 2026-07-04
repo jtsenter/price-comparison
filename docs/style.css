@@ -648,9 +648,9 @@ table { width: max-content; min-width: 100%; border-collapse: collapse; }
 /* ── Column filter button (▾ in header) */
 .col-filter-btn {
   position: absolute;
-  right: 20px; top: 50%;
+  right: 18px; top: 50%;
   transform: translateY(-50%);
-  width: 20px; height: 20px;
+  width: 24px; height: 24px; /* WCAG 2.5.8 minimum target size */
   border: none; background: none;
   color: var(--text-soft); font-size: 14px;
   cursor: pointer; padding: 0; line-height: 1;
@@ -788,7 +788,8 @@ td { padding: 9px 16px; vertical-align: middle; }
   cursor: pointer;
   font-size: 13px;
   color: var(--text-soft);
-  padding: 1px 4px;
+  padding: 5px 6px; /* ~24px hit area (WCAG 2.5.8); glyph stays 13px */
+  margin: -4px 0;   /* keep the row height unchanged */
   border-radius: 4px;
   opacity: 0;
   transition: opacity 0.15s, color 0.15s;
@@ -853,17 +854,17 @@ tr:hover .item-edit-btn { opacity: 1; }
 /* History button for the trend bar. Desktop: hover-revealed text link (icon hidden).
    Mobile cards (.mc-bar overrides below): always-visible circular icon button. */
 .price-bar-manage {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--text-soft);
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.15s;
   display: block;
-  margin-top: 2px;
   text-decoration: underline;
   background: none;
   border: none;
-  padding: 0;
+  padding: 5px 8px 5px 0; /* was an 11px-tall sliver — real hit area, same look */
+  margin: -3px 0 -5px;    /* swallow the padding so the row height is unchanged */
   text-align: left;
 }
 .price-bar-manage .pbm-ico { display: none; }
@@ -2396,12 +2397,9 @@ td.priority-cell { text-align: center; }
   }
   .priority-pill.freq-pill { display: none; }
   .priority-filter .filter-separator { display: none; }
-  .priority-pills {
-    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
-    gap: 8px; padding-bottom: 2px;
-  }
-  .priority-pills::-webkit-scrollbar { display: none; }
-  .priority-pill { flex-shrink: 0; }
+  /* Every pill above is hidden individually, so hide the container too —
+     its padding otherwise renders as a stray 2px strip above the tabs. */
+  .priority-pills { display: none; }
 }
 
 /* ── 8 · Dark mode ─────────────────────────────────────────────────────── */
