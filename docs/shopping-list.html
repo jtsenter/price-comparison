@@ -538,17 +538,22 @@ async function boot() {
     });
   }
 
-  // Store-agnostic aggregate totals (what it costs to buy everything at one store).
-  // Each total uses ONLY that store's price; single-store items are excluded from
-  // the other store's total — they are not double-counted.
-  const wwTotal = displayItems
-    .filter(i => i.woolworths?.price != null)
-    .reduce((s, i) => s + i.woolworths.price * getUnits(i.list_item, unitOv, analysis), 0);
-  const coTotal = displayItems
-    .filter(i => i.coles?.price != null)
-    .reduce((s, i) => s + i.coles.price * getUnits(i.list_item, unitOv, analysis), 0);
-  const wwCount = displayItems.filter(i => i.woolworths?.price != null).length;
-  const coCount = displayItems.filter(i => i.coles?.price != null).length;
+  // Store-agnostic aggregate totals: the true cost of getting the WHOLE basket
+  // primarily from one store, buying single-store-only items from wherever they
+  // ARE priced (you have no choice for those). Previously each total summed ONLY
+  // items priced at that store and silently dropped the rest — understating cost
+  // rather than admitting "you can't get this here" — which let "Best split" (a
+  // true full-basket total) come out MORE expensive than either "single store"
+  // total, an impossible result for a real shopping trip. Every total must cover
+  // the same item set for the comparison to mean anything.
+  const wwTotal = displayItems.reduce((s, i) => {
+    const p = i.woolworths?.price ?? i.coles?.price;
+    return p != null ? s + p * getUnits(i.list_item, unitOv, analysis) : s;
+  }, 0);
+  const coTotal = displayItems.reduce((s, i) => {
+    const p = i.coles?.price ?? i.woolworths?.price;
+    return p != null ? s + p * getUnits(i.list_item, unitOv, analysis) : s;
+  }, 0);
 
   // diff = absolute difference between all-WW and all-Coles hypothetical totals.
   // Drives the ribbon chip state (cheaper / paying-more / equal).

@@ -5721,7 +5721,15 @@ function buildShoppingListItems(useChecked) {
     return allItems.filter(i => i.list_item.toLowerCase().includes(q));
   }
   // Priority 4: current filter view (frequency tab + category + hot/priced-only)
-  return sortItems(allItems);
+  // Per-kg group MEMBER products (e.g. all 14 "Chicken Breast" variants) are
+  // collapsed into ONE comparison row on the main table, but this raw item list
+  // has no concept of that grouping — a bulk export was including every variant
+  // as its own line item (49 raw chicken/salmon/basa/mince products instead of
+  // the 8 rows actually shown), inflating both the item count and every basket
+  // total. Explicit selection above (incl. addPerKgToBasket's "+" on one specific
+  // variant) is unaffected — only this bulk "everything currently shown" path.
+  const perkgMembers = new Set(loadVariantGroups().flatMap(g => g.items));
+  return sortItems(allItems.filter(i => !perkgMembers.has(i.list_item)));
 }
 
 function exportShoppingList(useChecked) {
