@@ -273,6 +273,55 @@ const CATEGORY_REMAP = {
   'Health & Beauty':        'Personal Care & Baby',
 };
 
+// Per-item category corrections — applied after CATEGORY_REMAP, before user
+// localStorage overrides win. These fix scraper mismatches without editing
+// latest.json. SINGLE copy here so index, hot-deals and shopping-list agree
+// (when only app.js had it, corrected items landed under their raw category
+// on the Basket page's shopping mode).
+const ITEM_CATEGORY_DEFAULTS = {
+  // Bakery → correct
+  'Essentials Domestic Wipes Roll':                               'Household',
+  'Woolworths Fresh Continental Parsley Bunch':                   'Fruit & Veg',
+  // Dairy & Eggs → correct (scraper matched by store section, not product type)
+  'Ben & Jerry\'s Ice Cream Tub Chocolate Chip Cookie Dough':    'Frozen Foods',
+  'Cadbury Dairy Milk Large Chocolate Block':                     'Sweets',
+  'Cadbury Dairy Milk Top Deck Chocolate Block':                  'Sweets',
+  'Continental Classics Cup A Soup Creamy Chicken With Croutons': 'Pantry',
+  'KitKat Milk Chocolate Mini Bars Share Pack':                   'Sweets',
+  'Maltesers Milk Chocolate Party Gift Box':                      'Sweets',
+  'McVitie\'s Digestives Milk Chocolate':                        'Sweets',
+  'McVitie\'s Hobnobs Milk Chocolate':                           'Sweets',
+  'Pringles Sour Cream & Onion Potato Chips':                     'Sweets',
+  'Snickers Milk Chocolate Party Share Bag':                      'Sweets',
+  'Snickers Milk Chocolate Party Share Bag 20 Pieces':            'Sweets',
+  'Woolworths Beef Porterhouse Steak & Butter':                   'Meat & Seafood',
+  'Woolworths Butternut Pumpkin Cut':                             'Fruit & Veg',
+  'Yumi\'s Eggplant Mediterranean Dip':                          'Pantry',
+  // Fruit & Veg → correct
+  'Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot':         'Baby',
+  'Dolmio Extra Bolognese Tomato Pasta Sauce':                    'Pantry',
+  'Macro Organic Natural Pumpkin Kernels':                        'Pantry',
+  'Mutti Tomato Paste Double Concentrate':                        'Pantry',
+  'Sam\'s Pantry Granola Pink Lady Apple & Cinnamon':             'Pantry',
+  'Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle': 'Drinks & Alcohol',
+  'Schweppes Orange Mango Natural Mineral Water Bottle':          'Drinks & Alcohol',
+  'Twinings Honeybush, Orange & Mandarin':                        'Pantry',
+  'Twinings Orange & Cinnamon Tea Bags Tea':                      'Pantry',
+  // Meat & Seafood → correct
+  'Continental Classics Cup A Soup Chicken With Lots Of Noodles': 'Pantry',
+  // Other → correct
+  'Hedy\'s Fresh Quiche Lorraine Chilled Meal':                   'Ready Meals',
+  'Old El Paso Fajita Spice Mix Mexican Style':                   'Pantry',
+  'Parsnip Fresh':                                                'Fruit & Veg',
+  'Weet-Bix Little Kids Breakfast Cereal':                        'Baby',
+  'Woolworths Garlic Heads CLOVE':                                'Fruit & Veg',
+  // Pantry → correct
+  'Baby Mum-Mum Snack Vegetable Rice Rusk':                      'Baby',
+  'Strike Blue Toilet Cleaner Cistern Blocks':                    'Household',
+  'Vevelle White 2 Ply Toilet Tissue':                            'Household',
+  'Woolworths Dill Fresh Herb':                                   'Fruit & Veg',
+};
+
 function normalizeCategory(raw) {
   const c = (raw || '').trim() || 'Other';
   return CATEGORY_REMAP[c] || c;

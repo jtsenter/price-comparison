@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=77" />
+  <link rel="stylesheet" href="style.css?v=78" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -430,7 +430,7 @@
 
 <!-- Shared utilities — must load before inline script -->
 <script src="name_map.js?v=13"></script>
-<script src="utils.js?v=57"></script>
+<script src="utils.js?v=58"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -506,7 +506,7 @@ window.addEventListener('resize', fixStickyOffset);
 function getCategory(item) {
   let ov = null;
   try { ov = JSON.parse(localStorage.getItem('pw_categories_v1') || '{}')[item.list_item]; } catch {}
-  return normalizeCategory(ov || item.category);
+  return normalizeCategory(ov || ITEM_CATEGORY_DEFAULTS[item.list_item] || item.category);
 }
 
 // ── Deal computation ──────────────────────────────────────────────────────────

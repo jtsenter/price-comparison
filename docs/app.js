@@ -493,51 +493,9 @@ function getUnits(itemName) {
 // CATEGORY_REMAP + normalizeCategory() live in utils.js (shared with hot-deals
 // and shopping-list, so the three pages can't drift on category names again).
 
-// Per-item category corrections — applied after CATEGORY_REMAP, before user localStorage overrides win.
-// These fix scraper mismatches without needing to edit latest.json.
-const ITEM_CATEGORY_DEFAULTS = {
-  // Bakery → correct
-  'Essentials Domestic Wipes Roll':                               'Household',
-  'Woolworths Fresh Continental Parsley Bunch':                   'Fruit & Veg',
-  // Dairy & Eggs → correct (scraper matched by store section, not product type)
-  'Ben & Jerry\'s Ice Cream Tub Chocolate Chip Cookie Dough':    'Frozen Foods',
-  'Cadbury Dairy Milk Large Chocolate Block':                     'Sweets',
-  'Cadbury Dairy Milk Top Deck Chocolate Block':                  'Sweets',
-  'Continental Classics Cup A Soup Creamy Chicken With Croutons': 'Pantry',
-  'KitKat Milk Chocolate Mini Bars Share Pack':                   'Sweets',
-  'Maltesers Milk Chocolate Party Gift Box':                      'Sweets',
-  'McVitie\'s Digestives Milk Chocolate':                        'Sweets',
-  'McVitie\'s Hobnobs Milk Chocolate':                           'Sweets',
-  'Pringles Sour Cream & Onion Potato Chips':                     'Sweets',
-  'Snickers Milk Chocolate Party Share Bag':                      'Sweets',
-  'Snickers Milk Chocolate Party Share Bag 20 Pieces':            'Sweets',
-  'Woolworths Beef Porterhouse Steak & Butter':                   'Meat & Seafood',
-  'Woolworths Butternut Pumpkin Cut':                             'Fruit & Veg',
-  'Yumi\'s Eggplant Mediterranean Dip':                          'Pantry',
-  // Fruit & Veg → correct
-  'Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot':         'Baby',
-  'Dolmio Extra Bolognese Tomato Pasta Sauce':                    'Pantry',
-  'Macro Organic Natural Pumpkin Kernels':                        'Pantry',
-  'Mutti Tomato Paste Double Concentrate':                        'Pantry',
-  'Sam\'s Pantry Granola Pink Lady Apple & Cinnamon':             'Pantry',
-  'Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle': 'Drinks & Alcohol',
-  'Schweppes Orange Mango Natural Mineral Water Bottle':          'Drinks & Alcohol',
-  'Twinings Honeybush, Orange & Mandarin':                        'Pantry',
-  'Twinings Orange & Cinnamon Tea Bags Tea':                      'Pantry',
-  // Meat & Seafood → correct
-  'Continental Classics Cup A Soup Chicken With Lots Of Noodles': 'Pantry',
-  // Other → correct
-  'Hedy\'s Fresh Quiche Lorraine Chilled Meal':                   'Ready Meals',
-  'Old El Paso Fajita Spice Mix Mexican Style':                   'Pantry',
-  'Parsnip Fresh':                                                'Fruit & Veg',
-  'Weet-Bix Little Kids Breakfast Cereal':                        'Baby',
-  'Woolworths Garlic Heads CLOVE':                                'Fruit & Veg',
-  // Pantry → correct
-  'Baby Mum-Mum Snack Vegetable Rice Rusk':                      'Baby',
-  'Strike Blue Toilet Cleaner Cistern Blocks':                    'Household',
-  'Vevelle White 2 Ply Toilet Tissue':                            'Household',
-  'Woolworths Dill Fresh Herb':                                   'Fruit & Veg',
-};
+// ITEM_CATEGORY_DEFAULTS lives in utils.js: shopping-list and hot-deals resolve
+// categories too, and when only this file had the map, an item corrected here
+// (garlic → Fruit & Veg) landed under its RAW category on the Basket page.
 
 function getCategory(item) {
   // Precedence: user override → per-item default → scraped category. Normalising
@@ -2590,7 +2548,7 @@ function renderSavingInfo(s) {
   const basket = `<div class="saving-line"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
   let maxRow = '';
   if (s.max_saving > s.total_saving + 0.005) {
-    maxRow = `<div class="saving-line" title="Buy each item at whichever store is cheapest, vs doing your whole shop at the dearer store"><span class="saving-icon">${splitIcon}</span><div class="saving-text"><div class="saving-label">Max saving · split shop</div><span class="saving-amount">${fmt(s.max_saving)}</span></div></div>`;
+    maxRow = `<div class="saving-line" title="Buy each item at whichever store is cheapest, vs doing your whole shop at the dearer store"><span class="saving-icon">${splitIcon}</span><div class="saving-text"><div class="saving-label">Split shop</div><span class="saving-amount">${fmt(s.max_saving)}</span></div></div>`;
   }
   return basket + maxRow;
 }
@@ -3869,11 +3827,45 @@ function appendGroupCardMobile(container, group, overrides) {
   const wwWin = cheaper === 'woolworths', coWin = cheaper === 'coles';
   const borderCls = wwWin ? ' cheaper-ww' : coWin ? ' cheaper-coles' : '';
 
-  // Same layout as a normal mobile card (image, name, trend bar, two store prices)
-  // so per-kg groups read consistently — the differences that mark it as per-kg are
-  // the "$/kg" badge, the /kg price suffix, and the expand chevron. No cheaper-tag
-  // row: the ✓ stamp on the winning price already says which store is cheapest, and
-  // the basket button lives at the end of the prices row instead of its own line.
+  // Same layout as a normal mobile card in BOTH views: compact = the same
+  // single-line row, detailed = image + name/icons/priority + trend + prices.
+  // Only two things mark it as per-kg — the /kg price suffix and the expand
+  // chevron sitting at the end of the prices row. The 🔥 uses the same
+  // isHotDeal() as every other item; the 👁 watches the whole CATEGORY (the
+  // group key), not individual member products.
+  const wwKg = group._wwPerKg != null ? `$${group._wwPerKg.toFixed(2)}` : '—';
+  const coKg = group._coPerKg != null ? `$${group._coPerKg.toFixed(2)}` : '—';
+  // Cheapest variant across both stores (a REAL product) for the quick add-to-basket.
+  const cheapestVar = [group._wwBest, group._coBest].filter(Boolean).sort((a, b) => a.perkg - b.perkg)[0];
+  const hotDeal = isHotDeal(group, loadExclusions());
+  const hotHtml = hotDeal ? '<span class="mc-hot" title="Hot Deal — meaningfully cheaper than its usual price right now">🔥</span>' : '';
+
+  // Tap-to-add works like a normal card: tapping the card toggles the group's
+  // CHEAPEST variant in the basket (mc-selected highlight and all); expand /
+  // collapse is the explicit chevron button.
+  const inBasket = cheapestVar ? _selectedItems.has(cheapestVar.name) : false;
+  const card = document.createElement('div');
+  card.dataset.group = group._groupKey;
+  if (cheapestVar) card.dataset.cheapest = cheapestVar.name;
+  // Same keyboard/screen-reader contract as normal cards (see renderMobileCards).
+  card.tabIndex = 0;
+  card.setAttribute('role', 'button');
+  card.setAttribute('aria-pressed', String(inBasket));
+  card.setAttribute('aria-label', group._groupLabel);
+
+  // Compact view: identical single-line row to normal items (no eye/chevron —
+  // same no-horizontal-room trade-off as normal compact rows).
+  if (_mcView === 'compact') {
+    card.className = `mobile-card mobile-card-compact vg-mobile-card${borderCls}${inBasket ? ' mc-selected' : ''}`;
+    card.innerHTML = `
+      ${hotHtml}
+      <span class="mcc-name">${esc(group._groupLabel)}</span>
+      <span class="mcc-price"><span class="store-chip sm ww">W</span><span class="${wwWin ? 'mcc-bold' : ''}">${wwKg}</span></span>
+      <span class="mcc-price"><span class="store-chip sm coles">C</span><span class="${coWin ? 'mcc-bold' : ''}">${coKg}</span></span>`;
+    container.appendChild(card);
+    return;
+  }
+
   const wwImg = resolveImgUrl(group._wwBest?.result?.image_url) || '';
   const coImg = resolveImgUrl(group._coBest?.result?.image_url) || '';
   const imgPref = loadImgOverrides()[group.list_item];
@@ -3883,27 +3875,14 @@ function appendGroupCardMobile(container, group, overrides) {
     ? `<img class="mc-img" src="${imgSrc}" alt="" loading="lazy">`
     : '<div class="mc-img-placeholder"></div>';
   const bar = groupTrendCellHTML(group);
-  const wwKg = group._wwPerKg != null ? `$${group._wwPerKg.toFixed(2)}` : '—';
-  const coKg = group._coPerKg != null ? `$${group._coPerKg.toFixed(2)}` : '—';
-  // Cheapest variant across both stores (a REAL product) for the quick add-to-basket.
-  const cheapestVar = [group._wwBest, group._coBest].filter(Boolean).sort((a, b) => a.perkg - b.perkg)[0];
-  const cheapestName = cheapestVar ? cheapestVar.name.replace(/"/g, '&quot;') : '';
+  const isWatched = _watchlist.has(group.list_item);
+  const watchBtn = `<button class="mc-watch-btn${isWatched ? ' active' : ''}" data-item="${escAttr(group.list_item)}" title="${isWatched ? 'Remove category from watchlist' : 'Watch this category'}">👁</button>`;
+  const prioLabels = { weekly: 'Weekly', monthly: 'Monthly', rare: 'Rare' };
+  const priority = getPriority(group.list_item);
+  const prioHtml = prioLabels[priority]
+    ? `<span class="mc-priority ${priority}">${prioLabels[priority]}</span>` : '';
 
-  // Tap-to-add works like a normal card: tapping the card toggles the group's
-  // CHEAPEST variant in the basket (mc-selected highlight and all), and the
-  // expand/collapse that used to be the whole-card tap moved to an explicit
-  // chevron button — one consistent gesture across every mobile card.
-  const inBasket = cheapestVar ? _selectedItems.has(cheapestVar.name) : false;
-  const card = document.createElement('div');
   card.className = `mobile-card vg-mobile-card${borderCls}${inBasket ? ' mc-selected' : ''}${isExpanded ? ' vg-mobile-open' : ''}`;
-  card.dataset.group = group._groupKey;
-  if (cheapestVar) card.dataset.cheapest = cheapestVar.name;
-  // Same keyboard/screen-reader contract as normal cards (see renderMobileCards).
-  card.tabIndex = 0;
-  card.setAttribute('role', 'button');
-  card.setAttribute('aria-pressed', String(inBasket));
-  card.setAttribute('aria-label', group._groupLabel);
-
   let html = `
     <div class="mc-top">
       ${imgHtml}
@@ -3911,10 +3890,13 @@ function appendGroupCardMobile(container, group, overrides) {
         <div class="mc-name-row">
           <div class="mc-name">${esc(group._groupLabel)}</div>
           <span class="mc-icons">
+            ${hotHtml}
             ${bar ? `<button class="mc-hist-btn" data-manage-item="__group_${group._groupKey}" title="Price history" aria-label="View price history">${HIST_CLOCK_SVG}</button>` : ''}
-            <span class="vgm-perkg-badge">$/kg</span>
-            <button class="vgm-chevron-btn" aria-expanded="${isExpanded}" aria-label="${isExpanded ? 'Hide store options' : 'Show store options'}" title="${isExpanded ? 'Hide store options' : 'Show store options'}">${isExpanded ? '▾' : '▸'}</button>
+            ${watchBtn}
           </span>
+        </div>
+        <div class="mc-badges">
+          <div class="mc-badges-left">${prioHtml}</div>
         </div>
       </div>
     </div>
@@ -3928,6 +3910,7 @@ function appendGroupCardMobile(container, group, overrides) {
         <div class="mc-store-label coles-col"><span class="store-chip sm coles">C</span> Coles</div>
         <div class="mc-price${coWin ? ' cheaper-c' : ''}">${coKg}<span class="vgm-kg-suffix">/kg</span></div>
       </div>
+      <button class="vgm-chevron-btn" aria-expanded="${isExpanded}" aria-label="${isExpanded ? 'Hide store options' : 'Show store options'}" title="${isExpanded ? 'Hide store options' : 'Show store options'}">${isExpanded ? '▾' : '▸'}</button>
     </div>`;
 
   if (isExpanded) {
@@ -4235,6 +4218,12 @@ function renderMobileCards(items, data) {
   } else if (_mobileSortMode === 'savings') {
     const sv = it => (savingAmount(it) || 0) * getUnits(it.list_item);
     displayItems.sort((a, b) => (sv(b) - sv(a)) * sortDir);
+  } else if (_mobileSortMode === 'store') {
+    // ↑ Coles-cheaper first, ↓ WW-cheaper first; equal-priced in the middle
+    // either way (same idea as the web column filter). Sort is stable, so the
+    // previous order is kept within each band.
+    const rank = it => it.cheaper_store === 'coles' ? 0 : it.cheaper_store === 'woolworths' ? 2 : 1;
+    displayItems.sort((a, b) => (rank(a) - rank(b)) * sortDir);
   }
 
   // Toolbar: sort chips (left) + view toggle (right)
@@ -4248,6 +4237,7 @@ function renderMobileCards(items, data) {
     { mode: 'az',      label: 'A–Z'      },
     { mode: 'savings', label: 'Savings'  },
     { mode: 'trend',   label: 'Trend'},
+    { mode: 'store',   label: 'C/W'},
   ];
   CHIPS.forEach(({ mode, label }) => {
     const chip = document.createElement('button');
@@ -4596,16 +4586,6 @@ function _renderPageInner(data) {
     priorities: _uiPriorities,
   }).length;
   $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>${hotCount > 0 ? `<a href="hot-deals.html" class="hot-deals-link">🔥 ${hotCount} deal${hotCount !== 1 ? 's' : ''}</a>` : ''}`;
-  // Red dot on the Hot Deals bottom tab when there are active deals
-  const btbHotTab = document.querySelector('#bottomTabBar a[href="hot-deals.html"]');
-  if (btbHotTab) {
-    let dot = btbHotTab.querySelector('.btb-hot-dot');
-    if (hotCount > 0) {
-      if (!dot) { dot = document.createElement('span'); dot.className = 'btb-hot-dot'; btbHotTab.appendChild(dot); }
-    } else {
-      dot?.remove();
-    }
-  }
   $('banner').style.display = 'block';
   const _sw = $('searchWrap');
   if (_sw) _sw.style.display = '';
@@ -5770,7 +5750,10 @@ function initPullToRefresh() {
     if (wasTriggered) {
       indicator.classList.add('triggered');
       indicator.innerHTML = '<div class="ptr-spinner"></div>&nbsp;Refreshing…';
-      triggerRefresh();
+      // Reload the published data only — do NOT trigger a scrape. Scrapes are a
+      // desktop action (need a token; run for many minutes); pull-down's job on a
+      // phone is just "show me the latest numbers the scraper already produced".
+      loadData().then((fresh) => { if (fresh) renderPage(fresh); });
       setTimeout(() => { indicator.classList.remove('triggered'); indicator.innerHTML = ''; }, 2000);
     }
     startY = currentY = 0;
@@ -6187,6 +6170,10 @@ async function boot() {
     mobileCardsEl.addEventListener('click', (e) => {
       const bb = e.target.closest('.vg-pv-basket');
       if (bb) { addPerKgToBasket(bb.dataset.item); return; }
+      // Group-card eye only: normal cards handle their own .mc-watch-btn in a
+      // direct listener, so handling them here too would toggle twice (a no-op).
+      const wb = e.target.closest('.vg-mobile-card .mc-watch-btn');
+      if (wb) { toggleWatchlist(wb.dataset.item); return; }
       const manageBtn = e.target.closest('.price-bar-manage, .mc-hist-btn');
       if (manageBtn) { openHistoryFromManageBtn(manageBtn.dataset.manageItem); return; }
       const chev = e.target.closest('.vgm-chevron-btn');

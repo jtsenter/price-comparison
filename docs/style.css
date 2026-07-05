@@ -91,6 +91,9 @@ header {
   font-weight: 800;
   color: var(--text);
   letter-spacing: -0.3px;
+  /* Wordmark retired on desktop too (user: header real estate is too tight).
+     The W/C chips stay — they're the home link on every sub-page. */
+  display: none;
 }
 
 nav { display: flex; gap: 4px; }
@@ -473,7 +476,10 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 @media (max-width: 700px) { .cat-cols { grid-template-columns: 1fr; } }
 
 /* Mobile variant group cards */
-.vg-mobile-card { display: flex; flex-direction: column; gap: 10px; cursor: pointer; }
+/* Block flow like every other .mobile-card, so the shared 8px mc-top/mc-bar/
+   mc-prices margins collapse identically — flex+gap here made group cards'
+   row spacing 26/18px while normal cards sat at 8/8. */
+.vg-mobile-card { cursor: pointer; }
 .vgm-head { display: flex; align-items: center; gap: 8px; }
 .vgm-head-label { font-weight: 700; font-size: 16px; }
 .vgm-head-count { font-size: 11px; font-weight: 600; color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); padding: 1px 8px; border-radius: 10px; }
@@ -486,10 +492,9 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 .vgm-store-sec { background: var(--bg); border-radius: 8px; padding: 8px 10px; }
 
 /* Per-kg mobile card markers (card otherwise looks like a normal mobile card). */
-.vgm-perkg-badge { font-size: 10px; font-weight: 700; color: #0F6E56; background: rgba(29,158,117,.14); border-radius: 5px; padding: 1px 6px; white-space: nowrap; }
-:root[data-theme="dark"] .vgm-perkg-badge { color: #34D399; } /* dark cards need a light green, not #0F6E56 */
 /* Expand/collapse is an explicit button (tap-on-card now toggles the basket,
-   matching normal cards) — sized for a thumb, not just the glyph. */
+   matching normal cards) — sized for a thumb, not just the glyph. It sits at
+   the end of the prices row (next to the Coles column), not in the icon row. */
 .vgm-chevron-btn {
   border: 1px solid var(--border-strong); background: var(--card); color: var(--text-mid);
   border-radius: 7px; width: 30px; height: 30px; padding: 0; cursor: pointer;
@@ -1614,12 +1619,6 @@ td.priority-cell { text-align: center; }
 .card-btn:hover { background: var(--bg-alt); border-color: var(--text-mid); color: var(--text); }
 .hot-deals-link { color: #e05a00; font-weight: 600; text-decoration: none; }
 .hot-deals-link:hover { text-decoration: underline; }
-.btb-hot-dot {
-  position: absolute; top: 6px; right: calc(50% - 14px);
-  width: 8px; height: 8px; border-radius: 50%;
-  background: #e05a00; border: 2px solid var(--card);
-  pointer-events: none;
-}
 .view-toggle-btn.view-active { background: var(--bg-alt); border-color: var(--text-mid); }
 
 /* ── Row checkbox ────────────────────────────────────────────── */
@@ -2139,7 +2138,11 @@ td.priority-cell { text-align: center; }
   .mc-hot { font-size: 16px; flex-shrink: 0; line-height: 1; }
 
   /* Trend bar (re-enable; 700px rule hides .price-bar-outer globally) */
-  .mc-bar { margin: 6px 0 0; }
+  .mc-bar { margin: 8px 0 0; } /* same 8px rhythm as mc-top/mc-prices gaps */
+  /* The group card's trend bar reuses the desktop table-cell markup, whose
+     wrapper carries its own top margin — flatten it so group cards keep the
+     same 8px row rhythm as normal cards. */
+  .mc-bar .price-bar-outer { margin: 0; }
   .mc-bar .price-bar-outer { display: block !important; }
   .mc-bar .price-bar { height: 8px; }
   .mc-bar .price-bar-labels { font-size: 10px; }
@@ -2157,7 +2160,9 @@ td.priority-cell { text-align: center; }
   }
 
   /* Price grid */
-  .mc-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .mc-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  /* Per-kg group card: expand chevron as a third, right-aligned prices-row column */
+  .vg-mobile-card .mc-prices { grid-template-columns: 1fr 1fr auto; align-items: center; }
   .mc-store-col { display: flex; flex-direction: column; gap: 2px; }
   .mc-store-label {
     font-size: 11px; font-weight: 700; text-transform: uppercase;
@@ -2400,6 +2405,12 @@ td.priority-cell { text-align: center; }
   /* Every pill above is hidden individually, so hide the container too —
      its padding otherwise renders as a stray 2px strip above the tabs. */
   .priority-pills { display: none; }
+  /* Scrapes are a desktop action: they need the GitHub token (not configured on
+     phones) and run for many minutes. Pull-down on mobile reloads data instead. */
+  #refreshBtn { display: none !important; }
+  /* Hot Deals filter bar: its right-side siblings are hidden on mobile, which
+     left this divider floating as a stray 2px line. */
+  .deals-filter-bar .filter-separator { display: none; }
 }
 
 /* ── 8 · Dark mode ─────────────────────────────────────────────────────── */
