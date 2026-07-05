@@ -3291,6 +3291,7 @@ function renderCards(items) {
   const parts = [];
 
   items.forEach(item => {
+    if (item._isGroup) { parts.push(groupCardHTML(item, overrides)); return; }
     const ww = item.woolworths;
     const co = item.coles;
     const cheaper = item.cheaper_store;
@@ -3675,6 +3676,80 @@ function groupSubLabel(group) {
   if (group._wwCount) parts.push(`${group._wwCount} Woolworths`);
   if (group._coCount) parts.push(`${group._coCount} Coles`);
   return parts.join(' · ') || 'No products';
+}
+
+// Desktop "card view" (#cardGrid) rendering for a variant group. This view had
+// no group branch at all — unlike the table (appendGroupRowDesktop) and mobile
+// cards (appendGroupCardMobile) — so groups fell through the per-item path
+// above and showed the raw synthetic key ("__group_lamb_mince") as the name.
+// Mirrors the per-item card structure (name/cat header, checkbox+priority,
+// WW-vs-Coles prices, trend bar, edit/refresh footer) with the group's $/kg
+// headline standing in for a single product's pack price.
+function groupCardHTML(group, overrides) {
+  const wwBest = group._wwBest, coBest = group._coBest;
+  const cheaper = group.cheaper_store;
+
+  const wwImg = resolveImgUrl(wwBest?.result?.image_url) || '';
+  const coImg = resolveImgUrl(coBest?.result?.image_url) || '';
+  const imgPref = loadImgOverrides()[group.list_item];
+  const imgSrc = (imgPref === 'ww' ? wwImg : imgPref === 'coles' ? coImg : null)
+    || (cheaper === 'coles' ? (coImg || wwImg) : (wwImg || coImg));
+  const imgHtml = imgSrc
+    ? `<img class="card-img" src="${imgSrc}" alt="" loading="lazy">`
+    : '<div class="card-img-placeholder">No Photo</div>';
+
+  const safeKey = group.list_item.replace(/"/g, '&quot;');
+  const p = getPriority(group.list_item);
+  const prioOptions = ['weekly', 'monthly', 'rare'].map(v =>
+    `<option value="${v}"${p === v ? ' selected' : ''}>${v[0].toUpperCase() + v.slice(1)}</option>`
+  ).join('');
+  const isChecked = _checkedItems.has(group.list_item);
+
+  const wwUrl = wwBest ? (overrides[wwBest.name]?.wwUrl || wwBest.result?.url || null) : null;
+  const coUrl = coBest ? (overrides[coBest.name]?.colesUrl || coBest.result?.url || null) : null;
+  const priceHtml = (perkg, url) => perkg == null
+    ? '<span class="no-data">—</span>'
+    : (url
+      ? `<a href="${url}" target="_blank" rel="noopener" class="price-link">$${perkg.toFixed(2)}<span class="perkg-suffix">/kg</span></a>`
+      : `$${perkg.toFixed(2)}<span class="perkg-suffix">/kg</span>`);
+
+  const wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span><span class="card-store-price">${priceHtml(group._wwPerKg, wwUrl)}</span></div>`;
+  const coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span><span class="card-store-price">${priceHtml(group._coPerKg, coUrl)}</span></div>`;
+
+  const wwClass = cheaper === 'woolworths' ? 'winner-ww' : '';
+  const coClass = cheaper === 'coles'      ? 'winner-coles' : '';
+
+  const units = getUnits(group.list_item);
+  const savingHtml = (group._wwPerKg != null && group._coPerKg != null && group._wwPerKg !== group._coPerKg)
+    ? `<div class="card-saving">${cheaper === 'woolworths' ? '<span class="store-chip ww sm">W</span>' : '<span class="store-chip coles sm">C</span>'} Save ${fmt(Math.abs(group._wwPerKg - group._coPerKg) * units)}</div>`
+    : '';
+
+  const bar = groupTrendCellHTML(group);
+
+  return `<div class="item-card" data-item="${safeKey}" data-group="${group._groupKey}">
+    <div class="card-top">
+      <div class="card-img-wrap">${imgHtml}</div>
+      <div class="card-info">
+        <div class="card-name">${esc(group._groupLabel)}</div>
+        <div class="card-cat">${esc(getCategory(group))} · ${esc(groupSubLabel(group))}</div>
+      </div>
+      <div class="card-right">
+        <input type="checkbox" class="row-check card-check" data-item="${safeKey}"${isChecked ? ' checked' : ''}>
+        <select class="priority-select card-priority-sel" data-item="${safeKey}">${prioOptions}</select>
+      </div>
+    </div>
+    <div class="card-prices">
+      <div class="card-store ${wwClass}">${wwHtml}</div>
+      <div class="card-vs">vs</div>
+      <div class="card-store ${coClass}">${coHtml}</div>
+    </div>
+    ${savingHtml}
+    ${bar ? `<div class="card-bar">${bar}</div>` : ''}
+    <div class="card-footer">
+      <button class="item-edit-btn card-btn" data-edit-item="${safeKey}" title="Edit category">✎ Edit</button>
+      <button class="item-refresh-btn card-btn" data-item="${safeKey}" title="Refresh prices for this category">↺ Refresh</button>
+    </div>
+  </div>`;
 }
 
 // Render one variant group: a collapsed table row, plus (if open) a full-width
@@ -5911,14 +5986,18 @@ async function boot() {
       }
       const editBtn = e.target.closest('.item-edit-btn');
       if (editBtn && _lastData) {
-        const item = _lastData.items.find(i => i.list_item === editBtn.dataset.editItem);
+        const key = editBtn.dataset.editItem;
+        if (key.startsWith('__group_')) { openCategoryEditModal(key.replace('__group_', '')); return; }
+        const item = _lastData.items.find(i => i.list_item === key);
         if (item) openEditModal(item);
         return;
       }
       const refreshBtn = e.target.closest('.item-refresh-btn');
       if (refreshBtn) {
-        const ov = loadOverrides()[refreshBtn.dataset.item] || {};
-        triggerItemRefresh(refreshBtn.dataset.item, refreshBtn, { wwUrl: ov.wwUrl, colesUrl: ov.colesUrl });
+        const rItem = refreshBtn.dataset.item;
+        if (rItem.startsWith('__group_')) { refreshCategory(rItem.replace('__group_', ''), refreshBtn); return; }
+        const ov = loadOverrides()[rItem] || {};
+        triggerItemRefresh(rItem, refreshBtn, { wwUrl: ov.wwUrl, colesUrl: ov.colesUrl });
         return;
       }
     });
