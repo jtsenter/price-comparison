@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>⚠️ Validate Prices — PriceWatch</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="style.css?v=78" />
+  <link rel="stylesheet" href="style.css?v=79" />
   <style>
     /* ── Validate page overrides ── */
     .validate-hero {
@@ -94,6 +94,22 @@
     .reason-tag.conflict   { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
     .reason-tag.change     { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
     .reason-tag.range      { background: #EDE9FE; color: #5B21B6; border: 1px solid #DDD6FE; }
+
+    /* Archive context: shows whether the flagged product is archived, or offers
+       to archive it (useful for the "these two are clearly different products"
+       mismatches that shouldn't keep getting flagged). */
+    .validate-archived-badge {
+      font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px;
+      background: var(--bg); color: var(--text-soft); border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .validate-archive-btn {
+      font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+      background: var(--card); color: var(--text-mid); border: 1px solid var(--border-strong);
+      cursor: pointer; white-space: nowrap;
+    }
+    .validate-archive-btn:hover:not(:disabled) { background: var(--bg); color: var(--text); }
+    .validate-archive-btn:disabled { opacity: 0.6; cursor: default; }
 
     .validate-stores {
       display: grid;
@@ -403,6 +419,50 @@ async function githubPut(s, path, content, commitMsg, knownSha) {
 
 let _latestData = null;
 let _latestSha = null;  // blob SHA of the revision loadLatest() last returned (API reads only)
+let _archivedSet = new Set();  // names in docs/data/archived_items.json (for the per-card archive context)
+
+// Load the shared archived-items list so each card can show whether the product
+// is archived (and offer to archive it if not). Prefers the Contents API (fresh)
+// and falls back to the Pages copy.
+async function loadArchivedSet() {
+  const s = loadSettings();
+  try {
+    if (s.token && s.user && s.repo) {
+      const r = await fetch(`https://api.github.com/repos/${s.user}/${s.repo}/contents/docs/data/archived_items.json?t=${Date.now()}`,
+        { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' }, cache: 'no-store' });
+      if (r.ok) {
+        const j = await r.json();
+        if (j.content) {
+          const arr = JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g, '')))));
+          if (Array.isArray(arr)) { _archivedSet = new Set(arr); return; }
+        }
+      }
+    }
+    const r2 = await fetch(`data/archived_items.json?t=${Date.now()}`);
+    if (r2.ok) { const arr = await r2.json(); if (Array.isArray(arr)) _archivedSet = new Set(arr); }
+  } catch { /* non-fatal — cards just won't show archive state */ }
+}
+
+// Archive a product from the validate page: append it to archived_items.json.
+// Fresh-GET sha (via githubPut with no knownSha) — archiving is infrequent and
+// not racing a scrape, so atomic-write threading isn't needed here.
+async function archiveItemFromValidate(itemName, btn) {
+  const s = loadSettings();
+  if (!s.token || !s.user || !s.repo) { showGlobalError('GitHub settings not configured — cannot archive.'); return; }
+  const prevLabel = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Archiving…';
+  _archivedSet.add(itemName);
+  try {
+    const arr = [..._archivedSet].sort();
+    await githubPut(s, 'docs/data/archived_items.json', JSON.stringify(arr, null, 2) + '\n',
+      `chore: archive ${itemName} (from validate)`);
+    btn.outerHTML = '<span class="validate-archived-badge">📦 Archived</span>';
+  } catch (e) {
+    _archivedSet.delete(itemName);
+    btn.disabled = false; btn.textContent = prevLabel;
+    showGlobalError(`Archive failed: ${e.message}`);
+  }
+}
 
 // Read latest.json. When GitHub settings exist, read from the Contents API — it
 // reflects the repo the instant a commit lands. The GitHub Pages copy (the relative
@@ -562,11 +622,16 @@ async function handleAction(entry, store, action, cardEl) {
     markCardResolved(cardEl);
     updateValidateNavBadge(updatedPV.length);
 
-    // Remove card after a short pause so the user sees ✅ Saved, then show empty state if done
+    // Remove card after a short pause so the user sees ✅ Saved, then show empty
+    // state only when nothing is left. Source of truth = the freshly-written
+    // pending_validation (updatedPV), NOT a DOM count: the old check queried
+    // ".validation-card" (typo — cards are ".validate-card") AND ":not(.resolved)"
+    // (a class markCardResolved never adds), so it always counted 0 and flashed
+    // the empty state after the FIRST action, hiding the still-pending items
+    // until a manual refresh rebuilt the list.
     setTimeout(() => {
       cardEl.remove();
-      const remaining = document.querySelectorAll('.validation-card:not(.resolved)').length;
-      if (remaining === 0) {
+      if (!updatedPV.length) {
         document.getElementById('validateList').style.display = 'none';
         document.getElementById('emptyState').style.display = 'block';
       }
@@ -781,7 +846,11 @@ function renderEntry(entry) {
           <div class="validate-meta">Flagged ${date}</div>
         </div>
       </div>
-      <div class="validate-reasons">${reasonsHtml}</div>
+      <div class="validate-reasons">${reasonsHtml}${
+        (_archivedSet.has(entry.item) || _itemData?.archived === true)
+          ? '<span class="validate-archived-badge">📦 Archived</span>'
+          : '<button class="validate-archive-btn" type="button">📦 Archive</button>'
+      }</div>
     </div>
     <div class="validate-stores">
       ${buildStoreCol(entry, 'ww',    entry.ww_suspicious,    entry.ww_price,    entry.ww_prev_price,    entry.ww_url)}
@@ -794,6 +863,11 @@ function renderEntry(entry) {
       if (_writing || btn.classList.contains('done')) return;
       handleAction(entry, btn.dataset.store, btn.dataset.action, card);
     });
+  });
+
+  // Archive button (only present when the item isn't already archived)
+  card.querySelector('.validate-archive-btn')?.addEventListener('click', (e) => {
+    archiveItemFromValidate(entry.item, e.currentTarget);
   });
 
   return card;
@@ -814,6 +888,8 @@ function renderEntry(entry) {
     document.getElementById('loading').textContent = 'Failed to load data.';
     return;
   }
+
+  await loadArchivedSet();  // so each card knows its archive state before first render
 
   // One-time cleanup: strip week_conflict from all pending_validation entries;
   // remove entries whose only reason was week_conflict.

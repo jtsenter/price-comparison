@@ -117,6 +117,27 @@ nav a.active { background: var(--bg); color: var(--text); font-weight: 600; }
 .header-search .search-clear { right: 10px; }
 .header-div { width: 1px; height: 24px; background: var(--border); flex-shrink: 0; margin: 0 2px; }
 
+/* Every header action button matches the 38px search-box height (they were ~28px,
+   so the top bar looked ragged next to the search field). Flex-centres the glyph. */
+header .header-right .btn-icon {
+  height: 38px; min-width: 38px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+
+/* Validate: a warning pill sitting between the search box and the icon cluster
+   (only rendered when there are prices to review). Distinct amber so it reads as
+   an action, not a nav icon. */
+.validate-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 38px; padding: 0 14px; flex-shrink: 0;
+  border-radius: 9px; text-decoration: none; white-space: nowrap;
+  font-size: 13px; font-weight: 700;
+  background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A;
+  transition: background .12s, border-color .12s;
+}
+.validate-pill:hover { background: #FDE68A; border-color: #FCD34D; }
+:root[data-theme="dark"] .validate-pill { background: #422006; color: #FCD34D; border-color: #713f12; }
+
 /* Icon-only nav destinations in the header action cluster (Hot Deals, Basket,
    Alerts). Same ghost-button chrome as the utility buttons beside them, but each
    destination keeps a small colour identity so they read at a glance. Hidden on
@@ -1855,7 +1876,7 @@ td.priority-cell { text-align: center; }
   .price-bar-outer { display: none; }
   /* Mobile: the bottom tab bar + header action icons cover navigation, so drop
      the left nav and the desktop nav-icon cluster to give the search room. */
-  #mainNav, .nav-icon-btn, .header-div { display: none; }
+  #mainNav, .nav-icon-btn, .header-div, .validate-pill { display: none; }
   .header-search { min-width: 60px; }
 }
 
@@ -1892,10 +1913,10 @@ td.priority-cell { text-align: center; }
 .mc-icons {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 6px;               /* even breathing room between 🔥 / history / 👁 */
   flex-shrink: 0;
   margin-left: auto;
-  align-self: center;
+  align-self: flex-start; /* top-align with the product name, not its vertical centre */
 }
 .mc-watch-btn {
   background: none;
@@ -2121,10 +2142,12 @@ td.priority-cell { text-align: center; }
     -webkit-box-orient: vertical; overflow: hidden; line-height: 1.35;
     flex: 1; min-width: 0;
   }
-  /* Badges row: frequency tag left, saving right */
+  /* Metadata row under the name: frequency tag + saving sit together, left-
+     aligned. Was space-between, which flung the "Weekly" pill and "Save $X" to
+     opposite edges with a big empty gap between them (looked misplaced). */
   .mc-badges {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 6px; margin-top: 4px;
+    display: flex; align-items: center; justify-content: flex-start;
+    gap: 8px; margin-top: 5px; flex-wrap: wrap;
   }
   .mc-badges-left { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
   .mc-cat {
@@ -2209,11 +2232,18 @@ td.priority-cell { text-align: center; }
   }
   #mcViewToggle:active { background: #D8EEE1; }
 
-  /* Compact single-line card */
-  .mobile-card-compact { padding: 9px 12px; }
-  .mobile-card-compact { display: flex; align-items: center; gap: 8px; }
+  /* Compact single-line card. Prices sit in two FIXED-width columns so the W
+     numbers line up under each other and the C numbers under each other, like a
+     table — regardless of $8.00 vs $18.00 vs $148.00 (tabular-nums keeps digit
+     widths equal, and the number is pushed to the column's right edge). */
+  .mobile-card-compact { padding: 9px 12px; display: flex; align-items: center; gap: 8px; }
   .mcc-name { font-size: 13px; font-weight: 600; color: var(--text); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .mcc-price { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 500; color: var(--text); }
+  .mcc-price {
+    display: inline-flex; align-items: center; gap: 5px;
+    width: 76px; flex-shrink: 0;
+    font-size: 14px; font-weight: 500; color: var(--text);
+  }
+  .mcc-price > :last-child { margin-left: auto; font-variant-numeric: tabular-nums; }
   .mcc-bold { font-weight: 800; }
   .mobile-card-compact .mc-hot { font-size: 13px; }
   .mobile-card-compact .mc-icons { gap: 4px; }
@@ -2373,9 +2403,21 @@ td.priority-cell { text-align: center; }
 @media (max-width: 700px) {
   .priority-pill    { padding: 7px 14px; font-size: 13px; min-height: 36px; }
   .category-tab     { padding: 7px 14px; font-size: 13px; min-height: 36px; }
-  .mc-watch-btn     { min-width: 44px; min-height: 44px; font-size: 18px; }
   .dm-watch         { min-width: 44px; min-height: 44px; }
   .store-filter-btn { padding: 7px 12px; min-height: 36px; font-size: 13px; }
+
+  /* Card icon row: 🔥 / history / 👁 were 16 / 30 / 44px tall — a bare emoji, a
+     bordered box and an oversized button, all different. Unify to equal 34px
+     squares, centred, so they read as one tidy control strip. */
+  .mc-icons > .mc-hot,
+  .mc-icons > .mc-hist-btn,
+  .mc-icons > .mc-watch-btn,
+  .mc-icons > .mc-unarchive-btn {
+    width: 34px; height: 34px; min-width: 34px; min-height: 34px;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 0; line-height: 1; font-size: 17px; box-sizing: border-box;
+  }
+  .mc-icons > .mc-hot { font-size: 18px; }
 
   /* The frequency dropdown is relocated into the category row by buildCategoryTabs,
      and every other control here is hidden on mobile — so this row collapses to
