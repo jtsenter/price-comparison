@@ -14620,6 +14620,10 @@
         {
           "date": "2026-06-08",
           "price": 2.5
+        },
+        {
+          "date": "2026-07-07",
+          "price": 1.8
         }
       ],
       "match_confidence": "high",
@@ -25599,21 +25603,6 @@
       ]
     },
     {
-      "item": "Essentials White Vinegar",
-      "ww_price": 1.85,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/94706/essentials-white-vinegar",
-      "ww_prev_price": 1.85,
-      "ww_suspicious": false,
-      "coles_price": 1.8,
-      "coles_url": "https://www.coles.com.au/product/coles-simply-white-vinegar-2l-4524127",
-      "coles_prev_price": 1.95,
-      "coles_suspicious": true,
-      "flagged_date": "2026-07-07",
-      "reason": [
-        "outside_historical_range"
-      ]
-    },
-    {
       "item": "Cadbury Fingers Milk Chocolate Biscuits",
       "ww_price": 5.5,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/6072006/cadbury-fingers-milk-chocolate-biscuits",
@@ -25919,8 +25908,9 @@
       "ww": 7
     },
     "Essentials White Vinegar": {
-      "approved_date": "2026-05-31",
-      "ww": 1.85
+      "approved_date": "2026-07-06",
+      "ww": 1.85,
+      "coles": 1.8
     },
     "Fresh Radish Bunch": {
       "approved_date": "2026-05-31",
