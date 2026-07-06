@@ -637,6 +637,15 @@ const DEFAULT_VARIANT_GROUPS = [
     'Woolworths Beef Porterhouse Steak Medium',
     'Woolworths Beef Porterhouse Steak Thick Cut',
     'Macro Grass Fed Beef Porterhouse Steaks 2 Pack',
+    // Coles side (coles-only pins). The VSP RR 2-pack (id 4997140) is NOT listed
+    // here — it's already the "& Butter" item's coles match, so re-adding it would
+    // show the same product twice in the Coles column.
+    'Coles No Added Hormone Beef Quick Cook Porterhouse Steak 180g',
+    'Coles No Added Hormone Beef Porterhouse Steak With Thyme & Pepper Butter 500g',
+    'Coles Finest Carbon Neutral Beef Porterhouse Steak 370g',
+    'Drovers Choice Beef Porterhouse Steaks 200g',
+    'Drovers Choice No Added Hormone Beef Porterhouse Steak 1kg',
+    "Cleaver's Organic Grass-Fed Beef Porterhouse Steak 290g",
   ]},
 ];
 
