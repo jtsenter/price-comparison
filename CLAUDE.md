@@ -100,8 +100,8 @@ All tunable values are defined near the top of `scraper.py`:
 | `PAGE_TIMEOUT_MS`     | 20 000  | `page.goto` timeout                      |
 | `COLES_WAIT_MS`       | 1 500   | Post-navigation wait for Coles pages     |
 | `COLES_SCROLL_WAIT_MS`| 800     | Post-scroll wait for lazy-loaded tiles   |
-| `MAX_PRODUCT_PRICE`   | 50.0    | Upper bound for plausible product prices |
-| `SKIP_AGE_DAYS`       | 4       | Items scraped within N days are skipped  |
+| `MAX_PRODUCT_PRICE`   | 80.0    | Upper bound for plausible product prices |
+| `SKIP_FRESH_HOURS`    | 12      | Scheduled runs skip items scraped within N hours (manual runs never skip) |
 
 ## Areas needing care
 
@@ -111,9 +111,20 @@ All tunable values are defined near the top of `scraper.py`:
 - **Git conflicts**: Progress pushes use `git pull --no-rebase -X ours` before pushing. The
   `_push_lock` in `push_progress_bg` skips a new push if the previous thread is still
   running. Workflow timeout is 90 minutes.
-- **CONCURRENCY = 2** — Coles rate-limits aggressively above 3. Each slot uses one WW
-  page + one Coles page from pool queues; the `finally` block always returns pages so the
-  gather never deadlocks.
+- **CONCURRENCY = 2** — applies to Woolworths. Coles requests are additionally
+  serialised through a global semaphore (`_COLES_SEM`, one in flight + jitter): Coles
+  rate-bans mid-run when hammered — a 2026-07-06 manual run got 14 items then 0 for the
+  rest, and the scheduled run 18 min later got 0/208. Each slot uses one WW page + one
+  Coles page from pool queues; the `finally` block always returns pages so the gather
+  never deadlocks.
+- **Persistent browser profile** — the scraper uses `launch_persistent_context` with a
+  profile under the service account's `%LOCALAPPDATA%\pricewatch-pw-profile`, so Coles
+  bot-check (Incapsula) trust cookies survive across runs. No user-agent override: a
+  hardcoded UA that lags the real Chrome build is itself a bot fingerprint.
+- **Scrape-log rates are per-store**: single-store-pinned items deliberately skip the
+  other store ("a single-store pin means a single store") and are recorded as neither
+  attempted nor missed there — `ww_attempted`/`coles_attempted` in scrape_log.json are
+  the denominators, not `scraped`.
 
 ## Self-hosted Runner
 

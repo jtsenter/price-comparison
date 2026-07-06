@@ -49,6 +49,37 @@ def _run():
         log = json.load(open(path))
         assert len(log) == 1 and log[0]["trigger"] == "manual", log
 
+        # Per-store attempted counts (single-store-pinned items skip the other
+        # store — dividing misses by the combined `scraped` count made rates lie).
+        scraper._append_scrape_log("scheduled", 250, [], [], ww_attempted=223, coles_attempted=213)
+        log = json.load(open(path))
+        assert log[-1]["ww_attempted"] == 223 and log[-1]["coles_attempted"] == 213, log[-1]
+        # Omitted → keys absent (old-format entries stay valid; UI falls back to `scraped`).
+        scraper._append_scrape_log("scheduled", 250, [], [])
+        log = json.load(open(path))
+        assert "ww_attempted" not in log[-1] and "coles_attempted" not in log[-1], log[-1]
+
+    # should_skip_item: scheduled runs skip items scraped within SKIP_FRESH_HOURS
+    # (a scheduled run 18 min after a manual one re-hammered Coles into a rate ban);
+    # manual runs never skip; carried-forward items keep an old last_scraped so a
+    # failed item is retried next run.
+    from datetime import datetime, timezone, timedelta
+    now = datetime.now(timezone.utc)
+    fresh = {"last_scraped": (now - timedelta(hours=1)).isoformat()}
+    stale = {"last_scraped": (now - timedelta(hours=scraper.SKIP_FRESH_HOURS + 1)).isoformat()}
+    assert scraper.should_skip_item(fresh, "scheduled") is True
+    assert scraper.should_skip_item(stale, "scheduled") is False
+    assert scraper.should_skip_item(fresh, "manual") is False
+    assert scraper.should_skip_item(None, "scheduled") is False
+    assert scraper.should_skip_item({}, "scheduled") is False
+    assert scraper.should_skip_item({"last_scraped": "garbage"}, "scheduled") is False
+    # Archived: scheduled runs refresh only when older than ARCHIVED_REFRESH_DAYS.
+    arch_fresh = {"archived": True, "last_scraped": (now - timedelta(days=1)).isoformat()}
+    arch_stale = {"archived": True, "last_scraped": (now - timedelta(days=scraper.ARCHIVED_REFRESH_DAYS + 1)).isoformat()}
+    assert scraper.should_skip_item(arch_fresh, "scheduled") is True
+    assert scraper.should_skip_item(arch_stale, "scheduled") is False
+    assert scraper.should_skip_item(arch_fresh, "manual") is False
+
     print("scrape_log_selfcheck: all cases passed")
 
 

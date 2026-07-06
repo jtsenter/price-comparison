@@ -8,7 +8,7 @@ import sys
 import threading
 import urllib.error
 import urllib.request
-from datetime import datetime, timezone, date
+from datetime import datetime, timezone, date, timedelta
 from urllib.parse import quote, urlparse, parse_qs, unquote
 
 from playwright.async_api import async_playwright
@@ -64,6 +64,9 @@ MAX_PRODUCT_PRICE    = 80.0     # ceiling used by COLES_PRODUCT_PAGE_JS's DOM-se
 CONCURRENCY          = 2        # parallel page-pairs (don't exceed 3)
 MAX_RESULTS          = 5        # search results fetched per store
 ARCHIVED_REFRESH_DAYS = 7       # scheduled runs refresh archived items only if older than this (else carried forward)
+SKIP_FRESH_HOURS     = 12       # scheduled runs skip items scraped within this window (a manual
+                                # run minutes earlier otherwise gets fully re-scraped — double the
+                                # request volume, which is what trips Coles's mid-run rate ban)
 SUSPICIOUS_CHANGE_PCT   = 0.30  # flag if price changed by more than this fraction
 SUSPICIOUS_MIN_HISTORY  = 3     # minimum price_history entries to run suspicion check
 SCRAPE_LOG_MAX          = 30    # scrape-log runs kept in docs/data/scrape_log.json
@@ -74,9 +77,14 @@ _ww_debug_done = False
 _run_store_misses: list = []
 
 
-def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed: list) -> None:
+def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed: list,
+                       ww_attempted: int | None = None, coles_attempted: int | None = None) -> None:
     """Append one run's per-store miss summary to docs/data/scrape_log.json (capped).
     ww_missed/coles_missed: [{"item": str, "reason": "no_results"|"no_match"}, ...].
+    ww_attempted/coles_attempted: how many items were actually TRIED at each store.
+    Single-store-pinned items deliberately skip the other store ("a single-store pin
+    means a single store") — counting those as misses made the success rates lie
+    (WW showed 76% when its real rate was 85%). The UI divides by attempted.
     Lets the UI (scrape-log.html) show miss rates over time and which products get
     skipped most, and whether misses are a block/selector break (no_results) or a
     matcher/naming problem (no_match)."""
@@ -88,13 +96,18 @@ def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed
                 log = json.load(f)
         except Exception:
             log = []
-    log.append({
+    entry = {
         "date": datetime.now(timezone.utc).isoformat(),
         "trigger": trigger,
         "scraped": scraped,
         "ww_missed": ww_missed,
         "coles_missed": coles_missed,
-    })
+    }
+    if ww_attempted is not None:
+        entry["ww_attempted"] = ww_attempted
+    if coles_attempted is not None:
+        entry["coles_attempted"] = coles_attempted
+    log.append(entry)
     log = log[-SCRAPE_LOG_MAX:]
     with open(path, "w") as f:
         json.dump(log, f, separators=(",", ":"))
@@ -700,14 +713,59 @@ COLES_EXTRACT_JS = """
 """
 
 
+# One Coles request in flight at a time. Coles rate-bans mid-run when hammered
+# (2026-07-06: a manual run got 14 items then 0 for the rest; the scheduled run
+# 18 min later got 0/208 — and the ban outlived both runs) while WW tolerates
+# CONCURRENCY page-pairs fine — so only Coles serialises, plus jitter between
+# requests. A banned session gets served completely EMPTY pages (no title, no
+# body — verified live), so consecutive hard failures are the ban signal.
+_COLES_SEM = asyncio.Semaphore(1)
+
+# Circuit breaker: after COLES_BAN_THRESHOLD consecutive failures, pause ALL
+# Coles traffic once (the soft ban sometimes lifts in minutes); if the ban
+# persists through the cooldowns, stop hitting Coles for the rest of the run —
+# further requests only extend the ban, and carry-forward keeps the data whole.
+COLES_BAN_THRESHOLD  = 8
+COLES_BAN_COOLDOWN_S = 120
+_coles_fails = 0
+_coles_cooldowns_left = 2
+_coles_dead = False
+
+async def _register_coles_result(ok: bool) -> None:
+    """Track consecutive Coles failures; cool down / trip the breaker on a ban.
+    Called while holding _COLES_SEM, so the cooldown pauses ALL Coles traffic."""
+    global _coles_fails, _coles_cooldowns_left, _coles_dead
+    if ok:
+        _coles_fails = 0
+        return
+    _coles_fails += 1
+    if _coles_fails < COLES_BAN_THRESHOLD:
+        return
+    if _coles_cooldowns_left > 0:
+        _coles_cooldowns_left -= 1
+        print(f"  [Coles] {_coles_fails} consecutive failures — likely rate ban; "
+              f"pausing all Coles requests {COLES_BAN_COOLDOWN_S}s "
+              f"({_coles_cooldowns_left} cooldown(s) left)…")
+        await asyncio.sleep(COLES_BAN_COOLDOWN_S)
+        _coles_fails = 0
+    else:
+        _coles_dead = True
+        print("  [Coles] Ban persisted through cooldowns — skipping Coles for the "
+              "rest of this run; last-known prices carry forward.")
+
 async def search_coles(page, query: str) -> list[dict]:
+    if _coles_dead:
+        return []
     url = f"{COLES_BASE}/search?q={quote(query)}"
     try:
+      async with _COLES_SEM:
         await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
         await page.wait_for_timeout(COLES_WAIT_MS)
         await page.evaluate("window.scrollBy(0, 300)")
         await page.wait_for_timeout(COLES_SCROLL_WAIT_MS)
         raw = await page.evaluate(COLES_EXTRACT_JS)
+        await _register_coles_result(bool(raw))
+        await asyncio.sleep(random.uniform(0.5, 1.5))
         results = []
         for r in raw:
             price = parse_price(r["price_text"])
@@ -723,6 +781,7 @@ async def search_coles(page, query: str) -> list[dict]:
         return results
     except Exception as e:
         print(f"  [Coles] Error searching '{query}': {e}")
+        await _register_coles_result(False)  # timeouts on banned pages count toward the breaker
         return []
 
 
@@ -834,7 +893,10 @@ async def fetch_coles_by_url(page, url: str) -> dict | None:
     """
     if url and not url.startswith("http"):
         url = "https://" + url
+    if _coles_dead:
+        return None
     for attempt in range(2):
+      async with _COLES_SEM:  # same serialisation as search_coles — one Coles request at a time
         try:
             await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
             await page.wait_for_timeout(COLES_WAIT_MS)
@@ -843,6 +905,7 @@ async def fetch_coles_by_url(page, url: str) -> dict | None:
             price = parse_price(raw.get("price_text", ""))
             unit_price, unit = parse_unit_price(raw.get("unit_price_text", ""))
             if name and price:
+                await _register_coles_result(True)
                 if attempt > 0:
                     print(f"  [Coles] Retry succeeded for {url}")
                 return {
@@ -873,6 +936,7 @@ async def fetch_coles_by_url(page, url: str) -> dict | None:
                 print(f"  [Coles] Retry also failed for {url}, returning None")
             else:
                 print(f"  [Coles] Exception fetching URL {url}: {e}")
+        await _register_coles_result(False)
         return None
     return None
 
@@ -1086,7 +1150,19 @@ def should_skip_item(ex_data: dict | None, trigger: str) -> bool:
         return age_days < ARCHIVED_REFRESH_DAYS
     if trigger == "manual":
         return False
-    return False
+    # Scheduled runs skip items scraped within SKIP_FRESH_HOURS. Carried-forward
+    # items keep their OLD last_scraped, so a failed item is still retried next
+    # run — only genuinely fresh successes are skipped. (2026-07-06: a scheduled
+    # run fired 18 min after a manual one, re-scraped 208 items, and got Coles
+    # 0% because the manual run's volume had already tripped the rate ban.)
+    last_scraped = ex_data.get("last_scraped")
+    if not last_scraped:
+        return False
+    try:
+        age = datetime.now(timezone.utc) - datetime.fromisoformat(last_scraped)
+    except Exception:
+        return False
+    return age < timedelta(hours=SKIP_FRESH_HOURS)
 
 
 def _coles_fallback_query(coles_url: str, item: str) -> str:
@@ -1125,6 +1201,11 @@ async def _scrape_single_item(
     # Set when a pinned WW URL existed but its fetch failed; ensures carry-forward
     # fires even if fallback searches return non-empty-but-unmatched results.
     _had_pinned_ww = False
+    # Deliberately-not-attempted stores (single-store pins / explicit single-URL
+    # refresh). These must NOT count as misses in the scrape log — they aren't
+    # failures, the store simply doesn't sell the product.
+    _ww_skipped = False
+    _co_skipped = False
 
     if ww_url or coles_url:
         # Explicit URL refresh (workflow dispatch) — use the URL; no name-search fallback
@@ -1136,6 +1217,7 @@ async def _scrape_single_item(
             _skip_picker_ww = True
             coles_results = [existing_item["coles"]] if existing_item.get("coles") else []
             _skip_picker_co = True
+            _co_skipped = True
         elif coles_url and not ww_url:
             print(f"  Fetching Coles by URL: {coles_url}")
             _co = await fetch_coles_by_url(coles_page, coles_url)
@@ -1148,6 +1230,7 @@ async def _scrape_single_item(
                 coles_results = await search_with_retry(search_coles, coles_page, _fq)
             ww_results = [existing_item["woolworths"]] if existing_item.get("woolworths") else []
             _skip_picker_ww = True
+            _ww_skipped = True
         else:
             print(f"  Fetching WW by URL: {ww_url}")
             _ww = await fetch_ww_by_url(ww_page, ww_url)
@@ -1228,6 +1311,7 @@ async def _scrape_single_item(
                 # unrelated WW items (e.g. "Coles 3 Star Lamb Mince" → "Woolworths Lamb
                 # Mince"), polluting the data. A single-store pin means a single store.
                 ww_results = []
+                _ww_skipped = True
             if pinned_co:
                 _co = await fetch_coles_by_url(coles_page, pinned_co)
                 if _co:
@@ -1255,11 +1339,28 @@ async def _scrape_single_item(
             else:
                 # Woolworths-only pinned item — don't name-search Coles (same mis-match risk).
                 coles_results = []
+                _co_skipped = True
         else:
             ww_results, coles_results = await asyncio.gather(
                 search_with_retry(search_woolworths, ww_page, item, retries=1),
                 search_with_retry(search_coles, coles_page, item, retries=1),
             )
+            # Search came back empty but a past run matched this product and stored
+            # its URL — refetch that page directly. Rescues blocked-search runs
+            # (Coles rate-bans search mid-run far more readily than product pages)
+            # and costs nothing when search works. Same product → skip the matcher.
+            if not ww_results and (existing_item.get("woolworths") or {}).get("url"):
+                _ww = await fetch_ww_by_url(ww_page, existing_item["woolworths"]["url"])
+                if _ww and (_ww.get("price") or 0) > 0:
+                    print("    WW: search empty — recovered via last-known product URL")
+                    ww_results = [_ww]
+                    _skip_picker_ww = True
+            if not coles_results and (existing_item.get("coles") or {}).get("url"):
+                _co = await fetch_coles_by_url(coles_page, existing_item["coles"]["url"])
+                if _co:
+                    print("    Coles: search empty — recovered via last-known product URL")
+                    coles_results = [_co]
+                    _skip_picker_co = True
         await delay()
 
     # Drop any candidates the user explicitly rejected for this item via "Different item".
@@ -1298,9 +1399,18 @@ async def _scrape_single_item(
     # Record fresh per-store misses for this run's scrape log, BEFORE carry-forward
     # masks a miss with the last-known price. This is the signal that surfaces
     # chronically-skipped products in the UI summary (a carried price still hides a gap).
+    # A deliberately-skipped store (single-store pin) is neither attempted nor missed.
     _ww_reason = _miss_reason(ww_match, ww_results)
     _co_reason = _miss_reason(coles_match, coles_results)
-    _run_store_misses.append((item, ww_match is None, coles_match is None, _ww_reason, _co_reason))
+    _run_store_misses.append({
+        "item": item,
+        "ww_attempted": not _ww_skipped,
+        "co_attempted": not _co_skipped,
+        "ww_missed": ww_match is None and not _ww_skipped,
+        "co_missed": coles_match is None and not _co_skipped,
+        "ww_reason": _ww_reason,
+        "co_reason": _co_reason,
+    })
 
     # Carry forward existing store data when no fresh result is available.
     # Always carry forward when the matcher produced no usable result — whether because
@@ -1646,16 +1756,34 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
     existing_approved: dict = dict(existing_data.get("approved_prices") or {})
 
     async with async_playwright() as pw:
-        browser = await pw.chromium.launch(
+        # UA needs BOTH properties (verified live 2026-07-06):
+        #   1. no "HeadlessChrome" token — WW's edge 403s it on the first request;
+        #   2. a version matching the real Chrome build — the old hardcoded
+        #      Chrome/124 lagged the installed browser, and a UA/fingerprint
+        #      version mismatch is itself a bot signal for Incapsula.
+        # So: read the real version with a throwaway launch, then advertise it.
+        _probe = await pw.chromium.launch(headless=True, channel="chrome")
+        _chrome_major = _probe.version.split(".")[0]
+        await _probe.close()
+        real_ua = (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            f"AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{_chrome_major}.0.0.0 Safari/537.36"
+        )
+        print(f"Browser: Chrome {_chrome_major} (persistent profile)")
+
+        # Persistent profile: Incapsula/Akamai trust cookies (Coles) survive across
+        # runs, so a session that passed a challenge once stays trusted instead of
+        # re-triggering the bot check from zero every run. Lives OUTSIDE the repo —
+        # actions/checkout's `git clean -ffdx` would wipe anything in the worktree.
+        profile_dir = os.path.join(
+            os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"), "pricewatch-pw-profile"
+        )
+        context = await pw.chromium.launch_persistent_context(
+            profile_dir,
             headless=True,
             channel="chrome",
+            user_agent=real_ua,
             args=["--no-sandbox", "--disable-blink-features=AutomationControlled", "--disable-dev-shm-usage"],
-        )
-        context = await browser.new_context(
-            user_agent=(
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-            ),
             viewport={"width": 1280, "height": 800},
             locale="en-AU",
         )
@@ -1854,16 +1982,20 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             # points at a block or a broken selector) vs "no_match" (got candidates, none
             # matched the query well enough — points at a naming/matcher issue instead).
             _ww_missed = sorted(
-                ({"item": it, "reason": r} for it, _ww, _co, r, _ in _run_store_misses if _ww),
+                ({"item": e["item"], "reason": e["ww_reason"]} for e in _run_store_misses if e["ww_missed"]),
                 key=lambda e: e["item"],
             )
             _co_missed = sorted(
-                ({"item": it, "reason": r} for it, _ww, _co, _, r in _run_store_misses if _co),
+                ({"item": e["item"], "reason": e["co_reason"]} for e in _run_store_misses if e["co_missed"]),
                 key=lambda e: e["item"],
             )
-            _append_scrape_log(trigger, len(_run_store_misses), _ww_missed, _co_missed)
+            _append_scrape_log(
+                trigger, len(_run_store_misses), _ww_missed, _co_missed,
+                ww_attempted=sum(1 for e in _run_store_misses if e["ww_attempted"]),
+                coles_attempted=sum(1 for e in _run_store_misses if e["co_attempted"]),
+            )
 
-        await browser.close()
+        await context.close()  # persistent context: closing also flushes the profile to disk
 
     os.makedirs(DATA_DIR, exist_ok=True)
 

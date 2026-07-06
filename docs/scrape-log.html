@@ -217,22 +217,33 @@ function renderChronicMisses(log) {
   card.style.display = '';
 }
 
+// Per-store denominator: newer log entries carry ww_attempted/coles_attempted
+// (items actually TRIED at that store — single-store-pinned items deliberately
+// skip the other store and are neither attempts nor misses there). Older
+// entries fall back to the combined `scraped` count.
+function attempted(run, store) {
+  const v = store === 'ww' ? run.ww_attempted : run.coles_attempted;
+  return v != null ? v : (run.scraped || 0);
+}
+
 function renderRun(run, prevRun) {
   const wwMissed = normaliseMissed(run.ww_missed);
   const coMissed = normaliseMissed(run.coles_missed);
-  const total = run.scraped || 0;
-  const wwOk = Math.max(0, total - wwMissed.length);
-  const coOk = Math.max(0, total - coMissed.length);
-  const wwPct = total ? Math.round(wwOk / total * 100) : 0;
-  const coPct = total ? Math.round(coOk / total * 100) : 0;
+  const wwTotal = attempted(run, 'ww');
+  const coTotal = attempted(run, 'coles');
+  const wwOk = Math.max(0, wwTotal - wwMissed.length);
+  const coOk = Math.max(0, coTotal - coMissed.length);
+  const wwPct = wwTotal ? Math.round(wwOk / wwTotal * 100) : 0;
+  const coPct = coTotal ? Math.round(coOk / coTotal * 100) : 0;
 
   let trend = '';
   if (prevRun) {
     const prevWwMissed = normaliseMissed(prevRun.ww_missed).length;
-    const prevTotal = prevRun.scraped || 1;
-    const prevWwPct = Math.round((prevTotal - prevWwMissed) / prevTotal * 100);
+    const prevWwTotal = attempted(prevRun, 'ww') || 1;
+    const prevCoTotal = attempted(prevRun, 'coles') || 1;
+    const prevWwPct = Math.round((prevWwTotal - prevWwMissed) / prevWwTotal * 100);
     const prevCoMissed = normaliseMissed(prevRun.coles_missed).length;
-    const prevCoPct = Math.round((prevTotal - prevCoMissed) / prevTotal * 100);
+    const prevCoPct = Math.round((prevCoTotal - prevCoMissed) / prevCoTotal * 100);
     const d = (wwPct - prevWwPct) + (coPct - prevCoPct);
     if (d > 4) trend = ' <span style="color:var(--ww);font-size:11px">▲ improving</span>';
     else if (d < -4) trend = ' <span style="color:var(--coles);font-size:11px">▼ worse</span>';
@@ -244,11 +255,11 @@ function renderRun(run, prevRun) {
     <div class="sl-run-head">
       <div class="sl-run-date">${fmtDate(run.date)}<span class="rel">${timeAgo(run.date)}</span></div>
       <span class="sl-run-trigger">${run.trigger || 'unknown'}</span>
-      <div class="sl-store-stat ww" title="${wwOk} of ${total} items had a Woolworths match this run">
+      <div class="sl-store-stat ww" title="${wwOk} of ${wwTotal} items attempted at Woolworths matched this run">
         <span class="store-chip sm ww">W</span> ${wwPct}%
         <span class="bar-track"><span class="bar-fill" style="width:${wwPct}%"></span></span>
       </div>
-      <div class="sl-store-stat coles" title="${coOk} of ${total} items had a Coles match this run">
+      <div class="sl-store-stat coles" title="${coOk} of ${coTotal} items attempted at Coles matched this run">
         <span class="store-chip sm coles">C</span> ${coPct}%
         <span class="bar-track"><span class="bar-fill" style="width:${coPct}%"></span></span>
       </div>
@@ -292,10 +303,10 @@ async function load() {
   const archivedCount = items.filter(i => i.archived).length;
   const lastRun = log[log.length - 1];
   const lastRunWwPct = lastRun
-    ? Math.round((lastRun.scraped - normaliseMissed(lastRun.ww_missed).length) / (lastRun.scraped || 1) * 100)
+    ? Math.round((attempted(lastRun, 'ww') - normaliseMissed(lastRun.ww_missed).length) / (attempted(lastRun, 'ww') || 1) * 100)
     : null;
   const lastRunCoPct = lastRun
-    ? Math.round((lastRun.scraped - normaliseMissed(lastRun.coles_missed).length) / (lastRun.scraped || 1) * 100)
+    ? Math.round((attempted(lastRun, 'coles') - normaliseMissed(lastRun.coles_missed).length) / (attempted(lastRun, 'coles') || 1) * 100)
     : null;
 
   $('slInfoGrid').innerHTML = `
