@@ -1080,8 +1080,8 @@
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1855650.jpg",
         "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.2,
+      "cheaper_store": "coles",
+      "saving_per_item": 25.5,
       "alternatives": [
         {
           "name": "Ingham's Turkey Breast Herb & Mustard Shaved From The Deli",
@@ -25604,22 +25604,6 @@
       "flagged_date": "2026-07-07",
       "reason": [
         "suspicious_drop_gt20pct",
-        "outside_historical_range"
-      ]
-    },
-    {
-      "item": "Ingham's Turkey Breast Shaved From The Deli",
-      "ww_price": 27,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/27316/ingham-s-turkey-breast-shaved-from-the-deli",
-      "ww_prev_price": 30,
-      "ww_suspicious": false,
-      "coles_price": 6,
-      "coles_url": "https://www.coles.com.au/product/moira-mac's-carved-turkey-breast-slices-110g-1855650",
-      "coles_prev_price": 4.5,
-      "coles_suspicious": true,
-      "flagged_date": "2026-07-07",
-      "reason": [
-        "30pct_change",
         "outside_historical_range"
       ]
     },
