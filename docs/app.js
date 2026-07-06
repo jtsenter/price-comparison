@@ -625,6 +625,19 @@ const DEFAULT_VARIANT_GROUPS = [
     'Coles Graze Lamb Mince 500g',
     "El-Amin's Halal Lamb Mince 500g",
   ]},
+  // Porterhouse: pack sizes vary wildly (180g quick-cook → 1kg roast), so only
+  // $/kg is comparable — a textbook per-kg group. WW members pinned ww-only in
+  // url_overrides.json; the "& Butter" item bridges to a real Coles porterhouse
+  // (2-pack 450g) via its coles pin. Coles-specific variants get added as their
+  // URLs are captured (Coles rate-bans the scraper's headless session, so they
+  // trickle in). Members with no live price at a store simply don't show there.
+  { key: 'beef_porterhouse', label: 'Beef Porterhouse Steak', items: [
+    'Woolworths Beef Porterhouse Steak & Butter',
+    'Woolworths Beef Porterhouse Steak',
+    'Woolworths Beef Porterhouse Steak Medium',
+    'Woolworths Beef Porterhouse Steak Thick Cut',
+    'Macro Grass Fed Beef Porterhouse Steaks 2 Pack',
+  ]},
 ];
 
 // Effective categories = seed defaults merged with the user's saved label/membership
