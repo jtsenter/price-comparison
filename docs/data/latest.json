@@ -576,17 +576,22 @@
       },
       "coles": {
         "name": "Cadbury Fingers Milk Chocolate Biscuits | 124g",
-        "price": 5.5,
+        "price": 4.4,
         "unit_price": 5.5,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/cadbury-fingers-milk-chocolate-biscuits-124g-1742777",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/1/1742777.jpg"
       },
-      "cheaper_store": "equal",
-      "saving_per_item": 0,
+      "cheaper_store": "coles",
+      "saving_per_item": 1.1,
       "alternatives": [],
       "ww_price_history": [],
-      "coles_price_history": [],
+      "coles_price_history": [
+        {
+          "date": "2026-07-07",
+          "price": 4.4
+        }
+      ],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 4.44,
@@ -25603,21 +25608,6 @@
       ]
     },
     {
-      "item": "Cadbury Fingers Milk Chocolate Biscuits",
-      "ww_price": 5.5,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/6072006/cadbury-fingers-milk-chocolate-biscuits",
-      "ww_prev_price": 5.5,
-      "ww_suspicious": false,
-      "coles_price": 4.4,
-      "coles_url": "https://www.coles.com.au/product/cadbury-fingers-milk-chocolate-biscuits-124g-1742777",
-      "coles_prev_price": 5.5,
-      "coles_suspicious": true,
-      "flagged_date": "2026-07-07",
-      "reason": [
-        "outside_historical_range"
-      ]
-    },
-    {
       "item": "Ingham's Turkey Breast Shaved From The Deli",
       "ww_price": 27,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/27316/ingham-s-turkey-breast-shaved-from-the-deli",
@@ -26072,6 +26062,10 @@
     "Armada Small Kitchen Tidy Bag": {
       "ww": 2.25,
       "approved_date": "2026-07-04"
+    },
+    "Cadbury Fingers Milk Chocolate Biscuits": {
+      "coles": 4.4,
+      "approved_date": "2026-07-06"
     }
   }
 }
