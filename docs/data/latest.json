@@ -1644,15 +1644,15 @@
       },
       "coles": {
         "name": "Coles Mushrooms Cup | 200g",
-        "price": 4,
+        "price": 3.6,
         "unit_price": 4,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-mushrooms-cup-200g-4829860",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4829860.jpg",
         "retailer": "coles"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 1.5,
+      "cheaper_store": "coles",
+      "saving_per_item": 8.9,
       "alternatives": [
         {
           "name": "Mushrooms Flat Large Loose",
@@ -1679,7 +1679,12 @@
           "price": 12.5
         }
       ],
-      "coles_price_history": [],
+      "coles_price_history": [
+        {
+          "date": "2026-07-07",
+          "price": 3.6
+        }
+      ],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 1.25,
@@ -25623,21 +25628,6 @@
       ]
     },
     {
-      "item": "Mushrooms Cups Loose",
-      "ww_price": 12.5,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/143109/mushrooms-cups-loose",
-      "ww_prev_price": 12.5,
-      "ww_suspicious": false,
-      "coles_price": 3.6,
-      "coles_url": "https://www.coles.com.au/product/coles-mushrooms-cup-200g-4829860",
-      "coles_prev_price": 4,
-      "coles_suspicious": true,
-      "flagged_date": "2026-07-07",
-      "reason": [
-        "outside_historical_range"
-      ]
-    },
-    {
       "item": "Red Capsicum",
       "ww_price": 1.48,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/135306/red-capsicum",
@@ -26019,6 +26009,10 @@
     },
     "Cadbury Fingers Milk Chocolate Biscuits": {
       "coles": 4.4,
+      "approved_date": "2026-07-06"
+    },
+    "Mushrooms Cups Loose": {
+      "coles": 3.6,
       "approved_date": "2026-07-06"
     }
   }
