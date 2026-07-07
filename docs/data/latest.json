@@ -2464,14 +2464,14 @@
       },
       "coles": {
         "name": "Oyster Bay Marlborough Sauvignon Blanc 750ml | 1 Each",
-        "price": 18,
+        "price": 23,
         "unit_price": 24,
         "unit": "1L",
         "url": "https://www.coles.com.au/product/oyster-bay-marlborough-sauvignon-blanc-750ml-1-each-8258681",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8258681.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 1,
+      "saving_per_item": 6,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -2495,6 +2495,10 @@
         {
           "date": "2026-06-22",
           "price": 18
+        },
+        {
+          "date": "2026-07-07",
+          "price": 23
         }
       ],
       "match_confidence": "low",
@@ -25601,21 +25605,6 @@
   },
   "pending_validation": [
     {
-      "item": "South Island Marlborough Sauvignon Blanc",
-      "ww_price": 17,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/906238/south-island-marlborough-sauvignon-blanc",
-      "ww_prev_price": 17,
-      "ww_suspicious": false,
-      "coles_price": 23,
-      "coles_url": "https://www.coles.com.au/product/oyster-bay-marlborough-sauvignon-blanc-750ml-1-each-8258681",
-      "coles_prev_price": 18,
-      "coles_suspicious": true,
-      "flagged_date": "2026-07-07",
-      "reason": [
-        "outside_historical_range"
-      ]
-    },
-    {
       "item": "The Odd Bunch Lebanese Cucumber Punnet",
       "ww_price": 4.7,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/24364/the-odd-bunch-lebanese-cucumber-punnet",
@@ -25844,7 +25833,8 @@
       "coles": 8
     },
     "South Island Marlborough Sauvignon Blanc": {
-      "approved_date": "2026-05-31"
+      "approved_date": "2026-07-07",
+      "coles": 23
     },
     "Strike Paper Towels Embossed 2 Ply": {
       "approved_date": "2026-05-31",
