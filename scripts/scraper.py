@@ -318,15 +318,18 @@ def _parse_ww_products(product_list: list) -> list[dict]:
         cup_string = p.get("CupString", "")
         if not name or price is None:
             continue
-        # Prefer the regular shelf price over a member-exclusive (Everyday Rewards) price.
-        # When IsEveryDayRewards or IsPmDeals is set, Price is the member price and
-        # WasPrice is the regular shelf price anyone can pay.
-        is_member_deal = bool(p.get("IsEveryDayRewards") or p.get("IsPmDeals"))
-        if was_price is not None and float(was_price) > float(price):
-            # WasPrice is higher than Price — regardless of the EDR flag, the shelf price
-            # is always ≥ the member price. Use WasPrice as the real shelf price.
-            flag_note = "IsEDR" if is_member_deal else "no IsEDR flag"
-            print(f"    [WW] Member/promo price for '{name}' ({flag_note}): ${price} -> shelf price ${was_price}")
+        # Distinguish a MEMBER-EXCLUSIVE price (Everyday Rewards / Prices Member —
+        # revert to the public WasPrice) from a PUBLIC special (IsOnSpecial, no
+        # member flag — everyone pays the lower Price, so KEEP it). The old code
+        # took WasPrice whenever WasPrice > Price "regardless of the EDR flag",
+        # which inflated every public special to its struck-through was price
+        # (Mix Max scraped at $7.70 when the public special was $5.80). Use the
+        # same reliable flags the pinned-URL path uses: IsEdrSpecial/IsPmDelivery.
+        # (IsEveryDayRewards/IsPmDeals come back null on the search API.)
+        is_member_deal = bool(p.get("IsEdrSpecial") or p.get("IsPmDelivery")
+                              or p.get("IsEveryDayRewards") or p.get("IsPmDeals"))
+        if was_price is not None and float(was_price) > float(price) and is_member_deal:
+            print(f"    [WW] Member price for '{name}': ${price} -> public shelf ${was_price}")
             price = was_price
         product_url = (
             f"{WOOLWORTHS_BASE}/shop/productdetails/{stockcode}/{url_name}"
@@ -502,7 +505,12 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                 #   2. [class*="regular"][class*="price"] (contains "regular" + "price")
                 #   3. Any price NOT inside [class*="member"], [class*="reward"], [class*="loyalty"]
                 #   4. Fallback: all prices, use max
-                if price is not None:
+                # BUT skip it entirely on a confirmed PUBLIC special: __NEXT_DATA__'s
+                # Price is the real current price, and the page also shows a HIGHER
+                # struck-through "Was" price — the "use max" heuristic would grab that
+                # and hide the special (same bug as the search path had).
+                public_special = on_special and not (is_edr or is_pm)
+                if price is not None and not public_special:
                     _dom_prices = await page.evaluate("""
                         () => {
                             const priceRe = /^\\$\\s*([\\d]+\\.[\\d]{2})$/;

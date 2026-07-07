@@ -46,5 +46,6 @@ jobs:
           python retry_selfcheck.py
           python scrape_log_selfcheck.py
           python coles_price_ceiling_selfcheck.py
+          python ww_special_selfcheck.py
           python matcher_selfcheck.py
           python categories_selfcheck.py
