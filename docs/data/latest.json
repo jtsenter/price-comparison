@@ -3915,14 +3915,14 @@
       },
       "coles": {
         "name": "Coles Irresistible Boysenberry | 1L",
-        "price": 6.5,
+        "price": 4.5,
         "unit_price": 6.5,
         "unit": "100mL",
         "url": "https://www.coles.com.au/product/coles-irresistible-boysenberry-1l-8556238",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/8/8556238.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 2.8,
+      "saving_per_item": 0.8,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -3938,7 +3938,12 @@
           "price": 3.7
         }
       ],
-      "coles_price_history": [],
+      "coles_price_history": [
+        {
+          "date": "2026-07-07",
+          "price": 4.5
+        }
+      ],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.78,
@@ -25610,21 +25615,6 @@
   },
   "pending_validation": [
     {
-      "item": "Woolworths Ice Cream Cones Boysenberry",
-      "ww_price": 3.7,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/792235/woolworths-ice-cream-cones-boysenberry",
-      "ww_prev_price": 3.7,
-      "ww_suspicious": false,
-      "coles_price": 4.5,
-      "coles_url": "https://www.coles.com.au/product/coles-boysenberry-ice-cream-cones-475ml-8559586",
-      "coles_prev_price": 6.5,
-      "coles_suspicious": true,
-      "flagged_date": "2026-07-07",
-      "reason": [
-        "30pct_change"
-      ]
-    },
-    {
       "item": "Woolworths Spring Water Bottles",
       "ww_price": 9.4,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/116784/woolworths-spring-water-bottles",
@@ -25927,6 +25917,10 @@
     },
     "Woolworths Baked Beans In Tomato Sauce": {
       "coles": 1.3,
+      "approved_date": "2026-07-07"
+    },
+    "Woolworths Ice Cream Cones Boysenberry": {
+      "coles": 4.5,
       "approved_date": "2026-07-07"
     }
   }
