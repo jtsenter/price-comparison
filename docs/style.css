@@ -2066,7 +2066,11 @@ td.priority-cell { text-align: center; }
     margin: 0 12px 8px;
     width: calc(100% - 24px);
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
   }
+  .search-wrap #searchInput { height: 38px; }
+  header .header-right .nav-icon-btn { height: 38px; min-width: 38px; }
 
   /* ── Banner: compact two-column strip so products show sooner ─── */
   .comparison-banner {
