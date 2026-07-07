@@ -2331,7 +2331,7 @@
       "woolworths": null,
       "coles": {
         "name": "Schweppes Natural Mineral Water Bottle | 1.1L",
-        "price": 1.8,
+        "price": 3,
         "unit_price": 1.64,
         "unit": "1L",
         "url": "https://www.coles.com.au/product/schweppes-natural-mineral-water-bottle-1.1l-3014974",
@@ -2353,6 +2353,10 @@
         {
           "date": "2026-06-29",
           "price": 1.8
+        },
+        {
+          "date": "2026-07-07",
+          "price": 3
         }
       ],
       "match_confidence": "none",
@@ -25597,22 +25601,6 @@
   },
   "pending_validation": [
     {
-      "item": "Schweppes Lemon Lime Natural Mineral Water Bottle",
-      "ww_price": null,
-      "ww_url": "",
-      "ww_prev_price": null,
-      "ww_suspicious": false,
-      "coles_price": 3,
-      "coles_url": "https://www.coles.com.au/product/schweppes-natural-mineral-water-bottle-1.1l-3014974",
-      "coles_prev_price": 1.8,
-      "coles_suspicious": true,
-      "flagged_date": "2026-07-07",
-      "reason": [
-        "30pct_change",
-        "outside_historical_range"
-      ]
-    },
-    {
       "item": "South Island Marlborough Sauvignon Blanc",
       "ww_price": 17,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/906238/south-island-marlborough-sauvignon-blanc",
@@ -25968,6 +25956,10 @@
     "Mushrooms Cups Loose": {
       "coles": 3.6,
       "approved_date": "2026-07-06"
+    },
+    "Schweppes Lemon Lime Natural Mineral Water Bottle": {
+      "coles": 3,
+      "approved_date": "2026-07-07"
     }
   }
 }
