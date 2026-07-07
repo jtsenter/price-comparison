@@ -3056,14 +3056,14 @@
       },
       "coles": {
         "name": "Coles Baked Beans In Tomato Sauce 4x220g | 880g",
-        "price": 4.4,
+        "price": 1.3,
         "unit_price": 4.4,
         "unit": "100g",
         "url": "https://www.coles.com.au/product/coles-baked-beans-in-tomato-sauce-4x220g-880g-6264446",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/6/6264446.jpg"
       },
       "cheaper_store": "woolworths",
-      "saving_per_item": 3.3,
+      "saving_per_item": 0.2,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -3079,7 +3079,12 @@
           "price": 1.1
         }
       ],
-      "coles_price_history": [],
+      "coles_price_history": [
+        {
+          "date": "2026-07-07",
+          "price": 1.3
+        }
+      ],
       "match_confidence": "low",
       "size_warning": false,
       "per_100_ww": 0.26,
@@ -25605,22 +25610,6 @@
   },
   "pending_validation": [
     {
-      "item": "Woolworths Baked Beans In Tomato Sauce",
-      "ww_price": 1.1,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/47682/woolworths-baked-beans-in-tomato-sauce",
-      "ww_prev_price": 1.1,
-      "ww_suspicious": false,
-      "coles_price": 1.3,
-      "coles_url": "https://www.coles.com.au/product/coles-baked-beans-canned-regular-425g-145557",
-      "coles_prev_price": 4.4,
-      "coles_suspicious": true,
-      "flagged_date": "2026-07-07",
-      "reason": [
-        "30pct_change",
-        "outside_historical_range"
-      ]
-    },
-    {
       "item": "Woolworths Ice Cream Cones Boysenberry",
       "ww_price": 3.7,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/792235/woolworths-ice-cream-cones-boysenberry",
@@ -25934,6 +25923,10 @@
     },
     "Schweppes Lemon Lime Natural Mineral Water Bottle": {
       "coles": 3,
+      "approved_date": "2026-07-07"
+    },
+    "Woolworths Baked Beans In Tomato Sauce": {
+      "coles": 1.3,
       "approved_date": "2026-07-07"
     }
   }
