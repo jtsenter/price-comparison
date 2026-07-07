@@ -2,15 +2,21 @@
 // Network-first is deliberate: the site is deployed often, so online users must
 // always get fresh HTML/CSS/JS (no stale-shell trap). The cache only serves when
 // the network is unavailable, giving an instant offline view of last-known prices.
+//
+// GitHub Pages sends Cache-Control: max-age=600 on every file. A plain fetch()
+// still honours that (the browser's HTTP cache can silently answer without
+// hitting the network), which defeated "network-first" — mobile users with no
+// hard-refresh option could see a 10-minute-stale layout. `cache: 'no-store'`
+// forces every fetch here to actually reach the network.
 
-const CACHE = 'pricewatch-v112';
+const CACHE = 'pricewatch-v113';
 const SHELL = [
   'index.html',
   'hot-deals.html',
   'shopping-list.html',
   'scrape-log.html',
   'alerts.html',
-  'style.css?v=84',
+  'style.css?v=85',
   'app.js?v=96',
   'utils.js?v=58',
   'header.js?v=1',
@@ -41,7 +47,7 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   if (new URL(req.url).origin !== location.origin) return; // let CDN/images go straight to network
   e.respondWith(
-    fetch(req)
+    fetch(req, { cache: 'no-store' })
       .then((res) => {
         const copy = res.clone();
         caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {});
