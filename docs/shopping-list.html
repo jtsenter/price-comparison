@@ -295,11 +295,16 @@
          Category column and slim the paddings so the table fits without a
          page-level horizontal scroll. */
       main { padding-left: 12px; padding-right: 12px; }
-      table col:nth-child(2), thead th:nth-child(2), tbody td:nth-child(2) { display: none; }
+      /* Drop the Category column. The tfoot (Subtotal) MUST be hidden too — it was
+         omitted, so the footer had one more cell than the header/body, shifting the
+         Subtotal total under the wrong (narrow) column and clipping it. */
+      table col:nth-child(2), thead th:nth-child(2), tbody td:nth-child(2), tfoot td:nth-child(2) { display: none; }
       td, thead th, tfoot td { padding-left: 8px; padding-right: 8px; }
-      table col:nth-child(3) { width: 80px !important; }
-      table col:nth-child(4) { width: 48px !important; }
-      table col:nth-child(5) { width: 72px !important; }
+      table col:nth-child(3) { width: 78px !important; }
+      table col:nth-child(4) { width: 44px !important; }
+      table col:nth-child(5) { width: 82px !important; }
+      /* Subtotal reads as the total: right-align its label toward the number. */
+      tfoot td:first-child { white-space: nowrap; }
     }
     @media print {
       header .header-actions { display: none; }

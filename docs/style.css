@@ -2046,10 +2046,11 @@ td.priority-cell { text-align: center; }
   /* Hide desktop-only controls */
   .col-chooser-wrap, .view-toggle-btn { display: none !important; }
 
-  /* Show the mobile watchlist toggle. The mobile 🔥 (mobile-hot-btn) stays
-     HIDDEN: it duplicated the bottom tab bar's Hot Deals (both a flame, but one
-     filters the list and the other navigates — confusing). Bottom tab wins. */
-  .mobile-watch-btn { display: inline-flex; }
+  /* Mobile top bar = search + the detailed/compact view toggle (the two most
+     useful controls). The watchlist eye and the 🔥 are hidden: the eye was niche,
+     and the 🔥 duplicated the bottom tab bar's Hot Deals. */
+  .mobile-view-btn  { display: inline-flex; }
+  .mobile-watch-btn { display: none !important; }
   .mobile-hot-btn   { display: none !important; }
 
   /* Reclaim header space on mobile: the W/C brand chips (redundant — the bottom
@@ -2209,6 +2210,9 @@ td.priority-cell { text-align: center; }
   .mc-price.cheaper   { color: var(--ww); }
   .mc-price.cheaper-c { color: var(--coles); }
   .mc-unit { font-size: 11px; color: #6B7280; }
+  /* "Save $X" now lives under the cheaper store's price (was a lonely badge once
+     the Weekly tag was dropped from the detailed card). */
+  .mc-save-line { font-size: 12px; font-weight: 800; color: var(--green); margin-top: 3px; }
 
   .mc-saving { font-size: 13px; font-weight: 700; color: var(--green); }
 

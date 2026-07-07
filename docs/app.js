@@ -4358,9 +4358,9 @@ function renderMobileCards(items, data) {
   chipsWrap.className = 'mc-sort-chips';
 
   const CHIPS = [
+    { mode: 'trend',   label: 'Trend'},
     { mode: 'az',      label: 'A–Z'      },
     { mode: 'savings', label: 'Savings'  },
-    { mode: 'trend',   label: 'Trend'},
     { mode: 'store',   label: 'C/W'},
   ];
   CHIPS.forEach(({ mode, label }) => {
@@ -4386,17 +4386,19 @@ function renderMobileCards(items, data) {
   // View toggle — single icon-only button; glyph shows the layout you'll switch TO
   const ICON_LIST = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>';
   const ICON_CARDS = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="7" rx="1.5"/><rect x="3" y="14" width="18" height="7" rx="1.5"/></svg>';
-  const viewBtn = document.createElement('button');
-  viewBtn.id = 'mcViewToggle';
-  viewBtn.setAttribute('aria-label', _mcView === 'detailed' ? 'Switch to compact view' : 'Switch to detailed view');
-  viewBtn.title = _mcView === 'detailed' ? 'Compact view' : 'Detailed view';
-  viewBtn.innerHTML = _mcView === 'detailed' ? ICON_LIST : ICON_CARDS;
-  viewBtn.addEventListener('click', () => {
-    _mcView = _mcView === 'detailed' ? 'compact' : 'detailed';
-    localStorage.setItem('pw_mc_view_v1', _mcView);
-    if (_lastData) renderPage(_lastData); // renderPage preserves scroll itself
-  });
-  toolbar.appendChild(viewBtn);
+  // The detailed/compact toggle lives in the HEADER now (top bar), not the toolbar.
+  // Icon shows the layout you'll switch TO. onclick (not addEventListener) so the
+  // per-render refresh never stacks handlers.
+  const hdrView = document.getElementById('mobileViewToggle');
+  if (hdrView) {
+    hdrView.innerHTML = _mcView === 'detailed' ? ICON_LIST : ICON_CARDS;
+    hdrView.title = _mcView === 'detailed' ? 'Compact view' : 'Detailed view';
+    hdrView.onclick = () => {
+      _mcView = _mcView === 'detailed' ? 'compact' : 'detailed';
+      localStorage.setItem('pw_mc_view_v1', _mcView);
+      if (_lastData) renderPage(_lastData); // renderPage preserves scroll itself
+    };
+  }
 
   container.appendChild(toolbar);
 
@@ -4493,10 +4495,6 @@ function renderMobileCards(items, data) {
               ${_activePriority === 'archive' ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : ''}
             </span>
           </div>
-          <div class="mc-badges">
-            <div class="mc-badges-left">${prioHtml}</div>
-            ${savingTag}
-          </div>
           ${altHintHTML(item)}
         </div>
       </div>
@@ -4506,11 +4504,13 @@ function renderMobileCards(items, data) {
           <div class="mc-store-label ww-col"><span class="store-chip sm ww">W</span> Woolworths</div>
           <div class="mc-price${wwCheaper ? ' cheaper' : ''}">${ww ? fmt(ww.price) : '—'}</div>
           ${wwUnit ? `<div class="mc-unit">${wwUnit}</div>` : ''}
+          ${wwCheaper && saving > 0 ? `<div class="mc-save-line">Save ${fmt(saving)}</div>` : ''}
         </div>
         <div class="mc-store-col">
           <div class="mc-store-label coles-col"><span class="store-chip sm coles">C</span> Coles</div>
           <div class="mc-price${coCheaper ? ' cheaper-c' : ''}">${co ? fmt(co.price) : '—'}</div>
           ${coUnit ? `<div class="mc-unit">${coUnit}</div>` : ''}
+          ${coCheaper && saving > 0 ? `<div class="mc-save-line">Save ${fmt(saving)}</div>` : ''}
         </div>
       </div>`;
     }
@@ -6124,8 +6124,24 @@ async function boot() {
     saveColVisibility();
     if (_lastData) renderPage(_lastData);
   }
-  $('wwCard')?.addEventListener('click',    () => _activateTotalCol('ww_total',    'coles_total'));
-  $('colesCard')?.addEventListener('click', () => _activateTotalCol('coles_total', 'ww_total'));
+  // Tapping a store total: desktop reveals that store's per-item total COLUMN;
+  // mobile has no table, so instead re-sort the cards to surface where that store
+  // wins (the C/W sort, pointed at that store) and scroll to the list. Previously
+  // the mobile tap silently toggled a hidden column and looked broken.
+  const _storeCardTap = (store) => {
+    if (window.innerWidth <= 700) {
+      _mobileSortMode = 'store';
+      _mobileSortDir  = store === 'ww' ? 'desc' : 'asc'; // desc → WW-cheaper first
+      if (_lastData) renderPage(_lastData);
+      document.getElementById('mobileCards')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (store === 'ww') {
+      _activateTotalCol('ww_total', 'coles_total');
+    } else {
+      _activateTotalCol('coles_total', 'ww_total');
+    }
+  };
+  $('wwCard')?.addEventListener('click',    () => _storeCardTap('ww'));
+  $('colesCard')?.addEventListener('click', () => _storeCardTap('coles'));
 
   // Column filter button clicks (delegated from thead, re-bound after each render via renderTableHead)
   document.addEventListener('click', (e) => {

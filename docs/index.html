@@ -22,7 +22,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=81" />
+  <link rel="stylesheet" href="style.css?v=82" />
 </head>
 <body>
 
@@ -107,9 +107,12 @@
       <button class="btn btn-ghost btn-icon mobile-hot-btn" id="mobileHotBtn" title="Hot Deals">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg>
       </button>
-      <button class="btn btn-ghost btn-icon mobile-watch-btn" id="mobileWatchBtn" title="Watchlist">
+      <button class="btn btn-ghost btn-icon mobile-watch-btn" id="mobileWatchBtn" title="Watchlist" style="display:none">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
       </button>
+      <!-- Mobile top-bar view toggle (detailed ⇄ compact). Icon set by JS to the
+           layout you'll switch TO. Replaces the watchlist eye per user request. -->
+      <button class="btn btn-ghost btn-icon mobile-view-btn" id="mobileViewToggle" title="Switch view" aria-label="Switch view"></button>
       <button class="btn btn-primary btn-icon" id="refreshBtn" title="Update prices">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
       </button>
@@ -491,7 +494,7 @@
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script src="name_map.js?v=50"></script>
 <script src="utils.js?v=58"></script>
-<script src="app.js?v=94"></script>
+<script src="app.js?v=95"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">
