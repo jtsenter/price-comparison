@@ -143,6 +143,25 @@
     }
     .bar-optimal strong { font-size: 15px; font-weight: 800; }
     .bar-optimal span { color: #94A3B8; font-size: 12px; }
+    /* Savings row — same "Basket saving / Split shop" component as the main page. */
+    .sl-savings-row {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap; padding: 14px 20px; border-top: 1px solid var(--border);
+    }
+    .saving-info { display: flex; gap: 26px; flex-wrap: wrap; }
+    .saving-line { display: flex; align-items: center; gap: 10px; }
+    .saving-icon { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 26px; font-size: 20px; }
+    .saving-icon .store-chip { width: 26px; height: 26px; font-size: 14px; border-radius: 7px; }
+    .split-icon { display: block; border-radius: 50%; }
+    .saving-text { text-align: left; line-height: 1; }
+    .saving-label { font-size: 10px; font-weight: 700; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+    .saving-amount { font-size: 20px; font-weight: 800; color: var(--green); line-height: 1; }
+    .bar-ribbon-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    @media (max-width: 700px) {
+      .sl-savings-row { padding: 12px 14px; }
+      .saving-info { gap: 18px; }
+      .saving-amount { font-size: 17px; }
+    }
 
     /* Store sections */
     .store-section { margin-bottom: 28px; }
@@ -799,6 +818,22 @@ async function boot() {
       coOnlyCount > 0    ? `<span class="bar-store-chip co-chip">${coOnlyCount} at Coles</span>` : '',
     ].join('');
 
+    // Savings shown with the SAME "Basket saving / Split shop" component as the
+    // main page (renderSavingInfo): cheaper-store chip + the two headline numbers.
+    const cheaperTotal = Math.min(wwTotal, coTotal);
+    const dearerTotal  = Math.max(wwTotal, coTotal);
+    const basketSaving = dearerTotal - cheaperTotal;   // buy all at the cheaper single store vs the dearer
+    const splitSaving  = dearerTotal - optimalTotal;   // buy each item at its cheapest store vs the dearer
+    const savingCheaperChip = (wwTotal <= coTotal)
+      ? '<span class="store-chip sm ww">W</span>' : '<span class="store-chip sm coles">C</span>';
+    const splitDisc = `<svg class="split-icon" width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 A14 14 0 0 0 16 30 Z" fill="var(--ww)"/><path d="M16 2 A14 14 0 0 1 16 30 Z" fill="var(--coles)"/><line x1="16" y1="2" x2="16" y2="30" stroke="var(--card)" stroke-width="2.5"/></svg>`;
+    const savingInfoHtml = isEqual
+      ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
+      : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`
+        + (splitSaving > basketSaving + 0.005
+            ? `<div class="saving-line" title="Buy each item at whichever store is cheapest, vs doing your whole shop at the dearer store"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Split shop</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
+            : '');
+
     main.innerHTML = `
       <div class="filter-note">📋 ${filterNoteHtml}</div>
       <div class="sl-topbar">
@@ -839,14 +874,9 @@ async function boot() {
             <div class="sc-hint">${coHint}</div>
           </div>
         </div>
-        <div class="bar-optimal">
-          🏆 Best split: <strong>${fmt(optimalTotal)}</strong>
-          <span>— buying each item at its cheapest store</span>
-        </div>
-        <div class="bar-ribbon">
-          ${ribbonSaveChip}
-          <div class="ribbon-sep"></div>
-          ${ribbonChips}
+        <div class="sl-savings-row">
+          <div class="saving-info">${savingInfoHtml}</div>
+          <div class="bar-ribbon-chips">${ribbonChips}</div>
         </div>
       </div>
 
