@@ -7234,14 +7234,14 @@
       },
       "coles": {
         "name": "Cucumbers Lebanese",
-        "price": 10.9,
+        "price": 1.26,
         "unit_price": 21.8,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-organic-cucumbers-lebanese-500g-4982857",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/4/4982857.jpg"
       },
-      "cheaper_store": "woolworths",
-      "saving_per_item": 9.48,
+      "cheaper_store": "coles",
+      "saving_per_item": 0.16,
       "alternatives": [],
       "ww_price_history": [
         {
@@ -25612,23 +25612,6 @@
       "reason": [
         "30pct_change",
         "outside_historical_range"
-      ]
-    },
-    {
-      "item": "Lebanese Cucumbers",
-      "ww_price": 1.42,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/137130/lebanese-cucumbers",
-      "ww_prev_price": 1.42,
-      "ww_suspicious": false,
-      "coles_price": 10.9,
-      "coles_url": "https://www.coles.com.au/product/coles-organic-cucumbers-lebanese-500g-4982857",
-      "coles_prev_price": 1.26,
-      "coles_suspicious": true,
-      "flagged_date": "2026-07-07",
-      "reason": [
-        "30pct_change",
-        "outside_historical_range",
-        "jumped 765% up"
       ]
     }
   ],
