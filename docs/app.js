@@ -4386,19 +4386,22 @@ function renderMobileCards(items, data) {
   // View toggle — single icon-only button; glyph shows the layout you'll switch TO
   const ICON_LIST = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>';
   const ICON_CARDS = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="7" rx="1.5"/><rect x="3" y="14" width="18" height="7" rx="1.5"/></svg>';
-  // The detailed/compact toggle lives in the HEADER now (top bar), not the toolbar.
-  // Icon shows the layout you'll switch TO. onclick (not addEventListener) so the
-  // per-render refresh never stacks handlers.
-  const hdrView = document.getElementById('mobileViewToggle');
-  if (hdrView) {
-    hdrView.innerHTML = _mcView === 'detailed' ? ICON_LIST : ICON_CARDS;
-    hdrView.title = _mcView === 'detailed' ? 'Compact view' : 'Detailed view';
-    hdrView.onclick = () => {
-      _mcView = _mcView === 'detailed' ? 'compact' : 'detailed';
-      localStorage.setItem('pw_mc_view_v1', _mcView);
-      if (_lastData) renderPage(_lastData); // renderPage preserves scroll itself
-    };
-  }
+  // The detailed/compact toggle sits in the toolbar, to the right of the sort
+  // chips (there's spare room there). The mobile HEADER slot is used for the
+  // Basket shortcut instead. Icon shows the layout you'll switch TO; onclick
+  // (not addEventListener) so the per-render refresh never stacks handlers.
+  const viewBtn = document.createElement('button');
+  viewBtn.id = 'mcViewToggle';
+  viewBtn.type = 'button';
+  viewBtn.innerHTML = _mcView === 'detailed' ? ICON_LIST : ICON_CARDS;
+  viewBtn.title = _mcView === 'detailed' ? 'Compact view' : 'Detailed view';
+  viewBtn.setAttribute('aria-label', viewBtn.title);
+  viewBtn.onclick = () => {
+    _mcView = _mcView === 'detailed' ? 'compact' : 'detailed';
+    localStorage.setItem('pw_mc_view_v1', _mcView);
+    if (_lastData) renderPage(_lastData); // renderPage preserves scroll itself
+  };
+  toolbar.appendChild(viewBtn);
 
   container.appendChild(toolbar);
 
