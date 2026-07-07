@@ -302,7 +302,10 @@
         Confirm to accept a new price; reject to discard it and keep the history unchanged.
       </div>
     </div>
-    <button id="confirmAllBtn" class="btn btn-primary" style="display:none;flex-shrink:0;">✓ Confirm All</button>
+    <div style="display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;">
+      <button id="recheckAllBtn" class="btn btn-ghost" style="display:none;" title="Reload the latest flagged prices from the repo">↻ Recheck</button>
+      <button id="confirmAllBtn" class="btn btn-primary" style="display:none;">✓ Confirm All</button>
+    </div>
   </div>
 </div>
 
@@ -496,156 +499,147 @@ async function loadLatest() {
 
 // ── Action handler ────────────────────────────────────────────────────────────
 
-async function handleAction(entry, store, action, cardEl) {
-  if (_writing) return;
+// Background write queue: a click records the decision + flips the buttons
+// INSTANTLY, then queues the GitHub write. A single drainer commits jobs one at
+// a time in the background (writes to latest.json must serialise — each is a
+// read-modify-write of the same file), so the user can blast through the whole
+// list without the ~5s per-card freeze the old synchronous await caused.
+let _writeQueue = [];
+let _draining = false;
+let _scrapeGuardAsked = false; // ask the "a scrape is running" confirm at most once per drain
 
+async function handleAction(entry, store, action, cardEl) {
   const s = loadSettings();
   if (!s.token || !s.user || !s.repo) {
     showGlobalError('GitHub settings not configured — cannot save.');
     return;
   }
 
-  // Record the decision locally
+  // Record the decision + flip the button — instant, never blocked by a write.
   if (!_decisions[entry.item]) _decisions[entry.item] = { ww: null, coles: null };
   _decisions[entry.item][store] = action;
 
-  // Update button state immediately (optimistic UI)
   const col = cardEl.querySelector(`.store-col-${store}`);
-  col?.querySelectorAll('.validate-actions .btn').forEach(b => {
-    b.disabled = true;
-    b.classList.remove('done');
-  });
+  col?.querySelectorAll('.validate-actions .btn').forEach(b => { b.disabled = true; b.classList.remove('done'); });
   const activeBtn = col?.querySelector(`.btn-${action}`);
   if (activeBtn) { activeBtn.classList.add('done'); activeBtn.textContent = action === 'confirm' ? '✓ Confirmed' : '✗ Rejected'; }
 
-  // Check if both stores have been decided (or only one is suspicious)
   const dec = _decisions[entry.item];
-  const wwNeeds    = entry.ww_suspicious;
-  const colesNeeds = entry.coles_suspicious;
-  const wwDone     = !wwNeeds    || dec.ww    != null;
-  const colesDone  = !colesNeeds || dec.coles != null;
-
+  const wwDone    = !entry.ww_suspicious    || dec.ww    != null;
+  const colesDone = !entry.coles_suspicious || dec.coles != null;
   if (!wwDone || !colesDone) {
-    // Partial — wait for the other store
     updateCardStatus(cardEl, 'Waiting for the other store decision…', '');
     return;
   }
 
-  // Both decided — write to GitHub
-  setWriteLock(true);
-  updateCardStatus(cardEl, '⏳ Saving to GitHub…', '');
+  // Both decided → queue the write and let the drainer handle it in the
+  // background. Snapshot the decision (the shared _decisions map could change).
+  markCardResolved(cardEl);
+  updateCardStatus(cardEl, '⏳ Queued…', '');
+  _writeQueue.push({ entry, dec: { ...dec }, cardEl });
+  drainWriteQueue();
+}
 
-  try {
-    // Re-fetch latest.json to get current state
-    const fresh = await loadLatest();
-    _latestData = fresh;
-
-    // Race guard: while a scrape runs, its final write rebuilds latest.json from a
-    // boot-time snapshot — a validation saved mid-run can be silently resurrected.
-    if (fresh.scrape_progress &&
-        !confirm('A scrape is running right now — it may overwrite this decision when it finishes.\n\nSave anyway?')) {
-      throw new Error('Save cancelled — scrape in progress');
+async function drainWriteQueue() {
+  if (_draining) return;
+  _draining = true;
+  const s = loadSettings();
+  while (_writeQueue.length) {
+    const job = _writeQueue.shift();
+    updateCardStatus(job.cardEl, '⏳ Saving…', '');
+    try {
+      const remaining = await commitDecision(s, job.entry, job.dec);
+      updateCardStatus(job.cardEl, '✅ Saved', 'resolved');
+      updateValidateNavBadge(remaining);
+      const card = job.cardEl;
+      setTimeout(() => {
+        card.remove();
+        if (!document.querySelectorAll('#validateList .validate-card').length) {
+          document.getElementById('validateList').style.display = 'none';
+          document.getElementById('emptyState').style.display = 'block';
+        }
+      }, 900);
+    } catch (err) {
+      console.error(err);
+      showGlobalError(`Save failed: ${err.message}`);
+      updateCardStatus(job.cardEl, `⚠ Save failed — tap a button to retry`, 'error');
+      // Un-resolve so the user can re-decide/retry this one.
+      job.cardEl.style.opacity = '';
+      job.cardEl.querySelectorAll('.validate-actions .btn').forEach(b => { b.disabled = false; b.classList.remove('done'); b.textContent = b.classList.contains('btn-confirm') ? '✓ Confirm' : '✗ Reject'; });
+      delete _decisions[job.entry.item];
     }
-
-    // Find the matching item in items[]
-    const itemEntry = fresh.items?.find(i => i.list_item === entry.item);
-
-    // Build updated per-store histories
-    let newWwHist    = itemEntry?.ww_price_history    ?? [];
-    let newCoHist    = itemEntry?.coles_price_history ?? [];
-
-    // Use today as fallback date for legacy entries that predate flagged_date field
-    const confirmedDate = entry.flagged_date || new Date().toISOString().slice(0, 10);
-
-    if (wwNeeds && dec.ww === 'confirm' && entry.ww_price != null) {
-      newWwHist = [...newWwHist, { date: confirmedDate, price: Math.round(entry.ww_price * 100) / 100 }];
-    }
-    if (colesNeeds && dec.coles === 'confirm' && entry.coles_price != null) {
-      newCoHist = [...newCoHist, { date: confirmedDate, price: Math.round(entry.coles_price * 100) / 100 }];
-    }
-
-    // Update the item — confirm updates current price + history; reject reverts current price
-    const updatedItems = (fresh.items || []).map(i => {
-      if (i.list_item !== entry.item) return i;
-      const patch = { ww_price_history: newWwHist, coles_price_history: newCoHist };
-
-      // Confirmed prices: update current displayed price (covers EDR carry-forward items
-      // where scraper kept old price pending review)
-      if (wwNeeds && dec.ww === 'confirm' && entry.ww_price != null)
-        patch.woolworths = { ...(i.woolworths || {}), price: entry.ww_price };
-      if (colesNeeds && dec.coles === 'confirm' && entry.coles_price != null)
-        patch.coles = { ...(i.coles || {}), price: entry.coles_price };
-
-      // Revert rejected store prices back to the previous known-good price
-      if (wwNeeds && dec.ww === 'reject' && entry.ww_prev_price != null)
-        patch.woolworths = { ...(i.woolworths || {}), price: entry.ww_prev_price };
-      if (colesNeeds && dec.coles === 'reject' && entry.coles_prev_price != null)
-        patch.coles = { ...(i.coles || {}), price: entry.coles_prev_price };
-
-      // Recalculate cheaper_store / saving_per_item after any price revert
-      const wwP = patch.woolworths ? patch.woolworths.price : (i.woolworths?.price ?? null);
-      const coP = patch.coles      ? patch.coles.price      : (i.coles?.price      ?? null);
-      if (wwP != null && coP != null) {
-        if      (wwP < coP) { patch.cheaper_store = 'woolworths'; patch.saving_per_item = Math.round((coP - wwP) * 100) / 100; }
-        else if (coP < wwP) { patch.cheaper_store = 'coles';      patch.saving_per_item = Math.round((wwP - coP) * 100) / 100; }
-        else                { patch.cheaper_store = 'equal';      patch.saving_per_item = 0; }
-      }
-
-      return { ...i, ...patch };
-    });
-
-    // Remove this entry from pending_validation
-    const updatedPV = (fresh.pending_validation || []).filter(e => e.item !== entry.item);
-
-    // Only update approved_prices for confirmed stores — rejected prices must never be approved
-    const today = new Date().toISOString().slice(0, 10);
-    const ap = { ...(fresh.approved_prices || {}) };
-    const wwConfirmed    = wwNeeds    && dec.ww    === 'confirm' && entry.ww_price    != null;
-    const colesConfirmed = colesNeeds && dec.coles === 'confirm' && entry.coles_price != null;
-    if (wwConfirmed || colesConfirmed) {
-      if (!ap[entry.item]) ap[entry.item] = {};
-      if (wwConfirmed)    ap[entry.item].ww    = entry.ww_price;
-      if (colesConfirmed) ap[entry.item].coles = entry.coles_price;
-      ap[entry.item].approved_date = today;
-    }
-
-    const updated = { ...fresh, items: updatedItems, approved_prices: ap,
-                      pending_validation: updatedPV.length ? updatedPV : undefined };
-    if (!updatedPV.length) delete updated.pending_validation;
-
-    const content = JSON.stringify(updated, null, 2) + '\n';
-    await githubPut(s, 'docs/data/latest.json', content,
-      `validate: ${entry.item} — ww:${dec.ww ?? 'n/a'} coles:${dec.coles ?? 'n/a'}`, _latestSha);
-
-    _latestData = updated;
-    updateCardStatus(cardEl, '✅ Saved', 'resolved');
-    markCardResolved(cardEl);
-    updateValidateNavBadge(updatedPV.length);
-
-    // Remove card after a short pause so the user sees ✅ Saved, then show empty
-    // state only when nothing is left. Source of truth = the freshly-written
-    // pending_validation (updatedPV), NOT a DOM count: the old check queried
-    // ".validation-card" (typo — cards are ".validate-card") AND ":not(.resolved)"
-    // (a class markCardResolved never adds), so it always counted 0 and flashed
-    // the empty state after the FIRST action, hiding the still-pending items
-    // until a manual refresh rebuilt the list.
-    setTimeout(() => {
-      cardEl.remove();
-      if (!updatedPV.length) {
-        document.getElementById('validateList').style.display = 'none';
-        document.getElementById('emptyState').style.display = 'block';
-      }
-    }, 1500);
-
-  } catch (err) {
-    console.error(err);
-    showGlobalError(`Save failed: ${err.message}`);
-    updateCardStatus(cardEl, `⚠ Save failed: ${err.message}`, 'error');
-    // Re-enable undone buttons
-    cardEl.querySelectorAll('.validate-actions .btn:not(.done)').forEach(b => { b.disabled = false; });
-  } finally {
-    setWriteLock(false);
   }
+  _draining = false;
+  _scrapeGuardAsked = false;
+  const status = document.getElementById('globalStatus');
+  if (status) { status.className = ''; status.style.display = 'none'; }
+}
+
+// Read-modify-write one decision into latest.json. Returns remaining pending count.
+async function commitDecision(s, entry, dec) {
+  const fresh = await loadLatest();
+  _latestData = fresh;
+
+  // Race guard: while a scrape runs, its final write rebuilds latest.json from a
+  // boot-time snapshot — a decision saved mid-run can be silently resurrected.
+  // Ask once per drain, not once per card.
+  if (fresh.scrape_progress && !_scrapeGuardAsked) {
+    _scrapeGuardAsked = true;
+    if (!confirm('A scrape is running right now — it may overwrite these decisions when it finishes.\n\nSave anyway?'))
+      throw new Error('Save cancelled — scrape in progress');
+  }
+
+  const wwNeeds = entry.ww_suspicious, colesNeeds = entry.coles_suspicious;
+  const itemEntry = fresh.items?.find(i => i.list_item === entry.item);
+  let newWwHist = itemEntry?.ww_price_history ?? [];
+  let newCoHist = itemEntry?.coles_price_history ?? [];
+  const confirmedDate = entry.flagged_date || new Date().toISOString().slice(0, 10);
+  if (wwNeeds && dec.ww === 'confirm' && entry.ww_price != null)
+    newWwHist = [...newWwHist, { date: confirmedDate, price: Math.round(entry.ww_price * 100) / 100 }];
+  if (colesNeeds && dec.coles === 'confirm' && entry.coles_price != null)
+    newCoHist = [...newCoHist, { date: confirmedDate, price: Math.round(entry.coles_price * 100) / 100 }];
+
+  const updatedItems = (fresh.items || []).map(i => {
+    if (i.list_item !== entry.item) return i;
+    const patch = { ww_price_history: newWwHist, coles_price_history: newCoHist };
+    if (wwNeeds && dec.ww === 'confirm' && entry.ww_price != null)
+      patch.woolworths = { ...(i.woolworths || {}), price: entry.ww_price };
+    if (colesNeeds && dec.coles === 'confirm' && entry.coles_price != null)
+      patch.coles = { ...(i.coles || {}), price: entry.coles_price };
+    if (wwNeeds && dec.ww === 'reject' && entry.ww_prev_price != null)
+      patch.woolworths = { ...(i.woolworths || {}), price: entry.ww_prev_price };
+    if (colesNeeds && dec.coles === 'reject' && entry.coles_prev_price != null)
+      patch.coles = { ...(i.coles || {}), price: entry.coles_prev_price };
+    const wwP = patch.woolworths ? patch.woolworths.price : (i.woolworths?.price ?? null);
+    const coP = patch.coles      ? patch.coles.price      : (i.coles?.price      ?? null);
+    if (wwP != null && coP != null) {
+      if      (wwP < coP) { patch.cheaper_store = 'woolworths'; patch.saving_per_item = Math.round((coP - wwP) * 100) / 100; }
+      else if (coP < wwP) { patch.cheaper_store = 'coles';      patch.saving_per_item = Math.round((wwP - coP) * 100) / 100; }
+      else                { patch.cheaper_store = 'equal';      patch.saving_per_item = 0; }
+    }
+    return { ...i, ...patch };
+  });
+
+  const updatedPV = (fresh.pending_validation || []).filter(e => e.item !== entry.item);
+  const today = new Date().toISOString().slice(0, 10);
+  const ap = { ...(fresh.approved_prices || {}) };
+  const wwConfirmed    = wwNeeds    && dec.ww    === 'confirm' && entry.ww_price    != null;
+  const colesConfirmed = colesNeeds && dec.coles === 'confirm' && entry.coles_price != null;
+  if (wwConfirmed || colesConfirmed) {
+    if (!ap[entry.item]) ap[entry.item] = {};
+    if (wwConfirmed)    ap[entry.item].ww    = entry.ww_price;
+    if (colesConfirmed) ap[entry.item].coles = entry.coles_price;
+    ap[entry.item].approved_date = today;
+  }
+
+  const updated = { ...fresh, items: updatedItems, approved_prices: ap,
+                    pending_validation: updatedPV.length ? updatedPV : undefined };
+  if (!updatedPV.length) delete updated.pending_validation;
+
+  await githubPut(s, 'docs/data/latest.json', JSON.stringify(updated, null, 2) + '\n',
+    `validate: ${entry.item} — ww:${dec.ww ?? 'n/a'} coles:${dec.coles ?? 'n/a'}`, _latestSha);
+  _latestData = updated;
+  return updatedPV.length;
 }
 
 function updateCardStatus(cardEl, msg, cls) {
@@ -676,7 +670,7 @@ function updateValidateNavBadge(count) {
 // ── Confirm All ───────────────────────────────────────────────────────────────
 
 async function confirmAll() {
-  if (_writing) return;
+  if (_writing || _draining || _writeQueue.length) return; // don't bulk-write while individual writes drain
   const s = loadSettings();
   if (!s.token || !s.user || !s.repo) {
     showGlobalError('GitHub settings not configured — cannot save.');
@@ -860,7 +854,9 @@ function renderEntry(entry) {
   // Wire up action buttons
   card.querySelectorAll('.validate-actions .btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      if (_writing || btn.classList.contains('done')) return;
+      // No _writing gate any more — clicks register instantly and the write is
+      // queued in the background (see handleAction). Just ignore a finished button.
+      if (btn.disabled || btn.classList.contains('done')) return;
       handleAction(entry, btn.dataset.store, btn.dataset.action, card);
     });
   });
@@ -911,28 +907,52 @@ function renderEntry(entry) {
 
   document.getElementById('loading').style.display = 'none';
 
-  const pending = _latestData.pending_validation || [];
-  updateValidateNavBadge(pending.length);
+  // Wire the toolbar once; buildValidateList() (re)paints the cards from
+  // _latestData and is reused by the Recheck button.
+  document.getElementById('confirmAllBtn')?.addEventListener('click', confirmAll);
+  document.getElementById('recheckAllBtn')?.addEventListener('click', recheckAll);
+  buildValidateList();
+})();
 
+// Paint the pending-validation cards from _latestData (+ archive context).
+function buildValidateList() {
   const listEl = document.getElementById('validateList');
   const emptyEl = document.getElementById('emptyState');
-
+  const confirmAllBtn = document.getElementById('confirmAllBtn');
+  const recheckAllBtn = document.getElementById('recheckAllBtn');
+  const pending = _latestData?.pending_validation || [];
+  updateValidateNavBadge(pending.length);
+  listEl.innerHTML = '';
+  if (recheckAllBtn) recheckAllBtn.style.display = '';
   if (pending.length === 0) {
+    listEl.style.display = 'none';
+    if (confirmAllBtn) confirmAllBtn.style.display = 'none';
     emptyEl.style.display = 'block';
     return;
   }
-
-  const confirmAllBtn = document.getElementById('confirmAllBtn');
-  if (confirmAllBtn) {
-    confirmAllBtn.style.display = '';
-    confirmAllBtn.addEventListener('click', confirmAll);
-  }
-
+  emptyEl.style.display = 'none';
+  if (confirmAllBtn) confirmAllBtn.style.display = '';
   listEl.style.display = 'flex';
-  pending.forEach(entry => {
-    listEl.appendChild(renderEntry(entry));
-  });
-})();
+  pending.forEach(entry => listEl.appendChild(renderEntry(entry)));
+}
+
+// Recheck: pull the freshest flagged prices from the repo and repaint. Useful
+// after a scrape lands (some items may no longer be suspicious) or to confirm a
+// decision saved. Does NOT re-scrape — that's the main page's Update Prices.
+async function recheckAll() {
+  if (_draining || _writeQueue.length) return; // let in-flight writes finish first
+  const btn = document.getElementById('recheckAllBtn');
+  if (btn) { btn.disabled = true; btn.textContent = '↻ Rechecking…'; }
+  try {
+    _latestData = await loadLatest();
+    await loadArchivedSet();
+    buildValidateList();
+  } catch (e) {
+    showGlobalError(`Recheck failed: ${e.message}`);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '↻ Recheck'; }
+  }
+}
 
 // ── Bell notifications (name changes) ────────────────────────────────────────
 (async function initNavBell() {

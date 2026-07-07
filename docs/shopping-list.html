@@ -489,14 +489,18 @@ async function boot() {
     if (localStorage.getItem('pw_sl_locked') !== '1') localStorage.removeItem('pw_sl_handoff');
   } catch {}
 
-  const allItems = (data.items || []).filter(i => !i.archived);
+  const activeItems = (data.items || []).filter(i => !i.archived);
 
   let displayItems;
   if (handoff && Array.isArray(handoff.items) && handoff.items.length > 0) {
+    // Explicit selection wins over the archive filter: a per-kg group can have an
+    // archived member as its cheapest variant (e.g. Chicken Roast Portions), and
+    // the user deliberately added it — so match against ALL items, not just active
+    // ones. (Bug: 4 items added, only 3 shown, because one was archived.)
     const nameSet = new Set(handoff.items);
-    displayItems = allItems.filter(i => nameSet.has(i.list_item));
+    displayItems = (data.items || []).filter(i => nameSet.has(i.list_item));
   } else {
-    displayItems = allItems; // fallback: show everything
+    displayItems = activeItems; // fallback: show everything active
   }
 
   if (!displayItems.length) {
