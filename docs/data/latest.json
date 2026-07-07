@@ -10631,7 +10631,7 @@
       },
       "coles": {
         "name": "Coles Beef Scotch Steak With Bearnaise Butter | 265g",
-        "price": 13,
+        "price": 17,
         "unit_price": 13,
         "unit": "1kg",
         "url": "https://www.coles.com.au/product/coles-beef-scotch-steak-with-bearnaise-butter-265g-6641427",
@@ -10639,7 +10639,7 @@
         "retailer": "coles"
       },
       "cheaper_store": "coles",
-      "saving_per_item": 5,
+      "saving_per_item": 1,
       "alternatives": [
         {
           "name": "Coles Beef Scotch Steak With Bearnaise Butter | 265g",
@@ -25596,22 +25596,6 @@
     "items_not_found": 18
   },
   "pending_validation": [
-    {
-      "item": "Woolworths Beef Porterhouse Steak & Butter",
-      "ww_price": 18,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/243050/woolworths-beef-porterhouse-steak-butter",
-      "ww_prev_price": 18,
-      "ww_suspicious": false,
-      "coles_price": 13,
-      "coles_url": "https://www.coles.com.au/product/coles-beef-scotch-steak-with-bearnaise-butter-265g-6641427",
-      "coles_prev_price": 17,
-      "coles_suspicious": true,
-      "flagged_date": "2026-07-07",
-      "reason": [
-        "suspicious_drop_gt20pct",
-        "outside_historical_range"
-      ]
-    },
     {
       "item": "Macro Organic Black Bean No Added Salt",
       "ww_price": 1.5,
