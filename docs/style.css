@@ -111,8 +111,8 @@ nav a.active { background: var(--bg); color: var(--text); font-weight: 600; }
 .header-right { display: flex; align-items: center; gap: 8px; }
 
 /* Search now lives in the toolbar, flexible between the logo and the action cluster. */
-.header-search { flex: 1; min-width: 90px; margin: 0; }
-.header-search #searchInput { padding-left: 34px; height: 38px; }
+.header-search { flex: 1; min-width: 90px; margin: 0; display: flex; align-items: center; }
+.header-search #searchInput { padding-left: 34px; height: 38px; flex: 1; }
 .header-search-ico { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-soft); pointer-events: none; }
 .header-search .search-clear { right: 10px; }
 .header-div { width: 1px; height: 24px; background: var(--border); flex-shrink: 0; margin: 0 2px; }
@@ -2066,11 +2066,7 @@ td.priority-cell { text-align: center; }
     margin: 0 12px 8px;
     width: calc(100% - 24px);
     box-sizing: border-box;
-    display: flex;
-    align-items: center;
   }
-  .search-wrap #searchInput { height: 38px; }
-  header .header-right .nav-icon-btn { height: 38px; min-width: 38px; }
 
   /* ── Banner: compact two-column strip so products show sooner ─── */
   .comparison-banner {
