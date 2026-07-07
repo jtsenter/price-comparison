@@ -117,26 +117,25 @@ nav a.active { background: var(--bg); color: var(--text); font-weight: 600; }
 .header-search .search-clear { right: 10px; }
 .header-div { width: 1px; height: 24px; background: var(--border); flex-shrink: 0; margin: 0 2px; }
 
-/* Every header action button matches the 38px search-box height (they were ~28px,
-   so the top bar looked ragged next to the search field). Flex-centres the glyph. */
-header .header-right .btn-icon {
-  height: 38px; min-width: 38px;
-  display: inline-flex; align-items: center; justify-content: center;
-}
+/* Header action buttons match the 38px search-box height (they were ~28px, so
+   the top bar looked ragged). MUST NOT set `display` — .btn is already
+   inline-flex/centred, and forcing display here re-showed every button the
+   mobile media query hides via display:none (the desktop dup 🔥/👁 AND the
+   mobile nav-destination/fire leak). Height only; centring comes from .btn. */
+header .header-right .btn-icon { height: 38px; min-width: 38px; justify-content: center; }
 
-/* Validate: a warning pill sitting between the search box and the icon cluster
-   (only rendered when there are prices to review). Distinct amber so it reads as
-   an action, not a nav icon. */
+/* Validate: a quiet pill between the search box and the icon cluster (only
+   rendered when there are prices to review). Deliberately low-key — ghost
+   chrome, muted text — so it's findable without shouting for attention. */
 .validate-pill {
   display: inline-flex; align-items: center; gap: 6px;
-  height: 38px; padding: 0 14px; flex-shrink: 0;
+  height: 38px; padding: 0 12px; flex-shrink: 0;
   border-radius: 9px; text-decoration: none; white-space: nowrap;
-  font-size: 13px; font-weight: 700;
-  background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A;
-  transition: background .12s, border-color .12s;
+  font-size: 13px; font-weight: 600;
+  background: transparent; color: var(--text-mid); border: 1px solid var(--border-strong);
+  transition: background .12s, color .12s, border-color .12s;
 }
-.validate-pill:hover { background: #FDE68A; border-color: #FCD34D; }
-:root[data-theme="dark"] .validate-pill { background: #422006; color: #FCD34D; border-color: #713f12; }
+.validate-pill:hover { background: var(--bg); color: var(--text); border-color: var(--text-soft); }
 
 /* Icon-only nav destinations in the header action cluster (Hot Deals, Basket,
    Alerts). Same ghost-button chrome as the utility buttons beside them, but each
@@ -2044,8 +2043,17 @@ td.priority-cell { text-align: center; }
   /* Hide desktop-only controls */
   .col-chooser-wrap, .view-toggle-btn { display: none !important; }
 
-  /* Show mobile-only header buttons */
-  .mobile-hot-btn, .mobile-watch-btn { display: inline-flex; }
+  /* Show the mobile watchlist toggle. The mobile 🔥 (mobile-hot-btn) stays
+     HIDDEN: it duplicated the bottom tab bar's Hot Deals (both a flame, but one
+     filters the list and the other navigates — confusing). Bottom tab wins. */
+  .mobile-watch-btn { display: inline-flex; }
+  .mobile-hot-btn   { display: none !important; }
+
+  /* Reclaim header space on mobile: the W/C brand chips (redundant — the bottom
+     tab bar's Prices tab is home) and the notification bell (never wanted on a
+     phone) are hidden. */
+  header .brand { display: none; }
+  #notifBtn { display: none !important; }
 
   /* ── Search bar ─────────────────────────────────────────────── */
   .search-wrap {
