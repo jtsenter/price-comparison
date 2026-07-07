@@ -587,6 +587,7 @@ const DEFAULT_VARIANT_GROUPS = [
     'Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets',
     'Woolworths Salmon Portions Skin On',
     'Woolworths Salmon Portions Skin Off 4 pack',
+    'Woolworths Diced Tasmanian Salmon Skin Off 300g',
     'Tassal Atlantic Salmon Skin On 300g',
     'Tassal Atlantic Salmon Skin Off 300g',
     'Coles Tasmanian Salmon Portions Skin On 4 Pack 460g',
@@ -1394,6 +1395,7 @@ function openEditModal(item) {
 let _historyItem = null;
 let _priceHistChart = null;
 let _pendingExcl = null; // staged exclusions (Set), null when modal is closed
+let _phExpanded = false;  // price-history "Expand": show per-row source (receipt/scrape date). Web only.
 
 function _closePriceHistoryModal() {
   const modal = $('priceHistoryModal');
@@ -1414,6 +1416,15 @@ function initPriceHistoryModal() {
   $('priceHistoryClose').addEventListener('click', _closePriceHistoryModal);
   $('priceHistoryClose2').addEventListener('click', _closePriceHistoryModal);
   modal.addEventListener('click', (e) => { if (e.target === modal) _closePriceHistoryModal(); });
+
+  // Expand toggle (web only): reveals each row's source — receipt vs scrape, and
+  // the scrape date — without cluttering the default clean view.
+  $('priceHistoryExpandBtn')?.addEventListener('click', () => {
+    _phExpanded = !_phExpanded;
+    const list = $('priceHistoryList');
+    list.classList.toggle('ph-expanded', _phExpanded);
+    $('priceHistoryExpandBtn').textContent = _phExpanded ? '⤡ Collapse' : '⤢ Expand';
+  });
 
   $('priceHistoryReset').addEventListener('click', () => {
     if (!_historyItem) return;
@@ -1685,6 +1696,14 @@ function openPriceHistoryModal(item) {
   const closeOnlyBtn = $('priceHistoryClose2');
   if (closeOnlyBtn) closeOnlyBtn.textContent = simplified ? 'Close' : 'Cancel';
 
+  // Expand button is web-only (the narrow modal has no room for a source column).
+  const expandBtn = $('priceHistoryExpandBtn');
+  if (expandBtn) {
+    expandBtn.style.display = innerWidth <= 700 ? 'none' : '';
+    expandBtn.textContent = _phExpanded ? '⤡ Collapse' : '⤢ Expand';
+  }
+  $('priceHistoryList').classList.toggle('ph-expanded', _phExpanded && innerWidth > 700);
+
   // Initialize pending on fresh open; re-renders reuse existing _pendingExcl
   if (_pendingExcl === null) {
     const excl = loadExclusions();
@@ -1798,8 +1817,16 @@ function openPriceHistoryModal(item) {
          </span>`
       : `<span style="color:var(--text-soft)">—</span>`;
 
+    // Source label (revealed by Expand): where this price came from. 'scrape' =
+    // captured by an automated scrape on that date; 'receipt' = a purchase from
+    // shopping_list.xlsx; 'now' = the current live price.
+    const _src = entry.source || '';
+    const srcLabel = _src.includes('live') ? 'now (live)'
+      : _src.includes('scrape') ? `scraped ${entry.date || ''}`
+      : _src.includes('excel') ? 'receipt' : _src;
+
     row.innerHTML = `
-      <span class="price-history-date${idx === 0 ? ' ph-latest-date' : ''}">${entry.date || 'Unknown date'}</span>
+      <span class="price-history-date${idx === 0 ? ' ph-latest-date' : ''}">${entry.date || 'Unknown date'}<span class="ph-source">${esc(srcLabel)}</span></span>
       ${wwHtml}
       ${coHtml}`;
 
