@@ -4740,17 +4740,22 @@
       },
       "coles": {
         "name": "Spring Water 8x1.5l",
-        "price": 3.3,
+        "price": 6.5,
         "unit_price": 0.54,
         "unit": "1L",
         "url": "https://www.coles.com.au/product/coles-spring-water-8x1.5l-8-pack-7906196",
         "image_url": "https://cdn.productimages.coles.com.au/productimages/7/7906196.jpg"
       },
-      "cheaper_store": "coles",
+      "cheaper_store": "woolworths",
       "saving_per_item": 1.6,
       "alternatives": [],
       "ww_price_history": [],
-      "coles_price_history": [],
+      "coles_price_history": [
+        {
+          "date": "2026-07-08",
+          "price": 6.5
+        }
+      ],
       "match_confidence": "high",
       "size_warning": false,
       "per_100_ww": 0.05,
@@ -26183,22 +26188,6 @@
       ]
     },
     {
-      "item": "Woolworths Spring Water Bottles",
-      "ww_price": 4.9,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/749792/woolworths-spring-water-bottles",
-      "ww_prev_price": 4.9,
-      "ww_suspicious": false,
-      "coles_price": 6.5,
-      "coles_url": "https://www.coles.com.au/product/coles-spring-water-8x1.5l-8-pack-7906196",
-      "coles_prev_price": 3.3,
-      "coles_suspicious": true,
-      "flagged_date": "2026-07-08",
-      "reason": [
-        "30pct_change",
-        "outside_historical_range"
-      ]
-    },
-    {
       "item": "The Dutch Company Confectionary 4 Syrup Wafers",
       "ww_price": 3.05,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/291451/the-dutch-company-confectionary-4-syrup-wafers",
@@ -26594,6 +26583,10 @@
     },
     "Woolworths Baked Beans In Tomato Sauce": {
       "coles": 1.3,
+      "approved_date": "2026-07-08"
+    },
+    "Woolworths Spring Water Bottles": {
+      "coles": 6.5,
       "approved_date": "2026-07-08"
     }
   }
