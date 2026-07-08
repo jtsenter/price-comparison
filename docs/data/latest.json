@@ -10898,6 +10898,10 @@
         {
           "date": "2026-07-07",
           "price": 1.3
+        },
+        {
+          "date": "2026-07-08",
+          "price": 1.08
         }
       ],
       "match_confidence": "medium",
@@ -26196,21 +26200,6 @@
       ]
     },
     {
-      "item": "Woolworths Capsicum Green",
-      "ww_price": 1.48,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/135156/woolworths-capsicum-green",
-      "ww_prev_price": 1.48,
-      "ww_suspicious": false,
-      "coles_price": 1.08,
-      "coles_url": "https://www.coles.com.au/product/coles-capsicum-green-loose-approx.-220g-7214862",
-      "coles_prev_price": 1.3,
-      "coles_suspicious": true,
-      "flagged_date": "2026-07-08",
-      "reason": [
-        "outside_historical_range"
-      ]
-    },
-    {
       "item": "Woolworths Greek Style Yoghurt",
       "ww_price": 4.2,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/571487/woolworths-natural-greek-style-yoghurt",
@@ -26460,7 +26449,8 @@
       "coles": 1.95
     },
     "Woolworths Capsicum Green": {
-      "approved_date": "2026-07-06"
+      "approved_date": "2026-07-08",
+      "coles": 1.08
     },
     "Woolworths Celery Heart": {
       "approved_date": "2026-05-31",
