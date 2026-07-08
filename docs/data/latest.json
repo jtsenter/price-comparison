@@ -10072,6 +10072,10 @@
         {
           "date": "2026-07-07",
           "price": 6.4
+        },
+        {
+          "date": "2026-07-08",
+          "price": 7.4
         }
       ],
       "match_confidence": "high",
@@ -26192,21 +26196,6 @@
       ]
     },
     {
-      "item": "Woolworths 12 Extra Large Free Range Eggs",
-      "ww_price": 6.5,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/224763/woolworths-12-x-large-free-range-eggs",
-      "ww_prev_price": 6.5,
-      "ww_suspicious": false,
-      "coles_price": 7.4,
-      "coles_url": "https://www.coles.com.au/product/sunrise-free-range-eggs-12-pack-700g-6339534",
-      "coles_prev_price": 6.4,
-      "coles_suspicious": true,
-      "flagged_date": "2026-07-08",
-      "reason": [
-        "outside_historical_range"
-      ]
-    },
-    {
       "item": "Woolworths Capsicum Green",
       "ww_price": 1.48,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/135156/woolworths-capsicum-green",
@@ -26579,6 +26568,10 @@
     },
     "The Dutch Company Confectionary 4 Syrup Wafers": {
       "coles": 2.2,
+      "approved_date": "2026-07-08"
+    },
+    "Woolworths 12 Extra Large Free Range Eggs": {
+      "coles": 7.4,
       "approved_date": "2026-07-08"
     }
   }
