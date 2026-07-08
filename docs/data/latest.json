@@ -12655,6 +12655,10 @@
         {
           "date": "2026-07-07",
           "price": 4.2
+        },
+        {
+          "date": "2026-07-08",
+          "price": 3.5
         }
       ],
       "match_confidence": "high",
@@ -26200,21 +26204,6 @@
       ]
     },
     {
-      "item": "Woolworths Greek Style Yoghurt",
-      "ww_price": 4.2,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/571487/woolworths-natural-greek-style-yoghurt",
-      "ww_prev_price": 4.2,
-      "ww_suspicious": false,
-      "coles_price": 3.5,
-      "coles_url": "https://www.coles.com.au/product/coles-greek-style-natural-yoghurt-1kg-2273478",
-      "coles_prev_price": 4.2,
-      "coles_suspicious": true,
-      "flagged_date": "2026-07-08",
-      "reason": [
-        "outside_historical_range"
-      ]
-    },
-    {
       "item": "Dolmio Extra Bolognese Tomato Pasta Sauce",
       "ww_price": 2.3,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/758286/dolmio-extra-bolognese-tomato-pasta-sauce",
@@ -26562,6 +26551,10 @@
     },
     "Woolworths 12 Extra Large Free Range Eggs": {
       "coles": 7.4,
+      "approved_date": "2026-07-08"
+    },
+    "Woolworths Greek Style Yoghurt": {
+      "coles": 3.5,
       "approved_date": "2026-07-08"
     }
   }
