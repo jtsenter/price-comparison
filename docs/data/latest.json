@@ -8769,6 +8769,10 @@
         {
           "date": "2026-07-02",
           "price": 3.05
+        },
+        {
+          "date": "2026-07-08",
+          "price": 2.2
         }
       ],
       "match_confidence": "medium",
@@ -26188,22 +26192,6 @@
       ]
     },
     {
-      "item": "The Dutch Company Confectionary 4 Syrup Wafers",
-      "ww_price": 3.05,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/291451/the-dutch-company-confectionary-4-syrup-wafers",
-      "ww_prev_price": 2.5,
-      "ww_suspicious": false,
-      "coles_price": 2.2,
-      "coles_url": "https://www.coles.com.au/product/the-dutch-company-syrup-wafers-125g-4179062",
-      "coles_prev_price": 3.05,
-      "coles_suspicious": true,
-      "flagged_date": "2026-07-08",
-      "reason": [
-        "suspicious_drop_gt20pct",
-        "outside_historical_range"
-      ]
-    },
-    {
       "item": "Woolworths 12 Extra Large Free Range Eggs",
       "ww_price": 6.5,
       "ww_url": "https://www.woolworths.com.au/shop/productdetails/224763/woolworths-12-x-large-free-range-eggs",
@@ -26587,6 +26575,10 @@
     },
     "Woolworths Spring Water Bottles": {
       "coles": 6.5,
+      "approved_date": "2026-07-08"
+    },
+    "The Dutch Company Confectionary 4 Syrup Wafers": {
+      "coles": 2.2,
       "approved_date": "2026-07-08"
     }
   }
