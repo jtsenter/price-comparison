@@ -413,8 +413,10 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
 .vg-group-sub { display: block; font-size: 11px; color: var(--text-soft); margin-top: 1px; padding-left: 19px; }
 .perkg-suffix { font-size: 11px; font-weight: 600; color: var(--text-soft); }
 
-/* Expanded full-width panel. */
-.vg-panel-row > td { padding: 0 !important; background: color-mix(in srgb, var(--accent) 5%, transparent); border-bottom: 1px solid var(--border); cursor: pointer; }
+/* Expanded full-width panel. Not clickable itself (only the group header row
+   toggles — see the tbody click handler), so a normal cursor, not the leftover
+   pointer from when the whole panel used to collapse on click. */
+.vg-panel-row > td { padding: 0 !important; background: color-mix(in srgb, var(--accent) 5%, transparent); border-bottom: 1px solid var(--border); cursor: default; }
 /* The panel lives in a full-width colspan cell, so on a wide (overflowing) table its
    right half — the Coles column — fell off-screen. Pin it to the left of the scroll
    viewport and size it to the visible width so both stores stay on screen; the main
@@ -927,7 +929,13 @@ tr:hover .price-bar-manage { opacity: 1; }
 .price-per100 { font-size: 10px; color: var(--text-soft); margin-top: 1px; opacity: 0.8; }
 .price-link { color: inherit; text-decoration: none; }
 .price-link:hover { color: var(--ww); text-decoration: underline; }
-.no-data { color: var(--text-soft); font-size: 13px; }
+/* A missing-value placeholder ("—") sits alone in its cell with nothing else to
+   align against, so it's centered regardless of that column's real-value
+   alignment (e.g. WW/Coles totals are left-aligned when present). display:block
+   makes it fill the table cell so text-align:center has a box to center within;
+   inside a flex row (the saving column) a block child still sizes to its own
+   content, so this doesn't disturb that column's flex justify-content:flex-end. */
+.no-data { color: var(--text-soft); font-size: 13px; display: block; text-align: center; }
 
 /* Symmetric price highlighting — both green when cheapest */
 .cell-ww .price-main,
