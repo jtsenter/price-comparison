@@ -4151,6 +4151,7 @@ function appendGroupCardMobile(container, group, overrides) {
 
 // ── Per-kg category edit modal ────────────────────────────────────────────────
 let _catEditKey = null;
+let _catEditOrig = null; // per-store membership at modal-open, for removal detection
 let _catDragSrc = null;  // drag source row, shared by the once-bound drag handlers
 
 // A blank product row for the "+ Add product" action. Matches makeRow(isNew).
@@ -4198,6 +4199,10 @@ function openCategoryEditModal(groupKey) {
   const ov = loadOverrides();
   const excl = loadPerKgExclusions();
   const stores = resolveStoreLists(cat, byName);
+  // Snapshot the per-store membership so save can detect deletions (a member the
+  // user pulled out of a store's column) and actually make them stick — see
+  // saveCategoryEdit's removal handling.
+  _catEditOrig = { ww: [...stores.ww], coles: [...stores.coles] };
 
   $('catEditName').value = cat.label;
 
@@ -4366,6 +4371,50 @@ function saveCategoryEdit() {
   // Union (WW order first, then Coles-only items) = the membership the user just defined.
   const items = [...wwItems, ...coItems.filter(n => !wwItems.includes(n))];
 
+  // Store REMOVALS: a member that was in a store's column when the modal opened but
+  // isn't now. This must genuinely stick — the old code just dropped it from the
+  // order list, but resolveStoreLists re-appended any member that still had a live
+  // price at that store, so a wrong cross-store match (e.g. Chicken Roast Portions
+  // matched to a Coles "Chicken Parma" product) kept coming back every render, and
+  // the scraper kept re-matching it. To make removal permanent we (1) pin the KEPT
+  // store single-store so the scraper stops name-searching the removed store, and
+  // (2) null the removed store's data in latest.json so it disappears immediately
+  // and can't be re-appended.
+  const orig = _catEditOrig || { ww: [], coles: [] };
+  const removals = []; // { item, store }  store = the one being removed
+  for (const n of orig.ww)    if (!wwItems.includes(n)) removals.push({ item: n, store: 'ww' });
+  for (const n of orig.coles) if (!coItems.includes(n)) removals.push({ item: n, store: 'coles' });
+
+  const touchedItems = new Set();  // names whose url_overrides entry changed
+  let latestChanged = false;
+  for (const { item, store } of removals) {
+    const keptStore = store === 'ww' ? 'coles' : 'ww';
+    const stillInKept = (keptStore === 'ww' ? wwItems : coItems).includes(item);
+    // Only single-store-pin when the member survives at the other store; a member
+    // removed from BOTH stores is just leaving the category (handled by the diff).
+    if (stillInKept) {
+      const data = _lastData?.items?.find(i => i.list_item === item);
+      const keptUrl = keptStore === 'ww'
+        ? (ov[item]?.wwUrl || data?.woolworths?.url)
+        : (ov[item]?.colesUrl || data?.coles?.url);
+      if (keptUrl) {
+        ov[item] = ov[item] || {};
+        ov[item][keptStore === 'ww' ? 'wwUrl' : 'colesUrl'] = keptUrl;
+        delete ov[item][store === 'ww' ? 'wwUrl' : 'colesUrl'];
+        touchedItems.add(item);
+      }
+      // Null the removed store now so it drops from the UI and resolveStoreLists
+      // can't re-append it (qualifies() keys off price > 0).
+      if (data) {
+        data[store === 'ww' ? 'woolworths' : 'coles'] = null;
+        data.cheaper_store = null; data.saving_per_item = null;
+        latestChanged = true;
+      }
+    }
+    // Belt-and-suspenders: block it from that store's $/kg list regardless.
+    excl.add(`${key}::${item}::${store}`);
+  }
+
   // Persist as a diff vs the current code defaults so removals stick and future default
   // changes flow through. `remove` = defaults the user dropped; `add` = everything else.
   const defItems = (DEFAULT_VARIANT_GROUPS.find(d => d.key === key) || {}).items || [];
@@ -4377,16 +4426,25 @@ function saveCategoryEdit() {
   closeCategoryEditModal();
   if (_lastData) renderPage(_lastData);
 
-  // Persist new products' URLs to url_overrides.json so the scraper re-scrapes
-  // them on every full run (they'd vanish otherwise — they're not in the Excel).
-  if (newFetches.length) {
-    const s = loadSettings();
-    if (!s.token) {
-      alert(`Saved. ${newFetches.length} new product(s) added — add your GitHub token (Auto-update Setup) then hit ↻ on the category to fetch their prices.`);
-    } else {
-      persistUrlOverridesToRepo(s, ov).catch(err => showSyncError('URL overrides', err, () => persistUrlOverridesToRepo(s, ov).catch(() => {})));
-      newFetches.forEach(f => triggerItemRefresh(f.name, null, { wwUrl: f.wwUrl, colesUrl: f.colesUrl }));
+  const s = loadSettings();
+  const needRepo = newFetches.length || touchedItems.size || latestChanged;
+  if (needRepo && !s.token) {
+    alert('Saved locally. Add your GitHub token (Auto-update Setup) so the change reaches the scraper and other devices.');
+  } else if (needRepo) {
+    // Exact-write the touched items so a removed URL is actually deleted from the
+    // repo (merge-only writes could never drop a key). New products merge in.
+    persistUrlOverridesToRepo(s, ov, [...touchedItems])
+      .catch(err => showSyncError('URL overrides', err, () => persistUrlOverridesToRepo(s, ov, [...touchedItems]).catch(() => {})));
+    if (latestChanged) {
+      persistLatestJson(_lastData, `edit: ${key} — removed ${removals.map(r => `${r.item} @ ${r.store}`).join(', ')}`)
+        .catch(err => showSyncError('latest.json', err));
+    }
+    // New products' URLs live in url_overrides now — fetch their prices immediately.
+    newFetches.forEach(f => triggerItemRefresh(f.name, null, { wwUrl: f.wwUrl, colesUrl: f.colesUrl }));
+    if (newFetches.length) {
       alert(`Saved. Fetching ${newFetches.length} new product(s) — they'll appear once the next price check finishes.`);
+    } else if (removals.length) {
+      showToast(`✓ Removed ${removals.length} store listing${removals.length > 1 ? 's' : ''} — the scraper will stop checking ${removals.map(r => r.store === 'ww' ? 'WW' : 'Coles').join('/')}.`);
     }
   }
 }
@@ -6292,9 +6350,11 @@ async function boot() {
         // below already ignores button clicks, so this won't collapse the panel).
         const pvBasket = e.target.closest('.vg-pv-basket');
         if (pvBasket) { addPerKgToBasket(pvBasket.dataset.item); return; }
-        // Variant group expand/collapse — click anywhere on the group row (or its
-        // panel header), except on the interactive controls it hosts.
-        const groupRow = e.target.closest('.vg-group-row, .vg-panel-row');
+        // Variant group expand/collapse — click ONLY the group header row toggles.
+        // The expanded panel beneath (.vg-panel-row) is deliberately inert so a tap
+        // on a variant / whitespace there doesn't collapse the panel out from under
+        // you; collapse by clicking the same header row you opened.
+        const groupRow = e.target.closest('.vg-group-row');
         if (groupRow && !e.target.closest('.priority-select, .units-ctrl, a, button, input, .img-hoverable')) {
           const key = groupRow.dataset.group;
           if (_expandedGroups.has(key)) _expandedGroups.delete(key);
