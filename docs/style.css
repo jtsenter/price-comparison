@@ -2000,11 +2000,14 @@ td.priority-cell { text-align: center; }
 .diff-item-priority-badge.archive { background: #F9FAFB; color: #9CA3AF; }
 
 /* ── Search bar ───────────────────────────────────────────────── */
+/* No margin: the search lives in the header flex row now, and a leftover bottom
+   margin shifted it 4px above the buttons' centreline (the "misaligned heights"
+   bug — it overrode .header-search's margin:0 by being later in the file). */
 .search-wrap {
   position: relative;
   display: flex;
   align-items: center;
-  margin: 0 0 8px;
+  margin: 0;
 }
 #searchInput {
   width: 100%;
@@ -2046,12 +2049,12 @@ td.priority-cell { text-align: center; }
   /* Hide desktop-only controls */
   .col-chooser-wrap, .view-toggle-btn { display: none !important; }
 
-  /* Mobile top bar = search + a Basket shortcut. The detailed/compact toggle now
-     lives in the sort-chips toolbar (see #mcViewToggle), so the header slot is
-     freed for the Basket icon. Un-hide just nav-basket from the desktop nav
-     cluster (everything else in .nav-icon-btn stays hidden on phones). Skip the
-     Basket page itself — linking to the page you're on is pointless. */
-  header:not([data-page="shopping-list"]) .header-right .nav-icon-btn.nav-basket {
+  /* Mobile top bar = search + a Price Alerts shortcut. Basket and Hot Deals
+     already live in the bottom tab bar (a header basket was a duplicate), but
+     Alerts has NO other mobile entry point — the desktop nav cluster, the bell
+     and the options menu are all hidden on phones. Skip the Alerts page itself —
+     linking to the page you're on is pointless. */
+  header:not([data-page="alerts"]) .header-right .nav-icon-btn.nav-alerts {
     display: inline-flex;
   }
 
@@ -2060,13 +2063,6 @@ td.priority-cell { text-align: center; }
      phone) are hidden. */
   header .brand { display: none; }
   #notifBtn { display: none !important; }
-
-  /* ── Search bar ─────────────────────────────────────────────── */
-  .search-wrap {
-    margin: 0 12px 8px;
-    width: calc(100% - 24px);
-    box-sizing: border-box;
-  }
 
   /* ── Banner: compact two-column strip so products show sooner ─── */
   .comparison-banner {

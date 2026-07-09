@@ -230,7 +230,13 @@
     .nav-icon-btn.nav-basket:hover { color: #006B31; background: rgba(0,132,61,.08); }
     .nav-icon-btn.nav-alerts:hover { color: #B45309; background: rgba(217,119,6,.08); }
     .nav-icon-btn.here.nav-basket  { background: rgba(0,132,61,.10); border-color: rgba(0,132,61,.35); }
-    @media (max-width: 700px) { .nav-icon-btn, .header-div { display: none; } }
+    /* Mirrors style.css's mobile header: nav cluster + bell hidden, but keep the
+       Price Alerts shortcut (its only mobile entry point). */
+    @media (max-width: 700px) {
+      .nav-icon-btn, .header-div { display: none; }
+      #notifBtn { display: none !important; }
+      .header-right .nav-icon-btn.nav-alerts { display: inline-flex; }
+    }
 
     /* ── Shopping mode — big tap-to-check rows for in-store use ── */
     .sl-mode-seg { display: inline-flex; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
@@ -360,7 +366,7 @@
 </head>
 <body>
 <header data-page="shopping-list"></header>
-<script src="header.js?v=1"></script>
+<script src="header.js?v=2"></script>
 
 <div class="notif-dropdown" id="notifDropdown" style="display:none">
   <div class="notif-header">

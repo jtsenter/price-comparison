@@ -1194,10 +1194,15 @@ async def _scrape_single_item(
     """Scrape one item. Returns (result_dict | None, is_not_found)."""
     category = guess_category(item)
     history = purchase_history.get(item, {})
-    # Fallback: if exact match fails, try substring match (e.g. "Lamb Mince" -> "Woolworths Lamb Mince")
+    # Fallback: if exact match fails, allow a store-prefix variant of the SAME
+    # product (e.g. "Lamb Mince" -> "Woolworths Lamb Mince"), i.e. the Excel name
+    # must END with the item name. A bare substring test borrowed history across
+    # different products — "…Porterhouse Steak" matched "…Porterhouse Steak &
+    # Butter", giving the loose $/kg listing the 2-pack's receipt prices (the
+    # phantom $100/kg trend points).
     if not history and purchase_history:
         for excel_name, hist_data in purchase_history.items():
-            if item.lower() in excel_name.lower() and hist_data.get("price_history"):
+            if excel_name.lower().endswith(item.lower()) and hist_data.get("price_history"):
                 history = hist_data
                 break
     existing_item = next((ex for ex in existing_data.get("items", []) if ex["list_item"] == item), {})
@@ -1432,10 +1437,13 @@ async def _scrape_single_item(
             return existing, conf_label
         return None, "none"
 
-    if coles_match is None:
+    # A deliberately-skipped store (single-store pin = "not sold there") must NOT
+    # carry forward: keeping the stale price made it impossible to ever remove a
+    # product from one store — the old number just kept resurfacing.
+    if coles_match is None and not _co_skipped:
         coles_match, co_conf = _carry("coles", "carried", "Coles")
 
-    if ww_match is None:
+    if ww_match is None and not _ww_skipped:
         ww_match, ww_conf = _carry("woolworths", "carried", "WW")
 
     if not ww_match and not coles_match:
@@ -1709,9 +1717,23 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         shopping_list = sorted(archived_set)
         print(f"Archived-only scrape: {len(shopping_list)} items")
     else:
+        # Order by the user's actual priority tags (synced from the UI into
+        # user_settings.json): weekly first, then monthly, then rare — so if the
+        # run dies mid-way (Coles rate-ban, runner reboot) the items that matter
+        # most already have fresh prices. Untagged items count as weekly (the UI
+        # default). Trip count breaks ties within a band.
+        _user_priorities: dict = {}
+        try:
+            with open(os.path.join(DATA_DIR, "user_settings.json")) as _f:
+                _user_priorities = json.load(_f).get("priorities", {}) or {}
+        except Exception:
+            pass
+        _PRIO_RANK = {"weekly": 0, "monthly": 1, "rare": 2}
+
         def _priority_key(name):
+            rank = _PRIO_RANK.get(_user_priorities.get(name, "weekly"), 0)
             trips = purchase_history.get(name, {}).get("trip_count", 0)
-            return 0 if trips >= 7 else (1 if trips >= 3 else 2)
+            return (rank, -trips)
         # Active items first (by priority); archived items appended LAST so they
         # refresh in the same scheduled run but never delay active items. The
         # staleness gate in should_skip_item keeps them to ~weekly, not every run.

@@ -124,7 +124,15 @@ All tunable values are defined near the top of `scraper.py`:
 - **Scrape-log rates are per-store**: single-store-pinned items deliberately skip the
   other store ("a single-store pin means a single store") and are recorded as neither
   attempted nor missed there — `ww_attempted`/`coles_attempted` in scrape_log.json are
-  the denominators, not `scraped`.
+  the denominators, not `scraped`. A pin-skipped store is also NOT carried forward
+  (its stale data drops on the next run) — that's how "remove a product from one
+  store" works, via the validate page's 🚫 button or clearing a URL in the edit
+  dialog. Explicit single-URL refresh dispatches still keep the other store (it
+  flows through `existing_item` into the results).
+- **Excel-history fallback is suffix-only**: a pinned item missing from the Excel
+  borrows history only when an Excel name ENDS with the item name (store-prefix
+  variants). A bare substring match once gave "Beef Porterhouse Steak" the
+  "…Steak & Butter" receipt history → phantom $100/kg trend points.
 
 ## Self-hosted Runner
 

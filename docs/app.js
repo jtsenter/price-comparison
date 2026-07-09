@@ -343,11 +343,18 @@ async function persistLatestJson(data, message = 'chore: update latest.json') {
   await githubPutJson(s, 'docs/data/latest.json', data, message);
 }
 
-async function persistUrlOverridesToRepo(s, overrides) {
+async function persistUrlOverridesToRepo(s, overrides, exactItems = []) {
   if (!s?.user || !s?.repo || !s?.token) return;
   // Merge rather than overwrite: entries already in the repo but not in
   // localStorage (e.g. manually added by Claude) are preserved; localStorage
   // entries take priority on conflict.
+  //
+  // exactItems: names whose repo entry must mirror the local state EXACTLY —
+  // including deleting url keys / the whole entry. Merge-only semantics made it
+  // impossible to ever remove a pinned URL ("delete the URL and save" bug): the
+  // repo kept the old key forever. Only the item being edited is treated
+  // exactly, so unrelated repo-side pins are never clobbered by stale
+  // localStorage entries.
   const existing = await githubGetJson(s, 'docs/data/url_overrides.json');
   const merged = { ...existing };
   for (const [item, ov] of Object.entries(overrides)) {
@@ -356,6 +363,16 @@ async function persistUrlOverridesToRepo(s, overrides) {
       if (ov.wwUrl)    merged[item].ww_url    = ov.wwUrl;
       if (ov.colesUrl) merged[item].coles_url = ov.colesUrl;
     }
+  }
+  for (const item of exactItems) {
+    const ov = overrides[item];
+    const entry = { ...(merged[item] || {}) };
+    delete entry.ww_url;
+    delete entry.coles_url;
+    if (ov?.wwUrl)    entry.ww_url    = ov.wwUrl;
+    if (ov?.colesUrl) entry.coles_url = ov.colesUrl;
+    if (Object.keys(entry).length) merged[item] = entry;
+    else delete merged[item];
   }
   await githubPutJson(s, 'docs/data/url_overrides.json', merged, 'Update URL overrides');
 }
@@ -1112,6 +1129,13 @@ async function triggerItemRefresh(itemName, btn, urlOverrides) {
     );
 
     if (res.status === 204) {
+      // Persist the pending scrape so navigating away / refreshing doesn't lose
+      // the status — checkPendingItemRefresh() picks the marker up on any load.
+      try {
+        const m = JSON.parse(localStorage.getItem('pw_pending_refresh') || '{}');
+        m[itemName] = Date.now();
+        localStorage.setItem('pw_pending_refresh', JSON.stringify(m));
+      } catch {}
       if (btn) pollItemRefresh(s, btn, itemName);
     } else {
       const err = await res.json().catch(() => ({}));
@@ -1121,6 +1145,37 @@ async function triggerItemRefresh(itemName, btn, urlOverrides) {
   } catch (e) {
     alert(`Network error: ${e.message}`);
     if (btn) { btn.disabled = false; btn.classList.remove('spinning'); }
+  }
+}
+
+// Continuity for single-item scrapes across refresh/navigation: the dispatch
+// writes a localStorage marker; this checks it against the loaded data. Fresh
+// data for the item → "updated" toast; still pending → one reminder per page
+// load; older than 15 min → silently dropped (run died or was skipped).
+let _pendingRefreshNotified = false;
+function checkPendingItemRefresh(data) {
+  let m;
+  try { m = JSON.parse(localStorage.getItem('pw_pending_refresh') || '{}'); } catch { return; }
+  const names = Object.keys(m);
+  if (!names.length) return;
+  let changed = false;
+  const stillPending = [];
+  for (const name of names) {
+    const item = data.items?.find(i => i.list_item === name);
+    const scrapedTs = item?.last_scraped ? new Date(item.last_scraped).getTime() : 0;
+    if (scrapedTs > m[name]) {
+      delete m[name]; changed = true;
+      showToast(`✓ "${stripWW(name)}" re-scraped — price updated.`);
+    } else if (Date.now() - m[name] > 15 * 60 * 1000) {
+      delete m[name]; changed = true;
+    } else if (!_pendingRefreshItems.has(name)) {
+      stillPending.push(name);
+    }
+  }
+  if (changed) { try { localStorage.setItem('pw_pending_refresh', JSON.stringify(m)); } catch {} }
+  if (stillPending.length && !_pendingRefreshNotified) {
+    _pendingRefreshNotified = true;
+    showToast(`⏳ Re-scrape still running: ${stillPending.map(stripWW).join(', ')}`, 5000);
   }
 }
 
@@ -1134,6 +1189,11 @@ async function pollItemRefresh(s, btn, itemName) {
 
   const finish = (fresh) => {
     _pendingRefreshItems.delete(itemName);
+    try {
+      const m = JSON.parse(localStorage.getItem('pw_pending_refresh') || '{}');
+      delete m[itemName];
+      localStorage.setItem('pw_pending_refresh', JSON.stringify(m));
+    } catch {}
     if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
     if (fresh) { showToast(`✓ "${stripWW(itemName)}" updated`); renderPage(fresh); }
     else { showToast(`⚠ "${stripWW(itemName)}" scrape didn't complete — check GitHub Actions`, 5000); if (_lastData) renderPage(_lastData); }
@@ -1307,8 +1367,24 @@ function initEditModal() {
     const _normaliseUrl = u => { const s = u.trim(); return s && !s.startsWith('http') ? 'https://' + s : s; };
     const newWwUrl   = _normaliseUrl($('editWwUrl').value)   || undefined;
     const newCoUrl   = _normaliseUrl($('editColesUrl').value) || undefined;
-    const urlChanged = newWwUrl !== (prevOv.wwUrl || _editingItem.woolworths?.url || '')
-                    || newCoUrl !== (prevOv.colesUrl || _editingItem.coles?.url || '');
+    const prevWw = prevOv.wwUrl    || _editingItem.woolworths?.url || '';
+    const prevCo = prevOv.colesUrl || _editingItem.coles?.url      || '';
+    // Per-store intent: a cleared field REMOVES the item from that store (the
+    // remaining URL becomes a single-store pin; the scraper stops checking the
+    // cleared store). A changed non-empty field re-pins + rescrapes.
+    const wwRemoved = !!prevWw && !newWwUrl;
+    const coRemoved = !!prevCo && !newCoUrl;
+    const wwChanged = !!newWwUrl && newWwUrl !== prevWw;
+    const coChanged = !!newCoUrl && newCoUrl !== prevCo;
+
+    if (wwRemoved && coRemoved) {
+      alert('Both links removed — that would leave the item with no store at all.\nUse Archive to stop tracking it entirely, or keep at least one link.');
+      return;
+    }
+    if ((wwRemoved || coRemoved) && !(newWwUrl || newCoUrl)) {
+      alert(`Removing a store needs the other store's link to stay pinned, but none is set.`);
+      return;
+    }
 
     overrides[_editingItem.list_item] = {
       displayName: $('editDisplayName').value.trim() || undefined,
@@ -1323,6 +1399,19 @@ function initEditModal() {
     saveOverrides(overrides);
     const item = _editingItem;
     close();
+
+    // Store removal applies immediately: null the store locally + in the repo
+    // copy of latest.json (the scraper keeps it dropped from the next run on —
+    // single-store pins are skipped and no longer carried forward).
+    if ((wwRemoved || coRemoved) && _lastData) {
+      const li = _lastData.items?.find(i => i.list_item === item.list_item);
+      if (li) {
+        if (wwRemoved) li.woolworths = null;
+        if (coRemoved) li.coles = null;
+        li.cheaper_store = null;
+        li.saving_per_item = null;
+      }
+    }
     if (_lastData) renderPage(_lastData);
 
     const s = loadSettings();
@@ -1332,10 +1421,14 @@ function initEditModal() {
       $('editSave').disabled = true;
       $('editReset').disabled = true;
       try {
-        // Always sync all URL overrides to repo so the scraper never misses a pinned URL
-        await persistUrlOverridesToRepo(s, overrides);
-        // If a URL was added/changed, trigger an immediate single-item scrape
-        if (urlChanged && (newWwUrl || newCoUrl)) {
+        // Exact semantics for THIS item (deletions included); merge for the rest.
+        await persistUrlOverridesToRepo(s, overrides, [item.list_item]);
+        if (wwRemoved || coRemoved) {
+          await persistLatestJson(_lastData, `edit: ${item.list_item} — removed from ${wwRemoved ? 'Woolworths' : 'Coles'}`);
+          showToast(`✓ "${item.list_item}" removed from ${wwRemoved ? 'Woolworths' : 'Coles'}.`);
+        }
+        // A URL was added/changed → immediate single-item rescrape with it
+        if (wwChanged || coChanged) {
           triggerItemRefresh(item.list_item, null, { wwUrl: newWwUrl, colesUrl: newCoUrl });
           showToast(`✓ Scrape triggered for "${item.list_item}" with the new URL.`);
         }
@@ -1361,7 +1454,9 @@ function initEditModal() {
       $('editSave').disabled = true;
       $('editReset').disabled = true;
       try {
-        await persistUrlOverridesToRepo(s, overrides);
+        // Exact semantics so the repo entry is actually deleted (reset = back to
+        // automatic name-matching at both stores).
+        await persistUrlOverridesToRepo(s, overrides, [_editingItem.list_item]);
       } catch (e) {
         showSyncError('URL override (reset)', e);
       } finally {
@@ -4553,7 +4648,11 @@ function renderMobileCards(items, data) {
 // nothing rendered them. Show the cheapest one as a one-line hint under the
 // product name. Re-checked against the CURRENT best price (scraper data can lag a
 // price drop), so the hint only appears when the swap is genuinely cheaper today.
+// 2026-07-09: hidden per user — the suggestions weren't relevant enough. Flip the
+// flag to bring the hint back; the scraper still collects item.alternatives.
+const SHOW_ALT_HINTS = false;
 function altHintHTML(item) {
+  if (!SHOW_ALT_HINTS) return '';
   const alts = Array.isArray(item.alternatives)
     ? item.alternatives.filter(a => a && a.price != null && a.price > 0) : [];
   if (!alts.length) return '';
@@ -4716,6 +4815,7 @@ function _renderPageInner(data) {
   $('banner').style.display = 'block';
   const _sw = $('searchWrap');
   if (_sw) _sw.style.display = '';
+  checkPendingItemRefresh(data);
 
   _lastData = data;
 

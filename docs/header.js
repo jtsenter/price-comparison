@@ -38,12 +38,17 @@
 
   /* Hot / Basket / Alerts nav cluster. `active` gets the .here highlight. */
   function navCluster(active) {
-    function a(cls, href, title, svg) {
+    function a(cls, href, title, svg, id) {
       var here = (cls === active) ? ' here' : '';
-      return '<a class="btn btn-ghost btn-icon nav-icon-btn nav-' + cls + here + '" href="' + href + '" title="' + title + '">' + svg + '</a>';
+      return '<a class="btn btn-ghost btn-icon nav-icon-btn nav-' + cls + here + '"' +
+             (id ? ' id="' + id + '"' : '') +
+             ' href="' + href + '" title="' + title + '">' + svg + '</a>';
     }
+    // basketNavLink id is load-bearing: app.js intercepts it on index so the
+    // basket opens with the selected items (or everything currently visible)
+    // instead of whatever stale list the basket page last had.
     return a('hot', 'hot-deals.html', 'Hot Deals', SVG_HOT) +
-           a('basket', 'shopping-list.html', 'Basket', SVG_CART) +
+           a('basket', 'shopping-list.html', 'Basket', SVG_CART, 'basketNavLink') +
            a('alerts', 'alerts.html', 'Price Alerts', SVG_TAG);
   }
 
