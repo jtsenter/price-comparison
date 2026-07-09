@@ -3642,40 +3642,56 @@ function groupTrendCellHTML(group) {
 }
 
 // Synthesizes a "price history" item for a per-kg group: for each store, at every
-// date any member was seen, take the CHEAPEST $/kg any member had that store that
-// day. The result is "what did this category cost at each store over time",
-// independent of which specific product happened to be cheapest — matches what the
-// group's own headline $/kg numbers already mean (group._wwPerKg/_coPerKg are each
-// the current cheapest member at that store).
+// date ANY member's price changed, take the CHEAPEST $/kg across ALL members —
+// each member FORWARD-FILLED to its most recent known price as of that date, not
+// just members with an explicit entry that day. Members are scraped on independent
+// schedules (a fresh full run doesn't necessarily touch every member, and a
+// member's own history only gets a new row when its price changes or 7+ days have
+// passed — see scraper.py's ww_add/co_add), so a plain per-date union of raw
+// entries let a pricier member "win" a date simply because it was the only one
+// re-scraped that day, while the true cheapest member's last-known (unchanged)
+// price was silently ignored. Forward-filling means every date's minimum reflects
+// what the cheapest member ACTUALLY cost then, matching the live headline number
+// (group._wwPerKg/_coPerKg) once the dates catch up to today.
 function buildGroupHistoryItem(group) {
-  const wwMap = new Map(), coMap = new Map();
-  const takeMin = (map, date, price) => {
-    if (!date || price == null) return;
-    const cur = map.get(date);
-    if (cur == null || price < cur) map.set(date, price);
+  const buildStoreSeries = (isWw) => {
+    // One sorted, deduped (date -> price) series per member.
+    const memberSeries = group._members.map(m => {
+      const ratio = perKgRatio(isWw ? m.woolworths : m.coles);
+      if (ratio == null) return [];
+      const ex = exclSetsFor(m.list_item)[isWw ? 'ww' : 'co'];
+      const raw = isWw ? [...(m.price_history || []), ...(m.ww_price_history || [])]
+                        : (m.coles_price_history || []);
+      const byDate = new Map();
+      for (const e of raw) {
+        if (!(e.price > 0) || ex.has(Number(e.price).toFixed(2))) continue;
+        byDate.set(e.date, +(e.price * ratio).toFixed(2)); // later entries for the same date win
+      }
+      return [...byDate.entries()].map(([date, price]) => ({ date, price })).sort((a, b) => a.date.localeCompare(b.date));
+    });
+
+    const allDates = [...new Set(memberSeries.flat().map(p => p.date))].sort();
+    const cursor = memberSeries.map(() => 0);
+    const lastKnown = memberSeries.map(() => null);
+    const out = [];
+    for (const date of allDates) {
+      memberSeries.forEach((series, i) => {
+        while (cursor[i] < series.length && series[cursor[i]].date <= date) {
+          lastKnown[i] = series[cursor[i]].price;
+          cursor[i]++;
+        }
+      });
+      const known = lastKnown.filter(p => p != null);
+      if (known.length) out.push({ date, price: Math.min(...known) });
+    }
+    return out;
   };
-  group._members.forEach(m => {
-    const wwR = perKgRatio(m.woolworths);
-    const coR = perKgRatio(m.coles);
-    const { ww: wwEx, co: coEx } = exclSetsFor(m.list_item);
-    [...(m.price_history || []), ...(m.ww_price_history || [])].forEach(e => {
-      if (e.price > 0 && wwR != null && !wwEx.has(Number(e.price).toFixed(2))) {
-        takeMin(wwMap, e.date, +(e.price * wwR).toFixed(2));
-      }
-    });
-    (m.coles_price_history || []).forEach(e => {
-      if (e.price > 0 && coR != null && !coEx.has(Number(e.price).toFixed(2))) {
-        takeMin(coMap, e.date, +(e.price * coR).toFixed(2));
-      }
-    });
-  });
-  const toEntries = (map) => [...map.entries()].map(([date, price]) => ({ date, price })).sort((a, b) => a.date.localeCompare(b.date));
   return {
     list_item: group._groupLabel,
     _isGroupHistory: true,
     price_history: [],
-    ww_price_history: toEntries(wwMap),
-    coles_price_history: toEntries(coMap),
+    ww_price_history: buildStoreSeries(true),
+    coles_price_history: buildStoreSeries(false),
     woolworths: group._wwBest ? { price: group._wwPerKg, scraped_at: group._wwBest.result?.scraped_at } : null,
     coles: group._coBest ? { price: group._coPerKg, scraped_at: group._coBest.result?.scraped_at } : null,
   };
