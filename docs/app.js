@@ -774,6 +774,15 @@ function updateBulkBar() {
   bar.style.display = count > 0 ? 'flex' : 'none';
   const pill = bar.querySelector('.bt-count-pill');
   if (pill) pill.textContent = count;
+  // In the Archived view the archive button is a no-op (they're already
+  // archived) — flip it to "Unarchive". Also hide the Priority chip there: it
+  // only offers weekly/monthly/rare, which would silently unarchive anyway, so
+  // Unarchive is the clear single action.
+  const inArchive = _activePriority === 'archive';
+  const archBtn = bar.querySelector('.bt-archive');
+  if (archBtn) archBtn.innerHTML = inArchive ? '📤 Unarchive' : '🗄 Archive';
+  const priChip = bar.querySelector('.bt-pri');
+  if (priChip) priChip.style.display = inArchive ? 'none' : '';
 }
 
 // ── Column order & widths ────────────────────────────────────────────────────
@@ -2593,7 +2602,20 @@ function initBulkBar() {
 
   bar.querySelector('.bt-archive')?.addEventListener('click', () => {
     const pr = loadPriorities();
-    _checkedItems.forEach(name => { pr[name] = 'archive'; });
+    const unarchiving = _activePriority === 'archive';
+    _checkedItems.forEach(name => {
+      if (unarchiving) {
+        // Mirror unarchiveItem(): explicit 'archive' → restore to monthly;
+        // otherwise the item was only archived via the item.archived flag, so
+        // clearing the flag (below) is enough. Also clear the baked-in flag so
+        // the row leaves the Archived view immediately (no scrape needed).
+        if (pr[name] === 'archive') pr[name] = 'monthly'; else delete pr[name];
+        syncItemArchivedFlag(name, false);
+      } else {
+        pr[name] = 'archive';
+        syncItemArchivedFlag(name, true);
+      }
+    });
     savePriorities(pr);
     _checkedItems.clear();
     updateBulkBar();
