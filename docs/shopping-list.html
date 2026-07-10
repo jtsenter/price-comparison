@@ -811,7 +811,7 @@ async function boot() {
     const splitDisc = `<svg class="split-icon" width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 A14 14 0 0 0 16 30 Z" fill="var(--ww)"/><path d="M16 2 A14 14 0 0 1 16 30 Z" fill="var(--coles)"/><line x1="16" y1="2" x2="16" y2="30" stroke="var(--card)" stroke-width="2.5"/></svg>`;
     const savingInfoHtml = isEqual
       ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
-      : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`
+      : `<div class="saving-line" title="How much less your whole basket costs at the cheaper store, vs buying everything at the other store"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`
         + (splitSaving > basketSaving + 0.005
             ? `<div class="saving-line" title="Buy each item at whichever store is cheapest, vs doing your whole shop at the dearer store"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Split shop</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
             : '');
