@@ -1193,9 +1193,6 @@ tr:hover .item-refresh-btn { opacity: 1; pointer-events: auto; }
 .price-history-row:last-child { border-bottom: none; }
 .price-history-date { color: var(--text-soft); font-size: 12px; }
 .price-history-date.ph-latest-date { font-weight: 700; color: var(--text); }
-/* Per-row source line, hidden until the web-only "Expand" toggle is on. */
-.ph-source { display: none; font-size: 10px; font-weight: 500; color: var(--text-soft); text-transform: none; letter-spacing: 0; }
-.price-history-list.ph-expanded .ph-source { display: block; margin-top: 1px; }
 .price-history-store-cell {
   display: flex;
   align-items: center;
