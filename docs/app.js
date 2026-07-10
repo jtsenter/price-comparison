@@ -2628,7 +2628,16 @@ function initBulkBar() {
 
 function computeBannerStats(items) {
   const exclusions = loadExclusions();
+  // Per-kg member products are shown in the table collapsed into a single group
+  // row (with the group's own priority + $/kg), never as individual rows — so
+  // they must NOT be counted here either. Counting them made the WW/Coles footer
+  // and the comparison banner include products the user can't see as rows: e.g.
+  // Monthly + Meat showed 2 rows but the footer summed 3 items, because a beef
+  // porterhouse member (monthly by trip-count) was tallied while its group row
+  // was hidden. The banner/footer now match exactly what's on screen.
+  const perkgMembers = new Set(loadVariantGroups().flatMap(g => g.items));
   const filtered = items.filter(item => {
+    if (perkgMembers.has(item.list_item)) return false;
     if (_activePriority === 'watchlist') {
       if (!_watchlist.has(item.list_item)) return false;
     } else if (_activePriority === 'selected') {
