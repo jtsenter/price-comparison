@@ -2529,6 +2529,18 @@ function scheduleArchiveSync() {
   _archiveSyncTimer = setTimeout(syncArchivedToGitHub, 2000);
 }
 
+// Keeps the LOADED item's `archived` boolean in sync with the priority choice.
+// That flag is baked into latest.json by the scraper (from archived_items.json
+// as of the last run) — separate from the browser-local priority — so changing
+// only the priority left the row stuck showing exclusively in the Archive view
+// until the next full scrape happened to overwrite it. Without this, "unarchive"
+// looked completely broken: the item just vanished into limbo, visible nowhere
+// you'd think to look.
+function syncItemArchivedFlag(itemName, archived) {
+  const item = _lastData?.items?.find(i => i.list_item === itemName);
+  if (item) item.archived = archived;
+}
+
 function unarchiveItem(itemName) {
   const pr = loadPriorities();
   if (pr[itemName] === 'archive') {
@@ -2537,6 +2549,7 @@ function unarchiveItem(itemName) {
     delete pr[itemName];
   }
   savePriorities(pr);
+  syncItemArchivedFlag(itemName, false);
   scheduleArchiveSync(); // debounced write to archived_items.json
   if (_lastData) renderPage(_lastData);
 }
@@ -3453,8 +3466,11 @@ function renderCards(items) {
       ? `<img class="card-img" src="${imgSrc}" alt="" loading="lazy" onerror="imgError(this,'${imgFallback}')">`
       : '<div class="card-img-placeholder">No Photo</div>';
 
-    const prioOptions = ['weekly','monthly','rare'].map(v =>
-      `<option value="${v}"${p===v?' selected':''}>${v[0].toUpperCase()+v.slice(1)}</option>`
+    // 'archive' is a real, selectable option here (not just a bulk action) — an
+    // archived item's own dropdown must actually show "Archived" selected, not
+    // silently default to "Weekly" with no way back short of a separate button.
+    const prioOptions = ['weekly','monthly','rare','archive'].map(v =>
+      `<option value="${v}"${p===v?' selected':''}>${v==='archive'?'Archived':v[0].toUpperCase()+v.slice(1)}</option>`
     ).join('');
 
     // Prices
@@ -5191,12 +5207,17 @@ function _renderPageInner(data) {
     const wwClass  = cheaper === 'woolworths' ? 'cell-ww' : '';
     const coClass  = cheaper === 'coles'      ? 'cell-coles' : '';
 
-    // Priority cell (uses analysis data as fallback)
+    // Priority cell (uses analysis data as fallback). 'archive' is a real option
+    // here — an archived item's dropdown must show "Archived" selected (it used
+    // to silently default to "Weekly" with no visible indication, and the only
+    // way back was a separate, easy-to-miss "↩ Unarchive" button in the actions
+    // column — this makes archive/unarchive symmetric with the same control).
     const itemPriority = getPriority(item.list_item);
     const priorityCell = `<td class="priority-cell"><select class="priority-select" data-item="${safeKey}">
       <option value="weekly"${itemPriority === 'weekly' ? ' selected' : ''}>Weekly</option>
       <option value="monthly"${itemPriority === 'monthly' ? ' selected' : ''}>Monthly</option>
       <option value="rare"${itemPriority === 'rare' ? ' selected' : ''}>Rare</option>
+      <option value="archive"${itemPriority === 'archive' ? ' selected' : ''}>Archived</option>
     </select></td>`;
 
     const isItemPerkg = _perkgSet.has(item.list_item);
@@ -6231,6 +6252,7 @@ async function boot() {
         if (sel.value) pr[sel.dataset.item] = sel.value;
         else delete pr[sel.dataset.item];
         savePriorities(pr);
+        syncItemArchivedFlag(sel.dataset.item, sel.value === 'archive');
         if (_lastData) renderPage(_lastData);
         scheduleArchiveSync();
       }
@@ -6474,6 +6496,7 @@ async function boot() {
           const p = loadPriorities();
           p[sel.dataset.item] = sel.value;
           savePriorities(p);
+          syncItemArchivedFlag(sel.dataset.item, sel.value === 'archive');
           if (_lastData) renderPage(_lastData);
           scheduleArchiveSync();
         }
