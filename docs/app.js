@@ -597,9 +597,6 @@ const DEFAULT_VARIANT_GROUPS = [
     'The Bare Bird Chicken Thigh Fillets',
     'El Amins Halal Chicken Thigh Cutlets',
   ]},
-  { key: 'chicken_roast', label: 'Chicken Roast Portions', items: [
-    'Woolworths Cook Chicken Roasting Portions Italian Style',
-  ]},
   { key: 'salmon', label: 'Salmon', items: [
     'Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets',
     'Woolworths Salmon Portions Skin On',
