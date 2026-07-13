@@ -190,10 +190,16 @@
     tbody tr:nth-child(even) { background: #FAFBFC; }
     td { padding: 10px 14px; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     td.r { text-align: right; font-weight: 600; }
-    /* Name cell: wrap text, let other cells keep fixed widths from colgroup */
-    .item-name-cell { font-weight: 500; white-space: normal; overflow: visible; text-overflow: clip; max-width: 0; }
-    .name-wrap { display: flex; align-items: center; gap: 9px; line-height: 1.35; }
+    /* Name cell is the ONLY one that gives way: single line, ellipsis when
+       long (full name in the title tooltip). Everything else keeps its room. */
+    .item-name-cell { font-weight: 500; max-width: 0; }
+    .name-wrap { display: flex; align-items: center; gap: 9px; line-height: 1.35; min-width: 0; }
+    .name-wrap span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .sl-thumb { width: 30px; height: 30px; border-radius: 6px; object-fit: contain; background: #fff; border: 1px solid var(--border); flex-shrink: 0; }
+    /* Single-store mode: item not sold at the chosen store — priced from the other */
+    .only-chip { font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 5px; color: #fff; vertical-align: middle; margin-left: 5px; white-space: nowrap; }
+    .only-chip.ww { background: var(--ww); }
+    .only-chip.coles { background: var(--coles); }
     .price-val { font-size: 15px; font-weight: 700; }
     .unit-val { font-size: 11px; color: var(--text-soft); }
     .total-val { font-size: 15px; font-weight: 700; color: var(--text); }
@@ -207,20 +213,54 @@
     .qs-btn { width: 26px; height: 26px; border: none; background: transparent; color: var(--text-mid); font-size: 15px; font-weight: 600; cursor: pointer; line-height: 1; -webkit-tap-highlight-color: transparent; }
     .qs-btn:hover { background: var(--bg); color: var(--text); }
     .qs-val { min-width: 24px; text-align: center; font-weight: 600; font-size: 13px; }
-    .row-btn { border: none; background: none; cursor: pointer; font-size: 13px; color: var(--text-soft); padding: 5px 6px; border-radius: 6px; line-height: 1; -webkit-tap-highlight-color: transparent; }
+    /* ⇄ / ✕ as proper mini-buttons — same border/radius family as the qty
+       stepper so they read as part of the table, not floating glyphs. */
+    .act-wrap { display: flex; gap: 5px; justify-content: flex-end; align-items: center; }
+    .row-btn {
+      width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center;
+      border: 1px solid var(--border); background: var(--card); border-radius: 8px;
+      cursor: pointer; font-size: 13px; color: var(--text-mid); line-height: 1; padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
     .row-btn:hover { background: var(--bg); color: var(--text); }
-    .row-btn.rm:hover { color: #DC2626; background: rgba(220,38,38,.10); }
-    /* Buttons, not text: the default td ellipsis clipped them into a dead "…" */
-    .act-cell { text-align: right; overflow: visible; text-overflow: clip; }
+    .row-btn.rm:hover { color: #DC2626; border-color: #FCA5A5; background: rgba(220,38,38,.08); }
+    /* Buttons/steppers, not text: the default td ellipsis clipped them to a dead "…" */
+    .act-cell, .qty-cell { text-align: right; overflow: visible; text-overflow: clip; }
 
     /* Column resize handles (initSlResize creates them; without these rules
        they were 0-width and invisible — columns LOOKED unresizable) */
     .col-resize-handle {
-      position: absolute; right: 0; top: 15%; bottom: 15%;
-      width: 4px; cursor: col-resize; border-radius: 3px;
-      background: rgba(0,0,0,0.12); transition: background 0.15s; z-index: 2;
+      position: absolute; right: -4px; top: 10%; bottom: 10%;
+      width: 9px; cursor: col-resize; border-radius: 3px;
+      background: transparent; transition: background 0.15s; z-index: 2;
     }
-    .col-resize-handle:hover, .col-resize-handle.resizing { background: var(--ww); }
+    .col-resize-handle::before {
+      content: ''; position: absolute; left: 3px; top: 0; bottom: 0; width: 3px;
+      border-radius: 3px; background: rgba(0,0,0,0.12);
+    }
+    .col-resize-handle:hover::before, .col-resize-handle.resizing::before { background: var(--ww); }
+
+    /* Info "?" bubbles (same component as the main page) */
+    .info-ico {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 1px solid var(--border); color: var(--text-soft);
+      font-size: 9px; font-weight: 800; line-height: 1;
+      cursor: help; position: relative; margin-left: 4px; vertical-align: middle;
+    }
+    .info-ico:hover, .info-ico:focus { color: var(--text); outline: none; }
+    .info-ico:hover::after, .info-ico:focus::after {
+      content: attr(data-tip);
+      position: absolute; bottom: calc(100% + 7px); left: 50%; transform: translateX(-50%);
+      background: var(--text); color: var(--card);
+      font-size: 11px; font-weight: 500; line-height: 1.45; text-transform: none; letter-spacing: 0;
+      padding: 7px 11px; border-radius: 7px; width: 230px; text-align: left;
+      white-space: normal; z-index: 600; pointer-events: none;
+      box-shadow: 0 4px 14px rgba(0,0,0,.2);
+    }
+
+    /* Shopping mode is phone-only (in-store tool) — hide its toggle on web */
+    @media (min-width: 701px) { .sl-mode-seg.sl-shop-seg { display: none; } }
 
     /* Only-one-store note */
     .only-note { font-size: 12px; color: var(--text-soft); font-style: italic; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; margin-top: 8px; }
@@ -408,7 +448,7 @@
 </head>
 <body>
 <header data-page="shopping-list"></header>
-<script src="header.js?v=4"></script>
+<script src="header.js?v=5"></script>
 
 <div class="notif-dropdown" id="notifDropdown" style="display:none">
   <div class="notif-header">
@@ -422,7 +462,7 @@
   <div class="empty">Loading…</div>
 </main>
 
-<script src="utils.js?v=58"></script>
+<script src="utils.js?v=59"></script>
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '—';
 
@@ -433,41 +473,41 @@ let _slColWidths = (() => {
 function saveSlColWidths() { localStorage.setItem('pw_sl_col_widths', JSON.stringify(_slColWidths)); }
 
 function initSlResize() {
-  document.querySelectorAll('.sl-table-wrap thead th[data-col]').forEach(th => {
-    const col = th.dataset.col;
-    const saved = _slColWidths[col];
-    if (saved) { th.style.width = saved + 'px'; th.style.minWidth = saved + 'px'; }
-    if (th.querySelector('.col-resize-handle')) return;
-    const handle = document.createElement('div');
-    handle.className = 'col-resize-handle';
-    th.appendChild(handle);
-    handle.addEventListener('mousedown', (e) => {
-      e.preventDefault(); e.stopPropagation();
-      const table   = th.closest('table');
-      const tbody   = table?.querySelector('tbody');
-      const thead   = th.closest('thead');
-      const colIdx  = [...thead.querySelectorAll('th')].indexOf(th);
-      const startX  = e.clientX;
-      const startW  = th.getBoundingClientRect().width;
-      handle.classList.add('resizing');
-      document.body.style.cursor = 'col-resize';
-      document.body.style.userSelect = 'none';
-      function onMove(e) {
-        const newW = Math.max(50, startW + e.clientX - startX);
-        th.style.width = newW + 'px'; th.style.minWidth = newW + 'px';
-        tbody?.querySelectorAll(`tr td:nth-child(${colIdx + 1})`).forEach(td => {
-          td.style.width = newW + 'px'; td.style.minWidth = newW + 'px'; td.style.maxWidth = newW + 'px';
-        });
-      }
-      function onUp() {
-        handle.classList.remove('resizing');
-        document.body.style.cursor = ''; document.body.style.userSelect = '';
-        document.removeEventListener('mousemove', onMove);
-        document.removeEventListener('mouseup', onUp);
-        _slColWidths[col] = th.getBoundingClientRect().width; saveSlColWidths();
-      }
-      document.addEventListener('mousemove', onMove);
-      document.addEventListener('mouseup', onUp);
+  // table-layout:fixed sizes every column from the <colgroup>'s <col> widths —
+  // the old code resized the th/td elements, which fixed layout IGNORES, so
+  // dragging "didn't act accordingly". Resize the <col> itself.
+  document.querySelectorAll('.sl-table-wrap table').forEach(table => {
+    const cols = table.querySelectorAll('colgroup col');
+    table.querySelectorAll('thead th').forEach((th, colIdx) => {
+      const key = th.dataset.col;
+      const colEl = cols[colIdx];
+      if (!key || !colEl) return;
+      if (_slColWidths[key]) colEl.style.width = _slColWidths[key] + 'px';
+      if (th.querySelector('.col-resize-handle')) return;
+      const handle = document.createElement('div');
+      handle.className = 'col-resize-handle';
+      th.appendChild(handle);
+      handle.addEventListener('mousedown', (e) => {
+        e.preventDefault(); e.stopPropagation();
+        const startX = e.clientX;
+        const startW = th.getBoundingClientRect().width;
+        handle.classList.add('resizing');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+        function onMove(ev) {
+          colEl.style.width = Math.max(50, startW + ev.clientX - startX) + 'px';
+        }
+        function onUp() {
+          handle.classList.remove('resizing');
+          document.body.style.cursor = ''; document.body.style.userSelect = '';
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+          _slColWidths[key] = Math.round(th.getBoundingClientRect().width);
+          saveSlColWidths();
+        }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
     });
   });
 }
@@ -551,11 +591,28 @@ async function boot() {
     return;
   }
 
-  let equalStore = 'ww'; // which store equal-price items are currently assigned to
+  let equalStore = 'ww'; // split mode: which store equal-price items are assigned to
 
-  // Per-row "buy it at the other store instead" overrides (session-only). Lets a
-  // one-store trip absorb an item that's technically cheaper across the road.
+  // View model: ONE store by default — the realistic plan is buying the whole
+  // basket at whichever store totals cheaper. "Split shop" opts into the
+  // two-table cheapest-at-each-store view. Persisted across visits.
+  let slSplit = localStorage.getItem('pw_sl_split') === '1';
+  let chosenStore = null; // single mode: store to buy at; null = auto (cheaper total)
+
+  // Per-row "buy it at the other store instead" overrides (split mode only,
+  // session-only). Clicking a store card resets them.
   const storeOverride = new Map(); // list_item → 'ww' | 'coles'
+
+  // Effective price of an item at `store`. In SINGLE mode, items the store
+  // doesn't sell fall back to the other store's price (you have no choice for
+  // those) — the same rule computeTotals uses, so the table subtotal always
+  // EQUALS the store card total. In split mode no fallback (an item is only
+  // in a store's table because it's priced there).
+  function priceFor(i, store) {
+    const own = store === 'ww' ? i.woolworths?.price : i.coles?.price;
+    if (own != null || slSplit) return own;
+    return store === 'ww' ? i.coles?.price : i.woolworths?.price;
+  }
 
   // Per-table sort state — survives renderContent() re-renders
   let wwSortKey = 'category', wwSortDir = 'asc';
@@ -582,13 +639,11 @@ async function boot() {
         av = a.list_item.toLowerCase();
         bv = b.list_item.toLowerCase();
       } else if (key === 'price') {
-        av = (store === 'ww' ? a.woolworths?.price : a.coles?.price) ?? Infinity;
-        bv = (store === 'ww' ? b.woolworths?.price : b.coles?.price) ?? Infinity;
+        av = priceFor(a, store) ?? Infinity;
+        bv = priceFor(b, store) ?? Infinity;
       } else if (key === 'total') {
-        const ap = (store === 'ww' ? a.woolworths?.price : a.coles?.price) ?? 0;
-        const bp = (store === 'ww' ? b.woolworths?.price : b.coles?.price) ?? 0;
-        av = ap * getUnits(a.list_item, unitOv, analysis);
-        bv = bp * getUnits(b.list_item, unitOv, analysis);
+        av = (priceFor(a, store) ?? 0) * getUnits(a.list_item, unitOv, analysis);
+        bv = (priceFor(b, store) ?? 0) * getUnits(b.list_item, unitOv, analysis);
       }
       return typeof av === 'string' ? av.localeCompare(bv) * mul : (av - bv) * mul;
     });
@@ -656,33 +711,53 @@ async function boot() {
     return { wwItems, colesItems };
   }
 
+  // The lists the page renders: split → cheapest-at-each-store; single → the
+  // WHOLE basket under one store (default: the cheaper overall total).
+  function singleStoreNow() {
+    if (chosenStore) return chosenStore;
+    const { wwTotal, coTotal } = computeTotals();
+    return wwTotal <= coTotal ? 'ww' : 'coles';
+  }
+  function currentLists() {
+    if (slSplit) return computeSplit();
+    return singleStoreNow() === 'ww'
+      ? { wwItems: displayItems, colesItems: [] }
+      : { wwItems: [], colesItems: displayItems };
+  }
+
   function buildTable(storeItems, store, sortKey, sortDir) {
     if (!storeItems.length) return `<p class="only-note">No items are cheapest at ${store === 'ww' ? 'Woolworths' : 'Coles'} in this selection.</p>`;
     const pfx    = store === 'ww' ? 'ww' : 'coles';
     const sorted = sortItems(storeItems, store, sortKey, sortDir);
-    const subtotal = sorted.reduce((s, i) => {
-      const price = store === 'ww' ? i.woolworths?.price : i.coles?.price;
-      return s + (price ?? 0) * getUnits(i.list_item, unitOv, analysis);
-    }, 0);
+    const subtotal = sorted.reduce((s, i) =>
+      s + (priceFor(i, store) ?? 0) * getUnits(i.list_item, unitOv, analysis), 0);
     const arrow = (key) => sortKey === key ? (sortDir === 'asc' ? ' ↑' : ' ↓') : ' ↕';
     const rows = sorted.map(i => {
-      const sd = store === 'ww' ? i.woolworths : i.coles;
+      const own = store === 'ww' ? i.woolworths : i.coles;
+      const other = store === 'ww' ? i.coles : i.woolworths;
+      // Single mode: an item this store doesn't sell shows the OTHER store's
+      // price with a chip — you'd have to grab those few elsewhere anyway.
+      const fellBack = !slSplit && own?.price == null && other?.price != null;
+      const sd = fellBack ? other : own;
       const units = getUnits(i.list_item, unitOv, analysis);
       const lineTotal = (sd?.price ?? 0) * units;
       const cat = getCategory(i, catOv);
       const unitStr = fmtUnit(sd?.unit_price, sd?.unit);
       const img = sd?.image_url;
-      const otherPriced = (store === 'ww' ? i.coles?.price : i.woolworths?.price) != null;
+      const showSwap = slSplit && own?.price != null && other?.price != null;
       const swapTo = store === 'ww' ? 'coles' : 'ww';
       const swapTitle = store === 'ww' ? 'Buy at Coles instead' : 'Buy at Woolworths instead';
+      const onlyChip = fellBack
+        ? ` <span class="only-chip ${store === 'ww' ? 'coles' : 'ww'}" title="Not sold at ${store === 'ww' ? 'Woolworths' : 'Coles'} — this is the ${store === 'ww' ? 'Coles' : 'Woolworths'} price">${store === 'ww' ? 'C' : 'W'} only</span>`
+        : '';
       const name = escAttr(i.list_item);
       return `<tr>
-        <td class="item-name-cell"><div class="name-wrap">${img ? `<img class="sl-thumb" loading="lazy" src="${escAttr(img)}" alt="" onerror="this.style.display='none'">` : ''}<span>${esc(i.list_item)}</span></div></td>
+        <td class="item-name-cell"><div class="name-wrap">${img ? `<img class="sl-thumb" loading="lazy" src="${escAttr(img)}" alt="" onerror="this.style.display='none'">` : ''}<span title="${name}">${esc(i.list_item)}</span></div></td>
         <td class="cat-cell" style="font-size:12px;color:#64748B;overflow:hidden;text-overflow:ellipsis">${esc(cat)}</td>
-        <td class="r price-cell"><span class="price-val">${fmt(sd?.price)}</span>${unitStr ? ` <span class="unit-val">${unitStr}</span>` : ''}</td>
+        <td class="r price-cell"><span class="price-val">${fmt(sd?.price)}</span>${unitStr ? ` <span class="unit-val">${unitStr}</span>` : ''}${onlyChip}</td>
         <td class="r qty-cell"><div class="qty-step"><button type="button" class="qs-btn" data-item="${name}" data-d="-1" aria-label="Decrease quantity">−</button><span class="qs-val">${units}</span><button type="button" class="qs-btn" data-item="${name}" data-d="1" aria-label="Increase quantity">+</button></div></td>
         <td class="r total-cell"><span class="total-val">${fmt(lineTotal)}</span></td>
-        <td class="act-cell">${otherPriced ? `<button type="button" class="row-btn swap" data-item="${name}" data-to="${swapTo}" title="${swapTitle}">⇄</button>` : ''}<button type="button" class="row-btn rm" data-item="${name}" title="Remove from basket">✕</button></td>
+        <td class="act-cell"><div class="act-wrap">${showSwap ? `<button type="button" class="row-btn swap" data-item="${name}" data-to="${swapTo}" title="${swapTitle}">⇄</button>` : ''}<button type="button" class="row-btn rm" data-item="${name}" title="Remove from basket">✕</button></div></td>
       </tr>`;
     }).join('');
     return `<div class="sl-table-wrap"><table>
@@ -712,12 +787,15 @@ async function boot() {
   // in-store use. Checked-off names persist in localStorage so the trip survives
   // a refresh; stale names (items no longer in the basket) are simply ignored.
   let slMode = localStorage.getItem('pw_sl_mode') === 'shop' ? 'shop' : 'list';
+  // Shopping mode is an IN-STORE tool — phone only. On desktop always render
+  // the list (and hide the toggle via CSS on .sl-shop-seg).
+  if (window.innerWidth > 700) slMode = 'list';
   let smChecked = {};
   try { smChecked = JSON.parse(localStorage.getItem('pw_shop_checked_v1') || '{}'); } catch {}
   const saveSmChecked = () => localStorage.setItem('pw_shop_checked_v1', JSON.stringify(smChecked));
 
   const segHtml = () => `
-    <div class="sl-mode-seg">
+    <div class="sl-mode-seg sl-shop-seg">
       <button class="sl-mode-btn${slMode === 'list' ? ' active' : ''}" data-mode="list">📋 List</button>
       <button class="sl-mode-btn${slMode === 'shop' ? ' active' : ''}" data-mode="shop">🛒 Shopping mode</button>
     </div>`;
@@ -818,20 +896,16 @@ async function boot() {
   // renderContent() re-runs on every state change: equalStore, sort, qty
   // stepper, row removal, store swap. All derived numbers are computed here.
   function renderContent() {
-    const { wwItems, colesItems } = computeSplit();
+    const { wwItems, colesItems } = currentLists();
     if (slMode === 'shop') { renderShopMode(wwItems, colesItems); return; }
     const { wwTotal, coTotal, optimalTotal, diff, isEqual } = computeTotals();
-    // Planned spend per store under the CURRENT assignment (equal-price choice
-    // + per-row ⇄ swaps). These are what the store cards show — swap an item
-    // across and the numbers move, unlike the all-at-one-store hypotheticals.
-    const subtotalOf = (items, store) => items.reduce((s, i) => {
-      const price = store === 'ww' ? i.woolworths?.price : i.coles?.price;
-      return s + (price ?? 0) * getUnits(i.list_item, unitOv, analysis);
-    }, 0);
+    // Split mode: planned spend per store under the current assignment
+    // (equal-price choice + per-row ⇄ swaps) — shown on the cards there.
+    const subtotalOf = (items, store) => items.reduce((s, i) =>
+      s + (priceFor(i, store) ?? 0) * getUnits(i.list_item, unitOv, analysis), 0);
     const wwSub = subtotalOf(wwItems, 'ww');
     const coSub = subtotalOf(colesItems, 'coles');
-    const tripTotal = wwSub + coSub;
-    // Equal-price items (same price at both stores) — reassignable by user
+    // Equal-price items (same price at both stores) — reassignable in split mode
     const equalItems = displayItems.filter(i =>
       i.cheaper_store === 'equal' &&
       i.woolworths?.price != null &&
@@ -839,8 +913,11 @@ async function boot() {
     const filterNoteHtml = handoff?.note
       ? `Showing <strong>${displayItems.length}</strong> ${handoff.note}`
       : `Showing <strong>${displayItems.length}</strong> item${displayItems.length !== 1 ? 's' : ''}`;
-    const ec = equalItems.length;
-    const wwActive = equalStore === 'ww';
+    const ec = slSplit ? equalItems.length : 0;
+    const single = slSplit ? null : singleStoreNow();
+    // Card "active" highlight: single mode = the store you're buying at;
+    // split mode = where equal-price items are assigned (as before).
+    const wwActive = slSplit ? equalStore === 'ww' : single === 'ww';
 
     // Card classes — the store class lets the active card carry its own store colour
     const wwCardCls = `store-card-sl ww ${wwActive ? 'card-active' : 'card-inactive'}`;
@@ -881,19 +958,23 @@ async function boot() {
     const savingCheaperChip = (wwTotal <= coTotal)
       ? '<span class="store-chip sm ww">W</span>' : '<span class="store-chip sm coles">C</span>';
     const splitDisc = `<svg class="split-icon" width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 A14 14 0 0 0 16 30 Z" fill="var(--ww)"/><path d="M16 2 A14 14 0 0 1 16 30 Z" fill="var(--coles)"/><line x1="16" y1="2" x2="16" y2="30" stroke="var(--card)" stroke-width="2.5"/></svg>`;
-    // Trip total leads: what THIS plan costs across both stores. It responds
-    // to qty steppers, removals, equal-price assignment and per-row ⇄ swaps.
-    const tripLine = `<div class="saving-line" title="What this trip costs across both stores with the current item assignment"><span class="saving-icon">🧾</span><div class="saving-text"><div class="saving-label">Trip total</div><span class="saving-amount" style="color:var(--text)">${fmt(tripTotal)}</span></div></div>`;
-    const savingInfoHtml = tripLine + (isEqual
+    // (No "Trip total": in single mode it IS the active card's number, and the
+    // subtotal rows already carry the split-mode detail.)
+    const infoIco = tip => `<span class="info-ico" tabindex="0" data-tip="${tip.replace(/"/g, '&quot;')}">?</span>`;
+    const savingInfoHtml = (isEqual
       ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
-      : `<div class="saving-line" title="How much less your whole basket costs at the cheaper store, vs buying everything at the other store"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`
+      : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIco('How much less your whole basket costs at the cheaper store, vs buying everything at the other store')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`
         + (splitSaving > basketSaving + 0.005
-            ? `<div class="saving-line" title="Buy each item at whichever store is cheapest, vs doing your whole shop at the dearer store"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Split shop</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
+            ? `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Split shop${infoIco('Buy each item at whichever store is cheapest, vs doing your whole shop at the dearer store. Use the Split shop toggle above to plan it.')}</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
             : ''));
 
     main.innerHTML = `
       <div class="sl-note">📋 ${filterNoteHtml}</div>
       <div class="sl-topbar">
+        <div class="sl-mode-seg" id="splitSeg">
+          <button class="sl-mode-btn${!slSplit ? ' active' : ''}" data-splitmode="0" title="Buy the whole basket at one store">🏬 One store</button>
+          <button class="sl-mode-btn${slSplit ? ' active' : ''}" data-splitmode="1" title="Buy each item at whichever store is cheaper">🔀 Split shop</button>
+        </div>
         ${segHtml()}
         <div style="flex:1"></div>
         <button id="saveBasketBtn" class="btn-outline-save">🔒 Save basket</button>
@@ -906,13 +987,13 @@ async function boot() {
             <div class="sc-icon"><span class="sc-icon-chip ww">W</span></div>
             <div class="sc-name-row">
               <span class="sc-store-name">Woolworths</span>
-              <span class="sc-item-pill">${wwItems.length} item${wwItems.length !== 1 ? 's' : ''}</span>
+              <span class="sc-item-pill">${slSplit ? `${wwItems.length} item${wwItems.length !== 1 ? 's' : ''}` : `all ${displayItems.length} items`}</span>
             </div>
-            <div class="sc-price ${wwPriceCls}">${fmt(wwSub)}</div>
-            <div class="sc-subtitle">Your items here · all ${displayItems.length} items would cost ${fmt(wwTotal)}</div>
+            <div class="sc-price ${wwPriceCls}">${fmt(slSplit ? wwSub : wwTotal)}</div>
+            <div class="sc-subtitle">${slSplit ? 'Your items assigned here' : 'Whole basket at this store'}</div>
             <div class="sc-spacer"></div>
             <div class="sc-badge-row">
-              <span class="sc-badge" style="${wwBadgeStyle}">✓ Selected store</span>
+              <span class="sc-badge" style="${wwBadgeStyle}">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>
             </div>
             <div class="sc-hint">${wwHint}</div>
           </div>
@@ -920,13 +1001,13 @@ async function boot() {
             <div class="sc-icon"><span class="sc-icon-chip coles">C</span></div>
             <div class="sc-name-row">
               <span class="sc-store-name">Coles</span>
-              <span class="sc-item-pill">${colesItems.length} item${colesItems.length !== 1 ? 's' : ''}</span>
+              <span class="sc-item-pill">${slSplit ? `${colesItems.length} item${colesItems.length !== 1 ? 's' : ''}` : `all ${displayItems.length} items`}</span>
             </div>
-            <div class="sc-price ${coPriceCls}">${fmt(coSub)}</div>
-            <div class="sc-subtitle">Your items here · all ${displayItems.length} items would cost ${fmt(coTotal)}</div>
+            <div class="sc-price ${coPriceCls}">${fmt(slSplit ? coSub : coTotal)}</div>
+            <div class="sc-subtitle">${slSplit ? 'Your items assigned here' : 'Whole basket at this store'}</div>
             <div class="sc-spacer"></div>
             <div class="sc-badge-row">
-              <span class="sc-badge" style="${coBadgeStyle}">✓ Selected store</span>
+              <span class="sc-badge" style="${coBadgeStyle}">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>
             </div>
             <div class="sc-hint">${coHint}</div>
           </div>
@@ -937,23 +1018,23 @@ async function boot() {
         </div>
       </div>
 
-      <div class="store-section">
+      ${!wwItems.length && !slSplit ? '' : `<div class="store-section">
         <div class="section-header">
           <span class="store-chip ww">W</span>
           <span class="section-title">Buy at Woolworths</span>
           <span class="section-count">${wwItems.length} item${wwItems.length !== 1 ? 's' : ''}</span>
         </div>
         ${buildTable(wwItems, 'ww', wwSortKey, wwSortDir)}
-      </div>
+      </div>`}
 
-      <div class="store-section">
+      ${!colesItems.length && !slSplit ? '' : `<div class="store-section">
         <div class="section-header">
           <span class="store-chip coles">C</span>
           <span class="section-title">Buy at Coles</span>
           <span class="section-count">${colesItems.length} item${colesItems.length !== 1 ? 's' : ''}</span>
         </div>
         ${buildTable(colesItems, 'coles', colesSortKey, colesSortDir)}
-      </div>
+      </div>`}
     `;
 
     // Wire sort header clicks (per-table, independent state)
@@ -971,15 +1052,27 @@ async function boot() {
       });
     });
 
-    // Wire store-block click handlers to reassign equal-price items
-    if (ec > 0) {
-      document.getElementById('wwTotalBlock')?.addEventListener('click', () => {
-        if (equalStore !== 'ww') { equalStore = 'ww'; renderContent(); }
-      });
-      document.getElementById('colesTotalBlock')?.addEventListener('click', () => {
-        if (equalStore !== 'coles') { equalStore = 'coles'; renderContent(); }
-      });
-    }
+    // One store ⇄ Split shop toggle
+    main.querySelectorAll('#splitSeg .sl-mode-btn').forEach(b => b.addEventListener('click', () => {
+      const want = b.dataset.splitmode === '1';
+      if (want === slSplit) return;
+      slSplit = want;
+      localStorage.setItem('pw_sl_split', want ? '1' : '0');
+      storeOverride.clear(); // a mode switch starts from the clean default plan
+      renderContent();
+    }));
+
+    // Store-card clicks. Single mode: choose which store to buy the whole
+    // basket at. Split mode: reassign equal-price items (as before). Either
+    // way a card click RESETS any per-row ⇄ swaps back to the default plan.
+    const cardClick = (store) => () => {
+      storeOverride.clear();
+      if (slSplit) equalStore = store;
+      else chosenStore = store;
+      renderContent();
+    };
+    document.getElementById('wwTotalBlock')?.addEventListener('click', cardClick('ww'));
+    document.getElementById('colesTotalBlock')?.addEventListener('click', cardClick('coles'));
 
     // Qty steppers — write the same pw_units_v1 map the main page reads, so
     // quantities stay consistent between pages.

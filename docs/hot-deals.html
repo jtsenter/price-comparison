@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=90" />
+  <link rel="stylesheet" href="style.css?v=91" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -60,6 +60,23 @@
     .deals-hero-stat strong {
       color: var(--text);
       font-weight: 700;
+    }
+
+    /* ── Deal-definition sliders ── */
+    .hd-tune {
+      display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
+      margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
+      width: 100%;
+    }
+    .hd-tune-row { display: flex; align-items: center; gap: 10px; }
+    .hd-tune-row label { font-size: 12px; font-weight: 600; color: var(--text-mid); white-space: nowrap; }
+    .hd-tune-row input[type="range"] { width: 140px; accent-color: var(--ww); cursor: pointer; }
+    .hd-tune-row strong { font-size: 13px; font-weight: 800; color: var(--text); min-width: 40px; font-variant-numeric: tabular-nums; }
+    @media (max-width: 700px) {
+      .hd-tune { gap: 10px; }
+      .hd-tune-row { width: 100%; }
+      .hd-tune-row label { flex: 1; }
+      .hd-tune-row input[type="range"] { width: 120px; }
     }
 
     /* ── Filter bar ── */
@@ -303,7 +320,7 @@
 <body>
 
 <header data-page="hot-deals"></header>
-<script src="header.js?v=4"></script>
+<script src="header.js?v=5"></script>
 
 <div class="notif-dropdown" id="notifDropdown" style="display:none">
   <div class="notif-header">
@@ -317,6 +334,21 @@
   <div class="deals-hero-title">🔥 Hot Deals</div>
   <div class="deals-hero-divider"></div>
   <div class="deals-hero-stats" id="heroStats"></div>
+  <!-- The two dials that DEFINE a deal, out in the open. Dragging either
+       instantly grows/shrinks the list below. -->
+  <div class="hd-tune">
+    <div class="hd-tune-row" title="How far below its usual (median historical) price an item must be">
+      <label for="hdDropSlider">↓ Below usual price</label>
+      <input type="range" id="hdDropSlider" min="0" max="50" step="1">
+      <strong id="hdDropVal">4%+</strong>
+    </div>
+    <div class="hd-tune-row" title="How much cheaper the best store must be vs the other store">
+      <label for="hdDiffSlider">⇄ Cheaper than other store</label>
+      <input type="range" id="hdDiffSlider" min="0" max="50" step="1">
+      <strong id="hdDiffVal">0%+</strong>
+    </div>
+    <button id="hdTuneReset" class="btn btn-ghost" style="font-size:12px;padding:5px 12px">↺ Reset</button>
+  </div>
 </div>
 
 <!-- Category filter tabs -->
@@ -388,7 +420,7 @@
 
 <!-- Shared utilities — must load before inline script -->
 <script src="name_map.js?v=13"></script>
-<script src="utils.js?v=58"></script>
+<script src="utils.js?v=59"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -872,11 +904,15 @@ function renderDeals() {
   const priorities = loadPriorities();
   const exclusions = loadExclusions();
 
-  // SINGLE source of truth — identical to the main page's deal count.
+  // SINGLE source of truth — identical to the main page's deal count (the
+  // main page reads the same stored slider values).
+  const tune = loadDealTune();
   const allDeals = getHotDealItems(_data.items, {
     exclusions,
     archivedSet: _archivedSet,
     priorities,
+    minDropPct: tune.drop,
+    minStoreDiffPct: tune.diff,
   });
 
   buildCategoryTabs(allDeals.map(d => d.item));
@@ -1183,6 +1219,37 @@ function initWatchlistFilter() {
   });
 }
 
+// ── Deal-definition sliders ───────────────────────────────────────────────────
+// Persisted via pw_hd_tune_v1 (loadDealTune in utils.js) — the main page reads
+// the same values for its "🔥 N deals" count so the two never disagree.
+
+function initDealTune() {
+  const dropS = document.getElementById('hdDropSlider');
+  const diffS = document.getElementById('hdDiffSlider');
+  const reset = document.getElementById('hdTuneReset');
+  if (!dropS || !diffS) return;
+  const sync = (t) => {
+    dropS.value = t.drop;
+    diffS.value = t.diff;
+    document.getElementById('hdDropVal').textContent = `${t.drop}%+`;
+    document.getElementById('hdDiffVal').textContent = `${t.diff}%+`;
+  };
+  sync(loadDealTune());
+  const onInput = () => {
+    const t = { drop: Number(dropS.value), diff: Number(diffS.value) };
+    localStorage.setItem('pw_hd_tune_v1', JSON.stringify(t));
+    sync(t);
+    renderDeals();
+  };
+  dropS.addEventListener('input', onInput);
+  diffS.addEventListener('input', onInput);
+  reset?.addEventListener('click', () => {
+    localStorage.removeItem('pw_hd_tune_v1');
+    sync(loadDealTune());
+    renderDeals();
+  });
+}
+
 // ── Sort header clicks ────────────────────────────────────────────────────────
 
 function initSortHeaders() {
@@ -1374,6 +1441,7 @@ function initRefreshBtn() {
   renderHdHead();
   initStoreFilter();
   initWatchlistFilter();
+  initDealTune();
   initTooltip();
   initRefreshBtn();
   initHdColChooser();

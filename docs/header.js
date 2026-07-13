@@ -23,6 +23,7 @@
   var page = host.getAttribute('data-page');
 
   /* ── SVG icons (kept as consts so the templates stay readable) ── */
+  var SVG_HOME  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
   var SVG_HOT   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg>';
   var SVG_CART  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
   var SVG_EYE   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
@@ -91,7 +92,10 @@
     var watch = (page === 'index')
       ? '<button class="btn btn-ghost btn-icon nav-icon-btn nav-watch" id="mobileWatchBtn" type="button" title="Watchlist">' + SVG_EYE + '</button>'
       : a('watch', 'index.html#watchlist', 'Watchlist', SVG_EYE);
-    return a('hot', 'hot-deals.html', 'Hot Deals', SVG_HOT) +
+    // Home leads the cluster: "how do I get back to the main page?" needed a
+    // literal house, not just the brand chips.
+    return a('home', 'index.html', 'Home', SVG_HOME) +
+           a('hot', 'hot-deals.html', 'Hot Deals', SVG_HOT) +
            a('basket', 'shopping-list.html', 'Basket', SVG_CART, 'basketNavLink') +
            watch;
   }
@@ -160,6 +164,7 @@
     '';
 
   var active =
+    page === 'index' ? 'home' :
     page === 'hot-deals' ? 'hot' :
     page === 'shopping-list' ? 'basket' : null;
 

@@ -1016,28 +1016,9 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
 
   const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
   const pos = Math.max(0, Math.min(100, rawPos));
-
-  const counts = {};
-  prices.forEach(p => { const k = p.toFixed(2); counts[k] = (counts[k] || 0) + 1; });
-  const total = prices.length;
-
-  const lines = Object.entries(counts)
-    .sort(([a], [b]) => +a - +b)
-    .map(([p, c]) => {
-      const pct = Math.round((c / total) * 100);
-      const bar = '█'.repeat(Math.round(pct / 10));
-      return `$${p}  ${bar.padEnd(10)}  ${pct}% (${c}×)`;
-    });
-
-  const cheaperPct = Math.round(prices.filter(p => p > currentPrice).length / total * 100);
-  lines.push('');
-  lines.push(cheaperPct > 0
-    ? `Now cheaper than ${cheaperPct}% of past prices ✓`
-    : `Now at all-time low ✓`
-  );
-
-  const tooltip = lines.join('\n');
-  const safeTooltip = tooltip.replace(/"/g, '&quot;');
+  // (The old hover histogram tooltip was removed as redundant — the History
+  // modal, one click away on the always-visible clock icon, shows the same
+  // data properly.)
   const safeItemName = itemName.replace(/"/g, '&quot;');
 
   // Off-range: green circle LEFT (price below min) or red circle RIGHT (price above max)
@@ -1052,7 +1033,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
 
   const allTimeLowBadge = rawPos === 0 ? '<span class="trophy-icon" title="All-time low — the cheapest this item has ever been recorded at">🏆</span>' : '';
   return `
-    <div class="price-bar-outer" data-tooltip="${safeTooltip}">
+    <div class="price-bar-outer">
       ${trackHtml}
       <div class="price-bar-labels">
         <span>${fmt(minP)}${allTimeLowBadge}</span>
@@ -1060,44 +1041,6 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
       </div>
     </div>
     <button class="price-bar-manage" data-manage-item="${safeItemName}" aria-label="View price history"><svg class="pbm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg><span class="pbm-txt">History</span></button>`;
-}
-
-// ── Tooltip (fixed, not clipped by overflow:hidden) ──────────────────────────
-
-function initTooltip() {
-  const tip = $('priceTooltip');
-  if (!tip) return;
-  // Touch browsers fire a synthetic mouseover on first tap (hover emulation), which
-  // popped this raw-text tooltip up on mobile — confusing, since there's no mouse to
-  // move away and dismiss it with. Mobile has its own "History" button instead.
-  const hasRealHover = () => matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-  document.addEventListener('mouseover', (e) => {
-    if (!hasRealHover()) return;
-    const el = e.target.closest('.price-bar-outer[data-tooltip]');
-    if (!el) return;
-    tip.textContent = el.dataset.tooltip;
-    tip.style.display = 'block';
-  });
-
-  document.addEventListener('mousemove', (e) => {
-    if (tip.style.display === 'none') return;
-    const margin = 12;
-    const tipH = tip.offsetHeight;
-    const tipW = tip.offsetWidth;
-    let top = e.clientY - tipH - margin;
-    let left = e.clientX - tipW / 2;
-    if (top < 8) top = e.clientY + margin;
-    if (left < 8) left = 8;
-    if (left + tipW > window.innerWidth - 8) left = window.innerWidth - tipW - 8;
-    tip.style.top = `${top}px`;
-    tip.style.left = `${left}px`;
-  });
-
-  document.addEventListener('mouseout', (e) => {
-    const el = e.target.closest('.price-bar-outer[data-tooltip]');
-    if (el) tip.style.display = 'none';
-  });
 }
 
 // ── Per-item refresh ─────────────────────────────────────────────────────────
@@ -2724,6 +2667,12 @@ function computeBannerStats(items) {
 //   • Basket saving — the gap between the two whole-basket totals (matches the cards).
 //   • Max saving — buy each item at its cheaper store vs the dearer single store.
 //     Only shown when splitting the shop beats just visiting the cheaper store.
+// A small circled "?" that reveals its explanation on hover OR tap/focus
+// (tabindex makes :focus-visible tooltips work on touch). CSS: .info-ico.
+function infoIcoHTML(tip) {
+  return `<span class="info-ico" tabindex="0" role="note" aria-label="${escAttr(tip)}" data-tip="${escAttr(tip)}">?</span>`;
+}
+
 function renderSavingInfo(s) {
   // Basket saving carries the cheaper store's logo; max saving carries a split
   // W│C disc to signal "buy across both stores".
@@ -2731,10 +2680,12 @@ function renderSavingInfo(s) {
     ? '<span class="store-chip coles sm">C</span>'
     : '<span class="store-chip ww sm">W</span>';
   const splitIcon = `<svg class="split-icon" width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 A14 14 0 0 0 16 30 Z" fill="var(--ww)"/><path d="M16 2 A14 14 0 0 1 16 30 Z" fill="var(--coles)"/><line x1="16" y1="2" x2="16" y2="30" stroke="var(--card)" stroke-width="2.5"/></svg>`;
-  const basket = `<div class="saving-line" title="How much less your whole basket costs at the cheaper store, vs buying everything at the other store"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
+  // Explanations live behind a visible ?-icon (hover or tap/focus shows the
+  // tip) — a bare title attribute was invisible until you happened to hover.
+  const basket = `<div class="saving-line"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIcoHTML('How much less your whole basket costs at the cheaper store, vs buying everything at the other store')}</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
   let maxRow = '';
   if (s.max_saving > s.total_saving + 0.005) {
-    maxRow = `<div class="saving-line" title="Buy each item at whichever store is cheapest, vs doing your whole shop at the dearer store"><span class="saving-icon">${splitIcon}</span><div class="saving-text"><div class="saving-label">Split shop</div><span class="saving-amount">${fmt(s.max_saving)}</span></div></div>`;
+    maxRow = `<div class="saving-line"><span class="saving-icon">${splitIcon}</span><div class="saving-text"><div class="saving-label">Split shop${infoIcoHTML('Buy each item at whichever store is cheapest, vs doing your whole shop at the dearer store')}</div><span class="saving-amount">${fmt(s.max_saving)}</span></div></div>`;
   }
   return basket + maxRow;
 }
@@ -3979,8 +3930,12 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     ? `<img class="item-img img-hoverable" src="${imgSrc}" alt="" loading="lazy" data-item="${group.list_item}" data-ww-img="${wwImg}" data-co-img="${coImg}" />`
     : '<div class="item-img-placeholder">No Photo</div>';
 
-  // No caret glyph: the whole row is the expand/collapse target (cursor +
-  // hover already signal it), and the tiny ▸ just stole width from the name.
+  // No caret glyph before the name (it stole width) — instead the sub-label
+  // ends with an explicit expand/close affordance so it's obvious the row
+  // toggles the variant panel and how to get back out.
+  const expandHint = isExpanded
+    ? '<span class="vg-expand-hint open">▴ click to close</span>'
+    : '<span class="vg-expand-hint">▾ expand</span>';
   const nameCell = `<td class="item-name vg-group-name-cell">
     <div class="item-row">
       ${imgHtml}
@@ -3989,7 +3944,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
           <span class="vg-group-label">${esc(group._groupLabel)}</span>
           <button class="item-edit-btn" data-edit-item="${group.list_item}" title="Edit category">✎</button>
         </span>
-        <span class="vg-group-sub">${groupSubLabel(group)}</span>
+        <span class="vg-group-sub">${groupSubLabel(group)} ${expandHint}</span>
       </div>
     </div></td>`;
 
@@ -4086,6 +4041,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
       <div class="vg-panel-head">
         <span class="vg-panel-title">${esc(group._groupLabel)}</span>
         ${winnerTag}
+        <button type="button" class="vg-panel-close" data-close-group="${group._groupKey}" title="Collapse this category">▲ Collapse</button>
       </div>
       <div class="vg-panel-cols">
         <div class="vg-panel-store">
@@ -4599,6 +4555,15 @@ function renderMobileCards(items, data) {
     });
     chipsWrap.appendChild(chip);
   });
+  // Watchlist chip — lives with the sort chips (the header eye read as too
+  // prominent on phones); delegates to the same toggle the header button uses.
+  const watchChip = document.createElement('button');
+  watchChip.className = 'mc-sort-chip mc-watch-chip' + (_activePriority === 'watchlist' ? ' active' : '');
+  watchChip.textContent = '👁';
+  watchChip.title = 'Watchlist';
+  watchChip.setAttribute('aria-label', 'Watchlist filter');
+  watchChip.onclick = () => $('mobileWatchBtn')?.click();
+  chipsWrap.appendChild(watchChip);
   toolbar.appendChild(chipsWrap);
 
   // View toggle — single icon-only button; glyph shows the layout you'll switch TO
@@ -4939,10 +4904,13 @@ function _renderPageInner(data) {
     : `${totalNonArchived} items`;
   // Deal count uses the SAME canonical function the Hot Deals page uses, with the
   // same inputs, so this number always equals the rows shown there (no drift).
+  const hotTune = loadDealTune(); // same sliders the Hot Deals page uses
   const hotCount = getHotDealItems(data.items, {
     exclusions: _renderExclusions,
     archivedSet: _repoArchivedSet,
     priorities: _uiPriorities,
+    minDropPct: hotTune.drop,
+    minStoreDiffPct: hotTune.diff,
   }).length;
   $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>${hotCount > 0 ? `<a href="hot-deals.html" class="hot-deals-link">🔥 ${hotCount} deal${hotCount !== 1 ? 's' : ''}</a>` : ''}`;
   $('banner').style.display = 'block';
@@ -5981,12 +5949,32 @@ function getCurrentVisibleItems() {
 function buildShoppingListItems(useChecked) {
   if (!_lastData) return [];
   const allItems = _lastData.items;
+  // Selected per-kg GROUP rows are synthetic (`__group_*` — they don't exist in
+  // latest.json), so a plain name filter silently DROPPED them: "I added 6
+  // items, only 4 arrived". Swap each group for its best-value member (lowest
+  // $/kg across both stores) so the basket gets a real, buyable product.
+  const expandGroups = (nameSet) => {
+    const names = new Set();
+    let groups = null;
+    for (const n of nameSet) {
+      if (!n.startsWith('__group_')) { names.add(n); continue; }
+      if (!groups) groups = buildVariantGroups(new Map(allItems.map(i => [i.list_item, i])));
+      const g = groups.find(gr => gr.list_item === n);
+      const best = [g?._wwBest, g?._coBest].filter(Boolean).sort((a, b) => a.perkg - b.perkg)[0];
+      if (best) names.add(best.name);
+    }
+    return names;
+  };
   // Priority 1: mobile tap-selected items
-  if (_selectedItems.size > 0)
-    return allItems.filter(i => _selectedItems.has(i.list_item));
+  if (_selectedItems.size > 0) {
+    const sel = expandGroups(_selectedItems);
+    return allItems.filter(i => sel.has(i.list_item));
+  }
   // Priority 2: desktop checkbox-selected rows (bulk bar)
-  if (useChecked && _checkedItems && _checkedItems.size > 0)
-    return allItems.filter(i => _checkedItems.has(i.list_item));
+  if (useChecked && _checkedItems && _checkedItems.size > 0) {
+    const sel = expandGroups(_checkedItems);
+    return allItems.filter(i => sel.has(i.list_item));
+  }
   // Priority 3: active search — substring match on list_item name
   if (_searchQuery && _searchQuery.trim().length > 0) {
     const q = _searchQuery.trim().toLowerCase();
@@ -6106,7 +6094,6 @@ async function boot() {
   initSettingsModal();
   initEditModal();
   initPriceHistoryModal();
-  initTooltip();
   initStickyHeader();
   initUploadModal();
   initSearch();
@@ -6206,6 +6193,9 @@ async function boot() {
   const TABLE_ICON = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="3" y1="15" x2="21" y2="15"/></svg>`;
   const CARD_ICON  = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>`;
   function syncViewToggleBtn() {
+    // Card view: the sticky site header adds nothing while browsing cards —
+    // let it scroll away (body class drives `header { position: static }`).
+    document.body.classList.toggle('pw-cardview', _viewMode === 'card');
     if (!viewToggleBtn) return;
     if (_viewMode === 'card') {
       viewToggleBtn.innerHTML = TABLE_ICON;
@@ -6409,6 +6399,14 @@ async function boot() {
         // below already ignores button clicks, so this won't collapse the panel).
         const pvBasket = e.target.closest('.vg-pv-basket');
         if (pvBasket) { addPerKgToBasket(pvBasket.dataset.item); return; }
+        // Explicit "▲ Collapse" button inside the expanded panel (the panel body
+        // itself stays inert — see below).
+        const panelClose = e.target.closest('.vg-panel-close');
+        if (panelClose) {
+          _expandedGroups.delete(panelClose.dataset.closeGroup);
+          if (_lastData) renderPage(_lastData);
+          return;
+        }
         // Variant group expand/collapse — click ONLY the group header row toggles.
         // The expanded panel beneath (.vg-panel-row) is deliberately inert so a tap
         // on a variant / whitespace there doesn't collapse the panel out from under

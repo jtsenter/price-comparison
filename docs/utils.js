@@ -334,16 +334,39 @@ function normalizeCategory(raw) {
 //   opts.exclusions  — per-item excluded historical prices (pw_exclusions_v1)
 //   opts.archivedSet — names archived in docs/data/archived_items.json
 //   opts.priorities  — localStorage priorities (pw_priorities_v1); 'archive' hides
+//   opts.minDropPct / opts.minStoreDiffPct — optional threshold overrides (the
+//     Hot Deals sliders; both pages pass the same stored values so the main-page
+//     count always equals the rows shown). Defaults reproduce the canonical
+//     qualify rule exactly: drop ≥ DEAL_MIN_DROP (or all-time low), any store gap.
 function getHotDealItems(items, opts) {
   opts = opts || {};
   const exclusions  = opts.exclusions  || {};
   const archivedSet = opts.archivedSet || new Set();
   const priorities  = opts.priorities  || {};
+  const minDrop = opts.minDropPct      != null ? opts.minDropPct / 100      : DEAL_MIN_DROP;
+  const minDiff = opts.minStoreDiffPct != null ? opts.minStoreDiffPct / 100 : 0;
   return (items || [])
     .filter(item =>
       !item.archived &&
       priorities[item.list_item] !== 'archive' &&
       !archivedSet.has(item.list_item))
     .map(item => ({ item, deal: getDealQuality(item, exclusions) }))
-    .filter(({ deal }) => deal.qualifies);
+    .filter(({ deal }) =>
+      deal.typical != null &&
+      deal.spread >= DEAL_MIN_SPREAD &&
+      // At the default threshold an all-time low always qualifies (canonical
+      // rule); once the user RAISES the drop slider, ATL items must meet it too.
+      (deal.dropPct >= minDrop || (deal.isAllTimeLow && minDrop <= DEAL_MIN_DROP)) &&
+      deal.savingPct >= minDiff);
+}
+
+// Shared slider state for the two deal thresholds (Hot Deals page writes it,
+// both pages read it so their numbers agree).
+const DEAL_TUNE_DEFAULTS = { drop: Math.round(DEAL_MIN_DROP * 100), diff: 0 };
+function loadDealTune() {
+  try {
+    const t = JSON.parse(localStorage.getItem('pw_hd_tune_v1') || 'null');
+    if (t && typeof t.drop === 'number' && typeof t.diff === 'number') return t;
+  } catch {}
+  return { ...DEAL_TUNE_DEFAULTS };
 }

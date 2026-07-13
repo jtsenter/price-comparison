@@ -68,6 +68,9 @@ header {
   z-index: 1000;
   box-shadow: var(--shadow-sm);
 }
+/* Card view: nothing in the header helps while browsing cards — let it scroll
+   away instead of eating 60px of every screen. (app.js sets the body class.) */
+body.pw-cardview header { position: static; }
 .header-inner {
   max-width: 1600px;
   margin: 0 auto;
@@ -144,6 +147,9 @@ header .header-right .btn-icon { height: 38px; min-width: 38px; justify-content:
    Watchlist eye, which stays: it's the only mobile entry to that filter). */
 .nav-icon-btn { text-decoration: none; }
 .nav-icon-btn svg { display: block; }
+.nav-icon-btn.nav-home       { color: var(--text-mid); }
+.nav-icon-btn.nav-home:hover { color: var(--text); background: var(--bg); }
+.nav-icon-btn.here.nav-home  { background: var(--bg); border-color: var(--border-strong); }
 .nav-icon-btn.nav-hot        { color: #DC2626; }
 .nav-icon-btn.nav-basket     { color: var(--ww); }
 .nav-icon-btn.nav-watch      { color: #D97706; }
@@ -424,11 +430,25 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
    clientWidth in JS (renderTableHead). */
 .vg-panel { padding: 14px 18px 16px; position: sticky; left: 0; box-sizing: border-box; width: var(--pw-panelw, 100%); }
 .vg-panel-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+/* Explicit way out of an expanded category (plus the header row still toggles) */
+.vg-panel-close {
+  margin-left: auto; cursor: pointer;
+  font-size: 11px; font-weight: 700; color: var(--text-mid);
+  background: var(--card); border: 1px solid var(--border-strong); border-radius: 14px;
+  padding: 3px 10px; white-space: nowrap;
+}
+.vg-panel-close:hover { background: var(--bg); color: var(--text); }
+/* Expand/close affordance at the end of the group row's sub-label */
+.vg-expand-hint { color: var(--accent); font-weight: 600; white-space: nowrap; }
+.vg-expand-hint.open { color: var(--text-mid); }
 .vg-panel-title { font-weight: 800; font-size: 16px; }
 .vg-panel-winner { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 10px; background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
 .vg-panel-winner.ww { background: rgba(0,132,61,.13); color: #15803d; }
 .vg-panel-winner.coles { background: rgba(185,28,28,.12); color: #b91c1c; }
-.vg-panel-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+/* minmax(0,1fr): a bare 1fr's min is auto, so ONE long product name silently
+   widened that store's whole column — the boxes must stay equal and names
+   ellipsize instead. */
+.vg-panel-cols { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 18px; }
 .vg-panel-store { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; }
 .vg-store-h { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px; margin-bottom: 6px; }
 .vg-pv { display: flex; align-items: center; gap: 9px; padding: 6px 8px; border-radius: 7px; font-size: 13px; }
@@ -884,28 +904,49 @@ tr:hover .item-edit-btn { opacity: 1; }
   margin-top: 4px;
 }
 
-/* History button for the trend bar. Desktop: hover-revealed text link (icon hidden).
-   Mobile cards (.mc-bar overrides below): always-visible circular icon button. */
+/* History button for the trend bar — price history is a headline feature, so
+   this is an ALWAYS-VISIBLE clock icon (was a hover-revealed text link nobody
+   discovered). In the table it pins to the right edge of the trend cell;
+   elsewhere (card view) it flows inline. */
 .price-bar-manage {
   font-size: 11px;
   color: var(--text-soft);
   cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.15s;
-  display: block;
-  text-decoration: underline;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   background: none;
   border: none;
-  padding: 5px 8px 5px 0; /* was an 11px-tall sliver — real hit area, same look */
-  margin: -3px 0 -5px;    /* swallow the padding so the row height is unchanged */
-  text-align: left;
+  padding: 5px;
 }
-.price-bar-manage .pbm-ico { display: none; }
-tr:hover .price-bar-manage { opacity: 1; }
+.price-bar-manage .pbm-ico { display: block; width: 16px; height: 16px; }
+.price-bar-manage .pbm-txt { display: none; }
 .price-bar-manage:hover { color: var(--ww); }
+#tableBody .trend-cell .price-bar-manage {
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+}
 
-.trend-cell { min-width: 116px; vertical-align: middle; }
+.trend-cell { min-width: 116px; vertical-align: middle; position: relative; padding-right: 30px; }
 .trend-cell .price-bar-outer { margin-top: 0; padding-top: 6px; }
+
+/* Circled "?" that reveals its explanation on hover or tap/focus */
+.info-ico {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 1px solid var(--border-strong); color: var(--text-soft);
+  font-size: 9px; font-weight: 800; line-height: 1;
+  cursor: help; position: relative; margin-left: 4px; vertical-align: middle;
+}
+.info-ico:hover, .info-ico:focus { color: var(--text); border-color: var(--text-soft); outline: none; }
+.info-ico:hover::after, .info-ico:focus::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 7px); left: 50%; transform: translateX(-50%);
+  background: var(--text); color: var(--card);
+  font-size: 11px; font-weight: 500; line-height: 1.45; text-transform: none; letter-spacing: 0;
+  padding: 7px 11px; border-radius: 7px; width: 230px; text-align: left;
+  white-space: normal; z-index: 600; pointer-events: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,.2);
+}
 
 .price-bar-flat { background: #CBD5E1 !important; }
 .price-bar-labels-flat { justify-content: center; }
@@ -2060,13 +2101,9 @@ td.priority-cell { text-align: center; }
   /* Hide desktop-only controls */
   .col-chooser-wrap, .view-toggle-btn { display: none !important; }
 
-  /* Mobile top bar = search + a Watchlist shortcut. Basket and Hot Deals
-     already live in the bottom tab bar (a header basket was a duplicate), but
-     the Watchlist filter has NO other mobile entry point — the pill row, the
-     desktop nav cluster and the options menu are all hidden on phones. */
-  header .header-right .nav-icon-btn.nav-watch {
-    display: inline-flex;
-  }
+  /* Mobile top bar = just the search. The Watchlist eye moved DOWN into the
+     sort-chips toolbar (it read as too prominent in the header); Basket and
+     Hot Deals live in the bottom tab bar. */
 
   /* Reclaim header space on mobile: the W/C brand chips (redundant — the bottom
      tab bar's Prices tab is home) and the notification bell (never wanted on a
@@ -2243,6 +2280,9 @@ td.priority-cell { text-align: center; }
   .mc-sort-chip.active {
     background: var(--ww); color: #fff; border-color: var(--ww);
   }
+  /* Watchlist chip: icon-only, amber when the filter is on */
+  .mc-watch-chip { padding: 5px 10px; }
+  .mc-watch-chip.active { background: #D97706; border-color: #D97706; }
 
   /* View toggle (detailed ⇄ compact) — icon only, tinted so it stays visible */
   #mcViewToggle {
