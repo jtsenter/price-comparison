@@ -44,7 +44,9 @@
     nav a.active { background: var(--bg); color: var(--text); font-weight: 600; }
     .header-right { display: flex; align-items: center; gap: 8px; }
 
-    main { max-width: 860px; margin: 0 auto; padding: 24px; }
+    /* 1100px: the old 860px left dead margins while the tables squeezed —
+       give the name column the room instead. */
+    main { max-width: 1100px; margin: 0 auto; padding: 24px; }
 
     /* ── Store card summary ─────────────────── */
     .store-summary-wrap {
@@ -208,7 +210,17 @@
     .row-btn { border: none; background: none; cursor: pointer; font-size: 13px; color: var(--text-soft); padding: 5px 6px; border-radius: 6px; line-height: 1; -webkit-tap-highlight-color: transparent; }
     .row-btn:hover { background: var(--bg); color: var(--text); }
     .row-btn.rm:hover { color: #DC2626; background: rgba(220,38,38,.10); }
-    .act-cell { text-align: right; }
+    /* Buttons, not text: the default td ellipsis clipped them into a dead "…" */
+    .act-cell { text-align: right; overflow: visible; text-overflow: clip; }
+
+    /* Column resize handles (initSlResize creates them; without these rules
+       they were 0-width and invisible — columns LOOKED unresizable) */
+    .col-resize-handle {
+      position: absolute; right: 0; top: 15%; bottom: 15%;
+      width: 4px; cursor: col-resize; border-radius: 3px;
+      background: rgba(0,0,0,0.12); transition: background 0.15s; z-index: 2;
+    }
+    .col-resize-handle:hover, .col-resize-handle.resizing { background: var(--ww); }
 
     /* Only-one-store note */
     .only-note { font-size: 12px; color: var(--text-soft); font-style: italic; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; margin-top: 8px; }
@@ -246,10 +258,10 @@
     .nav-icon-btn.nav-basket:hover { color: #006B31; background: rgba(0,132,61,.08); }
     .nav-icon-btn.nav-watch:hover  { color: #B45309; background: rgba(217,119,6,.08); }
     .nav-icon-btn.here.nav-basket  { background: rgba(0,132,61,.10); border-color: rgba(0,132,61,.35); }
-    /* Mirrors style.css's mobile header: nav cluster + bell hidden, but keep the
-       Watchlist shortcut (its only mobile entry point). */
+    /* Mirrors style.css's mobile header: nav cluster + bell + ⚙ hidden, but
+       keep the Watchlist shortcut (its only mobile entry point). */
     @media (max-width: 700px) {
-      .nav-icon-btn, .header-div { display: none; }
+      .nav-icon-btn, .header-div, #optionsWrap { display: none; }
       #notifBtn { display: none !important; }
       .header-right .nav-icon-btn.nav-watch { display: inline-flex; }
     }
@@ -396,7 +408,7 @@
 </head>
 <body>
 <header data-page="shopping-list"></header>
-<script src="header.js?v=3"></script>
+<script src="header.js?v=4"></script>
 
 <div class="notif-dropdown" id="notifDropdown" style="display:none">
   <div class="notif-header">
@@ -667,7 +679,7 @@ async function boot() {
       return `<tr>
         <td class="item-name-cell"><div class="name-wrap">${img ? `<img class="sl-thumb" loading="lazy" src="${escAttr(img)}" alt="" onerror="this.style.display='none'">` : ''}<span>${esc(i.list_item)}</span></div></td>
         <td class="cat-cell" style="font-size:12px;color:#64748B;overflow:hidden;text-overflow:ellipsis">${esc(cat)}</td>
-        <td class="r price-cell"><span class="price-val">${fmt(sd?.price)}</span>${unitStr ? `<div class="unit-val">${unitStr}</div>` : ''}</td>
+        <td class="r price-cell"><span class="price-val">${fmt(sd?.price)}</span>${unitStr ? ` <span class="unit-val">${unitStr}</span>` : ''}</td>
         <td class="r qty-cell"><div class="qty-step"><button type="button" class="qs-btn" data-item="${name}" data-d="-1" aria-label="Decrease quantity">−</button><span class="qs-val">${units}</span><button type="button" class="qs-btn" data-item="${name}" data-d="1" aria-label="Increase quantity">+</button></div></td>
         <td class="r total-cell"><span class="total-val">${fmt(lineTotal)}</span></td>
         <td class="act-cell">${otherPriced ? `<button type="button" class="row-btn swap" data-item="${name}" data-to="${swapTo}" title="${swapTitle}">⇄</button>` : ''}<button type="button" class="row-btn rm" data-item="${name}" title="Remove from basket">✕</button></td>
@@ -676,11 +688,11 @@ async function boot() {
     return `<div class="sl-table-wrap"><table>
       <colgroup>
         <col>
-        <col style="width:105px">
+        <col style="width:110px">
+        <col style="width:112px">
         <col style="width:92px">
-        <col style="width:92px">
-        <col style="width:82px">
-        <col style="width:62px">
+        <col style="width:86px">
+        <col style="width:72px">
       </colgroup>
       <thead><tr>
         <th class="sl-sort-hdr" data-col="item" data-sort-store="${pfx}" data-sort-key="item">Item${arrow('item')}</th>
@@ -809,6 +821,16 @@ async function boot() {
     const { wwItems, colesItems } = computeSplit();
     if (slMode === 'shop') { renderShopMode(wwItems, colesItems); return; }
     const { wwTotal, coTotal, optimalTotal, diff, isEqual } = computeTotals();
+    // Planned spend per store under the CURRENT assignment (equal-price choice
+    // + per-row ⇄ swaps). These are what the store cards show — swap an item
+    // across and the numbers move, unlike the all-at-one-store hypotheticals.
+    const subtotalOf = (items, store) => items.reduce((s, i) => {
+      const price = store === 'ww' ? i.woolworths?.price : i.coles?.price;
+      return s + (price ?? 0) * getUnits(i.list_item, unitOv, analysis);
+    }, 0);
+    const wwSub = subtotalOf(wwItems, 'ww');
+    const coSub = subtotalOf(colesItems, 'coles');
+    const tripTotal = wwSub + coSub;
     // Equal-price items (same price at both stores) — reassignable by user
     const equalItems = displayItems.filter(i =>
       i.cheaper_store === 'equal' &&
@@ -844,15 +866,6 @@ async function boot() {
     // Intrinsic classification counts (independent of equalStore assignment)
     const wwOnlyCount = displayItems.filter(i => i.cheaper_store === 'woolworths').length;
     const coOnlyCount = displayItems.filter(i => i.cheaper_store === 'coles').length;
-    // Chip state depends on equalStore (which store the user is currently viewing)
-    const selectedTotal = equalStore === 'ww' ? wwTotal : coTotal;
-    const otherTotal    = equalStore === 'ww' ? coTotal : wwTotal;
-    const isCheaper     = selectedTotal <= otherTotal;
-    const ribbonSaveChip = isEqual
-      ? `<span class="bar-save-chip bar-save-chip-eq">⚖ Same price at both stores</span>`
-      : isCheaper
-        ? `<span class="bar-save-chip">✓ You save ${fmt(diff)}</span>`
-        : `<span class="bar-save-chip bar-save-chip-warn">⚠ You're paying ${fmt(diff)} more</span>`;
     const ribbonChips = [
       wwOnlyCount > 0    ? `<span class="bar-store-chip ww-chip">${wwOnlyCount} at Woolworths</span>` : '',
       equalItems.length > 0 ? `<span class="bar-store-chip eq-chip">${equalItems.length} equal-price</span>` : '',
@@ -868,12 +881,15 @@ async function boot() {
     const savingCheaperChip = (wwTotal <= coTotal)
       ? '<span class="store-chip sm ww">W</span>' : '<span class="store-chip sm coles">C</span>';
     const splitDisc = `<svg class="split-icon" width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 A14 14 0 0 0 16 30 Z" fill="var(--ww)"/><path d="M16 2 A14 14 0 0 1 16 30 Z" fill="var(--coles)"/><line x1="16" y1="2" x2="16" y2="30" stroke="var(--card)" stroke-width="2.5"/></svg>`;
-    const savingInfoHtml = isEqual
+    // Trip total leads: what THIS plan costs across both stores. It responds
+    // to qty steppers, removals, equal-price assignment and per-row ⇄ swaps.
+    const tripLine = `<div class="saving-line" title="What this trip costs across both stores with the current item assignment"><span class="saving-icon">🧾</span><div class="saving-text"><div class="saving-label">Trip total</div><span class="saving-amount" style="color:var(--text)">${fmt(tripTotal)}</span></div></div>`;
+    const savingInfoHtml = tripLine + (isEqual
       ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
       : `<div class="saving-line" title="How much less your whole basket costs at the cheaper store, vs buying everything at the other store"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`
         + (splitSaving > basketSaving + 0.005
             ? `<div class="saving-line" title="Buy each item at whichever store is cheapest, vs doing your whole shop at the dearer store"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Split shop</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
-            : '');
+            : ''));
 
     main.innerHTML = `
       <div class="sl-note">📋 ${filterNoteHtml}</div>
@@ -892,8 +908,8 @@ async function boot() {
               <span class="sc-store-name">Woolworths</span>
               <span class="sc-item-pill">${wwItems.length} item${wwItems.length !== 1 ? 's' : ''}</span>
             </div>
-            <div class="sc-price ${wwPriceCls}">${fmt(wwTotal)}</div>
-            <div class="sc-subtitle">If you bought everything here</div>
+            <div class="sc-price ${wwPriceCls}">${fmt(wwSub)}</div>
+            <div class="sc-subtitle">Your items here · all ${displayItems.length} items would cost ${fmt(wwTotal)}</div>
             <div class="sc-spacer"></div>
             <div class="sc-badge-row">
               <span class="sc-badge" style="${wwBadgeStyle}">✓ Selected store</span>
@@ -906,8 +922,8 @@ async function boot() {
               <span class="sc-store-name">Coles</span>
               <span class="sc-item-pill">${colesItems.length} item${colesItems.length !== 1 ? 's' : ''}</span>
             </div>
-            <div class="sc-price ${coPriceCls}">${fmt(coTotal)}</div>
-            <div class="sc-subtitle">If you bought everything here</div>
+            <div class="sc-price ${coPriceCls}">${fmt(coSub)}</div>
+            <div class="sc-subtitle">Your items here · all ${displayItems.length} items would cost ${fmt(coTotal)}</div>
             <div class="sc-spacer"></div>
             <div class="sc-badge-row">
               <span class="sc-badge" style="${coBadgeStyle}">✓ Selected store</span>

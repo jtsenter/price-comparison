@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>⚠️ Validate Prices — PriceWatch</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="style.css?v=89" />
+  <link rel="stylesheet" href="style.css?v=90" />
   <style>
     /* ── Validate page overrides ── */
     .validate-hero {
@@ -263,7 +263,7 @@
 <body>
 
 <header data-page="validate"></header>
-<script src="header.js?v=3"></script>
+<script src="header.js?v=4"></script>
 
 <div class="notif-dropdown" id="notifDropdown" style="display:none">
   <div class="notif-header">
@@ -746,15 +746,35 @@ async function fixLinkFromValidate(entry, store, cardEl) {
     dispatched = res.ok || res.status === 204;
   } catch (_) { /* offline runner etc. — the pin still applies next scheduled run */ }
 
+  // 3. A fixed link supersedes the WHOLE flagged entry: the suspicious price
+  //    came from the wrong product page, and the rescrape we just dispatched
+  //    re-checks the item end-to-end (re-flagging anything genuinely off).
+  //    Previously this only auto-rejected the fixed store's flag — if the
+  //    other store was also flagged (or the fixed store wasn't the flagged
+  //    one) the card silently stayed "waiting", which read as "fix did
+  //    nothing". Roll the fixed store back to its pre-flag price, clear the
+  //    entry, drop the card.
+  markCardResolved(cardEl);
   updateCardStatus(cardEl, dispatched
-    ? '🔗 Link saved — rescrape started. Rejecting the flagged price…'
-    : '🔗 Link saved (rescrape not started — it will apply next run). Rejecting the flagged price…', '');
-
-  // 3. The flagged price came from the wrong product — reject it so history
-  //    stays clean. Reuses the normal decision path (queued write).
-  if (entry[isWw ? 'ww_suspicious' : 'coles_suspicious']) {
-    handleAction(entry, store, 'reject', cardEl);
-  }
+    ? '🔗 Link saved — rescrape started…'
+    : '🔗 Link saved (rescrape not started — it will apply next run)…', '');
+  _writeQueue.push({ cardEl, run: async () => {
+    const fresh = await loadLatest();
+    const prev = isWw ? entry.ww_prev_price : entry.coles_prev_price;
+    const items = (fresh.items || []).map(i => {
+      if (i.list_item !== entry.item || prev == null) return i;
+      const key = isWw ? 'woolworths' : 'coles';
+      return { ...i, [key]: { ...(i[key] || {}), price: prev, url } };
+    });
+    const pv = (fresh.pending_validation || []).filter(e => e.item !== entry.item);
+    const updated = { ...fresh, items };
+    if (pv.length) updated.pending_validation = pv; else delete updated.pending_validation;
+    await githubPut(s, 'docs/data/latest.json', JSON.stringify(updated),
+      `validate: ${entry.item} — ${storeName} link fixed, flag cleared`, _latestSha);
+    _latestData = updated;
+    return pv.length;
+  }});
+  drainWriteQueue();
 }
 
 function updateCardStatus(cardEl, msg, cls) {

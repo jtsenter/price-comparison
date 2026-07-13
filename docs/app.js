@@ -1185,6 +1185,23 @@ function checkPendingItemRefresh(data) {
   }
 }
 
+// Continuity for FULL scrapes across refresh/navigation (the strip's "waiting"
+// state). Marker set on dispatch; considered spent once the data is newer than
+// the dispatch (run finished) or after 100 min (past the workflow timeout).
+// header.js runs the same check on pages that don't load app.js.
+function scrapeDispatchPending(data) {
+  let disp;
+  try { disp = localStorage.getItem('pw_scrape_dispatched_v1'); } catch { return false; }
+  if (!disp) return false;
+  const t = Date.parse(disp);
+  if (isNaN(t) || Date.now() - t > 100 * 60 * 1000 ||
+      (data?.last_updated && Date.parse(data.last_updated) >= t)) {
+    try { localStorage.removeItem('pw_scrape_dispatched_v1'); } catch {}
+    return false;
+  }
+  return true;
+}
+
 async function pollItemRefresh(s, btn, itemName) {
   _pendingRefreshItems.add(itemName);
   if (_lastData) renderPage(_lastData);
@@ -2341,18 +2358,11 @@ function initPriorityFilter() {
     btn.addEventListener('click', () => {
       const p = btn.dataset.priority;
       if (p) {
-        // Watchlist toggles off when clicked while already active
-        if (p === 'watchlist' && _activePriority === 'watchlist') {
-          _activePriority = 'all';
-          container.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
-          container.querySelector('[data-priority="all"]')?.classList.add('active');
-        } else {
-          _activePriority = p;
-          _showHotOnly = false;
-          container.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          $('hotFilterBtn')?.classList.remove('active');
-        }
+        _activePriority = p;
+        _showHotOnly = false;
+        container.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        $('hotFilterBtn')?.classList.remove('active');
         _storeFilter = 'all';
         const scrapeArchBtn = $('scrapeArchivedBtn');
         if (scrapeArchBtn) scrapeArchBtn.style.display = _activePriority === 'archive' ? 'inline-flex' : 'none';
@@ -2390,22 +2400,30 @@ function initPriorityFilter() {
   const mobileHotBtn = $('mobileHotBtn');
   if (mobileHotBtn) mobileHotBtn.addEventListener('click', _toggleHotDeals);
 
-  // Mobile watchlist header icon — drives the (hidden-on-mobile) watchlist pill,
-  // which already toggles itself off when re-clicked.
-  const mobileWatchBtn = $('mobileWatchBtn');
-  if (mobileWatchBtn) {
-    mobileWatchBtn.addEventListener('click', () => {
-      container.querySelector('.watchlist-pill')?.click();
-      mobileWatchBtn.classList.toggle('active', _activePriority === 'watchlist');
-    });
+  // Watchlist filter — the header eye icon is its ONE entry point (the old
+  // pill next to Archived duplicated it and was removed). Toggles on/off;
+  // turning it off lands back on "All".
+  function toggleWatchlistFilter() {
+    const on = _activePriority !== 'watchlist';
+    _activePriority = on ? 'watchlist' : 'all';
+    if (on) { _showHotOnly = false; $('hotFilterBtn')?.classList.remove('active'); }
+    _storeFilter = 'all';
+    container.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
+    if (!on) container.querySelector('[data-priority="all"]')?.classList.add('active');
+    const scrapeArchBtn = $('scrapeArchivedBtn');
+    if (scrapeArchBtn) scrapeArchBtn.style.display = 'none';
+    $('mobileWatchBtn')?.classList.toggle('active', on);
+    if (_lastData) renderPage(_lastData);
   }
+
+  const mobileWatchBtn = $('mobileWatchBtn');
+  if (mobileWatchBtn) mobileWatchBtn.addEventListener('click', toggleWatchlistFilter);
 
   // Other pages link here as index.html#watchlist (the header eye icon) —
   // activate the watchlist filter on arrival, then drop the hash so a plain
   // refresh doesn't re-trigger it.
   if (location.hash === '#watchlist') {
-    container.querySelector('.watchlist-pill')?.click();
-    mobileWatchBtn?.classList.add('active');
+    if (_activePriority !== 'watchlist') toggleWatchlistFilter();
     history.replaceState(null, '', location.pathname + location.search);
   }
 
@@ -3092,6 +3110,10 @@ async function triggerRefresh() {
     );
 
     if (res.status === 204) {
+      // Persist the dispatch so the strip survives refreshes / other pages —
+      // renderPage (and header.js's poller on non-index pages) shows a
+      // "waiting" strip until scrape_progress appears or the run completes.
+      try { localStorage.setItem('pw_scrape_dispatched_v1', new Date().toISOString()); } catch {}
       // Show progress strip immediately — don't wait for scraper to push data
       _progressDismissed = false;
       const strip = $('scrapeStrip');
@@ -3957,13 +3979,13 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     ? `<img class="item-img img-hoverable" src="${imgSrc}" alt="" loading="lazy" data-item="${group.list_item}" data-ww-img="${wwImg}" data-co-img="${coImg}" />`
     : '<div class="item-img-placeholder">No Photo</div>';
 
-  const chev = isExpanded ? '▾' : '▸';
+  // No caret glyph: the whole row is the expand/collapse target (cursor +
+  // hover already signal it), and the tiny ▸ just stole width from the name.
   const nameCell = `<td class="item-name vg-group-name-cell">
     <div class="item-row">
       ${imgHtml}
       <div class="item-info">
         <span class="vg-group-title">
-          <span class="vg-chevron">${chev}</span>
           <span class="vg-group-label">${esc(group._groupLabel)}</span>
           <button class="item-edit-btn" data-edit-item="${group.list_item}" title="Edit category">✎</button>
         </span>
@@ -4891,6 +4913,16 @@ function _renderPageInner(data) {
       $('scrapeStripPct').textContent = '';
       const retryBtn = $('scrapeStripRetry');
       if (retryBtn) retryBtn.style.display = 'none';
+    } else if (scrapeDispatchPending(data) && !_progressDismissed) {
+      // A full scrape was triggered (possibly in another tab / before a
+      // refresh) but the scraper hasn't pushed its first progress yet.
+      strip.style.display = 'flex';
+      strip.classList.remove('stale');
+      $('scrapeStripLabel').textContent = '⏳ Scrape triggered — waiting for first progress…';
+      $('scrapeStripFill').style.width = '0%';
+      $('scrapeStripPct').textContent = '';
+      const retryBtn = $('scrapeStripRetry');
+      if (retryBtn) retryBtn.style.display = 'none';
     } else {
       strip.style.display = 'none';
     }
@@ -4919,6 +4951,21 @@ function _renderPageInner(data) {
   checkPendingItemRefresh(data);
 
   _lastData = data;
+
+  // Auto-poll while a dispatched scrape hasn't produced progress yet (page was
+  // refreshed / opened mid-wait): slow poll until progress appears or the
+  // marker is spent — each renderPage re-evaluates and stops the timer.
+  if (!rawProg && scrapeDispatchPending(data) && !window._dispatchWaitTimer) {
+    window._dispatchWaitTimer = setInterval(async () => {
+      const fresh = await loadData();
+      if (!fresh) return;
+      if (fresh.scrape_progress || !scrapeDispatchPending(fresh)) {
+        clearInterval(window._dispatchWaitTimer);
+        window._dispatchWaitTimer = null;
+        renderPage(fresh); // hands off to the normal progress branch below
+      }
+    }, 15000);
+  }
 
   // Auto-poll progress while scraping
   if (rawProg) {
@@ -5991,17 +6038,9 @@ function exportShoppingList(useChecked) {
   window.location.href = 'shopping-list.html';
 }
 
-// ── Options menu (theme + row density) ─────────────────────────────────────────
-
-let _theme = localStorage.getItem('pw_theme') || 'light'; // 'light' | 'dark' | 'auto'
-
-function applyTheme() {
-  const dark = _theme === 'dark' ||
-    (_theme === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
-  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-  document.querySelectorAll('#themeSeg .opt-seg-btn').forEach(b =>
-    b.classList.toggle('active', b.dataset.themeOpt === _theme));
-}
+// ── Options menu (row density only — the dropdown itself, its toggle and the
+//    theme switcher are owned by header.js so they work identically on every
+//    page; density is index-only because it styles the main table) ───────────
 
 function applyDensity() {
   const wrap = document.querySelector('.table-wrap');
@@ -6011,45 +6050,13 @@ function applyDensity() {
 }
 
 function initOptionsMenu() {
-  const btn = $('optionsBtn');
-  const dd  = $('optionsDropdown');
-
-  applyTheme();
   applyDensity();
-
-  // Keep 'auto' in sync if the OS theme flips while the page is open.
-  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => {
-    if (_theme === 'auto') applyTheme();
-  });
-
-  $('themeSeg')?.addEventListener('click', (e) => {
-    const b = e.target.closest('.opt-seg-btn'); if (!b) return;
-    _theme = b.dataset.themeOpt;
-    try { localStorage.setItem('pw_theme', _theme); } catch {}
-    applyTheme();
-  });
-
   $('densitySeg')?.addEventListener('click', (e) => {
     const b = e.target.closest('.opt-seg-btn'); if (!b) return;
     _density = b.dataset.densityOpt;
     try { localStorage.setItem('pw_density', _density); } catch {}
     applyDensity();
   });
-
-  if (btn && dd) {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const opening = dd.style.display === 'none';
-      closeHeaderDropdowns('optionsDropdown');
-      dd.style.display = opening ? 'block' : 'none';
-    });
-    dd.addEventListener('click', (e) => {
-      e.stopPropagation();
-      // Menu items (Import / Auto-update Setup) open a modal — close the menu behind it.
-      if (e.target.closest('.more-dropdown-item')) dd.style.display = 'none';
-    });
-    document.addEventListener('click', () => { dd.style.display = 'none'; });
-  }
 }
 
 // ── Pull-to-refresh ───────────────────────────────────────────────────────────
@@ -6309,6 +6316,9 @@ async function boot() {
 
   $('scrapeStripDismiss')?.addEventListener('click', () => {
     _progressDismissed = true;
+    // Dismiss also spends the dispatch marker, or the strip would pop back on
+    // the next page load / other pages' pollers.
+    try { localStorage.removeItem('pw_scrape_dispatched_v1'); } catch {}
     const strip = $('scrapeStrip');
     if (strip) strip.style.display = 'none';
   });
