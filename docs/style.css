@@ -147,18 +147,21 @@ header .header-right .btn-icon { height: 38px; min-width: 38px; justify-content:
    Watchlist eye, which stays: it's the only mobile entry to that filter). */
 .nav-icon-btn { text-decoration: none; }
 .nav-icon-btn svg { display: block; }
-.nav-icon-btn.nav-home       { color: var(--text-mid); }
-.nav-icon-btn.nav-home:hover { color: var(--text); background: var(--bg); }
-.nav-icon-btn.here.nav-home  { background: var(--bg); border-color: var(--border-strong); }
 .nav-icon-btn.nav-hot        { color: #DC2626; }
 .nav-icon-btn.nav-basket     { color: var(--ww); }
-.nav-icon-btn.nav-watch      { color: #D97706; }
 .nav-icon-btn.nav-hot:hover     { color: #B91C1C; background: rgba(220,38,38,.08); }
 .nav-icon-btn.nav-basket:hover  { color: #006B31; background: rgba(0,132,61,.08); }
-.nav-icon-btn.nav-watch:hover   { color: #B45309; background: rgba(217,119,6,.08); }
 .nav-icon-btn.here.nav-hot      { background: rgba(220,38,38,.10); border-color: rgba(220,38,38,.35); }
 .nav-icon-btn.here.nav-basket   { background: rgba(0,132,61,.10);  border-color: rgba(0,132,61,.35); }
-.nav-icon-btn.nav-watch.active  { background: rgba(217,119,6,.12); border-color: rgba(217,119,6,.35); }
+
+/* Standalone home link on the far left of every page except index — an
+   unboxed quiet icon next to the brand, not another button in the cluster. */
+.home-link {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 7px; margin-right: 2px; border-radius: 9px;
+  color: var(--text-mid); text-decoration: none;
+}
+.home-link:hover { color: var(--text); background: var(--bg); }
 
 /* ── Buttons ─────────────────────────────────────────────────── */
 .btn {
@@ -351,7 +354,11 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
 .saving-icon .store-chip.sm { width: 26px; height: 26px; font-size: 14px; border-radius: 7px; }
 .split-icon { display: block; border-radius: 50%; }
 .saving-text { text-align: left; line-height: 1; }
+/* Flex so the ? info icon centres on the text line instead of hanging low */
 .saving-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   font-size: 10px;
   font-weight: 700;
   color: var(--text-soft);
@@ -419,28 +426,31 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
 .vg-group-sub { display: block; font-size: 11px; color: var(--text-soft); margin-top: 1px; }
 .perkg-suffix { font-size: 11px; font-weight: 600; color: var(--text-soft); }
 
-/* Expanded full-width panel. Not clickable itself (only the group header row
-   toggles — see the tbody click handler), so a normal cursor, not the leftover
-   pointer from when the whole panel used to collapse on click. */
-.vg-panel-row > td { padding: 0 !important; background: color-mix(in srgb, var(--accent) 5%, transparent); border-bottom: 1px solid var(--border); cursor: default; }
+/* Expanded panel = a SPEECH BUBBLE hanging off the group row above: indented,
+   bordered, with a caret pointing up at the row. The shape itself says "this
+   belongs to that row — click the row again to close". Not clickable (only
+   the group header row toggles — see the tbody click handler). */
+.vg-panel-row > td { padding: 0 0 12px !important; background: transparent; border-bottom: 1px solid var(--border); cursor: default; }
 /* The panel lives in a full-width colspan cell, so on a wide (overflowing) table its
    right half — the Coles column — fell off-screen. Pin it to the left of the scroll
    viewport and size it to the visible width so both stores stay on screen; the main
    table columns still scroll left of it. --pw-panelw is set to the table-wrap's
    clientWidth in JS (renderTableHead). */
-.vg-panel { padding: 14px 18px 16px; position: sticky; left: 0; box-sizing: border-box; width: var(--pw-panelw, 100%); }
-.vg-panel-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-/* Explicit way out of an expanded category (plus the header row still toggles) */
-.vg-panel-close {
-  margin-left: auto; cursor: pointer;
-  font-size: 11px; font-weight: 700; color: var(--text-mid);
-  background: var(--card); border: 1px solid var(--border-strong); border-radius: 14px;
-  padding: 3px 10px; white-space: nowrap;
+.vg-panel {
+  padding: 14px 18px 16px; position: sticky; left: 16px; box-sizing: border-box;
+  margin: 12px 0 4px 56px; width: calc(var(--pw-panelw, 100%) - 88px);
+  background: color-mix(in srgb, var(--accent) 6%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  border-radius: 12px;
 }
-.vg-panel-close:hover { background: var(--bg); color: var(--text); }
-/* Expand/close affordance at the end of the group row's sub-label */
-.vg-expand-hint { color: var(--accent); font-weight: 600; white-space: nowrap; }
-.vg-expand-hint.open { color: var(--text-mid); }
+.vg-panel::before {
+  content: ''; position: absolute; top: -8px; left: 30px;
+  width: 14px; height: 14px; transform: rotate(45deg);
+  background: color-mix(in srgb, var(--accent) 6%, var(--card));
+  border-left: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+  border-top: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+}
+.vg-panel-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .vg-panel-title { font-weight: 800; font-size: 16px; }
 .vg-panel-winner { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 10px; background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
 .vg-panel-winner.ww { background: rgba(0,132,61,.13); color: #15803d; }
@@ -923,19 +933,25 @@ tr:hover .item-edit-btn { opacity: 1; }
 .price-bar-manage .pbm-txt { display: none; }
 .price-bar-manage:hover { color: var(--ww); }
 #tableBody .trend-cell .price-bar-manage {
-  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  /* Centred on the coloured TRACK, not the whole cell — the bar block is
+     track (top) + price labels (below), so a cell-centred icon floated
+     between the two and read as misaligned. */
+  position: absolute; right: 2px; top: calc(50% - 8px); transform: translateY(-50%);
 }
 
 .trend-cell { min-width: 116px; vertical-align: middle; position: relative; padding-right: 30px; }
 .trend-cell .price-bar-outer { margin-top: 0; padding-top: 6px; }
 
-/* Circled "?" that reveals its explanation on hover or tap/focus */
+/* Circled "?" that reveals its explanation on hover or tap/focus.
+   letter-spacing/transform reset: it inherits the label's uppercase tracking,
+   which pushed the glyph off-centre. */
 .info-ico {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 14px; height: 14px; border-radius: 50%;
+  width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0;
   border: 1px solid var(--border-strong); color: var(--text-soft);
   font-size: 9px; font-weight: 800; line-height: 1;
-  cursor: help; position: relative; margin-left: 4px; vertical-align: middle;
+  letter-spacing: 0; text-transform: none;
+  cursor: help; position: relative;
 }
 .info-ico:hover, .info-ico:focus { color: var(--text); border-color: var(--text-soft); outline: none; }
 .info-ico:hover::after, .info-ico:focus::after {
@@ -1342,6 +1358,16 @@ th.sort-active { color: var(--text); }
   z-index: 10;
 }
 .trophy-icon:hover::after { opacity: 1; }
+
+/* Row prefix that marks the pill rows as FILTERS acting on the table below —
+   users confused the "Deals only" filter pill with the Hot Deals PAGE. */
+.filter-row-label {
+  display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0;
+  font-size: 10px; font-weight: 800; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--text-soft);
+  padding-right: 2px;
+}
+.filter-row-label svg { display: block; }
 
 /* ── Filter separator ─────────────────────────────────────────── */
 .filter-separator {
@@ -1963,6 +1989,23 @@ td.priority-cell { text-align: center; }
 .item-watch-btn:hover { opacity: 1; }
 .item-watch-btn.active { color: var(--ww); opacity: 1; }
 
+/* Desktop table rows: the 👁/↻ pair is ONE tidy hover cluster — same circular
+   chrome as each other, hidden at rest (a faint eye on all 250 rows was pure
+   noise). Only a WATCHED item keeps its eye lit. */
+#tableBody .actions-cell .item-watch-btn {
+  width: 26px; height: 26px;
+  border: 1px solid var(--border); border-radius: 50%;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 4px;
+  font-size: 13px; padding: 0;
+  opacity: 0; pointer-events: none;
+}
+#tableBody tr:hover .actions-cell .item-watch-btn,
+#tableBody .actions-cell .item-watch-btn.active { opacity: 1; pointer-events: auto; }
+#tableBody .actions-cell .item-watch-btn.active { border-color: var(--ww); background: rgba(0,132,61,.08); }
+#tableBody .actions-cell .item-refresh-btn { margin: 0 auto; }
+
 /* Mobile card icons row (👁 + 🔥) */
 .mc-icons {
   display: flex;
@@ -2385,16 +2428,6 @@ td.priority-cell { text-align: center; }
 .density-toggle-btn.compact-on {
   background: var(--text); color: var(--card); border-color: var(--text);
 }
-.table-wrap.density-compact td,
-.table-wrap.density-compact #tableHead th { padding: 5px 10px; }
-.table-wrap.density-compact .item-img,
-.table-wrap.density-compact .item-img-placeholder { width: 30px; height: 30px; }
-.table-wrap.density-compact .price-main { font-size: 14px; }
-.table-wrap.density-compact .price-unit,
-.table-wrap.density-compact .price-per100 { display: none; }
-/* Hide the in-cell price bars in compact rows — but never the Trend column,
-   whose whole content is a .price-bar-outer. */
-.table-wrap.density-compact td:not(.trend-cell) .price-bar-outer { display: none !important; }
 
 /* ── 4 · Pull-to-refresh indicator ────────────────────────────────────── */
 #pullRefreshIndicator {

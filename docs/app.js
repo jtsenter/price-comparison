@@ -11,7 +11,7 @@ const HIST_CLOCK_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="no
 // the page-level "click outside closes it" listener doesn't fire on their own
 // button — but that also means clicking one button never closes a sibling
 // dropdown left open. Each button calls this before toggling its own.
-const _headerDropdownIds = ['notifDropdown', 'optionsDropdown', 'colChooserDropdown'];
+const _headerDropdownIds = ['optionsDropdown', 'colChooserDropdown'];
 function closeHeaderDropdowns(exceptId) {
   _headerDropdownIds.forEach(id => {
     if (id === exceptId) return;
@@ -529,7 +529,6 @@ function getCategory(item) {
 let _activePriority = 'weekly';
 let _showHotOnly = false;
 let _storeFilter = 'all';
-let _showPricesOnly = false;
 
 function _updateStoreCycleBtn() {
   const btn = $('storeCycleBtn');
@@ -761,7 +760,6 @@ let _approvedWarns = new Set(); // loaded from approved_warns.json
 let _selectedItems = new Set(); // session-only mobile card selection
 let _viewMode = localStorage.getItem('pw_view_mode') || 'table'; // 'table' | 'card'
 let _mcView = localStorage.getItem('pw_mc_view_v1') || 'detailed'; // mobile card view: 'detailed' | 'compact'
-let _density = localStorage.getItem('pw_density') || 'comfortable'; // 'comfortable' | 'compact'
 
 // ── Bulk selection ────────────────────────────────────────────────────────────
 
@@ -2298,6 +2296,7 @@ function initPriorityFilter() {
   if (!container) return;
 
   container.querySelectorAll('.priority-pill').forEach(btn => {
+    if (btn.id === 'watchlistPill') return; // has its own toggle handler below
     btn.addEventListener('click', () => {
       const p = btn.dataset.priority;
       if (p) {
@@ -2307,8 +2306,6 @@ function initPriorityFilter() {
         btn.classList.add('active');
         $('hotFilterBtn')?.classList.remove('active');
         _storeFilter = 'all';
-        const scrapeArchBtn = $('scrapeArchivedBtn');
-        if (scrapeArchBtn) scrapeArchBtn.style.display = _activePriority === 'archive' ? 'inline-flex' : 'none';
         // Keep the mobile frequency dropdown in sync with the active frequency.
         const fs = $('freqSelect');
         if (fs && ['all', 'weekly', 'monthly', 'rare', 'archive'].includes(_activePriority)) fs.value = _activePriority;
@@ -2343,28 +2340,25 @@ function initPriorityFilter() {
   const mobileHotBtn = $('mobileHotBtn');
   if (mobileHotBtn) mobileHotBtn.addEventListener('click', _toggleHotDeals);
 
-  // Watchlist filter — the header eye icon is its ONE entry point (the old
-  // pill next to Archived duplicated it and was removed). Toggles on/off;
-  // turning it off lands back on "All".
+  // Watchlist filter — a pill in the filter row (it IS a filter); the mobile
+  // sort-toolbar eye chip clicks this same pill. Toggles on/off; turning it
+  // off lands back on "All".
   function toggleWatchlistFilter() {
     const on = _activePriority !== 'watchlist';
     _activePriority = on ? 'watchlist' : 'all';
     if (on) { _showHotOnly = false; $('hotFilterBtn')?.classList.remove('active'); }
     _storeFilter = 'all';
     container.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
-    if (!on) container.querySelector('[data-priority="all"]')?.classList.add('active');
-    const scrapeArchBtn = $('scrapeArchivedBtn');
-    if (scrapeArchBtn) scrapeArchBtn.style.display = 'none';
-    $('mobileWatchBtn')?.classList.toggle('active', on);
+    if (on) $('watchlistPill')?.classList.add('active');
+    else container.querySelector('[data-priority="all"]')?.classList.add('active');
     if (_lastData) renderPage(_lastData);
   }
 
-  const mobileWatchBtn = $('mobileWatchBtn');
-  if (mobileWatchBtn) mobileWatchBtn.addEventListener('click', toggleWatchlistFilter);
+  $('watchlistPill')?.addEventListener('click', toggleWatchlistFilter);
 
-  // Other pages link here as index.html#watchlist (the header eye icon) —
-  // activate the watchlist filter on arrival, then drop the hash so a plain
-  // refresh doesn't re-trigger it.
+  // Other pages link here as index.html#watchlist — activate the watchlist
+  // filter on arrival, then drop the hash so a plain refresh doesn't
+  // re-trigger it.
   if (location.hash === '#watchlist') {
     if (_activePriority !== 'watchlist') toggleWatchlistFilter();
     history.replaceState(null, '', location.pathname + location.search);
@@ -2379,14 +2373,6 @@ function initPriorityFilter() {
       if (_lastData) renderPage(_lastData);
     });
   }
-}
-
-function initPricesOnlyFilter() {
-  $('pricesOnlyBtn')?.addEventListener('click', () => {
-    _showPricesOnly = !_showPricesOnly;
-    $('pricesOnlyBtn')?.classList.toggle('active', _showPricesOnly);
-    if (_lastData) renderPage(_lastData);
-  });
 }
 
 // ── Mobile card selection pill ────────────────────────────────────────────────
@@ -2682,10 +2668,12 @@ function renderSavingInfo(s) {
   const splitIcon = `<svg class="split-icon" width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 A14 14 0 0 0 16 30 Z" fill="var(--ww)"/><path d="M16 2 A14 14 0 0 1 16 30 Z" fill="var(--coles)"/><line x1="16" y1="2" x2="16" y2="30" stroke="var(--card)" stroke-width="2.5"/></svg>`;
   // Explanations live behind a visible ?-icon (hover or tap/focus shows the
   // tip) — a bare title attribute was invisible until you happened to hover.
-  const basket = `<div class="saving-line"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIcoHTML('How much less your whole basket costs at the cheaper store, vs buying everything at the other store')}</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
+  // "Max": these are the largest POSSIBLE savings — they compare the two
+  // stores and don't change with whichever store you happen to pick.
+  const basket = `<div class="saving-line"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">Max basket saving${infoIcoHTML('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store')}</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
   let maxRow = '';
   if (s.max_saving > s.total_saving + 0.005) {
-    maxRow = `<div class="saving-line"><span class="saving-icon">${splitIcon}</span><div class="saving-text"><div class="saving-label">Split shop${infoIcoHTML('Buy each item at whichever store is cheapest, vs doing your whole shop at the dearer store')}</div><span class="saving-amount">${fmt(s.max_saving)}</span></div></div>`;
+    maxRow = `<div class="saving-line"><span class="saving-icon">${splitIcon}</span><div class="saving-text"><div class="saving-label">Max split saving${infoIcoHTML('The most you can save overall: every item bought at whichever store sells it cheapest, vs the dearer single store')}</div><span class="saving-amount">${fmt(s.max_saving)}</span></div></div>`;
   }
   return basket + maxRow;
 }
@@ -2753,6 +2741,12 @@ function initStickyHeader() {
 
   // Sync horizontal scroll from table-wrap
   document.querySelector('.table-wrap')?.addEventListener('scroll', (e) => {
+    // The wrap must NEVER scroll vertically (the page scrolls; the ghost pins
+    // the header). Browsers still nudge it internally sometimes (focus jumps,
+    // find-in-page, scrollIntoView) — the real thead is sticky INSIDE the wrap,
+    // so any internal scroll opened a gap band above it with rows showing
+    // through (the "row above the header" artifact). Clamp it back.
+    if (e.target.scrollTop !== 0) e.target.scrollTop = 0;
     if (_stickyGhostTable) {
       _stickyGhostTable.style.marginLeft = `-${e.target.scrollLeft}px`;
       pinGhostFrozenCols();
@@ -3216,14 +3210,6 @@ async function loadProgressData() {
   } catch { return null; }
 }
 
-async function loadNameChanges() {
-  try {
-    const res = await fetch(`data/name_changes_detected.json?t=${Date.now()}`);
-    if (!res.ok) return null;
-    return await res.json();
-  } catch { return null; }
-}
-
 // ── Sort state ───────────────────────────────────────────────────────────────
 
 let sortKeys = [{ col: 'trend', dir: 'asc' }];
@@ -3282,12 +3268,6 @@ function sortItems(items) {
     if (_showHotOnly && _storeFilter !== 'all') {
       if (_storeFilter === 'woolworths' && item.cheaper_store !== 'woolworths') return false;
       if (_storeFilter === 'coles' && item.cheaper_store !== 'coles') return false;
-    }
-    // Prices-only filter — require both stores to have a positive price
-    if (_showPricesOnly) {
-      const wwP = item.woolworths?.price;
-      const coP = item.coles?.price;
-      if (!(wwP != null && wwP > 0 && coP != null && coP > 0)) return false;
     }
     // Hide items priced at neither store by default — they're noise in the main
     // list (the footer's coverage count still reports how many are missing).
@@ -3930,12 +3910,9 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     ? `<img class="item-img img-hoverable" src="${imgSrc}" alt="" loading="lazy" data-item="${group.list_item}" data-ww-img="${wwImg}" data-co-img="${coImg}" />`
     : '<div class="item-img-placeholder">No Photo</div>';
 
-  // No caret glyph before the name (it stole width) — instead the sub-label
-  // ends with an explicit expand/close affordance so it's obvious the row
-  // toggles the variant panel and how to get back out.
-  const expandHint = isExpanded
-    ? '<span class="vg-expand-hint open">▴ click to close</span>'
-    : '<span class="vg-expand-hint">▾ expand</span>';
+  // No caret glyphs or expand/collapse buttons: the whole row toggles, and the
+  // open panel renders as an indented speech bubble whose tail points back at
+  // this row — the shape itself says "click the row above to close".
   const nameCell = `<td class="item-name vg-group-name-cell">
     <div class="item-row">
       ${imgHtml}
@@ -3944,7 +3921,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
           <span class="vg-group-label">${esc(group._groupLabel)}</span>
           <button class="item-edit-btn" data-edit-item="${group.list_item}" title="Edit category">✎</button>
         </span>
-        <span class="vg-group-sub">${groupSubLabel(group)} ${expandHint}</span>
+        <span class="vg-group-sub">${groupSubLabel(group)}</span>
       </div>
     </div></td>`;
 
@@ -4041,7 +4018,6 @@ function appendGroupRowDesktop(tbody, group, overrides) {
       <div class="vg-panel-head">
         <span class="vg-panel-title">${esc(group._groupLabel)}</span>
         ${winnerTag}
-        <button type="button" class="vg-panel-close" data-close-group="${group._groupKey}" title="Collapse this category">▲ Collapse</button>
       </div>
       <div class="vg-panel-cols">
         <div class="vg-panel-store">
@@ -4531,11 +4507,12 @@ function renderMobileCards(items, data) {
   const chipsWrap = document.createElement('div');
   chipsWrap.className = 'mc-sort-chips';
 
+  // (The C/W store-sort chip was removed as redundant with Savings; the
+  // 'store' sort itself remains reachable by tapping a store total card.)
   const CHIPS = [
     { mode: 'trend',   label: 'Trend'},
     { mode: 'az',      label: 'A–Z'      },
     { mode: 'savings', label: 'Savings'  },
-    { mode: 'store',   label: 'C/W'},
   ];
   CHIPS.forEach(({ mode, label }) => {
     const chip = document.createElement('button');
@@ -4555,14 +4532,14 @@ function renderMobileCards(items, data) {
     });
     chipsWrap.appendChild(chip);
   });
-  // Watchlist chip — lives with the sort chips (the header eye read as too
-  // prominent on phones); delegates to the same toggle the header button uses.
+  // Watchlist chip — lives with the sort chips (the pill row is hidden on
+  // phones); delegates to the filter row's pill so there's ONE toggle.
   const watchChip = document.createElement('button');
   watchChip.className = 'mc-sort-chip mc-watch-chip' + (_activePriority === 'watchlist' ? ' active' : '');
   watchChip.textContent = '👁';
   watchChip.title = 'Watchlist';
   watchChip.setAttribute('aria-label', 'Watchlist filter');
-  watchChip.onclick = () => $('mobileWatchBtn')?.click();
+  watchChip.onclick = () => $('watchlistPill')?.click();
   chipsWrap.appendChild(watchChip);
   toolbar.appendChild(chipsWrap);
 
@@ -4785,7 +4762,7 @@ function _renderPageInner(data) {
 
   // Keep the mobile header filter icons (🔥 / 👁) in sync with current state
   $('mobileHotBtn')?.classList.toggle('active', _showHotOnly);
-  $('mobileWatchBtn')?.classList.toggle('active', _activePriority === 'watchlist');
+  $('watchlistPill')?.classList.toggle('active', _activePriority === 'watchlist');
 
   // Always compute banner stats client-side so savings are units-weighted
   const s = computeBannerStats(data.items);
@@ -5038,8 +5015,6 @@ function _renderPageInner(data) {
       : allDisplayItems.filter(i => !i.archived && priorities[i.list_item] !== 'archive');
   buildCategoryTabs(categoryTabItems);
 
-  // Sync "Priced only" pill state (button is static HTML; click wired in initPricesOnlyFilter)
-  $('pricesOnlyBtn')?.classList.toggle('active', _showPricesOnly);
 
   // ── View mode branch ───────────────────────────────────────────
   const sorted = sortItems(allDisplayItems);
@@ -5368,38 +5343,9 @@ function updateValidateNavBadge(count) {
   link.textContent = `⚠️ Validate (${count})`;
 }
 
-// ── Name changes notice ───────────────────────────────────────────────────────
-
-async function showNameChangesNotice() {
-  const changes = await loadNameChanges();
-  const notifBtn = $('notifBtn');
-  const notifBadge = $('notifBadge');
-  const notifItems = $('notifItems');
-  if (!notifBtn || !changes || Object.keys(changes).length === 0) return;
-  const keys = Object.keys(changes).sort();
-  const fingerprint = keys.join('|');
-
-  // Don't re-show if user already dismissed this exact set of changes
-  if (localStorage.getItem('pw_notif_dismissed_v1') === fingerprint) return;
-
-  notifBadge.textContent = keys.length;
-  notifBtn.style.display = 'inline-flex';
-  notifItems.innerHTML = keys.map(k => `<span class="notif-item">${esc(k)}</span>`).join('');
-
-  notifBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const dd = $('notifDropdown');
-    const opening = dd.style.display === 'none';
-    closeHeaderDropdowns('notifDropdown');
-    dd.style.display = opening ? 'block' : 'none';
-  });
-  document.addEventListener('click', () => { $('notifDropdown').style.display = 'none'; });
-  $('notifDismissAll')?.addEventListener('click', () => {
-    localStorage.setItem('pw_notif_dismissed_v1', fingerprint);
-    notifBtn.style.display = 'none';
-    $('notifDropdown').style.display = 'none';
-  });
-}
+// (The name-changes notification bell was retired — the validate pill is the
+// single "data needs attention" surface. name_changes_detected.json is still
+// written by the scraper; nothing reads it in the UI.)
 
 // ── Mass upload ───────────────────────────────────────────────────────────────
 
@@ -6030,23 +5976,6 @@ function exportShoppingList(useChecked) {
 //    theme switcher are owned by header.js so they work identically on every
 //    page; density is index-only because it styles the main table) ───────────
 
-function applyDensity() {
-  const wrap = document.querySelector('.table-wrap');
-  if (wrap) wrap.classList.toggle('density-compact', _density === 'compact');
-  document.querySelectorAll('#densitySeg .opt-seg-btn').forEach(b =>
-    b.classList.toggle('active', b.dataset.densityOpt === _density));
-}
-
-function initOptionsMenu() {
-  applyDensity();
-  $('densitySeg')?.addEventListener('click', (e) => {
-    const b = e.target.closest('.opt-seg-btn'); if (!b) return;
-    _density = b.dataset.densityOpt;
-    try { localStorage.setItem('pw_density', _density); } catch {}
-    applyDensity();
-  });
-}
-
 // ── Pull-to-refresh ───────────────────────────────────────────────────────────
 
 function initPullToRefresh() {
@@ -6101,13 +6030,11 @@ async function boot() {
   initImgPicker();
   initCategoryEditModal();
   initPriorityFilter();
-  initPricesOnlyFilter();
   initSelectedPill();
   initBulkBar();
   initColumnChooser();
   initColFilterDropdown();
   updateImportBadge();
-  initOptionsMenu();
   initPullToRefresh();
 
   const refreshBtn = $('refreshBtn');
@@ -6136,56 +6063,6 @@ async function boot() {
   document.getElementById('btbBasketLink')?.addEventListener('click', _basketNavHandler);
 
   // Scrape strip dismiss & retry
-  // Scrape Archived button — persists archived list to GitHub then dispatches workflow
-  $('scrapeArchivedBtn')?.addEventListener('click', async () => {
-    const s = loadSettings();
-    if (!s.token) {
-      alert('Please configure Auto-update Setup first.');
-      return;
-    }
-    const pr = loadPriorities();
-    const archivedNames = Object.keys(pr).filter(k => pr[k] === 'archive');
-    if (!archivedNames.length) {
-      alert('No archived items found.');
-      return;
-    }
-    const btn = $('scrapeArchivedBtn');
-    btn.disabled = true;
-    btn.textContent = 'Saving…';
-    try {
-      // Write archived_items.json to repo via GitHub API
-      _archivedSaving = true;
-      try {
-        await persistArchivedToRepo(s, archivedNames, 'Update archived items list');
-      } finally {
-        _archivedSaving = false;
-      }
-      // Pre-flight runner check before dispatching
-      const { anyOnline } = await getRunnerStatus(s);
-      if (!anyOnline) {
-        showRunnerOfflineBanner();
-        alert('Archived list saved, but the scraper is offline — prices will update when the runner restarts.');
-        btn.disabled = false;
-        return;
-      }
-      hideRunnerOfflineBanner();
-      // Dispatch scrape_archived workflow
-      btn.textContent = 'Dispatching…';
-      await fetch(
-        `https://api.github.com/repos/${s.user}/${s.repo}/actions/workflows/scrape.yml/dispatches`,
-        {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ref: 'main', inputs: { trigger: 'scrape_archived' } }),
-        }
-      );
-      btn.textContent = '✓ Triggered';
-      setTimeout(() => { btn.disabled = false; btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Refresh Archived'; }, 4000);
-    } catch (e) {
-      alert(`Error: ${e.message}`);
-      btn.disabled = false;
-    }
-  });
 
   // ── View toggle ──────────────────────────────────────────────
   const viewToggleBtn = $('viewToggleBtn');
@@ -6371,7 +6248,6 @@ async function boot() {
 
   {
     renderPage(data);
-    showNameChangesNotice();
 
     // $/kg pill (web): cycles all → only per-kg groups → hide per-kg groups.
     // Only the label span is swapped so the scales icon survives the cycle.
@@ -6399,14 +6275,6 @@ async function boot() {
         // below already ignores button clicks, so this won't collapse the panel).
         const pvBasket = e.target.closest('.vg-pv-basket');
         if (pvBasket) { addPerKgToBasket(pvBasket.dataset.item); return; }
-        // Explicit "▲ Collapse" button inside the expanded panel (the panel body
-        // itself stays inert — see below).
-        const panelClose = e.target.closest('.vg-panel-close');
-        if (panelClose) {
-          _expandedGroups.delete(panelClose.dataset.closeGroup);
-          if (_lastData) renderPage(_lastData);
-          return;
-        }
         // Variant group expand/collapse — click ONLY the group header row toggles.
         // The expanded panel beneath (.vg-panel-row) is deliberately inert so a tap
         // on a variant / whitespace there doesn't collapse the panel out from under

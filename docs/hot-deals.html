@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=91" />
+  <link rel="stylesheet" href="style.css?v=92" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -320,15 +320,7 @@
 <body>
 
 <header data-page="hot-deals"></header>
-<script src="header.js?v=5"></script>
-
-<div class="notif-dropdown" id="notifDropdown" style="display:none">
-  <div class="notif-header">
-    <strong>Item name changes detected</strong>
-    <button class="notif-dismiss-all" id="notifDismissAll">Dismiss all</button>
-  </div>
-  <div class="notif-items" id="notifItems"></div>
-</div>
+<script src="header.js?v=6"></script>
 
 <div class="deals-hero">
   <div class="deals-hero-title">🔥 Hot Deals</div>
@@ -1503,36 +1495,8 @@ function initRefreshBtn() {
   }
 })();
 
-// ── Bell notifications (name changes) ────────────────────────────────────────
-(async function initNavBell() {
-  try {
-    const r = await fetch(`data/name_changes_detected.json?t=${Date.now()}`);
-    if (!r.ok) return;
-    const changes = await r.json();
-    const keys = Object.keys(changes || {}).sort();
-    if (!keys.length) return;
-    const fingerprint = keys.join('|');
-    if (localStorage.getItem('pw_notif_dismissed_v1') === fingerprint) return;
-    const notifBtn = document.getElementById('notifBtn');
-    const notifBadge = document.getElementById('notifBadge');
-    const notifItems = document.getElementById('notifItems');
-    const notifDropdown = document.getElementById('notifDropdown');
-    if (!notifBtn) return;
-    notifBadge.textContent = keys.length;
-    notifBtn.style.display = 'inline-flex';
-    notifItems.innerHTML = keys.map(k => `<span class="notif-item">${k}</span>`).join('');
-    notifBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      notifDropdown.style.display = notifDropdown.style.display === 'none' ? 'block' : 'none';
-    });
-    document.addEventListener('click', () => { notifDropdown.style.display = 'none'; });
-    document.getElementById('notifDismissAll')?.addEventListener('click', () => {
-      localStorage.setItem('pw_notif_dismissed_v1', fingerprint);
-      notifBtn.style.display = 'none';
-      notifDropdown.style.display = 'none';
-    });
-  } catch {}
-})();
+// (Notification bell retired — the validate pill is the single "data needs
+// attention" surface.)
 </script>
 
 <!-- Bottom tab bar (mobile) -->

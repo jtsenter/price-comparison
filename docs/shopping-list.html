@@ -156,7 +156,8 @@
     .saving-icon .store-chip { width: 26px; height: 26px; font-size: 14px; border-radius: 7px; }
     .split-icon { display: block; border-radius: 50%; }
     .saving-text { text-align: left; line-height: 1; }
-    .saving-label { font-size: 10px; font-weight: 700; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+    /* Flex so the ? info icon centres on the text line instead of hanging low */
+    .saving-label { display: flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
     .saving-amount { font-size: 20px; font-weight: 800; color: var(--green); line-height: 1; }
     .bar-ribbon-chips { display: flex; gap: 8px; flex-wrap: wrap; }
     @media (max-width: 700px) {
@@ -243,10 +244,11 @@
     /* Info "?" bubbles (same component as the main page) */
     .info-ico {
       display: inline-flex; align-items: center; justify-content: center;
-      width: 14px; height: 14px; border-radius: 50%;
+      width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0;
       border: 1px solid var(--border); color: var(--text-soft);
       font-size: 9px; font-weight: 800; line-height: 1;
-      cursor: help; position: relative; margin-left: 4px; vertical-align: middle;
+      letter-spacing: 0; text-transform: none;
+      cursor: help; position: relative;
     }
     .info-ico:hover, .info-ico:focus { color: var(--text); outline: none; }
     .info-ico:hover::after, .info-ico:focus::after {
@@ -308,6 +310,11 @@
 
     /* ── Shopping mode — big tap-to-check rows for in-store use ── */
     .sl-mode-seg { display: inline-flex; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    /* One store / Split shop is THE page-level decision — give it real weight */
+    .sl-split-seg { border-width: 2px; border-color: var(--border); }
+    .sl-split-seg .sl-mode-btn { padding: 10px 18px; font-size: 14px; font-weight: 700; }
+    /* Other store's price rides along muted next to each row price */
+    .alt-price { font-size: 11px; color: var(--text-soft); font-weight: 600; margin-left: 6px; white-space: nowrap; font-variant-numeric: tabular-nums; }
     .sl-mode-btn {
       padding: 8px 14px; font-size: 13px; font-weight: 600; border: none; cursor: pointer;
       background: var(--card); color: var(--text-mid);
@@ -448,15 +455,7 @@
 </head>
 <body>
 <header data-page="shopping-list"></header>
-<script src="header.js?v=5"></script>
-
-<div class="notif-dropdown" id="notifDropdown" style="display:none">
-  <div class="notif-header">
-    <strong>Item name changes detected</strong>
-    <button class="notif-dismiss-all" id="notifDismissAll">Dismiss all</button>
-  </div>
-  <div class="notif-items" id="notifItems"></div>
-</div>
+<script src="header.js?v=6"></script>
 
 <main id="main">
   <div class="empty">Loading…</div>
@@ -750,11 +749,16 @@ async function boot() {
       const onlyChip = fellBack
         ? ` <span class="only-chip ${store === 'ww' ? 'coles' : 'ww'}" title="Not sold at ${store === 'ww' ? 'Woolworths' : 'Coles'} — this is the ${store === 'ww' ? 'Coles' : 'Woolworths'} price">${store === 'ww' ? 'C' : 'W'} only</span>`
         : '';
+      // The other store's price rides along muted — switching stores (or
+      // deciding a ⇄ swap) needs both numbers in view.
+      const altPrice = (!fellBack && other?.price != null)
+        ? ` <span class="alt-price" title="${store === 'ww' ? 'Coles' : 'Woolworths'} price">${store === 'ww' ? 'C' : 'W'} ${fmt(other.price)}</span>`
+        : '';
       const name = escAttr(i.list_item);
       return `<tr>
         <td class="item-name-cell"><div class="name-wrap">${img ? `<img class="sl-thumb" loading="lazy" src="${escAttr(img)}" alt="" onerror="this.style.display='none'">` : ''}<span title="${name}">${esc(i.list_item)}</span></div></td>
         <td class="cat-cell" style="font-size:12px;color:#64748B;overflow:hidden;text-overflow:ellipsis">${esc(cat)}</td>
-        <td class="r price-cell"><span class="price-val">${fmt(sd?.price)}</span>${unitStr ? ` <span class="unit-val">${unitStr}</span>` : ''}${onlyChip}</td>
+        <td class="r price-cell"><span class="price-val">${fmt(sd?.price)}</span>${unitStr ? ` <span class="unit-val">${unitStr}</span>` : ''}${onlyChip}${altPrice}</td>
         <td class="r qty-cell"><div class="qty-step"><button type="button" class="qs-btn" data-item="${name}" data-d="-1" aria-label="Decrease quantity">−</button><span class="qs-val">${units}</span><button type="button" class="qs-btn" data-item="${name}" data-d="1" aria-label="Increase quantity">+</button></div></td>
         <td class="r total-cell"><span class="total-val">${fmt(lineTotal)}</span></td>
         <td class="act-cell"><div class="act-wrap">${showSwap ? `<button type="button" class="row-btn swap" data-item="${name}" data-to="${swapTo}" title="${swapTitle}">⇄</button>` : ''}<button type="button" class="row-btn rm" data-item="${name}" title="Remove from basket">✕</button></div></td>
@@ -799,11 +803,26 @@ async function boot() {
       <button class="sl-mode-btn${slMode === 'list' ? ' active' : ''}" data-mode="list">📋 List</button>
       <button class="sl-mode-btn${slMode === 'shop' ? ' active' : ''}" data-mode="shop">🛒 Shopping mode</button>
     </div>`;
+  // The One-store/Split-shop choice is THE page-level decision, so its toggle
+  // renders in BOTH list and shopping mode (it used to vanish in shop mode).
+  const splitSegHtml = () => `
+    <div class="sl-mode-seg sl-split-seg" id="splitSeg">
+      <button class="sl-mode-btn${!slSplit ? ' active' : ''}" data-splitmode="0" title="Buy the whole basket at one store">🏬 One store</button>
+      <button class="sl-mode-btn${slSplit ? ' active' : ''}" data-splitmode="1" title="Buy each item at whichever store is cheaper">🔀 Split shop</button>
+    </div>`;
   function wireSeg() {
-    main.querySelectorAll('.sl-mode-btn').forEach(b => b.addEventListener('click', () => {
+    main.querySelectorAll('.sl-shop-seg .sl-mode-btn').forEach(b => b.addEventListener('click', () => {
       if (b.dataset.mode === slMode) return;
       slMode = b.dataset.mode;
       localStorage.setItem('pw_sl_mode', slMode);
+      renderContent();
+    }));
+    main.querySelectorAll('#splitSeg .sl-mode-btn').forEach(b => b.addEventListener('click', () => {
+      const want = b.dataset.splitmode === '1';
+      if (want === slSplit) return;
+      slSplit = want;
+      localStorage.setItem('pw_sl_split', want ? '1' : '0');
+      storeOverride.clear(); // a mode switch starts from the clean default plan
       renderContent();
     }));
   }
@@ -848,6 +867,7 @@ async function boot() {
 
     main.innerHTML = `
       <div class="sl-topbar">
+        ${splitSegHtml()}
         ${segHtml()}
         <div style="flex:1"></div>
         <button id="smResetBtn" class="btn-outline-danger">↺ Reset picks</button>
@@ -961,20 +981,19 @@ async function boot() {
     // (No "Trip total": in single mode it IS the active card's number, and the
     // subtotal rows already carry the split-mode detail.)
     const infoIco = tip => `<span class="info-ico" tabindex="0" data-tip="${tip.replace(/"/g, '&quot;')}">?</span>`;
+    // "Max": the largest POSSIBLE savings. They compare the two stores, so
+    // they deliberately do NOT move when you pick the other store to buy at.
     const savingInfoHtml = (isEqual
       ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
-      : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIco('How much less your whole basket costs at the cheaper store, vs buying everything at the other store')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`
+      : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Max basket saving${infoIco('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store. Fixed — it does not change with the store you pick.')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`
         + (splitSaving > basketSaving + 0.005
-            ? `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Split shop${infoIco('Buy each item at whichever store is cheapest, vs doing your whole shop at the dearer store. Use the Split shop toggle above to plan it.')}</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
+            ? `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Max split saving${infoIco('The most you can save overall: every item at whichever store sells it cheapest, vs the dearer single store. Use the Split shop toggle above to plan it.')}</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
             : ''));
 
     main.innerHTML = `
       <div class="sl-note">📋 ${filterNoteHtml}</div>
       <div class="sl-topbar">
-        <div class="sl-mode-seg" id="splitSeg">
-          <button class="sl-mode-btn${!slSplit ? ' active' : ''}" data-splitmode="0" title="Buy the whole basket at one store">🏬 One store</button>
-          <button class="sl-mode-btn${slSplit ? ' active' : ''}" data-splitmode="1" title="Buy each item at whichever store is cheaper">🔀 Split shop</button>
-        </div>
+        ${splitSegHtml()}
         ${segHtml()}
         <div style="flex:1"></div>
         <button id="saveBasketBtn" class="btn-outline-save">🔒 Save basket</button>
@@ -1052,15 +1071,8 @@ async function boot() {
       });
     });
 
-    // One store ⇄ Split shop toggle
-    main.querySelectorAll('#splitSeg .sl-mode-btn').forEach(b => b.addEventListener('click', () => {
-      const want = b.dataset.splitmode === '1';
-      if (want === slSplit) return;
-      slSplit = want;
-      localStorage.setItem('pw_sl_split', want ? '1' : '0');
-      storeOverride.clear(); // a mode switch starts from the clean default plan
-      renderContent();
-    }));
+    // (One-store ⇄ Split-shop toggle is wired by wireSeg(), shared with
+    // shopping mode.)
 
     // Store-card clicks. Single mode: choose which store to buy the whole
     // basket at. Split mode: reassign equal-price items (as before). Either
@@ -1164,34 +1176,8 @@ boot();
       }
     } catch {}
   }
-  // Bell: show if there are undismissed name changes
-  try {
-    const r = await fetch(`data/name_changes_detected.json?t=${Date.now()}`);
-    if (!r.ok) return;
-    const changes = await r.json();
-    const keys = Object.keys(changes || {}).sort();
-    if (!keys.length) return;
-    const fingerprint = keys.join('|');
-    if (localStorage.getItem('pw_notif_dismissed_v1') === fingerprint) return;
-    const notifBtn = document.getElementById('notifBtn');
-    const notifBadge = document.getElementById('notifBadge');
-    const notifItems = document.getElementById('notifItems');
-    const notifDropdown = document.getElementById('notifDropdown');
-    if (!notifBtn) return;
-    notifBadge.textContent = keys.length;
-    notifBtn.style.display = 'inline-flex';
-    notifItems.innerHTML = keys.map(k => `<span class="notif-item">${k}</span>`).join('');
-    notifBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      notifDropdown.style.display = notifDropdown.style.display === 'none' ? 'block' : 'none';
-    });
-    document.addEventListener('click', () => { notifDropdown.style.display = 'none'; });
-    document.getElementById('notifDismissAll')?.addEventListener('click', () => {
-      localStorage.setItem('pw_notif_dismissed_v1', fingerprint);
-      notifBtn.style.display = 'none';
-      notifDropdown.style.display = 'none';
-    });
-  } catch {}
+  // (Notification bell retired — the validate pill above is the single
+  // "data needs attention" surface.)
 })();
 </script>
 <script>
