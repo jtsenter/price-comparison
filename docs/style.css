@@ -138,20 +138,21 @@ header .header-right .btn-icon { height: 38px; min-width: 38px; justify-content:
 .validate-pill:hover { background: var(--bg); color: var(--text); border-color: var(--text-soft); }
 
 /* Icon-only nav destinations in the header action cluster (Hot Deals, Basket,
-   Alerts). Same ghost-button chrome as the utility buttons beside them, but each
-   destination keeps a small colour identity so they read at a glance. Hidden on
-   mobile — the bottom tab bar covers navigation there. */
+   Watchlist). Same ghost-button chrome as the utility buttons beside them, but
+   each destination keeps a small colour identity so they read at a glance.
+   Hidden on mobile — the bottom tab bar covers navigation there (except the
+   Watchlist eye, which stays: it's the only mobile entry to that filter). */
 .nav-icon-btn { text-decoration: none; }
 .nav-icon-btn svg { display: block; }
 .nav-icon-btn.nav-hot        { color: #DC2626; }
 .nav-icon-btn.nav-basket     { color: var(--ww); }
-.nav-icon-btn.nav-alerts     { color: #D97706; }
+.nav-icon-btn.nav-watch      { color: #D97706; }
 .nav-icon-btn.nav-hot:hover     { color: #B91C1C; background: rgba(220,38,38,.08); }
 .nav-icon-btn.nav-basket:hover  { color: #006B31; background: rgba(0,132,61,.08); }
-.nav-icon-btn.nav-alerts:hover  { color: #B45309; background: rgba(217,119,6,.08); }
+.nav-icon-btn.nav-watch:hover   { color: #B45309; background: rgba(217,119,6,.08); }
 .nav-icon-btn.here.nav-hot      { background: rgba(220,38,38,.10); border-color: rgba(220,38,38,.35); }
 .nav-icon-btn.here.nav-basket   { background: rgba(0,132,61,.10);  border-color: rgba(0,132,61,.35); }
-.nav-icon-btn.here.nav-alerts   { background: rgba(217,119,6,.10); border-color: rgba(217,119,6,.35); }
+.nav-icon-btn.nav-watch.active  { background: rgba(217,119,6,.12); border-color: rgba(217,119,6,.35); }
 
 /* ── Buttons ─────────────────────────────────────────────────── */
 .btn {
@@ -543,6 +544,12 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 
 
 /* ── Category tabs ───────────────────────────────────────────── */
+/* .tabs-row pairs the scrolling category tabs with the table's columns chooser
+   (moved here from the site header — it configures the table, so it sits with
+   the table). The chooser keeps its header ids so app.js wiring is untouched. */
+.tabs-row { display: flex; align-items: flex-start; gap: 8px; }
+.tabs-row .category-tabs { flex: 1; min-width: 0; }
+.tabs-row-cols { flex-shrink: 0; }
 .category-tabs {
   display: flex;
   flex-wrap: nowrap;
@@ -2054,12 +2061,11 @@ td.priority-cell { text-align: center; }
   /* Hide desktop-only controls */
   .col-chooser-wrap, .view-toggle-btn { display: none !important; }
 
-  /* Mobile top bar = search + a Price Alerts shortcut. Basket and Hot Deals
+  /* Mobile top bar = search + a Watchlist shortcut. Basket and Hot Deals
      already live in the bottom tab bar (a header basket was a duplicate), but
-     Alerts has NO other mobile entry point — the desktop nav cluster, the bell
-     and the options menu are all hidden on phones. Skip the Alerts page itself —
-     linking to the page you're on is pointless. */
-  header:not([data-page="alerts"]) .header-right .nav-icon-btn.nav-alerts {
+     the Watchlist filter has NO other mobile entry point — the pill row, the
+     desktop nav cluster and the options menu are all hidden on phones. */
+  header .header-right .nav-icon-btn.nav-watch {
     display: inline-flex;
   }
 

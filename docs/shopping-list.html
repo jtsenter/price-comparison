@@ -190,11 +190,25 @@
     td.r { text-align: right; font-weight: 600; }
     /* Name cell: wrap text, let other cells keep fixed widths from colgroup */
     .item-name-cell { font-weight: 500; white-space: normal; overflow: visible; text-overflow: clip; max-width: 0; }
+    .name-wrap { display: flex; align-items: center; gap: 9px; line-height: 1.35; }
+    .sl-thumb { width: 30px; height: 30px; border-radius: 6px; object-fit: contain; background: #fff; border: 1px solid var(--border); flex-shrink: 0; }
     .price-val { font-size: 15px; font-weight: 700; }
     .unit-val { font-size: 11px; color: var(--text-soft); }
     .total-val { font-size: 15px; font-weight: 700; color: var(--text); }
+    /* Money and quantities align digit-for-digit down a column */
+    .price-val, .total-val, .unit-val, .qs-val, .sc-price, .saving-amount, tfoot td { font-variant-numeric: tabular-nums; }
     tfoot td { background: var(--bg); font-weight: 700; font-size: 15px; border-top: 2px solid var(--border); padding: 11px 14px; }
     tfoot td.r { text-align: right; }
+
+    /* ── Inline row controls: qty stepper + swap-store + remove ── */
+    .qty-step { display: inline-flex; align-items: center; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--card); }
+    .qs-btn { width: 26px; height: 26px; border: none; background: transparent; color: var(--text-mid); font-size: 15px; font-weight: 600; cursor: pointer; line-height: 1; -webkit-tap-highlight-color: transparent; }
+    .qs-btn:hover { background: var(--bg); color: var(--text); }
+    .qs-val { min-width: 24px; text-align: center; font-weight: 600; font-size: 13px; }
+    .row-btn { border: none; background: none; cursor: pointer; font-size: 13px; color: var(--text-soft); padding: 5px 6px; border-radius: 6px; line-height: 1; -webkit-tap-highlight-color: transparent; }
+    .row-btn:hover { background: var(--bg); color: var(--text); }
+    .row-btn.rm:hover { color: #DC2626; background: rgba(220,38,38,.10); }
+    .act-cell { text-align: right; }
 
     /* Only-one-store note */
     .only-note { font-size: 12px; color: var(--text-soft); font-style: italic; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 14px; margin-top: 8px; }
@@ -205,8 +219,10 @@
     .btn-primary { background: var(--ww); color: #fff; border-color: var(--ww); box-shadow: 0 1px 3px rgba(0,132,61,0.35); }
     .btn-primary:hover { background: #006B31; transform: translateY(-1px); }
 
-    .sl-topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
-    .filter-note { font-size: 14px; color: var(--text-mid); background: #FFFBEB; border: 1px solid #FCD34D; border-radius: var(--radius); padding: 8px 14px; margin-bottom: 12px; }
+    .sl-topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+    /* Quiet one-liner ("Showing N items…") — replaced the shouty yellow banner */
+    .sl-note { font-size: 13px; color: var(--text-soft); margin-bottom: 14px; }
+    .sl-note strong { color: var(--text-mid); }
     .btn-outline-danger { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid #FCA5A5; background: transparent; color: #DC2626; transition: all .15s; white-space: nowrap; }
     .btn-outline-danger:hover { background: #FEF2F2; border-color: #DC2626; }
     .btn-outline-save { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid #93C5AA; background: transparent; color: var(--ww); transition: all .15s; white-space: nowrap; }
@@ -225,17 +241,17 @@
     .nav-icon-btn svg { display: block; }
     .nav-icon-btn.nav-hot    { color: #DC2626; }
     .nav-icon-btn.nav-basket { color: var(--ww); }
-    .nav-icon-btn.nav-alerts { color: #D97706; }
+    .nav-icon-btn.nav-watch  { color: #D97706; }
     .nav-icon-btn.nav-hot:hover    { color: #B91C1C; background: rgba(220,38,38,.08); }
     .nav-icon-btn.nav-basket:hover { color: #006B31; background: rgba(0,132,61,.08); }
-    .nav-icon-btn.nav-alerts:hover { color: #B45309; background: rgba(217,119,6,.08); }
+    .nav-icon-btn.nav-watch:hover  { color: #B45309; background: rgba(217,119,6,.08); }
     .nav-icon-btn.here.nav-basket  { background: rgba(0,132,61,.10); border-color: rgba(0,132,61,.35); }
     /* Mirrors style.css's mobile header: nav cluster + bell hidden, but keep the
-       Price Alerts shortcut (its only mobile entry point). */
+       Watchlist shortcut (its only mobile entry point). */
     @media (max-width: 700px) {
       .nav-icon-btn, .header-div { display: none; }
       #notifBtn { display: none !important; }
-      .header-right .nav-icon-btn.nav-alerts { display: inline-flex; }
+      .header-right .nav-icon-btn.nav-watch { display: inline-flex; }
     }
 
     /* ── Shopping mode — big tap-to-check rows for in-store use ── */
@@ -297,26 +313,40 @@
       .sc-badge-row { margin-top: 6px; }
       .bar-ribbon { gap: 8px; padding: 10px 14px; }
       .sc-price { font-size: 24px; margin-bottom: 2px; }
-      /* Fixed column widths (110+100+70+85) overflow a 375px phone — drop the
-         Category column and slim the paddings so the table fits without a
-         page-level horizontal scroll. */
       main { padding-left: 12px; padding-right: 12px; }
-      /* Drop the Category column. The tfoot (Subtotal) MUST be hidden too — it was
-         omitted, so the footer had one more cell than the header/body, shifting the
-         Subtotal total under the wrong (narrow) column and clipping it. */
-      table col:nth-child(2), thead th:nth-child(2), tbody td:nth-child(2), tfoot td:nth-child(2) { display: none; }
-      td, thead th, tfoot td { padding-left: 8px; padding-right: 8px; }
-      table col:nth-child(3) { width: 78px !important; }
-      table col:nth-child(4) { width: 44px !important; }
-      table col:nth-child(5) { width: 82px !important; }
-      /* Subtotal reads as the total: right-align its label toward the number. */
-      tfoot td:first-child { white-space: nowrap; }
+      /* Stacked rows replace the table grid: a 6-column table can't fit a 375px
+         phone, so each row becomes a two-line card — name (+ remove) on top,
+         price · qty stepper · line total underneath. Same markup, CSS-only. */
+      .sl-table-wrap table, .sl-table-wrap tbody, .sl-table-wrap tfoot { display: block; }
+      .sl-table-wrap colgroup, .sl-table-wrap thead { display: none; }
+      .sl-table-wrap tbody tr {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        grid-template-areas: "name name act" "price qty total";
+        gap: 6px 12px; padding: 10px 12px; align-items: center;
+      }
+      .sl-table-wrap td { padding: 0; border: none; white-space: normal; overflow: visible; text-overflow: clip; }
+      .item-name-cell { grid-area: name; max-width: none; }
+      .cat-cell { display: none; }
+      .price-cell { grid-area: price; text-align: left; }
+      .qty-cell { grid-area: qty; }
+      .total-cell { grid-area: total; text-align: right; min-width: 64px; }
+      .act-cell { grid-area: act; align-self: start; }
+      /* Finger-sized touch targets */
+      .qs-btn { width: 34px; height: 34px; }
+      .row-btn { padding: 8px 9px; font-size: 14px; }
+      .sl-table-wrap tfoot tr { display: flex; justify-content: space-between; padding: 11px 12px; background: var(--bg); border-top: 2px solid var(--border); }
+      .sl-table-wrap tfoot td { padding: 0; border: none; background: none; }
+      .sl-table-wrap tfoot td:empty { display: none; }
     }
     @media print {
       header .header-actions { display: none; }
       body { background: #fff; }
       main { padding: 12px; }
       table { box-shadow: none; }
+      /* Paper is read-only: keep the qty NUMBER, drop the buttons */
+      .qs-btn, .act-cell, .sl-topbar, .sl-note { display: none; }
+      .qty-step { border: none; }
     }
 
     /* Bottom tab bar */
@@ -366,7 +396,7 @@
 </head>
 <body>
 <header data-page="shopping-list"></header>
-<script src="header.js?v=2"></script>
+<script src="header.js?v=3"></script>
 
 <div class="notif-dropdown" id="notifDropdown" style="display:none">
   <div class="notif-header">
@@ -509,22 +539,25 @@ async function boot() {
     return;
   }
 
-  // Banner note — count always bold; handoff note appended as context if present
-  const filterNoteHtml = handoff?.note
-    ? `Showing <strong>${displayItems.length}</strong> ${handoff.note}`
-    : `Showing <strong>${displayItems.length}</strong> item${displayItems.length !== 1 ? 's' : ''}`;
-
-  // Equal-price items (same price at both stores) — reassignable by user
-  const equalItems = displayItems.filter(i =>
-    i.cheaper_store === 'equal' &&
-    i.woolworths?.price != null &&
-    i.coles?.price != null);
-
   let equalStore = 'ww'; // which store equal-price items are currently assigned to
+
+  // Per-row "buy it at the other store instead" overrides (session-only). Lets a
+  // one-store trip absorb an item that's technically cheaper across the road.
+  const storeOverride = new Map(); // list_item → 'ww' | 'coles'
 
   // Per-table sort state — survives renderContent() re-renders
   let wwSortKey = 'category', wwSortDir = 'asc';
   let colesSortKey = 'category', colesSortDir = 'asc';
+
+  // Rewrite the handoff to match what's on screen, so row removals survive the
+  // trip back to the main page (and refreshes while the basket is locked).
+  function persistBasket() {
+    localStorage.setItem('pw_sl_handoff', JSON.stringify({
+      items: displayItems.map(i => i.list_item),
+      note: handoff?.note || 'items',
+      quantities: unitOv || {},
+    }));
+  }
 
   function sortItems(items, store, key, dir) {
     const mul = dir === 'asc' ? 1 : -1;
@@ -557,31 +590,33 @@ async function boot() {
   // true full-basket total) come out MORE expensive than either "single store"
   // total, an impossible result for a real shopping trip. Every total must cover
   // the same item set for the comparison to mean anything.
-  const wwTotal = displayItems.reduce((s, i) => {
-    const p = i.woolworths?.price ?? i.coles?.price;
-    return p != null ? s + p * getUnits(i.list_item, unitOv, analysis) : s;
-  }, 0);
-  const coTotal = displayItems.reduce((s, i) => {
-    const p = i.coles?.price ?? i.woolworths?.price;
-    return p != null ? s + p * getUnits(i.list_item, unitOv, analysis) : s;
-  }, 0);
-
-  // diff = absolute difference between all-WW and all-Coles hypothetical totals.
-  // Drives the ribbon chip state (cheaper / paying-more / equal).
-  const diff    = Math.abs(wwTotal - coTotal);
-  const isEqual = diff < 0.01;
-
-  // Optimal split: buy each item at whichever store is cheapest for it.
-  const optimalTotal = displayItems.reduce((sum, i) => {
-    const qty = getUnits(i.list_item, unitOv, analysis);
-    const best = i.cheaper_store === 'coles'
-      ? (i.coles?.price ?? i.woolworths?.price ?? 0)
-      : (i.woolworths?.price ?? i.coles?.price ?? 0);
-    return sum + best * qty;
-  }, 0);
+  // Computed per render (not once at boot): qty steppers and row removals
+  // change them live.
+  function computeTotals() {
+    const wwTotal = displayItems.reduce((s, i) => {
+      const p = i.woolworths?.price ?? i.coles?.price;
+      return p != null ? s + p * getUnits(i.list_item, unitOv, analysis) : s;
+    }, 0);
+    const coTotal = displayItems.reduce((s, i) => {
+      const p = i.coles?.price ?? i.woolworths?.price;
+      return p != null ? s + p * getUnits(i.list_item, unitOv, analysis) : s;
+    }, 0);
+    // Optimal split: buy each item at whichever store is cheapest for it.
+    const optimalTotal = displayItems.reduce((sum, i) => {
+      const qty = getUnits(i.list_item, unitOv, analysis);
+      const best = i.cheaper_store === 'coles'
+        ? (i.coles?.price ?? i.woolworths?.price ?? 0)
+        : (i.woolworths?.price ?? i.coles?.price ?? 0);
+      return sum + best * qty;
+    }, 0);
+    // diff drives the ribbon chip state (cheaper / paying-more / equal).
+    const diff = Math.abs(wwTotal - coTotal);
+    return { wwTotal, coTotal, optimalTotal, diff, isEqual: diff < 0.01 };
+  }
 
   function computeSplit() {
     // Routing rules — every displayItem ends up in exactly one table:
+    //   an explicit per-row override wins; otherwise
     //   WW table:    cheaper_store === 'woolworths'
     //             OR cheaper_store === 'equal'  AND equalStore === 'ww'
     //             OR woolworths only (no Coles price)
@@ -589,16 +624,22 @@ async function boot() {
     //             OR cheaper_store === 'equal'  AND equalStore === 'coles'
     //             OR coles only (no WW price)
     // Items without either price are excluded from displayItems upstream.
-    const wwItems = displayItems.filter(i =>
-      i.woolworths?.price != null &&
-      (i.cheaper_store === 'woolworths' ||
-       (i.cheaper_store === 'equal' && equalStore === 'ww') ||
-       i.coles?.price == null));
-    const colesItems = displayItems.filter(i =>
-      i.coles?.price != null &&
-      (i.cheaper_store === 'coles' ||
-       (i.cheaper_store === 'equal' && equalStore === 'coles') ||
-       i.woolworths?.price == null));
+    const wwItems = displayItems.filter(i => {
+      if (i.woolworths?.price == null) return false;
+      const ov = storeOverride.get(i.list_item);
+      if (ov) return ov === 'ww';
+      return i.cheaper_store === 'woolworths' ||
+             (i.cheaper_store === 'equal' && equalStore === 'ww') ||
+             i.coles?.price == null;
+    });
+    const colesItems = displayItems.filter(i => {
+      if (i.coles?.price == null) return false;
+      const ov = storeOverride.get(i.list_item);
+      if (ov) return ov === 'coles';
+      return i.cheaper_store === 'coles' ||
+             (i.cheaper_store === 'equal' && equalStore === 'coles') ||
+             i.woolworths?.price == null;
+    });
     // Invariant: wwItems ∪ colesItems === displayItems (no item in both or neither)
     return { wwItems, colesItems };
   }
@@ -618,21 +659,28 @@ async function boot() {
       const lineTotal = (sd?.price ?? 0) * units;
       const cat = getCategory(i, catOv);
       const unitStr = fmtUnit(sd?.unit_price, sd?.unit);
+      const img = sd?.image_url;
+      const otherPriced = (store === 'ww' ? i.coles?.price : i.woolworths?.price) != null;
+      const swapTo = store === 'ww' ? 'coles' : 'ww';
+      const swapTitle = store === 'ww' ? 'Buy at Coles instead' : 'Buy at Woolworths instead';
+      const name = escAttr(i.list_item);
       return `<tr>
-        <td class="item-name-cell">${i.list_item}</td>
-        <td style="font-size:12px;color:#64748B;overflow:hidden;text-overflow:ellipsis">${cat}</td>
-        <td class="r"><span class="price-val">${fmt(sd?.price)}</span>${unitStr ? `<div class="unit-val">${unitStr}</div>` : ''}</td>
-        <td class="r">${units}</td>
-        <td class="r"><span class="total-val">${fmt(lineTotal)}</span></td>
+        <td class="item-name-cell"><div class="name-wrap">${img ? `<img class="sl-thumb" loading="lazy" src="${escAttr(img)}" alt="" onerror="this.style.display='none'">` : ''}<span>${esc(i.list_item)}</span></div></td>
+        <td class="cat-cell" style="font-size:12px;color:#64748B;overflow:hidden;text-overflow:ellipsis">${esc(cat)}</td>
+        <td class="r price-cell"><span class="price-val">${fmt(sd?.price)}</span>${unitStr ? `<div class="unit-val">${unitStr}</div>` : ''}</td>
+        <td class="r qty-cell"><div class="qty-step"><button type="button" class="qs-btn" data-item="${name}" data-d="-1" aria-label="Decrease quantity">−</button><span class="qs-val">${units}</span><button type="button" class="qs-btn" data-item="${name}" data-d="1" aria-label="Increase quantity">+</button></div></td>
+        <td class="r total-cell"><span class="total-val">${fmt(lineTotal)}</span></td>
+        <td class="act-cell">${otherPriced ? `<button type="button" class="row-btn swap" data-item="${name}" data-to="${swapTo}" title="${swapTitle}">⇄</button>` : ''}<button type="button" class="row-btn rm" data-item="${name}" title="Remove from basket">✕</button></td>
       </tr>`;
     }).join('');
     return `<div class="sl-table-wrap"><table>
       <colgroup>
         <col>
-        <col style="width:110px">
-        <col style="width:100px">
-        <col style="width:70px">
-        <col style="width:85px">
+        <col style="width:105px">
+        <col style="width:92px">
+        <col style="width:92px">
+        <col style="width:82px">
+        <col style="width:62px">
       </colgroup>
       <thead><tr>
         <th class="sl-sort-hdr" data-col="item" data-sort-store="${pfx}" data-sort-key="item">Item${arrow('item')}</th>
@@ -640,9 +688,10 @@ async function boot() {
         <th class="r sl-sort-hdr" data-col="price" data-sort-store="${pfx}" data-sort-key="price">Price${arrow('price')}</th>
         <th class="r" data-col="qty">Qty</th>
         <th class="r sl-sort-hdr" data-col="total" data-sort-store="${pfx}" data-sort-key="total">Total${arrow('total')}</th>
+        <th></th>
       </tr></thead>
       <tbody>${rows}</tbody>
-      <tfoot><tr><td><strong>Subtotal</strong></td><td></td><td></td><td></td><td class="r"><strong>${fmt(subtotal)}</strong></td></tr></tfoot>
+      <tfoot><tr><td><strong>Subtotal</strong></td><td></td><td></td><td></td><td class="r"><strong>${fmt(subtotal)}</strong></td><td></td></tr></tfoot>
     </table></div>`;
   }
 
@@ -754,10 +803,20 @@ async function boot() {
     updateProgress();
   }
 
-  // renderContent() is called on boot and again whenever equalStore changes
+  // renderContent() re-runs on every state change: equalStore, sort, qty
+  // stepper, row removal, store swap. All derived numbers are computed here.
   function renderContent() {
     const { wwItems, colesItems } = computeSplit();
     if (slMode === 'shop') { renderShopMode(wwItems, colesItems); return; }
+    const { wwTotal, coTotal, optimalTotal, diff, isEqual } = computeTotals();
+    // Equal-price items (same price at both stores) — reassignable by user
+    const equalItems = displayItems.filter(i =>
+      i.cheaper_store === 'equal' &&
+      i.woolworths?.price != null &&
+      i.coles?.price != null);
+    const filterNoteHtml = handoff?.note
+      ? `Showing <strong>${displayItems.length}</strong> ${handoff.note}`
+      : `Showing <strong>${displayItems.length}</strong> item${displayItems.length !== 1 ? 's' : ''}`;
     const ec = equalItems.length;
     const wwActive = equalStore === 'ww';
 
@@ -817,7 +876,7 @@ async function boot() {
             : '');
 
     main.innerHTML = `
-      <div class="filter-note">📋 ${filterNoteHtml}</div>
+      <div class="sl-note">📋 ${filterNoteHtml}</div>
       <div class="sl-topbar">
         ${segHtml()}
         <div style="flex:1"></div>
@@ -905,6 +964,38 @@ async function boot() {
         if (equalStore !== 'coles') { equalStore = 'coles'; renderContent(); }
       });
     }
+
+    // Qty steppers — write the same pw_units_v1 map the main page reads, so
+    // quantities stay consistent between pages.
+    // ponytail: local-only write; cross-device unit sync still happens on the
+    // main page (its scheduleUserSettingsSync owns the publish token).
+    main.querySelectorAll('.qs-btn').forEach(b => b.addEventListener('click', () => {
+      const name = b.dataset.item;
+      const next = Math.max(1, getUnits(name, unitOv, analysis) + Number(b.dataset.d));
+      if (next === getUnits(name, unitOv, analysis)) return;
+      unitOv[name] = next;
+      localStorage.setItem('pw_units_v1', JSON.stringify(unitOv));
+      renderContent();
+    }));
+
+    // Per-row remove — drops the item from the basket (not from PriceWatch).
+    main.querySelectorAll('.row-btn.rm').forEach(b => b.addEventListener('click', () => {
+      const name = b.dataset.item;
+      displayItems = displayItems.filter(i => i.list_item !== name);
+      storeOverride.delete(name);
+      persistBasket();
+      if (!displayItems.length) {
+        main.innerHTML = '<div class="empty">Your basket is empty. <a href="index.html">Go back to add items.</a></div>';
+        return;
+      }
+      renderContent();
+    }));
+
+    // Per-row store swap — "I'll just buy it here anyway" for one-store trips.
+    main.querySelectorAll('.row-btn.swap').forEach(b => b.addEventListener('click', () => {
+      storeOverride.set(b.dataset.item, b.dataset.to);
+      renderContent();
+    }));
 
     document.getElementById('removeAllBtn')?.addEventListener('click', () => {
       if (confirm('Remove all items from your basket?')) {

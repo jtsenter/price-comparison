@@ -2400,6 +2400,15 @@ function initPriorityFilter() {
     });
   }
 
+  // Other pages link here as index.html#watchlist (the header eye icon) —
+  // activate the watchlist filter on arrival, then drop the hash so a plain
+  // refresh doesn't re-trigger it.
+  if (location.hash === '#watchlist') {
+    container.querySelector('.watchlist-pill')?.click();
+    mobileWatchBtn?.classList.add('active');
+    history.replaceState(null, '', location.pathname + location.search);
+  }
+
   const cycleBtn = $('storeCycleBtn');
   if (cycleBtn) {
     cycleBtn.addEventListener('click', () => {
