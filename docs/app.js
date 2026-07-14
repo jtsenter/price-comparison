@@ -116,12 +116,13 @@ function exclSetsFor(itemName) {
 // price, each converted with its own store's ratio, exclusions applied.
 // price_history and ww_price_history hold WW pack prices; coles_price_history
 // holds Coles pack prices.
-function memberPerKgPrices(m) {
+function memberPerKgPrices(m, useWw = true, useCo = true) {
   if (!m) return [];
-  const wwR = perKgRatio(m.woolworths);
-  const coR = perKgRatio(m.coles);
+  const wwR = useWw ? perKgRatio(m.woolworths) : null;
+  const coR = useCo ? perKgRatio(m.coles) : null;
   const { ww: wwEx, co: coEx } = exclSetsFor(m.list_item);
-  // r == null → can't convert this store's pack prices to $/kg; drop the source.
+  // r == null → can't convert this store's pack prices to $/kg (or the member
+  // is per-kg-excluded at that store); drop the source.
   const conv = (arr, r, ex) => (r == null ? [] : (arr || [])
     .filter(e => e.price > 0 && !ex.has(Number(e.price).toFixed(2)))
     .map(e => +(e.price * r).toFixed(2)));
@@ -130,9 +131,19 @@ function memberPerKgPrices(m) {
     ...conv(m.ww_price_history,    wwR, wwEx),
     ...conv(m.coles_price_history, coR, coEx),
   ];
-  const wk = clientPerKg(m.woolworths); if (wk != null) out.push(wk);
-  const ck = clientPerKg(m.coles);      if (ck != null) out.push(ck);
+  if (useWw) { const wk = clientPerKg(m.woolworths); if (wk != null) out.push(wk); }
+  if (useCo) { const ck = clientPerKg(m.coles);      if (ck != null) out.push(ck); }
   return out;
+}
+
+// Per-store include flags for a group member: skips per-kg category exclusions
+// so the trend bar and merged history never resurrect a "different item".
+function memberStoreFlags(group, m) {
+  const excl = loadPerKgExclusions();
+  return [
+    !excl.has(`${group._groupKey}::${m.list_item}::ww`),
+    !excl.has(`${group._groupKey}::${m.list_item}::coles`),
+  ];
 }
 
 function daysSince(isoString) {
@@ -527,20 +538,7 @@ function getCategory(item) {
 // ── Filter state ─────────────────────────────────────────────────────────────
 
 let _activePriority = 'weekly';
-let _showHotOnly = false;
-let _storeFilter = 'all';
 
-function _updateStoreCycleBtn() {
-  const btn = $('storeCycleBtn');
-  if (!btn) return;
-  const faces = {
-    all:         'All stores',
-    woolworths:  '<span class="store-chip ww sm">W</span> only',
-    coles:       '<span class="store-chip coles sm">C</span> only',
-  };
-  btn.innerHTML = faces[_storeFilter] || faces.all;
-  btn.classList.toggle('active', _storeFilter !== 'all');
-}
 let _searchQuery = '';
 let _perkgSet = new Set();   // items compared by $/kg (synced via user_settings.json)
 let _perkgFilter = 'all';  // per-kg group visibility: 'all' | 'only' | 'hidden' (⚙ /kg button cycles)
@@ -971,6 +969,13 @@ function colHeadHtml(col) {
 // ── Price history bar ────────────────────────────────────────────────────────
 
 function savingAmount(item) {
+  // Per-kg groups: their .woolworths/.coles are DIFFERENT pack sizes (each
+  // store's best variant), so |w−c| compared apples to oranges — an equal-$/kg
+  // group could sort as the biggest "saving". Compare the $/kg headlines.
+  if (item._isGroup) {
+    if (item._wwPerKg == null || item._coPerKg == null) return 0;
+    return Math.abs(item._wwPerKg - item._coPerKg);
+  }
   const w = item.woolworths?.price, c = item.coles?.price;
   if (w == null || c == null) return item.saving_per_item ?? 0;
   return Math.abs(w - c);
@@ -1704,10 +1709,15 @@ function histKgRatios(item) {
   if (item._isGroupHistory) return { perKg: true, ww: 1, coles: 1, groupLabel: null };
   const group = loadVariantGroups().find(g => (g.items || []).includes(item.list_item));
   if (!group) return { perKg: false, ww: 1, coles: 1, groupLabel: null };
-  // Same per-store conversion the trend bar uses (perKgRatio) → modal and trend agree.
-  // null ratio (store unconvertible) falls back to 1 so the modal shows that
-  // store's raw price instead of NaN; the trend bar drops it (memberPerKgPrices).
-  return { perKg: true, ww: perKgRatio(item.woolworths) ?? 1, coles: perKgRatio(item.coles) ?? 1, groupLabel: group.label };
+  const wwR = perKgRatio(item.woolworths);
+  const coR = perKgRatio(item.coles);
+  // Mixed bases are worse than none: "$8.50/kg" beside a per-unit price reads
+  // as comparable when it isn't (Truss Tomatoes: WW per kg, Coles per each).
+  // Only show $/kg when EVERY priced store converts; otherwise raw prices.
+  const wwOk = item.woolworths?.price == null || wwR != null;
+  const coOk = item.coles?.price == null || coR != null;
+  if (!wwOk || !coOk) return { perKg: false, ww: 1, coles: 1, groupLabel: group.label };
+  return { perKg: true, ww: wwR ?? 1, coles: coR ?? 1, groupLabel: group.label };
 }
 
 // Shared by every "History"/"Manage" button click handler (desktop table, desktop
@@ -1840,10 +1850,19 @@ function openPriceHistoryModal(item) {
 
     // Display in $/kg for per-kg members (kgR.ww/coles); data-price stays the raw
     // stored price so exclusions and the "different item" fork keep matching the data.
-    const wwEditBtns = simplified ? '' : `
+    // Group history rows get their OWN exclude button: each point knows which
+    // member product it came from (_wwMeta/_coMeta), so ✕ writes that member's
+    // raw pack price into pw_exclusions_v1 immediately — this is how a wrong
+    // "$9.02 beef mince" point gets removed from a category's history.
+    const grpBtn = (store) => {
+      const meta = (store === 'ww' ? item._wwMeta : item._coMeta)?.get(entry.date);
+      if (!meta) return '';
+      return `<button class="price-excl-x grp-excl" data-store="${store}" data-src="${escAttr(meta.src)}" data-raw="${meta.raw.toFixed(2)}" title="Exclude — this point came from ${escAttr(stripWW(meta.src))}">✕</button>`;
+    };
+    const wwEditBtns = item._isGroupHistory ? (innerWidth > 700 ? grpBtn('ww') : '') : simplified ? '' : `
            <button class="price-excl-x" data-store="ww" data-price="${Number(entry.ww).toFixed(2)}" title="${wwExcluded ? 'Re-include' : 'Exclude'}">✕</button>
            <button class="price-fork-btn" data-store="ww" data-price="${Number(entry.ww).toFixed(2)}" title="Different item">${forkSvg}</button>`;
-    const coEditBtns = simplified ? '' : `
+    const coEditBtns = item._isGroupHistory ? (innerWidth > 700 ? grpBtn('coles') : '') : simplified ? '' : `
            <button class="price-excl-x" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="${coExcluded ? 'Re-include' : 'Exclude'}">✕</button>
            <button class="price-fork-btn" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="Different item">${forkSvg}</button>`;
     const wwHtml = entry.ww != null
@@ -1863,7 +1882,24 @@ function openPriceHistoryModal(item) {
       ${wwHtml}
       ${coHtml}`;
 
-    row.querySelectorAll('.price-excl-x').forEach(btn => {
+    // Group-history exclusion: applied IMMEDIATELY to the source member (no
+    // Save step — a merged min-of-members series has no single pending list),
+    // then the group history is rebuilt so the point disappears on the spot.
+    row.querySelectorAll('.grp-excl').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const excl = loadExclusions();
+        const key = `${btn.dataset.store}:${btn.dataset.raw}`;
+        const arr = excl[btn.dataset.src] || [];
+        if (!arr.includes(key)) arr.push(key);
+        excl[btn.dataset.src] = arr;
+        saveExclusions(excl);
+        showToast(`Excluded $${btn.dataset.raw} (${stripWW(btn.dataset.src)})`);
+        if (_lastData) renderPage(_lastData);
+        openHistoryFromManageBtn(`__group_${item._groupKey}`);
+      });
+    });
+
+    row.querySelectorAll('.price-excl-x:not(.grp-excl)').forEach(btn => {
       btn.addEventListener('click', () => {
         const key = `${btn.dataset.store}:${btn.dataset.price}`;
         if (_pendingExcl.has(key)) {
@@ -2301,11 +2337,8 @@ function initPriorityFilter() {
       const p = btn.dataset.priority;
       if (p) {
         _activePriority = p;
-        _showHotOnly = false;
         container.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        $('hotFilterBtn')?.classList.remove('active');
-        _storeFilter = 'all';
         // Keep the mobile frequency dropdown in sync with the active frequency.
         const fs = $('freqSelect');
         if (fs && ['all', 'weekly', 'monthly', 'rare', 'archive'].includes(_activePriority)) fs.value = _activePriority;
@@ -2324,30 +2357,12 @@ function initPriorityFilter() {
     });
   }
 
-  function _toggleHotDeals() {
-    _showHotOnly = !_showHotOnly;
-    $('hotFilterBtn')?.classList.toggle('active', _showHotOnly);
-    $('mobileHotBtn')?.classList.toggle('active', _showHotOnly);
-    const cycleBtn = $('storeCycleBtn');
-    if (cycleBtn) cycleBtn.style.display = _showHotOnly ? 'inline-flex' : 'none';
-    if (!_showHotOnly) { _storeFilter = 'all'; _updateStoreCycleBtn(); }
-    if (_lastData) renderPage(_lastData);
-  }
-
-  const hotBtn = $('hotFilterBtn');
-  if (hotBtn) hotBtn.addEventListener('click', _toggleHotDeals);
-
-  const mobileHotBtn = $('mobileHotBtn');
-  if (mobileHotBtn) mobileHotBtn.addEventListener('click', _toggleHotDeals);
-
   // Watchlist filter — a pill in the filter row (it IS a filter); the mobile
   // sort-toolbar eye chip clicks this same pill. Toggles on/off; turning it
   // off lands back on "All".
   function toggleWatchlistFilter() {
     const on = _activePriority !== 'watchlist';
     _activePriority = on ? 'watchlist' : 'all';
-    if (on) { _showHotOnly = false; $('hotFilterBtn')?.classList.remove('active'); }
-    _storeFilter = 'all';
     container.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
     if (on) $('watchlistPill')?.classList.add('active');
     else container.querySelector('[data-priority="all"]')?.classList.add('active');
@@ -2364,15 +2379,6 @@ function initPriorityFilter() {
     history.replaceState(null, '', location.pathname + location.search);
   }
 
-  const cycleBtn = $('storeCycleBtn');
-  if (cycleBtn) {
-    cycleBtn.addEventListener('click', () => {
-      const order = ['all', 'woolworths', 'coles'];
-      _storeFilter = order[(order.indexOf(_storeFilter) + 1) % order.length];
-      _updateStoreCycleBtn();
-      if (_lastData) renderPage(_lastData);
-    });
-  }
 }
 
 // ── Mobile card selection pill ────────────────────────────────────────────────
@@ -2608,7 +2614,6 @@ function computeBannerStats(items) {
       }
     }
     if (_activeCategory !== 'All' && getCategory(item) !== _activeCategory) return false;
-    if (_showHotOnly && !isHotDeal(item, exclusions)) return false;
     // Only include items that have prices at both stores
     if (item.woolworths?.price == null || item.coles?.price == null) return false;
     return true;
@@ -3263,12 +3268,6 @@ function sortItems(items) {
       if (_activePriority !== 'all' && p !== _activePriority) return false;
     }
     // Hot deals filter
-    if (_showHotOnly && !isHotDeal(item, exclusions)) return false;
-    // Store filter (only active when hot filter is on)
-    if (_showHotOnly && _storeFilter !== 'all') {
-      if (_storeFilter === 'woolworths' && item.cheaper_store !== 'woolworths') return false;
-      if (_storeFilter === 'coles' && item.cheaper_store !== 'coles') return false;
-    }
     // Hide items priced at neither store by default — they're noise in the main
     // list (the footer's coverage count still reports how many are missing).
     // Single-store items stay visible since one price is still useful. The
@@ -3612,7 +3611,7 @@ function groupTrendCellHTML(group) {
   if (!cands.length) return '';
   const best = cands.reduce((a, b) => (a.perkg <= b.perkg ? a : b));
 
-  const prices = group._members.flatMap(memberPerKgPrices);
+  const prices = group._members.flatMap(m => memberPerKgPrices(m, ...memberStoreFlags(group, m)));
   if (prices.length < 2) return '';
   const hist = prices.map(p => ({ price: p }));
   // History button opens the group's own merged history (see buildGroupHistoryItem),
@@ -3634,9 +3633,15 @@ function groupTrendCellHTML(group) {
 // what the cheapest member ACTUALLY cost then, matching the live headline number
 // (group._wwPerKg/_coPerKg) once the dates catch up to today.
 function buildGroupHistoryItem(group) {
+  // Members the user excluded from this category's $/kg at a store must not
+  // feed its history either (a "different item" was polluting the series).
+  const perkgExcl = loadPerKgExclusions();
   const buildStoreSeries = (isWw) => {
-    // One sorted, deduped (date -> price) series per member.
+    // One sorted, deduped (date -> price) series per member. Each point keeps
+    // its SOURCE (member name + raw pack price) so the modal can offer
+    // per-point exclusion that writes back to the right member.
     const memberSeries = group._members.map(m => {
+      if (perkgExcl.has(`${group._groupKey}::${m.list_item}::${isWw ? 'ww' : 'coles'}`)) return [];
       const ratio = perKgRatio(isWw ? m.woolworths : m.coles);
       if (ratio == null) return [];
       const ex = exclSetsFor(m.list_item)[isWw ? 'ww' : 'co'];
@@ -3645,9 +3650,9 @@ function buildGroupHistoryItem(group) {
       const byDate = new Map();
       for (const e of raw) {
         if (!(e.price > 0) || ex.has(Number(e.price).toFixed(2))) continue;
-        byDate.set(e.date, +(e.price * ratio).toFixed(2)); // later entries for the same date win
+        byDate.set(e.date, { price: +(e.price * ratio).toFixed(2), src: m.list_item, raw: Number(e.price) }); // later entries for the same date win
       }
-      return [...byDate.entries()].map(([date, price]) => ({ date, price })).sort((a, b) => a.date.localeCompare(b.date));
+      return [...byDate.entries()].map(([date, v]) => ({ date, ...v })).sort((a, b) => a.date.localeCompare(b.date));
     });
 
     const allDates = [...new Set(memberSeries.flat().map(p => p.date))].sort();
@@ -3657,21 +3662,30 @@ function buildGroupHistoryItem(group) {
     for (const date of allDates) {
       memberSeries.forEach((series, i) => {
         while (cursor[i] < series.length && series[cursor[i]].date <= date) {
-          lastKnown[i] = series[cursor[i]].price;
+          lastKnown[i] = series[cursor[i]];
           cursor[i]++;
         }
       });
       const known = lastKnown.filter(p => p != null);
-      if (known.length) out.push({ date, price: Math.min(...known) });
+      if (known.length) {
+        const best = known.reduce((a, b) => (a.price <= b.price ? a : b));
+        out.push({ date, price: best.price, src: best.src, raw: best.raw });
+      }
     }
     return out;
   };
+  const wwSeries = buildStoreSeries(true);
+  const coSeries = buildStoreSeries(false);
   return {
     list_item: group._groupLabel,
     _isGroupHistory: true,
+    _groupKey: group._groupKey,
+    // date → winning source, for the modal's per-point exclusion buttons
+    _wwMeta: new Map(wwSeries.map(e => [e.date, e])),
+    _coMeta: new Map(coSeries.map(e => [e.date, e])),
     price_history: [],
-    ww_price_history: buildStoreSeries(true),
-    coles_price_history: buildStoreSeries(false),
+    ww_price_history: wwSeries,
+    coles_price_history: coSeries,
     woolworths: group._wwBest ? { price: group._wwPerKg, scraped_at: group._wwBest.result?.scraped_at } : null,
     coles: group._coBest ? { price: group._coPerKg, scraped_at: group._coBest.result?.scraped_at } : null,
   };
@@ -3686,7 +3700,7 @@ function groupTrendPosition(group) {
   const cands = [group._wwBest, group._coBest].filter(Boolean);
   if (!cands.length) return 999;
   const best = cands.reduce((a, b) => (a.perkg <= b.perkg ? a : b));
-  const prices = group._members.flatMap(memberPerKgPrices);
+  const prices = group._members.flatMap(m => memberPerKgPrices(m, ...memberStoreFlags(group, m)));
   if (prices.length < 2) return 999;
   const lo = Math.min(...prices), hi = Math.max(...prices);
   if (lo === hi) return 0.5;
@@ -4761,7 +4775,6 @@ function _renderPageInner(data) {
   if (daysSince(data.last_updated) > STALE_DATA_DAYS) $('staleBanner').classList.add('visible');
 
   // Keep the mobile header filter icons (🔥 / 👁) in sync with current state
-  $('mobileHotBtn')?.classList.toggle('active', _showHotOnly);
   $('watchlistPill')?.classList.toggle('active', _activePriority === 'watchlist');
 
   // Always compute banner stats client-side so savings are units-weighted

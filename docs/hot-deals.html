@@ -68,12 +68,20 @@
       margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
       width: 100%;
     }
+    .hd-tune-title { font-size: 12px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: .04em; }
+    .hd-tune-and {
+      font-size: 10px; font-weight: 800; letter-spacing: .06em; color: var(--text-soft);
+      border: 1px solid var(--border-strong); border-radius: 999px; padding: 2px 8px;
+    }
     .hd-tune-row { display: flex; align-items: center; gap: 10px; }
     .hd-tune-row label { font-size: 12px; font-weight: 600; color: var(--text-mid); white-space: nowrap; }
     .hd-tune-row input[type="range"] { width: 140px; accent-color: var(--ww); cursor: pointer; }
-    .hd-tune-row strong { font-size: 13px; font-weight: 800; color: var(--text); min-width: 40px; font-variant-numeric: tabular-nums; }
+    .hd-tune-row strong { font-size: 13px; font-weight: 800; color: var(--text); min-width: 34px; font-variant-numeric: tabular-nums; }
+    .hd-tune-atl { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--text-mid); cursor: pointer; white-space: nowrap; }
+    .hd-tune-atl input { accent-color: var(--ww); cursor: pointer; }
     @media (max-width: 700px) {
       .hd-tune { gap: 10px; }
+      .hd-tune-title, .hd-tune-and { display: none; }
       .hd-tune-row { width: 100%; }
       .hd-tune-row label { flex: 1; }
       .hd-tune-row input[type="range"] { width: 120px; }
@@ -326,19 +334,25 @@
   <div class="deals-hero-title">🔥 Hot Deals</div>
   <div class="deals-hero-divider"></div>
   <div class="deals-hero-stats" id="heroStats"></div>
-  <!-- The two dials that DEFINE a deal, out in the open. Dragging either
-       instantly grows/shrinks the list below. -->
+  <!-- The dials that DEFINE a deal, out in the open. Dragging either instantly
+       grows/shrinks the list below. Both conditions must hold (AND); the
+       checkbox rescues all-time lows from strict slider settings. -->
   <div class="hd-tune">
+    <span class="hd-tune-title">A deal must be</span>
     <div class="hd-tune-row" title="How far below its usual (median historical) price an item must be">
-      <label for="hdDropSlider">↓ Below usual price</label>
+      <label for="hdDropSlider">↓ below its usual price by ≥</label>
       <input type="range" id="hdDropSlider" min="0" max="50" step="1">
-      <strong id="hdDropVal">4%+</strong>
+      <strong id="hdDropVal">4%</strong>
     </div>
+    <span class="hd-tune-and">AND</span>
     <div class="hd-tune-row" title="How much cheaper the best store must be vs the other store">
-      <label for="hdDiffSlider">⇄ Cheaper than other store</label>
+      <label for="hdDiffSlider">⇄ cheaper than the other store by ≥</label>
       <input type="range" id="hdDiffSlider" min="0" max="50" step="1">
-      <strong id="hdDiffVal">0%+</strong>
+      <strong id="hdDiffVal">0%</strong>
     </div>
+    <label class="hd-tune-atl" title="An all-time-low price is always worth seeing, even when it misses the sliders">
+      <input type="checkbox" id="hdAtlChk"> 🏆 always include all-time lows
+    </label>
     <button id="hdTuneReset" class="btn btn-ghost" style="font-size:12px;padding:5px 12px">↺ Reset</button>
   </div>
 </div>
@@ -412,7 +426,7 @@
 
 <!-- Shared utilities — must load before inline script -->
 <script src="name_map.js?v=13"></script>
-<script src="utils.js?v=59"></script>
+<script src="utils.js?v=60"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -905,6 +919,7 @@ function renderDeals() {
     priorities,
     minDropPct: tune.drop,
     minStoreDiffPct: tune.diff,
+    includeATL: tune.atl,
   });
 
   buildCategoryTabs(allDeals.map(d => d.item));
@@ -912,10 +927,11 @@ function renderDeals() {
   const filtered = filterDeals(allDeals, exclusions);
   const sorted = sortDeals(filtered.map(d => d.item), exclusions);
 
-  // Hero stats
+  // Hero stats — counts describe what's SHOWN, so they follow the store /
+  // watchlist / category filters.
   const heroEl = document.getElementById('heroStats');
   if (heroEl) {
-    const allTimeLowCount = allDeals.filter(({ deal }) => deal.isAllTimeLow).length;
+    const allTimeLowCount = filtered.filter(({ deal }) => deal.isAllTimeLow).length;
     const showingAll = filtered.length === allDeals.length;
     heroEl.innerHTML = [
       showingAll
@@ -988,11 +1004,16 @@ function renderDeals() {
       ? `<span class="discrepancy-warn" title="Large price difference — double check the match is correct">⚠<button class="dismiss-diff-btn" data-item="${safeNameHD}" data-diff="${_hdDiff.toFixed(4)}" title="Dismiss warning">✕</button></span>`
       : '';
 
-    // Deal cell — explains WHY this is a hot deal (one line): the discount depth
-    // or all-time-low badge. The store now has its own column; the usual price
-    // moved to the Save column's subtext.
+    // Deal cell — explains WHY this is a hot deal: the discount depth or
+    // all-time-low badge, plus the cross-store gap when there is one
+    // ("12% cheaper than Coles") since that's the second thing that defines
+    // a deal here.
     const reasonClass = deal.isAllTimeLow ? 'deal-reason atl' : 'deal-reason';
-    const dealCell = `<span class="${reasonClass}">${deal.reason}</span>`;
+    const otherStoreName = deal.store === 'woolworths' ? 'Coles' : 'WW';
+    const storeGapTag = (deal.savingPct >= 0.01 && deal.otherPrice != null)
+      ? `<div class="deal-reason-sub">${Math.round(deal.savingPct * 100)}% cheaper than ${otherStoreName}</div>`
+      : '';
+    const dealCell = `<span class="${reasonClass}">${deal.reason}</span>${storeGapTag}`;
 
     // Store cell — which supermarket has the deal price (own column).
     const storeChip = deal.store === 'woolworths'
@@ -1218,23 +1239,26 @@ function initWatchlistFilter() {
 function initDealTune() {
   const dropS = document.getElementById('hdDropSlider');
   const diffS = document.getElementById('hdDiffSlider');
+  const atl   = document.getElementById('hdAtlChk');
   const reset = document.getElementById('hdTuneReset');
   if (!dropS || !diffS) return;
   const sync = (t) => {
     dropS.value = t.drop;
     diffS.value = t.diff;
-    document.getElementById('hdDropVal').textContent = `${t.drop}%+`;
-    document.getElementById('hdDiffVal').textContent = `${t.diff}%+`;
+    if (atl) atl.checked = t.atl !== false;
+    document.getElementById('hdDropVal').textContent = `${t.drop}%`;
+    document.getElementById('hdDiffVal').textContent = `${t.diff}%`;
   };
   sync(loadDealTune());
   const onInput = () => {
-    const t = { drop: Number(dropS.value), diff: Number(diffS.value) };
+    const t = { drop: Number(dropS.value), diff: Number(diffS.value), atl: atl ? atl.checked : true };
     localStorage.setItem('pw_hd_tune_v1', JSON.stringify(t));
     sync(t);
     renderDeals();
   };
   dropS.addEventListener('input', onInput);
   diffS.addEventListener('input', onInput);
+  atl?.addEventListener('change', onInput);
   reset?.addEventListener('click', () => {
     localStorage.removeItem('pw_hd_tune_v1');
     sync(loadDealTune());

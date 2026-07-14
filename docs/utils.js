@@ -31,13 +31,13 @@ function clientPer100(result) {
 
   // Strategy 1: extract size from product name
   const kgM = name.match(/(\d+(?:\.\d+)?)\s*kg\b/i);
-  if (kgM) { const g = +kgM[1] * 1000; return { value: +(price * 100 / g).toFixed(2), label: '100g' }; }
+  if (kgM) { const g = +kgM[1] * 1000; return { value: +(price * 100 / g).toFixed(4), label: '100g' }; }
   const gM = name.match(/(\d+(?:\.\d+)?)\s*g\b/i);
-  if (gM && +gM[1] > 0) return { value: +(price * 100 / +gM[1]).toFixed(2), label: '100g' };
+  if (gM && +gM[1] > 0) return { value: +(price * 100 / +gM[1]).toFixed(4), label: '100g' };
   const lM = name.match(/(\d+(?:\.\d+)?)\s*l(?:it(?:re|er)s?)?\b(?!\w)/i);
-  if (lM) { const ml = +lM[1] * 1000; return { value: +(price * 100 / ml).toFixed(2), label: '100ml' }; }
+  if (lM) { const ml = +lM[1] * 1000; return { value: +(price * 100 / ml).toFixed(4), label: '100ml' }; }
   const mlM = name.match(/(\d+(?:\.\d+)?)\s*ml\b/i);
-  if (mlM && +mlM[1] > 0) return { value: +(price * 100 / +mlM[1]).toFixed(2), label: '100ml' };
+  if (mlM && +mlM[1] > 0) return { value: +(price * 100 / +mlM[1]).toFixed(4), label: '100ml' };
 
   // Strategy 2: use store-provided cup price + unit (for loose/weight goods)
   const unit = (result.unit || '').toLowerCase().trim();
@@ -49,7 +49,7 @@ function clientPer100(result) {
       const uom = uM[2];
       if (uom === 'kg') qty *= 1000;
       else if (uom === 'l') qty *= 1000;
-      if (qty > 0) return { value: +(up * 100 / qty).toFixed(2), label: (uom === 'ml' || uom === 'l') ? '100ml' : '100g' };
+      if (qty > 0) return { value: +(up * 100 / qty).toFixed(4), label: (uom === 'ml' || uom === 'l') ? '100ml' : '100g' };
     }
   }
   return { value: null, label: '100g' };
@@ -186,7 +186,19 @@ function getDealQuality(item, exclusions) {
   const saveAmount = Math.max(0, typical - currentBest);
   const isAllTimeLow = currentBest <= lo + 0.01;
 
-  const qualifies = spread >= DEAL_MIN_SPREAD && (dropPct >= DEAL_MIN_DROP || isAllTimeLow);
+  // Recency guard: "below the long-run median" is not a deal if the item was
+  // CHEAPER within the last fortnight — the price went up, not down. Items
+  // with no dated recent entries keep the old behaviour.
+  const cutoff = new Date(Date.now() - 14 * 86400000).toISOString().slice(0, 10);
+  const recent = [
+    ...(item.price_history || []),
+    ...(item.ww_price_history || []),
+    ...(item.coles_price_history || []),
+  ].filter(h => h.date >= cutoff && Number(h.price) > 0 && !excludedSet.has(Number(h.price).toFixed(2)))
+   .map(h => Number(h.price));
+  const notAboveRecent = !recent.length || currentBest <= Math.min(...recent) + 0.01;
+
+  const qualifies = spread >= DEAL_MIN_SPREAD && notAboveRecent && (dropPct >= DEAL_MIN_DROP || isAllTimeLow);
 
   // Cross-store gap (secondary "savings": buying at the cheaper store vs the other)
   const otherPrice = store === 'woolworths' ? coP : wwP;
@@ -200,7 +212,7 @@ function getDealQuality(item, exclusions) {
   return {
     qualifies, store, price: currentBest, otherPrice,
     typical, lo, hi, spread, dropPct, saveAmount, isAllTimeLow,
-    savingPct, reason,
+    notAboveRecent, savingPct, reason,
   };
 }
 
@@ -345,6 +357,7 @@ function getHotDealItems(items, opts) {
   const priorities  = opts.priorities  || {};
   const minDrop = opts.minDropPct      != null ? opts.minDropPct / 100      : DEAL_MIN_DROP;
   const minDiff = opts.minStoreDiffPct != null ? opts.minStoreDiffPct / 100 : 0;
+  const inclATL = opts.includeATL !== false; // default on
   return (items || [])
     .filter(item =>
       !item.archived &&
@@ -354,19 +367,21 @@ function getHotDealItems(items, opts) {
     .filter(({ deal }) =>
       deal.typical != null &&
       deal.spread >= DEAL_MIN_SPREAD &&
-      // At the default threshold an all-time low always qualifies (canonical
-      // rule); once the user RAISES the drop slider, ATL items must meet it too.
-      (deal.dropPct >= minDrop || (deal.isAllTimeLow && minDrop <= DEAL_MIN_DROP)) &&
-      deal.savingPct >= minDiff);
+      deal.notAboveRecent &&
+      // An all-time low is always a deal (checkbox), regardless of where the
+      // sliders sit; otherwise BOTH slider thresholds must be met (AND).
+      ((inclATL && deal.isAllTimeLow) ||
+       (deal.dropPct >= minDrop && deal.savingPct >= minDiff)));
 }
 
 // Shared slider state for the two deal thresholds (Hot Deals page writes it,
 // both pages read it so their numbers agree).
-const DEAL_TUNE_DEFAULTS = { drop: Math.round(DEAL_MIN_DROP * 100), diff: 0 };
+const DEAL_TUNE_DEFAULTS = { drop: Math.round(DEAL_MIN_DROP * 100), diff: 0, atl: true };
 function loadDealTune() {
   try {
     const t = JSON.parse(localStorage.getItem('pw_hd_tune_v1') || 'null');
-    if (t && typeof t.drop === 'number' && typeof t.diff === 'number') return t;
+    if (t && typeof t.drop === 'number' && typeof t.diff === 'number')
+      return { atl: t.atl !== false, drop: t.drop, diff: t.diff };
   } catch {}
   return { ...DEAL_TUNE_DEFAULTS };
 }
