@@ -224,6 +224,7 @@
       -webkit-tap-highlight-color: transparent;
     }
     .row-btn:hover { background: var(--bg); color: var(--text); }
+    .row-btn:disabled { opacity: .35; cursor: default; pointer-events: none; }
     .row-btn.rm:hover { color: #DC2626; border-color: #FCA5A5; background: rgba(220,38,38,.08); }
     /* Buttons/steppers, not text: the default td ellipsis clipped them to a dead "…" */
     .act-cell, .qty-cell { text-align: right; overflow: visible; text-overflow: clip; }
@@ -461,7 +462,7 @@
   <div class="empty">Loading…</div>
 </main>
 
-<script src="utils.js?v=61"></script>
+<script src="utils.js?v=62"></script>
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '—';
 
@@ -521,13 +522,6 @@ function getUnits(itemName, unitOv, analysis) {
   return qty != null ? Math.round(qty) : 1;
 }
 
-function fmtUnit(price, unit) {
-  if (price == null) return '';
-  if (!unit) return '';
-  const m = unit.match(/^\d*\.?\d*\s*(?:g|kg|ml|l|ea|pk|pack|each)\b/i);
-  return m ? `/${m[0].trim()}` : '';
-}
-
 // ── Dynamic sticky header offset ─────────────────────────────────────────────
 // Calculates actual nav height and applies it to thead th sticky offset.
 // This prevents floating prices if header height ever changes.
@@ -582,7 +576,12 @@ async function boot() {
     const nameSet = new Set(handoff.items);
     displayItems = (data.items || []).filter(i => nameSet.has(i.list_item));
   } else {
-    displayItems = activeItems; // fallback: show everything active
+    // Fallback (arriving with no handoff): show everything active EXCEPT per-kg
+    // group members — the main table collapses those into one row per group, so
+    // dumping all ~50 raw variants here inflated the basket with duplicate
+    // chicken/mince/salmon products (most single-store, hence also swap-less).
+    const perkgMembers = perKgMemberNames();
+    displayItems = activeItems.filter(i => !perkgMembers.has(i.list_item));
   }
 
   if (!displayItems.length) {
@@ -595,7 +594,9 @@ async function boot() {
   // View model: ONE store by default — the realistic plan is buying the whole
   // basket at whichever store totals cheaper. "Split shop" opts into the
   // two-table cheapest-at-each-store view. Persisted across visits.
-  let slSplit = localStorage.getItem('pw_sl_split') === '1';
+  // Always opens in one-store — the realistic default plan. Split shop is a
+  // per-visit opt-in (deliberately NOT persisted; it kept surprising on return).
+  let slSplit = false;
   let chosenStore = null; // single mode: store to buy at; null = auto (cheaper total)
 
   // Per-row "buy it at the other store instead" overrides (split mode only,
@@ -741,11 +742,16 @@ async function boot() {
       const units = getUnits(i.list_item, unitOv, analysis);
       const lineTotal = (sd?.price ?? 0) * units;
       const cat = getCategory(i, catOv);
-      const unitStr = fmtUnit(sd?.unit_price, sd?.unit);
       const img = sd?.image_url;
-      const showSwap = slSplit && own?.price != null && other?.price != null;
+      // Split mode: ⇄ swaps the row to the other store. When the other store
+      // doesn't sell it the button stays but disabled — a consistent column
+      // beats buttons that silently vanish on some rows.
+      const canSwap = slSplit && own?.price != null && other?.price != null;
+      const swapDisabled = slSplit && own?.price != null && other?.price == null;
       const swapTo = store === 'ww' ? 'coles' : 'ww';
-      const swapTitle = store === 'ww' ? 'Buy at Coles instead' : 'Buy at Woolworths instead';
+      const swapTitle = canSwap
+        ? (store === 'ww' ? 'Buy at Coles instead' : 'Buy at Woolworths instead')
+        : `Only sold at ${store === 'ww' ? 'Woolworths' : 'Coles'}`;
       const onlyChip = fellBack
         ? ` <span class="only-chip ${store === 'ww' ? 'coles' : 'ww'}" title="Not sold at ${store === 'ww' ? 'Woolworths' : 'Coles'} — this is the ${store === 'ww' ? 'Coles' : 'Woolworths'} price">${store === 'ww' ? 'C' : 'W'} only</span>`
         : '';
@@ -758,10 +764,10 @@ async function boot() {
       return `<tr>
         <td class="item-name-cell"><div class="name-wrap">${img ? `<img class="sl-thumb" loading="lazy" src="${escAttr(img)}" alt="" onerror="this.style.display='none'">` : ''}<span title="${name}">${esc(i.list_item)}</span></div></td>
         <td class="cat-cell" style="font-size:12px;color:#64748B;overflow:hidden;text-overflow:ellipsis">${esc(cat)}</td>
-        <td class="r price-cell"><span class="price-val">${fmt(sd?.price)}</span>${unitStr ? ` <span class="unit-val">${unitStr}</span>` : ''}${onlyChip}${altPrice}</td>
+        <td class="r price-cell"><span class="price-val">${fmt(sd?.price)}</span>${onlyChip}${altPrice}</td>
         <td class="r qty-cell"><div class="qty-step"><button type="button" class="qs-btn" data-item="${name}" data-d="-1" aria-label="Decrease quantity">−</button><span class="qs-val">${units}</span><button type="button" class="qs-btn" data-item="${name}" data-d="1" aria-label="Increase quantity">+</button></div></td>
         <td class="r total-cell"><span class="total-val">${fmt(lineTotal)}</span></td>
-        <td class="act-cell"><div class="act-wrap">${showSwap ? `<button type="button" class="row-btn swap" data-item="${name}" data-to="${swapTo}" title="${swapTitle}">⇄</button>` : ''}<button type="button" class="row-btn rm" data-item="${name}" title="Remove from basket">✕</button></div></td>
+        <td class="act-cell"><div class="act-wrap">${canSwap || swapDisabled ? `<button type="button" class="row-btn swap" data-item="${name}" data-to="${swapTo}" title="${swapTitle}"${swapDisabled ? ' disabled' : ''}>⇄</button>` : ''}<button type="button" class="row-btn rm" data-item="${name}" title="Remove from basket">✕</button></div></td>
       </tr>`;
     }).join('');
     return `<div class="sl-table-wrap"><table>
@@ -821,7 +827,6 @@ async function boot() {
       const want = b.dataset.splitmode === '1';
       if (want === slSplit) return;
       slSplit = want;
-      localStorage.setItem('pw_sl_split', want ? '1' : '0');
       storeOverride.clear(); // a mode switch starts from the clean default plan
       renderContent();
     }));
@@ -983,7 +988,13 @@ async function boot() {
     const infoIco = tip => `<span class="info-ico" tabindex="0" data-tip="${tip.replace(/"/g, '&quot;')}">?</span>`;
     // "Max": the largest POSSIBLE savings. They compare the two stores, so
     // they deliberately do NOT move when you pick the other store to buy at.
-    const savingInfoHtml = (isEqual
+    // Split mode: the combined trip cost under the CURRENT plan (equal-price
+    // assignment + row swaps). Single mode doesn't need it — the active card's
+    // number already IS the trip total.
+    const splitTotalHtml = slSplit
+      ? `<div class="saving-line"><span class="saving-icon">🧾</span><div class="saving-text"><div class="saving-label">Split trip total${infoIco('Woolworths + Coles subtotals under the current plan — what the whole split trip costs.')}</div><span class="saving-amount">${fmt(wwSub + coSub)}</span></div></div>`
+      : '';
+    const savingInfoHtml = splitTotalHtml + (isEqual
       ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
       : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Max basket saving${infoIco('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store. Fixed — it does not change with the store you pick.')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`
         + (splitSaving > basketSaving + 0.005

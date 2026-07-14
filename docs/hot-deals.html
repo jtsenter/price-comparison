@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=92" />
+  <link rel="stylesheet" href="style.css?v=93" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -72,7 +72,10 @@
     .hd-tune-and {
       font-size: 10px; font-weight: 800; letter-spacing: .06em; color: var(--text-soft);
       border: 1px solid var(--border-strong); border-radius: 999px; padding: 2px 8px;
+      background: var(--card); cursor: pointer; font-family: inherit;
     }
+    .hd-tune-and:hover { color: var(--text); border-color: var(--text-soft); }
+    .hd-tune-and.or-on { color: var(--card); background: var(--text); border-color: var(--text); }
     .hd-tune-row { display: flex; align-items: center; gap: 10px; }
     .hd-tune-row label { font-size: 12px; font-weight: 600; color: var(--text-mid); white-space: nowrap; }
     .hd-tune-row input[type="range"] { width: 140px; accent-color: var(--ww); cursor: pointer; }
@@ -81,7 +84,7 @@
     .hd-tune-atl input { accent-color: var(--ww); cursor: pointer; }
     @media (max-width: 700px) {
       .hd-tune { gap: 10px; }
-      .hd-tune-title, .hd-tune-and { display: none; }
+      .hd-tune-title { display: none; } /* the AND/OR chip stays — it's a control now */
       .hd-tune-row { width: 100%; }
       .hd-tune-row label { flex: 1; }
       .hd-tune-row input[type="range"] { width: 120px; }
@@ -344,7 +347,7 @@
       <input type="range" id="hdDropSlider" min="0" max="50" step="1">
       <strong id="hdDropVal">4%</strong>
     </div>
-    <span class="hd-tune-and">AND</span>
+    <button type="button" class="hd-tune-and" id="hdModeBtn" title="How the two conditions combine — click to switch">AND</button>
     <div class="hd-tune-row" title="How much cheaper the best store must be vs the other store">
       <label for="hdDiffSlider">⇄ cheaper than the other store by ≥</label>
       <input type="range" id="hdDiffSlider" min="0" max="50" step="1">
@@ -426,7 +429,7 @@
 
 <!-- Shared utilities — must load before inline script -->
 <script src="name_map.js?v=13"></script>
-<script src="utils.js?v=61"></script>
+<script src="utils.js?v=62"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -612,6 +615,7 @@ let _watchlistOnly = false;
 let _watchlistHD = new Set();
 let _data = null;
 let _archivedSet = new Set();
+let _visibleDealNames = []; // deals currently rendered — handed off to the basket
 let _progressDismissed = false;
 let _progressLastDone = null;
 let _progressLastChangeTime = null;
@@ -920,12 +924,16 @@ function renderDeals() {
     minDropPct: tune.drop,
     minStoreDiffPct: tune.diff,
     includeATL: tune.atl,
+    mode: tune.mode,
   });
 
   buildCategoryTabs(allDeals.map(d => d.item));
 
   const filtered = filterDeals(allDeals, exclusions);
   const sorted = sortDeals(filtered.map(d => d.item), exclusions);
+  // Remember what's on screen — the basket header icon hands THESE off, so
+  // "go to basket from Hot Deals" means "basket of the deals I'm looking at".
+  _visibleDealNames = sorted.map(i => i.list_item);
 
   // Hero stats — counts describe what's SHOWN, so they follow the store /
   // watchlist / category filters.
@@ -1240,18 +1248,25 @@ function initDealTune() {
   const dropS = document.getElementById('hdDropSlider');
   const diffS = document.getElementById('hdDiffSlider');
   const atl   = document.getElementById('hdAtlChk');
+  const modeB = document.getElementById('hdModeBtn');
   const reset = document.getElementById('hdTuneReset');
   if (!dropS || !diffS) return;
+  let mode = loadDealTune().mode; // 'and' | 'or' — toggled by the chip between the sliders
   const sync = (t) => {
     dropS.value = t.drop;
     diffS.value = t.diff;
     if (atl) atl.checked = t.atl !== false;
+    mode = t.mode === 'or' ? 'or' : 'and';
+    if (modeB) {
+      modeB.textContent = mode.toUpperCase();
+      modeB.classList.toggle('or-on', mode === 'or');
+    }
     document.getElementById('hdDropVal').textContent = `${t.drop}%`;
     document.getElementById('hdDiffVal').textContent = `${t.diff}%`;
   };
   sync(loadDealTune());
   const onInput = () => {
-    const t = { drop: Number(dropS.value), diff: Number(diffS.value), atl: atl ? atl.checked : true };
+    const t = { drop: Number(dropS.value), diff: Number(diffS.value), atl: atl ? atl.checked : true, mode };
     localStorage.setItem('pw_hd_tune_v1', JSON.stringify(t));
     sync(t);
     renderDeals();
@@ -1259,6 +1274,7 @@ function initDealTune() {
   dropS.addEventListener('input', onInput);
   diffS.addEventListener('input', onInput);
   atl?.addEventListener('change', onInput);
+  modeB?.addEventListener('click', () => { mode = mode === 'or' ? 'and' : 'or'; onInput(); });
   reset?.addEventListener('click', () => {
     localStorage.removeItem('pw_hd_tune_v1');
     sync(loadDealTune());
@@ -1458,6 +1474,21 @@ function initRefreshBtn() {
   initStoreFilter();
   initWatchlistFilter();
   initDealTune();
+  // Basket icon → basket OF THE VISIBLE DEALS (same handoff app.js writes from
+  // the main page; without it the basket fell back to the whole item list).
+  // Locked basket keeps its append semantics.
+  document.getElementById('basketNavLink')?.addEventListener('click', () => {
+    if (!_visibleDealNames.length) return; // empty view → leave the basket as-is
+    let names = _visibleDealNames;
+    if (localStorage.getItem('pw_sl_locked') === '1') {
+      let existing = [];
+      try { existing = JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}').items || []; } catch {}
+      names = [...existing, ..._visibleDealNames.filter(n => !existing.includes(n))];
+    }
+    let quantities = {};
+    try { quantities = JSON.parse(localStorage.getItem('pw_units_v1') || '{}'); } catch {}
+    localStorage.setItem('pw_sl_handoff', JSON.stringify({ items: names, note: 'hot deals', quantities }));
+  });
   initTooltip();
   initRefreshBtn();
   initHdColChooser();

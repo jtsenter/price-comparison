@@ -555,123 +555,8 @@ let _searchQuery = '';
 let _perkgSet = new Set();   // items compared by $/kg (synced via user_settings.json)
 let _perkgFilter = 'all';  // per-kg group visibility: 'all' | 'only' | 'hidden' (⚙ /kg button cycles)
 
-// Per-kg categories. Each is a comparable product type; the two near-identical
-// salmon-fillet and basa entries are merged so each category holds its real
-// equivalents. Membership can be fine-tuned in the edit dialog (DEFAULT_VARIANT_GROUPS
-// is the seed; user overrides live in localStorage — see loadVariantGroups()).
-const DEFAULT_VARIANT_GROUPS = [
-  { key: 'chicken_breast', label: 'Chicken Breast', items: [
-    'Woolworths RSPCA Approved Chicken Breast Fillet',
-    'Woolworths RSPCA Approved Chicken Breast Fillets Skinless Small 450g - 715g',
-    'Woolworths RSPCA Approved Chicken Single Breast Fillet 300g',
-    'Macro Chicken Breast Fillets Free Range 700g - 1.4kg',
-    'Macro Free Range Australian Chicken Breast 500g - 1kg',
-    'Macro RSPCA Approved Chicken Breast Free Range Single 300g',
-    'Macro Organic Chicken Breast Fillet 500g - 750g',
-    'The Bare Bird Free Range Chicken Breast Fillets 600g',
-    'Al Sadiq Halal Chicken Breast Fillets Skinless Bulk Pack 1.1kg - 1.65kg',
-    'Coles RSPCA Approved Chicken Breast Fillets Large Pack 1.4kg',
-    'Coles RSPCA Approved Chicken Breast Fillets Small Pack 600g',
-    'Coles RSPCA Approved Free Range Chicken Breast Large Pack 1.25kg',
-    'Coles RSPCA Approved Free Range Chicken Breast Fillet Small Pack 600g',
-    'Lilydale Free Range Chicken Breast Fillets Bulk 1kg',
-  ]},
-  { key: 'chicken_drumsticks', label: 'Chicken Drumsticks', items: [
-    'Woolworths RSPCA Approved Chicken Drumsticks',
-    'Woolworths RSPCA Approved Chicken Drumsticks Bulk 1.1kg - 1.9kg',
-    'Macro Free Range Chicken Drumsticks 750g - 1.1kg',
-    'Coles RSPCA Approved Chicken Drumsticks 2kg',
-    'Coles RSPCA Approved Free Range Chicken Drumsticks 1.4kg',
-    'Lilydale Free Range Chicken Drumsticks Bulk 1kg',
-  ]},
-  { key: 'chicken_thigh', label: 'Chicken Thigh', items: [
-    'Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In',
-    'Woolworths RSPCA Approved Chicken Thigh Fillets Skinless Tray 1kg - 1.9kg',
-    'Woolworths RSPCA Approved Chicken Thigh Fillets Skinless Small 550g - 715g',
-    'Woolworths RSPCA Approved Chicken Thigh Cutlets Skin On 400g - 600g',
-    'Woolworths RSPCA Approved Chicken Thigh Fillet per 190g',
-    'Macro Free Range Chicken Thigh Fillet 800g - 1.1kg',
-    'Macro Free Range Australian Chicken Thigh Fillet 450g - 650g',
-    'Macro Organic Chicken Thigh Fillet 450g - 550g',
-    'Al Sadiq Halal Chicken Thigh Fillets Bulk Pack 1.5kg - 1.7kg',
-    'Coles RSPCA Approved Chicken Thigh Fillets Large Pack',
-    'Coles RSPCA Chicken Thigh Fillets Small Pack',
-    'Coles RSPCA Approved Chicken Thigh Cutlets',
-    'Coles RSPCA Approved Free Range Chicken Thigh Large Pack',
-    'Coles RSPCA Approved Free Range Chicken Thigh Cutlets 1.05kg',
-    'Lilydale Free Range Chicken Thigh Fillets Bulk',
-    'Lilydale Free Range Chicken Thigh Fillets Small Pack 545g',
-    'Inglewood Farms Chicken Thigh Fillets Skin Off',
-    'El-Amins Halal Chicken Thigh Fillets Large Pack',
-    'The Bare Bird Chicken Thigh Fillets',
-    'El Amins Halal Chicken Thigh Cutlets',
-  ]},
-  { key: 'salmon', label: 'Salmon', items: [
-    'Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets',
-    'Woolworths Salmon Portions Skin On',
-    'Woolworths Salmon Portions Skin Off 4 pack',
-    'Woolworths Diced Tasmanian Salmon Skin Off 300g',
-    'Tassal Atlantic Salmon Skin On 300g',
-    'Tassal Atlantic Salmon Skin Off 300g',
-    'Coles Tasmanian Salmon Portions Skin On 4 Pack 460g',
-    'Coles Tasmanian Salmon Portions Skin Off 460g',
-    'Tassal Salmon Portions Skin On 300g',
-  ]},
-  { key: 'basa_fillets', label: 'Basa Fillets', items: [
-    'Woolworths Basa Fillets Boneless With Skin Off',
-    'Woolworths Frozen Basa Fillets 1kg',
-    'Just Caught Skinless Basa Fillets Frozen 1kg',
-    'I&J Frozen Basa Fillets 750g',
-    'Coles Frozen Basa Fillet',
-  ]},
-  { key: 'beef_mince', label: 'Beef Mince', items: [
-    'Woolworths Lean Beef Mince',
-    'Woolworths Heart Smart Extra Lean Beef Mince 500g',
-    'Woolworths Lean Beef Mince 500g',
-    'Macro Grass Fed Lean Beef Mince 500g',
-    'Macro Organic Extra Lean Beef Mince 500g',
-    'Coles No Added Hormone Beef 5 Star Extra Lean Mince 500g',
-    'Coles No Added Hormone Beef 4 Star Lean Mince 500g',
-    'Coles No Added Hormone Beef 4 Star Lean Mince 800g',
-    "Cleaver's Organic Grass-fed Extra Lean Beef Mince 500g",
-    "Cleaver's Organic Grass-fed Premium Beef Mince 500g",
-    "El-Amin's Beef Lean Mince 500g",
-    'Macro Organic Lean Beef Mince 500g',
-    'Coles Graze Grass Fed No Added Hormone Beef Mince 500g',
-  ]},
-  { key: 'lamb_mince', label: 'Lamb Mince', items: [
-    'Woolworths Lamb Mince',
-    'Macro Grass Fed Australian Lamb Mince 450g',
-    'Macro Organic Lamb Mince 500g',
-    "Cleaver's Grass Fed Lamb Mince 500g",
-    'Fettayleh Foods Lamb Mince 500g',
-    'Coles 3 Star Lamb Mince 500g',
-    'Coles Graze Lamb Mince 500g',
-    "El-Amin's Halal Lamb Mince 500g",
-  ]},
-  // Porterhouse: pack sizes vary wildly (180g quick-cook → 1kg roast), so only
-  // $/kg is comparable — a textbook per-kg group. WW members pinned ww-only in
-  // url_overrides.json; the "& Butter" item bridges to a real Coles porterhouse
-  // (2-pack 450g) via its coles pin. Coles-specific variants get added as their
-  // URLs are captured (Coles rate-bans the scraper's headless session, so they
-  // trickle in). Members with no live price at a store simply don't show there.
-  { key: 'beef_porterhouse', label: 'Beef Porterhouse Steak', items: [
-    'Woolworths Beef Porterhouse Steak & Butter',
-    'Woolworths Beef Porterhouse Steak',
-    'Woolworths Beef Porterhouse Steak Medium',
-    'Woolworths Beef Porterhouse Steak Thick Cut',
-    'Macro Grass Fed Beef Porterhouse Steaks 2 Pack',
-    // Coles side (coles-only pins). The VSP RR 2-pack (id 4997140) is NOT listed
-    // here — it's already the "& Butter" item's coles match, so re-adding it would
-    // show the same product twice in the Coles column.
-    'Coles No Added Hormone Beef Quick Cook Porterhouse Steak 180g',
-    'Coles No Added Hormone Beef Porterhouse Steak With Thyme & Pepper Butter 500g',
-    'Coles Finest Carbon Neutral Beef Porterhouse Steak 370g',
-    'Drovers Choice Beef Porterhouse Steaks 200g',
-    'Drovers Choice No Added Hormone Beef Porterhouse Steak 1kg',
-    "Cleaver's Organic Grass-Fed Beef Porterhouse Steak 290g",
-  ]},
-];
+// DEFAULT_VARIANT_GROUPS (the per-kg category seed) lives in utils.js so the
+// basket page can exclude group members without loading all of app.js.
 
 // Effective categories = seed defaults merged with the user's saved label/membership
 // overrides (pw_perkg_cats_v1). Returns a fresh array each call.
@@ -2993,7 +2878,7 @@ function renderTableHead() {
   const thead = $('tableHead');
   if (!thead) return;
   const visibleCols = getVisibleCols();
-  thead.innerHTML = `<tr><th class="check-cell"><input type="checkbox" id="checkAll" title="Select all visible"></th>${visibleCols.map(colHeadHtml).join('')}<th class="actions-th"></th></tr>`;
+  thead.innerHTML = `<tr><th class="check-cell"><input type="checkbox" id="checkAll" title="Select all visible"></th>${visibleCols.map(colHeadHtml).join('')}<th class="actions-th">Actions</th></tr>`;
 
   // Apply stored column widths (fall back to defaults)
   thead.querySelectorAll('th[data-col]').forEach(th => {
@@ -4913,6 +4798,8 @@ function _renderPageInner(data) {
     priorities: _uiPriorities,
     minDropPct: hotTune.drop,
     minStoreDiffPct: hotTune.diff,
+    includeATL: hotTune.atl,
+    mode: hotTune.mode,
   }).length;
   $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>${hotCount > 0 ? `<a href="hot-deals.html" class="hot-deals-link">🔥 ${hotCount} deal${hotCount !== 1 ? 's' : ''}</a>` : ''}`;
   $('banner').style.display = 'block';
@@ -5692,11 +5579,23 @@ function initColumnChooser() {
       return (gi > 0 ? '<div class="col-chooser-sep"></div>' : '') + items;
     }).join('') +
     `<div class="col-chooser-sep"></div>
+     <button class="col-chooser-reset-btn col-chooser-save-btn" id="saveColsBtnInner">
+       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+       Save Columns
+     </button>
      <button class="col-chooser-reset-btn" id="resetColsBtnInner">
        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg>
        Reset Columns
      </button>`;
-    // Wire up the reset button each time dropdown is rendered
+    // Wire up the footer buttons each time dropdown is rendered. Save is a
+    // confidence affordance: choices already persist on every toggle, so this
+    // just confirms + closes (and is where cross-device sync would hook in).
+    dropdown.querySelector('#saveColsBtnInner')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      saveColVisibility();
+      dropdown.style.display = 'none';
+      showToast('Column layout saved');
+    });
     dropdown.querySelector('#resetColsBtnInner')?.addEventListener('click', (e) => {
       e.stopPropagation();
       dropdown.style.display = 'none';

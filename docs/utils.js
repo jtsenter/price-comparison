@@ -218,8 +218,10 @@ function getDealQuality(item, exclusions) {
 
 // Pass the pw_exclusions_v1 map so the 🔥 filter/badges agree with the
 // Hot Deals page (getHotDealItems), which always applies exclusions.
+// Tune-aware: the badges follow the user's Hot Deals sliders/mode, so the set
+// of 🔥 rows on the main page IS the set of rows on the Hot Deals page.
 function isHotDeal(item, exclusions) {
-  return getDealQuality(item, exclusions).qualifies;
+  return dealPassesTune(getDealQuality(item, exclusions), loadDealTune());
 }
 
 // ── GitHub Contents-API JSON read/write ─────────────────────────────────────
@@ -264,6 +266,144 @@ async function githubPutJson(s, repoPath, data, message) {
     const msg = await putRes.text().catch(() => String(putRes.status));
     throw new Error(`GitHub PUT failed (${putRes.status}): ${msg}`);
   }
+}
+
+// ── Per-kg variant groups (seed data) ───────────────────────────────────────
+// Per-kg categories. Each is a comparable product type; the two near-identical
+// salmon-fillet and basa entries are merged so each category holds its real
+// equivalents. Membership can be fine-tuned in the edit dialog (DEFAULT_VARIANT_GROUPS
+// is the seed; user overrides live in localStorage — see loadVariantGroups()).
+const DEFAULT_VARIANT_GROUPS = [
+  { key: 'chicken_breast', label: 'Chicken Breast', items: [
+    'Woolworths RSPCA Approved Chicken Breast Fillet',
+    'Woolworths RSPCA Approved Chicken Breast Fillets Skinless Small 450g - 715g',
+    'Woolworths RSPCA Approved Chicken Single Breast Fillet 300g',
+    'Macro Chicken Breast Fillets Free Range 700g - 1.4kg',
+    'Macro Free Range Australian Chicken Breast 500g - 1kg',
+    'Macro RSPCA Approved Chicken Breast Free Range Single 300g',
+    'Macro Organic Chicken Breast Fillet 500g - 750g',
+    'The Bare Bird Free Range Chicken Breast Fillets 600g',
+    'Al Sadiq Halal Chicken Breast Fillets Skinless Bulk Pack 1.1kg - 1.65kg',
+    'Coles RSPCA Approved Chicken Breast Fillets Large Pack 1.4kg',
+    'Coles RSPCA Approved Chicken Breast Fillets Small Pack 600g',
+    'Coles RSPCA Approved Free Range Chicken Breast Large Pack 1.25kg',
+    'Coles RSPCA Approved Free Range Chicken Breast Fillet Small Pack 600g',
+    'Lilydale Free Range Chicken Breast Fillets Bulk 1kg',
+  ]},
+  { key: 'chicken_drumsticks', label: 'Chicken Drumsticks', items: [
+    'Woolworths RSPCA Approved Chicken Drumsticks',
+    'Woolworths RSPCA Approved Chicken Drumsticks Bulk 1.1kg - 1.9kg',
+    'Macro Free Range Chicken Drumsticks 750g - 1.1kg',
+    'Coles RSPCA Approved Chicken Drumsticks 2kg',
+    'Coles RSPCA Approved Free Range Chicken Drumsticks 1.4kg',
+    'Lilydale Free Range Chicken Drumsticks Bulk 1kg',
+  ]},
+  { key: 'chicken_thigh', label: 'Chicken Thigh', items: [
+    'Woolworths RSPCA Approved Chicken Thigh Skinless Cutlets Bone-In',
+    'Woolworths RSPCA Approved Chicken Thigh Fillets Skinless Tray 1kg - 1.9kg',
+    'Woolworths RSPCA Approved Chicken Thigh Fillets Skinless Small 550g - 715g',
+    'Woolworths RSPCA Approved Chicken Thigh Cutlets Skin On 400g - 600g',
+    'Woolworths RSPCA Approved Chicken Thigh Fillet per 190g',
+    'Macro Free Range Chicken Thigh Fillet 800g - 1.1kg',
+    'Macro Free Range Australian Chicken Thigh Fillet 450g - 650g',
+    'Macro Organic Chicken Thigh Fillet 450g - 550g',
+    'Al Sadiq Halal Chicken Thigh Fillets Bulk Pack 1.5kg - 1.7kg',
+    'Coles RSPCA Approved Chicken Thigh Fillets Large Pack',
+    'Coles RSPCA Chicken Thigh Fillets Small Pack',
+    'Coles RSPCA Approved Chicken Thigh Cutlets',
+    'Coles RSPCA Approved Free Range Chicken Thigh Large Pack',
+    'Coles RSPCA Approved Free Range Chicken Thigh Cutlets 1.05kg',
+    'Lilydale Free Range Chicken Thigh Fillets Bulk',
+    'Lilydale Free Range Chicken Thigh Fillets Small Pack 545g',
+    'Inglewood Farms Chicken Thigh Fillets Skin Off',
+    'El-Amins Halal Chicken Thigh Fillets Large Pack',
+    'The Bare Bird Chicken Thigh Fillets',
+    'El Amins Halal Chicken Thigh Cutlets',
+  ]},
+  { key: 'salmon', label: 'Salmon', items: [
+    'Woolworths Fresh Tasmanian Atlantic Skin On Salmon Fillets',
+    'Woolworths Salmon Portions Skin On',
+    'Woolworths Salmon Portions Skin Off 4 pack',
+    'Woolworths Diced Tasmanian Salmon Skin Off 300g',
+    'Tassal Atlantic Salmon Skin On 300g',
+    'Tassal Atlantic Salmon Skin Off 300g',
+    'Coles Tasmanian Salmon Portions Skin On 4 Pack 460g',
+    'Coles Tasmanian Salmon Portions Skin Off 460g',
+    'Tassal Salmon Portions Skin On 300g',
+  ]},
+  { key: 'basa_fillets', label: 'Basa Fillets', items: [
+    'Woolworths Basa Fillets Boneless With Skin Off',
+    'Woolworths Frozen Basa Fillets 1kg',
+    'Just Caught Skinless Basa Fillets Frozen 1kg',
+    'I&J Frozen Basa Fillets 750g',
+    'Coles Frozen Basa Fillet',
+  ]},
+  { key: 'beef_mince', label: 'Beef Mince', items: [
+    'Woolworths Lean Beef Mince',
+    'Woolworths Heart Smart Extra Lean Beef Mince 500g',
+    'Woolworths Lean Beef Mince 500g',
+    'Macro Grass Fed Lean Beef Mince 500g',
+    'Macro Organic Extra Lean Beef Mince 500g',
+    'Coles No Added Hormone Beef 5 Star Extra Lean Mince 500g',
+    'Coles No Added Hormone Beef 4 Star Lean Mince 500g',
+    'Coles No Added Hormone Beef 4 Star Lean Mince 800g',
+    "Cleaver's Organic Grass-fed Extra Lean Beef Mince 500g",
+    "Cleaver's Organic Grass-fed Premium Beef Mince 500g",
+    "El-Amin's Beef Lean Mince 500g",
+    'Macro Organic Lean Beef Mince 500g',
+    'Coles Graze Grass Fed No Added Hormone Beef Mince 500g',
+  ]},
+  { key: 'lamb_mince', label: 'Lamb Mince', items: [
+    'Woolworths Lamb Mince',
+    'Macro Grass Fed Australian Lamb Mince 450g',
+    'Macro Organic Lamb Mince 500g',
+    "Cleaver's Grass Fed Lamb Mince 500g",
+    'Fettayleh Foods Lamb Mince 500g',
+    'Coles 3 Star Lamb Mince 500g',
+    'Coles Graze Lamb Mince 500g',
+    "El-Amin's Halal Lamb Mince 500g",
+  ]},
+  // Porterhouse: pack sizes vary wildly (180g quick-cook → 1kg roast), so only
+  // $/kg is comparable — a textbook per-kg group. WW members pinned ww-only in
+  // url_overrides.json; the "& Butter" item bridges to a real Coles porterhouse
+  // (2-pack 450g) via its coles pin. Coles-specific variants get added as their
+  // URLs are captured (Coles rate-bans the scraper's headless session, so they
+  // trickle in). Members with no live price at a store simply don't show there.
+  { key: 'beef_porterhouse', label: 'Beef Porterhouse Steak', items: [
+    'Woolworths Beef Porterhouse Steak & Butter',
+    'Woolworths Beef Porterhouse Steak',
+    'Woolworths Beef Porterhouse Steak Medium',
+    'Woolworths Beef Porterhouse Steak Thick Cut',
+    'Macro Grass Fed Beef Porterhouse Steaks 2 Pack',
+    // Coles side (coles-only pins). The VSP RR 2-pack (id 4997140) is NOT listed
+    // here — it's already the "& Butter" item's coles match, so re-adding it would
+    // show the same product twice in the Coles column.
+    'Coles No Added Hormone Beef Quick Cook Porterhouse Steak 180g',
+    'Coles No Added Hormone Beef Porterhouse Steak With Thyme & Pepper Butter 500g',
+    'Coles Finest Carbon Neutral Beef Porterhouse Steak 370g',
+    'Drovers Choice Beef Porterhouse Steaks 200g',
+    'Drovers Choice No Added Hormone Beef Porterhouse Steak 1kg',
+    "Cleaver's Organic Grass-Fed Beef Porterhouse Steak 290g",
+  ]},
+];
+
+// Every per-kg member name under the user's current overrides — used by the
+// basket page to keep group members out of the "whole list" fallback view
+// (the main table shows ONE row per group, so a raw dump of members would
+// inflate the basket). ponytail: legacy v1 overrides are treated as pure adds,
+// a close-enough mirror of app.js's migratePerKgOverride for a display filter.
+function perKgMemberNames() {
+  let ov = {};
+  try { ov = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}
+  const names = new Set();
+  for (const g of DEFAULT_VARIANT_GROUPS) {
+    const o = ov[g.key] || {};
+    const remove = new Set(o.v === 2 ? (o.remove || []) : []);
+    g.items.forEach(n => { if (!remove.has(n)) names.add(n); });
+    const added = o.v === 2 ? (o.add || []) : (Array.isArray(o.items) ? o.items : []);
+    added.forEach(n => names.add(n));
+  }
+  return names;
 }
 
 // ── Category normalisation ──────────────────────────────────────────────────
@@ -361,33 +501,51 @@ function getHotDealItems(items, opts) {
   const exclusions  = opts.exclusions  || {};
   const archivedSet = opts.archivedSet || new Set();
   const priorities  = opts.priorities  || {};
-  const minDrop = opts.minDropPct      != null ? opts.minDropPct / 100      : DEAL_MIN_DROP;
-  const minDiff = opts.minStoreDiffPct != null ? opts.minStoreDiffPct / 100 : 0;
-  const inclATL = opts.includeATL !== false; // default on
+  const tune = {
+    drop: opts.minDropPct      != null ? opts.minDropPct      : DEAL_TUNE_DEFAULTS.drop,
+    diff: opts.minStoreDiffPct != null ? opts.minStoreDiffPct : DEAL_TUNE_DEFAULTS.diff,
+    atl:  opts.includeATL == null ? DEAL_TUNE_DEFAULTS.atl : !!opts.includeATL,
+    mode: opts.mode === 'or' ? 'or' : 'and',
+  };
   return (items || [])
     .filter(item =>
       !item.archived &&
       priorities[item.list_item] !== 'archive' &&
       !archivedSet.has(item.list_item))
     .map(item => ({ item, deal: getDealQuality(item, exclusions) }))
-    .filter(({ deal }) =>
-      deal.typical != null &&
-      deal.spread >= DEAL_MIN_SPREAD &&
-      deal.notAboveRecent &&
-      // An all-time low is always a deal (checkbox), regardless of where the
-      // sliders sit; otherwise BOTH slider thresholds must be met (AND).
-      ((inclATL && deal.isAllTimeLow) ||
-       (deal.dropPct >= minDrop && deal.savingPct >= minDiff)));
+    .filter(({ deal }) => dealPassesTune(deal, tune));
+}
+
+// The ONE tuned-deal predicate — shared by getHotDealItems (Hot Deals page +
+// main-page count link) and isHotDeal (🔥 badges), so a 🔥 row is always a row
+// the Hot Deals page would actually show at the current slider settings.
+// tune: { drop, diff (whole percents), atl, mode: 'and'|'or' }.
+function dealPassesTune(deal, tune) {
+  if (deal.typical == null || deal.spread < DEAL_MIN_SPREAD || !deal.notAboveRecent) return false;
+  const passDrop = deal.dropPct   >= tune.drop / 100;
+  const passDiff = deal.savingPct >= tune.diff / 100;
+  const passSliders = tune.mode === 'or' ? (passDrop || passDiff) : (passDrop && passDiff);
+  // All-time low is an OR escape hatch (checkbox), regardless of the sliders.
+  return (tune.atl && deal.isAllTimeLow) || passSliders;
 }
 
 // Shared slider state for the two deal thresholds (Hot Deals page writes it,
 // both pages read it so their numbers agree).
-const DEAL_TUNE_DEFAULTS = { drop: Math.round(DEAL_MIN_DROP * 100), diff: 0, atl: true };
+// Defaults are deliberately strict — "a fifth off its usual price AND a tenth
+// cheaper than the rival". At the old 4%/0%/ATL-on defaults the page showed 73
+// "deals" out of ~210 active items, which made the word meaningless. ATL is off
+// by default for the same reason: ~50 items sit at their all-time low (history
+// is young), so with it on the sliders barely change the list.
+const DEAL_TUNE_DEFAULTS = { drop: 20, diff: 10, atl: false, mode: 'and' };
 function loadDealTune() {
   try {
     const t = JSON.parse(localStorage.getItem('pw_hd_tune_v1') || 'null');
     if (t && typeof t.drop === 'number' && typeof t.diff === 'number')
-      return { atl: t.atl !== false, drop: t.drop, diff: t.diff };
+      return {
+        atl: typeof t.atl === 'boolean' ? t.atl : DEAL_TUNE_DEFAULTS.atl,
+        drop: t.drop, diff: t.diff,
+        mode: t.mode === 'or' ? 'or' : 'and',
+      };
   } catch {}
   return { ...DEAL_TUNE_DEFAULTS };
 }
