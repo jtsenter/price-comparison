@@ -310,7 +310,7 @@ function scheduleUserSettingsSync() {
 async function persistUserSettingsToRepo() {
   const s = loadSettings();
   if (!s.token) return;
-  const payload = { priorities: loadPriorities(), units: loadUnitOverrides(), perkg: [..._perkgSet] };
+  const payload = { priorities: loadPriorities(), units: loadUnitOverrides(), perkg: [..._perkgSet], exclusions: loadExclusions() };
   try {
     await githubPutJson(s, 'docs/data/user_settings.json', payload, 'chore: sync user settings (priorities + quantities)');
   } catch (e) {
@@ -332,6 +332,18 @@ async function initUserSettings() {
         if (Array.isArray(remote.perkg)) {
           _perkgSet = new Set([..._perkgSet, ...remote.perkg]);
           savePerkgLocal(_perkgSet);
+        }
+        // Price-history exclusions (incl. per-kg group-history point removals):
+        // union per item so a device never silently drops the other's exclusions.
+        // ponytail: union means un-excluding a point on one device won't propagate
+        // the removal to others — the safe direction (never loses a correction).
+        if (remote.exclusions && typeof remote.exclusions === 'object') {
+          const merged = loadExclusions();
+          for (const [item, arr] of Object.entries(remote.exclusions)) {
+            if (!Array.isArray(arr)) continue;
+            merged[item] = [...new Set([...(merged[item] || []), ...arr])];
+          }
+          saveExclusions(merged);
         }
       }
     }

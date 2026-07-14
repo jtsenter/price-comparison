@@ -1730,8 +1730,29 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             pass
         _PRIO_RANK = {"weekly": 0, "monthly": 1, "rare": 2}
 
+        # Intermittent items (priced at NEITHER store in the current latest.json)
+        # are typically out-of-stock variant-group members that occasionally
+        # reappear. Scrape them LAST among active items (rank 3, below "rare") so
+        # a rate-ban or crash never delays items that actually have prices. The
+        # set is derived fresh each run, so an item that comes back in stock
+        # automatically returns to its normal priority next run. Archived items
+        # still come after these (appended below).
+        _unpriced_last_run: set = set()
+        try:
+            with open(os.path.join(DATA_DIR, "latest.json")) as _lf:
+                for _it in json.load(_lf).get("items", []):
+                    _ww = (_it.get("woolworths") or {}).get("price")
+                    _co = (_it.get("coles") or {}).get("price")
+                    if _ww is None and _co is None:
+                        _unpriced_last_run.add(_it.get("list_item"))
+        except Exception:
+            pass
+
         def _priority_key(name):
-            rank = _PRIO_RANK.get(_user_priorities.get(name, "weekly"), 0)
+            if name in _unpriced_last_run:
+                rank = 3
+            else:
+                rank = _PRIO_RANK.get(_user_priorities.get(name, "weekly"), 0)
             trips = purchase_history.get(name, {}).get("trip_count", 0)
             return (rank, -trips)
         # Active items first (by priority); archived items appended LAST so they

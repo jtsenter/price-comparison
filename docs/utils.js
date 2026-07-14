@@ -248,6 +248,12 @@ async function githubPutJson(s, repoPath, data, message) {
   const doPut = async () => {
     const getRes = await fetch(apiPath, { headers });
     const meta = getRes.ok ? await getRes.json() : {};
+    // Skip the write when the repo already holds byte-identical content. GitHub's
+    // contents API commits even for an unchanged blob, so the UI's on-boot syncs
+    // (priorities/watchlist/archived) were spamming main with no-op commits on
+    // every page load. meta.content is base64 wrapped at 60 cols; strip newlines
+    // to compare against our unwrapped base64 of the same bytes.
+    if (meta.content && meta.content.replace(/\n/g, '') === content) return { ok: true };
     const body = { message, content };
     if (meta.sha) body.sha = meta.sha;
     return fetch(apiPath, { method: 'PUT', headers, body: JSON.stringify(body) });
