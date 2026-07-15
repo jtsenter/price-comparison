@@ -531,12 +531,12 @@ function dealPassesTune(deal, tune) {
 
 // Shared slider state for the two deal thresholds (Hot Deals page writes it,
 // both pages read it so their numbers agree).
-// Defaults are deliberately strict — "a fifth off its usual price AND a tenth
-// cheaper than the rival". At the old 4%/0%/ATL-on defaults the page showed 73
-// "deals" out of ~210 active items, which made the word meaningless. ATL is off
-// by default for the same reason: ~50 items sit at their all-time low (history
-// is young), so with it on the sliders barely change the list.
-const DEAL_TUNE_DEFAULTS = { drop: 20, diff: 10, atl: false, mode: 'and' };
+// Slider defaults are deliberately strict — "a fifth off its usual price AND a
+// tenth cheaper than the rival". At the old 4%/0% defaults the page showed 73
+// "deals" out of ~210 active items, which made the word meaningless. ATL stays
+// on by default: an all-time low is always worth surfacing regardless of where
+// the sliders sit, which is the point of the checkbox being an OR escape hatch.
+const DEAL_TUNE_DEFAULTS = { drop: 20, diff: 10, atl: true, mode: 'and' };
 function loadDealTune() {
   try {
     const t = JSON.parse(localStorage.getItem('pw_hd_tune_v1') || 'null');
