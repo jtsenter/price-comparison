@@ -9,14 +9,14 @@
 // hard-refresh option could see a 10-minute-stale layout. `cache: 'no-store'`
 // forces every fetch here to actually reach the network.
 
-const CACHE = 'pricewatch-v133';
+const CACHE = 'pricewatch-v134';
 const SHELL = [
   'index.html',
   'hot-deals.html',
   'shopping-list.html',
   'scrape-log.html',
   'style.css?v=96',
-  'app.js?v=113',
+  'app.js?v=114',
   'utils.js?v=63',
   'header.js?v=6',
   'name_map.js?v=40',

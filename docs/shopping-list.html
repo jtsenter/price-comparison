@@ -615,6 +615,14 @@ async function boot() {
     return;
   }
 
+  // "Showing N …" caption — computed once and rendered in BOTH list and shopping
+  // mode, positioned UNDER the mode toggles. Previously it lived only in list
+  // mode and above the toggles, so switching to shopping mode dropped the line
+  // and the whole view jumped up.
+  const filterNoteHtml = handoff?.note
+    ? `Showing <strong>${displayItems.length}</strong> ${handoff.note}`
+    : `Showing <strong>${displayItems.length}</strong> item${displayItems.length !== 1 ? 's' : ''}`;
+
   let equalStore = 'ww'; // split mode: which store equal-price items are assigned to
 
   // View model: ONE store by default — the realistic plan is buying the whole
@@ -903,6 +911,7 @@ async function boot() {
         <div class="sl-flexspacer" style="flex:1"></div>
         <button id="smResetBtn" class="btn-outline-danger">↺ Reset picks</button>
       </div>
+      <div class="sl-note">📋 ${filterNoteHtml}</div>
       <div class="sm-progress-card">
         <div class="sm-progress-top">
           <span class="sm-count"><span id="smPicked">0</span> of <span id="smTotal">0</span> picked</span>
@@ -962,9 +971,6 @@ async function boot() {
       i.cheaper_store === 'equal' &&
       i.woolworths?.price != null &&
       i.coles?.price != null);
-    const filterNoteHtml = handoff?.note
-      ? `Showing <strong>${displayItems.length}</strong> ${handoff.note}`
-      : `Showing <strong>${displayItems.length}</strong> item${displayItems.length !== 1 ? 's' : ''}`;
     const ec = slSplit ? equalItems.length : 0;
     const single = slSplit ? null : singleStoreNow();
     // Card "active" highlight: single mode = the store you're buying at;
@@ -1029,7 +1035,6 @@ async function boot() {
             : ''));
 
     main.innerHTML = `
-      <div class="sl-note">📋 ${filterNoteHtml}</div>
       <div class="sl-topbar">
         ${splitSegHtml()}
         ${segHtml()}
@@ -1037,6 +1042,7 @@ async function boot() {
         <button id="saveBasketBtn" class="btn-outline-save">🔒 Save basket</button>
         <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
       </div>
+      <div class="sl-note">📋 ${filterNoteHtml}</div>
 
       <div class="store-summary-wrap">
         <div class="store-cards-grid">

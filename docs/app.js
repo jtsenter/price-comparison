@@ -5822,9 +5822,10 @@ function exportShoppingList(useChecked) {
   } else if (_searchQuery && _searchQuery.trim().length > 0) {
     note = `items matching "${esc(_searchQuery.trim())}"`;
   } else {
-    const pLabel = _activePriority === 'all' ? 'all' : `all ${_activePriority}`;
+    // "weekly items" / "items" / "archived items" — not the old "all weekly items".
+    const pWord = { weekly: 'weekly ', monthly: 'monthly ', rare: 'rare ', archive: 'archived ' }[_activePriority] || '';
     const catSuffix = _activeCategory !== 'All' ? ` · ${_activeCategory}` : '';
-    note = `${pLabel} items${catSuffix}`;
+    note = `${pWord}items${catSuffix}`;
   }
   const quantities = loadUnitOverrides();
   let finalNames = names;
