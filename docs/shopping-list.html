@@ -371,7 +371,10 @@
          "Selected store" badge carry all the signal. */
       .store-card-sl { padding: 12px 14px; grid-template-rows: none; }
       .sc-icon, .sc-subtitle, .sc-spacer, .sc-hint { display: none; }
-      .sc-name-row { flex-wrap: wrap; row-gap: 2px; margin-bottom: 4px; }
+      /* Item-count pill always on its own line — wrap-if-needed made "Woolworths"
+         (long name) wrap while "Coles" (short name) didn't, so the price below
+         landed on a different row per card. Column layout is deterministic. */
+      .sc-name-row { flex-direction: column; align-items: flex-start; gap: 3px; margin-bottom: 6px; }
       .sc-badge-row { margin-top: 6px; }
       .bar-ribbon { gap: 8px; padding: 10px 14px; }
       .sc-price { font-size: 24px; margin-bottom: 2px; }
