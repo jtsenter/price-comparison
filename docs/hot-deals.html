@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=94" />
+  <link rel="stylesheet" href="style.css?v=95" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -85,9 +85,14 @@
     @media (max-width: 700px) {
       .hd-tune { gap: 10px; }
       .hd-tune-title { display: none; } /* the AND/OR chip stays — it's a control now */
-      .hd-tune-row { width: 100%; }
-      .hd-tune-row label { flex: 1; }
-      .hd-tune-row input[type="range"] { width: 120px; }
+      /* Label on its own line, then range+value below it — a fixed-width value
+         badge after a long nowrap label doesn't fit one line on a phone (it was
+         rendering 20px past the right edge of the viewport). Wrapping the row
+         instead of shrinking the label keeps every control readable. */
+      .hd-tune-row { width: 100%; flex-wrap: wrap; row-gap: 4px; }
+      .hd-tune-row label { flex: 1 1 100%; white-space: normal; }
+      .hd-tune-row input[type="range"] { flex: 1 1 auto; width: auto; min-width: 0; }
+      .hd-tune-row strong { flex-shrink: 0; }
     }
 
     /* ── Filter bar ── */

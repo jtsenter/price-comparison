@@ -358,8 +358,11 @@
     :root[data-theme="dark"] .sl-mode-btn.active { background: var(--ww); color: #fff; }
 
     @media (max-width: 700px) {
-      .header-inner { padding: 0 10px; gap: 8px; }
-      .brand-name { display: none; }
+      /* Home (bottom tab bar already has it), the W/C logo, and Print (no phone
+         has a printer) leave the header with nothing left to show — the bottom
+         tab bar covers navigation. Drop the whole row; the scrape-progress strip
+         (a sibling, not inside .header-inner) still shows when relevant. */
+      .header-inner { display: none; }
       nav { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
       nav::-webkit-scrollbar { display: none; }
       nav a { white-space: nowrap; font-size: 13px; padding: 6px 8px; }

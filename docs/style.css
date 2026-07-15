@@ -1935,6 +1935,11 @@ td.priority-cell { text-align: center; }
      the left nav and the desktop nav-icon cluster to give the search room. */
   #mainNav, .nav-icon-btn, .header-div, .validate-pill { display: none; }
   .header-search { min-width: 60px; }
+  /* Hot Deals has no search box, so once the nav cluster/options/trail button
+     are hidden above, its header row is just an idle home+logo — the bottom
+     tab bar already covers navigation. Drop the whole row; the scrape-progress
+     strip (a sibling, not inside .header-inner) still shows when relevant. */
+  header[data-page="hot-deals"] .header-inner { display: none; }
 }
 
 /* Narrower desktop widths (e.g. a 1366px screen at 125% OS scaling ≈ 1092 CSS px):
