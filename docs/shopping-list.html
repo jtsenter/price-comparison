@@ -121,16 +121,8 @@
       font-size: 12px; font-weight: 600;
       padding: 5px 11px; border-radius: 14px; white-space: nowrap;
     }
-    .bar-store-chip.ww-chip::before {
-      content: ''; display: inline-block;
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--ww); flex-shrink: 0;
-    }
-    .bar-store-chip.co-chip::before {
-      content: ''; display: inline-block;
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--coles); flex-shrink: 0;
-    }
+    /* WW/Coles chips carry the real store logo square; only equal-price keeps a dot */
+    .bar-store-chip .store-chip { width: 18px; height: 18px; font-size: 10px; border-radius: 5px; flex-shrink: 0; }
     .bar-store-chip.eq-chip::before {
       content: ''; display: inline-block;
       width: 8px; height: 8px; border-radius: 50%;
@@ -334,6 +326,13 @@
     .sm-total { font-size: 18px; font-weight: 800; color: var(--text); }
     .sm-bar-track { height: 6px; background: var(--bg); border-radius: 999px; overflow: hidden; }
     .sm-bar-fill { height: 100%; width: 0; background: var(--ww); border-radius: 999px; transition: width .2s; }
+    /* Per-store counts in the sticky card: instant visible feedback when the
+       One store ⇄ Split shop toggle changes the plan (the store sections
+       themselves are below the fold, so without this a tap looked like a no-op). */
+    .sm-store-chips { display: flex; gap: 6px; justify-content: center; margin-top: 9px; }
+    .sm-chip { font-size: 11px; font-weight: 700; border-radius: 999px; padding: 2px 10px; color: #fff; }
+    .sm-chip.smw { background: var(--ww); }
+    .sm-chip.smc { background: var(--coles); }
     .sm-store-h { display: flex; align-items: center; gap: 10px; padding: 18px 0 8px; }
     .sm-cat { font-size: 11px; font-weight: 700; color: var(--text-soft); text-transform: uppercase; letter-spacing: .05em; padding: 10px 4px 5px; }
     .sm-row {
@@ -377,6 +376,29 @@
       .bar-ribbon { gap: 8px; padding: 10px 14px; }
       .sc-price { font-size: 24px; margin-bottom: 2px; }
       main { padding-left: 12px; padding-right: 12px; }
+      /* Topbar: fixed-size controls — each segment/button gets exactly half the
+         row instead of letter-count width, so the stack aligns edge to edge. */
+      .sl-topbar { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .sl-flexspacer { display: none; }
+      .sl-mode-seg { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
+      .sl-mode-btn { justify-content: center; }
+      .sl-split-seg .sl-mode-btn { padding: 10px 8px; }
+      #saveBasketBtn, #removeAllBtn { justify-content: center; }
+      #smResetBtn { grid-column: 1 / -1; justify-content: center; }
+      .sl-note { text-align: center; }
+      /* Savings: one line each (label left, price right), chips centered below */
+      .sl-savings-row { flex-direction: column; align-items: stretch; gap: 6px; }
+      .saving-info { flex-direction: column; gap: 0; }
+      .saving-line { padding: 5px 0; }
+      .saving-line + .saving-line { border-top: 1px solid var(--border); }
+      .saving-text { flex: 1; display: flex; align-items: center; justify-content: space-between; }
+      .saving-label { margin-bottom: 0; }
+      .saving-icon { width: 22px; font-size: 16px; }
+      .saving-icon .store-chip { width: 22px; height: 22px; font-size: 12px; }
+      .bar-ribbon-chips { justify-content: center; }
+      .chip-word { display: none; }
+      /* Split trip total: the number you act on — give it its own tinted row */
+      .saving-line.split-total-line { background: #F0FDF4; border: 1px solid #D1FAE5; border-radius: 12px; padding: 8px 10px; }
       /* Stacked rows replace the table grid: a 6-column table can't fit a 375px
          phone, so each row becomes a two-line card — name (+ remove) on top,
          price · qty stepper · line total underneath. Same markup, CSS-only. */
@@ -449,6 +471,7 @@
       & .store-card-sl.coles.card-active { background: #450a0a; border-bottom-color: var(--coles); }
       & .bar-ribbon { background: var(--card); border-top-color: var(--border); }
       & .bar-optimal { background: #052e16; border-color: #14532d; }
+      & .saving-line.split-total-line { background: #052e16; border-color: #14532d; }
       & tbody tr:nth-child(even) { background: #182030; }
       & tfoot td { background: var(--bg); }
       & table { background: var(--card); }
@@ -877,7 +900,7 @@ async function boot() {
       <div class="sl-topbar">
         ${splitSegHtml()}
         ${segHtml()}
-        <div style="flex:1"></div>
+        <div class="sl-flexspacer" style="flex:1"></div>
         <button id="smResetBtn" class="btn-outline-danger">↺ Reset picks</button>
       </div>
       <div class="sm-progress-card">
@@ -886,6 +909,7 @@ async function boot() {
           <span class="sm-total-wrap">In trolley <span class="sm-total" id="smSpend">$0.00</span></span>
         </div>
         <div class="sm-bar-track"><div class="sm-bar-fill" id="smBar"></div></div>
+        <div class="sm-store-chips">${wwItems.length ? `<span class="sm-chip smw">W · ${wwItems.length}</span>` : ''}${colesItems.length ? `<span class="sm-chip smc">C · ${colesItems.length}</span>` : ''}</div>
       </div>
       ${storeSection(wwItems, 'ww')}
       ${storeSection(colesItems, 'coles')}
@@ -972,9 +996,9 @@ async function boot() {
     const wwOnlyCount = displayItems.filter(i => i.cheaper_store === 'woolworths').length;
     const coOnlyCount = displayItems.filter(i => i.cheaper_store === 'coles').length;
     const ribbonChips = [
-      wwOnlyCount > 0    ? `<span class="bar-store-chip ww-chip">${wwOnlyCount} at Woolworths</span>` : '',
-      equalItems.length > 0 ? `<span class="bar-store-chip eq-chip">${equalItems.length} equal-price</span>` : '',
-      coOnlyCount > 0    ? `<span class="bar-store-chip co-chip">${coOnlyCount} at Coles</span>` : '',
+      wwOnlyCount > 0    ? `<span class="bar-store-chip ww-chip"><span class="store-chip ww">W</span>${wwOnlyCount}<span class="chip-word"> at Woolworths</span></span>` : '',
+      equalItems.length > 0 ? `<span class="bar-store-chip eq-chip">${equalItems.length}<span class="chip-word"> equal-price</span></span>` : '',
+      coOnlyCount > 0    ? `<span class="bar-store-chip co-chip"><span class="store-chip coles">C</span>${coOnlyCount}<span class="chip-word"> at Coles</span></span>` : '',
     ].join('');
 
     // Savings shown with the SAME "Basket saving / Split shop" component as the
@@ -995,7 +1019,7 @@ async function boot() {
     // assignment + row swaps). Single mode doesn't need it — the active card's
     // number already IS the trip total.
     const splitTotalHtml = slSplit
-      ? `<div class="saving-line"><span class="saving-icon">🧾</span><div class="saving-text"><div class="saving-label">Split trip total${infoIco('Woolworths + Coles subtotals under the current plan — what the whole split trip costs.')}</div><span class="saving-amount">${fmt(wwSub + coSub)}</span></div></div>`
+      ? `<div class="saving-line split-total-line"><span class="saving-icon">🧾</span><div class="saving-text"><div class="saving-label">Split trip total${infoIco('Woolworths + Coles subtotals under the current plan — what the whole split trip costs.')}</div><span class="saving-amount">${fmt(wwSub + coSub)}</span></div></div>`
       : '';
     const savingInfoHtml = splitTotalHtml + (isEqual
       ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
@@ -1009,7 +1033,7 @@ async function boot() {
       <div class="sl-topbar">
         ${splitSegHtml()}
         ${segHtml()}
-        <div style="flex:1"></div>
+        <div class="sl-flexspacer" style="flex:1"></div>
         <button id="saveBasketBtn" class="btn-outline-save">🔒 Save basket</button>
         <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
       </div>
