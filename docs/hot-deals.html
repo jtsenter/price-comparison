@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=93" />
+  <link rel="stylesheet" href="style.css?v=94" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -429,7 +429,7 @@
 
 <!-- Shared utilities — must load before inline script -->
 <script src="name_map.js?v=13"></script>
-<script src="utils.js?v=62"></script>
+<script src="utils.js?v=63"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -588,21 +588,6 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
 // ── Constants ────────────────────────────────────────────────────────────────
 
 const STALE_PROGRESS_MS  = 3 * 60 * 1000; // ms with no progress update → ⚠ Stalled
-const DISCREPANCY_WARN_THRESHOLD = 0.31;   // price diff % above which ⚠ is shown
-
-// ── Dismissed diff warnings ──────────────────────────────────────────────────
-function loadDismissedDiffs() {
-  try { return JSON.parse(localStorage.getItem('pw_dismissed_diffs_v1') || '{}'); } catch { return {}; }
-}
-function saveDismissedDiffs(d) { localStorage.setItem('pw_dismissed_diffs_v1', JSON.stringify(d)); }
-function isDiffDismissed(itemName, currentDiff) {
-  const dismissed = loadDismissedDiffs()[itemName];
-  if (dismissed == null) return false;
-  return currentDiff <= dismissed * 1.10;
-}
-function dismissDiff(itemName, currentDiff) {
-  const d = loadDismissedDiffs(); d[itemName] = currentDiff; saveDismissedDiffs(d);
-}
 
 // ── State ─────────────────────────────────────────────────────────────────────
 
@@ -1005,13 +990,6 @@ function renderDeals() {
 
     const safeNameHD = item.list_item.replace(/"/g, '&quot;');
 
-    // Discrepancy warning — must be declared before dealCell
-    const _hdDiff = (ww?.price != null && co?.price != null) ? Math.abs(ww.price - co.price) : 0;
-    const _hdDiffPct = (ww?.price != null && co?.price != null) ? _hdDiff / Math.max(ww.price, co.price) : 0;
-    const discWarn = _hdDiffPct > DISCREPANCY_WARN_THRESHOLD && !isDiffDismissed(item.list_item, _hdDiff)
-      ? `<span class="discrepancy-warn" title="Large price difference — double check the match is correct">⚠<button class="dismiss-diff-btn" data-item="${safeNameHD}" data-diff="${_hdDiff.toFixed(4)}" title="Dismiss warning">✕</button></span>`
-      : '';
-
     // Deal cell — explains WHY this is a hot deal: the discount depth or
     // all-time-low badge, plus the cross-store gap when there is one
     // ("12% cheaper than Coles") since that's the second thing that defines
@@ -1071,7 +1049,7 @@ function renderDeals() {
     const isWatchedHD = _watchlistHD.has(item.list_item);
     const watchBtnHD = `<button class="item-watch-btn${isWatchedHD ? ' active' : ''}" data-item="${safeNameHD}" title="${isWatchedHD ? 'Remove from watchlist' : 'Add to watchlist'}">👁</button>`;
     const _hdCellMap = {
-      name:     `<td class="item-name"><div class="deal-item-cell">${imgHtml}<div><div class="deal-item-name">${esc(displayName)}${discWarn}</div></div></div></td>`,
+      name:     `<td class="item-name"><div class="deal-item-cell">${imgHtml}<div><div class="deal-item-name">${esc(displayName)}</div></div></div></td>`,
       deal:     `<td>${dealCell}</td>`,
       store:    `<td style="text-align:center">${storeChip}</td>`,
       save:     `<td>${saveCell}</td>`,
@@ -1494,12 +1472,10 @@ function initRefreshBtn() {
   initHdColChooser();
   document.getElementById('hdResetColsBtn')?.addEventListener('click', resetHdCols);
 
-  // Watch + dismiss-diff button clicks (delegated from tbody)
+  // Watch button clicks (delegated from tbody)
   document.getElementById('dealsBody')?.addEventListener('click', (e) => {
     const wb = e.target.closest('.item-watch-btn');
     if (wb) { e.stopPropagation(); toggleWatchlistHD(wb.dataset.item); return; }
-    const db = e.target.closest('.dismiss-diff-btn');
-    if (db) { e.stopPropagation(); dismissDiff(db.dataset.item, parseFloat(db.dataset.diff)); renderDeals(); }
   });
 
   // Mobile deal cards — watch toggle

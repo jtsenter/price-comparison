@@ -157,28 +157,8 @@ function formatDate(isoString) {
   });
 }
 
-// ── Dismissed diff warnings ──────────────────────────────────────────────────
-
-function loadDismissedDiffs() {
-  try { return JSON.parse(localStorage.getItem('pw_dismissed_diffs_v1') || '{}'); } catch { return {}; }
-}
-function saveDismissedDiffs(d) {
-  localStorage.setItem('pw_dismissed_diffs_v1', JSON.stringify(d));
-}
-function isDiffDismissed(itemName, currentDiff) {
-  const dismissed = loadDismissedDiffs()[itemName];
-  if (dismissed == null) return false;
-  return currentDiff <= dismissed * 1.10;
-}
-function dismissDiff(itemName, currentDiff) {
-  const d = loadDismissedDiffs();
-  d[itemName] = currentDiff;
-  saveDismissedDiffs(d);
-}
-
 // ── Thresholds ────────────────────────────────────────────────────────────────
 
-const DISCREPANCY_WARN_THRESHOLD = 0.31; // price diff % above which ⚠ is shown
 const STALE_DATA_DAYS          = 5;      // days before "data is stale" banner appears
 const STALE_PROGRESS_MS        = 5 * 60 * 1000; // ms with no progress update → ⚠ Stalled
 
@@ -651,7 +631,6 @@ function savePerKgExclusions(set) {
 }
 let _expandedGroups = new Set();
 let _watchlist = new Set(); // loaded on boot from localStorage + watchlist.json
-let _approvedWarns = new Set(); // loaded from approved_warns.json
 let _selectedItems = new Set(); // session-only mobile card selection
 let _viewMode = localStorage.getItem('pw_view_mode') || 'table'; // 'table' | 'card'
 let _mcView = localStorage.getItem('pw_mc_view_v1') || 'detailed'; // mobile card view: 'detailed' | 'compact'
@@ -3304,7 +3283,6 @@ function renderCards(items) {
   if (!grid) return;
   const overrides = loadOverrides();
   const exclusions = loadExclusions();
-  const dismissed = (() => { try { return JSON.parse(localStorage.getItem('pw_dismissed_warns_v1') || '[]'); } catch { return []; } })();
   const parts = [];
 
   items.forEach(item => {
@@ -3370,15 +3348,6 @@ function renderCards(items) {
       ? `<div class="card-saving">${cheaper==='woolworths'?'<span class="store-chip ww sm">W</span>':'<span class="store-chip coles sm">C</span>'} Save ${savingAmt}</div>`
       : '';
 
-    // Match warning
-    let warnHtml = '';
-    const mc = item.match_confidence;
-    if (mc === 'none' && !dismissed.includes(item.list_item) && !_approvedWarns.has(item.list_item)) {
-      warnHtml = ` <span class="match-warn match-warn-none" title="Could not match this item" data-item="${safeKey}">⚠<button class="warn-dismiss" data-item="${safeKey}">✕</button></span>`;
-    } else if ((mc === 'low' || item.size_warning) && !dismissed.includes(item.list_item) && !_approvedWarns.has(item.list_item)) {
-      warnHtml = ` <span class="match-warn match-warn-low" title="Low-confidence match — verify these are the same product" data-item="${safeKey}">⚠<button class="warn-dismiss" data-item="${safeKey}">✕</button></span>`;
-    }
-
     const _trendSeries = getTrendSeries(item);
     const bar = buildPriceBar(item.list_item, _trendSeries.prices.map(p => ({price: p})), _trendSeries.current);
     const isChecked = _checkedItems.has(item.list_item);
@@ -3388,7 +3357,7 @@ function renderCards(items) {
       <div class="card-top">
         <div class="card-img-wrap">${imgHtml}</div>
         <div class="card-info">
-          <div class="card-name">${esc(displayName)}${warnHtml}</div>
+          <div class="card-name">${esc(displayName)}</div>
           <div class="card-cat">${esc(cat)}</div>
         </div>
         <div class="card-right">
@@ -5008,7 +4977,7 @@ function _renderPageInner(data) {
     const _trendSeriesPage = getTrendSeries(item);
     const bar = _trendSeriesPage.prices.length ? buildPriceBar(item.list_item, _trendSeriesPage.prices.map(p => ({price: p})), _trendSeriesPage.current) : '';
 
-    // % Cheaper + discrepancy warning (must be before itemCell)
+    // % Cheaper
     const wwPrice = ww?.price;
     const coPrice = co?.price;
     let pctHtml = '';
@@ -5016,33 +4985,12 @@ function _renderPageInner(data) {
       const pct = Math.round(Math.abs(wwPrice - coPrice) / Math.max(wwPrice, coPrice) * 100);
       pctHtml = `<span class="${cheaper === 'woolworths' ? 'pct-ww' : 'pct-coles'}">${pct}%</span>`;
     }
-    const priceDiffPct = (wwPrice != null && coPrice != null)
-      ? Math.abs(wwPrice - coPrice) / Math.max(wwPrice, coPrice)
-      : 0;
-    const _absDiff = (wwPrice != null && coPrice != null) ? Math.abs(wwPrice - coPrice) : 0;
-    const discrepancyWarning = priceDiffPct > DISCREPANCY_WARN_THRESHOLD && !isDiffDismissed(item.list_item, _absDiff)
-      ? `<span class="discrepancy-warn" title="Large price difference — double check the match is correct">⚠<button class="dismiss-diff-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" data-diff="${_absDiff.toFixed(4)}" title="Dismiss warning">✕</button></span>`
-      : '';
-
-    // Match quality warning (from scraper confidence / size validation)
-    const matchConf = item.match_confidence;
-    const sizeWarn  = item.size_warning;
-    let matchWarnHtml = '';
-    const _dismissed = (() => { try { return JSON.parse(localStorage.getItem('pw_dismissed_warns_v1') || '[]'); } catch { return []; } })();
-    if (matchConf === 'none' && !_dismissed.includes(item.list_item) && !_approvedWarns.has(item.list_item)) {
-      matchWarnHtml = `<span class="match-warn match-warn-none" title="Could not confidently match this item across stores — prices may be for different products" data-item="${item.list_item.replace(/"/g,'&quot;')}">⚠ possible mismatch<button class="warn-dismiss" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Dismiss">✕</button></span>`;
-    } else if ((matchConf === 'low' || sizeWarn) && !_dismissed.includes(item.list_item) && !_approvedWarns.has(item.list_item)) {
-      const tip = sizeWarn
-        ? 'Pack sizes differ between stores — per-100g is a better comparison'
-        : 'Low-confidence match — verify these are the same product';
-      matchWarnHtml = `<span class="match-warn match-warn-low" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="${tip}">⚠<button class="warn-dismiss" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Dismiss">✕</button></span>`;
-    }
 
     const itemCell = `
       <div class="item-row">
         ${imgHtml}
         <div class="item-info">
-          <div class="item-title-row">${esc(displayName)}${discrepancyWarning}${matchWarnHtml}${editBtn}</div>
+          <div class="item-title-row">${esc(displayName)}${editBtn}</div>
           ${altHintHTML(item)}
         </div>
       </div>`;
@@ -6020,17 +5968,6 @@ async function boot() {
   const cardGrid = $('cardGrid');
   if (cardGrid) {
     cardGrid.addEventListener('click', (e) => {
-      const warnEl = e.target.closest('.match-warn, .warn-dismiss');
-      if (warnEl) {
-        e.stopPropagation();
-        const btn = warnEl.classList.contains('warn-dismiss') ? warnEl : warnEl.querySelector('.warn-dismiss');
-        const itemName = btn?.dataset.item || warnEl.dataset.item;
-        if (itemName) {
-          try { const d = JSON.parse(localStorage.getItem('pw_dismissed_warns_v1')||'[]'); if (!d.includes(itemName)) d.push(itemName); localStorage.setItem('pw_dismissed_warns_v1', JSON.stringify(d)); } catch {}
-        }
-        warnEl.closest('.match-warn') ? warnEl.closest('.match-warn').remove() : warnEl.remove();
-        return;
-      }
       const manageBtn = e.target.closest('.price-bar-manage');
       if (manageBtn) { openHistoryFromManageBtn(manageBtn.dataset.manageItem); return; }
       const rowCheck = e.target.closest('.row-check');
@@ -6070,13 +6007,6 @@ async function boot() {
       }
     });
   }
-
-  // ── Reset dismissed warnings ──────────────────────────────────
-  $('resetWarningsBtn')?.addEventListener('click', () => {
-    localStorage.removeItem('pw_dismissed_warns_v1');
-    if (_lastData) renderPage(_lastData);
-    $('settingsModal').style.display = 'none';
-  });
 
   // ── Sync URL overrides → GitHub ───────────────────────────────
   $('syncOverridesBtn')?.addEventListener('click', async () => {
@@ -6165,9 +6095,7 @@ async function boot() {
   });
 
   // Load analysis data and watchlist before first render
-  await Promise.all([loadItemAnalysis(), initWatchlist(), initUserSettings(), mergeArchivedFromRepo(), loadRepoUrlOverrides(), (async () => {
-    try { const r = await fetch(`data/approved_warns.json?t=${Date.now()}`); if (r.ok) _approvedWarns = new Set(await r.json()); } catch {}
-  })() ]);
+  await Promise.all([loadItemAnalysis(), initWatchlist(), initUserSettings(), mergeArchivedFromRepo(), loadRepoUrlOverrides()]);
   const data = await loadData();
 
   {
@@ -6261,30 +6189,6 @@ async function boot() {
           triggerItemRefresh(itemName, fetchBtn, { wwUrl: pinnedUrlFor(itemName, 'ww'), colesUrl: pinnedUrlFor(itemName, 'coles') });
           return;
         }
-        const discrepEl = e.target.closest('.discrepancy-warn, .dismiss-diff-btn');
-        if (discrepEl) {
-          e.stopPropagation();
-          const btn = discrepEl.classList.contains('dismiss-diff-btn') ? discrepEl : discrepEl.querySelector('.dismiss-diff-btn');
-          if (btn) { dismissDiff(btn.dataset.item, parseFloat(btn.dataset.diff)); if (_lastData) renderPage(_lastData); }
-          return;
-        }
-
-        const warnEl = e.target.closest('.match-warn, .warn-dismiss');
-        if (warnEl) {
-          e.stopPropagation();
-          const btn = warnEl.classList.contains('warn-dismiss') ? warnEl : warnEl.querySelector('.warn-dismiss');
-          const itemName = btn?.dataset.item || warnEl.dataset.item;
-          if (itemName) {
-            try {
-              const d = JSON.parse(localStorage.getItem('pw_dismissed_warns_v1') || '[]');
-              if (!d.includes(itemName)) d.push(itemName);
-              localStorage.setItem('pw_dismissed_warns_v1', JSON.stringify(d));
-            } catch {}
-          }
-          warnEl.closest('.match-warn') ? warnEl.closest('.match-warn').remove() : warnEl.remove();
-          return;
-        }
-
         const watchBtn = e.target.closest('.item-watch-btn');
         if (watchBtn) { toggleWatchlist(watchBtn.dataset.item); return; }
 
