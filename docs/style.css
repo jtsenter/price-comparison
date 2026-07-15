@@ -1935,6 +1935,9 @@ td.priority-cell { text-align: center; }
      the left nav and the desktop nav-icon cluster to give the search room. */
   #mainNav, .nav-icon-btn, .header-div, .validate-pill { display: none; }
   .header-search { min-width: 60px; }
+  /* The "Category" row label is desktop-only — on a phone it just steals width
+     from the scrolling category tabs. (Desktop keeps it as a section cue.) */
+  .tabs-row .filter-row-label { display: none; }
   /* Hot Deals has no search box, so once the nav cluster/options/trail button
      are hidden above, its header row is just an idle home+logo — the bottom
      tab bar already covers navigation. Drop the whole row; the scrape-progress
