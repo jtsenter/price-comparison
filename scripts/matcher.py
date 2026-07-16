@@ -79,6 +79,31 @@ _STRIP_INLINE = re.compile(
 # fundamentally different product, so penalise heavily if one has it and the other doesn't.
 _QUALITY_TIER = re.compile(r'\b(organic)\b', re.IGNORECASE)
 
+# Mutually-exclusive descriptor families. A query and a result that each name a
+# DIFFERENT member of the same family are different products, not size/brand
+# variants - so a high name similarity ("chicken ... fillet") must NOT let them
+# match. Chicken cuts are the motivating case: "Chicken Thigh Fillets" kept
+# matching "Chicken Breast Fillet" because both classify as form UNKNOWN and
+# share nearly every other token. Add families here as new confusions surface.
+_DISCRIMINATOR_FAMILIES: list[frozenset[str]] = [
+    frozenset({'breast', 'thigh', 'drumstick', 'drumette', 'wing',
+               'maryland', 'tenderloin', 'nibbles'}),
+]
+
+
+def _discriminator_conflict(a: str, b: str) -> bool:
+    """True when `a` and `b` each contain a DIFFERENT token from the same
+    mutually-exclusive family (one says 'thigh', the other 'breast'). A product
+    naming two members of a family (e.g. 'thigh & wing pack') shares a token, so
+    it never conflicts with a query for either of those members."""
+    al, bl = a.lower(), b.lower()
+    for fam in _DISCRIMINATOR_FAMILIES:
+        ta = {t for t in fam if re.search(rf'\b{t}\b', al)}
+        tb = {t for t in fam if re.search(rf'\b{t}\b', bl)}
+        if ta and tb and ta.isdisjoint(tb):
+            return True
+    return False
+
 _STRIP_SIZE = re.compile(
     r'\b\d+(?:\.\d+)?\s*(?:kg|g|ml|l)\b'
     r'|\b\d+\s*(?:x\s*\d+(?:\s*(?:g|ml|kg|l))?)\b'
@@ -144,6 +169,12 @@ def pick_best_match(query: str, results: list[dict]) -> tuple[dict | None, str]:
     scored: list[tuple[float, float, bool, dict]] = []
     for r in results:
         if not r.get('name'):
+            continue
+        # Different cut/variant of the same family (thigh vs breast) is never a
+        # valid match, no matter how similar the rest of the name reads. Drop it
+        # before scoring - a wrong match is worse than no match (the scraper then
+        # carries prior data forward or reports the item not found).
+        if _discriminator_conflict(query, r['name']):
             continue
         m = extract_metadata(r['name'])
 

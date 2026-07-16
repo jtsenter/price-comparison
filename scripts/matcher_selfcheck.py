@@ -70,6 +70,24 @@ def _run():
           pick_best_match("Salmon Fillets Fresh", R("Smoked Salmon 200g")),
           (None, "none"))
 
+    # Chicken cut is a hard discriminator: a thigh query must NEVER latch onto a
+    # breast result even though the names are otherwise near-identical (both are
+    # form UNKNOWN and share "chicken ... fillet"). Both real bugs this locks:
+    check("thigh query rejects breast-only results",
+          pick_best_match("Lilydale Free Range Chicken Thigh Fillets Small Pack 545g",
+                          R("Lilydale Free Range Chicken Breast Fillet 600g")),
+          (None, "none"))
+    check("thigh query skips breast, takes the real thigh",
+          pick_name("Coles RSPCA Approved Free Range Chicken Thigh Large Pack",
+                    R("Macro RSPCA Approved Chicken Breast Free Range Single",
+                      "Coles RSPCA Approved Free Range Chicken Thigh Large Pack")),
+          "Coles RSPCA Approved Free Range Chicken Thigh Large Pack")
+    # A product naming two cuts shares a token, so it still matches a query for either.
+    check("multi-cut result still matches its family member",
+          pick_name("Chicken Thigh Cutlets",
+                    R("Woolworths Chicken Thigh & Wing Portions 1kg")),
+          "Woolworths Chicken Thigh & Wing Portions 1kg")
+
     # A bare/generic query ("Milk") must NOT latch onto a specific variant.
     check("generic query stays unmatched",
           pick_best_match("Milk 2L", R("Woolworths Full Cream Milk 250ml")),
