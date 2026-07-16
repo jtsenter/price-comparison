@@ -98,7 +98,10 @@
       padding: 8px 14px; display: flex; flex-direction: column; justify-content: center; gap: 2px;
     }
     .sl-savings-panel .saving-info { display: flex; flex-direction: column; gap: 0; }
-    .sl-savings-panel .saving-line { padding: 4px 0; }
+    /* All three lines share the same side padding so the Split shop line's
+       label and amount COLUMN-ALIGN with Basket/Split saving (its tint box
+       used to inset them by its own padding). 9px + 1px border = 10px. */
+    .sl-savings-panel .saving-line { padding: 4px 10px; }
     .sl-savings-panel .saving-line + .saving-line { border-top: 1px solid var(--border); }
     .sl-savings-panel .saving-text { flex: 1; display: flex; align-items: center; justify-content: space-between; }
     .sl-savings-panel .saving-label { margin-bottom: 0; }
@@ -106,7 +109,7 @@
     .sl-savings-panel .saving-icon { width: 22px; font-size: 16px; }
     .sl-savings-panel .saving-icon .store-chip { width: 22px; height: 22px; font-size: 12px; }
     .sl-savings-panel .bar-ribbon-chips { justify-content: center; gap: 6px; border-top: 1px solid var(--border); padding-top: 6px; margin-top: 2px; }
-    .saving-line.split-total-line { background: #F0FDF4; border: 1px solid #D1FAE5; border-radius: 10px; padding: 5px 10px; }
+    .saving-line.split-total-line { background: #F0FDF4; border: 1px solid #D1FAE5; border-radius: 10px; padding: 4px 9px; }
     /* ── Save ribbon (replaces stats bar) ── */
     .bar-ribbon {
       display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
@@ -137,10 +140,13 @@
     }
     /* WW/Coles chips carry the real store logo square; only equal-price keeps a dot */
     .bar-store-chip .store-chip { width: 18px; height: 18px; font-size: 10px; border-radius: 5px; flex-shrink: 0; }
+    /* Equal-price chip: a gray "=" square matching the W/C store chips - the
+       old bare 8px gray dot read as nothing in particular on mobile. */
     .bar-store-chip.eq-chip::before {
-      content: ''; display: inline-block;
-      width: 8px; height: 8px; border-radius: 50%;
-      background: #94A3B8; flex-shrink: 0;
+      content: '='; display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px; border-radius: 5px;
+      background: #94A3B8; color: #fff; font-size: 12px; font-weight: 800;
+      line-height: 1; flex-shrink: 0;
     }
     /* ── Optimal split strip ── */
     .bar-optimal {
@@ -478,7 +484,7 @@
 </head>
 <body>
 <header data-page="shopping-list"></header>
-<script src="header.js?v=8"></script>
+<script src="header.js?v=9"></script>
 
 <main id="main">
   <div class="empty">Loading…</div>
@@ -615,8 +621,11 @@ async function boot() {
   // mode, positioned UNDER the mode toggles. Previously it lived only in list
   // mode and above the toggles, so switching to shopping mode dropped the line
   // and the whole view jumped up.
-  const filterNoteHtml = handoff?.note
-    ? `<strong>${displayItems.length}</strong> ${handoff.note}`
+  // Singularise "items" in canned notes when N is 1 ("1 item (basket locked)").
+  const noteTxt = handoff?.note && displayItems.length === 1
+    ? handoff.note.replace(/\bitems\b/, 'item') : handoff?.note;
+  const filterNoteHtml = noteTxt
+    ? `<strong>${displayItems.length}</strong> ${noteTxt}`
     : `<strong>${displayItems.length}</strong> item${displayItems.length !== 1 ? 's' : ''}`;
 
   let equalStore = 'ww'; // split mode: which store equal-price items are assigned to

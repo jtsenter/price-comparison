@@ -639,6 +639,27 @@ let _mcView = localStorage.getItem('pw_mc_view_v1') || 'detailed'; // mobile car
 
 let _checkedItems = new Set();
 
+// A locked basket (Save basket on the basket page) arrives PRE-SELECTED here,
+// so it's visible which items are already in the saved basket - and deselecting
+// one then re-adding to basket removes it (see exportShoppingList's locked
+// branch). Desktop checkboxes key per-kg groups off their synthetic __group_*
+// key; mobile cards key off real member names - seed the matching set.
+(function seedSelectionFromLockedBasket() {
+  try {
+    if (localStorage.getItem('pw_sl_locked') !== '1') return;
+    const names = JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}').items || [];
+    if (!names.length) return;
+    const memberToGroup = new Map();
+    loadVariantGroups().forEach(g => g.items.forEach(n => memberToGroup.set(n, '__group_' + g.key)));
+    const target = window.innerWidth <= 700 ? _selectedItems : _checkedItems;
+    const useGroups = target === _checkedItems;
+    names.forEach(n => target.add(useGroups ? (memberToGroup.get(n) || n) : n));
+    // Mobile: refresh the floating "+ Basket (n)" pill - it's only updated by
+    // tap handlers otherwise, so a seeded selection showed "(0)".
+    if (target === _selectedItems) _updateSelectedPill();
+  } catch { /* corrupt handoff - just don't pre-select */ }
+})();
+
 function updateBulkBar() {
   const bar = $('bulkToolbar');
   if (!bar) return;
@@ -5830,14 +5851,20 @@ function exportShoppingList(useChecked) {
   const quantities = loadUnitOverrides();
   let finalNames = names;
   let finalNote = note;
-  // If the basket is locked (Save basket on the basket page), append to the
-  // existing basket instead of replacing it. Dedupe while preserving order.
+  // Locked basket (Save basket on the basket page):
+  //  - EXPLICIT selection: the saved basket arrives here pre-selected, so the
+  //    current selection IS the basket the user sees - it REPLACES the saved
+  //    list (deselecting an item and re-adding actually removes it).
+  //  - Bulk/filter export (no selection): append to the saved basket, deduped.
   if (localStorage.getItem('pw_sl_locked') === '1') {
-    let existing = [];
-    try { existing = JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}').items || []; } catch {}
-    const merged = [...existing];
-    names.forEach(n => { if (!merged.includes(n)) merged.push(n); });
-    finalNames = merged;
+    const explicit = _selectedItems.size > 0 || (useChecked && _checkedItems && _checkedItems.size > 0);
+    if (!explicit) {
+      let existing = [];
+      try { existing = JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}').items || []; } catch {}
+      const merged = [...existing];
+      names.forEach(n => { if (!merged.includes(n)) merged.push(n); });
+      finalNames = merged;
+    }
     finalNote = 'items (basket locked)';
   }
   const handoffPayload = { items: finalNames, note: finalNote, quantities };

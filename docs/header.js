@@ -60,6 +60,10 @@
     '.scrape-strip-pct{font-size:11px;color:var(--text-soft,#94A3B8);white-space:nowrap;min-width:30px;text-align:right}' +
     '.scrape-strip-retry{background:none;border:1px solid var(--border,#E2E8F0);border-radius:6px;cursor:pointer;color:var(--text-mid,#475569);font-size:12px;font-weight:600;padding:2px 10px;white-space:nowrap}' +
     '.scrape-strip-dismiss{background:none;border:none;cursor:pointer;color:var(--text-soft,#94A3B8);font-size:14px;line-height:1;padding:0 2px;flex-shrink:0}' +
+    /* Header icon sizing lives HERE (not per-page CSS) so the hot/basket/options
+       buttons are pixel-identical on every page - basket's inline stylesheet was
+       missing style.css's 38px rule, so its icons rendered 33x29 vs 38x38. */
+    'header .header-right .btn-icon{height:38px;min-width:38px;justify-content:center;box-sizing:border-box}' +
     '@media (max-width:700px){.validate-pill{display:none}}';
   var styleEl = document.createElement('style');
   styleEl.id = 'pw-header-css';

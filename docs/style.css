@@ -367,6 +367,21 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
   margin-bottom: 3px;
 }
 .saving-amount { font-size: 20px; font-weight: 800; color: var(--green); line-height: 1; }
+/* Desktop: label and amount share ONE line (label left, amount right), which
+   makes the whole banner a text-row shorter. The divider's children stretch to
+   a common width so the two amounts right-align with each other. Mobile keeps
+   its own compact layout (overrides near the end of this file). */
+@media (min-width: 701px) {
+  .comparison-banner { padding: 14px 24px; }
+  .store-card { padding: 10px 16px; }
+  .store-card-total { font-size: 26px; margin-bottom: 4px; }
+  /* Reserve the winner pill's real height on BOTH cards so they stay equal */
+  .store-card-badge { min-height: 26px; }
+  .store-divider { align-items: stretch; min-width: 230px; }
+  .saving-text { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex: 1; }
+  .saving-label { margin-bottom: 0; }
+  .saving-line + .saving-line { margin-top: 8px; }
+}
 .last-updated { font-size: 11px; color: var(--text-soft); text-align: center; }
 .last-updated span { display: block; }
 
