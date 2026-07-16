@@ -41,33 +41,30 @@
       gap: 6px;
       white-space: nowrap;
     }
-    .deals-hero-divider {
-      width: 1px;
-      height: 16px;
-      background: var(--border-strong);
-      flex-shrink: 0;
-    }
     .deals-hero-stats {
       display: flex;
-      gap: 16px;
+      gap: 10px;
       align-items: center;
       flex-wrap: wrap;
     }
     .deals-hero-stat {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-mid);
       display: flex; align-items: baseline; gap: 5px;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 4px 12px;
     }
     .deals-hero-stat strong {
       color: var(--text);
       font-weight: 700;
+      font-size: 14px;
     }
 
-    /* ── Deal-definition sliders ── */
+    /* ── Deal-definition + show filters, one card ── */
     .hd-tune {
       display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
-      margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
-      width: 100%;
+      margin-top: 10px; padding: 10px 14px; width: 100%;
+      background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
     }
     .hd-tune-title { font-size: 12px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: .04em; }
     .hd-tune-and {
@@ -83,71 +80,53 @@
     .hd-tune-row strong { font-size: 13px; font-weight: 800; color: var(--text); min-width: 34px; font-variant-numeric: tabular-nums; }
     .hd-tune-atl { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--text-mid); cursor: pointer; white-space: nowrap; }
     .hd-tune-atl input { accent-color: var(--ww); cursor: pointer; }
-    .hd-tune-foot { display: contents; } /* mobile turns this into a real footer row */
+    /* Row 2 of the card: the "Show" filters (store + watchlist) + Reset */
+    .hd-tune-show {
+      display: flex; align-items: center; gap: 12px; width: 100%;
+      border-top: 1px solid var(--border); padding-top: 9px; margin-top: 2px;
+    }
     .store-filter-row { display: flex; gap: 8px; flex-wrap: wrap; }
     @media (max-width: 700px) {
       /* Hero: centered title, two equal stat tiles */
       .deals-hero { padding: 12px 14px; gap: 10px; }
       .deals-hero-title { width: 100%; justify-content: center; }
-      .deals-hero-divider { display: none; }
       .deals-hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
       .deals-hero-stat {
         flex-direction: column; align-items: center; gap: 2px;
-        background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
         padding: 10px 6px; font-size: 11px; text-align: center;
       }
       .deals-hero-stat strong { font-size: 20px; }
-      /* Tuner: one card — label + value on a line, slider full width beneath,
-         AND/OR chip centered between the two, footer = checkbox left / reset right.
+      /* Tuner: label + value on a line, slider full width beneath, AND/OR chip
+         centered between the two, then the ATL checkbox and the Show filters.
          (The old layout let the value badge render past the viewport edge.) */
-      .hd-tune {
-        gap: 10px; margin-top: 4px; padding: 10px;
-        background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
-      }
+      .hd-tune { gap: 10px; margin-top: 4px; padding: 10px; }
       .hd-tune-title { display: none; } /* the AND/OR chip stays — it's a control now */
       .hd-tune-row { width: 100%; flex-wrap: wrap; row-gap: 6px; }
       .hd-tune-row label { flex: 1 1 auto; white-space: normal; }
       .hd-tune-row strong { flex-shrink: 0; text-align: right; }
       .hd-tune-row input[type="range"] { order: 3; flex: 1 1 100%; width: auto; min-width: 0; }
       .hd-tune-and { margin: 0 auto; }
-      .hd-tune-foot {
-        display: flex; width: 100%; justify-content: space-between; align-items: center;
-        border-top: 1px solid var(--border); padding-top: 9px;
-      }
+      .hd-tune-atl { width: 100%; border-top: 1px solid var(--border); padding-top: 9px; }
+      .hd-tune-show { flex-wrap: wrap; gap: 8px; padding-top: 8px; }
+      .hd-tune-show #hdTuneReset { margin-left: auto; }
       /* Store filter: three equal buttons filling the row (logo chips + names) */
-      .deals-filter-bar { padding: 10px 14px; }
-      .deals-filter-label { display: none; }
       .store-filter-row { display: grid; grid-template-columns: 1fr 1fr 1fr; width: 100%; gap: 8px; }
       .store-filter-btn { justify-content: center; }
     }
 
-    /* ── Filter bar ── */
-    .deals-filter-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 24px;
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-      flex-wrap: wrap;
+    /* ── Category tabs + Columns, one row ── */
+    .hd-tabs-row {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--card); border-bottom: 1px solid var(--border);
+      padding-right: 16px;
     }
-    /* Desktop: category tabs + store filter stick under the header (JS sets `top`),
-       forming one opaque block with the header and thead — no scroll seam, and the
-       filters stay reachable down a long list. Mobile keeps them in normal flow. */
+    .hd-tabs-row .category-tabs { flex: 1; min-width: 0; }
+    /* Desktop: the tabs row sticks under the main header (JS sets `top`), with
+       the table head sticking below it — one contiguous opaque stack, no seam.
+       Mobile keeps everything scrolling away (space is tight). */
     @media (min-width: 701px) {
-      #categoryTabs   { position: sticky; z-index: 60; }
-      .deals-filter-bar { position: sticky; z-index: 59; }
+      .hd-tabs-row { position: sticky; z-index: 60; }
     }
-    .deals-filter-label {
-      font-size: 12px;
-      color: var(--text-soft);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      white-space: nowrap;
-    }
-
-    /* ── Category tabs ── */
     .category-tabs {
       padding: 0 24px;
     }
@@ -366,11 +345,10 @@
 
 <div class="deals-hero">
   <div class="deals-hero-title">🔥 Hot Deals</div>
-  <div class="deals-hero-divider"></div>
   <div class="deals-hero-stats" id="heroStats"></div>
   <!-- The dials that DEFINE a deal, out in the open. Dragging either instantly
-       grows/shrinks the list below. Both conditions must hold (AND); the
-       checkbox rescues all-time lows from strict slider settings. -->
+       grows/shrinks the list below. Row 2 ("Show") holds the store + watchlist
+       filters — everything that decides WHICH deals you see lives in this card. -->
   <div class="hd-tune">
     <span class="hd-tune-title">A deal must be</span>
     <div class="hd-tune-row" title="How far below its usual (median historical) price an item must be">
@@ -384,28 +362,27 @@
       <input type="range" id="hdDiffSlider" min="0" max="50" step="1">
       <strong id="hdDiffVal">0%</strong>
     </div>
-    <div class="hd-tune-foot">
-      <label class="hd-tune-atl" title="An all-time-low price is always worth seeing, even when it misses the sliders">
-        <input type="checkbox" id="hdAtlChk"> 🏆 always include all-time lows
-      </label>
+    <label class="hd-tune-atl" title="An all-time-low price is always worth seeing, even when it misses the sliders">
+      <input type="checkbox" id="hdAtlChk"> 🏆 always include all-time lows
+    </label>
+    <div class="hd-tune-show">
+      <span class="hd-tune-title">Show</span>
+      <div id="storeFilter" class="store-filter-row">
+        <button class="store-filter-btn active" data-store="all">All Stores</button>
+        <button class="store-filter-btn" data-store="woolworths"><span class="store-chip ww sm">W</span> WW</button>
+        <button class="store-filter-btn" data-store="coles"><span class="store-chip coles sm">C</span> Coles</button>
+      </div>
+      <button class="priority-pill watchlist-pill" id="watchlistFilterBtn">👁 Watchlist</button>
+      <span class="hd-show-spacer" style="flex:1"></span>
       <button id="hdTuneReset" class="btn btn-ghost" style="font-size:12px;padding:5px 12px">↺ Reset</button>
     </div>
   </div>
 </div>
 
-<!-- Category filter tabs -->
-<div id="categoryTabs" class="category-tabs" style="padding-top:12px;padding-bottom:8px;background:var(--card);border-bottom:1px solid var(--border)"></div>
-
-<!-- Filter bar: store pills + watchlist toggle -->
-<div class="deals-filter-bar">
-  <span class="deals-filter-label">Store</span>
-  <div id="storeFilter" class="store-filter-row">
-    <button class="store-filter-btn active" data-store="all">All Stores</button>
-    <button class="store-filter-btn" data-store="woolworths"><span class="store-chip ww sm">W</span> WW</button>
-    <button class="store-filter-btn" data-store="coles"><span class="store-chip coles sm">C</span> Coles</button>
-  </div>
-  <span class="filter-separator" style="margin-left:auto"></span>
-  <button class="priority-pill watchlist-pill" id="watchlistFilterBtn">👁 Watchlist</button>
+<!-- Category filter tabs + the table's Columns chooser (it configures the table,
+     so it sits with the table, not up in the filters) -->
+<div class="hd-tabs-row">
+  <div id="categoryTabs" class="category-tabs" style="padding-top:12px;padding-bottom:8px"></div>
   <div class="col-chooser-wrap" id="hdColChooserWrap">
     <button class="btn btn-ghost" id="hdColChooserBtn">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
@@ -522,11 +499,9 @@ const fmtUnit = (price, unit) => {
 function fixStickyOffset() {
   const navH = document.querySelector('header')?.offsetHeight || 60;
   const desktop = window.innerWidth > 700;
-  const tabs = document.getElementById('categoryTabs');
-  const filter = document.querySelector('.deals-filter-bar');
+  const tabs = document.querySelector('.hd-tabs-row'); // tabs + Columns share one sticky row
   let top = navH;
   if (desktop && tabs) { tabs.style.top = top + 'px'; top += tabs.offsetHeight; }
-  if (desktop && filter) { filter.style.top = top + 'px'; top += filter.offsetHeight; }
   const theadTop = desktop ? top : navH;
   document.querySelectorAll('.deals-table thead th').forEach(th => {
     th.style.top = theadTop + 'px';

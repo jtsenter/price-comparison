@@ -2551,10 +2551,10 @@ function renderSavingInfo(s) {
   // tip) — a bare title attribute was invisible until you happened to hover.
   // "Max": these are the largest POSSIBLE savings — they compare the two
   // stores and don't change with whichever store you happen to pick.
-  const basket = `<div class="saving-line"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">Max basket saving${infoIcoHTML('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store')}</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
+  const basket = `<div class="saving-line"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIcoHTML('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store')}</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
   let maxRow = '';
   if (s.max_saving > s.total_saving + 0.005) {
-    maxRow = `<div class="saving-line"><span class="saving-icon">${splitIcon}</span><div class="saving-text"><div class="saving-label">Max split saving${infoIcoHTML('The most you can save overall: every item bought at whichever store sells it cheapest, vs the dearer single store')}</div><span class="saving-amount">${fmt(s.max_saving)}</span></div></div>`;
+    maxRow = `<div class="saving-line"><span class="saving-icon">${splitIcon}</span><div class="saving-text"><div class="saving-label">Split saving${infoIcoHTML('The most you can save overall: every item bought at whichever store sells it cheapest, vs the dearer single store')}</div><span class="saving-amount">${fmt(s.max_saving)}</span></div></div>`;
   }
   return basket + maxRow;
 }

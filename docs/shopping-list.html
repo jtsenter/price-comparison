@@ -49,25 +49,26 @@
     main { max-width: 1100px; margin: 0 auto; padding: 24px; }
 
     /* ── Store card summary ─────────────────── */
-    .store-summary-wrap {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius); box-shadow: var(--shadow);
-      margin-bottom: 24px; overflow: hidden;
-    }
-    .store-cards-grid { display: grid; grid-template-columns: 1fr 1fr; }
+    /* Three panels on one row: WW card | savings panel | Coles card — all three
+       trip prices (each store + the split price) sit side by side. */
+    .store-summary-wrap { margin-bottom: 20px; }
+    .store-cards-grid { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 10px; align-items: stretch; }
     .store-card-sl {
       display: grid;
-      grid-template-rows: auto auto auto auto 1fr auto minmax(36px,auto);
-      padding: 20px 24px; border-bottom: 3px solid transparent;
+      grid-template-columns: auto 1fr auto;
+      grid-template-areas: "icon name price" "icon name badge";
+      column-gap: 12px; row-gap: 2px;
+      align-items: center; align-content: center;
+      padding: 12px 16px;
       background: var(--card); cursor: pointer;
-      transition: background .15s, border-bottom-color .15s;
+      border: 2px solid var(--border); border-radius: 12px;
+      transition: background .15s, border-color .15s;
     }
-    .store-card-sl + .store-card-sl { border-left: 1px solid var(--border); }
     /* Active card carries its store identity, not a fixed green */
-    .store-card-sl.ww.card-active    { background: #F0FDF4; border-bottom-color: var(--ww); }
-    .store-card-sl.coles.card-active { background: #FEF5F5; border-bottom-color: var(--coles); }
+    .store-card-sl.ww.card-active    { background: #F0FDF4; border-color: var(--ww); }
+    .store-card-sl.coles.card-active { background: #FEF5F5; border-color: var(--coles); }
     .store-card-sl.card-inactive:hover { background: var(--bg); }
-    .sc-icon { margin-bottom: 12px; }
+    .sc-icon { grid-area: icon; }
     .sc-icon-chip {
       display: inline-flex; align-items: center; justify-content: center;
       width: 36px; height: 36px; border-radius: 10px;
@@ -75,24 +76,37 @@
     }
     .sc-icon-chip.ww    { background: var(--ww); }
     .sc-icon-chip.coles { background: var(--coles); }
-    .sc-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .sc-name-row { grid-area: name; display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
     .sc-store-name { font-size: 14px; font-weight: 700; }
     .sc-item-pill {
       font-size: 11px; background: var(--bg); color: var(--text-soft);
       border: 1px solid var(--border); border-radius: 10px;
       padding: 1px 8px; font-weight: 500;
     }
-    .sc-price { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 6px; }
+    .sc-price { grid-area: price; justify-self: end; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
     .sc-price.price-active   { color: var(--green); }
     .sc-price.price-inactive { color: var(--text-soft); }
-    .sc-subtitle { font-size: 12px; color: var(--text-soft); }
-    .sc-spacer { min-height: 8px; }
-    .sc-badge-row { margin-top: 12px; }
+    .sc-badge-row { grid-area: badge; justify-self: end; min-height: 18px; }
     .sc-badge {
       display: inline-block; background: var(--green); color: #fff;
       font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 10px;
     }
-    .sc-hint { font-size: 11px; color: var(--text-soft); font-style: italic; min-height: 36px; padding-top: 4px; }
+    .sc-delta { font-size: 11px; font-weight: 600; color: var(--text-soft); font-variant-numeric: tabular-nums; }
+    /* Savings panel — one line per figure (label left, price right), chips below */
+    .sl-savings-panel {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 8px 14px; display: flex; flex-direction: column; justify-content: center; gap: 2px;
+    }
+    .sl-savings-panel .saving-info { display: flex; flex-direction: column; gap: 0; }
+    .sl-savings-panel .saving-line { padding: 4px 0; }
+    .sl-savings-panel .saving-line + .saving-line { border-top: 1px solid var(--border); }
+    .sl-savings-panel .saving-text { flex: 1; display: flex; align-items: center; justify-content: space-between; }
+    .sl-savings-panel .saving-label { margin-bottom: 0; }
+    .sl-savings-panel .saving-amount { font-size: 16px; }
+    .sl-savings-panel .saving-icon { width: 22px; font-size: 16px; }
+    .sl-savings-panel .saving-icon .store-chip { width: 22px; height: 22px; font-size: 12px; }
+    .sl-savings-panel .bar-ribbon-chips { justify-content: center; gap: 6px; border-top: 1px solid var(--border); padding-top: 6px; margin-top: 2px; }
+    .saving-line.split-total-line { background: #F0FDF4; border: 1px solid #D1FAE5; border-radius: 10px; padding: 5px 10px; }
     /* ── Save ribbon (replaces stats bar) ── */
     .bar-ribbon {
       display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
@@ -137,26 +151,15 @@
     }
     .bar-optimal strong { font-size: 15px; font-weight: 800; }
     .bar-optimal span { color: #94A3B8; font-size: 12px; }
-    /* Savings row — same "Basket saving / Split shop" component as the main page. */
-    .sl-savings-row {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 16px; flex-wrap: wrap; padding: 14px 20px; border-top: 1px solid var(--border);
-    }
-    .saving-info { display: flex; gap: 26px; flex-wrap: wrap; }
+    /* Saving lines — same "Basket saving / Split shop" component as the main page. */
     .saving-line { display: flex; align-items: center; gap: 10px; }
     .saving-icon { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 26px; font-size: 20px; }
-    .saving-icon .store-chip { width: 26px; height: 26px; font-size: 14px; border-radius: 7px; }
     .split-icon { display: block; border-radius: 50%; }
     .saving-text { text-align: left; line-height: 1; }
     /* Flex so the ? info icon centres on the text line instead of hanging low */
-    .saving-label { display: flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+    .saving-label { display: flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.06em; }
     .saving-amount { font-size: 20px; font-weight: 800; color: var(--green); line-height: 1; }
     .bar-ribbon-chips { display: flex; gap: 8px; flex-wrap: wrap; }
-    @media (max-width: 700px) {
-      .sl-savings-row { padding: 12px 14px; }
-      .saving-info { gap: 18px; }
-      .saving-amount { font-size: 17px; }
-    }
 
     /* Store sections */
     .store-section { margin-bottom: 28px; }
@@ -365,16 +368,14 @@
       nav { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
       nav::-webkit-scrollbar { display: none; }
       nav a { white-space: nowrap; font-size: 13px; padding: 6px 8px; }
-      /* Compact W-vs-C cards side by side: the stacked full-height cards ate a
-         whole phone screen before the first item. Icon row, explainer line and
-         hint are droppable padding on mobile — store, count, total and the
-         "Selected store" badge carry all the signal. */
-      .store-card-sl { padding: 12px 14px; grid-template-rows: none; }
-      .sc-icon, .sc-subtitle, .sc-spacer, .sc-hint { display: none; }
-      /* Item-count pill always on its own line — wrap-if-needed made "Woolworths"
-         (long name) wrap while "Coles" (short name) didn't, so the price below
-         landed on a different row per card. Column layout is deterministic. */
-      .sc-name-row { flex-direction: column; align-items: flex-start; gap: 3px; margin-bottom: 6px; }
+      /* Compact W-vs-C cards side by side, savings panel full-width below them
+         (desktop puts the panel BETWEEN the cards; the shared DOM reorders here
+         via grid `order`). Cards stack their content vertically on a phone. */
+      .store-cards-grid { grid-template-columns: 1fr 1fr; }
+      .sl-savings-panel { order: 3; grid-column: 1 / -1; }
+      .store-card-sl { display: block; padding: 12px 14px; }
+      .sc-icon { display: none; }
+      .sc-name-row { margin-bottom: 6px; }
       .sc-badge-row { margin-top: 6px; }
       .bar-ribbon { gap: 8px; padding: 10px 14px; }
       .sc-price { font-size: 24px; margin-bottom: 2px; }
@@ -389,19 +390,9 @@
       #saveBasketBtn, #removeAllBtn { justify-content: center; }
       #smResetBtn { grid-column: 1 / -1; justify-content: center; }
       .sl-note { text-align: center; }
-      /* Savings: one line each (label left, price right), chips centered below */
-      .sl-savings-row { flex-direction: column; align-items: stretch; gap: 6px; }
-      .saving-info { flex-direction: column; gap: 0; }
-      .saving-line { padding: 5px 0; }
-      .saving-line + .saving-line { border-top: 1px solid var(--border); }
-      .saving-text { flex: 1; display: flex; align-items: center; justify-content: space-between; }
-      .saving-label { margin-bottom: 0; }
-      .saving-icon { width: 22px; font-size: 16px; }
-      .saving-icon .store-chip { width: 22px; height: 22px; font-size: 12px; }
-      .bar-ribbon-chips { justify-content: center; }
+      /* One-line savings + tinted Split shop row come from the shared
+         .sl-savings-panel base styles; mobile only shortens the chip wording */
       .chip-word { display: none; }
-      /* Split trip total: the number you act on — give it its own tinted row */
-      .saving-line.split-total-line { background: #F0FDF4; border: 1px solid #D1FAE5; border-radius: 12px; padding: 8px 10px; }
       /* Stacked rows replace the table grid: a 6-column table can't fit a 375px
          phone, so each row becomes a two-line card — name (+ remove) on top,
          price · qty stepper · line total underneath. Same markup, CSS-only. */
@@ -468,10 +459,9 @@
 
       & body { background: var(--bg); color: var(--text); }
       & header { background: var(--card); border-bottom-color: var(--border); }
-      & .store-summary-wrap { background: var(--card); border-color: var(--border); }
       & .store-card-sl { background: var(--card); }
-      & .store-card-sl.ww.card-active    { background: #052e16; border-bottom-color: var(--ww); }
-      & .store-card-sl.coles.card-active { background: #450a0a; border-bottom-color: var(--coles); }
+      & .store-card-sl.ww.card-active    { background: #052e16; border-color: var(--ww); }
+      & .store-card-sl.coles.card-active { background: #450a0a; border-color: var(--coles); }
       & .bar-ribbon { background: var(--card); border-top-color: var(--border); }
       & .bar-optimal { background: #052e16; border-color: #14532d; }
       & .saving-line.split-total-line { background: #052e16; border-color: #14532d; }
@@ -623,8 +613,8 @@ async function boot() {
   // mode and above the toggles, so switching to shopping mode dropped the line
   // and the whole view jumped up.
   const filterNoteHtml = handoff?.note
-    ? `Showing <strong>${displayItems.length}</strong> ${handoff.note}`
-    : `Showing <strong>${displayItems.length}</strong> item${displayItems.length !== 1 ? 's' : ''}`;
+    ? `<strong>${displayItems.length}</strong> ${handoff.note}`
+    : `<strong>${displayItems.length}</strong> item${displayItems.length !== 1 ? 's' : ''}`;
 
   let equalStore = 'ww'; // split mode: which store equal-price items are assigned to
 
@@ -974,7 +964,6 @@ async function boot() {
       i.cheaper_store === 'equal' &&
       i.woolworths?.price != null &&
       i.coles?.price != null);
-    const ec = slSplit ? equalItems.length : 0;
     const single = slSplit ? null : singleStoreNow();
     // Card "active" highlight: single mode = the store you're buying at;
     // split mode = where equal-price items are assigned (as before).
@@ -988,17 +977,12 @@ async function boot() {
     const wwPriceCls = wwActive ? 'price-active' : 'price-inactive';
     const coPriceCls = !wwActive ? 'price-active' : 'price-inactive';
 
-    // Badge visibility — hidden when totals are equal OR card is not active
-    const wwBadgeStyle = (isEqual || !wwActive) ? 'visibility:hidden' : '';
-    const coBadgeStyle = (isEqual || wwActive)  ? 'visibility:hidden' : '';
-
-    // Hint text — shown only on the active card; no navigation instruction text
-    const wwHint = ec > 0 && wwActive
-      ? `Includes ${ec} equal-price item${ec !== 1 ? 's' : ''} assigned here`
-      : '';
-    const coHint = ec > 0 && !wwActive
-      ? `Includes ${ec} equal-price item${ec !== 1 ? 's' : ''} assigned here`
-      : '';
+    // Inactive card shows its distance from the chosen store's total. Single
+    // mode only — split cards cover different item sets, so a delta between
+    // them is meaningless. Signed: picking the dearer store makes it negative.
+    const wwDelta = (!slSplit && !isEqual && !wwActive) ? wwTotal - coTotal : null;
+    const coDelta = (!slSplit && !isEqual &&  wwActive) ? coTotal - wwTotal : null;
+    const deltaHtml = d => d == null ? '' : `<span class="sc-delta">${d >= 0 ? '+' : '−'}${fmt(Math.abs(d))}</span>`;
 
     // ── Save ribbon ──────────────────────────────────────────────────────────
     // Intrinsic classification counts (independent of equalStore assignment)
@@ -1019,22 +1003,19 @@ async function boot() {
     const savingCheaperChip = (wwTotal <= coTotal)
       ? '<span class="store-chip sm ww">W</span>' : '<span class="store-chip sm coles">C</span>';
     const splitDisc = `<svg class="split-icon" width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 A14 14 0 0 0 16 30 Z" fill="var(--ww)"/><path d="M16 2 A14 14 0 0 1 16 30 Z" fill="var(--coles)"/><line x1="16" y1="2" x2="16" y2="30" stroke="var(--card)" stroke-width="2.5"/></svg>`;
-    // (No "Trip total": in single mode it IS the active card's number, and the
-    // subtotal rows already carry the split-mode detail.)
     const infoIco = tip => `<span class="info-ico" tabindex="0" data-tip="${tip.replace(/"/g, '&quot;')}">?</span>`;
-    // "Max": the largest POSSIBLE savings. They compare the two stores, so
-    // they deliberately do NOT move when you pick the other store to buy at.
-    // Split mode: the combined trip cost under the CURRENT plan (equal-price
-    // assignment + row swaps). Single mode doesn't need it — the active card's
-    // number already IS the trip total.
-    const splitTotalHtml = slSplit
-      ? `<div class="saving-line split-total-line"><span class="saving-icon">🧾</span><div class="saving-text"><div class="saving-label">Split trip total${infoIco('Woolworths + Coles subtotals under the current plan — what the whole split trip costs.')}</div><span class="saving-amount">${fmt(wwSub + coSub)}</span></div></div>`
-      : '';
+    // "Split shop" is ALWAYS shown, in both modes, so all three trip prices sit
+    // side by side: WW total (left card), Coles total (right card), split price
+    // (here). In split mode it follows the CURRENT plan (equal-price assignment
+    // + row swaps); in one-store mode it's the optimal split.
+    const splitShopVal = slSplit ? (wwSub + coSub) : optimalTotal;
+    const splitTotalHtml =
+      `<div class="saving-line split-total-line"><span class="saving-icon">🧾</span><div class="saving-text"><div class="saving-label">Split shop${infoIco('What the whole trip costs split across both stores — each item at its planned store (split mode) or its cheapest store.')}</div><span class="saving-amount">${fmt(splitShopVal)}</span></div></div>`;
     const savingInfoHtml = splitTotalHtml + (isEqual
       ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
-      : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Max basket saving${infoIco('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store. Fixed — it does not change with the store you pick.')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`
+      : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIco('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store. Fixed — it does not change with the store you pick.')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`
         + (splitSaving > basketSaving + 0.005
-            ? `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Max split saving${infoIco('The most you can save overall: every item at whichever store sells it cheapest, vs the dearer single store. Use the Split shop toggle above to plan it.')}</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
+            ? `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Split saving${infoIco('The most you can save overall: every item at whichever store sells it cheapest, vs the dearer single store. Use the Split shop toggle above to plan it.')}</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
             : ''));
 
     main.innerHTML = `
@@ -1056,12 +1037,11 @@ async function boot() {
               <span class="sc-item-pill">${slSplit ? `${wwItems.length} item${wwItems.length !== 1 ? 's' : ''}` : `all ${displayItems.length} items`}</span>
             </div>
             <div class="sc-price ${wwPriceCls}">${fmt(slSplit ? wwSub : wwTotal)}</div>
-            <div class="sc-subtitle">${slSplit ? 'Your items assigned here' : 'Whole basket at this store'}</div>
-            <div class="sc-spacer"></div>
-            <div class="sc-badge-row">
-              <span class="sc-badge" style="${wwBadgeStyle}">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>
-            </div>
-            <div class="sc-hint">${wwHint}</div>
+            <div class="sc-badge-row">${wwActive && !isEqual ? `<span class="sc-badge">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>` : deltaHtml(wwDelta)}</div>
+          </div>
+          <div class="sl-savings-panel">
+            <div class="saving-info">${savingInfoHtml}</div>
+            <div class="bar-ribbon-chips">${ribbonChips}</div>
           </div>
           <div class="${coCardCls}" id="colesTotalBlock">
             <div class="sc-icon"><span class="sc-icon-chip coles">C</span></div>
@@ -1070,17 +1050,8 @@ async function boot() {
               <span class="sc-item-pill">${slSplit ? `${colesItems.length} item${colesItems.length !== 1 ? 's' : ''}` : `all ${displayItems.length} items`}</span>
             </div>
             <div class="sc-price ${coPriceCls}">${fmt(slSplit ? coSub : coTotal)}</div>
-            <div class="sc-subtitle">${slSplit ? 'Your items assigned here' : 'Whole basket at this store'}</div>
-            <div class="sc-spacer"></div>
-            <div class="sc-badge-row">
-              <span class="sc-badge" style="${coBadgeStyle}">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>
-            </div>
-            <div class="sc-hint">${coHint}</div>
+            <div class="sc-badge-row">${!wwActive && !isEqual ? `<span class="sc-badge">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>` : deltaHtml(coDelta)}</div>
           </div>
-        </div>
-        <div class="sl-savings-row">
-          <div class="saving-info">${savingInfoHtml}</div>
-          <div class="bar-ribbon-chips">${ribbonChips}</div>
         </div>
       </div>
 
