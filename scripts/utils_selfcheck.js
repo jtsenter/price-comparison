@@ -33,6 +33,18 @@ function extractConst(name) {
   return m[0];
 }
 
+// buildDealGroups() reads localStorage (per-kg membership overrides) and the
+// module-level DEFAULT_VARIANT_GROUPS. Stub the former empty; inject a small
+// fixture for the latter so the test exercises the LOGIC (cheapest $/kg per
+// store, $/kg conversion, skip-empty) against controlled data rather than the
+// real 250-name seed. Membership-override resolution is covered separately via
+// variantGroupItemNames below.
+global.localStorage = { getItem: () => null };
+global.DEFAULT_VARIANT_GROUPS = [
+  { key: 'basa_fillets', label: 'Basa Fillets', items: ['Woolworths Frozen Basa Fillets 1kg', 'Coles Frozen Basa Fillet'] },
+  { key: 'lamb_mince',   label: 'Lamb Mince',   items: ['Some Lamb Mince 500g'] },
+];
+
 // eslint-disable-next-line no-eval
 eval([
   extractConst('DEAL_MIN_SPREAD'),
@@ -43,6 +55,8 @@ eval([
   extract('_median'),
   extract('getDealQuality'),
   extract('calcTrendPosition'),
+  extract('variantGroupItemNames'),
+  extract('buildDealGroups'),
 ].join('\n'));
 
 let n = 0;
@@ -121,6 +135,32 @@ check('median empty -> null', _median([]), null);
   check('at all-time low -> 0', calcTrendPosition(atLow), 0);
   const noHist = { price_history: [], woolworths: { price: 5 } };
   check('insufficient history -> 999 (sorts last)', calcTrendPosition(noHist), 999);
+}
+
+// ── variantGroupItemNames (per-kg membership override resolution) ────────────
+{
+  const g = { key: 'k', items: ['A', 'B', 'C'] };
+  check('no override -> seed verbatim', variantGroupItemNames(g, {}), ['A', 'B', 'C']);
+  check('legacy v1 items = pure adds', variantGroupItemNames(g, { k: { items: ['A', 'B', 'C', 'X'] } }), ['A', 'B', 'C', 'X']);
+  check('v2 remove drops a seed member', variantGroupItemNames(g, { k: { v: 2, remove: ['B'] } }), ['A', 'C']);
+  check('v2 add + remove together', variantGroupItemNames(g, { k: { v: 2, add: ['X'], remove: ['A'] } }), ['B', 'C', 'X']);
+}
+
+// ── buildDealGroups (cheapest $/kg per store, other groups skipped) ──────────
+{
+  // Two real basa_fillets seed members, priced so WW is cheaper per kg.
+  const items = [
+    { list_item: 'Woolworths Frozen Basa Fillets 1kg', woolworths: { price: 7.20, name: 'WW Basa 1kg', url: 'u1' }, coles: null, price_history: [], ww_price_history: [{ date: '2026-01-01', price: 9.00 }], coles_price_history: [] },
+    { list_item: 'Coles Frozen Basa Fillet',           woolworths: null, coles: { price: 10.00, name: 'Coles Basa 1kg', url: 'u2' }, price_history: [], ww_price_history: [], coles_price_history: [{ date: '2026-01-01', price: 12.00 }] },
+  ];
+  const groups = buildDealGroups(items);
+  const basa = groups.find(g => g.list_item === '__group_basa_fillets');
+  check('one basa group built', !!basa, true);
+  check('basa marked as group', basa._isGroup, true);
+  check('basa WW = cheapest member $/kg', basa.woolworths.price, 7.20);   // 7.20 / 1kg
+  check('basa Coles = cheapest member $/kg', basa.coles.price, 10.00);    // 10.00 / 1kg
+  check('WW history converted to $/kg', basa.ww_price_history.map(p => p.price), [9.00]);
+  check('groups with no priced members are skipped', groups.some(g => g.list_item === '__group_lamb_mince'), false);
 }
 
 console.log(`utils_selfcheck: all ${n} cases passed`);

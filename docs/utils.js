@@ -387,23 +387,99 @@ const DEFAULT_VARIANT_GROUPS = [
   ]},
 ];
 
+// One group's resolved member names under the user's current overrides.
+// ponytail: legacy v1 overrides are treated as pure adds, a close-enough mirror
+// of app.js's migratePerKgOverride for a display/grouping filter.
+function variantGroupItemNames(g, ov) {
+  const o = (ov || {})[g.key] || {};
+  const v2 = o.v === 2;
+  const remove = new Set(v2 ? (o.remove || []) : []);
+  const base = g.items.filter(n => !remove.has(n));
+  const added = v2 ? (o.add || []) : (Array.isArray(o.items) ? o.items : []);
+  return [...base, ...added.filter(n => !base.includes(n))];
+}
+
 // Every per-kg member name under the user's current overrides - used by the
 // basket page to keep group members out of the "whole list" fallback view
 // (the main table shows ONE row per group, so a raw dump of members would
-// inflate the basket). ponytail: legacy v1 overrides are treated as pure adds,
-// a close-enough mirror of app.js's migratePerKgOverride for a display filter.
+// inflate the basket) and by the Hot Deals page to swap members for group rows.
 function perKgMemberNames() {
   let ov = {};
   try { ov = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}
   const names = new Set();
-  for (const g of DEFAULT_VARIANT_GROUPS) {
-    const o = ov[g.key] || {};
-    const remove = new Set(o.v === 2 ? (o.remove || []) : []);
-    g.items.forEach(n => { if (!remove.has(n)) names.add(n); });
-    const added = o.v === 2 ? (o.add || []) : (Array.isArray(o.items) ? o.items : []);
-    added.forEach(n => names.add(n));
-  }
+  for (const g of DEFAULT_VARIANT_GROUPS) variantGroupItemNames(g, ov).forEach(n => names.add(n));
   return names;
+}
+
+// ── Per-kg groups for the Hot Deals page ────────────────────────────────────
+// Collapse each variant group's members into ONE synthetic deal item, so Hot
+// Deals compares the cheapest $/kg product at each store (matching the main
+// page) instead of surfacing individual members - whose cross-store pack-price
+// comparison is apples-to-oranges (different pack sizes, single-store SKUs).
+// The synthetic item carries $/kg as its "price" and $/kg history, so
+// getDealQuality / getTrendSeries (price-agnostic min/median math) run
+// correctly in $/kg space - the same trick app.js's buildGroupHistoryItem uses.
+// ponytail: honours per-kg MEMBERSHIP overrides (pw_perkg_cats_v1) but not
+// per-point/per-member $/kg exclusions (set from the main page's history modal;
+// rare). Upgrade path: share app.js's buildGroupHistoryItem. A member with no
+// derivable size (no $/kg) simply doesn't contribute.
+function buildDealGroups(items) {
+  const byName = new Map((items || []).map(i => [i.list_item, i]));
+  let ov = {};
+  try { ov = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}
+
+  const perKg = res => {
+    if (!res || res.price == null) return null;
+    const p = clientPer100(res);
+    return p.value != null ? +(p.value * 10).toFixed(2) : null;
+  };
+  // A store's pack-price history converted to $/kg via that store's own current
+  // ratio ($/kg ÷ pack price). Null ratio (no size) => drop it rather than
+  // mislabel pack prices as $/kg (a recurring source of wrong trend numbers).
+  const convHist = (res, arr) => {
+    const kg = perKg(res);
+    if (kg == null || !res.price || !arr) return [];
+    const ratio = kg / res.price;
+    return arr.filter(e => e.price > 0).map(e => ({ date: e.date, price: +(e.price * ratio).toFixed(2) }));
+  };
+  // Merge members' per-date series taking the cheapest $/kg across members at
+  // each date (carry-forward last-known), same shape as buildGroupHistoryItem.
+  const mergeSeries = (perMember) => {
+    const withData = perMember.filter(s => s.length);
+    const dates = [...new Set(withData.flat().map(p => p.date))].sort();
+    const cursor = withData.map(() => 0), last = withData.map(() => null), out = [];
+    for (const date of dates) {
+      withData.forEach((s, i) => { while (cursor[i] < s.length && s[cursor[i]].date <= date) last[i] = s[cursor[i]++]; });
+      const known = last.filter(p => p != null);
+      if (known.length) out.push({ date, price: Math.min(...known.map(p => p.price)) });
+    }
+    return out;
+  };
+
+  const groups = [];
+  for (const g of DEFAULT_VARIANT_GROUPS) {
+    const members = variantGroupItemNames(g, ov).map(n => byName.get(n)).filter(Boolean);
+    if (!members.length) continue;
+
+    const wwBest = members.map(m => ({ m, kg: perKg(m.woolworths) })).filter(x => x.kg != null).sort((a, b) => a.kg - b.kg)[0];
+    const coBest = members.map(m => ({ m, kg: perKg(m.coles)      })).filter(x => x.kg != null).sort((a, b) => a.kg - b.kg)[0];
+    if (!wwBest && !coBest) continue;
+
+    groups.push({
+      list_item: '__group_' + g.key,
+      _isGroup: true,
+      _groupLabel: g.label,
+      _memberNames: members.map(m => m.list_item), // for the basket handoff (re-collapsed there)
+      category: 'Meat & Seafood',
+      trip_count: null,
+      woolworths: wwBest ? { price: wwBest.kg, url: wwBest.m.woolworths.url, image_url: wwBest.m.woolworths.image_url, name: wwBest.m.woolworths.name } : null,
+      coles:      coBest ? { price: coBest.kg, url: coBest.m.coles.url,      image_url: coBest.m.coles.image_url,      name: coBest.m.coles.name } : null,
+      ww_price_history:    mergeSeries(members.map(m => convHist(m.woolworths, [...(m.price_history || []), ...(m.ww_price_history || [])]))),
+      coles_price_history: mergeSeries(members.map(m => convHist(m.coles, m.coles_price_history))),
+      price_history: [],
+    });
+  }
+  return groups;
 }
 
 // ── Category normalisation ──────────────────────────────────────────────────
