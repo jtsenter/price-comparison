@@ -60,7 +60,7 @@ for pair in pairs:
         print(f"  SKIP: '{keep_name}' not found in latest.json")
         continue
     if drop_item is None:
-        print(f"  SKIP: '{drop_name}' not found in latest.json — already merged?")
+        print(f"  SKIP: '{drop_name}' not found in latest.json - already merged?")
         continue
 
     before = len(keep_item.get("price_history") or [])

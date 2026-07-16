@@ -50,7 +50,7 @@ CATEGORY_KEYWORDS = {
         "mineral water", "lemon lime", "sauvignon blanc", "beer", "cider",
         "kombucha", "energy drink",
     ],
-    "Frozen & Ready Meals": [
+    "Frozen": [
         "frozen", "ice cream", "meat pies", "pizza", "ben & jerry", "bulla crunch",
         "ristorante",
         # former Ready Meals bucket
@@ -63,7 +63,7 @@ CATEGORY_KEYWORDS = {
         "sandwich bag", "sponge", "gloves", "paper cups", "resealable", "cistern",
         "ecostore", "vanish", "napisan", "shine dishwash", "ajax", "strike",
     ],
-    "Personal Care & Baby": [
+    "Personal Care": [
         "toothbrush", "hand wash", "hand soap", "dettol", "palmolive", "toothpaste",
         "shampoo", "conditioner", "deodorant", "sunscreen",
         # former Baby bucket

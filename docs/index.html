@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>PriceWatch — Woolworths vs Coles</title>
+  <title>PriceWatch - Woolworths vs Coles</title>
   <meta name="description" content="Compare Woolworths vs Coles grocery prices, track price history, and find the cheapest store for your basket." />
   <meta name="theme-color" content="#00843D" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -22,12 +22,12 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=96" />
+  <link rel="stylesheet" href="style.css?v=97" />
 </head>
 <body>
 
 <header data-page="index"></header>
-<script src="header.js?v=6"></script>
+<script src="header.js?v=7"></script>
 
 <!-- Bulk action bar -->
 <div id="bulkToolbar" class="bulk-toolbar" style="display:none">
@@ -47,11 +47,11 @@
 
 <main>
   <div class="stale-banner" id="staleBanner">
-    ⚠️ Price data is more than 5 days old — click <strong>Update Prices</strong> to refresh.
+    ⚠️ Price data is more than 5 days old - click <strong>Update Prices</strong> to refresh.
   </div>
 
   <div class="stale-banner runner-offline-banner" id="runnerOfflineBanner">
-    ⚠️ Scraper is offline — the Windows runner is not connected. Prices cannot be updated until it restarts.
+    ⚠️ Scraper is offline - the Windows runner is not connected. Prices cannot be updated until it restarts.
     <button class="runner-retry-btn" onclick="retryRunnerCheck()">↺ Retry</button>
     <button class="runner-dismiss-btn" onclick="document.getElementById('runnerOfflineBanner').classList.remove('visible')">✕</button>
   </div>
@@ -65,7 +65,7 @@
           <span class="store-chip ww lg">W</span>
           <span class="store-card-label">Woolworths</span>
         </div>
-        <div class="store-card-total" id="wwTotal">—</div>
+        <div class="store-card-total" id="wwTotal">-</div>
         <div class="store-card-badge" id="wwBadge"></div>
       </div>
 
@@ -78,7 +78,7 @@
           <span class="store-chip coles lg">C</span>
           <span class="store-card-label">Coles</span>
         </div>
-        <div class="store-card-total" id="colesTotal">—</div>
+        <div class="store-card-total" id="colesTotal">-</div>
         <div class="store-card-badge" id="colesBadge"></div>
       </div>
 
@@ -175,7 +175,7 @@
     <ul class="not-found-list" id="notFoundList"></ul>
   </div>
 
-  <!-- Status line: freshness, coverage, deal count — lives at the page foot -->
+  <!-- Status line: freshness, coverage, deal count - lives at the page foot -->
   <footer class="page-footer">
     <div class="last-updated" id="lastUpdated"></div>
   </footer>
@@ -292,7 +292,7 @@
       <input type="file" id="uploadFile" accept=".xlsx,.xls" style="display:none" />
     </div>
     <div id="pendingItemsSection" style="display:none">
-      <div class="upload-preview-title">Prices marked as "different item" — rename and add to your list:</div>
+      <div class="upload-preview-title">Prices marked as "different item" - rename and add to your list:</div>
       <ul class="pending-list upload-preview-list"></ul>
     </div>
     <div id="uploadPreview" style="display:none">
@@ -383,9 +383,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-<script src="name_map.js?v=50"></script>
-<script src="utils.js?v=63"></script>
-<script src="app.js?v=115"></script>
+<script src="name_map.js?v=51"></script>
+<script src="utils.js?v=64"></script>
+<script src="app.js?v=116"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">
@@ -428,7 +428,7 @@ function fixStickyOffset() {
   if (ghost) ghost.style.top = navH + 'px';
   // The REAL thead is sticky inside the overflow:auto .table-wrap, so its top
   // must be 0 (flush with the wrap): the ghost handles page-scroll pinning.
-  // navH here pinned it 61px INTO the wrap — any accidental internal scroll
+  // navH here pinned it 61px INTO the wrap - any accidental internal scroll
   // showed a band of rows above the header row.
   document.querySelectorAll('#tableHead th').forEach(th => {
     th.style.top = '0px';
@@ -437,7 +437,7 @@ function fixStickyOffset() {
 window.addEventListener('load', fixStickyOffset);
 window.addEventListener('resize', fixStickyOffset);
 // The header's height CHANGES at runtime (scrape strip appears/disappears,
-// validate pill shows) — stale offsets left a gap the table rows scrolled
+// validate pill shows) - stale offsets left a gap the table rows scrolled
 // through above the sticky column header. Re-measure on any header resize.
 window.addEventListener('load', () => {
   const h = document.querySelector('header');

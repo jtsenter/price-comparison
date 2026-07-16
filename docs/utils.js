@@ -1,4 +1,4 @@
-// ── utils.js — Shared utilities for PriceWatch
+// ── utils.js - Shared utilities for PriceWatch
 // SINGLE SOURCE OF TRUTH for trend position, hot deal detection, and sorting
 // Both app.js (index.html) and hot-deals.html load this file before their own code
 // Do NOT redefine these functions elsewhere or divergence will occur
@@ -58,7 +58,7 @@ function clientPer100(result) {
 // ── Exclusion-key parsing ───────────────────────────────────────────────────
 // One parser for pw_exclusions_v1 keys, which exist in three historical formats:
 // bare numbers, bare strings ("3.50"), and store-prefixed strings ("ww:3.50" /
-// "coles:3.50"). Returns a Set of "X.XX" price strings with prefixes stripped —
+// "coles:3.50"). Returns a Set of "X.XX" price strings with prefixes stripped -
 // for mixed WW+Coles series a price excluded at either store is dropped entirely
 // (matches buildPriceBar's documented behaviour).
 function exclPriceSet(exclKeys) {
@@ -82,7 +82,7 @@ function getTrendSeries(item) {
   ];
   // Honour the user's excluded history points (pw_exclusions_v1) here so the
   // sort ranks items by the same series the bar draws. loadExclusions() is a
-  // function declaration in app.js/hot-deals.html — hoisted and available by
+  // function declaration in app.js/hot-deals.html - hoisted and available by
   // the time this actually runs (renders always happen after page scripts
   // finish loading), even though this file is included first.
   const excluded = exclPriceSet(loadExclusions()[item.list_item]);
@@ -131,16 +131,16 @@ function sortByTrend(items, dir = 'asc') {
 // A "hot deal" is a price that is meaningfully LOW relative to the item's own
 // price history. The old rule (all-time-low within 1¢ OR bottom 20%) flagged
 // trivial deals: an item that only ever sells $3.80–$3.90 hits its "all-time
-// low" at $3.80, but that's a 2.6% range — not worth surfacing.
+// low" at $3.80, but that's a 2.6% range - not worth surfacing.
 //
 // getDealQuality() measures the DEPTH of the discount against the item's
 // TYPICAL (median) historical price and requires the price to actually move
 // over time before anything qualifies, so flat items drop out.
 //
 //   typical   = median of historical prices (the "usual" shelf price)
-//   spread    = (hi - lo) / hi   — how much the price varies historically
-//   dropPct   = (typical - currentBest) / typical — how far below usual we are
-//   saveAmount= max(0, typical - currentBest) — $ saved vs the usual price
+//   spread    = (hi - lo) / hi   - how much the price varies historically
+//   dropPct   = (typical - currentBest) / typical - how far below usual we are
+//   saveAmount= max(0, typical - currentBest) - $ saved vs the usual price
 //
 // Qualifies when the price varies enough (spread ≥ MIN_SPREAD) AND the current
 // price is a real discount (dropPct ≥ MIN_DROP, or an all-time low). Ranking is
@@ -160,8 +160,8 @@ function getDealQuality(item, exclusions) {
   const empty = { qualifies: false };
   if (item.archived) return empty;
 
-  // Historical (past) prices only — the "usual" price is what it cost before now.
-  // exclPriceSet handles the "ww:X.XX"/"coles:X.XX" key format — the old inline
+  // Historical (past) prices only - the "usual" price is what it cost before now.
+  // exclPriceSet handles the "ww:X.XX"/"coles:X.XX" key format - the old inline
   // Number(p).toFixed(2) turned prefixed keys into "NaN", silently disabling
   // exclusions for hot-deal detection (an excluded bogus low still made a 🔥).
   const excludedSet = exclPriceSet(exclusions && exclusions[item.list_item]);
@@ -187,7 +187,7 @@ function getDealQuality(item, exclusions) {
   const isAllTimeLow = currentBest <= lo + 0.01;
 
   // Recency guard: "below the long-run median" is not a deal if the item was
-  // CHEAPER within the last fortnight — the price went up, not down. Items
+  // CHEAPER within the last fortnight - the price went up, not down. Items
   // with no dated recent entries keep the old behaviour.
   const cutoff = new Date(Date.now() - 14 * 86400000).toISOString().slice(0, 10);
   const recent = [
@@ -228,7 +228,7 @@ function isHotDeal(item, exclusions) {
 // Single reader/writer for every synced data file (was 7 near-identical copies
 // across app.js and hot-deals.html). githubPutJson GETs the fresh blob sha
 // immediately before the PUT and retries once on 409 (stale sha from a
-// concurrent writer). Base64 is unicode-safe both ways — plain btoa() throws on
+// concurrent writer). Base64 is unicode-safe both ways - plain btoa() throws on
 // non-Latin-1 product names, and plain atob() mangles them on read. Throws on
 // failure so each caller keeps its own reporting (alert / showSyncError /
 // fire-and-forget). validate.html keeps its own githubPut: it threads a known
@@ -272,7 +272,7 @@ async function githubPutJson(s, repoPath, data, message) {
 // Per-kg categories. Each is a comparable product type; the two near-identical
 // salmon-fillet and basa entries are merged so each category holds its real
 // equivalents. Membership can be fine-tuned in the edit dialog (DEFAULT_VARIANT_GROUPS
-// is the seed; user overrides live in localStorage — see loadVariantGroups()).
+// is the seed; user overrides live in localStorage - see loadVariantGroups()).
 const DEFAULT_VARIANT_GROUPS = [
   { key: 'chicken_breast', label: 'Chicken Breast', items: [
     'Woolworths RSPCA Approved Chicken Breast Fillet',
@@ -364,7 +364,7 @@ const DEFAULT_VARIANT_GROUPS = [
     "El-Amin's Halal Lamb Mince 500g",
   ]},
   // Porterhouse: pack sizes vary wildly (180g quick-cook → 1kg roast), so only
-  // $/kg is comparable — a textbook per-kg group. WW members pinned ww-only in
+  // $/kg is comparable - a textbook per-kg group. WW members pinned ww-only in
   // url_overrides.json; the "& Butter" item bridges to a real Coles porterhouse
   // (2-pack 450g) via its coles pin. Coles-specific variants get added as their
   // URLs are captured (Coles rate-bans the scraper's headless session, so they
@@ -376,7 +376,7 @@ const DEFAULT_VARIANT_GROUPS = [
     'Woolworths Beef Porterhouse Steak Thick Cut',
     'Macro Grass Fed Beef Porterhouse Steaks 2 Pack',
     // Coles side (coles-only pins). The VSP RR 2-pack (id 4997140) is NOT listed
-    // here — it's already the "& Butter" item's coles match, so re-adding it would
+    // here - it's already the "& Butter" item's coles match, so re-adding it would
     // show the same product twice in the Coles column.
     'Coles No Added Hormone Beef Quick Cook Porterhouse Steak 180g',
     'Coles No Added Hormone Beef Porterhouse Steak With Thyme & Pepper Butter 500g',
@@ -387,7 +387,7 @@ const DEFAULT_VARIANT_GROUPS = [
   ]},
 ];
 
-// Every per-kg member name under the user's current overrides — used by the
+// Every per-kg member name under the user's current overrides - used by the
 // basket page to keep group members out of the "whole list" fallback view
 // (the main table shows ONE row per group, so a raw dump of members would
 // inflate the basket). ponytail: legacy v1 overrides are treated as pure adds,
@@ -409,7 +409,7 @@ function perKgMemberNames() {
 // ── Category normalisation ──────────────────────────────────────────────────
 // SINGLE map for every page (index, hot-deals, shopping-list). Covers the old
 // scraper names AND the 2026-07 category consolidation (13 → 10: Bakery folded
-// into Pantry, Frozen Foods + Ready Meals merged, Personal Care + Baby merged) —
+// into Pantry, Frozen Foods + Ready Meals merged, Personal Care + Baby merged) -
 // so stale latest.json values and old user overrides in pw_categories_v1 keep
 // resolving to a live category instead of resurrecting a dead tab.
 const CATEGORY_REMAP = {
@@ -420,18 +420,18 @@ const CATEGORY_REMAP = {
   'Spices & Herbs':         'Pantry',
   'Spreads & Dips':         'Pantry',
   'Nuts & Seeds':           'Pantry',
-  'Frozen Foods':           'Frozen & Ready Meals',
-  'Frozen':                 'Frozen & Ready Meals',
-  'Ready Meals':            'Frozen & Ready Meals',
+  'Frozen Foods':           'Frozen',
+  'Ready Meals':            'Frozen',
+  'Frozen & Ready Meals':   'Frozen',
   'Snacks & Confectionery': 'Sweets',
   'Snacks':                 'Sweets',
   'Drinks':                 'Drinks & Alcohol',
-  'Personal Care':          'Personal Care & Baby',
-  'Baby':                   'Personal Care & Baby',
-  'Health & Beauty':        'Personal Care & Baby',
+  'Baby':                   'Personal Care',
+  'Health & Beauty':        'Personal Care',
+  'Personal Care & Baby':   'Personal Care',
 };
 
-// Per-item category corrections — applied after CATEGORY_REMAP, before user
+// Per-item category corrections - applied after CATEGORY_REMAP, before user
 // localStorage overrides win. These fix scraper mismatches without editing
 // latest.json. SINGLE copy here so index, hot-deals and shopping-list agree
 // (when only app.js had it, corrected items landed under their raw category
@@ -485,14 +485,14 @@ function normalizeCategory(raw) {
   return CATEGORY_REMAP[c] || c;
 }
 
-// Canonical hot-deal list — the SINGLE source of truth shared by the main page
+// Canonical hot-deal list - the SINGLE source of truth shared by the main page
 // (which only needs the COUNT) and the Hot Deals page (which renders the list).
 // Both call this with the same inputs so the "🔥 N deals" number on the main
 // page always equals the number of rows shown on the Hot Deals page.
-//   opts.exclusions  — per-item excluded historical prices (pw_exclusions_v1)
-//   opts.archivedSet — names archived in docs/data/archived_items.json
-//   opts.priorities  — localStorage priorities (pw_priorities_v1); 'archive' hides
-//   opts.minDropPct / opts.minStoreDiffPct — optional threshold overrides (the
+//   opts.exclusions  - per-item excluded historical prices (pw_exclusions_v1)
+//   opts.archivedSet - names archived in docs/data/archived_items.json
+//   opts.priorities  - localStorage priorities (pw_priorities_v1); 'archive' hides
+//   opts.minDropPct / opts.minStoreDiffPct - optional threshold overrides (the
 //     Hot Deals sliders; both pages pass the same stored values so the main-page
 //     count always equals the rows shown). Defaults reproduce the canonical
 //     qualify rule exactly: drop ≥ DEAL_MIN_DROP (or all-time low), any store gap.
@@ -516,7 +516,7 @@ function getHotDealItems(items, opts) {
     .filter(({ deal }) => dealPassesTune(deal, tune));
 }
 
-// The ONE tuned-deal predicate — shared by getHotDealItems (Hot Deals page +
+// The ONE tuned-deal predicate - shared by getHotDealItems (Hot Deals page +
 // main-page count link) and isHotDeal (🔥 badges), so a 🔥 row is always a row
 // the Hot Deals page would actually show at the current slider settings.
 // tune: { drop, diff (whole percents), atl, mode: 'and'|'or' }.
@@ -531,7 +531,7 @@ function dealPassesTune(deal, tune) {
 
 // Shared slider state for the two deal thresholds (Hot Deals page writes it,
 // both pages read it so their numbers agree).
-// Slider defaults are deliberately strict — "a fifth off its usual price AND a
+// Slider defaults are deliberately strict - "a fifth off its usual price AND a
 // tenth cheaper than the rival". At the old 4%/0% defaults the page showed 73
 // "deals" out of ~210 active items, which made the word meaningless. ATL stays
 // on by default: an all-time low is always worth surfacing regardless of where

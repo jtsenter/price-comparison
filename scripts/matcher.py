@@ -26,7 +26,7 @@ def extract_weight_g(text: str) -> float | None:
 def extract_volume_ml(text: str) -> float | None:
     """Return volume in ml extracted from `text`, or None."""
     t = text.lower()
-    # Litres — avoid matching the 'l' in words like 'salted'
+    # Litres - avoid matching the 'l' in words like 'salted'
     m = re.search(r'(\d+(?:\.\d+)?)\s*(?:l(?:it(?:re|er)s?)?)(?:\b|(?=\s))', t)
     if m and not re.search(r'\d+(?:\.\d+)?\s*ml', t[:m.end()]):
         return float(m.group(1)) * 1000
@@ -75,7 +75,7 @@ _STRIP_INLINE = re.compile(
     re.IGNORECASE,
 )
 
-# Words that must match between query and result — organic vs non-organic is a
+# Words that must match between query and result - organic vs non-organic is a
 # fundamentally different product, so penalise heavily if one has it and the other doesn't.
 _QUALITY_TIER = re.compile(r'\b(organic)\b', re.IGNORECASE)
 
@@ -215,7 +215,7 @@ def compute_per_100(result: dict) -> tuple[float | None, str]:
     if price is None:
         return None, '100g'
 
-    # Strategy 1 — extract size from product name (most reliable for pre-packed goods)
+    # Strategy 1 - extract size from product name (most reliable for pre-packed goods)
     name = result.get('name', '')
     w = extract_weight_g(name)
     if w and w > 0:
@@ -224,7 +224,7 @@ def compute_per_100(result: dict) -> tuple[float | None, str]:
     if v and v > 0:
         return round(price * 100 / v, 2), '100ml'
 
-    # Strategy 2 — cup price + unit (for loose/bulk goods sold by weight)
+    # Strategy 2 - cup price + unit (for loose/bulk goods sold by weight)
     if unit_price is not None and unit:
         m = re.match(r'(\d*\.?\d*)?\s*(g|kg|ml|l)\b', unit)
         if m:
@@ -253,11 +253,11 @@ def validate_pair(
     Compute pair-level metadata after both matches are selected.
 
     Returns dict with keys:
-      match_confidence  — worst-of-two confidence, degraded if sizes differ
-      size_warning      — True when pack sizes or forms differ significantly
-      per_100_ww        — normalised WW price per 100g/ml (float | None)
-      per_100_coles     — normalised Coles price per 100g/ml (float | None)
-      per_100_unit      — '100g' or '100ml'
+      match_confidence  - worst-of-two confidence, degraded if sizes differ
+      size_warning      - True when pack sizes or forms differ significantly
+      per_100_ww        - normalised WW price per 100g/ml (float | None)
+      per_100_coles     - normalised Coles price per 100g/ml (float | None)
+      per_100_unit      - '100g' or '100ml'
     """
     per_100_ww,    lbl_ww    = compute_per_100(ww_result)
     per_100_coles, lbl_coles = compute_per_100(coles_result)

@@ -30,7 +30,7 @@ assert.deepStrictEqual(computePerKgItems(defaults, undefined), ['A', 'B', 'C']);
 // 2. Legacy snapshot with a user add → add preserved.
 assert.deepStrictEqual(computePerKgItems(defaults, { items: ['A', 'B', 'C', 'X'] }), ['A', 'B', 'C', 'X']);
 
-// 3. THE FIX — v2 removal of a default actually removes it (old union could not).
+// 3. THE FIX - v2 removal of a default actually removes it (old union could not).
 assert.deepStrictEqual(computePerKgItems(defaults, { v: 2, remove: ['B'] }), ['A', 'C']);
 
 // 4. v2 add + remove together.

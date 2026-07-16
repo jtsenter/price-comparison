@@ -1,5 +1,5 @@
 """
-recheck.py — Re-examine items with missing prices or suspicious price discrepancies.
+recheck.py - Re-examine items with missing prices or suspicious price discrepancies.
 
 For each flagged item:
   - Missing store: re-search with the full name, then a simplified fallback name,

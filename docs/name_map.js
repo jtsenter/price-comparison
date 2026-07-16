@@ -1,4 +1,4 @@
-// Auto-generated from bot/lookup.py _NAME_MAP — short display names for compact views.
+// Auto-generated from bot/lookup.py _NAME_MAP - short display names for compact views.
 window.PW_NAME_MAP = {
   "Annalisa Chickpeas": "Annalisa Chickpeas",
   "Armada Small Kitchen Tidy Bag": "Kitchen Tidy Bags",

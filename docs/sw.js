@@ -1,25 +1,25 @@
-// PriceWatch service worker — network-first with offline cache fallback.
+// PriceWatch service worker - network-first with offline cache fallback.
 // Network-first is deliberate: the site is deployed often, so online users must
 // always get fresh HTML/CSS/JS (no stale-shell trap). The cache only serves when
 // the network is unavailable, giving an instant offline view of last-known prices.
 //
 // GitHub Pages sends Cache-Control: max-age=600 on every file. A plain fetch()
 // still honours that (the browser's HTTP cache can silently answer without
-// hitting the network), which defeated "network-first" — mobile users with no
+// hitting the network), which defeated "network-first" - mobile users with no
 // hard-refresh option could see a 10-minute-stale layout. `cache: 'no-store'`
 // forces every fetch here to actually reach the network.
 
-const CACHE = 'pricewatch-v136';
+const CACHE = 'pricewatch-v137';
 const SHELL = [
   'index.html',
   'hot-deals.html',
   'shopping-list.html',
   'scrape-log.html',
-  'style.css?v=96',
-  'app.js?v=115',
-  'utils.js?v=63',
-  'header.js?v=6',
-  'name_map.js?v=40',
+  'style.css?v=97',
+  'app.js?v=116',
+  'utils.js?v=64',
+  'header.js?v=7',
+  'name_map.js?v=41',
   'manifest.webmanifest',
   'favicon.svg',
 ];

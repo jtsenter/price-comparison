@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Basket — PriceWatch</title>
-  <meta name="description" content="Your PriceWatch basket — split across Woolworths and Coles for the cheapest total." />
+  <title>Basket - PriceWatch</title>
+  <meta name="description" content="Your PriceWatch basket - split across Woolworths and Coles for the cheapest total." />
   <meta name="theme-color" content="#00843D" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="PriceWatch" />
@@ -34,7 +34,7 @@
     .header-inner { max-width: 1600px; margin: 0 auto; padding: 0 20px; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
     .header-left { display: flex; align-items: center; gap: 20px; }
     .brand { display: flex; align-items: center; gap: 7px; text-decoration: none; }
-    .brand-name { font-size: 17px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; display: none; /* wordmark retired — W/C chips are the home link */ }
+    .brand-name { font-size: 17px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; display: none; /* wordmark retired - W/C chips are the home link */ }
     .store-chip-hdr { display: inline-flex; align-items: center; justify-content: center; font-weight: 900; border-radius: 7px; color: #fff; width: 26px; height: 26px; font-size: 13px; }
     .store-chip-hdr.ww { background: var(--ww); }
     .store-chip-hdr.coles { background: var(--coles); }
@@ -44,12 +44,12 @@
     nav a.active { background: var(--bg); color: var(--text); font-weight: 600; }
     .header-right { display: flex; align-items: center; gap: 8px; }
 
-    /* 1100px: the old 860px left dead margins while the tables squeezed —
+    /* 1100px: the old 860px left dead margins while the tables squeezed -
        give the name column the room instead. */
     main { max-width: 1100px; margin: 0 auto; padding: 24px; }
 
     /* ── Store card summary ─────────────────── */
-    /* Three panels on one row: WW card | savings panel | Coles card — all three
+    /* Three panels on one row: WW card | savings panel | Coles card - all three
        trip prices (each store + the split price) sit side by side. */
     .store-summary-wrap { margin-bottom: 20px; }
     .store-cards-grid { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 10px; align-items: stretch; }
@@ -92,7 +92,7 @@
       font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 10px;
     }
     .sc-delta { font-size: 11px; font-weight: 600; color: var(--text-soft); font-variant-numeric: tabular-nums; }
-    /* Savings panel — one line per figure (label left, price right), chips below */
+    /* Savings panel - one line per figure (label left, price right), chips below */
     .sl-savings-panel {
       background: var(--card); border: 1px solid var(--border); border-radius: 12px;
       padding: 8px 14px; display: flex; flex-direction: column; justify-content: center; gap: 2px;
@@ -151,7 +151,7 @@
     }
     .bar-optimal strong { font-size: 15px; font-weight: 800; }
     .bar-optimal span { color: #94A3B8; font-size: 12px; }
-    /* Saving lines — same "Basket saving / Split shop" component as the main page. */
+    /* Saving lines - same "Basket saving / Split shop" component as the main page. */
     .saving-line { display: flex; align-items: center; gap: 10px; }
     .saving-icon { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; width: 26px; font-size: 20px; }
     .split-icon { display: block; border-radius: 50%; }
@@ -192,7 +192,7 @@
     .name-wrap { display: flex; align-items: center; gap: 9px; line-height: 1.35; min-width: 0; }
     .name-wrap span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .sl-thumb { width: 30px; height: 30px; border-radius: 6px; object-fit: contain; background: #fff; border: 1px solid var(--border); flex-shrink: 0; }
-    /* Single-store mode: item not sold at the chosen store — priced from the other */
+    /* Single-store mode: item not sold at the chosen store - priced from the other */
     .only-chip { font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 5px; color: #fff; vertical-align: middle; margin-left: 5px; white-space: nowrap; }
     .only-chip.ww { background: var(--ww); }
     .only-chip.coles { background: var(--coles); }
@@ -209,7 +209,7 @@
     .qs-btn { width: 26px; height: 26px; border: none; background: transparent; color: var(--text-mid); font-size: 15px; font-weight: 600; cursor: pointer; line-height: 1; -webkit-tap-highlight-color: transparent; }
     .qs-btn:hover { background: var(--bg); color: var(--text); }
     .qs-val { min-width: 24px; text-align: center; font-weight: 600; font-size: 13px; }
-    /* ⇄ / ✕ as proper mini-buttons — same border/radius family as the qty
+    /* ⇄ / ✕ as proper mini-buttons - same border/radius family as the qty
        stepper so they read as part of the table, not floating glyphs. */
     .act-wrap { display: flex; gap: 5px; justify-content: flex-end; align-items: center; }
     .row-btn {
@@ -225,7 +225,7 @@
     .act-cell, .qty-cell { text-align: right; overflow: visible; text-overflow: clip; }
 
     /* Column resize handles (initSlResize creates them; without these rules
-       they were 0-width and invisible — columns LOOKED unresizable) */
+       they were 0-width and invisible - columns LOOKED unresizable) */
     .col-resize-handle {
       position: absolute; right: -4px; top: 10%; bottom: 10%;
       width: 9px; cursor: col-resize; border-radius: 3px;
@@ -257,7 +257,7 @@
       box-shadow: 0 4px 14px rgba(0,0,0,.2);
     }
 
-    /* Shopping mode is phone-only (in-store tool) — hide its toggle on web */
+    /* Shopping mode is phone-only (in-store tool) - hide its toggle on web */
     @media (min-width: 701px) { .sl-mode-seg.sl-shop-seg { display: none; } }
 
     /* Only-one-store note */
@@ -270,7 +270,7 @@
     .btn-primary:hover { background: #006B31; transform: translateY(-1px); }
 
     .sl-topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
-    /* Quiet one-liner ("Showing N items…") — replaced the shouty yellow banner */
+    /* Quiet one-liner ("Showing N items…") - replaced the shouty yellow banner */
     .sl-note { font-size: 13px; color: var(--text-soft); margin-bottom: 14px; }
     .sl-note strong { color: var(--text-mid); }
     .btn-outline-danger { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid #FCA5A5; background: transparent; color: #DC2626; transition: all .15s; white-space: nowrap; }
@@ -282,7 +282,7 @@
     .empty { text-align: center; padding: 60px 20px; color: var(--text-soft); }
     .empty a { color: var(--ww); text-decoration: underline; }
 
-    /* Header icon nav (mirrors style.css's .nav-icon-btn — this page has its own CSS) */
+    /* Header icon nav (mirrors style.css's .nav-icon-btn - this page has its own CSS) */
     .btn-ghost { background: var(--card); color: var(--text-mid); }
     .btn-ghost:hover { background: var(--bg); color: var(--text); }
     .btn-icon { position: relative; padding: 6px 8px; }
@@ -304,9 +304,9 @@
       .header-right .nav-icon-btn.nav-watch { display: inline-flex; }
     }
 
-    /* ── Shopping mode — big tap-to-check rows for in-store use ── */
+    /* ── Shopping mode - big tap-to-check rows for in-store use ── */
     .sl-mode-seg { display: inline-flex; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-    /* One store / Split shop is THE page-level decision — give it real weight */
+    /* One store / Split shop is THE page-level decision - give it real weight */
     .sl-split-seg { border-width: 2px; border-color: var(--border); }
     .sl-split-seg .sl-mode-btn { padding: 10px 18px; font-size: 14px; font-weight: 700; }
     /* Other store's price rides along muted next to each row price */
@@ -361,7 +361,7 @@
 
     @media (max-width: 700px) {
       /* Home (bottom tab bar already has it), the W/C logo, and Print (no phone
-         has a printer) leave the header with nothing left to show — the bottom
+         has a printer) leave the header with nothing left to show - the bottom
          tab bar covers navigation. Drop the whole row; the scrape-progress strip
          (a sibling, not inside .header-inner) still shows when relevant. */
       .header-inner { display: none; }
@@ -380,7 +380,7 @@
       .bar-ribbon { gap: 8px; padding: 10px 14px; }
       .sc-price { font-size: 24px; margin-bottom: 2px; }
       main { padding-left: 12px; padding-right: 12px; }
-      /* Topbar: fixed-size controls — each segment/button gets exactly half the
+      /* Topbar: fixed-size controls - each segment/button gets exactly half the
          row instead of letter-count width, so the stack aligns edge to edge. */
       .sl-topbar { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
       .sl-flexspacer { display: none; }
@@ -394,7 +394,7 @@
          .sl-savings-panel base styles; mobile only shortens the chip wording */
       .chip-word { display: none; }
       /* Stacked rows replace the table grid: a 6-column table can't fit a 375px
-         phone, so each row becomes a two-line card — name (+ remove) on top,
+         phone, so each row becomes a two-line card - name (+ remove) on top,
          price · qty stepper · line total underneath. Same markup, CSS-only. */
       .sl-table-wrap table, .sl-table-wrap tbody, .sl-table-wrap tfoot { display: block; }
       .sl-table-wrap colgroup, .sl-table-wrap thead { display: none; }
@@ -447,7 +447,7 @@
       }
       .btb-tab.active { color: var(--ww); }
       .btb-tab svg { flex-shrink: 0; }
-      /* header nav only — a bare `nav` also matched #bottomTabBar and hid it */
+      /* header nav only - a bare `nav` also matched #bottomTabBar and hid it */
       header nav { display: none !important; }
       main { padding-bottom: 80px !important; }
     }
@@ -475,15 +475,15 @@
 </head>
 <body>
 <header data-page="shopping-list"></header>
-<script src="header.js?v=6"></script>
+<script src="header.js?v=7"></script>
 
 <main id="main">
   <div class="empty">Loading…</div>
 </main>
 
-<script src="utils.js?v=63"></script>
+<script src="utils.js?v=64"></script>
 <script>
-const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '—';
+const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '-';
 
 // ── Basket column widths ──────────────────────────────────────────────────────
 let _slColWidths = (() => {
@@ -492,7 +492,7 @@ let _slColWidths = (() => {
 function saveSlColWidths() { localStorage.setItem('pw_sl_col_widths', JSON.stringify(_slColWidths)); }
 
 function initSlResize() {
-  // table-layout:fixed sizes every column from the <colgroup>'s <col> widths —
+  // table-layout:fixed sizes every column from the <colgroup>'s <col> widths -
   // the old code resized the th/td elements, which fixed layout IGNORES, so
   // dragging "didn't act accordingly". Resize the <col> itself.
   document.querySelectorAll('.sl-table-wrap table').forEach(table => {
@@ -590,13 +590,13 @@ async function boot() {
   if (handoff && Array.isArray(handoff.items) && handoff.items.length > 0) {
     // Explicit selection wins over the archive filter: a per-kg group can have an
     // archived member as its cheapest variant (e.g. Chicken Roast Portions), and
-    // the user deliberately added it — so match against ALL items, not just active
+    // the user deliberately added it - so match against ALL items, not just active
     // ones. (Bug: 4 items added, only 3 shown, because one was archived.)
     const nameSet = new Set(handoff.items);
     displayItems = (data.items || []).filter(i => nameSet.has(i.list_item));
   } else {
     // Fallback (arriving with no handoff): show everything active EXCEPT per-kg
-    // group members — the main table collapses those into one row per group, so
+    // group members - the main table collapses those into one row per group, so
     // dumping all ~50 raw variants here inflated the basket with duplicate
     // chicken/mince/salmon products (most single-store, hence also swap-less).
     const perkgMembers = perKgMemberNames();
@@ -608,7 +608,7 @@ async function boot() {
     return;
   }
 
-  // "Showing N …" caption — computed once and rendered in BOTH list and shopping
+  // "Showing N …" caption - computed once and rendered in BOTH list and shopping
   // mode, positioned UNDER the mode toggles. Previously it lived only in list
   // mode and above the toggles, so switching to shopping mode dropped the line
   // and the whole view jumped up.
@@ -618,10 +618,10 @@ async function boot() {
 
   let equalStore = 'ww'; // split mode: which store equal-price items are assigned to
 
-  // View model: ONE store by default — the realistic plan is buying the whole
+  // View model: ONE store by default - the realistic plan is buying the whole
   // basket at whichever store totals cheaper. "Split shop" opts into the
   // two-table cheapest-at-each-store view. Persisted across visits.
-  // Always opens in one-store — the realistic default plan. Split shop is a
+  // Always opens in one-store - the realistic default plan. Split shop is a
   // per-visit opt-in (deliberately NOT persisted; it kept surprising on return).
   let slSplit = false;
   let chosenStore = null; // single mode: store to buy at; null = auto (cheaper total)
@@ -632,7 +632,7 @@ async function boot() {
 
   // Effective price of an item at `store`. In SINGLE mode, items the store
   // doesn't sell fall back to the other store's price (you have no choice for
-  // those) — the same rule computeTotals uses, so the table subtotal always
+  // those) - the same rule computeTotals uses, so the table subtotal always
   // EQUALS the store card total. In split mode no fallback (an item is only
   // in a store's table because it's priced there).
   function priceFor(i, store) {
@@ -641,7 +641,7 @@ async function boot() {
     return store === 'ww' ? i.coles?.price : i.woolworths?.price;
   }
 
-  // Per-table sort state — survives renderContent() re-renders
+  // Per-table sort state - survives renderContent() re-renders
   let wwSortKey = 'category', wwSortDir = 'asc';
   let colesSortKey = 'category', colesSortDir = 'asc';
 
@@ -679,8 +679,8 @@ async function boot() {
   // Store-agnostic aggregate totals: the true cost of getting the WHOLE basket
   // primarily from one store, buying single-store-only items from wherever they
   // ARE priced (you have no choice for those). Previously each total summed ONLY
-  // items priced at that store and silently dropped the rest — understating cost
-  // rather than admitting "you can't get this here" — which let "Best split" (a
+  // items priced at that store and silently dropped the rest - understating cost
+  // rather than admitting "you can't get this here" - which let "Best split" (a
   // true full-basket total) come out MORE expensive than either "single store"
   // total, an impossible result for a real shopping trip. Every total must cover
   // the same item set for the comparison to mean anything.
@@ -709,7 +709,7 @@ async function boot() {
   }
 
   function computeSplit() {
-    // Routing rules — every displayItem ends up in exactly one table:
+    // Routing rules - every displayItem ends up in exactly one table:
     //   an explicit per-row override wins; otherwise
     //   WW table:    cheaper_store === 'woolworths'
     //             OR cheaper_store === 'equal'  AND equalStore === 'ww'
@@ -763,7 +763,7 @@ async function boot() {
       const own = store === 'ww' ? i.woolworths : i.coles;
       const other = store === 'ww' ? i.coles : i.woolworths;
       // Single mode: an item this store doesn't sell shows the OTHER store's
-      // price with a chip — you'd have to grab those few elsewhere anyway.
+      // price with a chip - you'd have to grab those few elsewhere anyway.
       const fellBack = !slSplit && own?.price == null && other?.price != null;
       const sd = fellBack ? other : own;
       const units = getUnits(i.list_item, unitOv, analysis);
@@ -771,7 +771,7 @@ async function boot() {
       const cat = getCategory(i, catOv);
       const img = sd?.image_url;
       // Split mode: ⇄ swaps the row to the other store. When the other store
-      // doesn't sell it the button stays but disabled — a consistent column
+      // doesn't sell it the button stays but disabled - a consistent column
       // beats buttons that silently vanish on some rows.
       const canSwap = slSplit && own?.price != null && other?.price != null;
       const swapDisabled = slSplit && own?.price != null && other?.price == null;
@@ -780,9 +780,9 @@ async function boot() {
         ? (store === 'ww' ? 'Buy at Coles instead' : 'Buy at Woolworths instead')
         : `Only sold at ${store === 'ww' ? 'Woolworths' : 'Coles'}`;
       const onlyChip = fellBack
-        ? ` <span class="only-chip ${store === 'ww' ? 'coles' : 'ww'}" title="Not sold at ${store === 'ww' ? 'Woolworths' : 'Coles'} — this is the ${store === 'ww' ? 'Coles' : 'Woolworths'} price">${store === 'ww' ? 'C' : 'W'} only</span>`
+        ? ` <span class="only-chip ${store === 'ww' ? 'coles' : 'ww'}" title="Not sold at ${store === 'ww' ? 'Woolworths' : 'Coles'} - this is the ${store === 'ww' ? 'Coles' : 'Woolworths'} price">${store === 'ww' ? 'C' : 'W'} only</span>`
         : '';
-      // The other store's price rides along muted — switching stores (or
+      // The other store's price rides along muted - switching stores (or
       // deciding a ⇄ swap) needs both numbers in view.
       const altPrice = (!fellBack && other?.price != null)
         ? ` <span class="alt-price" title="${store === 'ww' ? 'Coles' : 'Woolworths'} price">${store === 'ww' ? 'C' : 'W'} ${fmt(other.price)}</span>`
@@ -824,7 +824,7 @@ async function boot() {
   // in-store use. Checked-off names persist in localStorage so the trip survives
   // a refresh; stale names (items no longer in the basket) are simply ignored.
   let slMode = localStorage.getItem('pw_sl_mode') === 'shop' ? 'shop' : 'list';
-  // Shopping mode is an IN-STORE tool — phone only. On desktop always render
+  // Shopping mode is an IN-STORE tool - phone only. On desktop always render
   // the list (and hide the toggle via CSS on .sl-shop-seg).
   if (window.innerWidth > 700) slMode = 'list';
   let smChecked = {};
@@ -954,12 +954,12 @@ async function boot() {
     if (slMode === 'shop') { renderShopMode(wwItems, colesItems); return; }
     const { wwTotal, coTotal, optimalTotal, diff, isEqual } = computeTotals();
     // Split mode: planned spend per store under the current assignment
-    // (equal-price choice + per-row ⇄ swaps) — shown on the cards there.
+    // (equal-price choice + per-row ⇄ swaps) - shown on the cards there.
     const subtotalOf = (items, store) => items.reduce((s, i) =>
       s + (priceFor(i, store) ?? 0) * getUnits(i.list_item, unitOv, analysis), 0);
     const wwSub = subtotalOf(wwItems, 'ww');
     const coSub = subtotalOf(colesItems, 'coles');
-    // Equal-price items (same price at both stores) — reassignable in split mode
+    // Equal-price items (same price at both stores) - reassignable in split mode
     const equalItems = displayItems.filter(i =>
       i.cheaper_store === 'equal' &&
       i.woolworths?.price != null &&
@@ -969,16 +969,16 @@ async function boot() {
     // split mode = where equal-price items are assigned (as before).
     const wwActive = slSplit ? equalStore === 'ww' : single === 'ww';
 
-    // Card classes — the store class lets the active card carry its own store colour
+    // Card classes - the store class lets the active card carry its own store colour
     const wwCardCls = `store-card-sl ww ${wwActive ? 'card-active' : 'card-inactive'}`;
     const coCardCls = `store-card-sl coles ${!wwActive ? 'card-active' : 'card-inactive'}`;
 
-    // Price colour — active card always green, inactive always grey
+    // Price colour - active card always green, inactive always grey
     const wwPriceCls = wwActive ? 'price-active' : 'price-inactive';
     const coPriceCls = !wwActive ? 'price-active' : 'price-inactive';
 
     // Inactive card shows its distance from the chosen store's total. Single
-    // mode only — split cards cover different item sets, so a delta between
+    // mode only - split cards cover different item sets, so a delta between
     // them is meaningless. Signed: picking the dearer store makes it negative.
     const wwDelta = (!slSplit && !isEqual && !wwActive) ? wwTotal - coTotal : null;
     const coDelta = (!slSplit && !isEqual &&  wwActive) ? coTotal - wwTotal : null;
@@ -1010,10 +1010,10 @@ async function boot() {
     // + row swaps); in one-store mode it's the optimal split.
     const splitShopVal = slSplit ? (wwSub + coSub) : optimalTotal;
     const splitTotalHtml =
-      `<div class="saving-line split-total-line"><span class="saving-icon">🧾</span><div class="saving-text"><div class="saving-label">Split shop${infoIco('What the whole trip costs split across both stores — each item at its planned store (split mode) or its cheapest store.')}</div><span class="saving-amount">${fmt(splitShopVal)}</span></div></div>`;
+      `<div class="saving-line split-total-line"><span class="saving-icon">🧾</span><div class="saving-text"><div class="saving-label">Split shop${infoIco('What the whole trip costs split across both stores - each item at its planned store (split mode) or its cheapest store.')}</div><span class="saving-amount">${fmt(splitShopVal)}</span></div></div>`;
     const savingInfoHtml = splitTotalHtml + (isEqual
       ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
-      : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIco('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store. Fixed — it does not change with the store you pick.')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`
+      : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIco('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store. Fixed - it does not change with the store you pick.')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`
         + (splitSaving > basketSaving + 0.005
             ? `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Split saving${infoIco('The most you can save overall: every item at whichever store sells it cheapest, vs the dearer single store. Use the Split shop toggle above to plan it.')}</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
             : ''));
@@ -1104,7 +1104,7 @@ async function boot() {
     document.getElementById('wwTotalBlock')?.addEventListener('click', cardClick('ww'));
     document.getElementById('colesTotalBlock')?.addEventListener('click', cardClick('coles'));
 
-    // Qty steppers — write the same pw_units_v1 map the main page reads, so
+    // Qty steppers - write the same pw_units_v1 map the main page reads, so
     // quantities stay consistent between pages.
     // ponytail: local-only write; cross-device unit sync still happens on the
     // main page (its scheduleUserSettingsSync owns the publish token).
@@ -1117,7 +1117,7 @@ async function boot() {
       renderContent();
     }));
 
-    // Per-row remove — drops the item from the basket (not from PriceWatch).
+    // Per-row remove - drops the item from the basket (not from PriceWatch).
     main.querySelectorAll('.row-btn.rm').forEach(b => b.addEventListener('click', () => {
       const name = b.dataset.item;
       displayItems = displayItems.filter(i => i.list_item !== name);
@@ -1130,7 +1130,7 @@ async function boot() {
       renderContent();
     }));
 
-    // Per-row store swap — "I'll just buy it here anyway" for one-store trips.
+    // Per-row store swap - "I'll just buy it here anyway" for one-store trips.
     main.querySelectorAll('.row-btn.swap').forEach(b => b.addEventListener('click', () => {
       storeOverride.set(b.dataset.item, b.dataset.to);
       renderContent();
@@ -1145,7 +1145,7 @@ async function boot() {
     });
 
 
-    // Save basket — locks the current items so additions from the main page are
+    // Save basket - locks the current items so additions from the main page are
     // appended (not replaced). Lock persists across refreshes until toggled off.
     const saveBtn = document.getElementById('saveBasketBtn');
     function reflectLock() {
@@ -1194,7 +1194,7 @@ boot();
       }
     } catch {}
   }
-  // (Notification bell retired — the validate pill above is the single
+  // (Notification bell retired - the validate pill above is the single
   // "data needs attention" surface.)
 })();
 </script>

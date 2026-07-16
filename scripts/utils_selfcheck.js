@@ -1,4 +1,4 @@
-// Self-check for docs/utils.js — the single source of truth for per-100g pricing,
+// Self-check for docs/utils.js - the single source of truth for per-100g pricing,
 // trend position, and hot-deal detection shared by index.html and hot-deals.html.
 // No framework, no deps: extracts the real functions straight from utils.js (so the
 // logic under test is single-sourced, not a re-implementation that could drift) and

@@ -1,5 +1,5 @@
 // Self-check for the consolidated GitHub Contents-API writer in docs/utils.js
-// (githubPutJson / githubGetJson — the single replacement for what used to be
+// (githubPutJson / githubGetJson - the single replacement for what used to be
 // 7 near-identical PUT blocks across app.js and hot-deals.html).
 // No framework, no deps: extracts the real functions from utils.js and runs
 // them against a mocked fetch. Run: node scripts/github_put_selfcheck.js

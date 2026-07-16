@@ -1,10 +1,10 @@
-"""Self-check for matcher.pick_best_match — the scraper's highest-risk logic.
+"""Self-check for matcher.pick_best_match - the scraper's highest-risk logic.
 
 Run: python scripts/matcher_selfcheck.py
 pick_best_match decides which store search result becomes an item's price. A wrong
 pick silently poisons the data (the "Reese's WW $37.99 vs Coles $3" class of bug),
-so this locks the scoring dimensions — exact match, ranking beyond index 0,
-rejection threshold, form penalty, organic-tier penalty, size penalty — against
+so this locks the scoring dimensions - exact match, ranking beyond index 0,
+rejection threshold, form penalty, organic-tier penalty, size penalty - against
 regressions when the thresholds get tuned. Expected values were confirmed against
 the current implementation; each reflects intended behaviour, not a snapshot of a bug.
 """
@@ -39,7 +39,7 @@ def _run():
           conf("Woolworths Full Cream Milk 2L", R("Woolworths Full Cream Milk 2L")),
           "high")
 
-    # Best of the list is chosen — NOT blindly index 0.
+    # Best of the list is chosen - NOT blindly index 0.
     check("ranks past index 0",
           pick_name("Chicken Thigh Fillets",
                     R("Toilet Paper 12pk", "Woolworths RSPCA Chicken Thigh Fillets 1kg")),

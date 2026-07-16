@@ -1,7 +1,7 @@
 // ── Utilities ────────────────────────────────────────────────────────────────
 
 const $ = (id) => document.getElementById(id);
-const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '—';
+const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '-';
 
 // Clock icon for the mobile cards' History button (lives in the card's icon row,
 // next to 🔥/👁, so it never crowds the trend bar's min/max labels).
@@ -9,7 +9,7 @@ const HIST_CLOCK_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="no
 
 // Header dropdowns (notif / options / columns) each stop click propagation so
 // the page-level "click outside closes it" listener doesn't fire on their own
-// button — but that also means clicking one button never closes a sibling
+// button - but that also means clicking one button never closes a sibling
 // dropdown left open. Each button calls this before toggling its own.
 const _headerDropdownIds = ['optionsDropdown', 'colChooserDropdown'];
 function closeHeaderDropdowns(exceptId) {
@@ -67,7 +67,7 @@ function imgError(el, fallbackSrc) {
 const fmtUnit = (price, unit) => {
   if (price == null) return '';
   if (!unit) return `${fmt(price)}/unit`;
-  // Suppress "1ea" display — it just means the whole pack and adds no info
+  // Suppress "1ea" display - it just means the whole pack and adds no info
   if (/^1\s*ea\b/i.test(unit.trim())) return '';
   const m = unit.match(/^\d*\.?\d*\s*(?:g|kg|ml|l|ea|pk|pack|each)\b/i);
   return m ? `${fmt(price)}/${m[0].trim()}` : fmt(price);
@@ -87,10 +87,10 @@ function clientPerKg(result) {
 
 // Pack-price → $/kg multiplier for one store's result. Ratio is the store's own
 // current $/kg over its current pack price; applied to that store's historical
-// pack prices. Returns null when the store has no usable size/price data — the
+// pack prices. Returns null when the store has no usable size/price data - the
 // caller must then DROP that store's history rather than treat raw pack prices
 // as $/kg (that mislabelling was a recurring source of wrong trend numbers).
-// ponytail: assumes pack size is stable over the item's history — if a product's
+// ponytail: assumes pack size is stable over the item's history - if a product's
 // pack size changed, older points convert with the current ratio. Acceptable for
 // a personal grocery tracker; the upgrade path is storing size per history entry.
 function perKgRatio(res) {
@@ -217,7 +217,7 @@ async function persistRejectedToRepo(s, rejected) {
 }
 
 // ── Image overrides ───────────────────────────────────────────────────────────
-// Stores { [list_item]: 'ww' | 'coles' } — user-chosen image source per item
+// Stores { [list_item]: 'ww' | 'coles' } - user-chosen image source per item
 function loadImgOverrides() {
   try { return JSON.parse(localStorage.getItem('pw_img_overrides_v1') || '{}'); } catch { return {}; }
 }
@@ -271,7 +271,7 @@ function toggleWatchlist(itemName) {
 // ── Cross-device sync of priorities + unit quantities ─────────────────────────
 // Item priorities (weekly/monthly/rare) and per-item quantities live only in
 // localStorage, so two devices can disagree on which items the "Weekly" basket
-// contains and how many of each — which makes the basket total, basket saving
+// contains and how many of each - which makes the basket total, basket saving
 // and max saving differ between phone and computer. We mirror both maps to
 // docs/data/user_settings.json (same mechanism as watchlist.json): the device
 // holding a token publishes on change; every device merges the file in on boot
@@ -316,7 +316,7 @@ async function initUserSettings() {
         // Price-history exclusions (incl. per-kg group-history point removals):
         // union per item so a device never silently drops the other's exclusions.
         // ponytail: union means un-excluding a point on one device won't propagate
-        // the removal to others — the safe direction (never loses a correction).
+        // the removal to others - the safe direction (never loses a correction).
         if (remote.exclusions && typeof remote.exclusions === 'object') {
           const merged = loadExclusions();
           for (const [item, arr] of Object.entries(remote.exclusions)) {
@@ -338,10 +338,10 @@ async function persistLatestJson(data, message = 'chore: update latest.json') {
   // Race guard: the scraper snapshots latest.json at boot and rebuilds it at the
   // end of a run, so an edit saved mid-scrape gets silently resurrected from that
   // boot snapshot (progress pushes even pull with -X ours). scrape_progress is
-  // present exactly while a run is live — warn before writing into that window.
+  // present exactly while a run is live - warn before writing into that window.
   if (data?.scrape_progress &&
-      !confirm('A scrape is running right now — the scraper may overwrite this change when it finishes.\n\nSave anyway?')) {
-    throw new Error('Save cancelled — scrape in progress');
+      !confirm('A scrape is running right now - the scraper may overwrite this change when it finishes.\n\nSave anyway?')) {
+    throw new Error('Save cancelled - scrape in progress');
   }
   await githubPutJson(s, 'docs/data/latest.json', data, message);
 }
@@ -352,7 +352,7 @@ async function persistUrlOverridesToRepo(s, overrides, exactItems = []) {
   // localStorage (e.g. manually added by Claude) are preserved; localStorage
   // entries take priority on conflict.
   //
-  // exactItems: names whose repo entry must mirror the local state EXACTLY —
+  // exactItems: names whose repo entry must mirror the local state EXACTLY -
   // including deleting url keys / the whole entry. Merge-only semantics made it
   // impossible to ever remove a pinned URL ("delete the URL and save" bug): the
   // repo kept the old key forever. Only the item being edited is treated
@@ -420,7 +420,7 @@ async function mergeArchivedFromRepo() {
       if (pr[name] == null) { pr[name] = 'archive'; changed = true; }
     });
     if (changed) savePriorities(pr);
-  } catch { /* offline / missing file — non-fatal */ }
+  } catch { /* offline / missing file - non-fatal */ }
 }
 
 // ── Pending items (from "different item" in price history) ───────────────────
@@ -462,7 +462,7 @@ function saveUnitOverrides(obj) {
 // dynamically as the fallback. Old names remap via CATEGORY_REMAP in utils.js.
 const KNOWN_CATEGORIES = [
   'Fruit & Veg', 'Meat & Seafood', 'Dairy & Eggs', 'Pantry', 'Sweets',
-  'Frozen & Ready Meals', 'Drinks & Alcohol', 'Household', 'Personal Care & Baby',
+  'Frozen', 'Drinks & Alcohol', 'Household', 'Personal Care',
 ];
 
 function loadCategoryOverrides() {
@@ -543,13 +543,13 @@ let _perkgFilter = 'all';  // per-kg group visibility: 'all' | 'only' | 'hidden'
 // ── Per-kg override model (pure helpers; unit-tested in scripts/perkg_selfcheck.js) ──
 // The override is a DIFF against the code defaults, not a frozen snapshot. This is the
 // whole point: defaults stay authoritative, so a member removed in code disappears and
-// a member added in code appears — while the user's own add/remove/rename still stick.
+// a member added in code appears - while the user's own add/remove/rename still stick.
 // The old snapshot form ({items, ww_items, coles_items}) is migrated on read.
 //
 //   v2 shape: { v:2, label?, add:[], remove:[], ww_order?, coles_order? }
 //
 // Known migration limit: a union snapshot can't tell a user-added item from a default
-// that was later pruned in code — both look like "extra" names — so on upgrade they're
+// that was later pruned in code - both look like "extra" names - so on upgrade they're
 // kept as `add`. The user can remove such a straggler once and it now stays removed.
 function migratePerKgOverride(o, defaultItems) {
   if (!o || typeof o !== 'object') return { v: 2, add: [], remove: [] };
@@ -587,7 +587,7 @@ function loadVariantGroups() {
 }
 
 // Resolve a category's per-store member lists (ordered). If the override has an
-// explicit ww_items/coles_items list, use it verbatim (explicit membership — keep
+// explicit ww_items/coles_items list, use it verbatim (explicit membership - keep
 // even pending items). Otherwise derive: an item belongs to a store's list if it
 // has a pinned URL or a real (>0) price there.
 function resolveStoreLists(group, byName) {
@@ -647,7 +647,7 @@ function updateBulkBar() {
   const pill = bar.querySelector('.bt-count-pill');
   if (pill) pill.textContent = count;
   // In the Archived view the archive button is a no-op (they're already
-  // archived) — flip it to "Unarchive". Also hide the Priority chip there: it
+  // archived) - flip it to "Unarchive". Also hide the Priority chip there: it
   // only offers weekly/monthly/rare, which would silently unarchive anyway, so
   // Unarchive is the clear single action.
   const inArchive = _activePriority === 'archive';
@@ -763,29 +763,29 @@ function applyNumFilter(val, { op1, val1 }) {
 function getColValue(col, item) {
   switch (col) {
     case 'name':         return item.list_item;
-    case 'priority':     return getPriority(item.list_item);
+    case 'priority':     { const p = getPriority(item.list_item); return p === 'archive' ? 'Archived' : p[0].toUpperCase() + p.slice(1); }
     case 'ww':           return item.woolworths?.price != null ? fmt(item.woolworths.price) : '(Missing)';
     case 'coles':        return item.coles?.price != null ? fmt(item.coles.price) : '(Missing)';
-    case 'cheaper':      return item.cheaper_store || 'N/A';
+    case 'cheaper':      { const c = item.cheaper_store; return c === 'woolworths' ? 'Woolworths' : c === 'coles' ? 'Coles' : c === 'equal' ? 'Equal' : 'N/A'; }
     case 'pct': {
       const ww = item.woolworths?.price, co = item.coles?.price;
-      if (ww == null || co == null) return '—';
+      if (ww == null || co == null) return '-';
       return Math.round(Math.abs(ww - co) / Math.max(ww, co) * 100) + '%';
     }
-    case 'saving':       { const s = savingAmount(item); return s > 0 ? fmt(s * getUnits(item.list_item)) : '—'; }
+    case 'saving':       { const s = savingAmount(item); return s > 0 ? fmt(s * getUnits(item.list_item)) : '-'; }
     case 'trips':        return String(item.trip_count || 0);
     case 'units':        return String(getUnits(item.list_item));
     case 'category':     return getCategory(item);
     case 'last_scraped': return item.last_scraped
       ? new Date(item.last_scraped).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
-      : '—';
+      : '-';
     case 'ww_total': {
       const v = item.woolworths?.price != null ? item.woolworths.price * getUnits(item.list_item) : null;
-      return v != null ? fmt(v) : '—';
+      return v != null ? fmt(v) : '-';
     }
     case 'coles_total': {
       const v = item.coles?.price != null ? item.coles.price * getUnits(item.list_item) : null;
-      return v != null ? fmt(v) : '—';
+      return v != null ? fmt(v) : '-';
     }
     default: return '';
   }
@@ -846,7 +846,7 @@ function colHeadHtml(col) {
 
 function savingAmount(item) {
   // Per-kg groups: their .woolworths/.coles are DIFFERENT pack sizes (each
-  // store's best variant), so |w−c| compared apples to oranges — an equal-$/kg
+  // store's best variant), so |w−c| compared apples to oranges - an equal-$/kg
   // group could sort as the biggest "saving". Compare the $/kg headlines.
   if (item._isGroup) {
     if (item._wwPerKg == null || item._coPerKg == null) return 0;
@@ -863,7 +863,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   // exclPriceSet (utils.js) handles both "ww:X.XX"/"coles:X.XX" and legacy bare keys.
   // For trend bars (mixed WW+Coles series) a price excluded at either store is dropped.
   const excluded = exclPriceSet(loadExclusions()[itemName]);
-  // Use raw history prices — they are already in the same monetary units (pack/shelf price)
+  // Use raw history prices - they are already in the same monetary units (pack/shelf price)
   // as currentPrice. _ww_price_factor is only used for cheaper_store comparison in the scraper.
   const prices = priceHistory
     .map(p => p.price)
@@ -877,10 +877,10 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
     const safeItemName = itemName.replace(/"/g, '&quot;');
     let flatTrack;
     if (currentPrice < minP - 0.005) {
-      // Current price is below all historical prices — green circle left
+      // Current price is below all historical prices - green circle left
       flatTrack = `<div class="price-bar-track-wrap"><div class="price-marker-off-left"></div><div class="price-bar price-bar-flat"></div></div>`;
     } else if (currentPrice > minP + 0.005) {
-      // Current price is above all historical prices — red circle right
+      // Current price is above all historical prices - red circle right
       flatTrack = `<div class="price-bar-track-wrap"><div class="price-bar price-bar-flat"></div><div class="price-marker-off-right"></div></div>`;
     } else {
       flatTrack = `<div class="price-bar price-bar-flat"><div class="price-marker" style="left:50%"></div></div>`;
@@ -895,7 +895,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
 
   const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
   const pos = Math.max(0, Math.min(100, rawPos));
-  // (The old hover histogram tooltip was removed as redundant — the History
+  // (The old hover histogram tooltip was removed as redundant - the History
   // modal, one click away on the always-visible clock icon, shows the same
   // data properly.)
   const safeItemName = itemName.replace(/"/g, '&quot;');
@@ -910,7 +910,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
     trackHtml = `<div class="price-bar"><div class="price-marker" style="left:${pos.toFixed(1)}%"></div></div>`;
   }
 
-  const allTimeLowBadge = rawPos === 0 ? '<span class="trophy-icon" title="All-time low — the cheapest this item has ever been recorded at">🏆</span>' : '';
+  const allTimeLowBadge = rawPos === 0 ? '<span class="trophy-icon" title="All-time low - the cheapest this item has ever been recorded at">🏆</span>' : '';
   return `
     <div class="price-bar-outer">
       ${trackHtml}
@@ -958,7 +958,7 @@ async function triggerItemRefresh(itemName, btn, urlOverrides) {
 
     if (res.status === 204) {
       // Persist the pending scrape so navigating away / refreshing doesn't lose
-      // the status — checkPendingItemRefresh() picks the marker up on any load.
+      // the status - checkPendingItemRefresh() picks the marker up on any load.
       try {
         const m = JSON.parse(localStorage.getItem('pw_pending_refresh') || '{}');
         m[itemName] = Date.now();
@@ -993,7 +993,7 @@ function checkPendingItemRefresh(data) {
     const scrapedTs = item?.last_scraped ? new Date(item.last_scraped).getTime() : 0;
     if (scrapedTs > m[name]) {
       delete m[name]; changed = true;
-      showToast(`✓ "${stripWW(name)}" re-scraped — price updated.`);
+      showToast(`✓ "${stripWW(name)}" re-scraped - price updated.`);
     } else if (Date.now() - m[name] > 15 * 60 * 1000) {
       delete m[name]; changed = true;
     } else if (!_pendingRefreshItems.has(name)) {
@@ -1041,7 +1041,7 @@ async function pollItemRefresh(s, btn, itemName) {
     } catch {}
     if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
     if (fresh) { showToast(`✓ "${stripWW(itemName)}" updated`); renderPage(fresh); }
-    else { showToast(`⚠ "${stripWW(itemName)}" scrape didn't complete — check GitHub Actions`, 5000); if (_lastData) renderPage(_lastData); }
+    else { showToast(`⚠ "${stripWW(itemName)}" scrape didn't complete - check GitHub Actions`, 5000); if (_lastData) renderPage(_lastData); }
   };
 
   // Phase 1: find the run created after dispatchedAt.
@@ -1102,7 +1102,7 @@ async function getRunnerStatus(s) {
       `https://api.github.com/repos/${s.user}/${s.repo}/actions/runners`,
       { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
     );
-    if (!res.ok) return { anyOnline: true, runners: [] }; // fail open — don't block on API error
+    if (!res.ok) return { anyOnline: true, runners: [] }; // fail open - don't block on API error
     const data = await res.json();
     const selfHosted = (data.runners || []).filter(r =>
       r.labels?.some(l => l.name === 'self-hosted')
@@ -1130,9 +1130,9 @@ function updateStaleBannerForRunner(offline) {
   const banner = $('staleBanner');
   if (!banner) return;
   if (offline) {
-    banner.innerHTML = `⚠️ Price data is more than ${STALE_DATA_DAYS} days old — scraper is currently <strong>offline</strong>. Prices cannot be updated until the Windows runner restarts.`;
+    banner.innerHTML = `⚠️ Price data is more than ${STALE_DATA_DAYS} days old - scraper is currently <strong>offline</strong>. Prices cannot be updated until the Windows runner restarts.`;
   } else {
-    banner.innerHTML = `⚠️ Price data is more than ${STALE_DATA_DAYS} days old — click <strong>Update Prices</strong> to refresh.`;
+    banner.innerHTML = `⚠️ Price data is more than ${STALE_DATA_DAYS} days old - click <strong>Update Prices</strong> to refresh.`;
   }
 }
 
@@ -1223,7 +1223,7 @@ function initEditModal() {
     const coChanged = !!newCoUrl && newCoUrl !== prevCo;
 
     if (wwRemoved && coRemoved) {
-      alert('Both links removed — that would leave the item with no store at all.\nUse Archive to stop tracking it entirely, or keep at least one link.');
+      alert('Both links removed - that would leave the item with no store at all.\nUse Archive to stop tracking it entirely, or keep at least one link.');
       return;
     }
     if ((wwRemoved || coRemoved) && !(newWwUrl || newCoUrl)) {
@@ -1246,7 +1246,7 @@ function initEditModal() {
     close();
 
     // Store removal applies immediately: null the store locally + in the repo
-    // copy of latest.json (the scraper keeps it dropped from the next run on —
+    // copy of latest.json (the scraper keeps it dropped from the next run on -
     // single-store pins are skipped and no longer carried forward).
     if ((wwRemoved || coRemoved) && _lastData) {
       const li = _lastData.items?.find(i => i.list_item === item.list_item);
@@ -1269,7 +1269,7 @@ function initEditModal() {
         // Exact semantics for THIS item (deletions included); merge for the rest.
         await persistUrlOverridesToRepo(s, overrides, [item.list_item]);
         if (wwRemoved || coRemoved) {
-          await persistLatestJson(_lastData, `edit: ${item.list_item} — removed from ${wwRemoved ? 'Woolworths' : 'Coles'}`);
+          await persistLatestJson(_lastData, `edit: ${item.list_item} - removed from ${wwRemoved ? 'Woolworths' : 'Coles'}`);
           showToast(`✓ "${item.list_item}" removed from ${wwRemoved ? 'Woolworths' : 'Coles'}.`);
         }
         // A URL was added/changed → immediate single-item rescrape with it
@@ -1429,8 +1429,8 @@ function buildPriceHistChart(item, excludedPrices) {
     .sort((a, b) => a.date.localeCompare(b.date));
 
   // Include today's live scraped price so the current point shows on the chart (the
-  // table already injects it). Without this, the current Coles point never appears —
-  // coles_price_history is usually empty — and the WW line stops at its last recorded date.
+  // table already injects it). Without this, the current Coles point never appears -
+  // coles_price_history is usually empty - and the WW line stops at its last recorded date.
   const liveDate = item.woolworths?.scraped_at?.slice(0, 10) || item.coles?.scraped_at?.slice(0, 10) || new Date().toISOString().slice(0, 10);
   if (item.woolworths?.price > 0 && !wwRaw.some(e => e.date === liveDate)) wwRaw.push({ date: liveDate, price: item.woolworths.price });
   if (item.coles?.price > 0 && !coRaw.some(e => e.date === liveDate)) coRaw.push({ date: liveDate, price: item.coles.price });
@@ -1581,7 +1581,7 @@ function buildPriceHistChart(item, excludedPrices) {
 // per-store multipliers (raw price → $/kg) using the current pack ratio, mirroring
 // groupTrendCellHTML. {perKg:false, ww:1, coles:1} for normal items (no conversion).
 function histKgRatios(item) {
-  // buildGroupHistoryItem() already stores $/kg-converted values — no further conversion.
+  // buildGroupHistoryItem() already stores $/kg-converted values - no further conversion.
   if (item._isGroupHistory) return { perKg: true, ww: 1, coles: 1, groupLabel: null };
   const group = loadVariantGroups().find(g => (g.items || []).includes(item.list_item));
   if (!group) return { perKg: false, ww: 1, coles: 1, groupLabel: null };
@@ -1614,14 +1614,14 @@ function openHistoryFromManageBtn(itemName) {
 function openPriceHistoryModal(item) {
   _historyItem = item;
   const kgR = histKgRatios(item);
-  // Group members show a "GroupLabel — Product name" title so it's clear this is one
-  // variant's history within the per-kg comparison, not the whole group's — a group can
+  // Group members show a "GroupLabel - Product name" title so it's clear this is one
+  // variant's history within the per-kg comparison, not the whole group's - a group can
   // mix WW-only and Coles-only products (e.g. "Lamb Mince"), so a single member's history
   // can legitimately show nothing for the store the group's headline price came from.
-  const titleName = kgR.groupLabel ? `${kgR.groupLabel} — ${stripWW(item.list_item)}` : stripWW(item.list_item);
+  const titleName = kgR.groupLabel ? `${kgR.groupLabel} - ${stripWW(item.list_item)}` : stripWW(item.list_item);
   $('priceHistoryTitle').textContent = `Price History - ${titleName}${kgR.perKg ? ' ($/kg)' : ''}`;
 
-  // Simplified view: no per-row exclude/"different item" editing, no Save/Reset —
+  // Simplified view: no per-row exclude/"different item" editing, no Save/Reset -
   // just the read-only chart + list. Always on for a group's merged history (points
   // come from whichever member was cheapest that day, so there's no single item's
   // exclusion list to edit); on mobile it's a deliberate simplification the narrow
@@ -1721,19 +1721,19 @@ function openPriceHistoryModal(item) {
     row.className = rowClass;
 
     // Horizontal stem on the left that splits into two diverging arrows (one up,
-    // one down) on the right — matches the requested "split into two directions" icon.
+    // one down) on the right - matches the requested "split into two directions" icon.
     const forkSvg = `<svg class="fork-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="10" y2="12"/><line x1="10" y1="12" x2="21" y2="4"/><line x1="10" y1="12" x2="21" y2="20"/><polyline points="19,8 21,4 17,5"/><polyline points="19,16 21,20 17,19"/></svg>`;
 
     // Display in $/kg for per-kg members (kgR.ww/coles); data-price stays the raw
     // stored price so exclusions and the "different item" fork keep matching the data.
     // Group history rows get their OWN exclude button: each point knows which
     // member product it came from (_wwMeta/_coMeta), so ✕ writes that member's
-    // raw pack price into pw_exclusions_v1 immediately — this is how a wrong
+    // raw pack price into pw_exclusions_v1 immediately - this is how a wrong
     // "$9.02 beef mince" point gets removed from a category's history.
     const grpBtn = (store) => {
       const meta = (store === 'ww' ? item._wwMeta : item._coMeta)?.get(entry.date);
       if (!meta) return '';
-      return `<button class="price-excl-x grp-excl" data-store="${store}" data-src="${escAttr(meta.src)}" data-raw="${meta.raw.toFixed(2)}" title="Exclude — this point came from ${escAttr(stripWW(meta.src))}">✕</button>`;
+      return `<button class="price-excl-x grp-excl" data-store="${store}" data-src="${escAttr(meta.src)}" data-raw="${meta.raw.toFixed(2)}" title="Exclude - this point came from ${escAttr(stripWW(meta.src))}">✕</button>`;
     };
     const wwEditBtns = item._isGroupHistory ? (innerWidth > 700 ? grpBtn('ww') : '') : simplified ? '' : `
            <button class="price-excl-x" data-store="ww" data-price="${Number(entry.ww).toFixed(2)}" title="${wwExcluded ? 'Re-include' : 'Exclude'}">✕</button>
@@ -1745,13 +1745,13 @@ function openPriceHistoryModal(item) {
       ? `<span class="price-history-store-cell price-history-store-ww">
            <span class="price-history-price">${fmt(entry.ww * kgR.ww)}</span>${wwEditBtns}
          </span>`
-      : `<span style="color:var(--text-soft)">—</span>`;
+      : `<span style="color:var(--text-soft)">-</span>`;
 
     const coHtml = entry.coles != null
       ? `<span class="price-history-store-cell price-history-store-coles">
            <span class="price-history-price" style="color:var(--coles)">${fmt(entry.coles * kgR.coles)}</span>${coEditBtns}
          </span>`
-      : `<span style="color:var(--text-soft)">—</span>`;
+      : `<span style="color:var(--text-soft)">-</span>`;
 
     row.innerHTML = `
       <span class="price-history-date${idx === 0 ? ' ph-latest-date' : ''}">${entry.date || 'Unknown date'}</span>
@@ -1759,7 +1759,7 @@ function openPriceHistoryModal(item) {
       ${coHtml}`;
 
     // Group-history exclusion: applied IMMEDIATELY to the source member (no
-    // Save step — a merged min-of-members series has no single pending list),
+    // Save step - a merged min-of-members series has no single pending list),
     // then the group history is rebuilt so the point disappears on the spot.
     row.querySelectorAll('.grp-excl').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1851,7 +1851,7 @@ function showSyncError(thing, err, onRetry) {
   clearTimeout(toast._timer);
   toast.innerHTML = '';
   const span = document.createElement('span');
-  span.textContent = `⚠ Couldn't sync ${thing} to the cloud — saved locally, NOT synced.`;
+  span.textContent = `⚠ Couldn't sync ${thing} to the cloud - saved locally, NOT synced.`;
   toast.appendChild(span);
   if (onRetry) {
     const btn = document.createElement('button');
@@ -2000,7 +2000,7 @@ function initDiffItemModal() {
 
 async function openDiffItemModal(item, priceKey, store) {
   const priority = getPriority(item.list_item);
-  // Store context — mutation deferred until Confirm is clicked.
+  // Store context - mutation deferred until Confirm is clicked.
   // `store` ('ww'|'coles') identifies which store's matched product was wrong,
   // so on confirm we can blocklist that product for this item AND pin it to the new one.
   _diffItemContext = { item, priceKey, priority, store, fromHistory: true };
@@ -2026,7 +2026,7 @@ async function doDiffItemAdd(newName, ctx) {
   const s = loadSettings();
   const priceNum = Number(ctx.priceKey);
 
-  // Now that user confirmed — remove the misidentified price from history
+  // Now that user confirmed - remove the misidentified price from history
   const liveItem = _lastData?.items?.find(i => i.list_item === ctx.item.list_item);
   if (liveItem) {
     liveItem.price_history       = (liveItem.price_history       || []).filter(e => e.price !== priceNum);
@@ -2058,7 +2058,7 @@ async function doDiffItemAdd(newName, ctx) {
     try {
       await persistLatestJson(_lastData, `fix: remove misidentified price entries for "${ctx.item.list_item}"`);
     } catch (_e) {
-      showToast('⚠ Could not save changes — check your GitHub token');
+      showToast('⚠ Could not save changes - check your GitHub token');
       if (_lastData) renderPage(_lastData);
       return;
     }
@@ -2114,13 +2114,13 @@ async function doDiffItemAdd(newName, ctx) {
 
   // Step 4: single-item scrape
   if (!s.token) {
-    showToast(`✓ "${newName}" saved locally — configure GitHub settings to scrape prices`);
+    showToast(`✓ "${newName}" saved locally - configure GitHub settings to scrape prices`);
     return;
   }
   const { anyOnline } = await getRunnerStatus(s);
   if (!anyOnline) {
     showRunnerOfflineBanner();
-    showToast(`✓ "${newName}" added — update prices when runner is back online`);
+    showToast(`✓ "${newName}" added - update prices when runner is back online`);
     return;
   }
   hideRunnerOfflineBanner();
@@ -2137,10 +2137,10 @@ async function doDiffItemAdd(newName, ctx) {
     }
   );
   if (dispRes.status === 204) {
-    showToast(`✓ "${newName}" added — scraping prices now…`);
+    showToast(`✓ "${newName}" added - scraping prices now…`);
     pollItemRefresh(s, null, newName);
   } else {
-    showToast(`✓ "${newName}" added — trigger a scrape manually when ready`);
+    showToast(`✓ "${newName}" added - trigger a scrape manually when ready`);
   }
 }
 
@@ -2153,7 +2153,7 @@ function nameMatchesSearch(name, terms) {
   return terms.every(t => n.includes(t));
 }
 
-// Record searches that match NOTHING in the current list — the cheapest useful
+// Record searches that match NOTHING in the current list - the cheapest useful
 // analytics: each one is a candidate to add to shopping_list.xlsx. Kept in
 // localStorage (no backend); the Scrape Log page surfaces them. Debounced by the
 // caller so mid-typing prefixes aren't logged.
@@ -2224,7 +2224,7 @@ function initPriorityFilter() {
     });
   });
 
-  // Mobile frequency dropdown — drives the same logic by clicking the hidden pill.
+  // Mobile frequency dropdown - drives the same logic by clicking the hidden pill.
   const freqSelect = $('freqSelect');
   if (freqSelect) {
     freqSelect.value = ['all', 'weekly', 'monthly', 'rare', 'archive'].includes(_activePriority) ? _activePriority : 'weekly';
@@ -2233,7 +2233,7 @@ function initPriorityFilter() {
     });
   }
 
-  // Watchlist filter — a pill in the filter row (it IS a filter); the mobile
+  // Watchlist filter - a pill in the filter row (it IS a filter); the mobile
   // sort-toolbar eye chip clicks this same pill. Toggles on/off; turning it
   // off lands back on "All".
   function toggleWatchlistFilter() {
@@ -2247,7 +2247,7 @@ function initPriorityFilter() {
 
   $('watchlistPill')?.addEventListener('click', toggleWatchlistFilter);
 
-  // Other pages link here as index.html#watchlist — activate the watchlist
+  // Other pages link here as index.html#watchlist - activate the watchlist
   // filter on arrival, then drop the hash so a plain refresh doesn't
   // re-trigger it.
   if (location.hash === '#watchlist') {
@@ -2260,7 +2260,7 @@ function initPriorityFilter() {
 // ── Mobile card selection pill ────────────────────────────────────────────────
 
 function _updateSelectedPill() {
-  // Floating "+ Basket (n)" button — visible whenever ≥1 item is selected
+  // Floating "+ Basket (n)" button - visible whenever ≥1 item is selected
   const fab = $('basketFab');
   if (fab) {
     const fc = $('basketFabCount');
@@ -2283,13 +2283,13 @@ function _updateSelectedPill() {
   }
 }
 
-// Toggle one real product (not the synthetic group key — those aren't in
+// Toggle one real product (not the synthetic group key - those aren't in
 // _lastData.items, so the basket export would silently drop them) in the basket
-// selection. Every matching element gets patched directly (no full re-render — that
+// selection. Every matching element gets patched directly (no full re-render - that
 // would jump mobile's scroll position back to the top) so tapping again to remove
 // has the same immediate visual feedback as tapping to add.
 // No toast: the floating "+ Basket (n)" button already shows the updated count,
-// and the toast — full-width on mobile — sat right on top of it at almost the same
+// and the toast - full-width on mobile - sat right on top of it at almost the same
 // bottom offset, hiding the icon it was supposed to confirm.
 function addPerKgToBasket(name) {
   if (!name) return;
@@ -2297,7 +2297,7 @@ function addPerKgToBasket(name) {
   else _selectedItems.add(name);
   const selected = _selectedItems.has(name);
   // The same product can be the tap-target of the group card (data-cheapest) AND
-  // its own "＋" row inside the expanded member list — keep both in sync.
+  // its own "＋" row inside the expanded member list - keep both in sync.
   document.querySelectorAll(`[data-item="${CSS.escape(name)}"].vg-pv-basket`)
     .forEach(el => {
       el.classList.toggle('selected', selected);
@@ -2352,7 +2352,7 @@ function scheduleArchiveSync() {
 
 // Keeps the LOADED item's `archived` boolean in sync with the priority choice.
 // That flag is baked into latest.json by the scraper (from archived_items.json
-// as of the last run) — separate from the browser-local priority — so changing
+// as of the last run) - separate from the browser-local priority - so changing
 // only the priority left the row stuck showing exclusively in the Archive view
 // until the next full scrape happened to overwrite it. Without this, "unarchive"
 // looked completely broken: the item just vanished into limbo, visible nowhere
@@ -2467,7 +2467,7 @@ function initBulkBar() {
 function computeBannerStats(items) {
   const exclusions = loadExclusions();
   // Per-kg member products are shown in the table collapsed into a single group
-  // row (with the group's own priority + $/kg), never as individual rows — so
+  // row (with the group's own priority + $/kg), never as individual rows - so
   // they must NOT be counted here either. Counting them made the WW/Coles footer
   // and the comparison banner include products the user can't see as rows: e.g.
   // Monthly + Meat showed 2 rows but the footer summed 3 items, because a beef
@@ -2531,8 +2531,8 @@ function computeBannerStats(items) {
 }
 
 // Renders the two saving figures shown between the store cards:
-//   • Basket saving — the gap between the two whole-basket totals (matches the cards).
-//   • Max saving — buy each item at its cheaper store vs the dearer single store.
+//   • Basket saving - the gap between the two whole-basket totals (matches the cards).
+//   • Max saving - buy each item at its cheaper store vs the dearer single store.
 //     Only shown when splitting the shop beats just visiting the cheaper store.
 // A small circled "?" that reveals its explanation on hover OR tap/focus
 // (tabindex makes :focus-visible tooltips work on touch). CSS: .info-ico.
@@ -2548,8 +2548,8 @@ function renderSavingInfo(s) {
     : '<span class="store-chip ww sm">W</span>';
   const splitIcon = `<svg class="split-icon" width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 A14 14 0 0 0 16 30 Z" fill="var(--ww)"/><path d="M16 2 A14 14 0 0 1 16 30 Z" fill="var(--coles)"/><line x1="16" y1="2" x2="16" y2="30" stroke="var(--card)" stroke-width="2.5"/></svg>`;
   // Explanations live behind a visible ?-icon (hover or tap/focus shows the
-  // tip) — a bare title attribute was invisible until you happened to hover.
-  // "Max": these are the largest POSSIBLE savings — they compare the two
+  // tip) - a bare title attribute was invisible until you happened to hover.
+  // "Max": these are the largest POSSIBLE savings - they compare the two
   // stores and don't change with whichever store you happen to pick.
   const basket = `<div class="saving-line"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIcoHTML('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store')}</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
   let maxRow = '';
@@ -2624,7 +2624,7 @@ function initStickyHeader() {
   document.querySelector('.table-wrap')?.addEventListener('scroll', (e) => {
     // The wrap must NEVER scroll vertically (the page scrolls; the ghost pins
     // the header). Browsers still nudge it internally sometimes (focus jumps,
-    // find-in-page, scrollIntoView) — the real thead is sticky INSIDE the wrap,
+    // find-in-page, scrollIntoView) - the real thead is sticky INSIDE the wrap,
     // so any internal scroll opened a gap band above it with rows showing
     // through (the "row above the header" artifact). Clamp it back.
     if (e.target.scrollTop !== 0) e.target.scrollTop = 0;
@@ -2663,7 +2663,7 @@ function syncStickyNow() {
   // Clone thead, removing resize handles from ghost (they'd interfere)
   while (_stickyGhostTable.firstChild) _stickyGhostTable.removeChild(_stickyGhostTable.firstChild);
   const cloned = realThead.cloneNode(true);
-  // Strip ids from the clone — cloneNode copies id="tableHead", and a duplicate id makes
+  // Strip ids from the clone - cloneNode copies id="tableHead", and a duplicate id makes
   // later $('tableHead') / querySelector('#tableHead') ambiguous (can return the ghost).
   cloned.removeAttribute('id');
   cloned.querySelectorAll('[id]').forEach(e => e.removeAttribute('id'));
@@ -2883,12 +2883,12 @@ function renderTableHead() {
   initColumnResize();
 
   // The header was just rebuilt. If the sticky ghost is showing (page scrolled down),
-  // re-sync it now so it never displays a stale/blank header until the next scroll —
+  // re-sync it now so it never displays a stale/blank header until the next scroll -
   // the "headline freezes / shows nothing until I expand a row" symptom.
   if (_stickyGhost && _stickyGhost.style.display !== 'none') syncStickyNow();
 
   // Expose the visible table width so an expanded per-kg panel can size itself to the
-  // viewport (sticky-left) instead of the full overflowing table — keeps Coles on screen.
+  // viewport (sticky-left) instead of the full overflowing table - keeps Coles on screen.
   const _tw = thead.closest('.table-wrap');
   if (_tw) _tw.style.setProperty('--pw-panelw', _tw.clientWidth + 'px');
 }
@@ -2936,11 +2936,11 @@ async function triggerRefresh() {
     );
 
     if (res.status === 204) {
-      // Persist the dispatch so the strip survives refreshes / other pages —
+      // Persist the dispatch so the strip survives refreshes / other pages -
       // renderPage (and header.js's poller on non-index pages) shows a
       // "waiting" strip until scrape_progress appears or the run completes.
       try { localStorage.setItem('pw_scrape_dispatched_v1', new Date().toISOString()); } catch {}
-      // Show progress strip immediately — don't wait for scraper to push data
+      // Show progress strip immediately - don't wait for scraper to push data
       _progressDismissed = false;
       const strip = $('scrapeStrip');
       if (strip) {
@@ -2952,7 +2952,7 @@ async function triggerRefresh() {
         const retryBtn = $('scrapeStripRetry');
         if (retryBtn) retryBtn.style.display = 'none';
       }
-      btn.innerHTML = '✓ Triggered — polling…';
+      btn.innerHTML = '✓ Triggered - polling…';
       const dispatchedAt = new Date().toISOString();
       pollForCompletion(s, dispatchedAt);
       refreshCooldown = true;
@@ -2976,12 +2976,12 @@ async function pollForCompletion(s, dispatchedAt) {
   const apiHeaders = { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' };
   let dataPollTimer;
 
-  // finish(true)  — run succeeded: clear timer, reload data
-  // finish(false) — run explicitly failed (bad conclusion from GitHub API)
+  // finish(true)  - run succeeded: clear timer, reload data
+  // finish(false) - run explicitly failed (bad conclusion from GitHub API)
   const finish = (success) => {
     clearInterval(dataPollTimer);
     if (success) {
-      btn.innerHTML = '✓ Done — reloading…';
+      btn.innerHTML = '✓ Done - reloading…';
       setTimeout(() => {
         fetch(`data/latest.json?t=${Date.now()}`)
           .then(r => r.json())
@@ -2994,18 +2994,18 @@ async function pollForCompletion(s, dispatchedAt) {
     }
   };
 
-  // lostConnection() — poll timed out or network error, NOT an explicit failure.
+  // lostConnection() - poll timed out or network error, NOT an explicit failure.
   // Keep the progress bar visible at its last known %, show a recoverable message
   // with a Refresh button that restarts polling from Phase 1.
   const lostConnection = () => {
-    // Do NOT clear dataPollTimer — the data poll keeps running in case the
+    // Do NOT clear dataPollTimer - the data poll keeps running in case the
     // scrape-progress branch catches up later.
     btn.innerHTML = '↻ Update Prices';
     btn.disabled = false;
     const strip = $('scrapeStrip');
     if (strip && strip.style.display !== 'none') {
       $('scrapeStripLabel').innerHTML =
-        '⚠ Lost connection — <a href="https://github.com/' +
+        '⚠ Lost connection - <a href="https://github.com/' +
         `${s.user}/${s.repo}/actions" target="_blank" rel="noopener" style="color:inherit">check GitHub Actions</a>`;
       const retryBtn = $('scrapeStripRetry');
       if (retryBtn) retryBtn.style.display = 'inline-block';
@@ -3017,14 +3017,14 @@ async function pollForCompletion(s, dispatchedAt) {
   };
 
   // Live data poll: re-renders the progress bar every 5 s while the scrape runs.
-  // Skip renderPage until scrape_progress first appears — calling renderPage before
+  // Skip renderPage until scrape_progress first appears - calling renderPage before
   // that would hide the manually-set "Waiting to start" strip (no scrape_progress
   // field in latest.json yet). Once seen, always call renderPage so completion
   // state renders correctly even when scrape_progress later disappears.
   dataPollTimer = setInterval(async () => {
     const fresh = await loadProgressData();
     if (!fresh) return;
-    // Only accept scrape_progress from this run — stale data on the branch
+    // Only accept scrape_progress from this run - stale data on the branch
     // (from a previous scrape) will have last_updated < dispatchedAt.
     if (fresh.scrape_progress && fresh.last_updated >= dispatchedAt) _progressSeenThisSession = true;
     if (!_progressSeenThisSession) return;
@@ -3144,7 +3144,7 @@ function sortItems(items) {
       if (_activePriority !== 'all' && p !== _activePriority) return false;
     }
     // Hot deals filter
-    // Hide items priced at neither store by default — they're noise in the main
+    // Hide items priced at neither store by default - they're noise in the main
     // list (the footer's coverage count still reports how many are missing).
     // Single-store items stay visible since one price is still useful. The
     // archive view is exempt so archived-but-unpriced items remain reachable.
@@ -3274,7 +3274,7 @@ function applyColSort(col) {
 
 // ── Weekly special detection ─────────────────────────────────────────────────
 // isHotDeal() and calcTrendPosition() are provided by utils.js (loaded before app.js in index.html).
-// Do not redefine them here — both pages must share the exact same implementation.
+// Do not redefine them here - both pages must share the exact same implementation.
 
 // ── Card view ─────────────────────────────────────────────────────────────────
 
@@ -3307,7 +3307,7 @@ function renderCards(items) {
       ? `<img class="card-img" src="${imgSrc}" alt="" loading="lazy" onerror="imgError(this,'${imgFallback}')">`
       : '<div class="card-img-placeholder">No Photo</div>';
 
-    // 'archive' is a real, selectable option here (not just a bulk action) — an
+    // 'archive' is a real, selectable option here (not just a bulk action) - an
     // archived item's own dropdown must actually show "Archived" selected, not
     // silently default to "Weekly" with no way back short of a separate button.
     const prioOptions = ['weekly','monthly','rare','archive'].map(v =>
@@ -3317,7 +3317,7 @@ function renderCards(items) {
     // Prices
     const wwP100 = clientPer100(ww);
     const coP100 = clientPer100(co);
-    const hotBadge = hotDeal ? ' <span class="hot-badge" title="Hot Deal — meaningfully cheaper than its usual price right now">🔥</span>' : '';
+    const hotBadge = hotDeal ? ' <span class="hot-badge" title="Hot Deal - meaningfully cheaper than its usual price right now">🔥</span>' : '';
 
     let wwHtml;
     if (ww) {
@@ -3386,8 +3386,8 @@ function renderCards(items) {
 
 // ── Variant groups (per-kg comparison) ────────────────────────────────────────
 // Per-kg items (meat/fish) are collapsed into one synthetic "group" row each, so
-// they render inline in the main table looking like normal product rows — image,
-// WW-vs-Coles columns, links — but with $/kg as the headline (pack size varies
+// they render inline in the main table looking like normal product rows - image,
+// WW-vs-Coles columns, links - but with $/kg as the headline (pack size varies
 // across stores, so only $/kg is comparable). Expanding lists every member
 // product as its own row with $/kg at each store.
 
@@ -3405,7 +3405,7 @@ function buildVariantGroups(byName) {
     });
     if (!members.length) continue;
 
-    // Woolworths and Coles are independent lists — a product contributes to a store
+    // Woolworths and Coles are independent lists - a product contributes to a store
     // only if it's a member of that store's list. The cheapest in each list wins.
     const stores = resolveStoreLists(g, byName);
     const memberByName = new Map(members.map(m => [m.list_item, m]));
@@ -3458,17 +3458,17 @@ function buildVariantGroups(byName) {
   return out;
 }
 
-// A $/kg price cell: just the $/kg headline (linked). No pack-price subline —
+// A $/kg price cell: just the $/kg headline (linked). No pack-price subline -
 // that lives in the expanded panel, where pack size actually matters.
 function perKgCellHTML(perkg, url) {
-  if (perkg == null) return '<span class="no-data">—</span>';
+  if (perkg == null) return '<span class="no-data">-</span>';
   const head = `$${perkg.toFixed(2)}<span class="perkg-suffix">/kg</span>`;
   const linked = url ? `<a href="${url}" target="_blank" rel="noopener" class="price-link">${head}</a>` : head;
   return `<div class="price-main">${linked}</div>`;
 }
 
 // Trend cell for a group. The bar is built from EVERY member's $/kg series
-// (memberPerKgPrices — the same conversion the price column and history modal
+// (memberPerKgPrices - the same conversion the price column and history modal
 // use), and the marker is the group's current best $/kg (best.perkg, the exact
 // number shown in the price column). History, current price and trend therefore
 // all share one source of truth and cannot diverge.
@@ -3481,18 +3481,18 @@ function groupTrendCellHTML(group) {
   if (prices.length < 2) return '';
   const hist = prices.map(p => ({ price: p }));
   // History button opens the group's own merged history (see buildGroupHistoryItem),
-  // not one member's — a group can mix a WW-only and a Coles-only product, so
+  // not one member's - a group can mix a WW-only and a Coles-only product, so
   // picking a single member's history hides whichever store that member doesn't sell at.
   return buildPriceBar(`__group_${group._groupKey}`, hist, best.perkg);
 }
 
 // Synthesizes a "price history" item for a per-kg group: for each store, at every
-// date ANY member's price changed, take the CHEAPEST $/kg across ALL members —
+// date ANY member's price changed, take the CHEAPEST $/kg across ALL members -
 // each member FORWARD-FILLED to its most recent known price as of that date, not
 // just members with an explicit entry that day. Members are scraped on independent
 // schedules (a fresh full run doesn't necessarily touch every member, and a
 // member's own history only gets a new row when its price changes or 7+ days have
-// passed — see scraper.py's ww_add/co_add), so a plain per-date union of raw
+// passed - see scraper.py's ww_add/co_add), so a plain per-date union of raw
 // entries let a pricier member "win" a date simply because it was the only one
 // re-scraped that day, while the true cheapest member's last-known (unchanged)
 // price was silently ignored. Forward-filling means every date's minimum reflects
@@ -3557,8 +3557,8 @@ function buildGroupHistoryItem(group) {
   };
 }
 
-// Trend SORT position for a per-kg group. Mirrors the bar in groupTrendCellHTML — built
-// from the members' $/kg series with the best $/kg as "current" — so sorting by trend
+// Trend SORT position for a per-kg group. Mirrors the bar in groupTrendCellHTML - built
+// from the members' $/kg series with the best $/kg as "current" - so sorting by trend
 // orders groups by the same metric the bar shows. calcTrendPosition can't be used on a
 // group: its price_history is empty and woolworths.price is a pack price, not $/kg, so it
 // returned a meaningless value (the "per-kg items sort weird" bug).
@@ -3601,10 +3601,10 @@ function perKgProductIdentity(url) {
 }
 
 // Collapse per-kg variant rows that are duplicates to the shopper. Two stages:
-//  (1) same pinned/scraped product URL — handles the many name-key aliases one product
+//  (1) same pinned/scraped product URL - handles the many name-key aliases one product
 //      accrued over time (with/without size, "(15% fat)", "Woolworths " prefix), INCLUDING
 //      ones the user renamed and ones a Coles-only item wrongly matched on WW;
-//  (2) same display name + same $/kg — handles genuinely distinct SKUs that read identically.
+//  (2) same display name + same $/kg - handles genuinely distinct SKUs that read identically.
 // The entry whose per-store name the user set always wins, so the named version survives.
 // `variants` is [{ name, res, pk }]. Returns a new array sorted by $/kg ascending.
 function dedupePerKgVariants(variants, storeKey, overrides, memberByName) {
@@ -3689,7 +3689,7 @@ function groupStoreVariantsHTML(group, store, overrides) {
 }
 
 // Group sub-label: per-store product counts (e.g. "2 Woolworths · 1 Coles").
-// "N products" was ambiguous — it counted the deduped union of list-items, which
+// "N products" was ambiguous - it counted the deduped union of list-items, which
 // rarely matched the two store columns the user actually sees.
 function groupSubLabel(group) {
   const parts = [];
@@ -3699,8 +3699,8 @@ function groupSubLabel(group) {
 }
 
 // Desktop "card view" (#cardGrid) rendering for a variant group. This view had
-// no group branch at all — unlike the table (appendGroupRowDesktop) and mobile
-// cards (appendGroupCardMobile) — so groups fell through the per-item path
+// no group branch at all - unlike the table (appendGroupRowDesktop) and mobile
+// cards (appendGroupCardMobile) - so groups fell through the per-item path
 // above and showed the raw synthetic key ("__group_lamb_mince") as the name.
 // Mirrors the per-item card structure (name/cat header, checkbox+priority,
 // WW-vs-Coles prices, trend bar, edit/refresh footer) with the group's $/kg
@@ -3728,7 +3728,7 @@ function groupCardHTML(group, overrides) {
   const wwUrl = wwBest ? (overrides[wwBest.name]?.wwUrl || wwBest.result?.url || null) : null;
   const coUrl = coBest ? (overrides[coBest.name]?.colesUrl || coBest.result?.url || null) : null;
   const priceHtml = (perkg, url) => perkg == null
-    ? '<span class="no-data">—</span>'
+    ? '<span class="no-data">-</span>'
     : (url
       ? `<a href="${url}" target="_blank" rel="noopener" class="price-link">$${perkg.toFixed(2)}<span class="perkg-suffix">/kg</span></a>`
       : `$${perkg.toFixed(2)}<span class="perkg-suffix">/kg</span>`);
@@ -3792,7 +3792,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
 
   // No caret glyphs or expand/collapse buttons: the whole row toggles, and the
   // open panel renders as an indented speech bubble whose tail points back at
-  // this row — the shape itself says "click the row above to close".
+  // this row - the shape itself says "click the row above to close".
   const nameCell = `<td class="item-name vg-group-name-cell">
     <div class="item-row">
       ${imgHtml}
@@ -3842,7 +3842,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
 
   const wwTotal = group._wwPerKg != null ? group._wwPerKg * units : null;
   const coTotal = group._coPerKg != null ? group._coPerKg * units : null;
-  let savingContent = '<span class="no-data">—</span>';
+  let savingContent = '<span class="no-data">-</span>';
   if (group._wwPerKg != null && group._coPerKg != null) {
     const sav = Math.abs(group._wwPerKg - group._coPerKg) * units;
     savingContent = sav > 0 ? `<span class="saving-cell">${fmt(sav)}</span>` : '<span class="no-data">$0.00</span>';
@@ -3861,15 +3861,15 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     trips:        `<td class="trips-cell"></td>`,
     category:     `<td style="font-size:12px;color:var(--text-mid)">${getCategory(group)}</td>`,
     last_scraped: `<td></td>`,
-    ww_total:     `<td style="font-size:13px;font-weight:600">${wwTotal != null ? fmt(wwTotal) : '<span class="no-data">—</span>'}</td>`,
-    coles_total:  `<td style="font-size:13px;font-weight:600">${coTotal != null ? fmt(coTotal) : '<span class="no-data">—</span>'}</td>`,
+    ww_total:     `<td style="font-size:13px;font-weight:600">${wwTotal != null ? fmt(wwTotal) : '<span class="no-data">-</span>'}</td>`,
+    coles_total:  `<td style="font-size:13px;font-weight:600">${coTotal != null ? fmt(coTotal) : '<span class="no-data">-</span>'}</td>`,
   };
 
-  // Selection checkbox (selects the whole category — basket uses its cheapest option).
+  // Selection checkbox (selects the whole category - basket uses its cheapest option).
   const checked = _checkedItems.has(group.list_item) ? ' checked' : '';
   const checkCell = `<td class="check-cell"><input type="checkbox" class="row-check" data-item="${group.list_item}"${checked}></td>`;
 
-  // Actions: watchlist + refresh — identical classes/markup to normal product rows
+  // Actions: watchlist + refresh - identical classes/markup to normal product rows
   // (edit ✎ lives in the name cell, same as normal items).
   const isWatched = _watchlist.has(group.list_item);
   const actionsCell = `<td class="actions-cell">
@@ -3925,16 +3925,16 @@ function appendGroupCardMobile(container, group, overrides) {
 
   // Same layout as a normal mobile card in BOTH views: compact = the same
   // single-line row, detailed = image + name/icons/priority + trend + prices.
-  // Only two things mark it as per-kg — the /kg price suffix and the expand
+  // Only two things mark it as per-kg - the /kg price suffix and the expand
   // chevron sitting at the end of the prices row. The 🔥 uses the same
   // isHotDeal() as every other item; the 👁 watches the whole CATEGORY (the
   // group key), not individual member products.
-  const wwKg = group._wwPerKg != null ? `$${group._wwPerKg.toFixed(2)}` : '—';
-  const coKg = group._coPerKg != null ? `$${group._coPerKg.toFixed(2)}` : '—';
+  const wwKg = group._wwPerKg != null ? `$${group._wwPerKg.toFixed(2)}` : '-';
+  const coKg = group._coPerKg != null ? `$${group._coPerKg.toFixed(2)}` : '-';
   // Cheapest variant across both stores (a REAL product) for the quick add-to-basket.
   const cheapestVar = [group._wwBest, group._coBest].filter(Boolean).sort((a, b) => a.perkg - b.perkg)[0];
   const hotDeal = isHotDeal(group, loadExclusions());
-  const hotHtml = hotDeal ? '<span class="mc-hot" title="Hot Deal — meaningfully cheaper than its usual price right now">🔥</span>' : '';
+  const hotHtml = hotDeal ? '<span class="mc-hot" title="Hot Deal - meaningfully cheaper than its usual price right now">🔥</span>' : '';
 
   // Tap-to-add works like a normal card: tapping the card toggles the group's
   // CHEAPEST variant in the basket (mc-selected highlight and all); expand /
@@ -3949,7 +3949,7 @@ function appendGroupCardMobile(container, group, overrides) {
   card.setAttribute('aria-pressed', String(inBasket));
   card.setAttribute('aria-label', group._groupLabel);
 
-  // Compact view: identical single-line row to normal items (no eye/chevron —
+  // Compact view: identical single-line row to normal items (no eye/chevron -
   // same no-horizontal-room trade-off as normal compact rows).
   if (_mcView === 'compact') {
     card.className = `mobile-card mobile-card-compact vg-mobile-card${borderCls}${inBasket ? ' mc-selected' : ''}`;
@@ -4034,7 +4034,7 @@ let _catDragSrc = null;  // drag source row, shared by the once-bound drag handl
 // A blank product row for the "+ Add product" action. Matches makeRow(isNew).
 // Best-effort human product name from a Coles/WW product URL slug. Used to auto-fill the
 // name field when a URL is pasted into a new category row, so you don't retype it.
-// Pure (no DOM) — unit-tested in scripts/perkg_selfcheck.js.
+// Pure (no DOM) - unit-tested in scripts/perkg_selfcheck.js.
 function deriveNameFromUrl(url) {
   if (!url) return '';
   let slug = '';
@@ -4077,14 +4077,14 @@ function openCategoryEditModal(groupKey) {
   const excl = loadPerKgExclusions();
   const stores = resolveStoreLists(cat, byName);
   // Snapshot the per-store membership so save can detect deletions (a member the
-  // user pulled out of a store's column) and actually make them stick — see
+  // user pulled out of a store's column) and actually make them stick - see
   // saveCategoryEdit's removal handling.
   _catEditOrig = { ww: [...stores.ww], coles: [...stores.coles] };
 
   $('catEditName').value = cat.label;
 
   // One product row, scoped to a single store. Woolworths and Coles each have
-  // their own independent column — separate products, names, URLs, and order.
+  // their own independent column - separate products, names, URLs, and order.
   const makeRow = (store, itemName, isNew) => {
     if (isNew) return catEditNewRow(store);
     const o = ov[itemName] || {};
@@ -4139,7 +4139,7 @@ function openCategoryEditModal(groupKey) {
 
 // Bind the add/remove + drag-reorder handlers to the (persistent) modal body ONCE.
 // Previously these lived inside openCategoryEditModal, so each reopen stacked another
-// copy — making "+ Add product" insert multiple rows and drops fire repeatedly.
+// copy - making "+ Add product" insert multiple rows and drops fire repeatedly.
 function bindCategoryEditBody() {
   const body = $('catEditBody');
   if (!body || body._catBound) return;
@@ -4176,7 +4176,7 @@ function bindCategoryEditBody() {
     }
   });
 
-  // HTML5 drag-and-drop — reordering is scoped to within a single column.
+  // HTML5 drag-and-drop - reordering is scoped to within a single column.
   body.addEventListener('dragstart', (e) => {
     const row = e.target.closest('.cat-prod[draggable]');
     if (!row) return;
@@ -4249,7 +4249,7 @@ function saveCategoryEdit() {
   const items = [...wwItems, ...coItems.filter(n => !wwItems.includes(n))];
 
   // Store REMOVALS: a member that was in a store's column when the modal opened but
-  // isn't now. This must genuinely stick — the old code just dropped it from the
+  // isn't now. This must genuinely stick - the old code just dropped it from the
   // order list, but resolveStoreLists re-appended any member that still had a live
   // price at that store, so a wrong cross-store match (e.g. Chicken Roast Portions
   // matched to a Coles "Chicken Parma" product) kept coming back every render, and
@@ -4313,15 +4313,15 @@ function saveCategoryEdit() {
     persistUrlOverridesToRepo(s, ov, [...touchedItems])
       .catch(err => showSyncError('URL overrides', err, () => persistUrlOverridesToRepo(s, ov, [...touchedItems]).catch(() => {})));
     if (latestChanged) {
-      persistLatestJson(_lastData, `edit: ${key} — removed ${removals.map(r => `${r.item} @ ${r.store}`).join(', ')}`)
+      persistLatestJson(_lastData, `edit: ${key} - removed ${removals.map(r => `${r.item} @ ${r.store}`).join(', ')}`)
         .catch(err => showSyncError('latest.json', err));
     }
-    // New products' URLs live in url_overrides now — fetch their prices immediately.
+    // New products' URLs live in url_overrides now - fetch their prices immediately.
     newFetches.forEach(f => triggerItemRefresh(f.name, null, { wwUrl: f.wwUrl, colesUrl: f.colesUrl }));
     if (newFetches.length) {
-      alert(`Saved. Fetching ${newFetches.length} new product(s) — they'll appear once the next price check finishes.`);
+      alert(`Saved. Fetching ${newFetches.length} new product(s) - they'll appear once the next price check finishes.`);
     } else if (removals.length) {
-      showToast(`✓ Removed ${removals.length} store listing${removals.length > 1 ? 's' : ''} — the scraper will stop checking ${removals.map(r => r.store === 'ww' ? 'WW' : 'Coles').join('/')}.`);
+      showToast(`✓ Removed ${removals.length} store listing${removals.length > 1 ? 's' : ''} - the scraper will stop checking ${removals.map(r => r.store === 'ww' ? 'WW' : 'Coles').join('/')}.`);
     }
   }
 }
@@ -4412,7 +4412,7 @@ function renderMobileCards(items, data) {
     });
     chipsWrap.appendChild(chip);
   });
-  // Watchlist chip — lives with the sort chips (the pill row is hidden on
+  // Watchlist chip - lives with the sort chips (the pill row is hidden on
   // phones); delegates to the filter row's pill so there's ONE toggle.
   const watchChip = document.createElement('button');
   watchChip.className = 'mc-sort-chip mc-watch-chip' + (_activePriority === 'watchlist' ? ' active' : '');
@@ -4423,7 +4423,7 @@ function renderMobileCards(items, data) {
   chipsWrap.appendChild(watchChip);
   toolbar.appendChild(chipsWrap);
 
-  // View toggle — single icon-only button; glyph shows the layout you'll switch TO
+  // View toggle - single icon-only button; glyph shows the layout you'll switch TO
   const ICON_LIST = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>';
   const ICON_CARDS = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="7" rx="1.5"/><rect x="3" y="14" width="18" height="7" rx="1.5"/></svg>';
   // The detailed/compact toggle sits in the toolbar, to the right of the sort
@@ -4515,14 +4515,14 @@ function renderMobileCards(items, data) {
 
     if (compact) {
       // Single-line row: fire, SHORT name, W chip + price, C chip + price (cheaper bold).
-      // No eye — there's no horizontal room in this layout.
+      // No eye - there's no horizontal room in this layout.
       const unarch = _activePriority === 'archive'
         ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : '';
       card.innerHTML = `
-        ${hotDeal ? '<span class="mc-hot" title="Hot Deal — meaningfully cheaper than its usual price right now">🔥</span>' : ''}
+        ${hotDeal ? '<span class="mc-hot" title="Hot Deal - meaningfully cheaper than its usual price right now">🔥</span>' : ''}
         <span class="mcc-name">${esc(ov.displayName || shortName(item.list_item))}</span>
-        <span class="mcc-price"><span class="store-chip sm ww">W</span><span class="${wwCheaper ? 'mcc-bold' : ''}">${ww ? fmt(ww.price) : '—'}</span></span>
-        <span class="mcc-price"><span class="store-chip sm coles">C</span><span class="${coCheaper ? 'mcc-bold' : ''}">${co ? fmt(co.price) : '—'}</span></span>
+        <span class="mcc-price"><span class="store-chip sm ww">W</span><span class="${wwCheaper ? 'mcc-bold' : ''}">${ww ? fmt(ww.price) : '-'}</span></span>
+        <span class="mcc-price"><span class="store-chip sm coles">C</span><span class="${coCheaper ? 'mcc-bold' : ''}">${co ? fmt(co.price) : '-'}</span></span>
         ${unarch ? `<span class="mc-icons">${unarch}</span>` : ''}`;
     } else {
       card.innerHTML = `
@@ -4532,7 +4532,7 @@ function renderMobileCards(items, data) {
           <div class="mc-name-row">
             <div class="mc-name">${esc(displayName)}</div>
             <span class="mc-icons">
-              ${hotDeal ? '<span class="mc-hot" title="Hot Deal — meaningfully cheaper than its usual price right now">🔥</span>' : ''}
+              ${hotDeal ? '<span class="mc-hot" title="Hot Deal - meaningfully cheaper than its usual price right now">🔥</span>' : ''}
               ${barHtml ? `<button class="mc-hist-btn" data-manage-item="${item.list_item.replace(/"/g,'&quot;')}" title="Price history" aria-label="View price history">${HIST_CLOCK_SVG}</button>` : ''}
               ${watchBtn}
               ${_activePriority === 'archive' ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : ''}
@@ -4545,13 +4545,13 @@ function renderMobileCards(items, data) {
       <div class="mc-prices">
         <div class="mc-store-col">
           <div class="mc-store-label ww-col"><span class="store-chip sm ww">W</span> Woolworths</div>
-          <div class="mc-price${wwCheaper ? ' cheaper' : ''}">${ww ? fmt(ww.price) : '—'}</div>
+          <div class="mc-price${wwCheaper ? ' cheaper' : ''}">${ww ? fmt(ww.price) : '-'}</div>
           ${wwUnit ? `<div class="mc-unit">${wwUnit}</div>` : ''}
           ${wwCheaper && saving > 0 ? `<div class="mc-save-line">Save ${fmt(saving)}</div>` : ''}
         </div>
         <div class="mc-store-col">
           <div class="mc-store-label coles-col"><span class="store-chip sm coles">C</span> Coles</div>
-          <div class="mc-price${coCheaper ? ' cheaper-c' : ''}">${co ? fmt(co.price) : '—'}</div>
+          <div class="mc-price${coCheaper ? ' cheaper-c' : ''}">${co ? fmt(co.price) : '-'}</div>
           ${coUnit ? `<div class="mc-unit">${coUnit}</div>` : ''}
           ${coCheaper && saving > 0 ? `<div class="mc-save-line">Save ${fmt(saving)}</div>` : ''}
         </div>
@@ -4568,7 +4568,7 @@ function renderMobileCards(items, data) {
         return;
       }
       // Any other button/link (History clock, product links) is handled by the
-      // container's delegated listener — a tap on it must NOT also toggle selection.
+      // container's delegated listener - a tap on it must NOT also toggle selection.
       if (e.target.closest('button, a')) return;
       // Mobile-only (≤700px): tap card to toggle selection
       if (window.innerWidth <= 700) {
@@ -4593,7 +4593,7 @@ function renderMobileCards(items, data) {
 // nothing rendered them. Show the cheapest one as a one-line hint under the
 // product name. Re-checked against the CURRENT best price (scraper data can lag a
 // price drop), so the hint only appears when the swap is genuinely cheaper today.
-// 2026-07-09: hidden per user — the suggestions weren't relevant enough. Flip the
+// 2026-07-09: hidden per user - the suggestions weren't relevant enough. Flip the
 // flag to bring the hint back; the scraper still collects item.alternatives.
 const SHOW_ALT_HINTS = false;
 function altHintHTML(item) {
@@ -4615,7 +4615,7 @@ function altHintHTML(item) {
 
 // ── Index page rendering ─────────────────────────────────────────────────────
 
-// Full re-render rebuilds the table/cards DOM, which resets the scroll position —
+// Full re-render rebuilds the table/cards DOM, which resets the scroll position -
 // on mobile that meant any tap that re-renders (priority change, group expand,
 // exclusion save, filter toggle) jumped the view back to the top. Wrap the real
 // renderer so EVERY exit path restores scroll: the initial load is at scrollY 0
@@ -4717,7 +4717,7 @@ function _renderPageInner(data) {
       strip.style.display = 'flex';
       strip.classList.toggle('stale', isStale);
       $('scrapeStripLabel').textContent = isStale
-        ? `⚠ Stalled at ${prog.done} of ${prog.total} — try refreshing`
+        ? `⚠ Stalled at ${prog.done} of ${prog.total} - try refreshing`
         : pct === 0
           ? `Starting price refresh…`
           : `Refreshing prices… ${prog.done} of ${prog.total}`;
@@ -4739,7 +4739,7 @@ function _renderPageInner(data) {
       // refresh) but the scraper hasn't pushed its first progress yet.
       strip.style.display = 'flex';
       strip.classList.remove('stale');
-      $('scrapeStripLabel').textContent = '⏳ Scrape triggered — waiting for first progress…';
+      $('scrapeStripLabel').textContent = '⏳ Scrape triggered - waiting for first progress…';
       $('scrapeStripFill').style.width = '0%';
       $('scrapeStripPct').textContent = '';
       const retryBtn = $('scrapeStripRetry');
@@ -4780,7 +4780,7 @@ function _renderPageInner(data) {
 
   // Auto-poll while a dispatched scrape hasn't produced progress yet (page was
   // refreshed / opened mid-wait): slow poll until progress appears or the
-  // marker is spent — each renderPage re-evaluates and stops the timer.
+  // marker is spent - each renderPage re-evaluates and stops the timer.
   if (!rawProg && scrapeDispatchPending(data) && !window._dispatchWaitTimer) {
     window._dispatchWaitTimer = setInterval(async () => {
       const fresh = await loadData();
@@ -4802,7 +4802,7 @@ function _renderPageInner(data) {
         if (!fresh) return;
         if (!fresh.scrape_progress) {
           // Require 3 consecutive no-progress responses before declaring done.
-          // A single missing response could be a CDN hiccup or a between-push window —
+          // A single missing response could be a CDN hiccup or a between-push window -
           // the strip stays up (via _scrapeActive/_lastProgress) until we're sure.
           window._progressNoDataStreak = (window._progressNoDataStreak || 0) + 1;
           if (window._progressNoDataStreak >= 3) {
@@ -4997,9 +4997,9 @@ function _renderPageInner(data) {
 
     // Hot deal: fire goes on the cheaper store's price cell
     const hotDeal = isHotDeal(item, _renderExclusions);
-    const hotBadge = `<span class="hot-badge" title="Hot Deal — meaningfully cheaper than its usual price right now">🔥</span>`;
+    const hotBadge = `<span class="hot-badge" title="Hot Deal - meaningfully cheaper than its usual price right now">🔥</span>`;
 
-    // Per-100g/ml — computed from product name (reliable for packs); falls back to scraped cup price
+    // Per-100g/ml - computed from product name (reliable for packs); falls back to scraped cup price
     const wwP100 = clientPer100(ww);
     const coP100 = clientPer100(co);
 
@@ -5033,7 +5033,7 @@ function _renderPageInner(data) {
       coCellContent = `<a href="${searchUrl}" target="_blank" rel="noopener" class="search-link">Find on Coles →</a>`;
     }
 
-    // Best Price — N/A when one store is missing
+    // Best Price - N/A when one store is missing
     let badgeHtml = '';
     if (!ww || !co) {
       badgeHtml = '<span class="cheaper-badge na">N/A</span>';
@@ -5051,7 +5051,7 @@ function _renderPageInner(data) {
     const hasBothPrices = ww?.price != null && co?.price != null;
     let savingContent;
     if (!hasBothPrices) {
-      savingContent = `<span class="no-data">—</span>`;
+      savingContent = `<span class="no-data">-</span>`;
     } else {
       const unitsSaving = (savingAmount(item) ?? 0) * units;
       savingContent = unitsSaving > 0
@@ -5072,10 +5072,10 @@ function _renderPageInner(data) {
     const coClass  = cheaper === 'coles'      ? 'cell-coles' : '';
 
     // Priority cell (uses analysis data as fallback). 'archive' is a real option
-    // here — an archived item's dropdown must show "Archived" selected (it used
+    // here - an archived item's dropdown must show "Archived" selected (it used
     // to silently default to "Weekly" with no visible indication, and the only
     // way back was a separate, easy-to-miss "↩ Unarchive" button in the actions
-    // column — this makes archive/unarchive symmetric with the same control).
+    // column - this makes archive/unarchive symmetric with the same control).
     const itemPriority = getPriority(item.list_item);
     const priorityCell = `<td class="priority-cell"><select class="priority-select" data-item="${safeKey}">
       <option value="weekly"${itemPriority === 'weekly' ? ' selected' : ''}>Weekly</option>
@@ -5100,7 +5100,7 @@ function _renderPageInner(data) {
     const colesTotalVal = co?.price != null ? co.price * units : null;
     const scrapedDate = item.last_scraped
       ? new Date(item.last_scraped).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
-      : '—';
+      : '-';
 
     // Build cell map keyed by col id
     const tdMap = {
@@ -5116,8 +5116,8 @@ function _renderPageInner(data) {
       trips:        `<td class="trips-cell">${tripsHtml}</td>`,
       category:     `<td style="font-size:12px;color:var(--text-mid)">${getCategory(item)}</td>`,
       last_scraped: `<td style="font-size:11px;color:var(--text-soft);white-space:nowrap">${scrapedDate}</td>`,
-      ww_total:     `<td style="font-size:13px;font-weight:600">${wwTotalVal != null ? fmt(wwTotalVal) : '<span class="no-data">—</span>'}</td>`,
-      coles_total:  `<td style="font-size:13px;font-weight:600">${colesTotalVal != null ? fmt(colesTotalVal) : '<span class="no-data">—</span>'}</td>`,
+      ww_total:     `<td style="font-size:13px;font-weight:600">${wwTotalVal != null ? fmt(wwTotalVal) : '<span class="no-data">-</span>'}</td>`,
+      coles_total:  `<td style="font-size:13px;font-weight:600">${colesTotalVal != null ? fmt(colesTotalVal) : '<span class="no-data">-</span>'}</td>`,
     };
 
     const checked = _checkedItems.has(item.list_item) ? ' checked' : '';
@@ -5132,7 +5132,7 @@ function _renderPageInner(data) {
     if (priceChanged && _pendingRefreshItems.has(item.list_item)) _pendingRefreshItems.delete(item.list_item);
   });
 
-  // Tfoot — use the same banner stats so the desktop footer and mobile banner
+  // Tfoot - use the same banner stats so the desktop footer and mobile banner
   // always show identical basket totals (qty-weighted, items with both prices).
   const footWWBase   = s.total_woolworths;
   const footCoBase   = s.total_coles;
@@ -5158,23 +5158,23 @@ function _renderPageInner(data) {
       trend:        `<td></td>`,
       priority:     `<td></td>`,
       units:        `<td></td>`,
-      ww:           `<td id="footWW">${_fWWAvail ? fmt(footWWBase) : '—'}</td>`,
-      coles:        `<td id="footColes">${_fCoAvail ? fmt(footCoBase) : '—'}</td>`,
+      ww:           `<td id="footWW">${_fWWAvail ? fmt(footWWBase) : '-'}</td>`,
+      coles:        `<td id="footColes">${_fCoAvail ? fmt(footCoBase) : '-'}</td>`,
       cheaper:      `<td></td>`,
       pct:          `<td></td>`,
       saving:       `<td id="footSaving" style="text-align:right" title="Total savings vs most expensive store"><span class="saving-cell">${fmt(footerSaving)}</span><div style="font-size:11px;color:var(--text-soft);font-weight:400">saved</div></td>`,
       trips:        `<td></td>`,
       category:     `<td></td>`,
       last_scraped: `<td></td>`,
-      ww_total:     `<td style="font-weight:700">${_fWWAvail ? fmt(footWWQty) : '—'}</td>`,
-      coles_total:  `<td style="font-weight:700">${_fCoAvail ? fmt(footCoQty) : '—'}</td>`,
+      ww_total:     `<td style="font-weight:700">${_fWWAvail ? fmt(footWWQty) : '-'}</td>`,
+      coles_total:  `<td style="font-weight:700">${_fCoAvail ? fmt(footCoQty) : '-'}</td>`,
     };
     tfootRow.innerHTML = '<td></td>' + getVisibleCols().map(col => footMap[col] || '<td></td>').join('') + '<td></td>';
   }
 
   $('tableContainer').style.display = 'block';
 
-  // Not-found items are now shown in the main table — hide the old separate section
+  // Not-found items are now shown in the main table - hide the old separate section
   $('notFoundSection').style.display = 'none';
 
   // Sync check-all indeterminate state
@@ -5203,7 +5203,7 @@ function updateValidateNavBadge(count) {
   link.textContent = `⚠️ Validate (${count})`;
 }
 
-// (The name-changes notification bell was retired — the validate pill is the
+// (The name-changes notification bell was retired - the validate pill is the
 // single "data needs attention" surface. name_changes_detected.json is still
 // written by the scraper; nothing reads it in the UI.)
 
@@ -5282,7 +5282,7 @@ function renderPendingItems() {
 }
 
 async function processUploadFile(file) {
-  if (!window.XLSX) { alert('SheetJS not loaded — please reload the page.'); return; }
+  if (!window.XLSX) { alert('SheetJS not loaded - please reload the page.'); return; }
 
   try {
     const buffer = await file.arrayBuffer();
@@ -5378,7 +5378,7 @@ async function writeNewItemToExcel(itemName) {
   wb.Sheets[sheetName] = XLSX.utils.aoa_to_sheet(data);
   const newContent = XLSX.write(wb, { type: 'base64', bookType: 'xlsx', cellDates: true });
 
-  // PUT — retry once on 409 with freshly fetched SHA
+  // PUT - retry once on 409 with freshly fetched SHA
   const doPut = async (currentSha) => fetch(
     `https://api.github.com/repos/${s.user}/${s.repo}/contents/shopping_list.xlsx`,
     {
@@ -5389,7 +5389,7 @@ async function writeNewItemToExcel(itemName) {
   );
   let putRes = await doPut(sha);
   if (putRes.status === 409) {
-    // Stale SHA — re-fetch and retry once
+    // Stale SHA - re-fetch and retry once
     const retryGet = await fetch(
       `https://api.github.com/repos/${s.user}/${s.repo}/contents/shopping_list.xlsx`,
       { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
@@ -5476,7 +5476,7 @@ async function addItemsToShoppingList(newItems) {
     const { anyOnline } = await getRunnerStatus(s);
     if (!anyOnline) {
       showRunnerOfflineBanner();
-      alert('Items added to your basket, but the scraper is offline — prices will update when the runner restarts.');
+      alert('Items added to your basket, but the scraper is offline - prices will update when the runner restarts.');
       return;
     }
     hideRunnerOfflineBanner();
@@ -5674,7 +5674,7 @@ function openColFilter(col, btn) {
 
   _cfdTempValues = existing ? new Set(existing) : new Set(_cfdAllValues);
 
-  // Update sort labels — context-aware per column type
+  // Update sort labels - context-aware per column type
   const asc = dd.querySelector('.cfd-sort-asc');
   const desc = dd.querySelector('.cfd-sort-desc');
   const sortLabel = (() => {
@@ -5705,7 +5705,7 @@ function openColFilter(col, btn) {
     }
   }
 
-  // Columns with no meaningful discrete values — hide search/values section
+  // Columns with no meaningful discrete values - hide search/values section
   const NO_VALUE_FILTER_COLS = new Set(['trend', 'last_scraped']);
   const showValueFilter = !NO_VALUE_FILTER_COLS.has(col);
   dd.querySelector('.cfd-search-wrap').style.display  = showValueFilter ? '' : 'none';
@@ -5767,7 +5767,7 @@ function getCurrentVisibleItems() {
 function buildShoppingListItems(useChecked) {
   if (!_lastData) return [];
   const allItems = _lastData.items;
-  // Selected per-kg GROUP rows are synthetic (`__group_*` — they don't exist in
+  // Selected per-kg GROUP rows are synthetic (`__group_*` - they don't exist in
   // latest.json), so a plain name filter silently DROPPED them: "I added 6
   // items, only 4 arrived". Swap each group for its best-value member (lowest
   // $/kg across both stores) so the basket gets a real, buyable product.
@@ -5793,7 +5793,7 @@ function buildShoppingListItems(useChecked) {
     const sel = expandGroups(_checkedItems);
     return allItems.filter(i => sel.has(i.list_item));
   }
-  // Priority 3: active search — substring match on list_item name
+  // Priority 3: active search - substring match on list_item name
   if (_searchQuery && _searchQuery.trim().length > 0) {
     const q = _searchQuery.trim().toLowerCase();
     return allItems.filter(i => i.list_item.toLowerCase().includes(q));
@@ -5801,11 +5801,11 @@ function buildShoppingListItems(useChecked) {
   // Priority 4: current filter view (frequency tab + category + hot/priced-only)
   // Per-kg group MEMBER products (e.g. all 14 "Chicken Breast" variants) are
   // collapsed into ONE comparison row on the main table, but this raw item list
-  // has no concept of that grouping — a bulk export was including every variant
+  // has no concept of that grouping - a bulk export was including every variant
   // as its own line item (49 raw chicken/salmon/basa/mince products instead of
   // the 8 rows actually shown), inflating both the item count and every basket
   // total. Explicit selection above (incl. addPerKgToBasket's "+" on one specific
-  // variant) is unaffected — only this bulk "everything currently shown" path.
+  // variant) is unaffected - only this bulk "everything currently shown" path.
   const perkgMembers = new Set(loadVariantGroups().flatMap(g => g.items));
   return sortItems(allItems.filter(i => !perkgMembers.has(i.list_item)));
 }
@@ -5822,7 +5822,7 @@ function exportShoppingList(useChecked) {
   } else if (_searchQuery && _searchQuery.trim().length > 0) {
     note = `items matching "${esc(_searchQuery.trim())}"`;
   } else {
-    // "weekly items" / "items" / "archived items" — not the old "all weekly items".
+    // "weekly items" / "items" / "archived items" - not the old "all weekly items".
     const pWord = { weekly: 'weekly ', monthly: 'monthly ', rare: 'rare ', archive: 'archived ' }[_activePriority] || '';
     const catSuffix = _activeCategory !== 'All' ? ` · ${_activeCategory}` : '';
     note = `${pWord}items${catSuffix}`;
@@ -5845,7 +5845,7 @@ function exportShoppingList(useChecked) {
   window.location.href = 'shopping-list.html';
 }
 
-// ── Options menu (row density only — the dropdown itself, its toggle and the
+// ── Options menu (row density only - the dropdown itself, its toggle and the
 //    theme switcher are owned by header.js so they work identically on every
 //    page; density is index-only because it styles the main table) ───────────
 
@@ -5880,7 +5880,7 @@ function initPullToRefresh() {
     if (wasTriggered) {
       indicator.classList.add('triggered');
       indicator.innerHTML = '<div class="ptr-spinner"></div>&nbsp;Refreshing…';
-      // Reload the published data only — do NOT trigger a scrape. Scrapes are a
+      // Reload the published data only - do NOT trigger a scrape. Scrapes are a
       // desktop action (need a token; run for many minutes); pull-down's job on a
       // phone is just "show me the latest numbers the scraper already produced".
       loadData().then((fresh) => { if (fresh) renderPage(fresh); });
@@ -5915,7 +5915,7 @@ async function boot() {
 
   $('shopListBtn')?.addEventListener('click', () => exportShoppingList(false));
 
-  // Floating "+ Basket (n)" — sends the tap-selected items to the basket page
+  // Floating "+ Basket (n)" - sends the tap-selected items to the basket page
   $('basketFab')?.addEventListener('click', () => {
     if (_selectedItems.size > 0) exportShoppingList(true);
   });
@@ -5939,11 +5939,11 @@ async function boot() {
 
   // ── View toggle ──────────────────────────────────────────────
   const viewToggleBtn = $('viewToggleBtn');
-  // Bordered rows-in-a-frame icon — must stay visually distinct from the Columns button (bare lines + dots).
+  // Bordered rows-in-a-frame icon - must stay visually distinct from the Columns button (bare lines + dots).
   const TABLE_ICON = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="3" y1="15" x2="21" y2="15"/></svg>`;
   const CARD_ICON  = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>`;
   function syncViewToggleBtn() {
-    // Card view: the sticky site header adds nothing while browsing cards —
+    // Card view: the sticky site header adds nothing while browsing cards -
     // let it scroll away (body class drives `header { position: static }`).
     document.body.classList.toggle('pw-cardview', _viewMode === 'card');
     if (!viewToggleBtn) return;
@@ -6019,7 +6019,7 @@ async function boot() {
     const overrides = loadOverrides();
     const hasUrls = Object.values(overrides).some(v => v.wwUrl || v.colesUrl);
     if (!hasUrls) {
-      alert('No URL overrides found in local storage — nothing to sync.');
+      alert('No URL overrides found in local storage - nothing to sync.');
       return;
     }
     const btn = $('syncOverridesBtn');
@@ -6030,7 +6030,7 @@ async function boot() {
       btn.textContent = '✓ Synced';
       setTimeout(() => { btn.textContent = 'Sync URL overrides'; btn.disabled = false; }, 2000);
     } catch (e) {
-      alert(`⚠ Sync failed — check your token.\n${e.message}`);
+      alert(`⚠ Sync failed - check your token.\n${e.message}`);
       btn.textContent = 'Sync URL overrides';
       btn.disabled = false;
     }
@@ -6114,9 +6114,9 @@ async function boot() {
         perkgBtn.classList.toggle('off', _perkgFilter === 'hidden');
         const lbl = perkgBtn.querySelector('.perkg-lbl');
         if (lbl) lbl.textContent = PERKG_LABEL[_perkgFilter];
-        perkgBtn.title = { all: 'Showing everything — click to isolate per-kg groups',
-                           only: 'Only per-kg groups — click to hide them',
-                           hidden: 'Per-kg groups hidden — click to show everything' }[_perkgFilter];
+        perkgBtn.title = { all: 'Showing everything - click to isolate per-kg groups',
+                           only: 'Only per-kg groups - click to hide them',
+                           hidden: 'Per-kg groups hidden - click to show everything' }[_perkgFilter];
         if (_lastData) renderPage(_lastData);
       });
     }
@@ -6128,7 +6128,7 @@ async function boot() {
         // below already ignores button clicks, so this won't collapse the panel).
         const pvBasket = e.target.closest('.vg-pv-basket');
         if (pvBasket) { addPerKgToBasket(pvBasket.dataset.item); return; }
-        // Variant group expand/collapse — click ONLY the group header row toggles.
+        // Variant group expand/collapse - click ONLY the group header row toggles.
         // The expanded panel beneath (.vg-panel-row) is deliberately inert so a tap
         // on a variant / whitespace there doesn't collapse the panel out from under
         // you; collapse by clicking the same header row you opened.
@@ -6249,13 +6249,13 @@ async function boot() {
       }
       // Other links/buttons/images (product links, edit, image hover) handle themselves.
       if (e.target.closest('a, button, .img-hoverable')) return;
-      // Whitespace inside the expanded variant list is inert — only the collapsed
+      // Whitespace inside the expanded variant list is inert - only the collapsed
       // card face is the tap-to-add surface.
       if (e.target.closest('.vgm-body')) return;
       const vgCard = e.target.closest('.vg-mobile-card');
       if (vgCard && vgCard.dataset.cheapest) addPerKgToBasket(vgCard.dataset.cheapest);
     });
-    // Keyboard: cards are focusable role=button divs — Enter/Space triggers the
+    // Keyboard: cards are focusable role=button divs - Enter/Space triggers the
     // same gesture as a tap. Only fires when the card ITSELF has focus; inner
     // real <button>/<a> elements handle their own keys natively.
     mobileCardsEl.addEventListener('keydown', (e) => {
@@ -6308,7 +6308,7 @@ async function boot() {
 
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
-  // Close whichever modal is open — check in reverse stack order (topmost first)
+  // Close whichever modal is open - check in reverse stack order (topmost first)
   const modalIds = ['diffItemModal', 'imgPickerModal', 'priceHistoryModal', 'uploadModal', 'editModal', 'settingsModal'];
   for (const id of modalIds) {
     const m = document.getElementById(id);

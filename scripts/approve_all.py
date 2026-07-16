@@ -9,7 +9,7 @@ if not pv:
     print("pending_validation is already empty. Nothing to do.")
     sys.exit(0)
 
-# Deduplicate by item name — keep first occurrence only
+# Deduplicate by item name - keep first occurrence only
 seen = {}
 for entry in pv:
     name = entry["item"]

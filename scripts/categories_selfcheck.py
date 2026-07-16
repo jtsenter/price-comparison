@@ -2,13 +2,13 @@
 
 Run: python scripts/categories_selfcheck.py
 Locks the merged buckets (Bakery -> Pantry, Frozen Foods + Ready Meals ->
-"Frozen & Ready Meals", Personal Care + Baby -> "Personal Care & Baby") and guards
+"Frozen", Personal Care + Baby -> "Personal Care") and guards
 against keyword collisions as new items are added. All bucket names must stay inside
 the 10 live categories the UI knows about (KNOWN_CATEGORIES in docs/app.js), or the
 item lands on a tab that doesn't exist.
 
 Note: the keyword guesser is deliberately imperfect for genuinely ambiguous names
-(e.g. "Pringles Sour Cream Chips" hits the Dairy keyword "cream" before "chips") —
+(e.g. "Pringles Sour Cream Chips" hits the Dairy keyword "cream" before "chips") -
 those few are corrected by ITEM_CATEGORY_DEFAULTS in app.js, not here, so they are
 not asserted below.
 """
@@ -16,8 +16,8 @@ from categories import guess_category, CATEGORY_KEYWORDS
 
 LIVE = {
     "Fruit & Veg", "Meat & Seafood", "Dairy & Eggs", "Pantry", "Sweets",
-    "Frozen & Ready Meals", "Drinks & Alcohol", "Household",
-    "Personal Care & Baby", "Other",
+    "Frozen", "Drinks & Alcohol", "Household",
+    "Personal Care", "Other",
 }
 
 CASES = [
@@ -29,12 +29,12 @@ CASES = [
     ("Pasta Penne 500g", "Pantry"),
     ("Vanish Napisan Stain Remover", "Household"),
     ("Mystery Widget XYZ", "Other"),
-    # Merged buckets — the whole point of the consolidation:
+    # Merged buckets - the whole point of the consolidation:
     ("Helga's Wholemeal Bread 750g", "Pantry"),                 # ex-Bakery
-    ("Ben & Jerry's Ice Cream Tub", "Frozen & Ready Meals"),    # ex-Frozen Foods
-    ("Continental Cup A Soup Chicken", "Frozen & Ready Meals"), # ex-Ready Meals
-    ("Aptamil Gold Follow-On Formula", "Personal Care & Baby"), # ex-Baby
-    ("Dettol Antibacterial Hand Wash", "Personal Care & Baby"), # ex-Personal Care
+    ("Ben & Jerry's Ice Cream Tub", "Frozen"),    # ex-Frozen Foods
+    ("Continental Cup A Soup Chicken", "Frozen"), # ex-Ready Meals
+    ("Aptamil Gold Follow-On Formula", "Personal Care"), # ex-Baby
+    ("Dettol Antibacterial Hand Wash", "Personal Care"), # ex-Personal Care
 ]
 
 

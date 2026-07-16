@@ -57,7 +57,7 @@ COLES_WAIT_MS        = 1_100    # post-navigation wait for Coles pages
 COLES_SCROLL_WAIT_MS = 600      # post-scroll wait for lazy-loaded tiles
 MAX_PRODUCT_PRICE    = 80.0     # ceiling used by COLES_PRODUCT_PAGE_JS's DOM-selector fallback
                                  # to reject unrelated on-page dollar figures (e.g. "spend $100,
-                                 # save $X" promo text). Only the last-resort strategy — real
+                                 # save $X" promo text). Only the last-resort strategy - real
                                  # grocery items rarely exceed $50, but bulk packs/multipacks
                                  # legitimately can, so this was previously hardcoded lower (50)
                                  # and could silently drop a genuine price on that fallback path.
@@ -65,7 +65,7 @@ CONCURRENCY          = 2        # parallel page-pairs (don't exceed 3)
 MAX_RESULTS          = 5        # search results fetched per store
 ARCHIVED_REFRESH_DAYS = 7       # scheduled runs refresh archived items only if older than this (else carried forward)
 SKIP_FRESH_HOURS     = 12       # scheduled runs skip items scraped within this window (a manual
-                                # run minutes earlier otherwise gets fully re-scraped — double the
+                                # run minutes earlier otherwise gets fully re-scraped - double the
                                 # request volume, which is what trips Coles's mid-run rate ban)
 SUSPICIOUS_CHANGE_PCT   = 0.30  # flag if price changed by more than this fraction
 SUSPICIOUS_MIN_HISTORY  = 3     # minimum price_history entries to run suspicion check
@@ -83,7 +83,7 @@ def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed
     ww_missed/coles_missed: [{"item": str, "reason": "no_results"|"no_match"}, ...].
     ww_attempted/coles_attempted: how many items were actually TRIED at each store.
     Single-store-pinned items deliberately skip the other store ("a single-store pin
-    means a single store") — counting those as misses made the success rates lie
+    means a single store") - counting those as misses made the success rates lie
     (WW showed 76% when its real rate was 85%). The UI divides by attempted.
     Lets the UI (scrape-log.html) show miss rates over time and which products get
     skipped most, and whether misses are a block/selector break (no_results) or a
@@ -170,7 +170,7 @@ def _load_rejected_urls() -> dict:
 def _should_add_history_entry(history: list, new_price: float, today: str) -> bool:
     """Return True if a new price history entry should be appended.
 
-    Rules (applies to all scrape triggers — manual and scheduled):
+    Rules (applies to all scrape triggers - manual and scheduled):
     - No history yet                           -> add.
     - Price changed vs last entry              -> add (always, regardless of age).
     - Price unchanged, last entry < 7 days ago -> skip.
@@ -182,19 +182,19 @@ def _should_add_history_entry(history: list, new_price: float, today: str) -> bo
     last_price = last.get('price')
     last_date  = last.get('date', '')
     if round(float(last_price), 2) != round(float(new_price), 2):
-        return True   # price changed — always record
+        return True   # price changed - always record
     try:
         days_since = (date.fromisoformat(today) - date.fromisoformat(last_date[:10])).days
         return days_since >= 7
     except Exception:
-        return True   # date parsing failed — add to be safe
+        return True   # date parsing failed - add to be safe
 
 
 def _miss_reason(match: dict | None, results: list) -> str | None:
     """Classify why a store fetch/match failed for the scrape log.
-    None = matched. "no_results" = search/fetch returned nothing — points at a
+    None = matched. "no_results" = search/fetch returned nothing - points at a
     block or a broken page selector. "no_match" = got candidates but none scored
-    well enough — points at a naming/matcher problem instead. The distinction
+    well enough - points at a naming/matcher problem instead. The distinction
     matters: no_results across nearly every item means the SITE is blocking or its
     markup changed; no_match spread across items means the matcher needs tuning."""
     if match is not None:
@@ -282,13 +282,13 @@ def resolve_url(href: str, base: str) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Woolworths — blocked by 403 from GitHub Actions IPs; kept for local use
+# Woolworths - blocked by 403 from GitHub Actions IPs; kept for local use
 # ---------------------------------------------------------------------------
 
 def _ww_pack_price(cup_price, product_unit, package_size):
     """WW prices some fresh items per kg (Unit='KG') but sells a fixed portion shown as
     'per 200g'. Return the portion shelf price (e.g. $38/kg × 200g = $7.60) for DISPLAY
-    only — the per-kg CupPrice stays the canonical `price`, so price history and the
+    only - the per-kg CupPrice stays the canonical `price`, so price history and the
     $/kg comparison remain in $/kg and don't cliff when a portion price is shown.
 
     Returns None when not a fixed per-kg portion: non-KG units, or by-weight produce
@@ -318,9 +318,9 @@ def _parse_ww_products(product_list: list) -> list[dict]:
         cup_string = p.get("CupString", "")
         if not name or price is None:
             continue
-        # Distinguish a MEMBER-EXCLUSIVE price (Everyday Rewards / Prices Member —
+        # Distinguish a MEMBER-EXCLUSIVE price (Everyday Rewards / Prices Member -
         # revert to the public WasPrice) from a PUBLIC special (IsOnSpecial, no
-        # member flag — everyone pays the lower Price, so KEEP it). The old code
+        # member flag - everyone pays the lower Price, so KEEP it). The old code
         # took WasPrice whenever WasPrice > Price "regardless of the EDR flag",
         # which inflated every public special to its struck-through was price
         # (Mix Max scraped at $7.70 when the public special was $5.80). Use the
@@ -385,9 +385,9 @@ async def search_with_retry(search_fn, page, query, retries=0):
     # An empty result is usually a transient miss (timeout, bot challenge, a slow
     # SSR payload) rather than "product doesn't exist". One retry recovers a large
     # share of those gaps. search_fn does a full page.goto, so the retry already
-    # navigates a fresh DOM — a brand-new page object would share the context's
+    # navigates a fresh DOM - a brand-new page object would share the context's
     # cookies and shed nothing extra.
-    # ponytail: same-page re-navigation, not a fresh browser context. Ceiling — if a
+    # ponytail: same-page re-navigation, not a fresh browser context. Ceiling - if a
     # store hard-bans the runner cookie/IP for a whole run, every item still retries
     # and wastes ~backoff each; upgrade path is a new context on repeated misses.
     for attempt in range(retries + 1):
@@ -507,7 +507,7 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                 #   4. Fallback: all prices, use max
                 # BUT skip it entirely on a confirmed PUBLIC special: __NEXT_DATA__'s
                 # Price is the real current price, and the page also shows a HIGHER
-                # struck-through "Was" price — the "use max" heuristic would grab that
+                # struck-through "Was" price - the "use max" heuristic would grab that
                 # and hide the special (same bug as the search path had).
                 public_special = on_special and not (is_edr or is_pm)
                 if price is not None and not public_special:
@@ -610,14 +610,14 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                         _dom_max  = max(_dom_vals)
                         _sources = set(e['src'] for e in _dom_prices)
                         if len(_dom_vals) >= 2:
-                            print(f"    [WW] DOM prices found: {_dom_vals} (sources: {_sources}) — using highest ${_dom_max} (shelf > member)")
+                            print(f"    [WW] DOM prices found: {_dom_vals} (sources: {_sources}) - using highest ${_dom_max} (shelf > member)")
                         else:
                             print(f"    [WW] DOM price: ${_dom_vals[0]} (source: {list(_sources)[0]})")
                         if abs(_dom_max - float(price)) > 0.005:
                             print(f"    [WW] DOM overrides __NEXT_DATA__ ${price} -> ${_dom_max}")
                             price = _dom_max
                     else:
-                        print(f"    [WW] DOM found no price elements — keeping __NEXT_DATA__ ${price}")
+                        print(f"    [WW] DOM found no price elements - keeping __NEXT_DATA__ ${price}")
                 if name and price is not None:
                     _, unit = parse_unit_price(cup_string)
                     # Per-kg-priced fixed portion ("per 200g"): keep price = per-kg
@@ -705,7 +705,7 @@ COLES_EXTRACT_JS = """
 
         const linkEl = tile.querySelector('a[href*="/product"]');
 
-        // Get product image — try src first, then data-src for lazy-loaded images
+        // Get product image - try src first, then data-src for lazy-loaded images
         let imageUrl = '';
         const imgEl = tile.querySelector('img');
         if (imgEl) {
@@ -723,15 +723,15 @@ COLES_EXTRACT_JS = """
 
 # One Coles request in flight at a time. Coles rate-bans mid-run when hammered
 # (2026-07-06: a manual run got 14 items then 0 for the rest; the scheduled run
-# 18 min later got 0/208 — and the ban outlived both runs) while WW tolerates
-# CONCURRENCY page-pairs fine — so only Coles serialises, plus jitter between
+# 18 min later got 0/208 - and the ban outlived both runs) while WW tolerates
+# CONCURRENCY page-pairs fine - so only Coles serialises, plus jitter between
 # requests. A banned session gets served completely EMPTY pages (no title, no
-# body — verified live), so consecutive hard failures are the ban signal.
+# body - verified live), so consecutive hard failures are the ban signal.
 _COLES_SEM = asyncio.Semaphore(1)
 
 # Circuit breaker: after COLES_BAN_THRESHOLD consecutive failures, pause ALL
 # Coles traffic once (the soft ban sometimes lifts in minutes); if the ban
-# persists through the cooldowns, stop hitting Coles for the rest of the run —
+# persists through the cooldowns, stop hitting Coles for the rest of the run -
 # further requests only extend the ban, and carry-forward keeps the data whole.
 COLES_BAN_THRESHOLD  = 8
 COLES_BAN_COOLDOWN_S = 120
@@ -751,14 +751,14 @@ async def _register_coles_result(ok: bool) -> None:
         return
     if _coles_cooldowns_left > 0:
         _coles_cooldowns_left -= 1
-        print(f"  [Coles] {_coles_fails} consecutive failures — likely rate ban; "
+        print(f"  [Coles] {_coles_fails} consecutive failures - likely rate ban; "
               f"pausing all Coles requests {COLES_BAN_COOLDOWN_S}s "
               f"({_coles_cooldowns_left} cooldown(s) left)…")
         await asyncio.sleep(COLES_BAN_COOLDOWN_S)
         _coles_fails = 0
     else:
         _coles_dead = True
-        print("  [Coles] Ban persisted through cooldowns — skipping Coles for the "
+        print("  [Coles] Ban persisted through cooldowns - skipping Coles for the "
               "rest of this run; last-known prices carry forward.")
 
 async def search_coles(page, query: str) -> list[dict]:
@@ -795,7 +795,7 @@ async def search_coles(page, query: str) -> list[dict]:
 
 COLES_PRODUCT_PAGE_JS = """
 () => {
-    // Strategy 1: __NEXT_DATA__ (Next.js SSR — most reliable, not affected by CSS changes)
+    // Strategy 1: __NEXT_DATA__ (Next.js SSR - most reliable, not affected by CSS changes)
     const ndEl = document.getElementById('__NEXT_DATA__');
     if (ndEl) {
         try {
@@ -885,7 +885,7 @@ COLES_PRODUCT_PAGE_JS = """
 
 
 def _coles_product_page_js() -> str:
-    """COLES_PRODUCT_PAGE_JS with MAX_PRODUCT_PRICE substituted in — a plain
+    """COLES_PRODUCT_PAGE_JS with MAX_PRODUCT_PRICE substituted in - a plain
     .replace() rather than an f-string/`.format()` because the JS body is full of
     literal `{`/`}` braces that would otherwise need escaping throughout."""
     return COLES_PRODUCT_PAGE_JS.replace('__MAX_PRODUCT_PRICE__', str(MAX_PRODUCT_PRICE))
@@ -904,7 +904,7 @@ async def fetch_coles_by_url(page, url: str) -> dict | None:
     if _coles_dead:
         return None
     for attempt in range(2):
-      async with _COLES_SEM:  # same serialisation as search_coles — one Coles request at a time
+      async with _COLES_SEM:  # same serialisation as search_coles - one Coles request at a time
         try:
             await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
             await page.wait_for_timeout(COLES_WAIT_MS)
@@ -924,7 +924,7 @@ async def fetch_coles_by_url(page, url: str) -> dict | None:
                     "url": url,
                     "image_url": _normalise_coles_img(raw.get("image_url", "")),
                 }
-            # Extraction yielded no product — check if it's a bot-detection page
+            # Extraction yielded no product - check if it's a bot-detection page
             if attempt == 0:
                 page_title = await page.title()
                 if any(kw in page_title.lower() for kw in _COLES_BOT_KEYWORDS):
@@ -977,7 +977,7 @@ def _purge_alias_items(items: list) -> list:
         name = it["list_item"]
         canon = clean_name(name)
         if canon != name and canon in present:
-            continue                      # alias whose canonical entry exists — drop it
+            continue                      # alias whose canonical entry exists - drop it
         if name in seen:
             continue                      # exact duplicate guard
         seen.add(name)
@@ -986,7 +986,7 @@ def _purge_alias_items(items: list) -> list:
 
 
 def _build_output(items: list, not_found: list, trigger: str, progress: dict | None = None, pending_validation: list | None = None, approved_prices: dict | None = None) -> dict:
-    # Only compare items where both prices are present — avoids single-store items skewing the totals
+    # Only compare items where both prices are present - avoids single-store items skewing the totals
     comparable = [r for r in items if r.get("woolworths", {}) and r["woolworths"].get("price") is not None
                   and r.get("coles", {}) and r["coles"].get("price") is not None]
     ww_total = sum(r["woolworths"]["price"] for r in comparable)
@@ -1040,7 +1040,7 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
     out = _build_output(items, not_found, trigger, progress=progress, pending_validation=pending_validation)
     os.makedirs(DATA_DIR, exist_ok=True)
     latest_path = os.path.join(DATA_DIR, "latest.json")
-    # Minified: latest.json is fetched by every page on every load — keep it small.
+    # Minified: latest.json is fetched by every page on every load - keep it small.
     with open(latest_path, "w") as f:
         json.dump(out, f, separators=(",", ":"))
     token = os.environ.get("GITHUB_TOKEN", "")
@@ -1064,7 +1064,7 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
                 return json.loads(r.read())["sha"]
         except urllib.error.HTTPError as e:
             if e.code == 404:
-                return None   # first write to branch — no SHA needed
+                return None   # first write to branch - no SHA needed
             raise
 
     def _do_put(sha: str | None) -> None:
@@ -1091,7 +1091,7 @@ def push_progress(items: list, not_found: list, done: int, total: int, trigger: 
             print(f"  -> Pushed progress to {_PROGRESS_BRANCH} ({done}/{total})")
         except urllib.error.HTTPError as e:
             if e.code == 409:
-                # Stale SHA (concurrent write) — refetch and retry once
+                # Stale SHA (concurrent write) - refetch and retry once
                 try:
                     sha2 = _fetch_sha()
                     _do_put(sha2)
@@ -1112,7 +1112,7 @@ _push_lock = threading.Lock()
 def push_progress_bg(items, not_found, done, total, trigger, existing_items=None,
                      current_item: str = "", started_at: str = "",
                      pending_validation=None):
-    """Non-blocking progress push — skips if a previous push is still running.
+    """Non-blocking progress push - skips if a previous push is still running.
     existing_items: full pre-scrape item list; carry-forward items not yet re-scraped
     so the JSON always shows all products during a scrape.
     """
@@ -1146,7 +1146,7 @@ def should_skip_item(ex_data: dict | None, trigger: str) -> bool:
         return False
     # Archived items refresh on scheduled runs too, but "in a different way":
     # only when their data is stale (older than ARCHIVED_REFRESH_DAYS). This way
-    # they update automatically — no separate tool — without scraping every run.
+    # they update automatically - no separate tool - without scraping every run.
     if ex_data.get("archived") and trigger not in ("scrape_archived", "manual"):
         last_scraped = ex_data.get("last_scraped")
         if not last_scraped:
@@ -1160,7 +1160,7 @@ def should_skip_item(ex_data: dict | None, trigger: str) -> bool:
         return False
     # Scheduled runs skip items scraped within SKIP_FRESH_HOURS. Carried-forward
     # items keep their OLD last_scraped, so a failed item is still retried next
-    # run — only genuinely fresh successes are skipped. (2026-07-06: a scheduled
+    # run - only genuinely fresh successes are skipped. (2026-07-06: a scheduled
     # run fired 18 min after a manual one, re-scraped 208 items, and got Coles
     # 0% because the manual run's volume had already tripped the rate ban.)
     last_scraped = ex_data.get("last_scraped")
@@ -1197,7 +1197,7 @@ async def _scrape_single_item(
     # Fallback: if exact match fails, allow a store-prefix variant of the SAME
     # product (e.g. "Lamb Mince" -> "Woolworths Lamb Mince"), i.e. the Excel name
     # must END with the item name. A bare substring test borrowed history across
-    # different products — "…Porterhouse Steak" matched "…Porterhouse Steak &
+    # different products - "…Porterhouse Steak" matched "…Porterhouse Steak &
     # Butter", giving the loose $/kg listing the 2-pack's receipt prices (the
     # phantom $100/kg trend points).
     if not history and purchase_history:
@@ -1215,13 +1215,13 @@ async def _scrape_single_item(
     # fires even if fallback searches return non-empty-but-unmatched results.
     _had_pinned_ww = False
     # Deliberately-not-attempted stores (single-store pins / explicit single-URL
-    # refresh). These must NOT count as misses in the scrape log — they aren't
+    # refresh). These must NOT count as misses in the scrape log - they aren't
     # failures, the store simply doesn't sell the product.
     _ww_skipped = False
     _co_skipped = False
 
     if ww_url or coles_url:
-        # Explicit URL refresh (workflow dispatch) — use the URL; no name-search fallback
+        # Explicit URL refresh (workflow dispatch) - use the URL; no name-search fallback
         if ww_url and not coles_url:
             print(f"  Fetching WW by URL: {ww_url}")
             _ww = await fetch_ww_by_url(ww_page, ww_url)
@@ -1260,7 +1260,7 @@ async def _scrape_single_item(
                 print(f"  Coles URL fetch failed, searching by: {_fq!r}")
                 coles_results = await search_with_retry(search_coles, coles_page, _fq)
     else:
-        # Name-based search (normal scrape) — honour url_overrides.json if present
+        # Name-based search (normal scrape) - honour url_overrides.json if present
         overrides_path = os.path.join(DATA_DIR, "url_overrides.json")
         _url_ov: dict = {}
         if os.path.exists(overrides_path):
@@ -1276,13 +1276,13 @@ async def _scrape_single_item(
             if pinned_ww:
                 _had_pinned_ww = True
                 _ww = await fetch_ww_by_url(ww_page, pinned_ww)
-                # Treat price=0 the same as a fetch failure — WW sometimes SSR-serves $0
+                # Treat price=0 the same as a fetch failure - WW sometimes SSR-serves $0
                 # for products whose real price is only set client-side (EDLP products).
                 if _ww and (_ww.get('price') or 0) > 0:
                     ww_results = [_ww]
                     _skip_picker_ww = True
                 else:
-                    # WW blocks direct page access from GHA — fall back to name search
+                    # WW blocks direct page access from GHA - fall back to name search
                     print(f"  WW pinned URL failed, falling back to name search")
                     ww_results = await search_with_retry(search_woolworths, ww_page, item)
                     # Prefer the result matching the stockcode in the pinned URL (avoids
@@ -1296,7 +1296,7 @@ async def _scrape_single_item(
                             ww_results = [_sc_hit]
                             _skip_picker_ww = True
                         else:
-                            # Stockcode not in top-5 results — retry search using URL slug
+                            # Stockcode not in top-5 results - retry search using URL slug
                             _slug_q = _sc_m.group(2).replace('-', ' ').strip()
                             # Also derive a brand-prefix-stripped query (e.g. "woolworths chickpeas"
                             # -> "chickpeas") to try if the slug is identical to the item name.
@@ -1313,13 +1313,13 @@ async def _scrape_single_item(
                                     ww_results = [_sc_hit2]
                                     _skip_picker_ww = True
                                 elif _slug_res:
-                                    # Pinned stockcode not found — don't substitute a different product.
+                                    # Pinned stockcode not found - don't substitute a different product.
                                     # Clear results so carry-forward preserves the last known price.
-                                    print(f"  WW: pinned stockcode {_sc} not in results — carrying forward")
+                                    print(f"  WW: pinned stockcode {_sc} not in results - carrying forward")
                                     ww_results = []
                                     _skip_picker_ww = True
             else:
-                # Reached only when pinned_co is set but pinned_ww is not — i.e. a
+                # Reached only when pinned_co is set but pinned_ww is not - i.e. a
                 # Coles-only product. Do NOT name-search Woolworths: it mis-matches
                 # unrelated WW items (e.g. "Coles 3 Star Lamb Mince" → "Woolworths Lamb
                 # Mince"), polluting the data. A single-store pin means a single store.
@@ -1331,14 +1331,14 @@ async def _scrape_single_item(
                     coles_results = [_co]
                     _skip_picker_co = True
                 else:
-                    # Coles product page failed — derive search query from URL slug
+                    # Coles product page failed - derive search query from URL slug
                     # (e.g. "coles-strawberries-250g-5191256" -> "strawberries 250g")
                     _fq = _coles_fallback_query(pinned_co, item)
                     print(f"  Coles pinned URL failed, searching by: {_fq!r}")
                     coles_results = await search_with_retry(search_coles, coles_page, _fq)
                     if coles_results:
                         # Prefer exact slug match; otherwise trust the user's URL choice
-                        # and use first result (skip the matcher — user already chose this product).
+                        # and use first result (skip the matcher - user already chose this product).
                         _slug_m = re.search(r'/product/([^/?]+)', pinned_co)
                         if _slug_m:
                             _pinned_slug = _slug_m.group(1)
@@ -1350,7 +1350,7 @@ async def _scrape_single_item(
                                 print(f"  Coles: using top search result (pinned slug not in results)")
                         _skip_picker_co = True  # bypass matcher; user chose this product
             else:
-                # Woolworths-only pinned item — don't name-search Coles (same mis-match risk).
+                # Woolworths-only pinned item - don't name-search Coles (same mis-match risk).
                 coles_results = []
                 _co_skipped = True
         else:
@@ -1359,19 +1359,19 @@ async def _scrape_single_item(
                 search_with_retry(search_coles, coles_page, item, retries=1),
             )
             # Search came back empty but a past run matched this product and stored
-            # its URL — refetch that page directly. Rescues blocked-search runs
+            # its URL - refetch that page directly. Rescues blocked-search runs
             # (Coles rate-bans search mid-run far more readily than product pages)
             # and costs nothing when search works. Same product → skip the matcher.
             if not ww_results and (existing_item.get("woolworths") or {}).get("url"):
                 _ww = await fetch_ww_by_url(ww_page, existing_item["woolworths"]["url"])
                 if _ww and (_ww.get("price") or 0) > 0:
-                    print("    WW: search empty — recovered via last-known product URL")
+                    print("    WW: search empty - recovered via last-known product URL")
                     ww_results = [_ww]
                     _skip_picker_ww = True
             if not coles_results and (existing_item.get("coles") or {}).get("url"):
                 _co = await fetch_coles_by_url(coles_page, existing_item["coles"]["url"])
                 if _co:
-                    print("    Coles: search empty — recovered via last-known product URL")
+                    print("    Coles: search empty - recovered via last-known product URL")
                     coles_results = [_co]
                     _skip_picker_co = True
         await delay()
@@ -1426,7 +1426,7 @@ async def _scrape_single_item(
     })
 
     # Carry forward existing store data when no fresh result is available.
-    # Always carry forward when the matcher produced no usable result — whether because
+    # Always carry forward when the matcher produced no usable result - whether because
     # the search returned nothing, the URL fetch failed, or the matcher rejected all
     # candidates. Losing existing price data is always worse than briefly keeping a
     # slightly stale match; the next successful scrape will correct it.
@@ -1439,7 +1439,7 @@ async def _scrape_single_item(
 
     # A deliberately-skipped store (single-store pin = "not sold there") must NOT
     # carry forward: keeping the stale price made it impossible to ever remove a
-    # product from one store — the old number just kept resurfacing.
+    # product from one store - the old number just kept resurfacing.
     if coles_match is None and not _co_skipped:
         coles_match, co_conf = _carry("coles", "carried", "Coles")
 
@@ -1481,9 +1481,9 @@ async def _scrape_single_item(
     _ww_jump = _jump_reason(ww_match['price'] if ww_match else None, ww_prev_hist, existing_item)
     _co_jump = _jump_reason(coles_match['price'] if coles_match else None, co_prev_hist, existing_item)
     if _ww_jump:
-        print(f"    [FLAG] WW {_ww_jump}: ${ww_prev_hist}->${ww_match['price']} — keeping live, flagging for validation")
+        print(f"    [FLAG] WW {_ww_jump}: ${ww_prev_hist}->${ww_match['price']} - keeping live, flagging for validation")
     if _co_jump:
-        print(f"    [FLAG] Coles {_co_jump}: ${co_prev_hist}->${coles_match['price']} — keeping live, flagging for validation")
+        print(f"    [FLAG] Coles {_co_jump}: ${co_prev_hist}->${coles_match['price']} - keeping live, flagging for validation")
 
     # Compute _ww_price_factor for per-kg items (used by UI for price_history normalisation).
     # WW sells loose produce (e.g. mushrooms) at $/kg; Coles sells fixed packs (e.g. 200g).
@@ -1508,9 +1508,9 @@ async def _scrape_single_item(
                 _ww_price_factor = round(_co_size_g / 1000, 4)
                 print(f"    WW per-kg rate detected: ${ww_price_val}, factor for {_co_size_g}g: {_ww_price_factor}")
             else:
-                print(f"    WW unit=KG but Coles pack >=900g or missing — factor 1.0")
+                print(f"    WW unit=KG but Coles pack >=900g or missing - factor 1.0")
         else:
-            print(f"    WW price ${ww_price_val} != cup ${ww_cup_val} (pack total, not per-kg) — factor 1.0")
+            print(f"    WW price ${ww_price_val} != cup ${ww_cup_val} (pack total, not per-kg) - factor 1.0")
 
     ww_price = ww_match["price"] if ww_match else None
     coles_price = coles_match["price"] if coles_match else None
@@ -1545,7 +1545,7 @@ async def _scrape_single_item(
     _vco = "low" if co_conf == "carried" else co_conf
     pair_meta = validate_pair(item, ww_match, coles_match, _vww, _vco)
 
-    # Deduplicate by date before use — guards against external writes introducing duplicates
+    # Deduplicate by date before use - guards against external writes introducing duplicates
     existing_ww_hist = _dedup_hist(existing_item.get("ww_price_history",    []) or [])
     existing_co_hist = _dedup_hist(existing_item.get("coles_price_history", []) or [])
     today_str = date.today().isoformat()
@@ -1584,7 +1584,7 @@ async def _scrape_single_item(
     else:
         new_co_hist = existing_co_hist
 
-    # week_conflict is normal repricing behaviour — never a validation trigger
+    # week_conflict is normal repricing behaviour - never a validation trigger
 
     # FIX 1: don't flag a store whose price is identical to the previous scrape.
     # An unchanged price cannot be a real pricing event regardless of history shape.
@@ -1594,14 +1594,14 @@ async def _scrape_single_item(
         coles_reasons = []
 
     # FIX 3: if the flagged store's new price matches the competitor's price exactly,
-    # it's a real market price — two stores agreeing on the same price is not suspicious.
+    # it's a real market price - two stores agreeing on the same price is not suspicious.
     if ww_reasons and ww_price is not None and coles_price is not None and round(ww_price, 2) == round(coles_price, 2):
         ww_reasons = []
     if coles_reasons and coles_price is not None and ww_price is not None and round(coles_price, 2) == round(ww_price, 2):
         coles_reasons = []
 
     # FIX 4: if the price falls within the combined range of all observed scrape prices
-    # (both WW and Coles histories), it is a known market price — not suspicious.
+    # (both WW and Coles histories), it is a known market price - not suspicious.
     # e.g. WW at $5.50 when WW history is $2.30-$3.70 but Coles history is $6.50:
     # the combined range is $2.30-$6.50, so $5.50 is within range and should not be flagged.
     _all_scrape_prices = (
@@ -1619,7 +1619,7 @@ async def _scrape_single_item(
     _validation_entry = None
     if all_reasons:
         # FIX 2: suppress entry if every still-flagged store's price is within the
-        # approved_prices tolerance — the per-store _is_approved check above only
+        # approved_prices tolerance - the per-store _is_approved check above only
         # runs before _suspicious_reasons; this catches edge cases where approved
         # prices were updated between scrape runs.
         _ww_clear = not ww_reasons or _is_approved(ww_price, _item_approved.get("ww"))
@@ -1639,7 +1639,7 @@ async def _scrape_single_item(
                 "reason": all_reasons,
             }
 
-    # FIX 3: Suppress EDR/member prices — only when is_on_special is explicitly False.
+    # FIX 3: Suppress EDR/member prices - only when is_on_special is explicitly False.
     # If is_on_special=True (confirmed public sale) or None (search result, unknown),
     # allow the price through to validation instead of silently carrying forward the old price.
     if ww_reasons and 'suspicious_drop_gt20pct' in ww_reasons and ww_match and prev_ww is not None:
@@ -1659,7 +1659,7 @@ async def _scrape_single_item(
     # If a store returned no result this run (and _carry also found nothing), preserve
     # whatever was in the previous latest.json rather than overwriting with None.
     # This prevents a single bot-detection miss from permanently erasing valid data.
-    # _nonzero: discard any store entry whose price is 0 or missing — $0 is not a
+    # _nonzero: discard any store entry whose price is 0 or missing - $0 is not a
     # real price (Woolworths serves it for products that load but aren't priced).
     def _nonzero(store_data):
         if store_data is None:
@@ -1718,7 +1718,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         print(f"Archived-only scrape: {len(shopping_list)} items")
     else:
         # Order by the user's actual priority tags (synced from the UI into
-        # user_settings.json): weekly first, then monthly, then rare — so if the
+        # user_settings.json): weekly first, then monthly, then rare - so if the
         # run dies mid-way (Coles rate-ban, runner reboot) the items that matter
         # most already have fresh prices. Untagged items count as weekly (the UI
         # default). Trip count breaks ties within a band.
@@ -1803,13 +1803,13 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
 
     # Load existing pending_validation as a dict keyed by item name for O(1) dedup
     existing_pv: dict = {e["item"]: e for e in existing_data.get("pending_validation", [])}
-    # Load existing approved_prices — carried forward and updated during this run
+    # Load existing approved_prices - carried forward and updated during this run
     existing_approved: dict = dict(existing_data.get("approved_prices") or {})
 
     async with async_playwright() as pw:
         # UA needs BOTH properties (verified live 2026-07-06):
-        #   1. no "HeadlessChrome" token — WW's edge 403s it on the first request;
-        #   2. a version matching the real Chrome build — the old hardcoded
+        #   1. no "HeadlessChrome" token - WW's edge 403s it on the first request;
+        #   2. a version matching the real Chrome build - the old hardcoded
         #      Chrome/124 lagged the installed browser, and a UA/fingerprint
         #      version mismatch is itself a bot signal for Incapsula.
         # So: read the real version with a throwaway launch, then advertise it.
@@ -1824,7 +1824,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
 
         # Persistent profile: Incapsula/Akamai trust cookies (Coles) survive across
         # runs, so a session that passed a challenge once stays trusted instead of
-        # re-triggering the bot check from zero every run. Lives OUTSIDE the repo —
+        # re-triggering the bot check from zero every run. Lives OUTSIDE the repo -
         # actions/checkout's `git clean -ffdx` would wipe anything in the worktree.
         profile_dir = os.path.join(
             os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"), "pricewatch-pw-profile"
@@ -1890,7 +1890,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             # Pre-populate archived items so they appear in every progress push.
             # The final write also appends them (else: branch below), but since
             # the scrape often stalls before completing, the last progress push
-            # becomes the permanent latest.json — archived items must be in it.
+            # becomes the permanent latest.json - archived items must be in it.
             if trigger != "scrape_archived":
                 _arch_present = {i["list_item"] for i in items_output}
                 for _arch_name in sorted(archived_set):
@@ -1931,8 +1931,8 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                 p = await context.new_page()
                 # Warm-up navigation. MUST NOT be fatal: Woolworths intermittently blocks
                 # the runner IP, and an unguarded goto here would crash the entire scrape
-                # (exit 1) before a single item is processed. The page is still usable —
-                # search_* navigate to their own URLs — so on failure we just continue.
+                # (exit 1) before a single item is processed. The page is still usable -
+                # search_* navigate to their own URLs - so on failure we just continue.
                 try:
                     await p.goto(WOOLWORTHS_BASE, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
                 except Exception as e:
@@ -1986,7 +1986,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                         if _ve:
                             new_validation_entries.append(_ve)
                     except asyncio.TimeoutError:
-                        print(f"  [TIMEOUT] {name} exceeded 90s — keeping existing data")
+                        print(f"  [TIMEOUT] {name} exceeded 90s - keeping existing data")
                         not_found.append(name)   # final carry-forward will restore existing price data
                         timed_out = True
                         _force_push = True       # push immediately so UI stall detector resets
@@ -2027,11 +2027,11 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
 
             # Scrape log: record this run's per-store fresh misses so the UI can show
             # miss rates over time and which products get skipped most. Items that timed
-            # out or errored never reached the match phase, so they're absent here —
+            # out or errored never reached the match phase, so they're absent here -
             # `scraped` counts items that completed matching, not total attempted.
-            # Each entry is {item, reason}: "no_results" (search/fetch returned nothing —
+            # Each entry is {item, reason}: "no_results" (search/fetch returned nothing -
             # points at a block or a broken selector) vs "no_match" (got candidates, none
-            # matched the query well enough — points at a naming/matcher issue instead).
+            # matched the query well enough - points at a naming/matcher issue instead).
             _ww_missed = sorted(
                 ({"item": e["item"], "reason": e["ww_reason"]} for e in _run_store_misses if e["ww_missed"]),
                 key=lambda e: e["item"],
@@ -2053,7 +2053,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
     if not single_item:
         # Carry-forward: any item already in latest.json that wasn't produced by
         # this scrape run gets preserved with its last-known prices.  This is the
-        # single rule that prevents items from disappearing — regardless of whether
+        # single rule that prevents items from disappearing - regardless of whether
         # they failed to scrape, are not in the Excel, or were added manually via
         # the UI.  Items with pinned URLs are already in the shopping list (added
         # earlier) so they will have been re-scraped fresh; everything else just
@@ -2062,7 +2062,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         still_not_found = []
         for name, ex in existing_map.items():
             if name in scraped_names:
-                continue  # already in output — fresh data takes priority
+                continue  # already in output - fresh data takes priority
             has_ww = (ex.get("woolworths") or {}).get("price") not in (None, 0, 0.0)
             has_co = (ex.get("coles") or {}).get("price") not in (None, 0, 0.0)
             if has_ww or has_co:
@@ -2083,7 +2083,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         for name in shopping_list:
             if name in final_names:
                 continue
-            print(f"  [placeholder] No data for shopping-list item — writing stub: {name}")
+            print(f"  [placeholder] No data for shopping-list item - writing stub: {name}")
             items_output.append({
                 "list_item": name,
                 "last_scraped": datetime.now(timezone.utc).isoformat(),
@@ -2165,7 +2165,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             not_found = [n for n in not_found if n not in existing_map]
         else:
             # Normal/scheduled run. Archived items we refreshed this run are already
-            # in items_output but the scrape result doesn't carry the archived flag —
+            # in items_output but the scrape result doesn't carry the archived flag -
             # re-stamp it so the archive view still recognises them.
             for _it in items_output:
                 if _it.get("list_item") in archived_set:
@@ -2219,10 +2219,10 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
     # that has since been merged into a canonical "Woolworths …" name).
     output["items"] = _purge_alias_items(output["items"])
 
-    # latest.json is served to every page on every load — minify it.
+    # latest.json is served to every page on every load - minify it.
     with open(latest_path, "w") as f:
         json.dump(output, f, separators=(",", ":"))
-    # Dated snapshot is a local, gitignored archive — keep it human-readable.
+    # Dated snapshot is a local, gitignored archive - keep it human-readable.
     with open(os.path.join(DATA_DIR, f"{datetime.now().strftime('%Y-%m-%d')}.json"), "w") as f:
         json.dump(output, f, indent=2)
 

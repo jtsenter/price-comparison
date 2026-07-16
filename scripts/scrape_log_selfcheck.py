@@ -43,14 +43,14 @@ def _run():
         # Oldest kept is dropped-from-front: first entry's `scraped` is the 15th write.
         assert log[0]["scraped"] == 15, log[0]
 
-        # Corrupt file must not crash — it starts fresh.
+        # Corrupt file must not crash - it starts fresh.
         open(path, "w").write("{ not json")
         scraper._append_scrape_log("manual", 1, [], [])
         log = json.load(open(path))
         assert len(log) == 1 and log[0]["trigger"] == "manual", log
 
         # Per-store attempted counts (single-store-pinned items skip the other
-        # store — dividing misses by the combined `scraped` count made rates lie).
+        # store - dividing misses by the combined `scraped` count made rates lie).
         scraper._append_scrape_log("scheduled", 250, [], [], ww_attempted=223, coles_attempted=213)
         log = json.load(open(path))
         assert log[-1]["ww_attempted"] == 223 and log[-1]["coles_attempted"] == 213, log[-1]

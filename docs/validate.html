@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>⚠️ Validate Prices — PriceWatch</title>
+  <title>⚠️ Validate Prices - PriceWatch</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="style.css?v=96" />
+  <link rel="stylesheet" href="style.css?v=97" />
   <style>
     /* ── Validate page overrides ── */
     .validate-hero {
@@ -201,7 +201,7 @@
     .btn-reject:hover:not(:disabled) { background: #FEE2E2; }
     .btn-reject.done { background: var(--coles); color: #fff; cursor: default; }
 
-    /* Secondary per-store actions (fix link / not sold here) — quiet text buttons */
+    /* Secondary per-store actions (fix link / not sold here) - quiet text buttons */
     .validate-secondary { display: flex; gap: 10px; margin-top: 8px; }
     .vs-btn {
       background: none; border: none; padding: 2px 0;
@@ -263,7 +263,7 @@
 <body>
 
 <header data-page="validate"></header>
-<script src="header.js?v=6"></script>
+<script src="header.js?v=7"></script>
 
 <div class="notif-dropdown" id="notifDropdown" style="display:none">
   <div class="notif-header">
@@ -293,7 +293,7 @@
 
 <main style="max-width:1200px;">
   <div id="noSettingsBanner" class="no-settings-banner" style="display:none">
-    GitHub settings (user, repo, token) are not configured — changes cannot be saved.
+    GitHub settings (user, repo, token) are not configured - changes cannot be saved.
     Open <a href="index.html">PriceWatch</a>, click ⚙ Settings and enter your details first.
   </div>
 
@@ -320,7 +320,7 @@ function loadSettings() {
 }
 
 function fmtPrice(p) {
-  if (p == null) return '—';
+  if (p == null) return '-';
   return '$' + Number(p).toFixed(2);
 }
 
@@ -425,15 +425,15 @@ async function loadArchivedSet() {
     }
     const r2 = await fetch(`data/archived_items.json?t=${Date.now()}`);
     if (r2.ok) { const arr = await r2.json(); if (Array.isArray(arr)) _archivedSet = new Set(arr); }
-  } catch { /* non-fatal — cards just won't show archive state */ }
+  } catch { /* non-fatal - cards just won't show archive state */ }
 }
 
 // Archive a product from the validate page: append it to archived_items.json.
-// Fresh-GET sha (via githubPut with no knownSha) — archiving is infrequent and
+// Fresh-GET sha (via githubPut with no knownSha) - archiving is infrequent and
 // not racing a scrape, so atomic-write threading isn't needed here.
 async function archiveItemFromValidate(itemName, btn) {
   const s = loadSettings();
-  if (!s.token || !s.user || !s.repo) { showGlobalError('GitHub settings not configured — cannot archive.'); return; }
+  if (!s.token || !s.user || !s.repo) { showGlobalError('GitHub settings not configured - cannot archive.'); return; }
   const prevLabel = btn.textContent;
   btn.disabled = true; btn.textContent = 'Archiving…';
   _archivedSet.add(itemName);
@@ -449,7 +449,7 @@ async function archiveItemFromValidate(itemName, btn) {
   }
 }
 
-// Read latest.json. When GitHub settings exist, read from the Contents API — it
+// Read latest.json. When GitHub settings exist, read from the Contents API - it
 // reflects the repo the instant a commit lands. The GitHub Pages copy (the relative
 // `data/latest.json` path) lags the repo by the Pages deploy (1–5 min), which made
 // approved items reappear after navigation and let sequential approvals resurrect
@@ -483,7 +483,7 @@ async function loadLatest() {
 
 // Background write queue: a click records the decision + flips the buttons
 // INSTANTLY, then queues the GitHub write. A single drainer commits jobs one at
-// a time in the background (writes to latest.json must serialise — each is a
+// a time in the background (writes to latest.json must serialise - each is a
 // read-modify-write of the same file), so the user can blast through the whole
 // list without the ~5s per-card freeze the old synchronous await caused.
 let _writeQueue = [];
@@ -493,11 +493,11 @@ let _scrapeGuardAsked = false; // ask the "a scrape is running" confirm at most 
 async function handleAction(entry, store, action, cardEl) {
   const s = loadSettings();
   if (!s.token || !s.user || !s.repo) {
-    showGlobalError('GitHub settings not configured — cannot save.');
+    showGlobalError('GitHub settings not configured - cannot save.');
     return;
   }
 
-  // Record the decision + flip the button — instant, never blocked by a write.
+  // Record the decision + flip the button - instant, never blocked by a write.
   if (!_decisions[entry.item]) _decisions[entry.item] = { ww: null, coles: null };
   _decisions[entry.item][store] = action;
 
@@ -531,13 +531,13 @@ async function drainWriteQueue() {
     updateCardStatus(job.cardEl, '⏳ Saving…', '');
     try {
       // Jobs are either a confirm/reject decision or a custom writer (store
-      // removal / link fix) — both funnel through this single drainer so all
+      // removal / link fix) - both funnel through this single drainer so all
       // latest.json read-modify-writes stay serialised.
       const remaining = job.run ? await job.run() : await commitDecision(s, job.entry, job.dec);
       updateCardStatus(job.cardEl, '✅ Saved', 'resolved');
       updateValidateNavBadge(remaining);
       // keepCard: a store-removal on a card whose other store still awaits a
-      // confirm/reject — leave the card up for that decision.
+      // confirm/reject - leave the card up for that decision.
       if (!job.keepCard) {
         const card = job.cardEl;
         setTimeout(() => {
@@ -551,7 +551,7 @@ async function drainWriteQueue() {
     } catch (err) {
       console.error(err);
       showGlobalError(`Save failed: ${err.message}`);
-      updateCardStatus(job.cardEl, `⚠ Save failed — tap a button to retry`, 'error');
+      updateCardStatus(job.cardEl, `⚠ Save failed - tap a button to retry`, 'error');
       // Un-resolve so the user can re-decide/retry this one.
       job.cardEl.style.opacity = '';
       job.cardEl.querySelectorAll('.validate-actions .btn').forEach(b => { b.disabled = false; b.classList.remove('done'); b.textContent = b.classList.contains('btn-confirm') ? '✓ Confirm' : '✗ Reject'; });
@@ -570,12 +570,12 @@ async function commitDecision(s, entry, dec) {
   _latestData = fresh;
 
   // Race guard: while a scrape runs, its final write rebuilds latest.json from a
-  // boot-time snapshot — a decision saved mid-run can be silently resurrected.
+  // boot-time snapshot - a decision saved mid-run can be silently resurrected.
   // Ask once per drain, not once per card.
   if (fresh.scrape_progress && !_scrapeGuardAsked) {
     _scrapeGuardAsked = true;
-    if (!confirm('A scrape is running right now — it may overwrite these decisions when it finishes.\n\nSave anyway?'))
-      throw new Error('Save cancelled — scrape in progress');
+    if (!confirm('A scrape is running right now - it may overwrite these decisions when it finishes.\n\nSave anyway?'))
+      throw new Error('Save cancelled - scrape in progress');
   }
 
   const wwNeeds = entry.ww_suspicious, colesNeeds = entry.coles_suspicious;
@@ -628,7 +628,7 @@ async function commitDecision(s, entry, dec) {
   // Minified on purpose: the scraper writes latest.json minified; pretty-printing
   // here ballooned the file to ~26k lines and bloated every subsequent git diff.
   await githubPut(s, 'docs/data/latest.json', JSON.stringify(updated),
-    `validate: ${entry.item} — ww:${dec.ww ?? 'n/a'} coles:${dec.coles ?? 'n/a'}`, _latestSha);
+    `validate: ${entry.item} - ww:${dec.ww ?? 'n/a'} coles:${dec.coles ?? 'n/a'}`, _latestSha);
   _latestData = updated;
   return updatedPV.length;
 }
@@ -651,13 +651,13 @@ async function ghGetJson(s, path) {
 // resolved as moot.
 async function removeStoreFromValidate(entry, store, cardEl) {
   const s = loadSettings();
-  if (!s.token) { showGlobalError('GitHub settings not configured — cannot save.'); return; }
+  if (!s.token) { showGlobalError('GitHub settings not configured - cannot save.'); return; }
   const isWw = store === 'ww';
   const storeName = isWw ? 'Woolworths' : 'Coles';
   const otherName = isWw ? 'Coles' : 'Woolworths';
 
   const itemData = _latestData?.items?.find(i => i.list_item === entry.item) || {};
-  // The kept store needs a product URL to pin — without one the scraper would
+  // The kept store needs a product URL to pin - without one the scraper would
   // fall back to name-search on BOTH stores and the removal wouldn't stick.
   const keptUrl = isWw ? (itemData.coles?.url || entry.coles_url) : (itemData.woolworths?.url || entry.ww_url);
   if (!keptUrl) {
@@ -685,7 +685,7 @@ async function removeStoreFromValidate(entry, store, cardEl) {
     e[isWw ? 'coles_url' : 'ww_url'] = keptUrl;
     ov.json[entry.item] = e;
     await githubPut(s, 'docs/data/url_overrides.json', JSON.stringify(ov.json, null, 2) + '\n',
-      `validate: ${entry.item} — not sold at ${storeName}`, ov.sha);
+      `validate: ${entry.item} - not sold at ${storeName}`, ov.sha);
 
     // 2. Null the store in latest.json + resolve the flagged entry for it.
     const fresh = await loadLatest();
@@ -699,7 +699,7 @@ async function removeStoreFromValidate(entry, store, cardEl) {
     const updated = { ...fresh, items, pending_validation: pv.length ? pv : undefined };
     if (!pv.length) delete updated.pending_validation;
     await githubPut(s, 'docs/data/latest.json', JSON.stringify(updated),
-      `validate: ${entry.item} — removed from ${storeName}`, _latestSha);
+      `validate: ${entry.item} - removed from ${storeName}`, _latestSha);
     _latestData = updated;
     return pv.length;
   }});
@@ -712,7 +712,7 @@ async function removeStoreFromValidate(entry, store, cardEl) {
 // single-item rescrape with the corrected link.
 async function fixLinkFromValidate(entry, store, cardEl) {
   const s = loadSettings();
-  if (!s.token) { showGlobalError('GitHub settings not configured — cannot save.'); return; }
+  if (!s.token) { showGlobalError('GitHub settings not configured - cannot save.'); return; }
   const isWw = store === 'ww';
   const storeName = isWw ? 'Woolworths' : 'Coles';
   const host = isWw ? 'woolworths.com.au' : 'coles.com.au';
@@ -728,7 +728,7 @@ async function fixLinkFromValidate(entry, store, cardEl) {
     const ov = await ghGetJson(s, 'docs/data/url_overrides.json');
     ov.json[entry.item] = { ...(ov.json[entry.item] || {}), [isWw ? 'ww_url' : 'coles_url']: url };
     await githubPut(s, 'docs/data/url_overrides.json', JSON.stringify(ov.json, null, 2) + '\n',
-      `validate: ${entry.item} — fixed ${storeName} link`, ov.sha);
+      `validate: ${entry.item} - fixed ${storeName} link`, ov.sha);
   } catch (err) {
     showGlobalError(`Saving link failed: ${err.message}`);
     return;
@@ -744,20 +744,20 @@ async function fixLinkFromValidate(entry, store, cardEl) {
       body: JSON.stringify({ ref: 'main', inputs }),
     });
     dispatched = res.ok || res.status === 204;
-  } catch (_) { /* offline runner etc. — the pin still applies next scheduled run */ }
+  } catch (_) { /* offline runner etc. - the pin still applies next scheduled run */ }
 
   // 3. A fixed link supersedes the WHOLE flagged entry: the suspicious price
   //    came from the wrong product page, and the rescrape we just dispatched
   //    re-checks the item end-to-end (re-flagging anything genuinely off).
-  //    Previously this only auto-rejected the fixed store's flag — if the
+  //    Previously this only auto-rejected the fixed store's flag - if the
   //    other store was also flagged (or the fixed store wasn't the flagged
   //    one) the card silently stayed "waiting", which read as "fix did
   //    nothing". Roll the fixed store back to its pre-flag price, clear the
   //    entry, drop the card.
   markCardResolved(cardEl);
   updateCardStatus(cardEl, dispatched
-    ? '🔗 Link saved — rescrape started…'
-    : '🔗 Link saved (rescrape not started — it will apply next run)…', '');
+    ? '🔗 Link saved - rescrape started…'
+    : '🔗 Link saved (rescrape not started - it will apply next run)…', '');
   _writeQueue.push({ cardEl, run: async () => {
     const fresh = await loadLatest();
     const prev = isWw ? entry.ww_prev_price : entry.coles_prev_price;
@@ -770,7 +770,7 @@ async function fixLinkFromValidate(entry, store, cardEl) {
     const updated = { ...fresh, items };
     if (pv.length) updated.pending_validation = pv; else delete updated.pending_validation;
     await githubPut(s, 'docs/data/latest.json', JSON.stringify(updated),
-      `validate: ${entry.item} — ${storeName} link fixed, flag cleared`, _latestSha);
+      `validate: ${entry.item} - ${storeName} link fixed, flag cleared`, _latestSha);
     _latestData = updated;
     return pv.length;
   }});
@@ -808,7 +808,7 @@ async function confirmAll() {
   if (_writing || _draining || _writeQueue.length) return; // don't bulk-write while individual writes drain
   const s = loadSettings();
   if (!s.token || !s.user || !s.repo) {
-    showGlobalError('GitHub settings not configured — cannot save.');
+    showGlobalError('GitHub settings not configured - cannot save.');
     return;
   }
 
@@ -826,11 +826,11 @@ async function confirmAll() {
 
     // Same race guard as handleAction: don't write into a live scrape's window.
     if (fresh.scrape_progress &&
-        !confirm('A scrape is running right now — it may overwrite these confirmations when it finishes.\n\nSave anyway?')) {
-      throw new Error('Save cancelled — scrape in progress');
+        !confirm('A scrape is running right now - it may overwrite these confirmations when it finishes.\n\nSave anyway?')) {
+      throw new Error('Save cancelled - scrape in progress');
     }
 
-    // Apply all confirmations in a single pass — one PUT for all entries
+    // Apply all confirmations in a single pass - one PUT for all entries
     let updatedItems = [...(fresh.items || [])];
     for (const entry of toConfirm) {
       updatedItems = updatedItems.map(i => {
@@ -911,7 +911,7 @@ function buildStoreCol(entry, store, suspicious, newPrice, prevPrice, url) {
   const notSuspClass = suspicious ? '' : ' not-suspicious';
 
   // Confirm/Reject only for suspicious stores; the secondary row (fix link /
-  // not sold here) is always available — wrong links and store removals aren't
+  // not sold here) is always available - wrong links and store removals aren't
   // limited to flagged prices.
   let actionsHtml = '';
   if (suspicious) {
@@ -925,8 +925,8 @@ function buildStoreCol(entry, store, suspicious, newPrice, prevPrice, url) {
   }
   const secondaryHtml = `
     <div class="validate-secondary">
-      <button class="vs-btn btn-fix-link" data-store="${store}" title="The flagged price came from the wrong product — pin the correct ${storeName} link">🔗 Fix link</button>
-      <button class="vs-btn btn-remove-store" data-store="${store}" title="${storeName} doesn't sell an equivalent product — stop checking it">🚫 Not sold here</button>
+      <button class="vs-btn btn-fix-link" data-store="${store}" title="The flagged price came from the wrong product - pin the correct ${storeName} link">🔗 Fix link</button>
+      <button class="vs-btn btn-remove-store" data-store="${store}" title="${storeName} doesn't sell an equivalent product - stop checking it">🚫 Not sold here</button>
     </div>`;
 
   return `
@@ -997,7 +997,7 @@ function renderEntry(entry) {
   // Wire up action buttons
   card.querySelectorAll('.validate-actions .btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      // No _writing gate any more — clicks register instantly and the write is
+      // No _writing gate any more - clicks register instantly and the write is
       // queued in the background (see handleAction). Just ignore a finished button.
       if (btn.disabled || btn.classList.contains('done')) return;
       handleAction(entry, btn.dataset.store, btn.dataset.action, card);
@@ -1052,7 +1052,7 @@ function renderEntry(entry) {
       try {
         await githubPut(s, 'docs/data/latest.json', JSON.stringify(_latestData),
           'chore: remove week_conflict from pending_validation', _latestSha);
-      } catch (_) { /* non-fatal — cleanup will retry on next load */ }
+      } catch (_) { /* non-fatal - cleanup will retry on next load */ }
     }
   }
 
@@ -1089,7 +1089,7 @@ function buildValidateList() {
 
 // Recheck: pull the freshest flagged prices from the repo and repaint. Useful
 // after a scrape lands (some items may no longer be suspicious) or to confirm a
-// decision saved. Does NOT re-scrape — that's the main page's Update Prices.
+// decision saved. Does NOT re-scrape - that's the main page's Update Prices.
 async function recheckAll() {
   if (_draining || _writeQueue.length) return; // let in-flight writes finish first
   const btn = document.getElementById('recheckAllBtn');

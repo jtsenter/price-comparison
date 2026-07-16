@@ -14,7 +14,7 @@ KNOWN_NAME_CHANGES = {
     "Radish Fresh": "Fresh Radish Bunch",
     "Woolworths Short Cut Bacon": "Woolworths Shortcut Bacon",
     "Corn Sweet": "Woolworths Corn Sweet",
-    # Same product recorded under an older prefix-less name — merge the history
+    # Same product recorded under an older prefix-less name - merge the history
     # into the current "Woolworths …" name so it shows as one item.
     "Capsicum Green": "Woolworths Capsicum Green",
     # All name variants of WW product 95171 (fresh Tasmanian Atlantic skin-on
@@ -51,7 +51,7 @@ KNOWN_NAME_CHANGES = {
 }
 
 # Resolve alias chains (A→B plus B→C would leave A pointing at a name that itself
-# renames — one clean_name() pass would then split A's history from C's). Fixpoint
+# renames - one clean_name() pass would then split A's history from C's). Fixpoint
 # here means a single dict lookup is always final. Self-maps (X→X) terminate naturally.
 for _k in list(KNOWN_NAME_CHANGES):
     _v, _hops = KNOWN_NAME_CHANGES[_k], 0

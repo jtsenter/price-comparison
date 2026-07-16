@@ -1,15 +1,15 @@
 /* ─────────────────────────────────────────────────────────────────────────
- * Shared site header — SINGLE SOURCE OF TRUTH for the top nav on every page.
+ * Shared site header - SINGLE SOURCE OF TRUTH for the top nav on every page.
  *
  * Each page carries only:   <header data-page="X"></header>
  *                           <script src="header.js?v=4"></script>
- * and this file fills it in. Edit the header HERE and all pages update — no
+ * and this file fills it in. Edit the header HERE and all pages update - no
  * more per-page drift.
  *
  * The chrome is IDENTICAL on every page: brand, Hot/Basket cluster, Options
- * (⚙) menu, scrape-progress strip — plus a standalone Home link on the left
+ * (⚙) menu, scrape-progress strip - plus a standalone Home link on the left
  * everywhere except index. Only two things legitimately differ per page: the
- * search box (index-only — it searches the main table) and the trailing
+ * search box (index-only - it searches the main table) and the trailing
  * primary action (index/hot-deals → Update Prices; basket → Print;
  * scrape-log → Refresh).
  *
@@ -34,7 +34,7 @@
   /* ── Component CSS injected here so pages that don't link style.css (the
         basket page has its own standalone stylesheet) still render the ⚙
         dropdown, validate pill and scrape strip correctly. Identical rules
-        exist in style.css for the pages that do link it — duplicates are
+        exist in style.css for the pages that do link it - duplicates are
         harmless. ── */
   var CSS =
     '.col-chooser-wrap{position:relative}' +
@@ -75,7 +75,7 @@
     '</a>';
 
   /* Hot / Basket nav cluster. `active` gets the .here highlight.
-     (Watchlist is a FILTER, not a destination — it lives in the filter row on
+     (Watchlist is a FILTER, not a destination - it lives in the filter row on
      index and the mobile sort toolbar. The notification bell was retired: the
      validate pill already covers "data needs attention".) */
   function navCluster(active) {
@@ -97,14 +97,14 @@
   var HOME = page === 'index' ? ''
     : '<a class="home-link" href="index.html" title="Back to the main page">' + SVG_HOME + '</a>';
 
-  /* Validate pill — shown by page JS when flagged prices exist. Identical slot
+  /* Validate pill - shown by page JS when flagged prices exist. Identical slot
      on every page (index's app.js and the other pages' initNavBell both key
      off the id). */
   var VALIDATE =
     '<a href="validate.html" id="validateNavLink" class="validate-pill"' +
     (page === 'validate' ? '' : ' style="display:none"') + '>⚠️ Validate</a>';
 
-  /* Scrape progress strip — on EVERY page, so a running scrape stays visible
+  /* Scrape progress strip - on EVERY page, so a running scrape stays visible
      wherever you navigate. index/hot-deals update it from their own data
      loads; other pages use the lightweight poller below. */
   var STRIP =
@@ -116,7 +116,7 @@
       '<button id="scrapeStripDismiss" class="scrape-strip-dismiss" title="Dismiss">✕</button>' +
     '</div>';
 
-  /* Options (⚙) dropdown — identical on every page. Index-only items (Import,
+  /* Options (⚙) dropdown - identical on every page. Index-only items (Import,
      Auto-update Setup) render only there: they act on modals other pages
      don't have. Theme + Scrape Log are universal and wired right here. */
   var OPTIONS =
@@ -138,7 +138,7 @@
       '</div>' +
     '</div>';
 
-  /* Trailing primary action — the ONE allowed per-page difference besides
+  /* Trailing primary action - the ONE allowed per-page difference besides
      search. */
   var TRAIL =
     page === 'index'         ? '<button class="btn btn-primary btn-icon" id="refreshBtn" title="Update prices">' + SVG_REF + '</button>' :
@@ -186,13 +186,13 @@
     });
     optDd.addEventListener('click', function (e) {
       e.stopPropagation();
-      // Menu items (Import / Auto-update Setup) open a modal — close the menu behind it.
+      // Menu items (Import / Auto-update Setup) open a modal - close the menu behind it.
       if (e.target.closest('.more-dropdown-item')) optDd.style.display = 'none';
     });
     document.addEventListener('click', function () { optDd.style.display = 'none'; });
   }
 
-  /* Theme switcher — universal. (Row density stays app.js-wired: index-only.) */
+  /* Theme switcher - universal. (Row density stays app.js-wired: index-only.) */
   function applyHeaderTheme() {
     var t = 'light';
     try { t = localStorage.getItem('pw_theme') || 'light'; } catch (e) {}
@@ -213,7 +213,7 @@
   });
 
   /* Scrape strip on pages app.js/hot-deals don't drive: check on load; while a
-     scrape is running (or freshly dispatched — pw_scrape_dispatched_v1 marker,
+     scrape is running (or freshly dispatched - pw_scrape_dispatched_v1 marker,
      set by index's Update Prices), poll latest.json and mirror progress. Stops
      polling once idle so we don't refetch a large file forever. */
   if (page !== 'index' && page !== 'hot-deals') {
@@ -250,7 +250,7 @@
             activeScrape = true;
           } else if (disp && !spent) {
             strip.style.display = 'flex';
-            document.getElementById('scrapeStripLabel').textContent = '⏳ Scrape triggered — waiting for first progress…';
+            document.getElementById('scrapeStripLabel').textContent = '⏳ Scrape triggered - waiting for first progress…';
             document.getElementById('scrapeStripFill').style.width = '0%';
             document.getElementById('scrapeStripPct').textContent = '';
             activeScrape = true;

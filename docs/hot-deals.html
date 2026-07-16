@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>🔥 Hot Deals — PriceWatch</title>
+  <title>🔥 Hot Deals - PriceWatch</title>
   <meta name="description" content="Grocery items currently at or near their lowest recorded price across Woolworths and Coles." />
   <meta name="theme-color" content="#00843D" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=96" />
+  <link rel="stylesheet" href="style.css?v=97" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -100,7 +100,7 @@
          centered between the two, then the ATL checkbox and the Show filters.
          (The old layout let the value badge render past the viewport edge.) */
       .hd-tune { gap: 10px; margin-top: 4px; padding: 10px; }
-      .hd-tune-title { display: none; } /* the AND/OR chip stays — it's a control now */
+      .hd-tune-title { display: none; } /* the AND/OR chip stays - it's a control now */
       .hd-tune-row { width: 100%; flex-wrap: wrap; row-gap: 6px; }
       .hd-tune-row label { flex: 1 1 auto; white-space: normal; }
       .hd-tune-row strong { flex-shrink: 0; text-align: right; }
@@ -122,7 +122,7 @@
     }
     .hd-tabs-row .category-tabs { flex: 1; min-width: 0; }
     /* Desktop: the tabs row sticks under the main header (JS sets `top`), with
-       the table head sticking below it — one contiguous opaque stack, no seam.
+       the table head sticking below it - one contiguous opaque stack, no seam.
        Mobile keeps everything scrolling away (space is tight). */
     @media (min-width: 701px) {
       .hd-tabs-row { position: sticky; z-index: 60; }
@@ -286,7 +286,7 @@
     .cell-deal-ww  { background: var(--ww-light); }
     .cell-deal-coles { background: var(--coles-light); }
 
-    /* ── Price bar — style.css provides all bar/dot/label rules.
+    /* ── Price bar - style.css provides all bar/dot/label rules.
          Only override the outer container for this page's layout context. ── */
     .price-bar-outer { cursor: help; margin-top: 4px; }
 
@@ -341,14 +341,14 @@
 <body>
 
 <header data-page="hot-deals"></header>
-<script src="header.js?v=6"></script>
+<script src="header.js?v=7"></script>
 
 <div class="deals-hero">
   <div class="deals-hero-title">🔥 Hot Deals</div>
   <div class="deals-hero-stats" id="heroStats"></div>
   <!-- The dials that DEFINE a deal, out in the open. Dragging either instantly
        grows/shrinks the list below. Row 2 ("Show") holds the store + watchlist
-       filters — everything that decides WHICH deals you see lives in this card. -->
+       filters - everything that decides WHICH deals you see lives in this card. -->
   <div class="hd-tune">
     <span class="hd-tune-title">A deal must be</span>
     <div class="hd-tune-row" title="How far below its usual (median historical) price an item must be">
@@ -356,7 +356,7 @@
       <input type="range" id="hdDropSlider" min="0" max="50" step="1">
       <strong id="hdDropVal">4%</strong>
     </div>
-    <button type="button" class="hd-tune-and" id="hdModeBtn" title="How the two conditions combine — click to switch">AND</button>
+    <button type="button" class="hd-tune-and" id="hdModeBtn" title="How the two conditions combine - click to switch">AND</button>
     <div class="hd-tune-row" title="How much cheaper the best store must be vs the other store">
       <label for="hdDiffSlider">⇄ cheaper than the other store by ≥</label>
       <input type="range" id="hdDiffSlider" min="0" max="50" step="1">
@@ -430,16 +430,16 @@
     <div id="dealsEmpty" class="deals-empty" style="display:none">
       <div class="deals-empty-icon">🛒</div>
       <div class="deals-empty-title">No hot deals right now</div>
-      <div>Check back after prices are updated — an item appears here when its current price is a real discount below its usual price (and its price actually varies over time).</div>
+      <div>Check back after prices are updated - an item appears here when its current price is a real discount below its usual price (and its price actually varies over time).</div>
     </div>
   </div>
 </main>
 
 <div id="priceTooltip" class="price-tooltip-fixed" style="display:none"></div>
 
-<!-- Shared utilities — must load before inline script -->
-<script src="name_map.js?v=13"></script>
-<script src="utils.js?v=63"></script>
+<!-- Shared utilities - must load before inline script -->
+<script src="name_map.js?v=14"></script>
+<script src="utils.js?v=64"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -476,7 +476,7 @@ function loadExclusions() {
   try { return JSON.parse(localStorage.getItem('pw_exclusions_v1') || '{}'); } catch { return {}; }
 }
 
-const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '—';
+const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '-';
 const stripWW = (name) => name.replace(/^Woolworths\s+/i, '');
 const fmtUnit = (price, unit) => {
   if (price == null) return '';
@@ -491,8 +491,8 @@ const fmtUnit = (price, unit) => {
 // ── Dynamic sticky offsets (desktop sub-header stack) ────────────────────────
 // On desktop the category tabs + store-filter bar are sticky, stacked directly
 // under the main header, with the table head sticking below THEM. This keeps the
-// filters visible while scrolling a long deals list, and — because header, tabs,
-// filter and thead form one contiguous opaque stack — removes the transient seam
+// filters visible while scrolling a long deals list, and - because header, tabs,
+// filter and thead form one contiguous opaque stack - removes the transient seam
 // where a row could flash in the gap as the thead settled. Heights are measured
 // live (tabs wrap differently at each width) and re-applied on resize + re-render.
 // Mobile keeps everything scrolling away (space is tight) with the thead at navH.
@@ -533,7 +533,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
   if (!priceHistory?.length || currentPrice == null) return '';
   const exclusions = loadExclusions();
   const excluded = new Set((exclusions[itemName] || []).map(p => Number(p).toFixed(2)));
-  // Use raw history prices — they are already actual shelf prices.
+  // Use raw history prices - they are already actual shelf prices.
   // _ww_price_factor is only used for cheaper_store comparison in the scraper.
   const prices = priceHistory
     .map(p => p.price)
@@ -544,14 +544,14 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
 
   if (minP === maxP) {
     if (Math.abs(currentPrice - minP) < 0.005) {
-      // Truly same price — flat bar (current price equals stable historical price)
+      // Truly same price - flat bar (current price equals stable historical price)
       return `
       <div class="price-bar-outer">
         <div class="price-bar price-bar-flat"><div class="price-marker" style="left:50%"></div></div>
         <div class="price-bar-labels price-bar-labels-flat"><span class="price-bar-always">${fmt(minP)}</span></div>
       </div>`;
     }
-    // Deal price differs from stable historical price — show a range bar
+    // Deal price differs from stable historical price - show a range bar
     const barMin = Math.min(currentPrice, minP);
     const barMax = Math.max(currentPrice, minP);
     const rawPos2 = ((currentPrice - barMin) / (barMax - barMin)) * 100;
@@ -599,7 +599,7 @@ const STALE_PROGRESS_MS  = 3 * 60 * 1000; // ms with no progress update → ⚠ 
 
 // ── State ─────────────────────────────────────────────────────────────────────
 
-// sortKeys: ordered array of {col, dir} — first element is primary sort
+// sortKeys: ordered array of {col, dir} - first element is primary sort
 // Default: deepest discount first (best deal at top)
 let sortKeys = [{ col: 'deal', dir: 'desc' }];
 let _activeCategory = 'All';
@@ -608,7 +608,7 @@ let _watchlistOnly = false;
 let _watchlistHD = new Set();
 let _data = null;
 let _archivedSet = new Set();
-let _visibleDealNames = []; // deals currently rendered — handed off to the basket
+let _visibleDealNames = []; // deals currently rendered - handed off to the basket
 let _progressDismissed = false;
 let _progressLastDone = null;
 let _progressLastChangeTime = null;
@@ -652,7 +652,7 @@ function sortDeals(items, exclusions) {
 function onColClick(col) {
   const existing = sortKeys.findIndex(k => k.col === col);
   if (existing === 0) {
-    // Already primary — toggle direction
+    // Already primary - toggle direction
     sortKeys[0] = { col, dir: sortKeys[0].dir === 'asc' ? 'desc' : 'asc' };
   } else {
     // Prepend as new primary key; keep others as secondary (remove duplicate if present)
@@ -694,7 +694,7 @@ function buildCategoryTabs(items) {
 }
 
 function renderSortBar() {
-  // No sort bar shown — multi-key sort works silently like Excel
+  // No sort bar shown - multi-key sort works silently like Excel
 }
 
 // ── Column order / widths / visibility (Hot Deals) ───────────────────────────
@@ -787,7 +787,7 @@ function hdColHtml(col) {
   const w  = _hdColWidths[col] ?? HD_DEFAULT_WIDTHS[col];
   // width WITHOUT min-width: the wrap is overflow-x: clip (a scroll container would
   // break the sticky thead), so hard minimums let saved widths push the table past
-  // the container and silently amputate the rightmost columns — no scrollbar, no
+  // the container and silently amputate the rightmost columns - no scrollbar, no
   // hint. A preferred width lets auto layout compress columns to fit instead;
   // every column stays visible even when the saved total exceeds the window.
   const ws = w ? `width:${w}px;` : '';
@@ -907,7 +907,7 @@ function renderDeals() {
   const priorities = loadPriorities();
   const exclusions = loadExclusions();
 
-  // SINGLE source of truth — identical to the main page's deal count (the
+  // SINGLE source of truth - identical to the main page's deal count (the
   // main page reads the same stored slider values).
   const tune = loadDealTune();
   const allDeals = getHotDealItems(_data.items, {
@@ -924,11 +924,11 @@ function renderDeals() {
 
   const filtered = filterDeals(allDeals, exclusions);
   const sorted = sortDeals(filtered.map(d => d.item), exclusions);
-  // Remember what's on screen — the basket header icon hands THESE off, so
+  // Remember what's on screen - the basket header icon hands THESE off, so
   // "go to basket from Hot Deals" means "basket of the deals I'm looking at".
   _visibleDealNames = sorted.map(i => i.list_item);
 
-  // Hero stats — counts describe what's SHOWN, so they follow the store /
+  // Hero stats - counts describe what's SHOWN, so they follow the store /
   // watchlist / category filters.
   const heroEl = document.getElementById('heroStats');
   if (heroEl) {
@@ -998,7 +998,7 @@ function renderDeals() {
 
     const safeNameHD = item.list_item.replace(/"/g, '&quot;');
 
-    // Deal cell — explains WHY this is a hot deal: the discount depth or
+    // Deal cell - explains WHY this is a hot deal: the discount depth or
     // all-time-low badge, plus the cross-store gap when there is one
     // ("12% cheaper than Coles") since that's the second thing that defines
     // a deal here.
@@ -1009,15 +1009,15 @@ function renderDeals() {
       : '';
     const dealCell = `<span class="${reasonClass}">${deal.reason}</span>${storeGapTag}`;
 
-    // Store cell — which supermarket has the deal price (own column).
+    // Store cell - which supermarket has the deal price (own column).
     const storeChip = deal.store === 'woolworths'
       ? '<span class="store-chip ww sm">W</span>'
       : '<span class="store-chip coles sm">C</span>';
 
-    // Save cell — dollars below the usual (median) price; sub shows that usual price.
+    // Save cell - dollars below the usual (median) price; sub shows that usual price.
     const saveCell = deal.saveAmount > 0
       ? `<div class="deal-save">${fmt(deal.saveAmount)}</div><div class="deal-save-sub">vs ${fmt(deal.typical)}</div>`
-      : '<span style="color:var(--text-soft)">—</span>';
+      : '<span style="color:var(--text-soft)">-</span>';
 
     // WW cell
     const wwUrl = ov.wwUrl || ww?.url || null;
@@ -1047,9 +1047,9 @@ function renderDeals() {
       coHtml = `<a href="https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}" target="_blank" rel="noopener" class="search-link">Find →</a>`;
     }
 
-    // Trend cell — price bar only, same as main page
+    // Trend cell - price bar only, same as main page
     const _trendSeriesHD = getTrendSeries(item);
-    const avgCell = buildPriceBar(item.list_item, _trendSeriesHD.prices.map(p => ({price: p})), _trendSeriesHD.current) || '—';
+    const avgCell = buildPriceBar(item.list_item, _trendSeriesHD.prices.map(p => ({price: p})), _trendSeriesHD.current) || '-';
 
     const wwClass  = deal.store === 'woolworths' ? 'cell-deal-ww' : '';
     const coClass  = deal.store === 'coles'      ? 'cell-deal-coles' : '';
@@ -1072,7 +1072,7 @@ function renderDeals() {
 
   // Recompute the sticky sub-header stack now that the category tabs are populated
   // (their height feeds the thead's top offset). Synchronous here = tabs already
-  // laid out, so heights are final — unlike an rAF that can fire mid-layout.
+  // laid out, so heights are final - unlike an rAF that can fire mid-layout.
   fixStickyOffset();
 
   updateValidateNavBadge(_data?.pending_validation?.length ?? 0);
@@ -1195,7 +1195,7 @@ function toggleWatchlistHD(itemName) {
   const repo = localStorage.getItem('gh_repo') || '';
   const token = localStorage.getItem('gh_token') || '';
   if (user && repo && token) {
-    // githubPutJson comes from utils.js (loaded above); errors stay swallowed —
+    // githubPutJson comes from utils.js (loaded above); errors stay swallowed -
     // the watchlist is already saved locally and re-syncs on the next toggle.
     githubPutJson({ user, repo, token }, 'docs/data/watchlist.json', [..._watchlistHD], 'chore: sync watchlist').catch(() => {});
   }
@@ -1227,7 +1227,7 @@ function initWatchlistFilter() {
 }
 
 // ── Deal-definition sliders ───────────────────────────────────────────────────
-// Persisted via pw_hd_tune_v1 (loadDealTune in utils.js) — the main page reads
+// Persisted via pw_hd_tune_v1 (loadDealTune in utils.js) - the main page reads
 // the same values for its "🔥 N deals" count so the two never disagree.
 
 function initDealTune() {
@@ -1237,7 +1237,7 @@ function initDealTune() {
   const modeB = document.getElementById('hdModeBtn');
   const reset = document.getElementById('hdTuneReset');
   if (!dropS || !diffS) return;
-  let mode = loadDealTune().mode; // 'and' | 'or' — toggled by the chip between the sliders
+  let mode = loadDealTune().mode; // 'and' | 'or' - toggled by the chip between the sliders
   const sync = (t) => {
     dropS.value = t.drop;
     diffS.value = t.diff;
@@ -1299,7 +1299,7 @@ function renderScrapeStrip(data) {
     strip.style.display = 'flex';
     strip.classList.toggle('stale', isStale);
     document.getElementById('scrapeStripLabel').textContent = isStale
-      ? `⚠ Stalled at ${prog.done} of ${prog.total} — try refreshing`
+      ? `⚠ Stalled at ${prog.done} of ${prog.total} - try refreshing`
       : pct === 0 ? `Starting price refresh…` : `Refreshing prices… ${prog.done} of ${prog.total}`;
     document.getElementById('scrapeStripFill').style.width = `${pct}%`;
     document.getElementById('scrapeStripPct').textContent = `${pct}%`;
@@ -1337,12 +1337,12 @@ async function triggerRefreshHD() {
       const selfHosted = (rd.runners || []).filter(r => r.labels?.some(l => l.name === 'self-hosted'));
       const anyOnline = selfHosted.length > 0 && selfHosted.some(r => r.status === 'online');
       if (!anyOnline) {
-        alert('⚠️ Scraper is offline — the Windows runner is not connected. Prices cannot be updated until it restarts.');
+        alert('⚠️ Scraper is offline - the Windows runner is not connected. Prices cannot be updated until it restarts.');
         if (btn) { btn.disabled = false; btn.innerHTML = '↻ Update Prices'; }
         return;
       }
     }
-  } catch (_) { /* fail open — proceed with dispatch on network error */ }
+  } catch (_) { /* fail open - proceed with dispatch on network error */ }
 
   if (btn) btn.innerHTML = 'Triggering…';
 
@@ -1371,7 +1371,7 @@ async function triggerRefreshHD() {
       const retryBtn = document.getElementById('scrapeStripRetry');
       if (retryBtn) retryBtn.style.display = 'none';
     }
-    if (btn) btn.innerHTML = '✓ Triggered — polling…';
+    if (btn) btn.innerHTML = '✓ Triggered - polling…';
     const dispatchedAt = new Date().toISOString();
     pollForCompletionHD(user, repo, token, dispatchedAt);
     _hdRefreshCooldown = true;
@@ -1389,7 +1389,7 @@ async function pollForCompletionHD(user, repo, token, dispatchedAt) {
 
   const finish = (success) => {
     if (success) {
-      if (btn) btn.innerHTML = '✓ Done — reloading…';
+      if (btn) btn.innerHTML = '✓ Done - reloading…';
       setTimeout(() => location.reload(), 2000);
     } else {
       if (btn) { btn.innerHTML = '↻ Update Prices'; btn.disabled = false; }
@@ -1486,7 +1486,7 @@ function initRefreshBtn() {
     if (wb) { e.stopPropagation(); toggleWatchlistHD(wb.dataset.item); return; }
   });
 
-  // Mobile deal cards — watch toggle
+  // Mobile deal cards - watch toggle
   document.getElementById('dealsMobile')?.addEventListener('click', (e) => {
     const wb = e.target.closest('.item-watch-btn');
     if (wb) { e.stopPropagation(); e.preventDefault(); toggleWatchlistHD(wb.dataset.item); }
@@ -1534,7 +1534,7 @@ function initRefreshBtn() {
   }
 })();
 
-// (Notification bell retired — the validate pill is the single "data needs
+// (Notification bell retired - the validate pill is the single "data needs
 // attention" surface.)
 </script>
 

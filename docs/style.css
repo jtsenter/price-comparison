@@ -68,7 +68,7 @@ header {
   z-index: 1000;
   box-shadow: var(--shadow-sm);
 }
-/* Card view: nothing in the header helps while browsing cards — let it scroll
+/* Card view: nothing in the header helps while browsing cards - let it scroll
    away instead of eating 60px of every screen. (app.js sets the body class.) */
 body.pw-cardview header { position: static; }
 .header-inner {
@@ -95,7 +95,7 @@ body.pw-cardview header { position: static; }
   color: var(--text);
   letter-spacing: -0.3px;
   /* Wordmark retired on desktop too (user: header real estate is too tight).
-     The W/C chips stay — they're the home link on every sub-page. */
+     The W/C chips stay - they're the home link on every sub-page. */
   display: none;
 }
 
@@ -121,15 +121,15 @@ nav a.active { background: var(--bg); color: var(--text); font-weight: 600; }
 .header-div { width: 1px; height: 24px; background: var(--border); flex-shrink: 0; margin: 0 2px; }
 
 /* Header action buttons match the 38px search-box height (they were ~28px, so
-   the top bar looked ragged). MUST NOT set `display` — .btn is already
+   the top bar looked ragged). MUST NOT set `display` - .btn is already
    inline-flex/centred, and forcing display here re-showed every button the
    mobile media query hides via display:none (the desktop dup 🔥/👁 AND the
    mobile nav-destination/fire leak). Height only; centring comes from .btn. */
 header .header-right .btn-icon { height: 38px; min-width: 38px; justify-content: center; }
 
 /* Validate: a quiet pill between the search box and the icon cluster (only
-   rendered when there are prices to review). Deliberately low-key — ghost
-   chrome, muted text — so it's findable without shouting for attention. */
+   rendered when there are prices to review). Deliberately low-key - ghost
+   chrome, muted text - so it's findable without shouting for attention. */
 .validate-pill {
   display: inline-flex; align-items: center; gap: 6px;
   height: 38px; padding: 0 12px; flex-shrink: 0;
@@ -143,7 +143,7 @@ header .header-right .btn-icon { height: 38px; min-width: 38px; justify-content:
 /* Icon-only nav destinations in the header action cluster (Hot Deals, Basket,
    Watchlist). Same ghost-button chrome as the utility buttons beside them, but
    each destination keeps a small colour identity so they read at a glance.
-   Hidden on mobile — the bottom tab bar covers navigation there (except the
+   Hidden on mobile - the bottom tab bar covers navigation there (except the
    Watchlist eye, which stays: it's the only mobile entry to that filter). */
 .nav-icon-btn { text-decoration: none; }
 .nav-icon-btn svg { display: block; }
@@ -154,7 +154,7 @@ header .header-right .btn-icon { height: 38px; min-width: 38px; justify-content:
 .nav-icon-btn.here.nav-hot      { background: rgba(220,38,38,.10); border-color: rgba(220,38,38,.35); }
 .nav-icon-btn.here.nav-basket   { background: rgba(0,132,61,.10);  border-color: rgba(0,132,61,.35); }
 
-/* Standalone home link on the far left of every page except index — an
+/* Standalone home link on the far left of every page except index - an
    unboxed quiet icon next to the brand, not another button in the cluster. */
 .home-link {
   display: inline-flex; align-items: center; justify-content: center;
@@ -382,7 +382,7 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
   content: "·"; margin-right: 12px; color: var(--text-soft);
 }
 
-/* Per-kg filter pill — cycles all → only groups → hide groups. Out of its dev-trial
+/* Per-kg filter pill - cycles all → only groups → hide groups. Out of its dev-trial
    dress: styled like every other filter pill, with teal accents matching the $/kg
    badges the groups use. Hidden on mobile (no cycle control there; groups always show). */
 #perkgDevBtn svg { color: #0F6E56; }
@@ -413,9 +413,9 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
 .alt-store.coles { background: var(--coles); }
 :root[data-theme="dark"] .alt-hint b { color: #34D399; }
 
-/* ── Variant groups (per-kg comparison) — inline rows + full-width expand panel ── */
+/* ── Variant groups (per-kg comparison) - inline rows + full-width expand panel ── */
 /* Collapsed group row: a normal product row; the whole row toggles the panel.
-   (The 2px accent frame lines from the trial period are gone — per-kg groups are a
+   (The 2px accent frame lines from the trial period are gone - per-kg groups are a
    shipped feature now and read like ordinary rows; the $/kg badge and chevron are
    enough to mark them.) */
 .vg-group-row { cursor: pointer; }
@@ -428,11 +428,11 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
 
 /* Expanded panel = a SPEECH BUBBLE hanging off the group row above: indented,
    bordered, with a caret pointing up at the row. The shape itself says "this
-   belongs to that row — click the row again to close". Not clickable (only
-   the group header row toggles — see the tbody click handler). */
+   belongs to that row - click the row again to close". Not clickable (only
+   the group header row toggles - see the tbody click handler). */
 .vg-panel-row > td { padding: 0 0 12px !important; background: transparent; border-bottom: 1px solid var(--border); cursor: default; }
 /* The panel lives in a full-width colspan cell, so on a wide (overflowing) table its
-   right half — the Coles column — fell off-screen. Pin it to the left of the scroll
+   right half - the Coles column - fell off-screen. Pin it to the left of the scroll
    viewport and size it to the visible width so both stores stay on screen; the main
    table columns still scroll left of it. --pw-panelw is set to the table-wrap's
    clientWidth in JS (renderTableHead). */
@@ -456,7 +456,7 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
 .vg-panel-winner.ww { background: rgba(0,132,61,.13); color: #15803d; }
 .vg-panel-winner.coles { background: rgba(185,28,28,.12); color: #b91c1c; }
 /* minmax(0,1fr): a bare 1fr's min is auto, so ONE long product name silently
-   widened that store's whole column — the boxes must stay equal and names
+   widened that store's whole column - the boxes must stay equal and names
    ellipsize instead. */
 .vg-panel-cols { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 18px; }
 .vg-panel-store { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; }
@@ -487,7 +487,7 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 .vg-pv-fetch { flex-shrink: 0; padding: 3px 8px !important; font-size: 12px !important; }
 .vg-panel-note { margin-top: 10px; font-size: 11px; color: var(--text-soft); }
 
-/* Category edit modal — two independent columns (Woolworths | Coles) */
+/* Category edit modal - two independent columns (Woolworths | Coles) */
 .cat-edit-note { font-size: 12px; color: var(--text-soft); margin: 10px 0 0; }
 .cat-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
 .cat-col { display: flex; flex-direction: column; min-width: 0; }
@@ -529,7 +529,7 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 
 /* Mobile variant group cards */
 /* Block flow like every other .mobile-card, so the shared 8px mc-top/mc-bar/
-   mc-prices margins collapse identically — flex+gap here made group cards'
+   mc-prices margins collapse identically - flex+gap here made group cards'
    row spacing 26/18px while normal cards sat at 8/8. */
 .vg-mobile-card { cursor: pointer; }
 .vgm-head { display: flex; align-items: center; gap: 8px; }
@@ -545,7 +545,7 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 
 /* Per-kg mobile card markers (card otherwise looks like a normal mobile card). */
 /* Expand/collapse is an explicit button (tap-on-card now toggles the basket,
-   matching normal cards) — sized for a thumb, not just the glyph. It sits at
+   matching normal cards) - sized for a thumb, not just the glyph. It sits at
    the end of the prices row (next to the Coles column), not in the icon row. */
 .vgm-chevron-btn {
   border: 1px solid var(--border-strong); background: var(--card); color: var(--text-mid);
@@ -557,8 +557,8 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 .vgm-kg-suffix { font-size: 11px; font-weight: 400; color: var(--text-soft); margin-left: 1px; }
 
 /* Mobile per-kg product rows: a 2-line grid so long product names wrap (no harsh
-   ellipsis on a phone), the pack price sits quietly under the name, and the $/kg —
-   the metric that matters — is large and right-aligned. */
+   ellipsis on a phone), the pack price sits quietly under the name, and the $/kg -
+   the metric that matters - is large and right-aligned. */
 .vgm-store-sec .vg-pv {
   display: grid;
   grid-template-columns: 34px 1fr auto auto;
@@ -574,7 +574,7 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 
 /* ── Category tabs ───────────────────────────────────────────── */
 /* .tabs-row pairs the scrolling category tabs with the table's columns chooser
-   (moved here from the site header — it configures the table, so it sits with
+   (moved here from the site header - it configures the table, so it sits with
    the table). The chooser keeps its header ids so app.js wiring is untouched. */
 .tabs-row { display: flex; align-items: flex-start; gap: 8px; }
 .tabs-row .category-tabs { flex: 1; min-width: 0; }
@@ -807,7 +807,7 @@ tbody tr:nth-child(even) { background: #FAFBFC; }
 tbody tr:hover { background: #FAFBFD; }
 tbody tr.row-flash { animation: row-flash 1s ease-out; }
 
-/* Compact rows are the ONLY density now (the toggle is gone) — tighter padding
+/* Compact rows are the ONLY density now (the toggle is gone) - tighter padding
    and a smaller thumbnail cut row height ~25% without hiding any information. */
 td { padding: 5px 12px; vertical-align: middle; }
 
@@ -916,7 +916,7 @@ tr:hover .item-edit-btn { opacity: 1; }
   margin-top: 4px;
 }
 
-/* History button for the trend bar — price history is a headline feature, so
+/* History button for the trend bar - price history is a headline feature, so
    this is an ALWAYS-VISIBLE clock icon (was a hover-revealed text link nobody
    discovered). In the table it pins to the right edge of the trend cell;
    elsewhere (card view) it flows inline. */
@@ -935,7 +935,7 @@ tr:hover .item-edit-btn { opacity: 1; }
 .price-bar-manage .pbm-txt { display: none; }
 .price-bar-manage:hover { color: var(--ww); }
 #tableBody .trend-cell .price-bar-manage {
-  /* Centred on the coloured TRACK, not the whole cell — the bar block is
+  /* Centred on the coloured TRACK, not the whole cell - the bar block is
      track (top) + price labels (below), so a cell-centred icon floated
      between the two and read as misaligned. */
   position: absolute; right: 2px; top: calc(50% - 8px); transform: translateY(-50%);
@@ -994,7 +994,7 @@ tr:hover .item-edit-btn { opacity: 1; }
 .price-per100 { font-size: 10px; color: var(--text-soft); margin-top: 1px; opacity: 0.8; }
 .price-link { color: inherit; text-decoration: none; }
 .price-link:hover { color: var(--ww); text-decoration: underline; }
-/* A missing-value placeholder ("—") sits alone in its cell with nothing else to
+/* A missing-value placeholder ("-") sits alone in its cell with nothing else to
    align against, so it's centered regardless of that column's real-value
    alignment (e.g. WW/Coles totals are left-aligned when present). display:block
    makes it fill the table cell so text-align:center has a box to center within;
@@ -1002,7 +1002,7 @@ tr:hover .item-edit-btn { opacity: 1; }
    content, so this doesn't disturb that column's flex justify-content:flex-end. */
 .no-data { color: var(--text-soft); font-size: 13px; display: block; text-align: center; }
 
-/* Symmetric price highlighting — both green when cheapest */
+/* Symmetric price highlighting - both green when cheapest */
 .cell-ww .price-main,
 .cell-coles .price-main { color: var(--ww); font-weight: 800; }
 
@@ -1041,7 +1041,7 @@ tr:hover .item-edit-btn { opacity: 1; }
 
 .saving-cell { font-size: 13px; color: var(--green); font-weight: 700; }
 
-/* Per-item refresh button — always in DOM, opacity toggle */
+/* Per-item refresh button - always in DOM, opacity toggle */
 .saving-row { display: flex; align-items: center; justify-content: flex-end; }
 .actions-th { width: 44px; min-width: 44px; padding: 0 !important; font-size: 9px; text-align: center; }
 .actions-cell { width: 44px; min-width: 44px; padding: 0 8px !important; text-align: center; }
@@ -1361,7 +1361,7 @@ th.sort-active { color: var(--text); }
 }
 .trophy-icon:hover::after { opacity: 1; }
 
-/* Row prefix that marks the pill rows as FILTERS acting on the table below —
+/* Row prefix that marks the pill rows as FILTERS acting on the table below -
    users confused the "Deals only" filter pill with the Hot Deals PAGE. */
 .filter-row-label {
   display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0;
@@ -1382,7 +1382,7 @@ th.sort-active { color: var(--text); }
   border-radius: 1px;
   flex-shrink: 0;
 }
-/* Mobile frequency dropdown — hidden on desktop (pills are used instead) */
+/* Mobile frequency dropdown - hidden on desktop (pills are used instead) */
 .freq-select { display: none; }
 
 /* ── Units column ─────────────────────────────────────────────── */
@@ -1456,7 +1456,7 @@ th.sort-active { color: var(--text); }
   color: #fff;
 }
 
-/* Colored filter & nav icons — fire (red-orange), archive (violet), watchlist (sky).
+/* Colored filter & nav icons - fire (red-orange), archive (violet), watchlist (sky).
    When a pill is active its background fills in, so the icon flips to white. */
 nav a[href="hot-deals.html"] svg,
 #bottomTabBar a[href="hot-deals.html"] svg,
@@ -1502,7 +1502,7 @@ nav a[href="hot-deals.html"] svg,
   color: var(--text);
 }
 
-/* Mobile-only Hot Deals + Watchlist header buttons — icons are coloured at rest
+/* Mobile-only Hot Deals + Watchlist header buttons - icons are coloured at rest
    (orange flame, blue eye) to match the desktop pills; the button fills with a
    tint when the filter is active so the toggled state reads clearly. */
 .mobile-hot-btn, .mobile-watch-btn { display: none; }
@@ -1877,7 +1877,7 @@ td.priority-cell { text-align: center; }
 .more-dropdown-item svg { flex-shrink: 0; color: var(--text-mid); }
 .more-dropdown-sep { height: 1px; background: var(--border); margin: 4px 0; }
 
-/* Options menu — theme + density segmented controls */
+/* Options menu - theme + density segmented controls */
 .options-dropdown { min-width: 200px; padding: 10px; }
 .options-group + .options-group { margin-top: 12px; }
 .options-divider { border-top: 1px solid var(--border); margin: 10px -10px 4px; }
@@ -1935,11 +1935,11 @@ td.priority-cell { text-align: center; }
      the left nav and the desktop nav-icon cluster to give the search room. */
   #mainNav, .nav-icon-btn, .header-div, .validate-pill { display: none; }
   .header-search { min-width: 60px; }
-  /* The "Category" row label is desktop-only — on a phone it just steals width
+  /* The "Category" row label is desktop-only - on a phone it just steals width
      from the scrolling category tabs. (Desktop keeps it as a section cue.) */
   .tabs-row .filter-row-label { display: none; }
   /* Hot Deals has no search box, so once the nav cluster/options/trail button
-     are hidden above, its header row is just an idle home+logo — the bottom
+     are hidden above, its header row is just an idle home+logo - the bottom
      tab bar already covers navigation. Drop the whole row; the scrape-progress
      strip (a sibling, not inside .header-inner) still shows when relevant. */
   header[data-page="hot-deals"] .header-inner { display: none; }
@@ -1947,7 +1947,7 @@ td.priority-cell { text-align: center; }
 
 /* Narrower desktop widths (e.g. a 1366px screen at 125% OS scaling ≈ 1092 CSS px):
    the comfortable 16px horizontal cell padding pushed the dense table into a
-   horizontal scrollbar — the long-standing "only good at 90% zoom" problem. Trim the
+   horizontal scrollbar - the long-standing "only good at 90% zoom" problem. Trim the
    horizontal padding (body + header + sticky-header ghost, kept in sync so columns
    stay aligned) so every column fits at 100% without hiding price bars or per-unit. */
 @media (min-width: 641px) and (max-width: 1180px) {
@@ -1974,7 +1974,7 @@ td.priority-cell { text-align: center; }
 .item-watch-btn:hover { opacity: 1; }
 .item-watch-btn.active { color: var(--ww); opacity: 1; }
 
-/* Desktop table rows: the 👁/↻ pair is ONE tidy hover cluster — same circular
+/* Desktop table rows: the 👁/↻ pair is ONE tidy hover cluster - same circular
    chrome as each other, hidden at rest (a faint eye on all 250 rows was pure
    noise). Only a WATCHED item keeps its eye lit. */
 #tableBody .actions-cell .item-watch-btn {
@@ -2064,7 +2064,7 @@ td.priority-cell { text-align: center; }
 }
 .toast-undo-btn:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
 
-/* ── Different item modal — priority badge ────────────────────── */
+/* ── Different item modal - priority badge ────────────────────── */
 .diff-item-priority-badge {
   display: inline-block;
   font-size: 12px;
@@ -2082,7 +2082,7 @@ td.priority-cell { text-align: center; }
 /* ── Search bar ───────────────────────────────────────────────── */
 /* No margin: the search lives in the header flex row now, and a leftover bottom
    margin shifted it 4px above the buttons' centreline (the "misaligned heights"
-   bug — it overrode .header-search's margin:0 by being later in the file). */
+   bug - it overrode .header-search's margin:0 by being later in the file). */
 .search-wrap {
   position: relative;
   display: flex;
@@ -2101,7 +2101,7 @@ td.priority-cell { text-align: center; }
   box-sizing: border-box;
 }
 #searchInput:focus { border-color: var(--accent); }
-/* Hide the native type=search clear button — we render our own .search-clear ✕. */
+/* Hide the native type=search clear button - we render our own .search-clear ✕. */
 #searchInput::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
 .search-clear {
   position: absolute;
@@ -2133,7 +2133,7 @@ td.priority-cell { text-align: center; }
      sort-chips toolbar (it read as too prominent in the header); Basket and
      Hot Deals live in the bottom tab bar. */
 
-  /* Reclaim header space on mobile: the W/C brand chips (redundant — the bottom
+  /* Reclaim header space on mobile: the W/C brand chips (redundant - the bottom
      tab bar's Prices tab is home) and the notification bell (never wanted on a
      phone) are hidden. */
   header .brand { display: none; }
@@ -2200,7 +2200,7 @@ td.priority-cell { text-align: center; }
     transition: box-shadow 0.15s;
   }
   .mobile-card:active        { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-  /* Cards are focusable role=button toggles — keyboard users need a visible ring */
+  /* Cards are focusable role=button toggles - keyboard users need a visible ring */
   .mobile-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .mobile-card.cheaper-ww    { border-left-color: var(--ww); }
   .mobile-card.cheaper-coles { border-left-color: var(--coles); }
@@ -2248,7 +2248,7 @@ td.priority-cell { text-align: center; }
   /* Trend bar (re-enable; 700px rule hides .price-bar-outer globally) */
   .mc-bar { margin: 8px 0 0; } /* same 8px rhythm as mc-top/mc-prices gaps */
   /* The group card's trend bar reuses the desktop table-cell markup, whose
-     wrapper carries its own top margin — flatten it so group cards keep the
+     wrapper carries its own top margin - flatten it so group cards keep the
      same 8px row rhythm as normal cards. */
   .mc-bar .price-bar-outer { margin: 0; }
   .mc-bar .price-bar-outer { display: block !important; }
@@ -2257,7 +2257,7 @@ td.priority-cell { text-align: center; }
   .mc-bar .price-marker { width: 12px; height: 12px; top: -4px; }
   .mc-bar .price-marker-off-left,
   .mc-bar .price-marker-off-right { width: 12px; height: 12px; }
-  /* buildPriceBar's own History button stays desktop-only — the mobile card has a
+  /* buildPriceBar's own History button stays desktop-only - the mobile card has a
      clock icon in its icon row instead (.mc-hist-btn, next to 🔥/👁), so the min/max
      labels keep the full bar width. */
   .mc-bar .price-bar-manage { display: none; }
@@ -2312,7 +2312,7 @@ td.priority-cell { text-align: center; }
   .mc-watch-chip { padding: 5px 10px; }
   .mc-watch-chip.active { background: #D97706; border-color: #D97706; }
 
-  /* View toggle (detailed ⇄ compact) — icon only, tinted so it stays visible */
+  /* View toggle (detailed ⇄ compact) - icon only, tinted so it stays visible */
   #mcViewToggle {
     display: inline-flex; align-items: center; justify-content: center;
     width: 38px; height: 34px; border-radius: 9px;
@@ -2325,7 +2325,7 @@ td.priority-cell { text-align: center; }
 
   /* Compact single-line card. Prices sit in two FIXED-width columns so the W
      numbers line up under each other and the C numbers under each other, like a
-     table — regardless of $8.00 vs $18.00 vs $148.00 (tabular-nums keeps digit
+     table - regardless of $8.00 vs $18.00 vs $148.00 (tabular-nums keeps digit
      widths equal, and the number is pushed to the column's right edge). */
   .mobile-card-compact { padding: 9px 12px; display: flex; align-items: center; gap: 8px; }
   .mcc-name { font-size: 13px; font-weight: 600; color: var(--text); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -2340,7 +2340,7 @@ td.priority-cell { text-align: center; }
   .mobile-card-compact .mc-icons { gap: 2px; }
 }
 
-/* Floating "+ Basket (n)" button — appears when ≥1 mobile card is selected */
+/* Floating "+ Basket (n)" button - appears when ≥1 mobile card is selected */
 #basketFab {
   position: fixed; right: 16px; bottom: 18px; z-index: 200;
   display: none; align-items: center; gap: 6px;
@@ -2357,7 +2357,7 @@ td.priority-cell { text-align: center; }
 /* ─────────────────────────────────────────────────────────────────────────── */
 
 /* ── 1 · Color-blind-safe winner checkmark ─────────────────────────────── */
-/* Cheaper marker — a filled circle "winner stamp" (clearer than a bare ✓):
+/* Cheaper marker - a filled circle "winner stamp" (clearer than a bare ✓):
    green disc for Woolworths, red for Coles, white check inside. */
 .cell-ww .price-main::after,
 .cell-coles .price-main::after,
@@ -2389,7 +2389,7 @@ td.priority-cell { text-align: center; }
 /* Scoped to the MAIN table's tbody (#tableBody): hot-deals' product cells also use
    .item-name, and an unscoped sticky left:36px displaced them 12px right (its table
    has no 36px checkbox column), painting their opaque background over the first
-   12px of the neighbouring column — clipped trend markers, immune to col-resize. */
+   12px of the neighbouring column - clipped trend markers, immune to col-resize. */
 #tableBody td.check-cell { position: sticky; left: 0; z-index: 31; background: var(--card); }
 #tableBody td.item-name {
   position: sticky; left: 36px; z-index: 30;
@@ -2461,7 +2461,7 @@ td.priority-cell { text-align: center; }
   /* Extra padding when FAB is also showing */
   #mobileCards.fab-visible { padding-bottom: 80px; }
 
-  /* Hide the top (header) nav — replaced by the bottom tab bar. Must NOT match
+  /* Hide the top (header) nav - replaced by the bottom tab bar. Must NOT match
      #bottomTabBar itself: it's also a <nav>, and a bare `nav !important` beat the
      id rule and silently hid the tab bar on every page. */
   header nav { display: none !important; }
@@ -2474,7 +2474,7 @@ td.priority-cell { text-align: center; }
   .dm-watch         { min-width: 44px; min-height: 44px; }
   .store-filter-btn { padding: 7px 12px; min-height: 36px; font-size: 13px; }
 
-  /* Card icon row: 🔥 / history / 👁 were 16 / 30 / 44px tall — a bare emoji, a
+  /* Card icon row: 🔥 / history / 👁 were 16 / 30 / 44px tall - a bare emoji, a
      bordered box and an oversized button, all different. Unify to equal 34px
      squares, centred, so they read as one tidy control strip. */
   .mc-icons > .mc-hot,
@@ -2488,17 +2488,17 @@ td.priority-cell { text-align: center; }
   .mc-icons > .mc-hot { font-size: 18px; }
 
   /* The frequency dropdown is relocated into the category row by buildCategoryTabs,
-     and every other control here is hidden on mobile — so this row collapses to
+     and every other control here is hidden on mobile - so this row collapses to
      nothing (the Refresh Archived button is the only thing that can re-expand it). */
   .priority-filter { flex-direction: column; align-items: stretch; gap: 0; padding: 0; }
-  /* Pills row is empty on mobile — all filters live in the header / dropdown / sort row.
+  /* Pills row is empty on mobile - all filters live in the header / dropdown / sort row.
      🔥 + 👁 are header icons, Archived is in the Weekly ▾ dropdown, and unpriced
      items are hidden by default so the "Priced only" toggle is unnecessary here. */
   .priority-pill.fire-pill,
   .priority-pill.archive-pill,
   .priority-pill.watchlist-pill,
   .prices-only-btn { display: none; }
-  /* Store cycle button only ever filtered Hot Deals — dropped from mobile entirely */
+  /* Store cycle button only ever filtered Hot Deals - dropped from mobile entirely */
   .store-cycle-btn { display: none !important; }
   /* Frequency dropdown now lives as the first chip in the category row */
   .freq-select {
@@ -2512,7 +2512,7 @@ td.priority-cell { text-align: center; }
   }
   .priority-pill.freq-pill { display: none; }
   .priority-filter .filter-separator { display: none; }
-  /* Every pill above is hidden individually, so hide the container too —
+  /* Every pill above is hidden individually, so hide the container too -
      its padding otherwise renders as a stray 2px strip above the tabs. */
   .priority-pills { display: none; }
   /* Scrapes are a desktop action: they need the GitHub token (not configured on
@@ -2524,7 +2524,7 @@ td.priority-cell { text-align: center; }
 }
 
 /* ── 8 · Dark mode ─────────────────────────────────────────────────────── */
-/* Dark theme — opt-in via <html data-theme="dark">. Light is the default; a
+/* Dark theme - opt-in via <html data-theme="dark">. Light is the default; a
    FOUC-preventing head script resolves the stored preference (light/dark/auto)
    to this attribute before first paint. */
 :root[data-theme="dark"] {
@@ -2546,7 +2546,7 @@ td.priority-cell { text-align: center; }
   --shadow:    0 2px 8px rgba(0,0,0,.5);
   --shadow-md: 0 4px 16px rgba(0,0,0,.55);
 
-  /* Table rows (sticky-cell backgrounds scoped to #tableBody, same as light mode —
+  /* Table rows (sticky-cell backgrounds scoped to #tableBody, same as light mode -
      hot-deals' .item-name cells are NOT sticky and must not get opaque overrides) */
   & tbody tr:nth-child(even)              { background: #182030; }
   & #tableBody tr:nth-child(even) td.item-name,
@@ -2600,7 +2600,7 @@ td.priority-cell { text-align: center; }
   /* Bottom tab bar */
   & #bottomTabBar  { background: var(--card); border-top-color: var(--border); }
 
-  /* Checkmarks in dark — use softer colors */
+  /* Checkmarks in dark - use softer colors */
   & .cell-ww .price-main::after,
   & .mc-price.cheaper::after   { background: #16a34a; color: #fff; }
   & .cell-coles .price-main::after,
