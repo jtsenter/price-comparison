@@ -108,7 +108,11 @@
     .sl-savings-panel .saving-amount { font-size: 16px; }
     .sl-savings-panel .saving-icon { width: 22px; font-size: 16px; }
     .sl-savings-panel .saving-icon .store-chip { width: 22px; height: 22px; font-size: 12px; }
-    .sl-savings-panel .bar-ribbon-chips { justify-content: center; gap: 6px; border-top: 1px solid var(--border); padding-top: 6px; margin-top: 2px; }
+    .sl-savings-panel .bar-ribbon-chips { justify-content: center; gap: 6px; border-top: 1px solid var(--border); padding-top: 6px; margin-top: 2px; flex-wrap: nowrap; }
+    /* The middle hero panel is too narrow (~380px) to fit all three chips WITH
+       their words on one line. The W/C/= icon + count already says it, so drop
+       the redundant words here (as mobile does) and keep them in the tooltip. */
+    .sl-savings-panel .bar-ribbon-chips .chip-word { display: none; }
     .saving-line.split-total-line { background: #F0FDF4; border: 1px solid #D1FAE5; border-radius: 10px; padding: 4px 9px; }
     /* ── Save ribbon (replaces stats bar) ── */
     .bar-ribbon {
@@ -1001,9 +1005,9 @@ async function boot() {
     const wwOnlyCount = displayItems.filter(i => i.cheaper_store === 'woolworths').length;
     const coOnlyCount = displayItems.filter(i => i.cheaper_store === 'coles').length;
     const ribbonChips = [
-      wwOnlyCount > 0    ? `<span class="bar-store-chip ww-chip"><span class="store-chip ww">W</span>${wwOnlyCount}<span class="chip-word"> at Woolworths</span></span>` : '',
-      equalItems.length > 0 ? `<span class="bar-store-chip eq-chip">${equalItems.length}<span class="chip-word"> equal-price</span></span>` : '',
-      coOnlyCount > 0    ? `<span class="bar-store-chip co-chip"><span class="store-chip coles">C</span>${coOnlyCount}<span class="chip-word"> at Coles</span></span>` : '',
+      wwOnlyCount > 0    ? `<span class="bar-store-chip ww-chip" title="${wwOnlyCount} cheaper at Woolworths"><span class="store-chip ww">W</span>${wwOnlyCount}<span class="chip-word"> at Woolworths</span></span>` : '',
+      equalItems.length > 0 ? `<span class="bar-store-chip eq-chip" title="${equalItems.length} same price at both">${equalItems.length}<span class="chip-word"> equal-price</span></span>` : '',
+      coOnlyCount > 0    ? `<span class="bar-store-chip co-chip" title="${coOnlyCount} cheaper at Coles"><span class="store-chip coles">C</span>${coOnlyCount}<span class="chip-word"> at Coles</span></span>` : '',
     ].join('');
 
     // Savings shown with the SAME "Basket saving / Split shop" component as the
