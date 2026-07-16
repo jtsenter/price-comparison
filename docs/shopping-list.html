@@ -269,9 +269,10 @@
     .btn-primary { background: var(--ww); color: #fff; border-color: var(--ww); box-shadow: 0 1px 3px rgba(0,132,61,0.35); }
     .btn-primary:hover { background: #006B31; transform: translateY(-1px); }
 
-    .sl-topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
-    /* Quiet one-liner ("Showing N items…") - replaced the shouty yellow banner */
-    .sl-note { font-size: 13px; color: var(--text-soft); margin-bottom: 14px; }
+    .sl-topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+    /* Quiet one-liner ("N hot deals" / "N items") - sits inline in the topbar,
+       on the same line as the One store / Split shop toggle. */
+    .sl-note { font-size: 13px; color: var(--text-soft); }
     .sl-note strong { color: var(--text-mid); }
     .btn-outline-danger { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid #FCA5A5; background: transparent; color: #DC2626; transition: all .15s; white-space: nowrap; }
     .btn-outline-danger:hover { background: #FEF2F2; border-color: #DC2626; }
@@ -389,7 +390,9 @@
       .sl-split-seg .sl-mode-btn { padding: 10px 8px; }
       #saveBasketBtn, #removeAllBtn { justify-content: center; }
       #smResetBtn { grid-column: 1 / -1; justify-content: center; }
-      .sl-note { text-align: center; }
+      /* Note spans the full grid row on mobile (the toggles already take the
+         whole width), so it reads as its own centered line under them. */
+      .sl-note { grid-column: 1 / -1; text-align: center; }
       /* One-line savings + tinted Split shop row come from the shared
          .sl-savings-panel base styles; mobile only shortens the chip wording */
       .chip-word { display: none; }
@@ -475,7 +478,7 @@
 </head>
 <body>
 <header data-page="shopping-list"></header>
-<script src="header.js?v=7"></script>
+<script src="header.js?v=8"></script>
 
 <main id="main">
   <div class="empty">Loading…</div>
@@ -901,10 +904,10 @@ async function boot() {
       <div class="sl-topbar">
         ${splitSegHtml()}
         ${segHtml()}
+        <div class="sl-note">📋 ${filterNoteHtml}</div>
         <div class="sl-flexspacer" style="flex:1"></div>
         <button id="smResetBtn" class="btn-outline-danger">↺ Reset picks</button>
       </div>
-      <div class="sl-note">📋 ${filterNoteHtml}</div>
       <div class="sm-progress-card">
         <div class="sm-progress-top">
           <span class="sm-count"><span id="smPicked">0</span> of <span id="smTotal">0</span> picked</span>
@@ -1022,11 +1025,11 @@ async function boot() {
       <div class="sl-topbar">
         ${splitSegHtml()}
         ${segHtml()}
+        <div class="sl-note">📋 ${filterNoteHtml}</div>
         <div class="sl-flexspacer" style="flex:1"></div>
         <button id="saveBasketBtn" class="btn-outline-save">🔒 Save basket</button>
         <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
       </div>
-      <div class="sl-note">📋 ${filterNoteHtml}</div>
 
       <div class="store-summary-wrap">
         <div class="store-cards-grid">

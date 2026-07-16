@@ -341,7 +341,7 @@
 <body>
 
 <header data-page="hot-deals"></header>
-<script src="header.js?v=7"></script>
+<script src="header.js?v=8"></script>
 
 <div class="deals-hero">
   <div class="deals-hero-title">🔥 Hot Deals</div>
@@ -1449,10 +1449,6 @@ async function pollForCompletionHD(user, repo, token, dispatchedAt) {
   setTimeout(findRun, 8000);
 }
 
-function initRefreshBtn() {
-  document.getElementById('refreshBtn')?.addEventListener('click', triggerRefreshHD);
-}
-
 // ── Init ───────────────────────────────────────────────────────────────────────
 
 (async () => {
@@ -1495,7 +1491,6 @@ function initRefreshBtn() {
     localStorage.setItem('pw_sl_handoff', JSON.stringify({ items: names, note: 'hot deals', quantities }));
   });
   initTooltip();
-  initRefreshBtn();
   initHdColChooser();
   document.getElementById('hdResetColsBtn')?.addEventListener('click', resetHdCols);
 
@@ -1528,7 +1523,7 @@ function initRefreshBtn() {
   });
   document.getElementById('scrapeStripRetry')?.addEventListener('click', () => {
     _progressDismissed = false;
-    document.getElementById('refreshBtn')?.click();
+    triggerRefreshHD(); // the header's Update Prices button was removed; trigger directly
   });
 
   renderScrapeStrip(_data);

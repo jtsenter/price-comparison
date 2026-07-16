@@ -92,9 +92,10 @@
            a('basket', 'shopping-list.html', 'Basket', SVG_CART, 'basketNavLink');
   }
 
-  /* Standalone home link, far left, on every page EXCEPT index (you're
-     already home there). */
-  var HOME = page === 'index' ? ''
+  /* Standalone home link, far left. Omitted on index (already home) and on
+     hot-deals / basket (the PriceWatch brand logo beside it already links home,
+     so a separate house icon there was redundant clutter). */
+  var HOME = (page === 'index' || page === 'hot-deals' || page === 'shopping-list') ? ''
     : '<a class="home-link" href="index.html" title="Back to the main page">' + SVG_HOME + '</a>';
 
   /* Validate pill - shown by page JS when flagged prices exist. Identical slot
@@ -138,14 +139,19 @@
       '</div>' +
     '</div>';
 
-  /* Trailing primary action - the ONE allowed per-page difference besides
-     search. */
+  /* Trailing primary action. Hot Deals no longer triggers scrapes from here
+     (that lives on index); basket's Print moved to PRINT_LEAD (before the nav
+     cluster) so the two headers read identically apart from that one button. */
   var TRAIL =
-    page === 'index'         ? '<button class="btn btn-primary btn-icon" id="refreshBtn" title="Update prices">' + SVG_REF + '</button>' :
-    page === 'hot-deals'     ? '<button class="btn btn-primary" id="refreshBtn">' + SVG_REF + ' Update Prices</button>' :
-    page === 'shopping-list' ? '<button class="btn btn-primary" onclick="window.print()">🖨 Print</button>' :
-    page === 'scrape-log'    ? '<button class="btn btn-ghost" id="slRefreshBtn" title="Reload log">' + SVG_REF + ' Refresh</button>' :
+    page === 'index'      ? '<button class="btn btn-primary btn-icon" id="refreshBtn" title="Update prices">' + SVG_REF + '</button>' :
+    page === 'scrape-log' ? '<button class="btn btn-ghost" id="slRefreshBtn" title="Reload log">' + SVG_REF + ' Refresh</button>' :
     '';
+
+  /* Basket's Print button, placed to the LEFT of the nav cluster so the basket
+     and Hot Deals headers are otherwise pixel-identical. */
+  var PRINT_LEAD = page === 'shopping-list'
+    ? '<button class="btn btn-primary" onclick="window.print()" title="Print shopping list">🖨 Print</button>'
+    : '';
 
   var active =
     page === 'hot-deals' ? 'hot' :
@@ -165,7 +171,7 @@
     '<div class="header-inner">' +
       '<div class="header-left">' + HOME + BRAND + '</div>' +
       SEARCH +
-      '<div class="header-right">' + VALIDATE + navCluster(active) + OPTIONS + TRAIL + '</div>' +
+      '<div class="header-right">' + VALIDATE + PRINT_LEAD + navCluster(active) + OPTIONS + TRAIL + '</div>' +
     '</div>' + STRIP;
 
   /* ══ Behaviour owned by the header (runs on every page) ══════════════════ */
