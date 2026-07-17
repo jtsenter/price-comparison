@@ -22,7 +22,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=101" />
+  <link rel="stylesheet" href="style.css?v=102" />
 </head>
 <body>
 
@@ -42,8 +42,8 @@
   <div class="bt-right">
     <button class="bt-chip bt-archive">🗄 Archive</button>
     <div class="bt-basket-seg">
-      <button class="bt-chip bt-sl">🛒 Add to Basket</button>
-      <button class="bt-chip bt-lock" id="btLockBtn" title="Lock: save this selection as your basket so it survives page changes. Unlock: stop persisting it.">🔓</button>
+      <button class="bt-chip bt-sl" title="Add the selected items to your basket">🛒 Add to Basket</button>
+      <button class="bt-chip bt-rm" title="Remove the selected items from your basket">✕</button>
     </div>
   </div>
 </div>
@@ -111,7 +111,7 @@
       <span class="filter-separator"></span>
       <button class="priority-pill" id="perkgDevBtn" type="button" title="Cycle: show everything / only $/kg groups / hide $/kg groups"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16.5c0 1.5 1.5 3 3.5 3s3.5-1.5 3.5-3L19.5 9z"/><path d="M1 16.5c0 1.5 1.5 3 3.5 3s3.5-1.5 3.5-3L4.5 9z"/><path d="M12 3v18"/><path d="M3 7h18"/><path d="M19.5 9 12 5 4.5 9"/></svg> <span class="perkg-lbl">$/kg</span></button>
       <span class="filter-separator"></span>
-      <button class="priority-pill selected-pill" id="selectedPill" style="display:none">☑ Selected (<span id="selectedCount">0</span>)</button>
+      <button class="priority-pill selected-pill" id="selectedPill" style="display:none" title="Show only the items in your basket">🛒 In basket (<span id="selectedCount">0</span>)</button>
     </div>
   </div>
 
@@ -185,7 +185,7 @@
 
 </main>
 
-<button id="basketFab" aria-label="Add selected items to basket">＋ Basket (<span id="basketFabCount">0</span>)</button>
+<button id="basketFab" aria-label="View basket">🛒 Basket (<span id="basketFabCount">0</span>)</button>
 
 <!-- Settings modal -->
 <div class="modal-overlay" id="settingsModal">
@@ -388,7 +388,7 @@
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script src="name_map.js?v=52"></script>
 <script src="utils.js?v=69"></script>
-<script src="app.js?v=120"></script>
+<script src="app.js?v=121"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">

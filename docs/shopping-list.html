@@ -113,7 +113,13 @@
        their words on one line. The W/C/= icon + count already says it, so drop
        the redundant words here (as mobile does) and keep them in the tooltip. */
     .sl-savings-panel .bar-ribbon-chips .chip-word { display: none; }
-    .saving-line.split-total-line { background: #F0FDF4; border: 1px solid #D1FAE5; border-radius: 10px; padding: 4px 9px; }
+    /* Split-shop box: the split trip PRICE and what that trip SAVES live in one
+       tinted box (they were separated by Basket saving, which read ambiguously).
+       Inner lines pad 9px so content column-aligns with the 10px-padded lines
+       outside the box (9px + 1px box border = 10px). */
+    .split-total-line { background: #F0FDF4; border: 1px solid #D1FAE5; border-radius: 10px; }
+    .sl-savings-panel .split-total-line .saving-line { padding: 4px 9px; }
+    .split-total-line .saving-line + .saving-line { border-top-color: #D1FAE5; }
     /* ── Save ribbon (replaces stats bar) ── */
     .bar-ribbon {
       display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
@@ -286,9 +292,6 @@
     .sl-note strong { color: var(--text-mid); }
     .btn-outline-danger { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid #FCA5A5; background: transparent; color: #DC2626; transition: all .15s; white-space: nowrap; }
     .btn-outline-danger:hover { background: #FEF2F2; border-color: #DC2626; }
-    .btn-outline-save { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; border: 1.5px solid #93C5AA; background: transparent; color: var(--ww); transition: all .15s; white-space: nowrap; }
-    .btn-outline-save:hover { background: #F0FDF4; border-color: var(--ww); }
-    .btn-outline-save.locked { background: var(--ww); color: #fff; border-color: var(--ww); }
 
     .empty { text-align: center; padding: 60px 20px; color: var(--text-soft); }
     .empty a { color: var(--ww); text-decoration: underline; }
@@ -398,7 +401,7 @@
       .sl-mode-seg { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
       .sl-mode-btn { justify-content: center; }
       .sl-split-seg .sl-mode-btn { padding: 10px 8px; }
-      #saveBasketBtn, #removeAllBtn { justify-content: center; }
+      #removeAllBtn { justify-content: center; }
       #smResetBtn { grid-column: 1 / -1; justify-content: center; }
       /* Note spans the full grid row on mobile (the toggles already take the
          whole width), so it reads as its own centered line under them. */
@@ -477,7 +480,8 @@
       & .store-card-sl.coles.card-active { background: #450a0a; border-color: var(--coles); }
       & .bar-ribbon { background: var(--card); border-top-color: var(--border); }
       & .bar-optimal { background: #052e16; border-color: #14532d; }
-      & .saving-line.split-total-line { background: #052e16; border-color: #14532d; }
+      & .split-total-line { background: #052e16; border-color: #14532d; }
+      & .split-total-line .saving-line + .saving-line { border-top-color: #14532d; }
       & tbody tr:nth-child(even) { background: #182030; }
       & tfoot td { background: var(--bg); }
       & table { background: var(--card); }
@@ -590,59 +594,27 @@ async function boot() {
     Object.assign(analysis, Object.fromEntries(Object.entries(prioOv).map(([k, v]) => [k, { ...(analysis[k] || {}), priority: v }])));
   } catch {}
 
-  // Read handoff written by app.js exportShoppingList().
-  // Normally consume-once (cleared after reading). But while the basket is
-  // LOCKED we keep it persistent so it survives refreshes and so additions from
-  // the main page can append to it.
+  // The basket: a normal persistent cart (localStorage pw_sl_handoff, written
+  // by the main page's add/remove controls and by removals here). Nothing lands
+  // in it unless the user explicitly added it, and it stays until removed.
+  // (The old consume-once handoff + lock flag are retired - drop the flag.)
   let handoff = null;
-  try {
-    const raw = localStorage.getItem('pw_sl_handoff');
-    handoff = raw ? JSON.parse(raw) : null;
-    if (localStorage.getItem('pw_sl_locked') !== '1') localStorage.removeItem('pw_sl_handoff');
-  } catch {}
+  try { handoff = JSON.parse(localStorage.getItem('pw_sl_handoff') || 'null'); } catch {}
+  localStorage.removeItem('pw_sl_locked');
 
-  const activeItems = (data.items || []).filter(i => !i.archived);
+  // Match against ALL items, not just active ones: a per-kg group's cheapest
+  // variant can be an archived product the user deliberately added.
+  const basketNames = new Set(handoff?.items || []);
+  let displayItems = (data.items || []).filter(i => basketNames.has(i.list_item));
 
-  let displayItems;
-  if (handoff && Array.isArray(handoff.items)) {
-    // Explicit selection wins over the archive filter: a per-kg group can have an
-    // archived member as its cheapest variant (e.g. Chicken Roast Portions), and
-    // the user deliberately added it - so match against ALL items, not just active
-    // ones. (Bug: 4 items added, only 3 shown, because one was archived.)
-    const nameSet = new Set(handoff.items);
-    displayItems = (data.items || []).filter(i => nameSet.has(i.list_item));
-  } else {
-    // Fallback (arriving with no handoff): show everything active EXCEPT per-kg
-    // group members - the main table collapses those into one row per group, so
-    // dumping all ~50 raw variants here inflated the basket with duplicate
-    // chicken/mince/salmon products (most single-store, hence also swap-less).
-    const perkgMembers = perKgMemberNames();
-    displayItems = activeItems.filter(i => !perkgMembers.has(i.list_item));
-  }
+  // An empty basket renders the NORMAL screen - hero panels, toggle, empty
+  // tables - not a bare "go back" message.
 
-  // An empty basket (arriving via handoff, or after removing everything) still
-  // renders the NORMAL screen - hero panels, toggle, empty tables - not a bare
-  // "go back" message. Only bail when there's no basket context at all AND the
-  // fallback found nothing (broken data).
-  if (!displayItems.length && !handoff) {
-    main.innerHTML = '<div class="empty">No items found for this selection.</div>';
-    return;
-  }
-
-  // "Showing N …" caption - computed once and rendered in BOTH list and shopping
-  // mode, positioned UNDER the mode toggles. Previously it lived only in list
-  // mode and above the toggles, so switching to shopping mode dropped the line
-  // and the whole view jumped up.
-  // Singularise "items" in canned notes when N is 1 ("1 item (basket locked)").
-  // A function, not a boot-time const: row removals re-render and the count
-  // must track the live basket (a const showed "5 items" over an empty list).
-  const filterNoteHtml = () => {
-    const noteTxt = handoff?.note && displayItems.length === 1
-      ? handoff.note.replace(/\bitems\b/, 'item') : handoff?.note;
-    return noteTxt
-      ? `<strong>${displayItems.length}</strong> ${noteTxt}`
-      : `<strong>${displayItems.length}</strong> item${displayItems.length !== 1 ? 's' : ''}`;
-  };
+  // "N items in your basket" caption - rendered in BOTH list and shopping mode,
+  // positioned UNDER the mode toggles. A function, not a boot-time const: row
+  // removals re-render and the count must track the live basket.
+  const filterNoteHtml = () =>
+    `<strong>${displayItems.length}</strong> item${displayItems.length !== 1 ? 's' : ''} in your basket`;
 
   let equalStore = 'ww'; // split mode: which store equal-price items are assigned to
 
@@ -673,12 +645,11 @@ async function boot() {
   let wwSortKey = 'category', wwSortDir = 'asc';
   let colesSortKey = 'category', colesSortDir = 'asc';
 
-  // Rewrite the handoff to match what's on screen, so row removals survive the
-  // trip back to the main page (and refreshes while the basket is locked).
+  // Rewrite the stored basket to match what's on screen, so removals here
+  // persist (and the main page's ✓ marks stay in sync on the next visit).
   function persistBasket() {
     localStorage.setItem('pw_sl_handoff', JSON.stringify({
       items: displayItems.map(i => i.list_item),
-      note: handoff?.note || 'items',
       quantities: unitOv || {},
     }));
   }
@@ -723,13 +694,15 @@ async function boot() {
       const p = i.coles?.price ?? i.woolworths?.price;
       return p != null ? s + p * getUnits(i.list_item, unitOv, analysis) : s;
     }, 0);
-    // Optimal split: buy each item at whichever store is cheapest for it.
+    // Optimal split: buy each item at whichever store's STICKER price is lower.
+    // Deliberately not cheaper_store: that flag can be per-kg-based (a size-
+    // mismatched pair like a quarter cabbage vs a whole one), which made the
+    // "optimal" trip cost MORE than the cheaper single store - an impossible
+    // number once Split shop and its saving sat next to each other.
     const optimalTotal = displayItems.reduce((sum, i) => {
       const qty = getUnits(i.list_item, unitOv, analysis);
-      const best = i.cheaper_store === 'coles'
-        ? (i.coles?.price ?? i.woolworths?.price ?? 0)
-        : (i.woolworths?.price ?? i.coles?.price ?? 0);
-      return sum + best * qty;
+      const best = Math.min(i.woolworths?.price ?? Infinity, i.coles?.price ?? Infinity);
+      return sum + (best === Infinity ? 0 : best * qty);
     }, 0);
     // diff drives the ribbon chip state (cheaper / paying-more / equal).
     const diff = Math.abs(wwTotal - coTotal);
@@ -1037,14 +1010,19 @@ async function boot() {
     // (here). In split mode it follows the CURRENT plan (equal-price assignment
     // + row swaps); in one-store mode it's the optimal split.
     const splitShopVal = slSplit ? (wwSub + coSub) : optimalTotal;
+    // One tinted box pairs the split trip's PRICE with what that trip SAVES -
+    // "Split shop / Split saving" used to sit apart with Basket saving between
+    // them, and nothing said which number was a price and which a saving.
     const splitTotalHtml =
-      `<div class="saving-line split-total-line"><span class="saving-icon">🧾</span><div class="saving-text"><div class="saving-label">Split shop${infoIco('What the whole trip costs split across both stores - each item at its planned store (split mode) or its cheapest store.')}</div><span class="saving-amount">${fmt(splitShopVal)}</span></div></div>`;
+      `<div class="split-total-line">
+        <div class="saving-line"><span class="saving-icon">🧾</span><div class="saving-text"><div class="saving-label">Split shop${infoIco('What the whole trip costs split across both stores - each item at its planned store (split mode) or its cheapest store.')}</div><span class="saving-amount">${fmt(splitShopVal)}</span></div></div>
+        ${splitSaving > 0.005
+          ? `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">You save${infoIco('What the split shop above saves vs doing the whole trip at the dearer store.')}</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
+          : ''}
+      </div>`;
     const savingInfoHtml = splitTotalHtml + (isEqual
       ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
-      : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIco('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store. Fixed - it does not change with the store you pick.')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`
-        + (splitSaving > basketSaving + 0.005
-            ? `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Split saving${infoIco('The most you can save overall: every item at whichever store sells it cheapest, vs the dearer single store. Use the Split shop toggle above to plan it.')}</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
-            : ''));
+      : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">One-store saving${infoIco('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store. Fixed - it does not change with the store you pick.')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`);
 
     main.innerHTML = `
       <div class="sl-topbar">
@@ -1052,7 +1030,6 @@ async function boot() {
         ${segHtml()}
         <div class="sl-note">📋 ${filterNoteHtml()}</div>
         <div class="sl-flexspacer" style="flex:1"></div>
-        <button id="saveBasketBtn" class="btn-outline-save">🔒 Save basket</button>
         <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
       </div>
 
@@ -1163,38 +1140,12 @@ async function boot() {
     document.getElementById('removeAllBtn')?.addEventListener('click', () => {
       if (confirm('Remove all items from your basket?')) {
         localStorage.removeItem('pw_sl_handoff');
-        localStorage.removeItem('pw_sl_locked');
         displayItems = [];
         storeOverride.clear();
         renderContent(); // normal screen, just empty
       }
     });
 
-
-    // Save basket - locks the current items so additions from the main page are
-    // appended (not replaced). Lock persists across refreshes until toggled off.
-    const saveBtn = document.getElementById('saveBasketBtn');
-    function reflectLock() {
-      const locked = localStorage.getItem('pw_sl_locked') === '1';
-      if (!saveBtn) return;
-      saveBtn.classList.toggle('locked', locked);
-      saveBtn.textContent = locked ? '🔒 Saved (locked)' : '🔒 Save basket';
-    }
-    reflectLock();
-    saveBtn?.addEventListener('click', () => {
-      const willLock = localStorage.getItem('pw_sl_locked') !== '1';
-      localStorage.setItem('pw_sl_locked', willLock ? '1' : '0');
-      if (willLock) {
-        // Persist the current basket so additions from the main page append to it
-        const names = displayItems.map(i => i.list_item);
-        localStorage.setItem('pw_sl_handoff', JSON.stringify({
-          items: names,
-          note: 'items (basket locked)',
-          quantities: unitOv || {},
-        }));
-      }
-      reflectLock();
-    });
 
     initSlResize();
     wireSeg();

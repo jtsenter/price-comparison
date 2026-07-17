@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=101" />
+  <link rel="stylesheet" href="style.css?v=102" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -608,7 +608,6 @@ let _watchlistOnly = false;
 let _watchlistHD = new Set();
 let _data = null;
 let _archivedSet = new Set();
-let _visibleDealNames = []; // deals currently rendered - handed off to the basket
 let _progressDismissed = false;
 let _progressLastDone = null;
 let _progressLastChangeTime = null;
@@ -937,7 +936,6 @@ function renderDeals() {
   // Group rows carry a synthetic __group_* key that isn't a real item; hand the
   // basket the underlying member names instead, which it re-collapses into the
   // same group row (matching the main page's group→basket handoff).
-  _visibleDealNames = sorted.flatMap(i => i._isGroup ? (i._memberNames || []) : [i.list_item]);
 
   // Hero stats - counts describe what's SHOWN, so they follow the store /
   // watchlist / category filters.
@@ -1475,21 +1473,9 @@ async function pollForCompletionHD(user, repo, token, dispatchedAt) {
   initStoreFilter();
   initWatchlistFilter();
   initDealTune();
-  // Basket icon → basket OF THE VISIBLE DEALS (same handoff app.js writes from
-  // the main page; without it the basket fell back to the whole item list).
-  // Locked basket keeps its append semantics.
-  document.getElementById('basketNavLink')?.addEventListener('click', () => {
-    if (!_visibleDealNames.length) return; // empty view → leave the basket as-is
-    let names = _visibleDealNames;
-    if (localStorage.getItem('pw_sl_locked') === '1') {
-      let existing = [];
-      try { existing = JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}').items || []; } catch {}
-      names = [...existing, ..._visibleDealNames.filter(n => !existing.includes(n))];
-    }
-    let quantities = {};
-    try { quantities = JSON.parse(localStorage.getItem('pw_units_v1') || '{}'); } catch {}
-    localStorage.setItem('pw_sl_handoff', JSON.stringify({ items: names, note: 'hot deals', quantities }));
-  });
+  // Basket icon is plain navigation. It used to dump every visible deal into
+  // the basket on click - retired with the lock model: the basket is a normal
+  // persistent cart and ONLY explicit adds put items in it.
   initTooltip();
   initHdColChooser();
   document.getElementById('hdResetColsBtn')?.addEventListener('click', resetHdCols);

@@ -1754,20 +1754,17 @@ td.priority-cell { text-align: center; }
 }
 .bt-chip:hover { background: #5D6E87; }
 .bt-chip .arrow { color: #B6C2D1; font-size: 14px; line-height: 1; }
-/* Basket + lock: one rectangle, two buttons. The lock is an icon-only segment
-   that shares the basket button's green until locked, when it turns amber -
-   the loud "this basket persists and re-checks rows" state. */
+/* Basket add/remove: one rectangle, two buttons. Green 🛒 appends the checked
+   rows to the persistent basket; the red ✕ segment removes them from it. */
 .bt-basket-seg { display: inline-flex; }
 .bt-basket-seg .bt-sl { border-radius: 8px 0 0 8px; }
-.bt-basket-seg .bt-lock {
-  border-radius: 0 8px 8px 0; border-left: 1px solid rgba(255,255,255,.35);
-  background: #00843D; border-color: #006B31; color: #fff; padding: 6px 10px;
+.bt-basket-seg .bt-rm {
+  border-radius: 0 8px 8px 0; border-left: 0;
+  background: #7F1D1D; border-color: #661717; color: #FCA5A5; padding: 6px 11px;
 }
-.bt-basket-seg .bt-lock:hover { background: #006B31; }
+.bt-basket-seg .bt-rm:hover { background: #991B1B; }
 .bt-sl { background: #00843D; border-color: #006B31; color: #fff; padding: 6px 16px; }
 .bt-sl:hover { background: #006B31; }
-.bt-basket-seg .bt-lock.locked { background: #B45309; border-color: #92400E; color: #FEF3C7; }
-.bt-basket-seg .bt-lock.locked:hover { background: #92400E; }
 .bt-archive { background: rgba(127,29,29,.6); border-color: rgba(153,27,27,.5); color: #FCA5A5; }
 .bt-archive:hover { background: rgba(153,27,27,.7); }
 /* Chip dropdown */

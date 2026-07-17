@@ -643,25 +643,25 @@ let _mcView = localStorage.getItem('pw_mc_view_v1') || 'detailed'; // mobile car
 
 let _checkedItems = new Set();
 
-// A locked basket (Save basket on the basket page) arrives PRE-SELECTED here,
-// so it's visible which items are already in the saved basket - and deselecting
-// one then re-adding to basket removes it (see exportShoppingList's locked
-// branch). Desktop checkboxes key per-kg groups off their synthetic __group_*
-// key; mobile cards key off real member names - seed the matching set.
-(function seedSelectionFromLockedBasket() {
+// ── The basket ────────────────────────────────────────────────────────────────
+// A normal persistent cart (localStorage pw_sl_handoff, read by the basket
+// page). Items get in ONLY when the user adds them (＋ button, card tap, or the
+// bulk "Add to Basket") and stay until removed. _selectedItems is the live
+// in-page mirror: ✓ marks on cards/panel rows mean "in the basket". Desktop
+// row checkboxes are transient bulk-action selection and are NEVER pre-seeded.
+function persistBasketStore() {
+  localStorage.setItem('pw_sl_handoff', JSON.stringify({
+    items: [..._selectedItems],
+    quantities: loadUnitOverrides(),
+  }));
+}
+(function mirrorBasketSelection() {
   try {
-    if (localStorage.getItem('pw_sl_locked') !== '1') return;
-    const names = JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}').items || [];
-    if (!names.length) return;
-    const memberToGroup = new Map();
-    loadVariantGroups().forEach(g => g.items.forEach(n => memberToGroup.set(n, '__group_' + g.key)));
-    const target = window.innerWidth <= 700 ? _selectedItems : _checkedItems;
-    const useGroups = target === _checkedItems;
-    names.forEach(n => target.add(useGroups ? (memberToGroup.get(n) || n) : n));
-    // Mobile: refresh the floating "+ Basket (n)" pill - it's only updated by
-    // tap handlers otherwise, so a seeded selection showed "(0)".
-    if (target === _selectedItems) _updateSelectedPill();
-  } catch { /* corrupt handoff - just don't pre-select */ }
+    (JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}').items || [])
+      .forEach(n => _selectedItems.add(n));
+  } catch { /* corrupt store - start empty */ }
+  localStorage.removeItem('pw_sl_locked'); // retired lock flag
+  _updateSelectedPill();
 })();
 
 function updateBulkBar() {
@@ -680,40 +680,30 @@ function updateBulkBar() {
   if (archBtn) archBtn.innerHTML = inArchive ? '📤 Unarchive' : '🗄 Archive';
   const priChip = bar.querySelector('.bt-pri');
   if (priChip) priChip.style.display = inArchive ? 'none' : '';
-  reflectBasketLock();
 }
 
-// Lock button in the bulk bar - the one visible control over the "saved basket"
-// state that makes rows arrive pre-checked. Locking SAVES the current selection
-// as the basket (same payload Add to Basket would send) and pins it; unlocking
-// stops the persistence (the saved list stays for one last visit, unlocked).
-function reflectBasketLock() {
-  const btn = $('btLockBtn');
-  if (!btn) return;
-  const locked = localStorage.getItem('pw_sl_locked') === '1';
-  btn.classList.toggle('locked', locked);
-  btn.textContent = locked ? '🔒' : '🔓'; // icon-only segment; the title carries the words
-  btn.title = locked
-    ? 'Basket is locked: its items stay selected here and survive refreshes. Click to unlock.'
-    : 'Save the current selection as your basket and keep it selected here until you unlock.';
-}
-function toggleBasketLock() {
-  const willLock = localStorage.getItem('pw_sl_locked') !== '1';
-  if (willLock) {
-    const items = buildShoppingListItems(true);
-    if (!items.length) { showToast('Nothing selected to lock'); return; }
-    localStorage.setItem('pw_sl_handoff', JSON.stringify({
-      items: items.map(i => i.list_item),
-      note: 'items (basket locked)',
-      quantities: loadUnitOverrides(),
-    }));
-    localStorage.setItem('pw_sl_locked', '1');
-    showToast(`🔒 Basket locked - ${items.length} item${items.length !== 1 ? 's' : ''} saved`);
-  } else {
-    localStorage.setItem('pw_sl_locked', '0');
-    showToast('🔓 Basket unlocked - items won\'t re-select after refresh');
+// Checked rows resolved to real basket-able product names. Per-kg group rows
+// are synthetic (__group_*): on ADD a group becomes its best-value member
+// (lowest $/kg across both stores - a real, buyable product); on REMOVE it
+// becomes ALL its members, because the basket may hold a variant that was
+// cheapest when it was added rather than today's winner.
+function checkedRealNames(forRemove) {
+  if (!_lastData) return [];
+  const names = new Set();
+  let groups = null;
+  for (const n of _checkedItems) {
+    if (!n.startsWith('__group_')) { names.add(n); continue; }
+    if (forRemove) {
+      const g = loadVariantGroups().find(gr => '__group_' + gr.key === n);
+      (g?.items || []).forEach(m => names.add(m));
+    } else {
+      if (!groups) groups = buildVariantGroups(new Map(_lastData.items.map(i => [i.list_item, i])));
+      const g = groups.find(gr => gr.list_item === n);
+      const best = [g?._wwBest, g?._coBest].filter(Boolean).sort((a, b) => a.perkg - b.perkg)[0];
+      if (best) names.add(best.name);
+    }
   }
-  reflectBasketLock();
+  return [...names];
 }
 
 // ── Column order & widths ────────────────────────────────────────────────────
@@ -2354,6 +2344,7 @@ function addPerKgToBasket(name) {
   if (!name) return;
   if (_selectedItems.has(name)) _selectedItems.delete(name);
   else _selectedItems.add(name);
+  persistBasketStore(); // ＋/✓ writes the basket directly - no separate "save" step
   const selected = _selectedItems.has(name);
   // The same product can be the tap-target of the group card (data-cheapest) AND
   // its own "＋" row inside the expanded member list - keep both in sync.
@@ -2495,8 +2486,30 @@ function initBulkBar() {
     });
   });
 
-  bar.querySelector('.bt-sl')?.addEventListener('click', () => exportShoppingList(true));
-  bar.querySelector('.bt-lock')?.addEventListener('click', toggleBasketLock);
+  // Standard cart semantics: Add appends the checked rows to the persistent
+  // basket (deduped, no navigation - the 🛒 nav icon views it); ✕ removes them.
+  bar.querySelector('.bt-sl')?.addEventListener('click', () => {
+    const add = checkedRealNames(false);
+    if (!add.length) return;
+    const before = _selectedItems.size;
+    add.forEach(n => _selectedItems.add(n));
+    persistBasketStore();
+    _updateSelectedPill();
+    showToast(`🛒 ${_selectedItems.size - before} added - ${_selectedItems.size} in basket`);
+    if (_lastData) renderPage(_lastData); // sync ✓ marks on panel rows / cards
+  });
+  bar.querySelector('.bt-rm')?.addEventListener('click', () => {
+    const rm = checkedRealNames(true);
+    const before = _selectedItems.size;
+    rm.forEach(n => _selectedItems.delete(n));
+    persistBasketStore();
+    _updateSelectedPill();
+    const removed = before - _selectedItems.size;
+    showToast(removed
+      ? `✕ ${removed} removed - ${_selectedItems.size} in basket`
+      : 'None of the selected items were in the basket');
+    if (_lastData) renderPage(_lastData);
+  });
 
   bar.querySelector('.bt-archive')?.addEventListener('click', () => {
     const pr = loadPriorities();
@@ -2611,7 +2624,7 @@ function renderSavingInfo(s) {
   // tip) - a bare title attribute was invisible until you happened to hover.
   // "Max": these are the largest POSSIBLE savings - they compare the two
   // stores and don't change with whichever store you happen to pick.
-  const basket = `<div class="saving-line"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIcoHTML('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store')}</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
+  const basket = `<div class="saving-line"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">One-store saving${infoIcoHTML('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store')}</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
   let maxRow = '';
   if (s.max_saving > s.total_saving + 0.005) {
     maxRow = `<div class="saving-line"><span class="saving-icon">${splitIcon}</span><div class="saving-text"><div class="saving-label">Split saving${infoIcoHTML('The most you can save overall: every item bought at whichever store sells it cheapest, vs the dearer single store')}</div><span class="saving-amount">${fmt(s.max_saving)}</span></div></div>`;
@@ -4046,8 +4059,8 @@ function appendGroupCardMobile(container, group, overrides) {
           <div class="mc-name">${esc(group._groupLabel)}</div>
           <span class="mc-icons">
             ${hotHtml}
-            ${bar ? `<button class="mc-hist-btn" data-manage-item="__group_${group._groupKey}" title="Price history" aria-label="View price history">${HIST_CLOCK_SVG}</button>` : ''}
             ${watchBtn}
+            ${bar ? `<button class="mc-hist-btn" data-manage-item="__group_${group._groupKey}" title="Price history" aria-label="View price history">${HIST_CLOCK_SVG}</button>` : ''}
           </span>
         </div>
         <div class="mc-badges">
@@ -4591,8 +4604,8 @@ function renderMobileCards(items, data) {
             <div class="mc-name">${esc(displayName)}</div>
             <span class="mc-icons">
               ${hotDeal ? '<span class="mc-hot" title="Hot Deal - meaningfully cheaper than its usual price right now">🔥</span>' : ''}
-              ${barHtml ? `<button class="mc-hist-btn" data-manage-item="${item.list_item.replace(/"/g,'&quot;')}" title="Price history" aria-label="View price history">${HIST_CLOCK_SVG}</button>` : ''}
               ${watchBtn}
+              ${barHtml ? `<button class="mc-hist-btn" data-manage-item="${item.list_item.replace(/"/g,'&quot;')}" title="Price history" aria-label="View price history">${HIST_CLOCK_SVG}</button>` : ''}
               ${_activePriority === 'archive' ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : ''}
             </span>
           </div>
@@ -4633,6 +4646,7 @@ function renderMobileCards(items, data) {
         const name = item.list_item;
         if (_selectedItems.has(name)) _selectedItems.delete(name);
         else _selectedItems.add(name);
+        persistBasketStore(); // tap = add/remove from the persistent basket
         card.classList.toggle('mc-selected', _selectedItems.has(name));
         card.setAttribute('aria-pressed', String(_selectedItems.has(name)));
         _updateSelectedPill();
@@ -5814,100 +5828,6 @@ function renderCfdValues(search, resetScroll = true) {
   });
 }
 
-// ── Export shopping list ──────────────────────────────────────────────────────
-
-function getCurrentVisibleItems() {
-  if (!_lastData) return [];
-  return sortItems(_lastData.items).map(i => i.list_item);
-}
-
-function buildShoppingListItems(useChecked) {
-  if (!_lastData) return [];
-  const allItems = _lastData.items;
-  // Selected per-kg GROUP rows are synthetic (`__group_*` - they don't exist in
-  // latest.json), so a plain name filter silently DROPPED them: "I added 6
-  // items, only 4 arrived". Swap each group for its best-value member (lowest
-  // $/kg across both stores) so the basket gets a real, buyable product.
-  const expandGroups = (nameSet) => {
-    const names = new Set();
-    let groups = null;
-    for (const n of nameSet) {
-      if (!n.startsWith('__group_')) { names.add(n); continue; }
-      if (!groups) groups = buildVariantGroups(new Map(allItems.map(i => [i.list_item, i])));
-      const g = groups.find(gr => gr.list_item === n);
-      const best = [g?._wwBest, g?._coBest].filter(Boolean).sort((a, b) => a.perkg - b.perkg)[0];
-      if (best) names.add(best.name);
-    }
-    return names;
-  };
-  // Priority 1: mobile tap-selected items
-  if (_selectedItems.size > 0) {
-    const sel = expandGroups(_selectedItems);
-    return allItems.filter(i => sel.has(i.list_item));
-  }
-  // Priority 2: desktop checkbox-selected rows (bulk bar)
-  if (useChecked && _checkedItems && _checkedItems.size > 0) {
-    const sel = expandGroups(_checkedItems);
-    return allItems.filter(i => sel.has(i.list_item));
-  }
-  // Priority 3: active search - substring match on list_item name
-  if (_searchQuery && _searchQuery.trim().length > 0) {
-    const q = _searchQuery.trim().toLowerCase();
-    return allItems.filter(i => i.list_item.toLowerCase().includes(q));
-  }
-  // Priority 4: current filter view (frequency tab + category + hot/priced-only)
-  // Per-kg group MEMBER products (e.g. all 14 "Chicken Breast" variants) are
-  // collapsed into ONE comparison row on the main table, but this raw item list
-  // has no concept of that grouping - a bulk export was including every variant
-  // as its own line item (49 raw chicken/salmon/basa/mince products instead of
-  // the 8 rows actually shown), inflating both the item count and every basket
-  // total. Explicit selection above (incl. addPerKgToBasket's "+" on one specific
-  // variant) is unaffected - only this bulk "everything currently shown" path.
-  const perkgMembers = new Set(loadVariantGroups().flatMap(g => g.items));
-  return sortItems(allItems.filter(i => !perkgMembers.has(i.list_item)));
-}
-
-function exportShoppingList(useChecked) {
-  const items = buildShoppingListItems(useChecked);
-  const names = items.map(i => i.list_item);
-  // Build a human-readable description of what's being exported.
-  // The basket page renders "Showing <N> <note>", so notes must NOT include a
-  // count of their own (avoids "Showing 4 4 selected items").
-  let note;
-  if (_selectedItems.size > 0 || (useChecked && _checkedItems && _checkedItems.size > 0)) {
-    note = 'selected items';
-  } else if (_searchQuery && _searchQuery.trim().length > 0) {
-    note = `items matching "${esc(_searchQuery.trim())}"`;
-  } else {
-    // "weekly items" / "items" / "archived items" - not the old "all weekly items".
-    const pWord = { weekly: 'weekly ', monthly: 'monthly ', rare: 'rare ', archive: 'archived ' }[_activePriority] || '';
-    const catSuffix = _activeCategory !== 'All' ? ` · ${_activeCategory}` : '';
-    note = `${pWord}items${catSuffix}`;
-  }
-  const quantities = loadUnitOverrides();
-  let finalNames = names;
-  let finalNote = note;
-  // Locked basket (Save basket on the basket page):
-  //  - EXPLICIT selection: the saved basket arrives here pre-selected, so the
-  //    current selection IS the basket the user sees - it REPLACES the saved
-  //    list (deselecting an item and re-adding actually removes it).
-  //  - Bulk/filter export (no selection): append to the saved basket, deduped.
-  if (localStorage.getItem('pw_sl_locked') === '1') {
-    const explicit = _selectedItems.size > 0 || (useChecked && _checkedItems && _checkedItems.size > 0);
-    if (!explicit) {
-      let existing = [];
-      try { existing = JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}').items || []; } catch {}
-      const merged = [...existing];
-      names.forEach(n => { if (!merged.includes(n)) merged.push(n); });
-      finalNames = merged;
-    }
-    finalNote = 'items (basket locked)';
-  }
-  const handoffPayload = { items: finalNames, note: finalNote, quantities };
-  localStorage.setItem('pw_sl_handoff', JSON.stringify(handoffPayload));
-  window.location.href = 'shopping-list.html';
-}
-
 // ── Options menu (row density only - the dropdown itself, its toggle and the
 //    theme switcher are owned by header.js so they work identically on every
 //    page; density is index-only because it styles the main table) ───────────
@@ -5976,27 +5896,10 @@ async function boot() {
   const refreshBtn = $('refreshBtn');
   if (refreshBtn) refreshBtn.addEventListener('click', triggerRefresh);
 
-  $('shopListBtn')?.addEventListener('click', () => exportShoppingList(false));
-
-  // Floating "+ Basket (n)" - sends the tap-selected items to the basket page
-  $('basketFab')?.addEventListener('click', () => {
-    if (_selectedItems.size > 0) exportShoppingList(true);
-  });
-
-  // Basket nav: with items selected → add them; nothing selected & unlocked →
-  // add everything currently showing. Locked + nothing selected → just view.
-  const _basketNavHandler = (e) => {
-    const locked = localStorage.getItem('pw_sl_locked') === '1';
-    if (_selectedItems.size > 0) {
-      e.preventDefault();
-      exportShoppingList(true);
-    } else if (!locked) {
-      e.preventDefault();
-      exportShoppingList(false);
-    }
-  };
-  $('basketNavLink')?.addEventListener('click', _basketNavHandler);
-  document.getElementById('btbBasketLink')?.addEventListener('click', _basketNavHandler);
+  // Floating "🛒 Basket (n)" - a cart badge: shows the basket count and opens
+  // the basket page. The nav 🛒 links are plain navigation too - nothing dumps
+  // items into the basket implicitly anymore; only explicit adds do.
+  $('basketFab')?.addEventListener('click', () => { window.location.href = 'shopping-list.html'; });
 
   // Scrape strip dismiss & retry
 
