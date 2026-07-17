@@ -412,19 +412,30 @@ const DEFAULT_VARIANT_GROUPS = [
     'Washed Potato Bag 4kg',
     'Woolworths Washed Potato Bag',
     'Woolworths Red Washed Potatoes Bag',
-    // Coles variants pinned via url_overrides.json (coles-only)
-    'Coles Potatoes Washed 2kg',
+    // Single-store variants pinned via url_overrides.json. (Coles Washed 2kg and
+    // Red Royale 2kg are NOT members: they're already the Coles side of the two
+    // WW bag pairs above - listing them again duplicated the products.)
+    'Woolworths White Washed Baby Potatoes Bag 1kg',
+    'Woolworths Baby Red Washed Potato Bag 1kg',
     'Coles Baby Washed Potatoes 1kg',
     'Coles Kestrel Washed Potatoes 2kg',
     'Coles Carisma Washed Potatoes 2kg',
-    'Coles Red Royale Washed Potatoes 2kg',
   ]},
   { key: 'carrots', label: 'Carrots', category: 'Fruit & Veg', items: [
     'Woolworths Australian Grown Carrots',
     'The Odd Bunch Carrots',
+    // Single-store variants pinned via url_overrides.json. (Coles I'm Perfect
+    // 1.5kg is already the Coles side of The Odd Bunch Carrots pair.)
+    'The Odd Bunch Crazy Carrots 5kg',
+    'Woolworths Baby Carrots 500g',
+    'Macro Organic Carrot Juicing Bag 2kg',
+    'Coles Carrots 1kg',
+    'Coles Baby Carrots 500g',
+    'Coles Organic Carrots 1kg',
   ]},
   { key: 'brown_onions', label: 'Brown Onions', category: 'Fruit & Veg', items: [
     'Woolworths Onion Brown Bag',
+    'Woolworths Brown Onions Bag 2kg',
   ]},
   { key: 'red_onions', label: 'Red Onions', category: 'Fruit & Veg', items: [
     'Woolworths Red Onions Bag',
@@ -438,6 +449,7 @@ const DEFAULT_VARIANT_GROUPS = [
   ]},
   { key: 'lotus_biscoff', label: 'Lotus Biscoff', category: 'Sweets', items: [
     'Lotus Biscoff Spread',
+    'Lotus Biscoff Spread Smooth 720g',
   ]},
 ];
 

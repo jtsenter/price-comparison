@@ -488,14 +488,14 @@
 </head>
 <body>
 <header data-page="shopping-list"></header>
-<script src="header.js?v=9"></script>
+<script src="header.js?v=10"></script>
 
 <main id="main">
   <div class="empty">Loading…</div>
 </main>
 
 <script src="name_map.js?v=52"></script>
-<script src="utils.js?v=68"></script>
+<script src="utils.js?v=69"></script>
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '-';
 // Short display name (same map the rest of the site uses); falls back to the
@@ -604,7 +604,7 @@ async function boot() {
   const activeItems = (data.items || []).filter(i => !i.archived);
 
   let displayItems;
-  if (handoff && Array.isArray(handoff.items) && handoff.items.length > 0) {
+  if (handoff && Array.isArray(handoff.items)) {
     // Explicit selection wins over the archive filter: a per-kg group can have an
     // archived member as its cheapest variant (e.g. Chicken Roast Portions), and
     // the user deliberately added it - so match against ALL items, not just active
@@ -620,7 +620,11 @@ async function boot() {
     displayItems = activeItems.filter(i => !perkgMembers.has(i.list_item));
   }
 
-  if (!displayItems.length) {
+  // An empty basket (arriving via handoff, or after removing everything) still
+  // renders the NORMAL screen - hero panels, toggle, empty tables - not a bare
+  // "go back" message. Only bail when there's no basket context at all AND the
+  // fallback found nothing (broken data).
+  if (!displayItems.length && !handoff) {
     main.innerHTML = '<div class="empty">No items found for this selection.</div>';
     return;
   }
@@ -630,11 +634,15 @@ async function boot() {
   // mode and above the toggles, so switching to shopping mode dropped the line
   // and the whole view jumped up.
   // Singularise "items" in canned notes when N is 1 ("1 item (basket locked)").
-  const noteTxt = handoff?.note && displayItems.length === 1
-    ? handoff.note.replace(/\bitems\b/, 'item') : handoff?.note;
-  const filterNoteHtml = noteTxt
-    ? `<strong>${displayItems.length}</strong> ${noteTxt}`
-    : `<strong>${displayItems.length}</strong> item${displayItems.length !== 1 ? 's' : ''}`;
+  // A function, not a boot-time const: row removals re-render and the count
+  // must track the live basket (a const showed "5 items" over an empty list).
+  const filterNoteHtml = () => {
+    const noteTxt = handoff?.note && displayItems.length === 1
+      ? handoff.note.replace(/\bitems\b/, 'item') : handoff?.note;
+    return noteTxt
+      ? `<strong>${displayItems.length}</strong> ${noteTxt}`
+      : `<strong>${displayItems.length}</strong> item${displayItems.length !== 1 ? 's' : ''}`;
+  };
 
   let equalStore = 'ww'; // split mode: which store equal-price items are assigned to
 
@@ -921,7 +929,7 @@ async function boot() {
       <div class="sl-topbar">
         ${splitSegHtml()}
         ${segHtml()}
-        <div class="sl-note">📋 ${filterNoteHtml}</div>
+        <div class="sl-note">📋 ${filterNoteHtml()}</div>
         <div class="sl-flexspacer" style="flex:1"></div>
         <button id="smResetBtn" class="btn-outline-danger">↺ Reset picks</button>
       </div>
@@ -1042,7 +1050,7 @@ async function boot() {
       <div class="sl-topbar">
         ${splitSegHtml()}
         ${segHtml()}
-        <div class="sl-note">📋 ${filterNoteHtml}</div>
+        <div class="sl-note">📋 ${filterNoteHtml()}</div>
         <div class="sl-flexspacer" style="flex:1"></div>
         <button id="saveBasketBtn" class="btn-outline-save">🔒 Save basket</button>
         <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
@@ -1143,11 +1151,7 @@ async function boot() {
       displayItems = displayItems.filter(i => i.list_item !== name);
       storeOverride.delete(name);
       persistBasket();
-      if (!displayItems.length) {
-        main.innerHTML = '<div class="empty">Your basket is empty. <a href="index.html">Go back to add items.</a></div>';
-        return;
-      }
-      renderContent();
+      renderContent(); // 0 items renders the normal screen, just empty
     }));
 
     // Per-row store swap - "I'll just buy it here anyway" for one-store trips.
@@ -1160,7 +1164,9 @@ async function boot() {
       if (confirm('Remove all items from your basket?')) {
         localStorage.removeItem('pw_sl_handoff');
         localStorage.removeItem('pw_sl_locked');
-        main.innerHTML = '<div class="empty">Your basket is empty. <a href="index.html">Go back to add items.</a></div>';
+        displayItems = [];
+        storeOverride.clear();
+        renderContent(); // normal screen, just empty
       }
     });
 

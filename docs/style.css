@@ -1725,7 +1725,7 @@ td.priority-cell { text-align: center; }
 .bulk-toolbar {
   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
   display: flex; align-items: center; justify-content: space-between;
-  gap: 10px; background: #1E293B; padding: 10px 20px;
+  gap: 10px; background: #3E4C61; padding: 10px 20px;
   border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,.3);
   z-index: 500; min-width: 600px; max-width: 90vw;
 }
@@ -1739,32 +1739,40 @@ td.priority-cell { text-align: center; }
 }
 .bt-label { color: #E2E8F0; font-size: 13px; font-weight: 600; }
 .bt-deselect {
-  background: none; border: none; color: #64748B;
+  background: none; border: none; color: #94A3B8;
   font-size: 12px; cursor: pointer; font-weight: 500;
   padding: 0; white-space: nowrap;
 }
-.bt-deselect:hover { color: #94A3B8; }
-.bt-divider { width: 1px; height: 22px; background: rgba(255,255,255,.12); margin: 0 4px; flex-shrink: 0; }
+.bt-deselect:hover { color: #CBD5E1; }
+.bt-divider { width: 1px; height: 22px; background: rgba(255,255,255,.18); margin: 0 4px; flex-shrink: 0; }
 .bt-chip {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 6px 13px; border-radius: 8px; font-size: 12px;
-  font-weight: 600; cursor: pointer; border: 1px solid rgba(255,255,255,.1);
-  background: #374151; color: #E2E8F0; white-space: nowrap;
+  font-weight: 600; cursor: pointer; border: 1px solid rgba(255,255,255,.14);
+  background: #4D5D74; color: #F1F5F9; white-space: nowrap;
   transition: background .15s;
 }
-.bt-chip:hover { background: #4B5563; }
-.bt-chip .arrow { color: #94A3B8; font-size: 14px; line-height: 1; }
+.bt-chip:hover { background: #5D6E87; }
+.bt-chip .arrow { color: #B6C2D1; font-size: 14px; line-height: 1; }
+/* Basket + lock: one rectangle, two buttons. The lock is an icon-only segment
+   that shares the basket button's green until locked, when it turns amber -
+   the loud "this basket persists and re-checks rows" state. */
+.bt-basket-seg { display: inline-flex; }
+.bt-basket-seg .bt-sl { border-radius: 8px 0 0 8px; }
+.bt-basket-seg .bt-lock {
+  border-radius: 0 8px 8px 0; border-left: 1px solid rgba(255,255,255,.35);
+  background: #00843D; border-color: #006B31; color: #fff; padding: 6px 10px;
+}
+.bt-basket-seg .bt-lock:hover { background: #006B31; }
 .bt-sl { background: #00843D; border-color: #006B31; color: #fff; padding: 6px 16px; }
 .bt-sl:hover { background: #006B31; }
-/* Lock toggle: quiet chip when unlocked; amber "engaged" state when locked so a
-   persisting basket is impossible to miss (this is what makes rows re-check). */
-.bt-lock.locked { background: rgba(180,83,9,.35); border-color: rgba(217,119,6,.55); color: #FCD34D; }
-.bt-lock.locked:hover { background: rgba(180,83,9,.5); }
+.bt-basket-seg .bt-lock.locked { background: #B45309; border-color: #92400E; color: #FEF3C7; }
+.bt-basket-seg .bt-lock.locked:hover { background: #92400E; }
 .bt-archive { background: rgba(127,29,29,.6); border-color: rgba(153,27,27,.5); color: #FCA5A5; }
 .bt-archive:hover { background: rgba(153,27,27,.7); }
 /* Chip dropdown */
 .bt-dropdown {
-  position: fixed; background: #1E293B; border: 1px solid rgba(255,255,255,.12);
+  position: fixed; background: #3E4C61; border: 1px solid rgba(255,255,255,.14);
   border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.4);
   padding: 6px; z-index: 600; min-width: 160px;
 }

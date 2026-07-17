@@ -24,7 +24,6 @@
   var page = host.getAttribute('data-page');
 
   /* ── SVG icons (kept as consts so the templates stay readable) ── */
-  var SVG_HOME  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
   var SVG_HOT   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg>';
   var SVG_CART  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
   var SVG_REF   = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
@@ -96,11 +95,10 @@
            a('basket', 'shopping-list.html', 'Basket', SVG_CART, 'basketNavLink');
   }
 
-  /* Standalone home link, far left. Omitted on index (already home) and on
-     hot-deals / basket (the PriceWatch brand logo beside it already links home,
-     so a separate house icon there was redundant clutter). */
-  var HOME = (page === 'index' || page === 'hot-deals' || page === 'shopping-list') ? ''
-    : '<a class="home-link" href="index.html" title="Back to the main page">' + SVG_HOME + '</a>';
+  /* No standalone home link on ANY page: the PriceWatch brand logo already
+     links home, so a separate house icon was redundant clutter (it had lingered
+     on validate / scrape-log after being dropped from the main three pages). */
+  var HOME = '';
 
   /* Validate pill - shown by page JS when flagged prices exist. Identical slot
      on every page (index's app.js and the other pages' initNavBell both key

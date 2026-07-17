@@ -28,8 +28,11 @@ const shortName = (name) => (window.PW_NAME_MAP && window.PW_NAME_MAP[name]) || 
 // Per-store display name for a per-kg category member. Woolworths and Coles names
 // are independent: an explicit per-store override wins, else the store's scraped
 // product name, else the stripped list_item key.
-const wwNameFor = (item, o, data) => (o?.wwName || data?.woolworths?.name || stripWW(item));
-const coNameFor = (item, o, data) => (o?.colesName || data?.coles?.name || stripWW(item));
+// Repo display names (url_overrides.json ww_name/coles_name) outrank scraped
+// store names: scrapes rewrite latest.json names every run (usually WITHOUT the
+// pack size), so per-kg weights only stick when kept outside latest.json.
+const wwNameFor = (item, o, data) => (o?.wwName || _repoUrlOverrides[item]?.ww_name || data?.woolworths?.name || stripWW(item));
+const coNameFor = (item, o, data) => (o?.colesName || _repoUrlOverrides[item]?.coles_name || data?.coles?.name || stripWW(item));
 const isMobile = () => window.innerWidth < 640;
 
 const COLES_CDN = 'https://cdn.productimages.coles.com.au/productimages';
@@ -689,7 +692,7 @@ function reflectBasketLock() {
   if (!btn) return;
   const locked = localStorage.getItem('pw_sl_locked') === '1';
   btn.classList.toggle('locked', locked);
-  btn.innerHTML = locked ? '🔒 Locked' : '🔓 Lock basket';
+  btn.textContent = locked ? '🔒' : '🔓'; // icon-only segment; the title carries the words
   btn.title = locked
     ? 'Basket is locked: its items stay selected here and survive refreshes. Click to unlock.'
     : 'Save the current selection as your basket and keep it selected here until you unlock.';
