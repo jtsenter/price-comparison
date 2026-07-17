@@ -677,6 +677,40 @@ function updateBulkBar() {
   if (archBtn) archBtn.innerHTML = inArchive ? '📤 Unarchive' : '🗄 Archive';
   const priChip = bar.querySelector('.bt-pri');
   if (priChip) priChip.style.display = inArchive ? 'none' : '';
+  reflectBasketLock();
+}
+
+// Lock button in the bulk bar - the one visible control over the "saved basket"
+// state that makes rows arrive pre-checked. Locking SAVES the current selection
+// as the basket (same payload Add to Basket would send) and pins it; unlocking
+// stops the persistence (the saved list stays for one last visit, unlocked).
+function reflectBasketLock() {
+  const btn = $('btLockBtn');
+  if (!btn) return;
+  const locked = localStorage.getItem('pw_sl_locked') === '1';
+  btn.classList.toggle('locked', locked);
+  btn.innerHTML = locked ? '🔒 Locked' : '🔓 Lock basket';
+  btn.title = locked
+    ? 'Basket is locked: its items stay selected here and survive refreshes. Click to unlock.'
+    : 'Save the current selection as your basket and keep it selected here until you unlock.';
+}
+function toggleBasketLock() {
+  const willLock = localStorage.getItem('pw_sl_locked') !== '1';
+  if (willLock) {
+    const items = buildShoppingListItems(true);
+    if (!items.length) { showToast('Nothing selected to lock'); return; }
+    localStorage.setItem('pw_sl_handoff', JSON.stringify({
+      items: items.map(i => i.list_item),
+      note: 'items (basket locked)',
+      quantities: loadUnitOverrides(),
+    }));
+    localStorage.setItem('pw_sl_locked', '1');
+    showToast(`🔒 Basket locked - ${items.length} item${items.length !== 1 ? 's' : ''} saved`);
+  } else {
+    localStorage.setItem('pw_sl_locked', '0');
+    showToast('🔓 Basket unlocked - items won\'t re-select after refresh');
+  }
+  reflectBasketLock();
 }
 
 // ── Column order & widths ────────────────────────────────────────────────────
@@ -2459,6 +2493,7 @@ function initBulkBar() {
   });
 
   bar.querySelector('.bt-sl')?.addEventListener('click', () => exportShoppingList(true));
+  bar.querySelector('.bt-lock')?.addEventListener('click', toggleBasketLock);
 
   bar.querySelector('.bt-archive')?.addEventListener('click', () => {
     const pr = loadPriorities();

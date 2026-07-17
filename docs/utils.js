@@ -412,6 +412,12 @@ const DEFAULT_VARIANT_GROUPS = [
     'Washed Potato Bag 4kg',
     'Woolworths Washed Potato Bag',
     'Woolworths Red Washed Potatoes Bag',
+    // Coles variants pinned via url_overrides.json (coles-only)
+    'Coles Potatoes Washed 2kg',
+    'Coles Baby Washed Potatoes 1kg',
+    'Coles Kestrel Washed Potatoes 2kg',
+    'Coles Carisma Washed Potatoes 2kg',
+    'Coles Red Royale Washed Potatoes 2kg',
   ]},
   { key: 'carrots', label: 'Carrots', category: 'Fruit & Veg', items: [
     'Woolworths Australian Grown Carrots',
@@ -424,7 +430,11 @@ const DEFAULT_VARIANT_GROUPS = [
     'Woolworths Red Onions Bag',
   ]},
   { key: 'nutella', label: 'Nutella', category: 'Sweets', items: [
-    'Nutella Hazelnut Chocolate Spread Spread',
+    'Nutella Hazelnut Chocolate Spread Spread', // the 750g (Excel history)
+    // Coles variants pinned via url_overrides.json (coles-only)
+    'Nutella Hazelnut Chocolate Spread 400g',
+    'Nutella Hazelnut Spread With Cocoa 1kg',
+    'Nutella Hazelnut Chocolate Spread 220g',
   ]},
   { key: 'lotus_biscoff', label: 'Lotus Biscoff', category: 'Sweets', items: [
     'Lotus Biscoff Spread',
