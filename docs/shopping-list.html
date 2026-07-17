@@ -86,7 +86,8 @@
     .sc-price { grid-area: price; justify-self: end; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
     .sc-price.price-active   { color: var(--green); }
     .sc-price.price-inactive { color: var(--text-soft); }
-    .sc-badge-row { grid-area: badge; justify-self: end; min-height: 18px; }
+    .sc-badge-row { grid-area: badge; justify-self: end; min-height: 18px; display: flex; align-items: center; gap: 6px; }
+    .sc-foreign { font-size: 10px; color: var(--text-soft); white-space: nowrap; cursor: help; }
     .sc-badge {
       display: inline-block; background: var(--green); color: #fff;
       font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 10px;
@@ -113,13 +114,11 @@
        their words on one line. The W/C/= icon + count already says it, so drop
        the redundant words here (as mobile does) and keep them in the tooltip. */
     .sl-savings-panel .bar-ribbon-chips .chip-word { display: none; }
-    /* Split-shop box: the split trip PRICE and what that trip SAVES live in one
-       tinted box (they were separated by Basket saving, which read ambiguously).
-       Inner lines pad 9px so content column-aligns with the 10px-padded lines
-       outside the box (9px + 1px box border = 10px). */
-    .split-total-line { background: #F0FDF4; border: 1px solid #D1FAE5; border-radius: 10px; }
-    .sl-savings-panel .split-total-line .saving-line { padding: 4px 9px; }
-    .split-total-line .saving-line + .saving-line { border-top-color: #D1FAE5; }
+    /* Split mode's headline: the combined trip total, bigger than the per-store
+       card totals it sums, in a green tint box above the savings lines. */
+    .trip-total { background: #F0FDF4; border: 1px solid #D1FAE5; border-radius: 10px; padding: 6px 9px; margin-bottom: 4px; text-align: center; }
+    .trip-total .tt-label { display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 10px; font-weight: 700; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.06em; }
+    .trip-total .tt-amount { font-size: 26px; font-weight: 800; color: var(--green); line-height: 1.15; font-variant-numeric: tabular-nums; }
     /* ── Save ribbon (replaces stats bar) ── */
     .bar-ribbon {
       display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
@@ -209,9 +208,11 @@
     .name-wrap span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .sl-thumb { width: 30px; height: 30px; border-radius: 6px; object-fit: contain; background: #fff; border: 1px solid var(--border); flex-shrink: 0; }
     /* Single-store mode: item not sold at the chosen store - priced from the other */
-    .only-chip { font-size: 9px; font-weight: 800; padding: 2px 5px; border-radius: 5px; color: #fff; vertical-align: middle; margin-left: 5px; white-space: nowrap; }
-    .only-chip.ww { background: var(--ww); }
-    .only-chip.coles { background: var(--coles); }
+    /* Row for an item this store doesn't sell (one-store mode borrows the other
+       store's price so the trip total stays honest): grayed with a quiet dash. */
+    .row-fellback td { opacity: .55; }
+    .row-fellback .act-cell { opacity: 1; } /* keep ✕ fully usable */
+    .from-other { color: var(--text-soft); font-weight: 700; margin-left: 5px; cursor: help; }
     .price-val { font-size: 15px; font-weight: 700; }
     .unit-val { font-size: 11px; color: var(--text-soft); }
     .total-val { font-size: 15px; font-weight: 700; color: var(--text); }
@@ -480,8 +481,7 @@
       & .store-card-sl.coles.card-active { background: #450a0a; border-color: var(--coles); }
       & .bar-ribbon { background: var(--card); border-top-color: var(--border); }
       & .bar-optimal { background: #052e16; border-color: #14532d; }
-      & .split-total-line { background: #052e16; border-color: #14532d; }
-      & .split-total-line .saving-line + .saving-line { border-top-color: #14532d; }
+      & .trip-total { background: #052e16; border-color: #14532d; }
       & tbody tr:nth-child(even) { background: #182030; }
       & tfoot td { background: var(--bg); }
       & table { background: var(--card); }
@@ -499,7 +499,7 @@
 </main>
 
 <script src="name_map.js?v=52"></script>
-<script src="utils.js?v=69"></script>
+<script src="utils.js?v=70"></script>
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '-';
 // Short display name (same map the rest of the site uses); falls back to the
@@ -555,13 +555,6 @@ function initSlResize() {
 // normalizeCategory (utils.js) keeps old override/scraper names pointing at live categories.
 function getCategory(item, catOv) { return normalizeCategory(catOv[item.list_item] || ITEM_CATEGORY_DEFAULTS[item.list_item] || item.category); }
 
-function getUnits(itemName, unitOv, analysis) {
-  const ov = unitOv[itemName];
-  if (ov != null) return ov;
-  const qty = analysis[itemName]?.avg_qty;
-  return qty != null ? Math.round(qty) : 1;
-}
-
 // ── Dynamic sticky header offset ─────────────────────────────────────────────
 // Calculates actual nav height and applies it to thead th sticky offset.
 // This prevents floating prices if header height ever changes.
@@ -578,7 +571,7 @@ async function boot() {
   const main = document.getElementById('main');
 
   // Load data
-  let data, analysis = {}, catOv = {}, unitOv = {};
+  let data, analysis = {}, catOv = {};
   try {
     const res = await fetch(`data/latest.json?t=${Date.now()}`);
     data = await res.json();
@@ -588,7 +581,6 @@ async function boot() {
   }
   try { analysis = await fetch('data/item_analysis.json').then(r => r.json()); } catch {}
   try { catOv  = JSON.parse(localStorage.getItem('pw_categories_v1') || '{}'); } catch {}
-  try { unitOv = JSON.parse(localStorage.getItem('pw_units_v1') || '{}'); } catch {}
   try {
     const prioOv = JSON.parse(localStorage.getItem('pw_priorities_v1') || '{}');
     Object.assign(analysis, Object.fromEntries(Object.entries(prioOv).map(([k, v]) => [k, { ...(analysis[k] || {}), priority: v }])));
@@ -606,6 +598,13 @@ async function boot() {
   // variant can be an archived product the user deliberately added.
   const basketNames = new Set(handoff?.items || []);
   let displayItems = (data.items || []).filter(i => basketNames.has(i.list_item));
+
+  // Basket quantities: how many UNITS OF EACH PRODUCT are in the cart (integer
+  // packs, default 1, min 1) - deliberately independent of the main page's
+  // Units column, which plans kg amounts. bq() also sanitises legacy values
+  // (old snapshots held kg fractions like 0.2, which made steppers nonsense).
+  let basketQty = (handoff?.quantities && typeof handoff.quantities === 'object') ? { ...handoff.quantities } : {};
+  const bq = n => { const q = Number(basketQty[n]); return Number.isFinite(q) && q >= 1 ? Math.round(q) : 1; };
 
   // An empty basket renders the NORMAL screen - hero panels, toggle, empty
   // tables - not a bare "go back" message.
@@ -650,7 +649,7 @@ async function boot() {
   function persistBasket() {
     localStorage.setItem('pw_sl_handoff', JSON.stringify({
       items: displayItems.map(i => i.list_item),
-      quantities: unitOv || {},
+      quantities: basketQty,
     }));
   }
 
@@ -668,8 +667,8 @@ async function boot() {
         av = priceFor(a, store) ?? Infinity;
         bv = priceFor(b, store) ?? Infinity;
       } else if (key === 'total') {
-        av = (priceFor(a, store) ?? 0) * getUnits(a.list_item, unitOv, analysis);
-        bv = (priceFor(b, store) ?? 0) * getUnits(b.list_item, unitOv, analysis);
+        av = (priceFor(a, store) ?? 0) * bq(a.list_item);
+        bv = (priceFor(b, store) ?? 0) * bq(b.list_item);
       }
       return typeof av === 'string' ? av.localeCompare(bv) * mul : (av - bv) * mul;
     });
@@ -688,11 +687,11 @@ async function boot() {
   function computeTotals() {
     const wwTotal = displayItems.reduce((s, i) => {
       const p = i.woolworths?.price ?? i.coles?.price;
-      return p != null ? s + p * getUnits(i.list_item, unitOv, analysis) : s;
+      return p != null ? s + p * bq(i.list_item) : s;
     }, 0);
     const coTotal = displayItems.reduce((s, i) => {
       const p = i.coles?.price ?? i.woolworths?.price;
-      return p != null ? s + p * getUnits(i.list_item, unitOv, analysis) : s;
+      return p != null ? s + p * bq(i.list_item) : s;
     }, 0);
     // Optimal split: buy each item at whichever store's STICKER price is lower.
     // Deliberately not cheaper_store: that flag can be per-kg-based (a size-
@@ -700,7 +699,7 @@ async function boot() {
     // "optimal" trip cost MORE than the cheaper single store - an impossible
     // number once Split shop and its saving sat next to each other.
     const optimalTotal = displayItems.reduce((sum, i) => {
-      const qty = getUnits(i.list_item, unitOv, analysis);
+      const qty = bq(i.list_item);
       const best = Math.min(i.woolworths?.price ?? Infinity, i.coles?.price ?? Infinity);
       return sum + (best === Infinity ? 0 : best * qty);
     }, 0);
@@ -758,7 +757,7 @@ async function boot() {
     const pfx    = store === 'ww' ? 'ww' : 'coles';
     const sorted = sortItems(storeItems, store, sortKey, sortDir);
     const subtotal = sorted.reduce((s, i) =>
-      s + (priceFor(i, store) ?? 0) * getUnits(i.list_item, unitOv, analysis), 0);
+      s + (priceFor(i, store) ?? 0) * bq(i.list_item), 0);
     const arrow = (key) => sortKey === key ? (sortDir === 'asc' ? ' ↑' : ' ↓') : ' ↕';
     const rows = sorted.map(i => {
       const own = store === 'ww' ? i.woolworths : i.coles;
@@ -767,7 +766,7 @@ async function boot() {
       // price with a chip - you'd have to grab those few elsewhere anyway.
       const fellBack = !slSplit && own?.price == null && other?.price != null;
       const sd = fellBack ? other : own;
-      const units = getUnits(i.list_item, unitOv, analysis);
+      const units = bq(i.list_item);
       const lineTotal = (sd?.price ?? 0) * units;
       const cat = getCategory(i, catOv);
       const img = sd?.image_url;
@@ -780,8 +779,11 @@ async function boot() {
       const swapTitle = canSwap
         ? (store === 'ww' ? 'Buy at Coles instead' : 'Buy at Woolworths instead')
         : `Only sold at ${store === 'ww' ? 'Woolworths' : 'Coles'}`;
+      // Not sold at this store: the whole row renders grayed (CSS .row-fellback)
+      // with a quiet dash after the price - the loud "C only" chip made a
+      // borrowed row look like a full citizen of the wrong store's list.
       const onlyChip = fellBack
-        ? ` <span class="only-chip ${store === 'ww' ? 'coles' : 'ww'}" title="Not sold at ${store === 'ww' ? 'Woolworths' : 'Coles'} - this is the ${store === 'ww' ? 'Coles' : 'Woolworths'} price">${store === 'ww' ? 'C' : 'W'} only</span>`
+        ? ` <span class="from-other" title="Not sold at ${store === 'ww' ? 'Woolworths' : 'Coles'} - you'd buy this at ${store === 'ww' ? 'Coles' : 'Woolworths'} (its price shown)">–</span>`
         : '';
       // The other store's price rides along muted - switching stores (or
       // deciding a ⇄ swap) needs both numbers in view.
@@ -789,7 +791,7 @@ async function boot() {
         ? ` <span class="alt-price" title="${store === 'ww' ? 'Coles' : 'Woolworths'} price">${store === 'ww' ? 'C' : 'W'} ${fmt(other.price)}</span>`
         : '';
       const name = escAttr(i.list_item);
-      return `<tr>
+      return `<tr${fellBack ? ' class="row-fellback"' : ''}>
         <td class="item-name-cell"><div class="name-wrap">${img ? `<img class="sl-thumb" loading="lazy" src="${escAttr(img)}" alt="" onerror="this.style.display='none'">` : ''}<span title="${name}">${esc(shortName(i.list_item))}</span></div></td>
         <td class="cat-cell" style="font-size:12px;color:#64748B;overflow:hidden;text-overflow:ellipsis">${esc(cat)}</td>
         <td class="r price-cell"><span class="price-val">${fmt(sd?.price)}</span>${onlyChip}${altPrice}</td>
@@ -863,7 +865,7 @@ async function boot() {
   function renderShopMode(wwItems, colesItems) {
     const lineOf = (i, store) => {
       const sd = store === 'ww' ? i.woolworths : i.coles;
-      return (sd?.price ?? 0) * getUnits(i.list_item, unitOv, analysis);
+      return (sd?.price ?? 0) * bq(i.list_item);
     };
     const rowsHtml = (items, store) => {
       // Category-grouped (≈ aisle order), name-sorted inside each group.
@@ -877,7 +879,7 @@ async function boot() {
       for (const [cat, list] of byCat) {
         html += `<div class="sm-cat">${esc(cat)}</div>`;
         html += list.map(i => {
-          const units = getUnits(i.list_item, unitOv, analysis);
+          const units = bq(i.list_item);
           const line = lineOf(i, store);
           const done = !!smChecked[i.list_item];
           return `<button type="button" class="sm-row${done ? ' done' : ''}" data-item="${escAttr(i.list_item)}" data-line="${line.toFixed(2)}">
@@ -957,7 +959,7 @@ async function boot() {
     // Split mode: planned spend per store under the current assignment
     // (equal-price choice + per-row ⇄ swaps) - shown on the cards there.
     const subtotalOf = (items, store) => items.reduce((s, i) =>
-      s + (priceFor(i, store) ?? 0) * getUnits(i.list_item, unitOv, analysis), 0);
+      s + (priceFor(i, store) ?? 0) * bq(i.list_item), 0);
     const wwSub = subtotalOf(wwItems, 'ww');
     const coSub = subtotalOf(colesItems, 'coles');
     // Equal-price items (same price at both stores) - reassignable in split mode
@@ -1005,24 +1007,29 @@ async function boot() {
       ? '<span class="store-chip sm ww">W</span>' : '<span class="store-chip sm coles">C</span>';
     const splitDisc = `<svg class="split-icon" width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 A14 14 0 0 0 16 30 Z" fill="var(--ww)"/><path d="M16 2 A14 14 0 0 1 16 30 Z" fill="var(--coles)"/><line x1="16" y1="2" x2="16" y2="30" stroke="var(--card)" stroke-width="2.5"/></svg>`;
     const infoIco = tip => `<span class="info-ico" tabindex="0" data-tip="${tip.replace(/"/g, '&quot;')}">?</span>`;
-    // "Split shop" is ALWAYS shown, in both modes, so all three trip prices sit
-    // side by side: WW total (left card), Coles total (right card), split price
-    // (here). In split mode it follows the CURRENT plan (equal-price assignment
-    // + row swaps); in one-store mode it's the optimal split.
-    const splitShopVal = slSplit ? (wwSub + coSub) : optimalTotal;
-    // One tinted box pairs the split trip's PRICE with what that trip SAVES -
-    // "Split shop / Split saving" used to sit apart with Basket saving between
-    // them, and nothing said which number was a price and which a saving.
-    const splitTotalHtml =
-      `<div class="split-total-line">
-        <div class="saving-line"><span class="saving-icon">🧾</span><div class="saving-text"><div class="saving-label">Split shop${infoIco('What the whole trip costs split across both stores - each item at its planned store (split mode) or its cheapest store.')}</div><span class="saving-amount">${fmt(splitShopVal)}</span></div></div>
-        ${splitSaving > 0.005
-          ? `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">You save${infoIco('What the split shop above saves vs doing the whole trip at the dearer store.')}</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
-          : ''}
-      </div>`;
-    const savingInfoHtml = splitTotalHtml + (isEqual
-      ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
-      : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">One-store saving${infoIco('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store. Fixed - it does not change with the store you pick.')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`);
+    // The centre panel carries SAVINGS only ("You save" for the split plan,
+    // "One-store saving" for a single-store trip). The split trip's PRICE lives
+    // in split mode itself: a big combined Trip total above the savings, so the
+    // two per-store subtotals get one headline number - not a third stat
+    // wedged between savings figures.
+    // One-store mode prices missing items from the OTHER store so both card
+    // totals cover the same item set (a fair comparison - a store isn't dearer
+    // just because it stocks one more item). Say so on the card.
+    const wwForeign = displayItems.filter(i => i.woolworths?.price == null && i.coles?.price != null).length;
+    const coForeign = displayItems.filter(i => i.coles?.price == null && i.woolworths?.price != null).length;
+    const foreignNote = (n, from) => (!slSplit && n > 0)
+      ? `<span class="sc-foreign" title="${n} item${n !== 1 ? 's' : ''} not sold here - priced from ${from} so both totals cover the same items">incl. ${n} from ${from === 'Coles' ? 'C' : 'W'}</span>`
+      : '';
+    const tripTotalHtml = slSplit
+      ? `<div class="trip-total"><div class="tt-label">🧾 Trip total · both stores${infoIco('What this split trip costs in total: the Woolworths and Coles subtotals combined, following your current plan and swaps.')}</div><div class="tt-amount">${fmt(wwSub + coSub)}</div></div>`
+      : '';
+    const savingInfoHtml = tripTotalHtml
+      + (splitSaving > 0.005
+          ? `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">You save${infoIco('What splitting across both stores saves vs doing the whole trip at the dearer store. Use the Split shop toggle above to plan it.')}</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
+          : '')
+      + (isEqual
+          ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
+          : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">One-store saving${infoIco('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store. Fixed - it does not change with the store you pick.')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`);
 
     main.innerHTML = `
       <div class="sl-topbar">
@@ -1042,7 +1049,7 @@ async function boot() {
               <span class="sc-item-pill">${slSplit ? `${wwItems.length} item${wwItems.length !== 1 ? 's' : ''}` : `all ${displayItems.length} items`}</span>
             </div>
             <div class="sc-price ${wwPriceCls}">${fmt(slSplit ? wwSub : wwTotal)}</div>
-            <div class="sc-badge-row">${wwActive && !isEqual ? `<span class="sc-badge">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>` : deltaHtml(wwDelta)}</div>
+            <div class="sc-badge-row">${foreignNote(wwForeign, 'Coles')}${wwActive && !isEqual ? `<span class="sc-badge">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>` : deltaHtml(wwDelta)}</div>
           </div>
           <div class="sl-savings-panel">
             <div class="saving-info">${savingInfoHtml}</div>
@@ -1055,7 +1062,7 @@ async function boot() {
               <span class="sc-item-pill">${slSplit ? `${colesItems.length} item${colesItems.length !== 1 ? 's' : ''}` : `all ${displayItems.length} items`}</span>
             </div>
             <div class="sc-price ${coPriceCls}">${fmt(slSplit ? coSub : coTotal)}</div>
-            <div class="sc-badge-row">${!wwActive && !isEqual ? `<span class="sc-badge">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>` : deltaHtml(coDelta)}</div>
+            <div class="sc-badge-row">${foreignNote(coForeign, 'Woolworths')}${!wwActive && !isEqual ? `<span class="sc-badge">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>` : deltaHtml(coDelta)}</div>
           </div>
         </div>
       </div>
@@ -1109,16 +1116,15 @@ async function boot() {
     document.getElementById('wwTotalBlock')?.addEventListener('click', cardClick('ww'));
     document.getElementById('colesTotalBlock')?.addEventListener('click', cardClick('coles'));
 
-    // Qty steppers - write the same pw_units_v1 map the main page reads, so
-    // quantities stay consistent between pages.
-    // ponytail: local-only write; cross-device unit sync still happens on the
-    // main page (its scheduleUserSettingsSync owns the publish token).
+    // Qty steppers - cart quantities only (persisted with the basket). They no
+    // longer touch pw_units_v1: that map is the main page's kg-planning Units
+    // column, a different concept from "how many packs am I buying".
     main.querySelectorAll('.qs-btn').forEach(b => b.addEventListener('click', () => {
       const name = b.dataset.item;
-      const next = Math.max(1, getUnits(name, unitOv, analysis) + Number(b.dataset.d));
-      if (next === getUnits(name, unitOv, analysis)) return;
-      unitOv[name] = next;
-      localStorage.setItem('pw_units_v1', JSON.stringify(unitOv));
+      const next = Math.max(1, bq(name) + Number(b.dataset.d));
+      if (next === bq(name)) return;
+      basketQty[name] = next;
+      persistBasket();
       renderContent();
     }));
 

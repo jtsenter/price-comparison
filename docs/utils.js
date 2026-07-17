@@ -536,6 +536,10 @@ function buildDealGroups(items) {
       _isGroup: true,
       _groupLabel: g.label,
       _memberNames: members.map(m => m.list_item), // for the basket handoff (re-collapsed there)
+      // Real product names behind each store's best $/kg - what a "add this
+      // group deal to the basket" action actually puts in the cart.
+      _wwBestName: wwBest ? wwBest.m.list_item : null,
+      _coBestName: coBest ? coBest.m.list_item : null,
       category: g.category || 'Meat & Seafood',
       trip_count: null,
       woolworths: wwBest ? { price: wwBest.kg, url: wwBest.m.woolworths.url, image_url: wwBest.m.woolworths.image_url, name: wwBest.m.woolworths.name } : null,

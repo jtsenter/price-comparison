@@ -1763,6 +1763,8 @@ td.priority-cell { text-align: center; }
   background: #7F1D1D; border-color: #661717; color: #FCA5A5; padding: 6px 11px;
 }
 .bt-basket-seg .bt-rm:hover { background: #991B1B; }
+.bt-basket-seg .bt-rm:disabled { opacity: .35; cursor: default; }
+.bt-basket-seg .bt-rm:disabled:hover { background: #7F1D1D; }
 .bt-sl { background: #00843D; border-color: #006B31; color: #fff; padding: 6px 16px; }
 .bt-sl:hover { background: #006B31; }
 .bt-archive { background: rgba(127,29,29,.6); border-color: rgba(153,27,27,.5); color: #FCA5A5; }

@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=102" />
+  <link rel="stylesheet" href="style.css?v=103" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -336,6 +336,18 @@
     .dm-watch.active { opacity: 1; }
     .dm-bar { margin-top: 9px; }
     .dm-bar .price-bar-outer { display: block !important; }
+    /* Deal → basket selection */
+    .check-cell { width: 34px; text-align: center; }
+    .hd-check { width: 15px; height: 15px; cursor: pointer; accent-color: var(--ww); }
+    .dm-check { width: 19px; height: 19px; flex-shrink: 0; align-self: center; }
+    #hdBulkBar { min-width: 420px; }
+    #hdToast {
+      position: fixed; bottom: 84px; left: 50%; transform: translateX(-50%);
+      background: #1E293B; color: #F1F5F9; font-size: 13px; font-weight: 600;
+      padding: 9px 16px; border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,.3);
+      opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 700;
+    }
+    #hdToast.show { opacity: 1; }
   </style>
 </head>
 <body>
@@ -435,11 +447,26 @@
   </div>
 </main>
 
+<!-- Deal selection → basket bar (same look as the main page's bulk bar) -->
+<div id="hdBulkBar" class="bulk-toolbar" style="display:none">
+  <div class="bt-left">
+    <span class="bt-count-pill">0</span>
+    <span class="bt-label">selected</span>
+    <button class="bt-deselect">Deselect all ✕</button>
+  </div>
+  <div class="bt-right">
+    <div class="bt-basket-seg">
+      <button class="bt-chip bt-sl" title="Add the selected deals to your basket">🛒 Add to Basket</button>
+      <button class="bt-chip bt-rm" title="Remove the selected deals from your basket">✕</button>
+    </div>
+  </div>
+</div>
+
 <div id="priceTooltip" class="price-tooltip-fixed" style="display:none"></div>
 
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=15"></script>
-<script src="utils.js?v=69"></script>
+<script src="utils.js?v=70"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -808,7 +835,19 @@ function hdColHtml(col) {
 function renderHdHead() {
   const thead = document.getElementById('dealsHead');
   if (!thead) return;
-  thead.innerHTML = `<tr>${getVisibleHdCols().map(hdColHtml).join('')}</tr>`;
+  // Leading check column sits OUTSIDE the col-chooser system (always on).
+  // Resize math stays aligned: it indexes th/td by position, and both head and
+  // body gain exactly one leading cell.
+  thead.innerHTML = `<tr><th class="check-cell"><input type="checkbox" id="hdCheckAll" title="Select all deals"></th>${getVisibleHdCols().map(hdColHtml).join('')}</tr>`;
+  document.getElementById('hdCheckAll')?.addEventListener('change', (e) => {
+    const on = e.target.checked;
+    document.querySelectorAll('#dealsBody .hd-check').forEach(cb => {
+      cb.checked = on;
+      const n = cb.dataset.item;
+      if (on) _hdChecked.add(n); else _hdChecked.delete(n);
+    });
+    updateHdBulkBar();
+  });
   const navH = document.querySelector('header')?.offsetHeight || 60;
   thead.querySelectorAll('th').forEach(th => { th.style.top = navH + 'px'; });
   initSortHeaders();
@@ -1082,8 +1121,12 @@ function renderDeals() {
       avg:      `<td class="trend-cell">${avgCell}</td>`,
       watch:    `<td style="text-align:center">${watchBtnHD}</td>`,
     };
-    tbody.insertAdjacentHTML('beforeend', `<tr>${getVisibleHdCols().map(c => _hdCellMap[c] || '').join('')}</tr>`);
+    // A group deal in the basket means its best-value member (a real product).
+    if (isGroup) _hdBestMember[item.list_item] = hdGroupBest(item);
+    const checkCell = `<td class="check-cell"><input type="checkbox" class="hd-check" data-item="${safeNameHD}"${_hdChecked.has(item.list_item) ? ' checked' : ''}></td>`;
+    tbody.insertAdjacentHTML('beforeend', `<tr>${checkCell}${getVisibleHdCols().map(c => _hdCellMap[c] || '').join('')}</tr>`);
   });
+  syncHdCheckAll();
 
   // Recompute the sticky sub-header stack now that the category tabs are populated
   // (their height feeds the thead's top offset). Synchronous here = tabs already
@@ -1094,6 +1137,88 @@ function renderDeals() {
 }
 
 // ── Mobile deal cards ──────────────────────────────────────────────────────────
+// ── Deal selection → basket ───────────────────────────────────────────────────
+// Same standard-cart semantics as the main page: checkboxes are a transient
+// selection; 🛒 appends the checked deals to the persistent basket, ✕ removes
+// them. Group deals resolve to their best-value member (a real product).
+const _hdChecked = new Set();
+const _hdBestMember = {}; // '__group_x' → member name, rebuilt each render
+
+function hdGroupBest(item) {
+  const w = item.woolworths?.price, c = item.coles?.price;
+  if (w != null && (c == null || w <= c)) return item._wwBestName;
+  return item._coBestName;
+}
+// Checked entries as real basket-able product names.
+function hdCheckedNames() {
+  return [..._hdChecked].map(n => n.startsWith('__group_') ? _hdBestMember[n] : n).filter(Boolean);
+}
+function hdBasket() {
+  try { const s = JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}'); return { items: s.items || [], quantities: s.quantities || {} }; } catch { return { items: [], quantities: {} }; }
+}
+function hdBasketSave(b) { localStorage.setItem('pw_sl_handoff', JSON.stringify(b)); }
+
+function hdToast(msg) {
+  let t = document.getElementById('hdToast');
+  if (!t) { t = document.createElement('div'); t.id = 'hdToast'; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function updateHdBulkBar() {
+  const bar = document.getElementById('hdBulkBar');
+  if (!bar) return;
+  bar.style.display = _hdChecked.size > 0 ? 'flex' : 'none';
+  const pill = bar.querySelector('.bt-count-pill');
+  if (pill) pill.textContent = _hdChecked.size;
+  const rmBtn = bar.querySelector('.bt-rm');
+  if (rmBtn) { const b = hdBasket(); rmBtn.disabled = !hdCheckedNames().some(n => b.items.includes(n)); }
+}
+function syncHdCheckAll() {
+  const all = document.querySelectorAll('#dealsBody .hd-check');
+  const head = document.getElementById('hdCheckAll');
+  if (head) head.checked = all.length > 0 && [...all].every(cb => cb.checked);
+}
+
+function initHdBulkBar() {
+  const bar = document.getElementById('hdBulkBar');
+  if (!bar) return;
+  // Delegated: rows re-render often (sort, tune sliders, category tabs)
+  document.addEventListener('change', (e) => {
+    const cb = e.target.closest('.hd-check');
+    if (!cb || cb.id === 'hdCheckAll') return;
+    if (cb.checked) _hdChecked.add(cb.dataset.item); else _hdChecked.delete(cb.dataset.item);
+    syncHdCheckAll();
+    updateHdBulkBar();
+  });
+  bar.querySelector('.bt-deselect')?.addEventListener('click', () => {
+    _hdChecked.clear();
+    document.querySelectorAll('.hd-check').forEach(cb => { cb.checked = false; });
+    updateHdBulkBar();
+  });
+  bar.querySelector('.bt-sl')?.addEventListener('click', () => {
+    const names = hdCheckedNames();
+    if (!names.length) return;
+    const b = hdBasket();
+    const added = names.filter(n => !b.items.includes(n));
+    added.forEach(n => { b.items.push(n); b.quantities[n] = 1; });
+    hdBasketSave(b);
+    updateHdBulkBar();
+    hdToast(`🛒 ${added.length} added - ${b.items.length} in basket`);
+  });
+  bar.querySelector('.bt-rm')?.addEventListener('click', () => {
+    const rm = new Set(hdCheckedNames());
+    const b = hdBasket();
+    const kept = b.items.filter(n => !rm.has(n));
+    const removed = b.items.length - kept.length;
+    rm.forEach(n => delete b.quantities[n]);
+    hdBasketSave({ items: kept, quantities: b.quantities });
+    updateHdBulkBar();
+    hdToast(removed ? `✕ ${removed} removed - ${kept.length} in basket` : 'None of the selected deals were in the basket');
+  });
+}
+
 function renderDealsMobile(sorted, exclusions, overrides) {
   const wrap = document.getElementById('dealsMobile');
   if (!wrap) return;
@@ -1134,10 +1259,12 @@ function renderDealsMobile(sorted, exclusions, overrides) {
       ? `<a href="${storeUrl}" target="_blank" rel="noopener" class="price-link dm-price">${fmt(deal.price)}${kgSuffix}</a>`
       : `<span class="dm-price">${fmt(deal.price)}${kgSuffix}</span>`;
 
+    if (isGroup) _hdBestMember[item.list_item] = hdGroupBest(item);
     const card = document.createElement('div');
     card.className = `dm-card ${isW ? 'ww' : 'co'}`;
     card.innerHTML = `
       <div class="dm-top">
+        <input type="checkbox" class="hd-check dm-check" data-item="${safe}"${_hdChecked.has(item.list_item) ? ' checked' : ''} aria-label="Select deal">
         ${imgHtml}
         <div class="dm-info"><div class="dm-name">${esc(name)}</div><div class="dm-cat">${esc(cat)}</div></div>
         ${badge}
@@ -1475,7 +1602,9 @@ async function pollForCompletionHD(user, repo, token, dispatchedAt) {
   initDealTune();
   // Basket icon is plain navigation. It used to dump every visible deal into
   // the basket on click - retired with the lock model: the basket is a normal
-  // persistent cart and ONLY explicit adds put items in it.
+  // persistent cart and ONLY explicit adds put items in it. Deals get in via
+  // the row checkboxes + the Add to Basket bar (initHdBulkBar).
+  initHdBulkBar();
   initTooltip();
   initHdColChooser();
   document.getElementById('hdResetColsBtn')?.addEventListener('click', resetHdCols);

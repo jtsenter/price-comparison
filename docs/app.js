@@ -650,10 +650,15 @@ let _checkedItems = new Set();
 // in-page mirror: ✓ marks on cards/panel rows mean "in the basket". Desktop
 // row checkboxes are transient bulk-action selection and are NEVER pre-seeded.
 function persistBasketStore() {
-  localStorage.setItem('pw_sl_handoff', JSON.stringify({
-    items: [..._selectedItems],
-    quantities: loadUnitOverrides(),
-  }));
+  // Cart quantities are integer packs owned by the basket page's steppers -
+  // keep what's already there, default new items to 1. (NOT the Units column's
+  // kg amounts; snapshotting those here gave carts 0.2-of-a-jar quantities.)
+  let prev = {};
+  try { prev = JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}').quantities || {}; } catch {}
+  const items = [..._selectedItems];
+  const quantities = {};
+  items.forEach(n => { const q = Number(prev[n]); quantities[n] = Number.isFinite(q) && q >= 1 ? Math.round(q) : 1; });
+  localStorage.setItem('pw_sl_handoff', JSON.stringify({ items, quantities }));
 }
 (function mirrorBasketSelection() {
   try {
@@ -680,6 +685,10 @@ function updateBulkBar() {
   if (archBtn) archBtn.innerHTML = inArchive ? '📤 Unarchive' : '🗄 Archive';
   const priChip = bar.querySelector('.bt-pri');
   if (priChip) priChip.style.display = inArchive ? 'none' : '';
+  // ✕ only does something when the checked rows overlap the basket - disable
+  // it otherwise so it never reads as a live control that silently no-ops.
+  const rmBtn = bar.querySelector('.bt-rm');
+  if (rmBtn) rmBtn.disabled = !checkedRealNames(true).some(n => _selectedItems.has(n));
 }
 
 // Checked rows resolved to real basket-able product names. Per-kg group rows
@@ -2548,11 +2557,14 @@ function computeBannerStats(items) {
   // was hidden. The banner/footer now match exactly what's on screen.
   const perkgMembers = new Set(loadVariantGroups().flatMap(g => g.items));
   const filtered = items.filter(item => {
-    if (perkgMembers.has(item.list_item)) return false;
-    if (_activePriority === 'watchlist') {
-      if (!_watchlist.has(item.list_item)) return false;
-    } else if (_activePriority === 'selected') {
+    // In-basket view: basketed per-kg MEMBERS are visible (via their group
+    // rows), so they count here too - checked before the member exclusion.
+    if (_activePriority === 'selected') {
       if (!_selectedItems.has(item.list_item)) return false;
+    } else if (perkgMembers.has(item.list_item)) {
+      return false;
+    } else if (_activePriority === 'watchlist') {
+      if (!_watchlist.has(item.list_item)) return false;
     } else {
       const p = getPriority(item.list_item);
       if (p === 'archive' || item.archived) {
@@ -3205,8 +3217,14 @@ function sortItems(items) {
     if (_perkgFilter === 'hidden' && item._isGroup) return false;
     // Watchlist filter: show only watchlisted items; bypass archive/priority checks
     if (_activePriority === 'watchlist') return _watchlist.has(item.list_item);
-    // Mobile selection filter
-    if (_activePriority === 'selected') return _selectedItems.has(item.list_item);
+    // In-basket filter. The basket stores MEMBER names, never synthetic
+    // __group_* keys - so a group row qualifies when any of its members is in
+    // the basket (otherwise basketed per-kg products were invisible here:
+    // members never render as individual rows).
+    if (_activePriority === 'selected') {
+      if (item._isGroup) return (item._members || []).some(m => _selectedItems.has(m.list_item));
+      return _selectedItems.has(item.list_item);
+    }
     const p = getPriority(item.list_item);
     // Archived items (by priority or item.archived flag): only visible in archive view.
     // In archive view, show ONLY those items and nothing else.
@@ -4484,6 +4502,28 @@ function renderMobileCards(items, data) {
     });
     chipsWrap.appendChild(chip);
   });
+  // Select-all chip - mobile's answer to the desktop header checkbox: one tap
+  // puts every VISIBLE card in the basket; when they're all in already, the
+  // same tap takes them back out. Reads the rendered cards, so it always
+  // matches the current filter/category view.
+  const allChip = document.createElement('button');
+  allChip.className = 'mc-sort-chip mc-all-chip';
+  allChip.textContent = '☑ All';
+  allChip.title = 'Add everything shown to the basket (tap again to remove)';
+  allChip.setAttribute('aria-label', allChip.title);
+  allChip.onclick = () => {
+    const names = [...document.querySelectorAll('#mobileCards .mobile-card')]
+      .map(c => c.dataset.cheapest || c.dataset.item).filter(Boolean);
+    if (!names.length) return;
+    const allIn = names.every(n => _selectedItems.has(n));
+    names.forEach(n => allIn ? _selectedItems.delete(n) : _selectedItems.add(n));
+    persistBasketStore();
+    _updateSelectedPill();
+    showToast(allIn ? `✕ ${names.length} removed - ${_selectedItems.size} in basket`
+                    : `🛒 All shown in basket - ${_selectedItems.size} total`);
+    if (_lastData) renderPage(_lastData);
+  };
+  chipsWrap.appendChild(allChip);
   // Watchlist chip - lives with the sort chips (the pill row is hidden on
   // phones); delegates to the filter row's pill so there's ONE toggle.
   const watchChip = document.createElement('button');
