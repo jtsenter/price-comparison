@@ -577,6 +577,7 @@ function loadVariantGroups() {
     return {
       key: g.key,
       label: o.label || g.label,
+      category: g.category,
       items: computePerKgItems(g.items, o),
       // Per-store ordered member lists (display order hints; membership comes from
       // `items` + price qualification in resolveStoreLists). Null until the user saves.
@@ -3312,7 +3313,7 @@ function renderCards(items) {
     const co = item.coles;
     const cheaper = item.cheaper_store;
     const ov = overrides[item.list_item] || {};
-    const displayName = ov.displayName || stripWW(item.list_item);
+    const displayName = ov.displayName || shortName(item.list_item);
     const cat = getCategory(item);
     const p = getPriority(item.list_item);
     const hotDeal = isHotDeal(item, exclusions);
@@ -3336,15 +3337,14 @@ function renderCards(items) {
     ).join('');
 
     // Prices
-    const wwP100 = clientPer100(ww);
-    const coP100 = clientPer100(co);
+    const { ww: wwP100, coles: coP100 } = per100Pair(ww, co);
     const hotBadge = hotDeal ? ' <span class="hot-badge" title="Hot Deal - meaningfully cheaper than its usual price right now">🔥</span>' : '';
 
     let wwHtml;
     if (ww) {
       const pv = wwUrl ? `<a href="${wwUrl}" target="_blank" rel="noopener" class="price-link">${fmt(ww.price)}</a>` : fmt(ww.price);
       const fire = hotDeal && cheaper === 'woolworths' ? hotBadge : '';
-      const unit = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : fmtUnit(ww.unit_price, ww.unit);
+      const unit = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : (wwP100.blanked ? '' : fmtUnit(ww.unit_price, ww.unit));
       wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}</div>`;
     } else {
       wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span> <a href="https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}" target="_blank" rel="noopener" class="search-link">Find →</a></div>`;
@@ -3354,7 +3354,7 @@ function renderCards(items) {
     if (co) {
       const pv = coUrl ? `<a href="${coUrl}" target="_blank" rel="noopener" class="price-link">${fmt(co.price)}</a>` : fmt(co.price);
       const fire = hotDeal && cheaper === 'coles' ? hotBadge : '';
-      const unit = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : fmtUnit(co.unit_price, co.unit);
+      const unit = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : (coP100.blanked ? '' : fmtUnit(co.unit_price, co.unit));
       coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}</div>`;
     } else {
       coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span> <a href="https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}" target="_blank" rel="noopener" class="search-link">Find →</a></div>`;
@@ -3471,7 +3471,7 @@ function buildVariantGroups(byName) {
       woolworths: wwBest ? wwBest.result : null,
       coles: coBest ? coBest.result : null,
       cheaper_store: cheaper,
-      category: 'Meat & Seafood',
+      category: g.category || 'Meat & Seafood',
       trip_count: null,
       price_history: [],
     });
@@ -4480,7 +4480,7 @@ function renderMobileCards(items, data) {
     const co      = item.coles;
     const cheaper = item.cheaper_store;
     const ov      = overrides[item.list_item] || {};
-    const displayName = ov.displayName || stripWW(item.list_item);
+    const displayName = ov.displayName || shortName(item.list_item);
     const priority = getPriority(item.list_item);
     const hotDeal  = isHotDeal(item, exclusions);
     const isWatchedMC = _watchlist.has(item.list_item);
@@ -4501,8 +4501,7 @@ function renderMobileCards(items, data) {
       ? buildPriceBar(item.list_item, _trendSeriesMC.prices.map(p => ({price: p})), _trendSeriesMC.current)
       : '';
 
-    const wwP100 = clientPer100(ww);
-    const coP100 = clientPer100(co);
+    const { ww: wwP100, coles: coP100 } = per100Pair(ww, co);
     const wwUnit = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : '';
     const coUnit = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : '';
 
@@ -4976,7 +4975,7 @@ function _renderPageInner(data) {
 
     const wwUrl  = ov.wwUrl    || ww?.url  || null;
     const coUrl  = ov.colesUrl || co?.url  || null;
-    const displayName = ov.displayName || stripWW(item.list_item);
+    const displayName = ov.displayName || shortName(item.list_item);
 
     const coImgSrc = resolveImgUrl(co?.image_url) || '';
     const wwImgSrc = resolveImgUrl(ww?.image_url) || '';
@@ -5021,8 +5020,7 @@ function _renderPageInner(data) {
     const hotBadge = `<span class="hot-badge" title="Hot Deal - meaningfully cheaper than its usual price right now">🔥</span>`;
 
     // Per-100g/ml - computed from product name (reliable for packs); falls back to scraped cup price
-    const wwP100 = clientPer100(ww);
-    const coP100 = clientPer100(co);
+    const { ww: wwP100, coles: coP100 } = per100Pair(ww, co);
 
     // WW price cell
     let wwCellContent;
@@ -5032,7 +5030,7 @@ function _renderPageInner(data) {
         : fmt(ww.price);
       const wwFire = hotDeal && (cheaper === 'woolworths' || (cheaper == null && ww && !co)) ? hotBadge : '';
       const wwNameTip = ww.name ? ` title="${ww.name.replace(/"/g, '&quot;')}"` : '';
-      const wwUnitStr = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : fmtUnit(ww.unit_price, ww.unit);
+      const wwUnitStr = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : (wwP100.blanked ? '' : fmtUnit(ww.unit_price, ww.unit));
       wwCellContent = `<div class="price-main"${wwNameTip}>${wwPriceVal}${wwFire}</div><div class="price-unit">${wwUnitStr}</div>`;
     } else {
       const searchUrl = `https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}`;
@@ -5047,7 +5045,7 @@ function _renderPageInner(data) {
         : fmt(co.price);
       const coFire = hotDeal && (cheaper === 'coles' || (cheaper == null && co && !ww)) ? hotBadge : '';
       const coNameTip = co.name ? ` title="${co.name.replace(/"/g, '&quot;')}"` : '';
-      const coUnitStr = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : fmtUnit(co.unit_price, co.unit);
+      const coUnitStr = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : (coP100.blanked ? '' : fmtUnit(co.unit_price, co.unit));
       coCellContent = `<div class="price-main"${coNameTip}>${coPriceVal}${coFire}</div><div class="price-unit">${coUnitStr}</div>`;
     } else {
       const searchUrl = `https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}`;

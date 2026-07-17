@@ -55,6 +55,22 @@ function clientPer100(result) {
   return { value: null, label: '100g' };
 }
 
+// $/100 for a WW+Coles pair with the "no lone unit price" rule: when BOTH stores
+// are priced but only ONE resolves a size, show $/100 for NEITHER - a single
+// side's $/100 (because only that store's name/cup-price carries a size) is a
+// confusing asymmetry between the two columns. If only one store is priced at
+// all, there's nothing to compare against, so its $/100 shows normally.
+function per100Pair(ww, co) {
+  const w = clientPer100(ww), c = clientPer100(co);
+  const bothPriced = ww && ww.price != null && co && co.price != null;
+  if (bothPriced && (w.value == null) !== (c.value == null)) {
+    // blanked=true tells the renderer to suppress even the raw fmtUnit fallback,
+    // so BOTH columns are truly empty (not just missing the $/100 figure).
+    return { ww: { value: null, label: w.label, blanked: true }, coles: { value: null, label: c.label, blanked: true } };
+  }
+  return { ww: w, coles: c };
+}
+
 // ── Exclusion-key parsing ───────────────────────────────────────────────────
 // One parser for pw_exclusions_v1 keys, which exist in three historical formats:
 // bare numbers, bare strings ("3.50"), and store-prefixed strings ("ww:3.50" /
@@ -385,6 +401,28 @@ const DEFAULT_VARIANT_GROUPS = [
     'Drovers Choice No Added Hormone Beef Porterhouse Steak 1kg',
     "Cleaver's Organic Grass-Fed Beef Porterhouse Steak 290g",
   ]},
+  // 2026-07 non-meat per-kg groups: pack sizes vary, only cheapest $/kg matters.
+  // These carry their own category (buildVariantGroups/buildDealGroups default
+  // to Meat & Seafood otherwise).
+  { key: 'greek_yoghurt', label: 'Greek Yoghurt', category: 'Dairy & Eggs', items: [
+    'Greek Style Yoghurt 2kg',
+    'Woolworths Greek Style Yoghurt',
+  ]},
+  { key: 'washed_potatoes', label: 'Washed Potatoes', category: 'Fruit & Veg', items: [
+    'Washed Potato Bag 4kg',
+    'Woolworths Washed Potato Bag',
+    'Woolworths Red Washed Potatoes Bag',
+  ]},
+  { key: 'carrots', label: 'Carrots', category: 'Fruit & Veg', items: [
+    'Woolworths Australian Grown Carrots',
+    'The Odd Bunch Carrots',
+  ]},
+  { key: 'brown_onions', label: 'Brown Onions', category: 'Fruit & Veg', items: [
+    'Woolworths Onion Brown Bag',
+  ]},
+  { key: 'red_onions', label: 'Red Onions', category: 'Fruit & Veg', items: [
+    'Woolworths Red Onions Bag',
+  ]},
 ];
 
 // One group's resolved member names under the user's current overrides.
@@ -470,7 +508,7 @@ function buildDealGroups(items) {
       _isGroup: true,
       _groupLabel: g.label,
       _memberNames: members.map(m => m.list_item), // for the basket handoff (re-collapsed there)
-      category: 'Meat & Seafood',
+      category: g.category || 'Meat & Seafood',
       trip_count: null,
       woolworths: wwBest ? { price: wwBest.kg, url: wwBest.m.woolworths.url, image_url: wwBest.m.woolworths.image_url, name: wwBest.m.woolworths.name } : null,
       coles:      coBest ? { price: coBest.kg, url: coBest.m.coles.url,      image_url: coBest.m.coles.image_url,      name: coBest.m.coles.name } : null,

@@ -50,6 +50,7 @@ eval([
   extractConst('DEAL_MIN_SPREAD'),
   extractConst('DEAL_MIN_DROP'),
   extract('clientPer100'),
+  extract('per100Pair'),
   extract('exclPriceSet'),
   extract('getTrendSeries'),
   extract('_median'),
@@ -75,6 +76,25 @@ check('cup-price fallback (loose, kg unit)',
   { value: 1, label: '100g' });
 check('no price -> null', clientPer100({ price: null }), { value: null, label: '100g' });
 check('no data at all -> null', clientPer100(null), { value: null, label: '100g' });
+
+// ── per100Pair (no lone unit price when both stores are priced) ──────────────
+{
+  const withSize = { price: 5, name: 'Foo 500g' };     // -> $1.00/100g
+  const noSize   = { price: 3, name: 'Bar' };           // -> null
+  // both priced, both resolve -> both show
+  let p = per100Pair(withSize, { price: 10, name: 'Baz 1kg' });
+  check('per100Pair both resolve: ww shown', p.ww.value, 1);
+  check('per100Pair both resolve: coles shown', p.coles.value != null, true);
+  // both priced, only one resolves -> BOTH blanked
+  p = per100Pair(withSize, noSize);
+  check('per100Pair asymmetric: ww blanked', p.ww.value, null);
+  check('per100Pair asymmetric: coles blanked', p.coles.value, null);
+  check('per100Pair asymmetric: blanked flag set', p.ww.blanked && p.coles.blanked, true);
+  // only one store priced -> its value still shows (nothing to compare against)
+  p = per100Pair(withSize, null);
+  check('per100Pair single store: value kept', p.ww.value, 1);
+  check('per100Pair single store: not blanked', !p.ww.blanked, true);
+}
 
 // ── exclPriceSet ─────────────────────────────────────────────────────────────
 check('mixed key formats',
