@@ -2415,6 +2415,15 @@ td.priority-cell { text-align: center; }
 #tableBody tr:nth-child(even) td.item-name { background: #FAFBFC; }
 #tableBody tr:hover td.check-cell,
 #tableBody tr:hover td.item-name { background: #FAFBFD; }
+/* A per-kg group row's sticky first columns (checkbox + name) must carry the
+   SAME accent tint as the rest of the row - otherwise the name sat on a white
+   island, visually detached from the expanded member panel it heads. Mixed over
+   --card (not transparent) so the sticky cell stays opaque during side-scroll.
+   Open placed last so it wins over :hover, matching the non-sticky > td rules. */
+#tableBody tr.vg-group-row:hover td.check-cell,
+#tableBody tr.vg-group-row:hover td.item-name { background: color-mix(in srgb, var(--accent) 5%, var(--card)); }
+#tableBody tr.vg-group-row.vg-group-open td.check-cell,
+#tableBody tr.vg-group-row.vg-group-open td.item-name { background: color-mix(in srgb, var(--accent) 7%, var(--card)); }
 
 /* ── 4 · Pull-to-refresh indicator ────────────────────────────────────── */
 #pullRefreshIndicator {

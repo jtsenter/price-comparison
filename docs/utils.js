@@ -423,6 +423,12 @@ const DEFAULT_VARIANT_GROUPS = [
   { key: 'red_onions', label: 'Red Onions', category: 'Fruit & Veg', items: [
     'Woolworths Red Onions Bag',
   ]},
+  { key: 'nutella', label: 'Nutella', category: 'Sweets', items: [
+    'Nutella Hazelnut Chocolate Spread Spread',
+  ]},
+  { key: 'lotus_biscoff', label: 'Lotus Biscoff', category: 'Sweets', items: [
+    'Lotus Biscoff Spread',
+  ]},
 ];
 
 // One group's resolved member names under the user's current overrides.
