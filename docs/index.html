@@ -22,7 +22,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=103" />
+  <link rel="stylesheet" href="style.css?v=104" />
 </head>
 <body>
 
@@ -41,10 +41,12 @@
   </div>
   <div class="bt-right">
     <button class="bt-chip bt-archive">🗄 Archive</button>
-    <div class="bt-basket-seg">
-      <button class="bt-chip bt-sl" title="Add the selected items to your basket">🛒 Add to Basket</button>
-      <button class="bt-chip bt-rm" title="Remove the selected items from your basket">✕</button>
+    <div class="bt-qty-step" title="How many units of each selected item to add">
+      <button class="bt-qty-dec" type="button" aria-label="Fewer units">−</button>
+      <span class="bt-qty">1</span>
+      <button class="bt-qty-inc" type="button" aria-label="More units">+</button>
     </div>
+    <button class="bt-chip bt-sl" title="Add the selected items to your basket">＋ Basket</button>
   </div>
 </div>
 
@@ -388,7 +390,7 @@
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script src="name_map.js?v=52"></script>
 <script src="utils.js?v=70"></script>
-<script src="app.js?v=122"></script>
+<script src="app.js?v=123"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">

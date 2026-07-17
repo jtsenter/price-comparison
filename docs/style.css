@@ -1754,19 +1754,21 @@ td.priority-cell { text-align: center; }
 }
 .bt-chip:hover { background: #5D6E87; }
 .bt-chip .arrow { color: #B6C2D1; font-size: 14px; line-height: 1; }
-/* Basket add/remove: one rectangle, two buttons. Green 🛒 appends the checked
-   rows to the persistent basket; the red ✕ segment removes them from it. */
-.bt-basket-seg { display: inline-flex; }
-.bt-basket-seg .bt-sl { border-radius: 8px 0 0 8px; }
-.bt-basket-seg .bt-rm {
-  border-radius: 0 8px 8px 0; border-left: 0;
-  background: #7F1D1D; border-color: #661717; color: #FCA5A5; padding: 6px 11px;
-}
-.bt-basket-seg .bt-rm:hover { background: #991B1B; }
-.bt-basket-seg .bt-rm:disabled { opacity: .35; cursor: default; }
-.bt-basket-seg .bt-rm:disabled:hover { background: #7F1D1D; }
-.bt-sl { background: #00843D; border-color: #006B31; color: #fff; padding: 6px 16px; }
+/* Units-to-add stepper, then the ＋ Basket button. At 0 units the button turns
+   into ✕ Remove (drops the checked rows from the basket) - one control that
+   both adds N units and, at zero, removes. */
+.bt-qty-step { display: inline-flex; align-items: center; gap: 2px; background: #4D5D74; border: 1px solid rgba(255,255,255,.14); border-radius: 8px; padding: 2px; }
+.bt-qty-step button { width: 24px; height: 24px; border: none; background: transparent; color: #F1F5F9; font-size: 16px; font-weight: 700; line-height: 1; cursor: pointer; border-radius: 6px; }
+.bt-qty-step button:hover { background: #5D6E87; }
+.bt-qty-step button:disabled { opacity: .35; cursor: default; }
+.bt-qty-step button:disabled:hover { background: transparent; }
+.bt-qty { min-width: 20px; text-align: center; color: #F1F5F9; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.bt-sl { background: #00843D; border-color: #006B31; color: #fff; padding: 6px 16px; border-radius: 8px; }
 .bt-sl:hover { background: #006B31; }
+.bt-sl.is-remove { background: #7F1D1D; border-color: #661717; color: #FCA5A5; }
+.bt-sl.is-remove:hover { background: #991B1B; }
+.bt-sl:disabled { opacity: .4; cursor: default; }
+.bt-sl:disabled:hover { background: #7F1D1D; }
 .bt-archive { background: rgba(127,29,29,.6); border-color: rgba(153,27,27,.5); color: #FCA5A5; }
 .bt-archive:hover { background: rgba(153,27,27,.7); }
 /* Chip dropdown */
@@ -2513,12 +2515,16 @@ td.priority-cell { text-align: center; }
   .mc-icons > .mc-hot,
   .mc-icons > .mc-hist-btn,
   .mc-icons > .mc-watch-btn,
+  .mc-icons > .item-watch-btn,
   .mc-icons > .mc-unarchive-btn {
     width: 34px; height: 34px; min-width: 34px; min-height: 34px;
     display: inline-flex; align-items: center; justify-content: center;
     padding: 0; line-height: 1; font-size: 17px; box-sizing: border-box;
   }
   .mc-icons > .mc-hot { font-size: 18px; }
+  /* Equal gaps between every icon in the strip (was 2px + per-button padding
+     variance, which read as uneven spacing between 🔥 / history / 👁). */
+  .mc-icons { gap: 4px; }
 
   /* The frequency dropdown is relocated into the category row by buildCategoryTabs,
      and every other control here is hidden on mobile - so this row collapses to

@@ -56,7 +56,7 @@
     .store-card-sl {
       display: grid;
       grid-template-columns: auto 1fr auto;
-      grid-template-areas: "icon name price" "icon name badge";
+      grid-template-areas: "icon name price" "icon name foreign" "icon name badge";
       column-gap: 12px; row-gap: 2px;
       align-items: center; align-content: center;
       padding: 12px 16px;
@@ -87,7 +87,10 @@
     .sc-price.price-active   { color: var(--green); }
     .sc-price.price-inactive { color: var(--text-soft); }
     .sc-badge-row { grid-area: badge; justify-self: end; min-height: 18px; display: flex; align-items: center; gap: 6px; }
-    .sc-foreign { font-size: 10px; color: var(--text-soft); white-space: nowrap; cursor: help; }
+    /* "incl. N from C/W" on its own line under the price so it never crowds the
+       badge - the card grows taller to fit it (empty row = 0 height otherwise). */
+    .sc-foreign-row { grid-area: foreign; justify-self: end; }
+    .sc-foreign { display: inline-block; font-size: 10px; color: var(--text-soft); white-space: nowrap; cursor: help; background: var(--bg); border-radius: 8px; padding: 1px 7px; }
     .sc-badge {
       display: inline-block; background: var(--green); color: #fff;
       font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 10px;
@@ -116,7 +119,7 @@
     .sl-savings-panel .bar-ribbon-chips .chip-word { display: none; }
     /* Split mode's headline: the combined trip total, bigger than the per-store
        card totals it sums, in a green tint box above the savings lines. */
-    .trip-total { background: #F0FDF4; border: 1px solid #D1FAE5; border-radius: 10px; padding: 6px 9px; margin-bottom: 4px; text-align: center; }
+    .trip-total { background: #F0FDF4; border: 1px solid #D1FAE5; border-radius: 10px; padding: 6px 9px; margin-top: 6px; text-align: center; }
     .trip-total .tt-label { display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 10px; font-weight: 700; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.06em; }
     .trip-total .tt-amount { font-size: 26px; font-weight: 800; color: var(--green); line-height: 1.15; font-variant-numeric: tabular-nums; }
     /* ── Save ribbon (replaces stats bar) ── */
@@ -1020,16 +1023,20 @@ async function boot() {
     const foreignNote = (n, from) => (!slSplit && n > 0)
       ? `<span class="sc-foreign" title="${n} item${n !== 1 ? 's' : ''} not sold here - priced from ${from} so both totals cover the same items">incl. ${n} from ${from === 'Coles' ? 'C' : 'W'}</span>`
       : '';
+    // Basket saving (one-store) sits ABOVE Split saving. In split mode a big
+    // combined Trip total goes BENEATH both savings (it's a total, not a saving,
+    // so it reads last). Trip total is out of the one-store view entirely - the
+    // two store cards already show each single-store total there.
+    const basketSavingLine = isEqual
+      ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
+      : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIco('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store. Fixed - it does not change with the store you pick.')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`;
+    const splitSavingLine = splitSaving > 0.005
+      ? `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Split saving${infoIco('The most you can save overall: every item at whichever store sells it cheapest, vs the dearer single store. Use the Split shop toggle above to plan it.')}</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
+      : '';
     const tripTotalHtml = slSplit
       ? `<div class="trip-total"><div class="tt-label">🧾 Trip total · both stores${infoIco('What this split trip costs in total: the Woolworths and Coles subtotals combined, following your current plan and swaps.')}</div><div class="tt-amount">${fmt(wwSub + coSub)}</div></div>`
       : '';
-    const savingInfoHtml = tripTotalHtml
-      + (splitSaving > 0.005
-          ? `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">You save${infoIco('What splitting across both stores saves vs doing the whole trip at the dearer store. Use the Split shop toggle above to plan it.')}</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
-          : '')
-      + (isEqual
-          ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
-          : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">One-store saving${infoIco('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store. Fixed - it does not change with the store you pick.')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`);
+    const savingInfoHtml = basketSavingLine + splitSavingLine + tripTotalHtml;
 
     main.innerHTML = `
       <div class="sl-topbar">
@@ -1049,7 +1056,8 @@ async function boot() {
               <span class="sc-item-pill">${slSplit ? `${wwItems.length} item${wwItems.length !== 1 ? 's' : ''}` : `all ${displayItems.length} items`}</span>
             </div>
             <div class="sc-price ${wwPriceCls}">${fmt(slSplit ? wwSub : wwTotal)}</div>
-            <div class="sc-badge-row">${foreignNote(wwForeign, 'Coles')}${wwActive && !isEqual ? `<span class="sc-badge">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>` : deltaHtml(wwDelta)}</div>
+            <div class="sc-foreign-row">${foreignNote(wwForeign, 'Coles')}</div>
+            <div class="sc-badge-row">${wwActive && !isEqual ? `<span class="sc-badge">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>` : deltaHtml(wwDelta)}</div>
           </div>
           <div class="sl-savings-panel">
             <div class="saving-info">${savingInfoHtml}</div>
@@ -1062,7 +1070,8 @@ async function boot() {
               <span class="sc-item-pill">${slSplit ? `${colesItems.length} item${colesItems.length !== 1 ? 's' : ''}` : `all ${displayItems.length} items`}</span>
             </div>
             <div class="sc-price ${coPriceCls}">${fmt(slSplit ? coSub : coTotal)}</div>
-            <div class="sc-badge-row">${foreignNote(coForeign, 'Woolworths')}${!wwActive && !isEqual ? `<span class="sc-badge">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>` : deltaHtml(coDelta)}</div>
+            <div class="sc-foreign-row">${foreignNote(coForeign, 'Woolworths')}</div>
+            <div class="sc-badge-row">${!wwActive && !isEqual ? `<span class="sc-badge">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>` : deltaHtml(coDelta)}</div>
           </div>
         </div>
       </div>

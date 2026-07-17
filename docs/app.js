@@ -649,17 +649,20 @@ let _checkedItems = new Set();
 // bulk "Add to Basket") and stay until removed. _selectedItems is the live
 // in-page mirror: ✓ marks on cards/panel rows mean "in the basket". Desktop
 // row checkboxes are transient bulk-action selection and are NEVER pre-seeded.
-function persistBasketStore() {
-  // Cart quantities are integer packs owned by the basket page's steppers -
-  // keep what's already there, default new items to 1. (NOT the Units column's
-  // kg amounts; snapshotting those here gave carts 0.2-of-a-jar quantities.)
-  let prev = {};
-  try { prev = JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}').quantities || {}; } catch {}
+function basketQtyMap() {
+  try { return { ...(JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}').quantities || {}) }; } catch { return {}; }
+}
+// Write the basket from the current _selectedItems + an explicit quantity map
+// (integer packs, min 1, default 1 for anything missing; stale keys pruned).
+function writeBasket(qtyMap) {
   const items = [..._selectedItems];
   const quantities = {};
-  items.forEach(n => { const q = Number(prev[n]); quantities[n] = Number.isFinite(q) && q >= 1 ? Math.round(q) : 1; });
+  items.forEach(n => { const q = Number((qtyMap || {})[n]); quantities[n] = Number.isFinite(q) && q >= 1 ? Math.round(q) : 1; });
   localStorage.setItem('pw_sl_handoff', JSON.stringify({ items, quantities }));
 }
+// Simple add/remove (single unit, from card taps / panel ＋): keep existing
+// quantities, default new to 1.
+function persistBasketStore() { writeBasket(basketQtyMap()); }
 (function mirrorBasketSelection() {
   try {
     (JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}').items || [])
@@ -685,10 +688,31 @@ function updateBulkBar() {
   if (archBtn) archBtn.innerHTML = inArchive ? '📤 Unarchive' : '🗄 Archive';
   const priChip = bar.querySelector('.bt-pri');
   if (priChip) priChip.style.display = inArchive ? 'none' : '';
-  // ✕ only does something when the checked rows overlap the basket - disable
-  // it otherwise so it never reads as a live control that silently no-ops.
-  const rmBtn = bar.querySelector('.bt-rm');
-  if (rmBtn) rmBtn.disabled = !checkedRealNames(true).some(n => _selectedItems.has(n));
+  reflectBulkQty();
+}
+
+// The bulk bar's units-to-add stepper. At 0 the ＋ Basket button flips to a
+// ✕ Remove that drops the checked rows from the basket.
+let _bulkQty = 1;
+function reflectBulkQty() {
+  const bar = $('bulkToolbar');
+  if (!bar) return;
+  const q = bar.querySelector('.bt-qty');
+  if (q) q.textContent = _bulkQty;
+  const dec = bar.querySelector('.bt-qty-dec');
+  if (dec) dec.disabled = _bulkQty <= 0;
+  const btn = bar.querySelector('.bt-sl');
+  if (!btn) return;
+  if (_bulkQty === 0) {
+    btn.textContent = '✕ Remove';
+    btn.classList.add('is-remove');
+    // Nothing to remove unless a checked row is actually in the basket.
+    btn.disabled = !checkedRealNames(true).some(n => _selectedItems.has(n));
+  } else {
+    btn.textContent = _bulkQty === 1 ? '＋ Basket' : `＋ Basket ×${_bulkQty}`;
+    btn.classList.remove('is-remove');
+    btn.disabled = false;
+  }
 }
 
 // Checked rows resolved to real basket-able product names. Per-kg group rows
@@ -2495,29 +2519,37 @@ function initBulkBar() {
     });
   });
 
-  // Standard cart semantics: Add appends the checked rows to the persistent
-  // basket (deduped, no navigation - the 🛒 nav icon views it); ✕ removes them.
+  // Units stepper: sets how many units of each checked item to add. Min 0;
+  // at 0 the button becomes ✕ Remove.
+  bar.querySelector('.bt-qty-dec')?.addEventListener('click', () => { if (_bulkQty > 0) { _bulkQty--; reflectBulkQty(); } });
+  bar.querySelector('.bt-qty-inc')?.addEventListener('click', () => { _bulkQty++; reflectBulkQty(); });
+
+  // ＋ Basket adds _bulkQty units of each checked row to the persistent basket
+  // (accumulating onto any units already there); at _bulkQty 0 it removes them.
   bar.querySelector('.bt-sl')?.addEventListener('click', () => {
+    if (_bulkQty === 0) {
+      const rm = checkedRealNames(true);
+      const before = _selectedItems.size;
+      const q = basketQtyMap();
+      rm.forEach(n => { _selectedItems.delete(n); delete q[n]; });
+      writeBasket(q);
+      _updateSelectedPill();
+      const removed = before - _selectedItems.size;
+      showToast(removed ? `✕ ${removed} removed - ${_selectedItems.size} in basket`
+                        : 'None of the selected items were in the basket');
+      if (_lastData) renderPage(_lastData);
+      return;
+    }
     const add = checkedRealNames(false);
     if (!add.length) return;
     const before = _selectedItems.size;
-    add.forEach(n => _selectedItems.add(n));
-    persistBasketStore();
+    const q = basketQtyMap();
+    add.forEach(n => { _selectedItems.add(n); q[n] = (Number(q[n]) || 0) + _bulkQty; });
+    writeBasket(q);
     _updateSelectedPill();
-    showToast(`🛒 ${_selectedItems.size - before} added - ${_selectedItems.size} in basket`);
+    const added = _selectedItems.size - before;
+    showToast(`🛒 ${_bulkQty === 1 ? '' : _bulkQty + ' units of '}${added || add.length} item${(added || add.length) !== 1 ? 's' : ''} added - ${_selectedItems.size} in basket`);
     if (_lastData) renderPage(_lastData); // sync ✓ marks on panel rows / cards
-  });
-  bar.querySelector('.bt-rm')?.addEventListener('click', () => {
-    const rm = checkedRealNames(true);
-    const before = _selectedItems.size;
-    rm.forEach(n => _selectedItems.delete(n));
-    persistBasketStore();
-    _updateSelectedPill();
-    const removed = before - _selectedItems.size;
-    showToast(removed
-      ? `✕ ${removed} removed - ${_selectedItems.size} in basket`
-      : 'None of the selected items were in the basket');
-    if (_lastData) renderPage(_lastData);
   });
 
   bar.querySelector('.bt-archive')?.addEventListener('click', () => {
@@ -2636,7 +2668,7 @@ function renderSavingInfo(s) {
   // tip) - a bare title attribute was invisible until you happened to hover.
   // "Max": these are the largest POSSIBLE savings - they compare the two
   // stores and don't change with whichever store you happen to pick.
-  const basket = `<div class="saving-line"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">One-store saving${infoIcoHTML('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store')}</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
+  const basket = `<div class="saving-line"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIcoHTML('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store')}</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
   let maxRow = '';
   if (s.max_saving > s.total_saving + 0.005) {
     maxRow = `<div class="saving-line"><span class="saving-icon">${splitIcon}</span><div class="saving-text"><div class="saving-label">Split saving${infoIcoHTML('The most you can save overall: every item bought at whichever store sells it cheapest, vs the dearer single store')}</div><span class="saving-amount">${fmt(s.max_saving)}</span></div></div>`;
@@ -4502,28 +4534,6 @@ function renderMobileCards(items, data) {
     });
     chipsWrap.appendChild(chip);
   });
-  // Select-all chip - mobile's answer to the desktop header checkbox: one tap
-  // puts every VISIBLE card in the basket; when they're all in already, the
-  // same tap takes them back out. Reads the rendered cards, so it always
-  // matches the current filter/category view.
-  const allChip = document.createElement('button');
-  allChip.className = 'mc-sort-chip mc-all-chip';
-  allChip.textContent = '☑ All';
-  allChip.title = 'Add everything shown to the basket (tap again to remove)';
-  allChip.setAttribute('aria-label', allChip.title);
-  allChip.onclick = () => {
-    const names = [...document.querySelectorAll('#mobileCards .mobile-card')]
-      .map(c => c.dataset.cheapest || c.dataset.item).filter(Boolean);
-    if (!names.length) return;
-    const allIn = names.every(n => _selectedItems.has(n));
-    names.forEach(n => allIn ? _selectedItems.delete(n) : _selectedItems.add(n));
-    persistBasketStore();
-    _updateSelectedPill();
-    showToast(allIn ? `✕ ${names.length} removed - ${_selectedItems.size} in basket`
-                    : `🛒 All shown in basket - ${_selectedItems.size} total`);
-    if (_lastData) renderPage(_lastData);
-  };
-  chipsWrap.appendChild(allChip);
   // Watchlist chip - lives with the sort chips (the pill row is hidden on
   // phones); delegates to the filter row's pill so there's ONE toggle.
   const watchChip = document.createElement('button');

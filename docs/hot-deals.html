@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=103" />
+  <link rel="stylesheet" href="style.css?v=104" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -317,8 +317,12 @@
 
     /* ── Mobile deal cards ─────────────────────────────────────── */
     .deals-mobile { flex-direction: column; gap: 9px; padding-top: 12px; }
-    .dm-card { background: var(--card); border-radius: 12px; padding: 11px 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-left: 3px solid var(--ww); }
+    .dm-card { background: var(--card); border-radius: 12px; padding: 11px 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-left: 3px solid var(--ww); cursor: pointer; -webkit-tap-highlight-color: transparent; }
     .dm-card.co { border-left-color: var(--coles); }
+    /* In-basket: green ring + a corner tick, matching the prices page's card selection */
+    .dm-card.dm-selected { box-shadow: 0 0 0 2px var(--ww) inset, 0 1px 4px rgba(0,0,0,0.08); }
+    .dm-basket-tick { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--ww); color: #fff; font-size: 13px; font-weight: 800; display: none; align-items: center; justify-content: center; align-self: center; }
+    .dm-card.dm-selected .dm-basket-tick { display: inline-flex; }
     .dm-top { display: flex; align-items: flex-start; gap: 10px; }
     .dm-img { width: 40px; height: 40px; object-fit: contain; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); flex: none; }
     .dm-img-ph { background: var(--bg); }
@@ -348,6 +352,8 @@
       opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 700;
     }
     #hdToast.show { opacity: 1; }
+    /* Mobile uses tap-to-add on the cards, not the desktop checkbox bar */
+    @media (max-width: 700px) { #hdBulkBar { display: none !important; } }
   </style>
 </head>
 <body>
@@ -1260,14 +1266,21 @@ function renderDealsMobile(sorted, exclusions, overrides) {
       : `<span class="dm-price">${fmt(deal.price)}${kgSuffix}</span>`;
 
     if (isGroup) _hdBestMember[item.list_item] = hdGroupBest(item);
+    // Tap-to-add, like the prices page: the card toggles its deal in the basket.
+    // basketName is the real product that goes in (group → best-value member).
+    const basketName = isGroup ? hdGroupBest(item) : item.list_item;
+    const inBasket = basketName && hdBasket().items.includes(basketName);
     const card = document.createElement('div');
-    card.className = `dm-card ${isW ? 'ww' : 'co'}`;
+    card.className = `dm-card ${isW ? 'ww' : 'co'}${inBasket ? ' dm-selected' : ''}`;
+    card.dataset.basketName = basketName || '';
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-pressed', String(!!inBasket));
     card.innerHTML = `
       <div class="dm-top">
-        <input type="checkbox" class="hd-check dm-check" data-item="${safe}"${_hdChecked.has(item.list_item) ? ' checked' : ''} aria-label="Select deal">
         ${imgHtml}
         <div class="dm-info"><div class="dm-name">${esc(name)}</div><div class="dm-cat">${esc(cat)}</div></div>
         ${badge}
+        <span class="dm-basket-tick" aria-hidden="true">✓</span>
       </div>
       <div class="dm-mid">
         <span class="store-chip ${isW ? 'ww' : 'coles'} sm">${isW ? 'W' : 'C'}</span>
@@ -1615,10 +1628,23 @@ async function pollForCompletionHD(user, repo, token, dispatchedAt) {
     if (wb) { e.stopPropagation(); toggleWatchlistHD(wb.dataset.item); return; }
   });
 
-  // Mobile deal cards - watch toggle
+  // Mobile deal cards - watch toggle, and tap-anywhere-else to add/remove from
+  // the basket (same immediate model as the prices page's mobile cards; the
+  // desktop checkbox bar isn't used on mobile).
   document.getElementById('dealsMobile')?.addEventListener('click', (e) => {
     const wb = e.target.closest('.item-watch-btn');
-    if (wb) { e.stopPropagation(); e.preventDefault(); toggleWatchlistHD(wb.dataset.item); }
+    if (wb) { e.stopPropagation(); e.preventDefault(); toggleWatchlistHD(wb.dataset.item); return; }
+    if (e.target.closest('a')) return; // price link opens the store, doesn't toggle
+    const card = e.target.closest('.dm-card');
+    if (!card) return;
+    const name = card.dataset.basketName;
+    if (!name) return;
+    const b = hdBasket();
+    const idx = b.items.indexOf(name);
+    if (idx === -1) { b.items.push(name); b.quantities[name] = 1; card.classList.add('dm-selected'); card.setAttribute('aria-pressed', 'true'); }
+    else { b.items.splice(idx, 1); delete b.quantities[name]; card.classList.remove('dm-selected'); card.setAttribute('aria-pressed', 'false'); }
+    hdBasketSave(b);
+    hdToast(idx === -1 ? `🛒 Added - ${b.items.length} in basket` : `✕ Removed - ${b.items.length} in basket`);
   });
 
   // Re-render when crossing the mobile/desktop breakpoint (debounced)
