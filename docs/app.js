@@ -2339,29 +2339,16 @@ function initPriorityFilter() {
 
 }
 
-// ── Mobile card selection pill ────────────────────────────────────────────────
+// ── Basket cart badge ─────────────────────────────────────────────────────────
 
 function _updateSelectedPill() {
-  // Floating "+ Basket (n)" button - visible whenever ≥1 item is selected
+  // Floating "🛒 (n)" cart badge - visible whenever the basket has items
   const fab = $('basketFab');
   if (fab) {
     const fc = $('basketFabCount');
     if (fc) fc.textContent = _selectedItems.size;
     fab.classList.toggle('show', _selectedItems.size > 0);
     document.getElementById('mobileCards')?.classList.toggle('fab-visible', _selectedItems.size > 0);
-  }
-  const pill = $('selectedPill');
-  const count = $('selectedCount');
-  if (!pill) return;
-  const n = _selectedItems.size;
-  pill.style.display = n > 0 ? '' : 'none';
-  if (count) count.textContent = n;
-  // If now 0, exit selected filter
-  if (n === 0 && _activePriority === 'selected') {
-    _activePriority = 'all';
-    document.querySelector('#priorityFilter [data-priority="all"]')?.classList.add('active');
-    pill.classList.remove('active');
-    if (_lastData) renderPage(_lastData);
   }
 }
 
@@ -2396,22 +2383,6 @@ function addPerKgToBasket(name) {
   _updateSelectedPill();
 }
 
-function initSelectedPill() {
-  $('selectedPill')?.addEventListener('click', () => {
-    if (_selectedItems.size === 0) return;
-    if (_activePriority === 'selected') {
-      // Toggle off
-      _activePriority = 'all';
-      $('selectedPill')?.classList.remove('active');
-      document.querySelector('#priorityFilter .priority-pill[data-priority="all"]')?.classList.add('active');
-    } else {
-      _activePriority = 'selected';
-      document.querySelectorAll('#priorityFilter .priority-pill').forEach(b => b.classList.remove('active'));
-      $('selectedPill')?.classList.add('active');
-    }
-    if (_lastData) renderPage(_lastData);
-  });
-}
 
 // ── Archive sync (module-level so initBulkBar callbacks can reach it) ─────────
 
@@ -2589,13 +2560,8 @@ function computeBannerStats(items) {
   // was hidden. The banner/footer now match exactly what's on screen.
   const perkgMembers = new Set(loadVariantGroups().flatMap(g => g.items));
   const filtered = items.filter(item => {
-    // In-basket view: basketed per-kg MEMBERS are visible (via their group
-    // rows), so they count here too - checked before the member exclusion.
-    if (_activePriority === 'selected') {
-      if (!_selectedItems.has(item.list_item)) return false;
-    } else if (perkgMembers.has(item.list_item)) {
-      return false;
-    } else if (_activePriority === 'watchlist') {
+    if (perkgMembers.has(item.list_item)) return false;
+    if (_activePriority === 'watchlist') {
       if (!_watchlist.has(item.list_item)) return false;
     } else {
       const p = getPriority(item.list_item);
@@ -3249,14 +3215,6 @@ function sortItems(items) {
     if (_perkgFilter === 'hidden' && item._isGroup) return false;
     // Watchlist filter: show only watchlisted items; bypass archive/priority checks
     if (_activePriority === 'watchlist') return _watchlist.has(item.list_item);
-    // In-basket filter. The basket stores MEMBER names, never synthetic
-    // __group_* keys - so a group row qualifies when any of its members is in
-    // the basket (otherwise basketed per-kg products were invisible here:
-    // members never render as individual rows).
-    if (_activePriority === 'selected') {
-      if (item._isGroup) return (item._members || []).some(m => _selectedItems.has(m.list_item));
-      return _selectedItems.has(item.list_item);
-    }
     const p = getPriority(item.list_item);
     // Archived items (by priority or item.archived flag): only visible in archive view.
     // In archive view, show ONLY those items and nothing else.
@@ -5936,7 +5894,6 @@ async function boot() {
   initImgPicker();
   initCategoryEditModal();
   initPriorityFilter();
-  initSelectedPill();
   initBulkBar();
   initColumnChooser();
   initColFilterDropdown();
