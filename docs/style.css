@@ -1754,16 +1754,22 @@ td.priority-cell { text-align: center; }
 }
 .bt-chip:hover { background: #5D6E87; }
 .bt-chip .arrow { color: #B6C2D1; font-size: 14px; line-height: 1; }
-/* Units-to-add stepper, then the ＋ Basket button. At 0 units the button turns
-   into ✕ Remove (drops the checked rows from the basket) - one control that
-   both adds N units and, at zero, removes. */
-.bt-qty-step { display: inline-flex; align-items: center; gap: 2px; background: #4D5D74; border: 1px solid rgba(255,255,255,.14); border-radius: 8px; padding: 2px; }
-.bt-qty-step button { width: 24px; height: 24px; border: none; background: transparent; color: #F1F5F9; font-size: 16px; font-weight: 700; line-height: 1; cursor: pointer; border-radius: 6px; }
-.bt-qty-step button:hover { background: #5D6E87; }
+/* ＋ Basket with its units stepper as ONE rectangle: the word first, the
+   − N + numbers to its right. At 0 units the button turns into ✕ Remove
+   (drops the checked rows from the basket). */
+.bt-basket-seg { display: inline-flex; align-items: stretch; }
+.bt-basket-seg .bt-sl { border-radius: 8px 0 0 8px; }
+.bt-qty-step {
+  display: inline-flex; align-items: center; gap: 1px;
+  background: #006B31; border: 1px solid #006B31; border-left: 1px solid rgba(255,255,255,.35);
+  border-radius: 0 8px 8px 0; padding: 0 3px;
+}
+.bt-qty-step button { width: 22px; height: 22px; border: none; background: transparent; color: #fff; font-size: 15px; font-weight: 700; line-height: 1; cursor: pointer; border-radius: 6px; }
+.bt-qty-step button:hover { background: #00843D; }
 .bt-qty-step button:disabled { opacity: .35; cursor: default; }
 .bt-qty-step button:disabled:hover { background: transparent; }
-.bt-qty { min-width: 20px; text-align: center; color: #F1F5F9; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.bt-sl { background: #00843D; border-color: #006B31; color: #fff; padding: 6px 16px; border-radius: 8px; }
+.bt-qty { min-width: 18px; text-align: center; color: #fff; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.bt-sl { background: #00843D; border-color: #006B31; color: #fff; padding: 6px 14px; }
 .bt-sl:hover { background: #006B31; }
 .bt-sl.is-remove { background: #7F1D1D; border-color: #661717; color: #FCA5A5; }
 .bt-sl.is-remove:hover { background: #991B1B; }

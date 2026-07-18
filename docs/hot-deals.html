@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=104" />
+  <link rel="stylesheet" href="style.css?v=105" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -452,6 +452,10 @@
     </div>
   </div>
 </main>
+
+<!-- Floating cart badge - identical to the prices page's (#basketFab styles come
+     from style.css); shows the basket count and opens the basket. -->
+<button id="basketFab" aria-label="View basket" onclick="window.location.href='shopping-list.html'">🛒 (<span id="basketFabCount">0</span>)</button>
 
 <!-- Deal selection → basket bar (same look as the main page's bulk bar) -->
 <div id="hdBulkBar" class="bulk-toolbar" style="display:none">
@@ -1164,6 +1168,17 @@ function hdBasket() {
 }
 function hdBasketSave(b) { localStorage.setItem('pw_sl_handoff', JSON.stringify(b)); }
 
+// Cart badge (🛒 (n), bottom right) - same behaviour as the prices page: shows
+// whenever the basket has items, count tracks every add/remove.
+function updateHdFab() {
+  const fab = document.getElementById('basketFab');
+  if (!fab) return;
+  const n = hdBasket().items.length;
+  const fc = document.getElementById('basketFabCount');
+  if (fc) fc.textContent = n;
+  fab.classList.toggle('show', n > 0);
+}
+
 function hdToast(msg) {
   let t = document.getElementById('hdToast');
   if (!t) { t = document.createElement('div'); t.id = 'hdToast'; document.body.appendChild(t); }
@@ -1188,6 +1203,7 @@ function syncHdCheckAll() {
 }
 
 function initHdBulkBar() {
+  updateHdFab(); // badge reflects the basket from the moment the page opens
   const bar = document.getElementById('hdBulkBar');
   if (!bar) return;
   // Delegated: rows re-render often (sort, tune sliders, category tabs)
@@ -1211,6 +1227,7 @@ function initHdBulkBar() {
     added.forEach(n => { b.items.push(n); b.quantities[n] = 1; });
     hdBasketSave(b);
     updateHdBulkBar();
+    updateHdFab();
     hdToast(`🛒 ${added.length} added - ${b.items.length} in basket`);
   });
   bar.querySelector('.bt-rm')?.addEventListener('click', () => {
@@ -1221,6 +1238,7 @@ function initHdBulkBar() {
     rm.forEach(n => delete b.quantities[n]);
     hdBasketSave({ items: kept, quantities: b.quantities });
     updateHdBulkBar();
+    updateHdFab();
     hdToast(removed ? `✕ ${removed} removed - ${kept.length} in basket` : 'None of the selected deals were in the basket');
   });
 }
@@ -1644,7 +1662,8 @@ async function pollForCompletionHD(user, repo, token, dispatchedAt) {
     if (idx === -1) { b.items.push(name); b.quantities[name] = 1; card.classList.add('dm-selected'); card.setAttribute('aria-pressed', 'true'); }
     else { b.items.splice(idx, 1); delete b.quantities[name]; card.classList.remove('dm-selected'); card.setAttribute('aria-pressed', 'false'); }
     hdBasketSave(b);
-    hdToast(idx === -1 ? `🛒 Added - ${b.items.length} in basket` : `✕ Removed - ${b.items.length} in basket`);
+    // No toast: the 🛒 (n) badge confirms the change, exactly like the prices page.
+    updateHdFab();
   });
 
   // Re-render when crossing the mobile/desktop breakpoint (debounced)
