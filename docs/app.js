@@ -715,25 +715,20 @@ function reflectBulkQty() {
   }
 }
 
-// Checked rows resolved to real basket-able product names. Per-kg group rows
-// are synthetic (__group_*): on ADD a group becomes its best-value member
-// (lowest $/kg across both stores - a real, buyable product); on REMOVE it
-// becomes ALL its members, because the basket may hold a variant that was
-// cheapest when it was added rather than today's winner.
+// Checked rows resolved to basket entry names. A per-kg group row goes in AS
+// THE CATEGORY (its __group_* key): the basket page prices it per store as
+// that store's cheapest variant, re-resolved on every visit - following the
+// group, not whichever product happened to win on the day it was added. On
+// REMOVE a group drops its key AND all member names (baskets from before this
+// model hold individual members).
 function checkedRealNames(forRemove) {
   if (!_lastData) return [];
   const names = new Set();
-  let groups = null;
   for (const n of _checkedItems) {
-    if (!n.startsWith('__group_')) { names.add(n); continue; }
-    if (forRemove) {
+    names.add(n);
+    if (forRemove && n.startsWith('__group_')) {
       const g = loadVariantGroups().find(gr => '__group_' + gr.key === n);
       (g?.items || []).forEach(m => names.add(m));
-    } else {
-      if (!groups) groups = buildVariantGroups(new Map(_lastData.items.map(i => [i.list_item, i])));
-      const g = groups.find(gr => gr.list_item === n);
-      const best = [g?._wwBest, g?._coBest].filter(Boolean).sort((a, b) => a.perkg - b.perkg)[0];
-      if (best) names.add(best.name);
     }
   }
   return [...names];
@@ -2380,6 +2375,14 @@ function addPerKgToBasket(name) {
       c.classList.toggle('mc-selected', selected);
       c.setAttribute('aria-pressed', String(selected));
     });
+  // Group CATEGORY entries (__group_*) highlight their group card by key.
+  if (name.startsWith('__group_')) {
+    document.querySelectorAll(`.vg-mobile-card[data-group="${CSS.escape(name.slice(8))}"]`)
+      .forEach(c => {
+        c.classList.toggle('mc-selected', selected);
+        c.setAttribute('aria-pressed', String(selected));
+      });
+  }
   _updateSelectedPill();
 }
 
@@ -4016,10 +4019,12 @@ function appendGroupCardMobile(container, group, overrides) {
   const hotDeal = isHotDeal(group, loadExclusions());
   const hotHtml = hotDeal ? '<span class="mc-hot" title="Hot Deal - meaningfully cheaper than its usual price right now">🔥</span>' : '';
 
-  // Tap-to-add works like a normal card: tapping the card toggles the group's
-  // CHEAPEST variant in the basket (mc-selected highlight and all); expand /
-  // collapse is the explicit chevron button.
-  const inBasket = cheapestVar ? _selectedItems.has(cheapestVar.name) : false;
+  // Tap-to-add works like a normal card: tapping the card toggles the group
+  // CATEGORY in the basket (priced per store as its cheapest variant there);
+  // expand / collapse is the explicit chevron button. Legacy member entries
+  // still light the card up.
+  const inBasket = _selectedItems.has(group.list_item) ||
+    (cheapestVar ? _selectedItems.has(cheapestVar.name) : false);
   const card = document.createElement('div');
   card.dataset.group = group._groupKey;
   if (cheapestVar) card.dataset.cheapest = cheapestVar.name;
@@ -6226,7 +6231,10 @@ async function boot() {
       // card face is the tap-to-add surface.
       if (e.target.closest('.vgm-body')) return;
       const vgCard = e.target.closest('.vg-mobile-card');
-      if (vgCard && vgCard.dataset.cheapest) addPerKgToBasket(vgCard.dataset.cheapest);
+      // Toggle the CATEGORY (group key) - the basket follows the group, not
+      // whichever variant was cheapest on the day. dataset.cheapest still
+      // gates the tap: a group with no priced variant has nothing to buy.
+      if (vgCard && vgCard.dataset.cheapest) addPerKgToBasket('__group_' + vgCard.dataset.group);
     });
     // Keyboard: cards are focusable role=button divs - Enter/Space triggers the
     // same gesture as a tap. Only fires when the card ITSELF has focus; inner

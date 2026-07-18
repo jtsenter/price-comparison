@@ -476,7 +476,7 @@
 
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=15"></script>
-<script src="utils.js?v=70"></script>
+<script src="utils.js?v=71"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -1132,7 +1132,6 @@ function renderDeals() {
       watch:    `<td style="text-align:center">${watchBtnHD}</td>`,
     };
     // A group deal in the basket means its best-value member (a real product).
-    if (isGroup) _hdBestMember[item.list_item] = hdGroupBest(item);
     const checkCell = `<td class="check-cell"><input type="checkbox" class="hd-check" data-item="${safeNameHD}"${_hdChecked.has(item.list_item) ? ' checked' : ''}></td>`;
     tbody.insertAdjacentHTML('beforeend', `<tr>${checkCell}${getVisibleHdCols().map(c => _hdCellMap[c] || '').join('')}</tr>`);
   });
@@ -1150,19 +1149,12 @@ function renderDeals() {
 // ── Deal selection → basket ───────────────────────────────────────────────────
 // Same standard-cart semantics as the main page: checkboxes are a transient
 // selection; 🛒 appends the checked deals to the persistent basket, ✕ removes
-// them. Group deals resolve to their best-value member (a real product).
+// them. A group deal goes in AS THE CATEGORY (its __group_* key) - the basket
+// page prices it per store as that store's cheapest variant, re-resolved on
+// every visit.
 const _hdChecked = new Set();
-const _hdBestMember = {}; // '__group_x' → member name, rebuilt each render
 
-function hdGroupBest(item) {
-  const w = item.woolworths?.price, c = item.coles?.price;
-  if (w != null && (c == null || w <= c)) return item._wwBestName;
-  return item._coBestName;
-}
-// Checked entries as real basket-able product names.
-function hdCheckedNames() {
-  return [..._hdChecked].map(n => n.startsWith('__group_') ? _hdBestMember[n] : n).filter(Boolean);
-}
+function hdCheckedNames() { return [..._hdChecked]; }
 function hdBasket() {
   try { const s = JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}'); return { items: s.items || [], quantities: s.quantities || {} }; } catch { return { items: [], quantities: {} }; }
 }
@@ -1283,11 +1275,11 @@ function renderDealsMobile(sorted, exclusions, overrides) {
       ? `<a href="${storeUrl}" target="_blank" rel="noopener" class="price-link dm-price">${fmt(deal.price)}${kgSuffix}</a>`
       : `<span class="dm-price">${fmt(deal.price)}${kgSuffix}</span>`;
 
-    if (isGroup) _hdBestMember[item.list_item] = hdGroupBest(item);
     // Tap-to-add, like the prices page: the card toggles its deal in the basket.
-    // basketName is the real product that goes in (group → best-value member).
-    const basketName = isGroup ? hdGroupBest(item) : item.list_item;
-    const inBasket = basketName && hdBasket().items.includes(basketName);
+    // Groups go in as the CATEGORY key - the basket prices each store's
+    // cheapest variant itself.
+    const basketName = item.list_item;
+    const inBasket = hdBasket().items.includes(basketName);
     const card = document.createElement('div');
     card.className = `dm-card ${isW ? 'ww' : 'co'}${inBasket ? ' dm-selected' : ''}`;
     card.dataset.basketName = basketName || '';
