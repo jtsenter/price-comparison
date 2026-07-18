@@ -34,6 +34,9 @@ CATEGORY_KEYWORDS = {
         "turmeric", "mixed herbs", "dill", "citric acid", "bicarbonate",
         "hoyt", "peanut butter", "biscoff", "hommus", "hummus",
         "eggplant dip", "beetroot hommus", "obela", "wilma",
+        # Shelf-stable instant meals - these are aisle goods, not freezer goods
+        # (they used to sit in the merged Frozen/Ready-Meals bucket)
+        "cup a soup", "continental cup", "instant noodle",
         "walnut", "macadamia", "sunflower kernel", "pumpkin kernel", "almond", "nut",
         # former Bakery bucket
         "bread", "wrap", "pizza base", "crispbread", "sourdough", "grain", "helga",
@@ -53,9 +56,9 @@ CATEGORY_KEYWORDS = {
     "Frozen": [
         "frozen", "ice cream", "meat pies", "pizza", "ben & jerry", "bulla crunch",
         "ristorante",
-        # former Ready Meals bucket
-        "meal kit", "ready meal", "instant noodle", "cup a soup", "continental cup",
-        "frozen meal", "microwave meal",
+        # former Ready Meals bucket (shelf-stable cup soups / instant noodles
+        # moved to Pantry - they're aisle goods)
+        "meal kit", "ready meal", "frozen meal", "microwave meal",
     ],
     "Household": [
         "toilet tissue", "toilet paper", "paper towel", "wipes", "cleaner",

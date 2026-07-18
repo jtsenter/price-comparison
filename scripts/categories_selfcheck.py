@@ -32,7 +32,7 @@ CASES = [
     # Merged buckets - the whole point of the consolidation:
     ("Helga's Wholemeal Bread 750g", "Pantry"),                 # ex-Bakery
     ("Ben & Jerry's Ice Cream Tub", "Frozen"),    # ex-Frozen Foods
-    ("Continental Cup A Soup Chicken", "Frozen"), # ex-Ready Meals
+    ("Continental Cup A Soup Chicken", "Pantry"), # shelf-stable, moved out of Frozen
     ("Aptamil Gold Follow-On Formula", "Personal Care"), # ex-Baby
     ("Dettol Antibacterial Hand Wash", "Personal Care"), # ex-Personal Care
 ]

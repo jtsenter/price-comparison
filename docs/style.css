@@ -367,6 +367,9 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
   margin-bottom: 3px;
 }
 .saving-amount { font-size: 20px; font-weight: 800; color: var(--green); line-height: 1; }
+/* Split-saving composite: BOLD dark trip price + the saving in green brackets */
+.saving-amount.sa-total { color: var(--text); }
+.sa-disc { color: var(--green); font-weight: 600; font-size: 13px; }
 /* Desktop: label and amount share ONE line (label left, amount right), which
    makes the whole banner a text-row shorter. The divider's children stretch to
    a common width so the two amounts right-align with each other. Mobile keeps

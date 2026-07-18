@@ -2612,6 +2612,7 @@ function computeBannerStats(items) {
     ww_data_available: ww_avail,
     total_saving: Math.round(total_saving * 100) / 100,
     max_saving: Math.round(max_saving * 100) / 100,
+    split_total: Math.round(cherry_total * 100) / 100, // the split trip's own price
     items_compared: filtered.length,
   };
 }
@@ -2637,10 +2638,13 @@ function renderSavingInfo(s) {
   // tip) - a bare title attribute was invisible until you happened to hover.
   // "Max": these are the largest POSSIBLE savings - they compare the two
   // stores and don't change with whichever store you happen to pick.
-  const basket = `<div class="saving-line"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIcoHTML('The most you can save with a one-store shop: whole basket at the cheaper store vs the dearer store')}</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
+  const basket = `<div class="saving-line"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIcoHTML('Buy everything at the cheaper store instead of the dearer one - this is the difference')}</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
   let maxRow = '';
   if (s.max_saving > s.total_saving + 0.005) {
-    maxRow = `<div class="saving-line"><span class="saving-icon">${splitIcon}</span><div class="saving-text"><div class="saving-label">Split saving${infoIcoHTML('The most you can save overall: every item bought at whichever store sells it cheapest, vs the dearer single store')}</div><span class="saving-amount">${fmt(s.max_saving)}</span></div></div>`;
+    // BOLD dark number = what the split trip costs; green bracket = what it
+    // saves vs the dearer single store (the old lone discount hid the price
+    // you'd actually pay - and that is the number that matters).
+    maxRow = `<div class="saving-line"><span class="saving-icon">${splitIcon}</span><div class="saving-text"><div class="saving-label">Split saving${infoIcoHTML('The bold number is what these items cost split across both stores (each at its cheaper one). The green bracket is what that saves vs the dearer store')}</div><span class="saving-amount sa-total">${fmt(s.split_total)} <span class="sa-disc">(−${fmt(s.max_saving)})</span></span></div></div>`;
   }
   return basket + maxRow;
 }
@@ -3273,8 +3277,10 @@ function sortItems(items) {
     const wwShown = item._isGroup ? item._wwPerKg : item.woolworths?.price;
     const coShown = item._isGroup ? item._coPerKg : item.coles?.price;
     switch (col) {
+      // Sort by what the row DISPLAYS (group label / rename / short name) so
+      // A-Z order matches what the eye reads, groups interleaved with items.
       case 'name':     return item._isGroup ? item._groupLabel.toLowerCase()
-        : (_sortOvr[item.list_item]?.displayName || stripWW(item.list_item)).toLowerCase();
+        : (_sortOvr[item.list_item]?.displayName || (window.PW_NAME_MAP && PW_NAME_MAP[item.list_item]) || stripWW(item.list_item)).toLowerCase();
       case 'ww':       return wwShown ?? NaN;
       case 'coles':    return coShown ?? NaN;
       case 'cheaper':  return item.cheaper_store ?? 'zzz';

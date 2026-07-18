@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=105" />
+  <link rel="stylesheet" href="style.css?v=106" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -475,7 +475,7 @@
 <div id="priceTooltip" class="price-tooltip-fixed" style="display:none"></div>
 
 <!-- Shared utilities - must load before inline script -->
-<script src="name_map.js?v=15"></script>
+<script src="name_map.js?v=53"></script>
 <script src="utils.js?v=71"></script>
 <script>
 if ('serviceWorker' in navigator) {
@@ -638,7 +638,8 @@ const STALE_PROGRESS_MS  = 3 * 60 * 1000; // ms with no progress update → ⚠ 
 
 // sortKeys: ordered array of {col, dir} - first element is primary sort
 // Default: deepest discount first (best deal at top)
-let sortKeys = [{ col: 'deal', dir: 'desc' }];
+// Default: best trend position first (0 = at its historical low), A-Z within ties.
+let sortKeys = [{ col: 'avg', dir: 'asc' }, { col: 'name', dir: 'asc' }];
 let _activeCategory = 'All';
 let _storeFilter = 'all';
 let _watchlistOnly = false;
@@ -651,9 +652,17 @@ let _progressLastChangeTime = null;
 
 // ── Sort ───────────────────────────────────────────────────────────────────────
 
+// Sorting compares what the row DISPLAYS: a group row sorts under its label
+// ("Basa Fillets"), never its raw __group_* key - keys start with an
+// underscore, which clumped every per-kg group ahead of the alphabet.
+function hdDispName(item) {
+  return (item._isGroup ? item._groupLabel
+    : ((window.PW_NAME_MAP && PW_NAME_MAP[item.list_item]) || stripWW(item.list_item))).toLowerCase();
+}
+
 function getSortValue(col, item, dealInfo) {
   switch (col) {
-    case 'name':     return item.list_item.toLowerCase();
+    case 'name':     return hdDispName(item);
     // Deal strength = discount depth vs usual price. Higher dropPct = better
     // deal, so on a desc sort the deepest discounts rise to the top.
     case 'deal':     return dealInfo != null ? dealInfo.dropPct : -Infinity;
@@ -680,8 +689,9 @@ function sortDeals(items, exclusions) {
       if (av < bv) return -1 * mul;
       if (av > bv) return  1 * mul;
     }
-    // Name tiebreaker: ensures identical sort values produce a stable, deterministic order
-    return a.list_item.localeCompare(b.list_item);
+    // Name tiebreaker: identical sort values fall back to A-Z by DISPLAYED name,
+    // so same-strength deals (e.g. soup flavours on the same special) sit together.
+    return hdDispName(a).localeCompare(hdDispName(b));
   });
 }
 
@@ -1047,7 +1057,9 @@ function renderDeals() {
     const co = item.coles;
     const isGroup = item._isGroup;
     const ov = overrides[item.list_item] || {};
-    const displayName = isGroup ? item._groupLabel : (ov.displayName || stripWW(item.list_item));
+    // Same short-name resolution the sort uses, so rows sit where they read.
+    const displayName = isGroup ? item._groupLabel
+      : (ov.displayName || (window.PW_NAME_MAP && PW_NAME_MAP[item.list_item]) || stripWW(item.list_item));
     const cat = getCategory(item);
     // For group rows every price is already $/kg; suffix it and drop the
     // per-100g subline (which would be a second, redundant unit conversion).
@@ -1077,9 +1089,12 @@ function renderDeals() {
       : '<span class="store-chip coles sm">C</span>';
 
     // Save cell - dollars below the usual (median) price; sub shows that usual price.
+    // saveAmount ≤ 0 means today's price IS its usual (median) price - the deal
+    // qualified another way (all-time low / cross-store gap). Say that instead
+    // of a bare dash, which read as missing data.
     const saveCell = deal.saveAmount > 0
       ? `<div class="deal-save">${fmt(deal.saveAmount)}${kgSuffix}</div><div class="deal-save-sub">vs ${fmt(deal.typical)}${kgSuffix}</div>`
-      : '<span style="color:var(--text-soft)">-</span>';
+      : `<span class="deal-save-sub" title="It usually sells at this price - the deal is the all-time low / store gap, not a drop vs usual">at its usual price</span>`;
 
     // WW cell
     const wwUrl = ov.wwUrl || ww?.url || null;
