@@ -507,7 +507,10 @@ function getPriority(itemName) {
 function getUnits(itemName) {
   const ov = loadUnitOverrides()[itemName];
   if (ov != null) return ov;
-  if (_perkgSet.has(itemName) || (typeof itemName === 'string' && itemName.startsWith('__group_'))) return 1.0;
+  if (typeof itemName === 'string' && itemName.startsWith('__group_')) {
+    return UNIT_BASED_GROUPS.has(itemName.slice(8)) ? 1 : 1.0;
+  }
+  if (_perkgSet.has(itemName)) return 1.0;
   const qty = getAnalysisData(itemName).avg_qty;
   return qty != null ? Math.round(qty) : 1;
 }
@@ -709,7 +712,9 @@ function reflectBulkQty() {
     // Nothing to remove unless a checked row is actually in the basket.
     btn.disabled = !checkedRealNames(true).some(n => _selectedItems.has(n));
   } else {
-    btn.textContent = _bulkQty === 1 ? '＋ Basket' : `＋ Basket ×${_bulkQty}`;
+    // Label stays plain "＋ Basket" - the stepper beside it already shows the
+    // unit count, so repeating it as "×N" on the button was redundant.
+    btn.textContent = '＋ Basket';
     btn.classList.remove('is-remove');
     btn.disabled = false;
   }
@@ -3914,10 +3919,11 @@ function appendGroupRowDesktop(tbody, group, overrides) {
   else badgeHtml = '<span class="cheaper-badge equal">=</span>';
 
   const units = getUnits(group.list_item);
+  const isUnitGroup = UNIT_BASED_GROUPS.has(group._groupKey);
   const unitsCell = `<td class="units-cell">
     <div class="units-ctrl">
       <button class="units-dec" data-item="${group.list_item}">−</button>
-      <span class="units-val">${units.toFixed(1)} kg</span>
+      <span class="units-val">${isUnitGroup ? units : units.toFixed(1) + ' kg'}</span>
       <button class="units-inc" data-item="${group.list_item}">+</button>
     </div></td>`;
 
@@ -6144,11 +6150,15 @@ async function boot() {
         const incBtn = e.target.closest('.units-inc, .units-dec');
         if (incBtn) {
           const itemName = incBtn.dataset.item;
-          const isPerkg = _perkgSet.has(itemName) || itemName.startsWith('__group_');
+          // Unit-based groups (Nutella, potato/carrot/onion bags, yoghurt tubs,
+          // Lotus - sold as one discrete pack) count PACKS like a normal item;
+          // every other per-kg entry (loose meat/seafood cuts) counts kilograms.
+          const isUnitGroup = itemName.startsWith('__group_') && UNIT_BASED_GROUPS.has(itemName.slice(8));
+          const isKgBased = !isUnitGroup && (_perkgSet.has(itemName) || itemName.startsWith('__group_'));
           const isInc = incBtn.classList.contains('units-inc');
           const ov = loadUnitOverrides();
           const cur = getUnits(itemName);
-          if (isPerkg) {
+          if (isKgBased) {
             const next = Math.round((cur + (isInc ? 0.2 : -0.2)) * 10) / 10;
             ov[itemName] = Math.max(0.2, next);
           } else {

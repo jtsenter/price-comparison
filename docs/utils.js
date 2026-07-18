@@ -453,6 +453,17 @@ const DEFAULT_VARIANT_GROUPS = [
   ]},
 ];
 
+// Groups sold as one discrete can/jar/bag, not weighed loose. The main
+// page's Units column should count PACKS for these (default 1, step 1) even
+// though the group's own price COMPARISON metric is $/kg - "1.2kg of
+// Nutella" isn't how anyone shops. Every other group (chicken, mince, salmon,
+// porterhouse...) is a variable-weight cut and keeps the kg-quantity model
+// (default 1.0kg, step 0.2kg).
+const UNIT_BASED_GROUPS = new Set([
+  'nutella', 'lotus_biscoff', 'washed_potatoes', 'carrots',
+  'brown_onions', 'red_onions', 'greek_yoghurt',
+]);
+
 // One group's resolved member names under the user's current overrides.
 // ponytail: legacy v1 overrides are treated as pure adds, a close-enough mirror
 // of app.js's migratePerKgOverride for a display/grouping filter.

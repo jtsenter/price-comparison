@@ -120,14 +120,12 @@
     /* Split mode: a connected X + Y = Z bar directly beneath the two store
        cards, spanning the grid - the equation ties the card totals to the
        combined trip price. */
-    .trip-bar { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; background: #F0FDF4; border: 1px solid #D1FAE5; border-radius: 10px; padding: 7px 12px; }
+    .trip-bar { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; background: #F0FDF4; border: 1px solid #D1FAE5; border-radius: 10px; padding: 7px 12px; }
     .trip-bar .tb-label { font-size: 10px; font-weight: 700; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.06em; }
-    .trip-bar .tb-eq { font-size: 16px; font-weight: 600; color: var(--text-mid); font-variant-numeric: tabular-nums; display: flex; align-items: center; gap: 7px; }
-    .trip-bar .tb-op { color: var(--text-soft); font-weight: 700; }
-    .trip-bar strong { font-size: 22px; font-weight: 800; color: var(--green); }
+    .trip-bar strong { font-size: 22px; font-weight: 800; color: var(--green); font-variant-numeric: tabular-nums; }
     /* Split-saving composite: BOLD dark trip price + the saving in green
        brackets (one-store mode only - split mode's total lives in the bar). */
-    .saving-amount.sa-total { color: var(--text); }
+    .saving-amount.sa-total { color: var(--green); }
     .sa-disc { color: var(--green); font-weight: 600; font-size: 13px; }
     .sl-mode-btn:disabled { opacity: .45; cursor: default; }
     /* ── Save ribbon (replaces stats bar) ── */
@@ -511,7 +509,7 @@
 </main>
 
 <script src="name_map.js?v=53"></script>
-<script src="utils.js?v=71"></script>
+<script src="utils.js?v=72"></script>
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '-';
 // Short display name (same map the rest of the site uses); falls back to the
@@ -1099,24 +1097,24 @@ async function boot() {
     // just because it stocks one more item). Say so on the card.
     const wwForeign = displayItems.filter(i => i.woolworths?.price == null && i.coles?.price != null).length;
     const coForeign = displayItems.filter(i => i.coles?.price == null && i.woolworths?.price != null).length;
+    // Plain-language label: "not sold here" says outright why the card's total
+    // includes a price you can't actually get at THIS store - the old "incl. N
+    // from W" made you decode an abbreviation to find that out.
     const foreignNote = (n, from) => (!slSplit && n > 0)
-      ? `<span class="sc-foreign" title="${n} item${n !== 1 ? 's' : ''} not sold here - priced from ${from} so both totals cover the same items">incl. ${n} from ${from === 'Coles' ? 'C' : 'W'}</span>`
+      ? `<span class="sc-foreign" title="${n} item${n !== 1 ? 's' : ''} not sold here - counted using ${n !== 1 ? 'their' : 'its'} ${from} price so both totals cover the same items">${n} not sold here</span>`
       : '';
     // Basket saving (one-store) sits ABOVE Split saving. The Split saving line
     // only shows when the plan actually splits AND beats the cheaper single
     // store - otherwise it's noise (a "$5.80 split saving" while the plan put
-    // everything at one store was exactly the reported bug). In one-store mode
-    // the line leads with the BOLD trip price + the saving in green brackets;
-    // in split mode the total already sits under the store cards (the X + Y = Z
-    // bar), so the line carries just the saving - no number twice.
+    // everything at one store was exactly the reported bug). The line ALWAYS
+    // leads with the trip price + the saving in green brackets, in both
+    // one-store and split mode - same format everywhere it appears.
     const basketSavingLine = isEqual
       ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
       : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIco('Buy everything at the cheaper store instead of the dearer one - this is the difference.')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`;
     const showSplitLine = plan.splits && splitSaving > basketSaving + 0.005;
     const splitSavingLine = showSplitLine
-      ? (slSplit
-          ? `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Split saving${infoIco('What this split trip saves vs doing everything at the dearer store.')}</div><span class="saving-amount">${fmt(splitSaving)}</span></div></div>`
-          : `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Split saving${infoIco('The bold number is what the trip costs split across both stores (each item at its cheaper one). The green bracket is what that saves vs the dearer store. Use the Split shop toggle to plan it.')}</div><span class="saving-amount sa-total">${fmt(plan.total)} <span class="sa-disc">(−${fmt(splitSaving)})</span></span></div></div>`)
+      ? `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Split saving${infoIco('The bold number is what these items cost split across both stores (each at its cheaper one). The green bracket is what that saves vs the dearer store. Use the Split shop toggle to plan it.')}</div><span class="saving-amount sa-total">${fmt(plan.total)} <span class="sa-disc">(−${fmt(splitSaving)})</span></span></div></div>`
       : '';
     const savingInfoHtml = basketSavingLine + splitSavingLine;
 
@@ -1155,7 +1153,7 @@ async function boot() {
             <div class="sc-foreign-row">${foreignNote(coForeign, 'Woolworths')}</div>
             <div class="sc-badge-row">${!wwActive && !isEqual ? `<span class="sc-badge">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>` : deltaHtml(coDelta)}</div>
           </div>
-          ${slSplit ? `<div class="trip-bar"><span class="tb-label">🧾 Split shop total</span><span class="tb-eq">${fmt(wwSub)} <span class="tb-op">+</span> ${fmt(coSub)} <span class="tb-op">=</span> <strong>${fmt(wwSub + coSub)}</strong></span></div>` : ''}
+          ${slSplit ? `<div class="trip-bar"><span class="tb-label">🧾 Split shop total</span><strong>${fmt(wwSub + coSub)}</strong></div>` : ''}
         </div>
       </div>
 
