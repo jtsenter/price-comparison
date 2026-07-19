@@ -349,7 +349,6 @@ const DEFAULT_VARIANT_GROUPS = [
   ]},
   { key: 'basa_fillets', label: 'Basa Fillets', items: [
     'Woolworths Basa Fillets Boneless With Skin Off',
-    'Woolworths Frozen Basa Fillets 1kg',
     'Just Caught Skinless Basa Fillets Frozen 1kg',
     'I&J Frozen Basa Fillets 750g',
     'Coles Frozen Basa Fillet',
@@ -579,9 +578,10 @@ const CATEGORY_REMAP = {
   'Snacks & Confectionery': 'Sweets',
   'Snacks':                 'Sweets',
   'Drinks':                 'Drinks & Alcohol',
-  'Baby':                   'Personal Care',
-  'Health & Beauty':        'Personal Care',
-  'Personal Care & Baby':   'Personal Care',
+  'Baby':                   'Baby & Care',
+  'Health & Beauty':        'Baby & Care',
+  'Personal Care & Baby':   'Baby & Care',
+  'Personal Care':          'Baby & Care', // 2026-07 rename: nappies/formula living under "Personal Care" read as mislabeled
 };
 
 // Per-item category corrections - applied after CATEGORY_REMAP, before user

@@ -23,8 +23,10 @@ CATEGORY_KEYWORDS = {
         "parsley",
     ],
     # 2026-07 consolidation (13 → 10 categories): Bakery folded into Pantry,
-    # Frozen Foods + Ready Meals merged, Personal Care + Baby merged. The UI's
-    # CATEGORY_REMAP (docs/utils.js) maps the old names for data scraped before this.
+    # Frozen Foods + Ready Meals merged, Personal Care + Baby merged into
+    # "Baby & Care" (renamed from "Personal Care" once nappies/formula living
+    # there read as mislabeled). The UI's CATEGORY_REMAP (docs/utils.js) maps
+    # every old name for data scraped before this.
     "Pantry": [
         "pasta", "rice", "flour", "sugar", "oil", "olive oil", "sauce", "tomato paste",
         "lentil", "barley", "chickpea", "oat", "granola", "baked beans", "tuna",
@@ -66,7 +68,7 @@ CATEGORY_KEYWORDS = {
         "sandwich bag", "sponge", "gloves", "paper cups", "resealable", "cistern",
         "ecostore", "vanish", "napisan", "shine dishwash", "ajax", "strike",
     ],
-    "Personal Care": [
+    "Baby & Care": [
         "toothbrush", "hand wash", "hand soap", "dettol", "palmolive", "toothpaste",
         "shampoo", "conditioner", "deodorant", "sunscreen",
         # former Baby bucket

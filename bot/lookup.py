@@ -187,8 +187,6 @@ _NAME_MAP = {
     "The Odd Bunch Lebanese Cucumber Punnet": "Odd Bunch Lebanese Cucumber",
     "The Odd Bunch Lemon Prepacked": "Odd Bunch Lemon",
     "The Odd Bunch Mandarin Prepacked": "Odd Bunch Mandarin",
-    "The Odd Bunch Mango": "Odd Bunch Mango",
-    "The Odd Bunch Strawberries Punnet": "Odd Bunch Strawberries",
     "The Odd Bunch Zucchini Prepacked": "Odd Bunch Zucchini",
     "Truss Tomatoes": "Truss Tomatoes",
     "Twinings Honeybush, Orange & Mandarin": "Twinings Honeybush & Mandarin",

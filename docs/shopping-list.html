@@ -107,9 +107,14 @@
        used to inset them by its own padding). 9px + 1px border = 10px. */
     .sl-savings-panel .saving-line { padding: 4px 10px; }
     .sl-savings-panel .saving-line + .saving-line { border-top: 1px solid var(--border); }
-    .sl-savings-panel .saving-text { flex: 1; display: flex; align-items: center; justify-content: space-between; }
+    .sl-savings-panel .saving-text { flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .sl-savings-panel .saving-label { margin-bottom: 0; }
     .sl-savings-panel .saving-amount { font-size: 16px; }
+    /* Shared saving figures (see basketSavingLine / splitSavingLine): bold-green
+       total (split only) + green (−$X) bracket, right-aligned so brackets align. */
+    .saving-figs { display: flex; align-items: baseline; justify-content: flex-end; gap: 8px; }
+    .sv-total { font-size: 18px; font-weight: 800; color: var(--green); line-height: 1; font-variant-numeric: tabular-nums; }
+    .sv-disc  { font-size: 14px; font-weight: 700; color: var(--green); font-variant-numeric: tabular-nums; }
     .sl-savings-panel .saving-icon { width: 22px; font-size: 16px; }
     .sl-savings-panel .saving-icon .store-chip { width: 22px; height: 22px; font-size: 12px; }
     .sl-savings-panel .bar-ribbon-chips { justify-content: center; gap: 6px; border-top: 1px solid var(--border); padding-top: 6px; margin-top: 2px; flex-wrap: nowrap; }
@@ -123,10 +128,6 @@
     .trip-bar { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; background: #F0FDF4; border: 1px solid #D1FAE5; border-radius: 10px; padding: 7px 12px; }
     .trip-bar .tb-label { font-size: 10px; font-weight: 700; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.06em; }
     .trip-bar strong { font-size: 22px; font-weight: 800; color: var(--green); font-variant-numeric: tabular-nums; }
-    /* Split-saving composite: BOLD dark trip price + the saving in green
-       brackets (one-store mode only - split mode's total lives in the bar). */
-    .saving-amount.sa-total { color: var(--green); }
-    .sa-disc { color: var(--green); font-weight: 600; font-size: 13px; }
     .sl-mode-btn:disabled { opacity: .45; cursor: default; }
     /* ── Save ribbon (replaces stats bar) ── */
     .bar-ribbon {
@@ -412,11 +413,13 @@
       .sl-mode-seg { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
       .sl-mode-btn { justify-content: center; }
       .sl-split-seg .sl-mode-btn { padding: 10px 8px; }
-      #removeAllBtn { justify-content: center; }
-      #smResetBtn { grid-column: 1 / -1; justify-content: center; }
-      /* Note spans the full grid row on mobile (the toggles already take the
-         whole width), so it reads as its own centered line under them. */
-      .sl-note { grid-column: 1 / -1; text-align: center; }
+      /* Note + its action button share ONE row in every mobile view (list AND
+         shopping mode): note on the left, button on the right. Previously the
+         list-mode Remove All button sat alone in the left half with dead space
+         beside it, while shopping mode's Reset spanned the full width - so the
+         two modes looked different. */
+      .sl-note { grid-column: 1; align-self: center; text-align: left; font-size: 12px; }
+      #removeAllBtn, #smResetBtn { grid-column: 2; justify-content: center; }
       /* One-line savings + tinted Split shop row come from the shared
          .sl-savings-panel base styles; mobile only shortens the chip wording */
       .chip-word { display: none; }
@@ -508,8 +511,8 @@
   <div class="empty">Loading…</div>
 </main>
 
-<script src="name_map.js?v=53"></script>
-<script src="utils.js?v=72"></script>
+<script src="name_map.js?v=54"></script>
+<script src="utils.js?v=73"></script>
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '-';
 // Short display name (same map the rest of the site uses); falls back to the
@@ -777,29 +780,34 @@ async function boot() {
 
   function computeSplit() {
     // Routing rules - every displayItem ends up in exactly one table:
-    //   an explicit per-row override wins; otherwise
-    //   WW table:    cheaper_store === 'woolworths'
-    //             OR cheaper_store === 'equal'  AND equalStore === 'ww'
-    //             OR woolworths only (no Coles price)
-    //   Coles table: cheaper_store === 'coles'
-    //             OR cheaper_store === 'equal'  AND equalStore === 'coles'
-    //             OR coles only (no WW price)
-    // Items without either price are excluded from displayItems upstream.
+    //   an explicit per-row override wins; otherwise route to the store with the
+    //   cheaper STICKER price (what you actually pay for this row), equal-price
+    //   items follow equalStore, single-store items go where they exist.
+    // NOT cheaper_store: that flag can be $/kg-based and, for a size-mismatched
+    // pair (e.g. a quarter cabbage $2.10 vs a whole one $6.90), name the pricier
+    // sticker store - which sent the "split" plan to a dearer total and hid the
+    // Split saving even though a real split saves money.
+    const sticker = i => {
+      const w = i.woolworths?.price, c = i.coles?.price;
+      if (w == null) return 'coles';
+      if (c == null) return 'ww';
+      if (w < c) return 'ww';
+      if (c < w) return 'coles';
+      return 'equal';
+    };
     const wwItems = displayItems.filter(i => {
       if (i.woolworths?.price == null) return false;
       const ov = storeOverride.get(i.list_item);
       if (ov) return ov === 'ww';
-      return i.cheaper_store === 'woolworths' ||
-             (i.cheaper_store === 'equal' && equalStore === 'ww') ||
-             i.coles?.price == null;
+      const s = sticker(i);
+      return s === 'ww' || (s === 'equal' && equalStore === 'ww');
     });
     const colesItems = displayItems.filter(i => {
       if (i.coles?.price == null) return false;
       const ov = storeOverride.get(i.list_item);
       if (ov) return ov === 'coles';
-      return i.cheaper_store === 'coles' ||
-             (i.cheaper_store === 'equal' && equalStore === 'coles') ||
-             i.woolworths?.price == null;
+      const s = sticker(i);
+      return s === 'coles' || (s === 'equal' && equalStore === 'coles');
     });
     // Invariant: wwItems ∪ colesItems === displayItems (no item in both or neither)
     return { wwItems, colesItems };
@@ -1042,11 +1050,11 @@ async function boot() {
       s + (priceFor(i, store) ?? 0) * bq(i.list_item), 0);
     const wwSub = subtotalOf(wwItems, 'ww');
     const coSub = subtotalOf(colesItems, 'coles');
-    // Equal-price items (same price at both stores) - reassignable in split mode
+    // Equal-price items (same STICKER price at both stores) - reassignable in
+    // split mode. By sticker, not cheaper_store, to match the split routing.
     const equalItems = displayItems.filter(i =>
-      i.cheaper_store === 'equal' &&
-      i.woolworths?.price != null &&
-      i.coles?.price != null);
+      i.woolworths?.price != null && i.coles?.price != null &&
+      i.woolworths.price === i.coles.price);
     const single = slSplit ? null : singleStoreNow();
     // Card "active" highlight: single mode = the store you're buying at;
     // split mode = where equal-price items are assigned (as before).
@@ -1068,9 +1076,10 @@ async function boot() {
     const deltaHtml = d => d == null ? '' : `<span class="sc-delta">${d >= 0 ? '+' : '−'}${fmt(Math.abs(d))}</span>`;
 
     // ── Save ribbon ──────────────────────────────────────────────────────────
-    // Intrinsic classification counts (independent of equalStore assignment)
-    const wwOnlyCount = displayItems.filter(i => i.cheaper_store === 'woolworths').length;
-    const coOnlyCount = displayItems.filter(i => i.cheaper_store === 'coles').length;
+    // Cheaper-by-STICKER counts (match the split routing, not $/kg cheaper_store).
+    const bothPriced = displayItems.filter(i => i.woolworths?.price != null && i.coles?.price != null);
+    const wwOnlyCount = bothPriced.filter(i => i.woolworths.price < i.coles.price).length;
+    const coOnlyCount = bothPriced.filter(i => i.coles.price < i.woolworths.price).length;
     const ribbonChips = [
       wwOnlyCount > 0    ? `<span class="bar-store-chip ww-chip" title="${wwOnlyCount} cheaper at Woolworths"><span class="store-chip ww">W</span>${wwOnlyCount}<span class="chip-word"> at Woolworths</span></span>` : '',
       equalItems.length > 0 ? `<span class="bar-store-chip eq-chip" title="${equalItems.length} same price at both">${equalItems.length}<span class="chip-word"> equal-price</span></span>` : '',
@@ -1103,18 +1112,27 @@ async function boot() {
     const foreignNote = (n, from) => (!slSplit && n > 0)
       ? `<span class="sc-foreign" title="${n} item${n !== 1 ? 's' : ''} not sold here - counted using ${n !== 1 ? 'their' : 'its'} ${from} price so both totals cover the same items">${n} not sold here</span>`
       : '';
-    // Basket saving (one-store) sits ABOVE Split saving. The Split saving line
-    // only shows when the plan actually splits AND beats the cheaper single
-    // store - otherwise it's noise (a "$5.80 split saving" while the plan put
-    // everything at one store was exactly the reported bug). The line ALWAYS
-    // leads with the trip price + the saving in green brackets, in both
-    // one-store and split mode - same format everywhere it appears.
+    // Basket saving (one-store) sits ABOVE Split saving, sharing one figure
+    // layout so they read as a set: a right-aligned `.saving-figs` block with an
+    // optional bold-green total then the saving as a green (−$X) bracket. The
+    // brackets align in a column; the split row adds its trip total to the left.
+    //   • Basket saving = bracket only (its total is the cheaper store card).
+    //   • Split saving = trip total + bracket (this panel is the only place the
+    //     split trip price shows). Only shown when the plan actually splits AND
+    //     beats the cheaper single store - else it's noise ("$5.80 split saving"
+    //     while the plan put everything in one store was the reported bug).
+    const svLine = (icon, label, tip, figs) =>
+      `<div class="saving-line"><span class="saving-icon">${icon}</span><div class="saving-text"><div class="saving-label">${label}${infoIco(tip)}</div><div class="saving-figs">${figs}</div></div></div>`;
+    const svDisc = v => `<span class="sv-disc">(−${fmt(v)})</span>`;
     const basketSavingLine = isEqual
       ? `<div class="saving-line"><span class="saving-icon">⚖</span><div class="saving-text"><div class="saving-label">Both stores</div><span class="saving-amount" style="color:var(--text-mid)">Same price</span></div></div>`
-      : `<div class="saving-line"><span class="saving-icon">${savingCheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIco('Buy everything at the cheaper store instead of the dearer one - this is the difference.')}</div><span class="saving-amount">${fmt(basketSaving)}</span></div></div>`;
+      : svLine(savingCheaperChip, 'Basket saving',
+          'Buy everything at the cheaper store instead of the dearer one - this is what you save.', svDisc(basketSaving));
     const showSplitLine = plan.splits && splitSaving > basketSaving + 0.005;
     const splitSavingLine = showSplitLine
-      ? `<div class="saving-line"><span class="saving-icon">${splitDisc}</span><div class="saving-text"><div class="saving-label">Split saving${infoIco('The bold number is what these items cost split across both stores (each at its cheaper one). The green bracket is what that saves vs the dearer store. Use the Split shop toggle to plan it.')}</div><span class="saving-amount sa-total">${fmt(plan.total)} <span class="sa-disc">(−${fmt(splitSaving)})</span></span></div></div>`
+      ? svLine(splitDisc, 'Split saving',
+          'The bold green number is what these items cost split across both stores (each at its cheaper one). The bracket is what that saves vs the dearer store. Use the Split shop toggle to plan it.',
+          `<span class="sv-total">${fmt(plan.total)}</span>${svDisc(splitSaving)}`)
       : '';
     const savingInfoHtml = basketSavingLine + splitSavingLine;
 
@@ -1133,7 +1151,8 @@ async function boot() {
             <div class="sc-icon"><span class="sc-icon-chip ww">W</span></div>
             <div class="sc-name-row">
               <span class="sc-store-name">Woolworths</span>
-              <span class="sc-item-pill">${slSplit ? `${wwItems.length} item${wwItems.length !== 1 ? 's' : ''}` : `all ${displayItems.length} items`}</span>
+              <span class="sc-item-pill">${slSplit ? `${wwItems.length} item${wwItems.length !== 1 ? 's' : ''}`
+                : (wwForeign > 0 ? `${displayItems.length - wwForeign}/${displayItems.length} items` : `all ${displayItems.length} items`)}</span>
             </div>
             <div class="sc-price ${wwPriceCls}">${fmt(slSplit ? wwSub : wwTotal)}</div>
             <div class="sc-foreign-row">${foreignNote(wwForeign, 'Coles')}</div>
@@ -1147,7 +1166,8 @@ async function boot() {
             <div class="sc-icon"><span class="sc-icon-chip coles">C</span></div>
             <div class="sc-name-row">
               <span class="sc-store-name">Coles</span>
-              <span class="sc-item-pill">${slSplit ? `${colesItems.length} item${colesItems.length !== 1 ? 's' : ''}` : `all ${displayItems.length} items`}</span>
+              <span class="sc-item-pill">${slSplit ? `${colesItems.length} item${colesItems.length !== 1 ? 's' : ''}`
+                : (coForeign > 0 ? `${displayItems.length - coForeign}/${displayItems.length} items` : `all ${displayItems.length} items`)}</span>
             </div>
             <div class="sc-price ${coPriceCls}">${fmt(slSplit ? coSub : coTotal)}</div>
             <div class="sc-foreign-row">${foreignNote(coForeign, 'Woolworths')}</div>

@@ -2,7 +2,7 @@
 
 Run: python scripts/categories_selfcheck.py
 Locks the merged buckets (Bakery -> Pantry, Frozen Foods + Ready Meals ->
-"Frozen", Personal Care + Baby -> "Personal Care") and guards
+"Frozen", Personal Care + Baby -> "Baby & Care") and guards
 against keyword collisions as new items are added. All bucket names must stay inside
 the 10 live categories the UI knows about (KNOWN_CATEGORIES in docs/app.js), or the
 item lands on a tab that doesn't exist.
@@ -17,7 +17,7 @@ from categories import guess_category, CATEGORY_KEYWORDS
 LIVE = {
     "Fruit & Veg", "Meat & Seafood", "Dairy & Eggs", "Pantry", "Sweets",
     "Frozen", "Drinks & Alcohol", "Household",
-    "Personal Care", "Other",
+    "Baby & Care", "Other",
 }
 
 CASES = [
@@ -33,8 +33,8 @@ CASES = [
     ("Helga's Wholemeal Bread 750g", "Pantry"),                 # ex-Bakery
     ("Ben & Jerry's Ice Cream Tub", "Frozen"),    # ex-Frozen Foods
     ("Continental Cup A Soup Chicken", "Pantry"), # shelf-stable, moved out of Frozen
-    ("Aptamil Gold Follow-On Formula", "Personal Care"), # ex-Baby
-    ("Dettol Antibacterial Hand Wash", "Personal Care"), # ex-Personal Care
+    ("Aptamil Gold Follow-On Formula", "Baby & Care"), # ex-Baby
+    ("Dettol Antibacterial Hand Wash", "Baby & Care"), # ex-Personal Care
 ]
 
 

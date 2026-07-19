@@ -367,9 +367,12 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
   margin-bottom: 3px;
 }
 .saving-amount { font-size: 20px; font-weight: 800; color: var(--green); line-height: 1; }
-/* Split-saving composite: BOLD dark trip price + the saving in green brackets */
-.saving-amount.sa-total { color: var(--green); }
-.sa-disc { color: var(--green); font-weight: 600; font-size: 13px; }
+/* Shared saving figures: an optional bold-green total, then the saving as a
+   green (−$X) bracket. Both rows use this so their brackets align in a column;
+   the split row adds its total to the left. */
+.saving-figs { display: flex; align-items: baseline; justify-content: flex-end; gap: 8px; }
+.sv-total { font-size: 19px; font-weight: 800; color: var(--green); line-height: 1; font-variant-numeric: tabular-nums; }
+.sv-disc  { font-size: 14px; font-weight: 700; color: var(--green); font-variant-numeric: tabular-nums; }
 /* Desktop: label and amount share ONE line (label left, amount right), which
    makes the whole banner a text-row shorter. The divider's children stretch to
    a common width so the two amounts right-align with each other. Mobile keeps

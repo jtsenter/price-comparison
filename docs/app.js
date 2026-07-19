@@ -465,7 +465,7 @@ function saveUnitOverrides(obj) {
 // dynamically as the fallback. Old names remap via CATEGORY_REMAP in utils.js.
 const KNOWN_CATEGORIES = [
   'Fruit & Veg', 'Meat & Seafood', 'Dairy & Eggs', 'Pantry', 'Sweets',
-  'Frozen', 'Drinks & Alcohol', 'Household', 'Personal Care',
+  'Frozen', 'Drinks & Alcohol', 'Household', 'Baby & Care',
 ];
 
 function loadCategoryOverrides() {
@@ -2639,17 +2639,25 @@ function renderSavingInfo(s) {
     ? '<span class="store-chip coles sm">C</span>'
     : '<span class="store-chip ww sm">W</span>';
   const splitIcon = `<svg class="split-icon" width="24" height="24" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 A14 14 0 0 0 16 30 Z" fill="var(--ww)"/><path d="M16 2 A14 14 0 0 1 16 30 Z" fill="var(--coles)"/><line x1="16" y1="2" x2="16" y2="30" stroke="var(--card)" stroke-width="2.5"/></svg>`;
-  // Explanations live behind a visible ?-icon (hover or tap/focus shows the
-  // tip) - a bare title attribute was invisible until you happened to hover.
-  // "Max": these are the largest POSSIBLE savings - they compare the two
-  // stores and don't change with whichever store you happen to pick.
-  const basket = `<div class="saving-line"><span class="saving-icon">${cheaperChip}</span><div class="saving-text"><div class="saving-label">Basket saving${infoIcoHTML('Buy everything at the cheaper store instead of the dearer one - this is the difference')}</div><span class="saving-amount">${fmt(s.total_saving)}</span></div></div>`;
+  // Two rows, one shared layout so they read as a set. Each row's figures sit
+  // in a right-aligned `.saving-figs` block: an optional bold-green total, then
+  // the saving as a green (−$X) bracket. The brackets line up in a column
+  // across both rows; the split row adds its trip total to their left.
+  //   • Basket saving = bracket only. Its total is the cheaper store card right
+  //     beside this panel, so repeating it here would just duplicate that.
+  //   • Split saving = trip total + bracket. This panel is the ONLY place the
+  //     split trip price appears, so it leads with that bold number.
+  const line = (icon, label, tip, figs) =>
+    `<div class="saving-line"><span class="saving-icon">${icon}</span><div class="saving-text"><div class="saving-label">${label}${infoIcoHTML(tip)}</div><div class="saving-figs">${figs}</div></div></div>`;
+  const disc = v => `<span class="sv-disc">(−${fmt(v)})</span>`;
+
+  const basket = line(cheaperChip, 'Basket saving',
+    'Buy everything at the cheaper store instead of the dearer one - this is what you save', disc(s.total_saving));
   let maxRow = '';
   if (s.max_saving > s.total_saving + 0.005) {
-    // BOLD dark number = what the split trip costs; green bracket = what it
-    // saves vs the dearer single store (the old lone discount hid the price
-    // you'd actually pay - and that is the number that matters).
-    maxRow = `<div class="saving-line"><span class="saving-icon">${splitIcon}</span><div class="saving-text"><div class="saving-label">Split saving${infoIcoHTML('The bold number is what these items cost split across both stores (each at its cheaper one). The green bracket is what that saves vs the dearer store')}</div><span class="saving-amount sa-total">${fmt(s.split_total)} <span class="sa-disc">(−${fmt(s.max_saving)})</span></span></div></div>`;
+    maxRow = line(splitIcon, 'Split saving',
+      'The bold green number is what these items cost split across both stores (each at its cheaper one). The bracket is what that saves vs the dearer store',
+      `<span class="sv-total">${fmt(s.split_total)}</span>${disc(s.max_saving)}`);
   }
   return basket + maxRow;
 }
