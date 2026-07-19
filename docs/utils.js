@@ -463,6 +463,33 @@ const UNIT_BASED_GROUPS = new Set([
   'brown_onions', 'red_onions', 'greek_yoghurt',
 ]);
 
+// Equivalent-quantity bundling for UNIT-BASED per-kg groups (yoghurt, potato,
+// nutella...), where each store is bought in WHOLE packs, not weighed loose.
+// Each store's cheapest-$/kg pack is scaled - using whole packs - to the SAME
+// comparison weight (the larger of the two pack sizes), so the basket compares
+// like for like (2 × WW 1kg vs 1 × Coles 2kg) instead of a lone 1kg sticker
+// beside a 2kg one. The store with the lower TOTAL at that weight is cheaper -
+// which, at equal weight, is exactly the lower $/kg. Pure; see utils_selfcheck.
+//   ww/co: { price, perKg, ... } | null.   pack size (kg) = price / perKg.
+//   returns { ww:{packs,total,...}|null, coles:{...}|null, cheaper }.
+// ponytail: only aligns when the larger size is a near-integer multiple of the
+// smaller (within 10%); off-multiple pairs (750g vs 1kg) fall back to 1:1 packs,
+// still comparable via the kg size labels the caller renders. Upgrade: exact LCM.
+function perKgEquivBundle(ww, co) {
+  const one = r => r ? { ...r, packs: 1, total: +(+r.price).toFixed(2) } : null;
+  if (!ww || !co) return { ww: one(ww), coles: one(co), cheaper: ww ? 'woolworths' : 'coles' };
+  const sizeW = ww.price / ww.perKg, sizeC = co.price / co.perKg;
+  const target = Math.max(sizeW, sizeC);
+  const packsFor = size => { const n = target / size, r = Math.round(n); return (r >= 1 && Math.abs(n - r) <= 0.1) ? r : 1; };
+  let nW = packsFor(sizeW), nC = packsFor(sizeC);
+  // If either side can't reach the target weight in whole packs, don't scale -
+  // a lopsided 1:2 that isn't a true weight match reads worse than 1:1.
+  if (nW * sizeW < target - 1e-6 || nC * sizeC < target - 1e-6) { nW = 1; nC = 1; }
+  const wt = +(nW * ww.price).toFixed(2), ct = +(nC * co.price).toFixed(2);
+  const cheaper = wt < ct - 0.005 ? 'woolworths' : ct < wt - 0.005 ? 'coles' : 'equal';
+  return { ww: { ...ww, packs: nW, total: wt }, coles: { ...co, packs: nC, total: ct }, cheaper };
+}
+
 // One group's resolved member names under the user's current overrides.
 // ponytail: legacy v1 overrides are treated as pure adds, a close-enough mirror
 // of app.js's migratePerKgOverride for a display/grouping filter.

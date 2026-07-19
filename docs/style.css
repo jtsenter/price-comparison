@@ -1862,9 +1862,12 @@ td.priority-cell { text-align: center; }
   font-size: 12px;
   color: var(--text-mid);
 }
-.scrape-strip-label { white-space: nowrap; font-weight: 600; min-width: 120px; }
+/* Truncate instead of overflowing: a single-item scrape puts the whole product
+   name here ("⏳ Scraping: Woolworths White Washed Baby Potatoes Bag 1kg…"),
+   which used to push the strip wider than the screen. */
+.scrape-strip-label { white-space: nowrap; font-weight: 600; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .scrape-strip-track {
-  flex: 1;
+  flex: 0 1 140px;
   height: 5px;
   background: var(--bg);
   border-radius: 3px;

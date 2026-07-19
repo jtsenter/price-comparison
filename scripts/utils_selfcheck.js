@@ -58,6 +58,7 @@ eval([
   extract('calcTrendPosition'),
   extract('variantGroupItemNames'),
   extract('buildDealGroups'),
+  extract('perKgEquivBundle'),
 ].join('\n'));
 
 let n = 0;
@@ -181,6 +182,41 @@ check('median empty -> null', _median([]), null);
   check('basa Coles = cheapest member $/kg', basa.coles.price, 10.00);    // 10.00 / 1kg
   check('WW history converted to $/kg', basa.ww_price_history.map(p => p.price), [9.00]);
   check('groups with no priced members are skipped', groups.some(g => g.list_item === '__group_lamb_mince'), false);
+}
+
+// ── perKgEquivBundle (equivalent-quantity bundling for unit-based groups) ────
+{
+  // 1kg @ $4.20/kg vs 2kg @ $4.20/kg: 2 × WW 1kg matches 1 × Coles 2kg, equal.
+  const yog = perKgEquivBundle({ price: 4.20, perKg: 4.20 }, { price: 8.40, perKg: 4.20 });
+  check('yoghurt WW scaled to 2 packs', yog.ww.packs, 2);
+  check('yoghurt WW total = 2×4.20', yog.ww.total, 8.40);
+  check('yoghurt Coles stays 1 pack', yog.coles.packs, 1);
+  check('yoghurt Coles total unchanged', yog.coles.total, 8.40);
+  check('equal total -> equal', yog.cheaper, 'equal');
+
+  // Same sizes (1kg each): no scaling, cheaper by real price.
+  const same = perKgEquivBundle({ price: 4.20, perKg: 4.20 }, { price: 4.50, perKg: 4.50 });
+  check('same-size no scaling ww', same.ww.packs, 1);
+  check('same-size no scaling coles', same.coles.packs, 1);
+  check('same-size cheaper = ww', same.cheaper, 'woolworths');
+
+  // 4kg vs 1kg: Coles buys 4 packs to reach 4kg. WW $4/kg beats Coles $5/kg.
+  const potato = perKgEquivBundle({ price: 16.00, perKg: 4.00 }, { price: 5.00, perKg: 5.00 });
+  check('potato Coles scaled to 4 packs', potato.coles.packs, 4);
+  check('potato Coles total = 4×5', potato.coles.total, 20.00);
+  check('potato WW stays 1 pack', potato.ww.packs, 1);
+  check('potato cheaper = ww', potato.cheaper, 'woolworths');
+
+  // Off-multiple (0.75kg vs 1kg): can't align in whole packs -> 1:1, no scaling.
+  const odd = perKgEquivBundle({ price: 6.00, perKg: 8.00 }, { price: 7.00, perKg: 7.00 });
+  check('off-multiple ww no scaling', odd.ww.packs, 1);
+  check('off-multiple coles no scaling', odd.coles.packs, 1);
+
+  // Single store: returned as-is, that store is "cheaper".
+  const solo = perKgEquivBundle({ price: 5.00, perKg: 5.00 }, null);
+  check('single store packs = 1', solo.ww.packs, 1);
+  check('single store coles null', solo.coles, null);
+  check('single store cheaper = ww', solo.cheaper, 'woolworths');
 }
 
 console.log(`utils_selfcheck: all ${n} cases passed`);
