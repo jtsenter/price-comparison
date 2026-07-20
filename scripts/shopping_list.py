@@ -7,7 +7,6 @@ KNOWN_NAME_CHANGES = {
     "Woolworths Natural Greek Style Yoghurt": "Woolworths Greek Style Yoghurt",
     "Home Chef Quiche Lorraine Chilled Meal": "Hedy's Fresh Quiche Lorraine Chilled Meal",
     "Home Chef Quiche Spinach & Feta Chilled Meal": "Hedy's Fresh Quiche Spinach & Feta Chilled Meal",
-    "Aptamil Gold Stage 2 Follow On Baby Formula 6-12M": "Aptamil Gold+ 2 Baby Follow-On Formula From 6 To 12 Months",
     "Woolworths Freshwater Basa Fillets Thawed": "Woolworths Basa Fillets Boneless With Skin Off",
     "Eat Later Hass Avocado": "Hass Avocado",
     "Hass Avocado": "Hass Avocado",

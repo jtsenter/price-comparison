@@ -290,10 +290,21 @@ function scheduleUserSettingsSync() {
   clearTimeout(_userSettingsTimer);
   _userSettingsTimer = setTimeout(persistUserSettingsToRepo, 1500);
 }
+// Strip tombstoned (deleted) item keys from a settings map before it's stored
+// or published - see REMOVED_ITEMS in utils.js for why this must be everywhere.
+function dropRemovedKeys(obj) {
+  for (const k of Object.keys(obj)) if (REMOVED_ITEMS.has(k)) delete obj[k];
+  return obj;
+}
 async function persistUserSettingsToRepo() {
   const s = loadSettings();
   if (!s.token) return;
-  const payload = { priorities: loadPriorities(), units: loadUnitOverrides(), perkg: [..._perkgSet], exclusions: loadExclusions() };
+  const payload = {
+    priorities: dropRemovedKeys(loadPriorities()),
+    units: dropRemovedKeys(loadUnitOverrides()),
+    perkg: [..._perkgSet].filter(n => !REMOVED_ITEMS.has(n)),
+    exclusions: dropRemovedKeys(loadExclusions()),
+  };
   try {
     await githubPutJson(s, 'docs/data/user_settings.json', payload, 'chore: sync user settings (priorities + quantities)');
   } catch (e) {
@@ -310,10 +321,10 @@ async function initUserSettings() {
         // Merge so the repo and this device agree. Repo values win on conflict
         // (changes push immediately, so the repo is the freshest source); any
         // local-only keys are preserved, so nothing is ever silently deleted.
-        localStorage.setItem('pw_priorities_v1', JSON.stringify({ ...loadPriorities(), ...(remote.priorities || {}) }));
-        localStorage.setItem('pw_units_v1',      JSON.stringify({ ...loadUnitOverrides(), ...(remote.units || {}) }));
+        localStorage.setItem('pw_priorities_v1', JSON.stringify(dropRemovedKeys({ ...loadPriorities(), ...(remote.priorities || {}) })));
+        localStorage.setItem('pw_units_v1',      JSON.stringify(dropRemovedKeys({ ...loadUnitOverrides(), ...(remote.units || {}) })));
         if (Array.isArray(remote.perkg)) {
-          _perkgSet = new Set([..._perkgSet, ...remote.perkg]);
+          _perkgSet = new Set([..._perkgSet, ...remote.perkg].filter(n => !REMOVED_ITEMS.has(n)));
           savePerkgLocal(_perkgSet);
         }
         // Price-history exclusions (incl. per-kg group-history point removals):
@@ -323,10 +334,10 @@ async function initUserSettings() {
         if (remote.exclusions && typeof remote.exclusions === 'object') {
           const merged = loadExclusions();
           for (const [item, arr] of Object.entries(remote.exclusions)) {
-            if (!Array.isArray(arr)) continue;
+            if (!Array.isArray(arr) || REMOVED_ITEMS.has(item)) continue;
             merged[item] = [...new Set([...(merged[item] || []), ...arr])];
           }
-          saveExclusions(merged);
+          saveExclusions(dropRemovedKeys(merged));
         }
       }
     }
@@ -414,14 +425,20 @@ async function mergeArchivedFromRepo() {
   try {
     const res = await fetch(`data/archived_items.json?t=${Date.now()}`);
     if (!res.ok) return;
-    const names = await res.json();
+    let names = await res.json();
     if (!Array.isArray(names) || !names.length) return;
+    names = names.filter(n => !REMOVED_ITEMS.has(n)); // tombstoned = deleted for good
     _repoArchivedSet = new Set(names);
     const pr = loadPriorities();
     let changed = false;
     names.forEach(name => {
       if (pr[name] == null) { pr[name] = 'archive'; changed = true; }
     });
+    // Scrub tombstoned names out of this device's local priorities too, so the
+    // next sync can't push them back into the repo.
+    for (const k of Object.keys(pr)) {
+      if (REMOVED_ITEMS.has(k)) { delete pr[k]; changed = true; }
+    }
     if (changed) savePriorities(pr);
   } catch { /* offline / missing file - non-fatal */ }
 }
@@ -513,6 +530,15 @@ function getUnits(itemName) {
   if (_perkgSet.has(itemName)) return 1.0;
   const qty = getAnalysisData(itemName).avg_qty;
   return qty != null ? Math.round(qty) : 1;
+}
+
+// Kg-quantity rows: loose per-kg entries (meat/seafood cuts, _perkgSet items) -
+// their Units value means KILOGRAMS, not a pack count. Unit-based groups
+// (Nutella, potato bags, yoghurt tubs...) count discrete packs like normal items.
+function isKgQty(itemName) {
+  if (typeof itemName !== 'string') return false;
+  const isUnitGroup = itemName.startsWith('__group_') && UNIT_BASED_GROUPS.has(itemName.slice(8));
+  return !isUnitGroup && (_perkgSet.has(itemName) || itemName.startsWith('__group_'));
 }
 
 // ── Category normalisation ────────────────────────────────────────────────────
@@ -856,7 +882,8 @@ function getColValue(col, item) {
     }
     case 'saving':       { const s = savingAmount(item); return s > 0 ? fmt(s * getUnits(item.list_item)) : '-'; }
     case 'trips':        return String(item.trip_count || 0);
-    case 'units':        return String(getUnits(item.list_item));
+    // Kg rows filter as "1.0kg" (their real meaning), pack rows as plain counts.
+    case 'units':        { const u = getUnits(item.list_item); return isKgQty(item.list_item) ? u.toFixed(1) + 'kg' : String(u); }
     case 'category':     return getCategory(item);
     case 'last_scraped': return item.last_scraped
       ? new Date(item.last_scraped).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -910,12 +937,14 @@ function colHeadHtml(col) {
     case 'trend':        return th('trend', '', 'Trend');
     case 'ww':           return th('ww', '', '<span class="store-chip ww sm">W</span> WW');
     case 'coles':        return th('coles', '', '<span class="store-chip coles sm">C</span> Coles');
-    case 'cheaper':      return th('cheaper', 'center-th', 'Best');
-    case 'pct':          return th('pct', 'center-th', 'Diff');
-    case 'saving':       return th('saving', 'right-th', 'Savings');
-    case 'trips':        return th('trips', 'center-th', 'Buys');
-    case 'priority':     return th('priority', 'center-th', 'Priority');
-    case 'units':        return th('units', 'center-th', 'Qty');
+    // 2026-07-20: all header text left-aligned (user request) - cells keep
+    // their own center/right alignment, only the th labels line up left.
+    case 'cheaper':      return th('cheaper', '', 'Best');
+    case 'pct':          return th('pct', '', 'Diff');
+    case 'saving':       return th('saving', '', 'Savings');
+    case 'trips':        return th('trips', '', 'Buys');
+    case 'priority':     return th('priority', '', 'Priority');
+    case 'units':        return th('units', '', 'Qty');
     case 'category':     return th('category', '', 'Category');
     case 'last_scraped': return th('last_scraped', '', 'Last Scraped');
     case 'ww_total':     return th('ww_total', '', '<span class="store-chip ww sm">W</span> Total');
@@ -2400,7 +2429,7 @@ async function syncArchivedToGitHub() {
   if (!s.token) return;
   if (_archivedSaving) return;
   const pr = loadPriorities();
-  const archivedNames = Object.keys(pr).filter(k => pr[k] === 'archive');
+  const archivedNames = Object.keys(pr).filter(k => pr[k] === 'archive' && !REMOVED_ITEMS.has(k));
   _archivedSaving = true;
   try {
     await persistArchivedToRepo(s, archivedNames);
@@ -3226,9 +3255,11 @@ let _scrapeActive = false;          // true between first progress and confirmed
 
 const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
 
-function sortItems(items) {
-  const exclusions = loadExclusions();
-  const _sortOvr = loadOverrides(); // hoisted: name sort uses displayed names (renames included)
+// The row-filter pipeline, shared by sortItems (skipCol=null) and the column
+// filter dropdown (skipCol=that column), which must offer only values present
+// in the rows every OTHER filter lets through - Excel semantics, instead of
+// listing options that select nothing.
+function applyFilters(items, skipCol = null) {
   let filtered = items.filter(item => {
     // Per-kg group visibility (⚙ /kg button): isolate the groups, or hide them entirely
     if (_perkgFilter === 'only') return !!item._isGroup;
@@ -3261,13 +3292,13 @@ function sortItems(items) {
 
   // Per-column value (checkbox) filters
   for (const [col, vals] of Object.entries(_colFilters)) {
-    if (!vals?.size) continue;
+    if (!vals?.size || col === skipCol) continue;
     filtered = filtered.filter(i => vals.has(getColValue(col, i)));
   }
 
   // Per-column numeric filters (AND'd with checkbox filters)
   for (const [col, nf] of Object.entries(_colNumFilters)) {
-    if (!nf) continue;
+    if (!nf || col === skipCol) continue;
     filtered = filtered.filter(i => {
       const numVal = getColNumericValue(col, i);
       return applyNumFilter(numVal, nf);
@@ -3281,6 +3312,14 @@ function sortItems(items) {
     filtered = filtered.filter(i =>
       nameMatchesSearch(ovr[i.list_item]?.displayName || i.list_item, terms));
   }
+
+  return filtered;
+}
+
+function sortItems(items) {
+  const exclusions = loadExclusions();
+  const _sortOvr = loadOverrides(); // hoisted: name sort uses displayed names (renames included)
+  const filtered = applyFilters(items);
 
   function getSortVal(col, item) {
     // Price columns must sort by the number the cell DISPLAYS: per-kg groups show
@@ -3299,7 +3338,9 @@ function sortItems(items) {
       case 'cheaper':  return item.cheaper_store ?? 'zzz';
       case 'saving':   return savingAmount(item) ?? NaN;
       case 'trips':    return item.trip_count || 0;
-      case 'units':    return getUnits(item.list_item);
+      // Kg rows sort as a contiguous block after pack-count rows (offset), so
+      // "1.0kg" items sit together instead of interleaving with "1 unit" items.
+      case 'units':    { const u = getUnits(item.list_item); return isKgQty(item.list_item) ? 1e6 + u : u; }
       case 'priority': return PRIORITY_ORDER[getPriority(item.list_item)] ?? 99;
       case 'pct':
         return (wwShown != null && coShown != null)
@@ -5003,6 +5044,7 @@ function _renderPageInner(data) {
 
 
   // ── View mode branch ───────────────────────────────────────────
+  _lastDisplayItems = allDisplayItems; // column filter dropdown's option pool
   const sorted = sortItems(allDisplayItems);
 
   if (isMobile()) {
@@ -5684,6 +5726,7 @@ function initColumnChooser() {
 let _cfdCol = null;
 let _cfdAllValues = [];
 let _cfdTempValues = null;
+let _lastDisplayItems = []; // renderPage's item set incl. per-kg group rows
 
 function initColFilterDropdown() {
   const dd = $('colFilterDropdown');
@@ -5767,10 +5810,15 @@ function openColFilter(col, btn) {
   _cfdCol = col;
   const existing = _colFilters[col];
 
-  // Gather all unique values from full (unfiltered by this col) items
-  const allItems = [...(_lastData.items || []), ...(_lastData.not_found_items || []).map(n => ({ list_item: n }))];
-  _cfdAllValues = [...new Set(allItems.map(i => getColValue(col, i)))].sort((a, b) => {
-    // Numeric sort for price/numeric-looking values
+  // Excel semantics: offer only values present in the rows every OTHER filter
+  // (view, category tab, other columns, search) lets through - not the whole
+  // dataset, which listed options that couldn't select anything.
+  const pool = _lastDisplayItems.length ? _lastDisplayItems : (_lastData.items || []);
+  _cfdAllValues = [...new Set(applyFilters(pool, col).map(i => getColValue(col, i)))].sort((a, b) => {
+    // Numeric sort for price/numeric-looking values; kg quantities ("1.0kg")
+    // group after plain pack counts, mirroring the column's sort order.
+    const ak = a.endsWith('kg'), bk = b.endsWith('kg');
+    if (ak !== bk) return ak ? 1 : -1;
     const na = parseFloat(a.replace(/[$,]/g, '')), nb = parseFloat(b.replace(/[$,]/g, ''));
     if (!isNaN(na) && !isNaN(nb)) return na - nb;
     return a.localeCompare(b);
@@ -6158,11 +6206,7 @@ async function boot() {
         const incBtn = e.target.closest('.units-inc, .units-dec');
         if (incBtn) {
           const itemName = incBtn.dataset.item;
-          // Unit-based groups (Nutella, potato/carrot/onion bags, yoghurt tubs,
-          // Lotus - sold as one discrete pack) count PACKS like a normal item;
-          // every other per-kg entry (loose meat/seafood cuts) counts kilograms.
-          const isUnitGroup = itemName.startsWith('__group_') && UNIT_BASED_GROUPS.has(itemName.slice(8));
-          const isKgBased = !isUnitGroup && (_perkgSet.has(itemName) || itemName.startsWith('__group_'));
+          const isKgBased = isKgQty(itemName); // kg steps for loose cuts, packs otherwise
           const isInc = incBtn.classList.contains('units-inc');
           const ov = loadUnitOverrides();
           const cur = getUnits(itemName);
