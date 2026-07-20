@@ -490,6 +490,35 @@ function perKgEquivBundle(ww, co) {
   return { ww: { ...ww, packs: nW, total: wt }, coles: { ...co, packs: nC, total: ct }, cheaper };
 }
 
+// Products the user deleted from the dataset. Every sync path must FILTER
+// these: priorities/archived lists live in each device's localStorage and the
+// sync code merges local + repo then publishes the union - so one phone with a
+// stale copy silently resurrects a purged item in archived_items.json /
+// user_settings.json forever (bit us twice: 2026-07-19 and 2026-07-20).
+// Deleting a product = purge the data files AND tombstone it here.
+const REMOVED_ITEMS = new Set([
+  // 2026-07-19 batch
+  'Woolworths Frozen Basa Fillets 1kg',
+  "Little One's Size 3 Ultra Dry Nappies Crawler 6-11Kg Boys & Girls",
+  "Little One's Size 4 Ultra Dry Nappies Toddler 10-15Kg Boys & Girls",
+  "Little One's Size 5 Ultra Dry Nappies Walker 12-17kg Boys & Girls",
+  'Ajax Antibacterial Wipes Eco Vanilla & Berries 110 Wipes',
+  'The Odd Bunch Mango',
+  'The Odd Bunch Strawberries Punnet',
+  // 2026-07-20 batch (incl. ghost aliases of renamed products - the alias name
+  // must never render again, but its Excel receipts still feed the new name)
+  'Aptamil Gold+ 2 Baby Follow-On Formula From 6 To 12 Months',
+  'Aptamil Gold Stage 2 Follow On Baby Formula 6-12M',
+  'Plum Red',
+  "Sam's Pantry Chocolate Brownie with Roasted Almonds Protein Bar",
+  'Dettol Tru Clean Antibacterial Multipurpose Wipes Citrus',
+  'The Odd Bunch Cherries Punnet',
+  'Eat Now Hass Avocado',
+  "Arnold's Farm Granola Pink Lady Apple & Cinnamon",
+  'Balconi Mix Max Spgnckes Cocoa',
+  'Vevelle 2 Ply White Toilet Tissue',
+]);
+
 // One group's resolved member names under the user's current overrides.
 // ponytail: legacy v1 overrides are treated as pure adds, a close-enough mirror
 // of app.js's migratePerKgOverride for a display/grouping filter.

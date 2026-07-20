@@ -681,8 +681,7 @@ table { width: max-content; min-width: 100%; border-collapse: collapse; }
 }
 #tableHead th:active { cursor: grabbing; }
 #tableHead th .store-chip { vertical-align: middle; margin-right: 5px; }
-.center-th { text-align: center !important; }
-.right-th  { text-align: right  !important; }
+/* (center-th / right-th retired 2026-07-20: all th labels left-align) */
 
 /* ── Sticky ghost header (JS-driven, bypasses overflow:hidden) */
 .sticky-header-ghost {
@@ -709,8 +708,6 @@ table { width: max-content; min-width: 100%; border-collapse: collapse; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.sticky-header-ghost th.center-th { text-align: center; }
-.sticky-header-ghost th.right-th  { text-align: right; }
 .sticky-header-ghost th.sort-active { color: var(--text); }
 .sticky-header-ghost th:hover { background: var(--border); }
 
@@ -1864,10 +1861,12 @@ td.priority-cell { text-align: center; }
 }
 /* Truncate instead of overflowing: a single-item scrape puts the whole product
    name here ("⏳ Scraping: Woolworths White Washed Baby Potatoes Bag 1kg…"),
-   which used to push the strip wider than the screen. */
-.scrape-strip-label { white-space: nowrap; font-weight: 600; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+   which used to push the strip wider than the screen. The label may shrink
+   (min-width:0 + ellipsis) but never grow past its text (flex-grow:0), so the
+   TRACK keeps flex:1 and stretches across the rest of the strip. */
+.scrape-strip-label { white-space: nowrap; font-weight: 600; flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .scrape-strip-track {
-  flex: 0 1 140px;
+  flex: 1;
   height: 5px;
   background: var(--bg);
   border-radius: 3px;

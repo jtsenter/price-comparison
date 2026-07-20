@@ -78,7 +78,8 @@ _run_store_misses: list = []
 
 
 def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed: list,
-                       ww_attempted: int | None = None, coles_attempted: int | None = None) -> None:
+                       ww_attempted: int | None = None, coles_attempted: int | None = None,
+                       ww_changes: list | None = None, coles_changes: list | None = None) -> None:
     """Append one run's per-store miss summary to docs/data/scrape_log.json (capped).
     ww_missed/coles_missed: [{"item": str, "reason": "no_results"|"no_match"}, ...].
     ww_attempted/coles_attempted: how many items were actually TRIED at each store.
@@ -107,6 +108,13 @@ def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed
         entry["ww_attempted"] = ww_attempted
     if coles_attempted is not None:
         entry["coles_attempted"] = coles_attempted
+    # Per-store price movements this run: [{"item", "old", "new"}, ...] - kept in
+    # every log entry so ~2 months of runs builds a picture of each store's
+    # pricing strategy (what moved, how often, and by how much).
+    if ww_changes is not None:
+        entry["ww_changes"] = ww_changes
+    if coles_changes is not None:
+        entry["coles_changes"] = coles_changes
     log.append(entry)
     log = log[-SCRAPE_LOG_MAX:]
     with open(path, "w") as f:
@@ -2040,10 +2048,28 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                 ({"item": e["item"], "reason": e["co_reason"]} for e in _run_store_misses if e["co_missed"]),
                 key=lambda e: e["item"],
             )
+            # Price changes this run: previous latest.json price vs freshly scraped
+            # price, per store, with old AND new - the raw data for studying how
+            # each supermarket moves prices over time. Carried-forward rows diff to
+            # zero and drop out naturally.
+            def _store_changes(store_key):
+                out = []
+                for it in items_output:
+                    old = existing_map.get(it["list_item"])
+                    if not old:
+                        continue
+                    op = (old.get(store_key) or {}).get("price")
+                    np = (it.get(store_key) or {}).get("price")
+                    if op is not None and np is not None and abs(op - np) > 0.004:
+                        out.append({"item": it["list_item"], "old": op, "new": np})
+                return sorted(out, key=lambda e: e["item"])
+
             _append_scrape_log(
                 trigger, len(_run_store_misses), _ww_missed, _co_missed,
                 ww_attempted=sum(1 for e in _run_store_misses if e["ww_attempted"]),
                 coles_attempted=sum(1 for e in _run_store_misses if e["co_attempted"]),
+                ww_changes=_store_changes("woolworths"),
+                coles_changes=_store_changes("coles"),
             )
 
         await context.close()  # persistent context: closing also flushes the profile to disk

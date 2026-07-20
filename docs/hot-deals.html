@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=108" />
+  <link rel="stylesheet" href="style.css?v=109" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -430,7 +430,7 @@
         <thead id="dealsHead">
           <tr>
             <th data-col="name">Product <span class="sort-arrow"></span></th>
-            <th data-col="deal" style="text-align:center">Best <span class="sort-arrow"></span></th>
+            <th data-col="deal">Best <span class="sort-arrow"></span></th>
             <th data-col="ww">
               <span class="store-chip ww sm">W</span> WW Price <span class="sort-arrow"></span>
             </th>
@@ -439,7 +439,7 @@
             </th>
             <th data-col="category" style="min-width:110px">Category <span class="sort-arrow"></span></th>
             <th data-col="avg" style="min-width:160px">Trend <span class="sort-arrow"></span></th>
-            <th data-col="watch" style="width:48px;text-align:center">Watch <span class="sort-arrow"></span></th>
+            <th data-col="watch" style="width:48px">Watch <span class="sort-arrow"></span></th>
           </tr>
         </thead>
         <tbody id="dealsBody"></tbody>
@@ -476,7 +476,7 @@
 
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=54"></script>
-<script src="utils.js?v=74"></script>
+<script src="utils.js?v=75"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -660,6 +660,14 @@ function hdDispName(item) {
     : ((window.PW_NAME_MAP && PW_NAME_MAP[item.list_item]) || stripWW(item.list_item))).toLowerCase();
 }
 
+// The Save column's number: cross-store gap first (deal-store price vs the
+// other store), drop-vs-usual as the single-store fallback - keep the cell
+// renderer and the sort key reading the same value.
+function hdStoreGap(deal) {
+  return (deal.otherPrice != null && deal.price != null)
+    ? Math.max(0, deal.otherPrice - deal.price) : 0;
+}
+
 function getSortValue(col, item, dealInfo) {
   switch (col) {
     case 'name':     return hdDispName(item);
@@ -667,7 +675,7 @@ function getSortValue(col, item, dealInfo) {
     // deal, so on a desc sort the deepest discounts rise to the top.
     case 'deal':     return dealInfo != null ? dealInfo.dropPct : -Infinity;
     case 'store':    return dealInfo != null ? dealInfo.store : 'zzz';
-    case 'save':     return dealInfo != null ? dealInfo.saveAmount : -Infinity;
+    case 'save':     return dealInfo != null ? (hdStoreGap(dealInfo) || dealInfo.saveAmount) : -Infinity;
     case 'ww':       return item.woolworths?.price ?? Infinity;
     case 'coles':    return item.coles?.price ?? Infinity;
     case 'avg': return calcTrendPosition(item); // 0.0=best deal, 1.0=expensive, 999=no history
@@ -841,13 +849,13 @@ function hdColHtml(col) {
   switch (col) {
     case 'name':     return `<th data-col="name" style="${ws}">Product <span class="sort-arrow"></span>${rh}</th>`;
     case 'deal':     return `<th data-col="deal" style="${ws}">Deal <span class="sort-arrow"></span>${rh}</th>`;
-    case 'store':    return `<th data-col="store" style="${ws}text-align:center">Store <span class="sort-arrow"></span>${rh}</th>`;
+    case 'store':    return `<th data-col="store" style="${ws}">Store <span class="sort-arrow"></span>${rh}</th>`;
     case 'save':     return `<th data-col="save" style="${ws}">Save <span class="sort-arrow"></span>${rh}</th>`;
     case 'ww':       return `<th data-col="ww" style="${ws}"><span class="store-chip ww sm">W</span> WW Price <span class="sort-arrow"></span>${rh}</th>`;
     case 'coles':    return `<th data-col="coles" style="${ws}"><span class="store-chip coles sm">C</span> Coles Price <span class="sort-arrow"></span>${rh}</th>`;
     case 'category': return `<th data-col="category" style="${ws}">Category <span class="sort-arrow"></span>${rh}</th>`;
     case 'avg':      return `<th data-col="avg" style="${ws}">Trend <span class="sort-arrow"></span>${rh}</th>`;
-    case 'watch':    return `<th data-col="watch" style="${ws}text-align:center">Watch <span class="sort-arrow"></span>${rh}</th>`;
+    case 'watch':    return `<th data-col="watch" style="${ws}">Watch <span class="sort-arrow"></span>${rh}</th>`;
     default: return '';
   }
 }
@@ -1088,13 +1096,17 @@ function renderDeals() {
       ? '<span class="store-chip ww sm">W</span>'
       : '<span class="store-chip coles sm">C</span>';
 
-    // Save cell - dollars below the usual (median) price; sub shows that usual price.
-    // saveAmount ≤ 0 means today's price IS its usual (median) price - the deal
-    // qualified another way (all-time low / cross-store gap). Say that instead
-    // of a bare dash, which read as missing data.
-    const saveCell = deal.saveAmount > 0
-      ? `<div class="deal-save">${fmt(deal.saveAmount)}${kgSuffix}</div><div class="deal-save-sub">vs ${fmt(deal.typical)}${kgSuffix}</div>`
-      : `<span class="deal-save-sub" title="It usually sells at this price - the deal is the all-time low / store gap, not a drop vs usual">at its usual price</span>`;
+    // Save cell - the CROSS-STORE gap: what you save buying at the deal store
+    // instead of the other one (2026-07-20: "$0.06/kg vs $13.36/kg" - a drop vs
+    // its own median - read as nonsense next to a $1.50/kg store gap; both store
+    // prices are already in the W/C columns, so no "vs" subline needed). Falls
+    // back to the drop-vs-usual figure when only one store is priced.
+    const storeGap = hdStoreGap(deal);
+    const saveCell = storeGap > 0.005
+      ? `<div class="deal-save">${fmt(storeGap)}${kgSuffix}</div>`
+      : deal.saveAmount > 0
+        ? `<div class="deal-save">${fmt(deal.saveAmount)}${kgSuffix}</div><div class="deal-save-sub">below usual</div>`
+        : `<span class="deal-save-sub" title="Both stores charge the same - the deal is the all-time low / drop vs usual, not a store gap">same price both stores</span>`;
 
     // WW cell
     const wwUrl = ov.wwUrl || ww?.url || null;

@@ -514,7 +514,7 @@
 </main>
 
 <script src="name_map.js?v=54"></script>
-<script src="utils.js?v=74"></script>
+<script src="utils.js?v=75"></script>
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '-';
 // Short display name (same map the rest of the site uses); falls back to the
@@ -522,16 +522,15 @@ const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '-';
 const shortName = n => (window.PW_NAME_MAP && window.PW_NAME_MAP[n]) || String(n).replace(/^Woolworths /, '');
 // Category entries render their group label, never the raw __group_* key.
 const dispName = i => i._isGroup ? i._groupLabel : shortName(i.list_item);
-// What a unit-based per-kg group actually buys at `store`, e.g. "2 × 1kg" or
-// "2kg" - so the row shows the equivalent quantity, not a bare size-less name.
+// PACK SIZE of a unit-based per-kg group's pick at `store` ("1kg", "2kg") -
+// rendered beside the pick name. The pack MULTIPLIER is not shown here: it
+// lives in the row's qty cell (2 units of 1kg vs 1 unit of 2kg).
 const pickQty = (i, store) => {
   const size = store === 'ww' ? i._wwSize : i._coSize;
   if (size == null) return '';
-  const packs = store === 'ww' ? i._wwPacks : i._coPacks;
   // Snap to 0.05kg: size is derived as price ÷ $/kg and $/kg is rounded to 4dp,
   // so a clean 4kg bag can read as 3.99. Grocery pack sizes are 0.05kg-grained.
-  const kg = Math.round(size * 20) / 20;
-  return (packs > 1 ? `${packs} × ${kg}kg` : `${kg}kg`);
+  return `${Math.round(size * 20) / 20}kg`;
 };
 
 // ── Basket column widths ──────────────────────────────────────────────────────
@@ -658,16 +657,18 @@ async function boot() {
       // UNIT-BASED groups (yoghurt, potato...) are bought as whole packs, so when
       // each store's cheapest-$/kg pick is a different size (WW 1kg vs Coles 2kg)
       // comparing lone stickers is apples-to-oranges. Scale each store to a common
-      // weight in whole packs and compare the real totals - the price the row then
-      // shows IS that equivalent-quantity total. Variable-weight cuts (meat) skip
-      // this: you buy those by the kilo, so "2 trays to match" makes no sense.
+      // weight in whole packs (2 × WW 1kg vs 1 × Coles 2kg). The row keeps the
+      // PER-PACK sticker; the pack multiplier lives in _wwPacks/_coPacks and the
+      // QTY CELL shows it (price × packs happens in effPrice, used everywhere).
+      // Variable-weight cuts (meat) skip this: you buy those by the kilo, so
+      // "2 trays to match" makes no sense.
       if (UNIT_BASED_GROUPS.has(g.key) && w && w.kg != null && c && c.kg != null) {
         const b = perKgEquivBundle({ price: w.res.price, perKg: w.kg }, { price: c.res.price, perKg: c.kg });
         displayItems.push({
           list_item: key, _isGroup: true, _groupLabel: g.label,
           category: g.category || 'Meat & Seafood',
-          woolworths: { ...w.res, price: b.ww.total },
-          coles:      { ...c.res, price: b.coles.total },
+          woolworths: { ...w.res },
+          coles:      { ...c.res },
           cheaper_store: b.cheaper,
           _wwPickName: w.m.list_item, _coPickName: c.m.list_item,
           _wwPacks: b.ww.packs, _coPacks: b.coles.packs,
@@ -726,15 +727,26 @@ async function boot() {
   // session-only). Clicking a store card resets them.
   const storeOverride = new Map(); // list_item → 'ww' | 'coles'
 
+  // Pack multiplier for a store's side of a row: per-kg category rows scale the
+  // smaller pack up to the group's comparison weight (2 × 1kg vs 1 × 2kg);
+  // everything else is 1.
+  const packsOf = (i, store) => (store === 'ww' ? i._wwPacks : i._coPacks) ?? 1;
+  // Effective one-line cost at `store`: per-pack sticker × packs. Null when the
+  // store doesn't price it. EVERY total/comparison uses this, so a 1kg pick is
+  // never weighed against a 2kg one.
+  const effPrice = (i, store) => {
+    const p = store === 'ww' ? i.woolworths?.price : i.coles?.price;
+    return p == null ? null : p * packsOf(i, store);
+  };
   // Effective price of an item at `store`. In SINGLE mode, items the store
   // doesn't sell fall back to the other store's price (you have no choice for
   // those) - the same rule computeTotals uses, so the table subtotal always
   // EQUALS the store card total. In split mode no fallback (an item is only
   // in a store's table because it's priced there).
   function priceFor(i, store) {
-    const own = store === 'ww' ? i.woolworths?.price : i.coles?.price;
+    const own = effPrice(i, store);
     if (own != null || slSplit) return own;
-    return store === 'ww' ? i.coles?.price : i.woolworths?.price;
+    return effPrice(i, store === 'ww' ? 'coles' : 'ww');
   }
 
   // Per-table sort state - survives renderContent() re-renders
@@ -783,11 +795,11 @@ async function boot() {
   // change them live.
   function computeTotals() {
     const wwTotal = displayItems.reduce((s, i) => {
-      const p = i.woolworths?.price ?? i.coles?.price;
+      const p = effPrice(i, 'ww') ?? effPrice(i, 'coles');
       return p != null ? s + p * bq(i.list_item) : s;
     }, 0);
     const coTotal = displayItems.reduce((s, i) => {
-      const p = i.coles?.price ?? i.woolworths?.price;
+      const p = effPrice(i, 'coles') ?? effPrice(i, 'ww');
       return p != null ? s + p * bq(i.list_item) : s;
     }, 0);
     // diff drives the ribbon chip state (cheaper / paying-more / equal).
@@ -820,12 +832,14 @@ async function boot() {
     // pair (e.g. a quarter cabbage $2.10 vs a whole one $6.90), name the pricier
     // sticker store - which sent the "split" plan to a dearer total and hid the
     // Split saving even though a real split saves money.
+    // effPrice, not raw sticker: a per-kg category row's sides can be different
+    // pack sizes, and only the packs-scaled cost is comparable.
     const sticker = i => {
-      const w = i.woolworths?.price, c = i.coles?.price;
+      const w = effPrice(i, 'ww'), c = effPrice(i, 'coles');
       if (w == null) return 'coles';
       if (c == null) return 'ww';
-      if (w < c) return 'ww';
-      if (c < w) return 'coles';
+      if (w < c - 0.005) return 'ww';
+      if (c < w - 0.005) return 'coles';
       return 'equal';
     };
     const wwItems = displayItems.filter(i => {
@@ -875,7 +889,11 @@ async function boot() {
       const fellBack = !slSplit && own?.price == null && other?.price != null;
       const sd = fellBack ? other : own;
       const units = bq(i.list_item);
-      const lineTotal = (sd?.price ?? 0) * units;
+      // The store this row's price/pick/packs actually come from (fellback rows
+      // borrow everything from the other store).
+      const rowStore = fellBack ? (store === 'ww' ? 'coles' : 'ww') : store;
+      const rowPacks = packsOf(i, rowStore);
+      const lineTotal = (sd?.price ?? 0) * rowPacks * units;
       const cat = getCategory(i, catOv);
       const img = sd?.image_url;
       // Split mode: ⇄ swaps the row to the other store. When the other store
@@ -894,18 +912,16 @@ async function boot() {
         ? ` <span class="from-other" title="Not sold at ${store === 'ww' ? 'Woolworths' : 'Coles'} - you'd buy this at ${store === 'ww' ? 'Coles' : 'Woolworths'} (its price shown)">–</span>`
         : '';
       // The other store's price rides along muted - switching stores (or
-      // deciding a ⇄ swap) needs both numbers in view.
+      // deciding a ⇄ swap) needs both numbers in view. For per-kg category rows
+      // it's the packs-scaled cost (the comparable number), not a lone sticker.
       const altPrice = (!fellBack && other?.price != null)
-        ? ` <span class="alt-price" title="${store === 'ww' ? 'Coles' : 'Woolworths'} price">${store === 'ww' ? 'C' : 'W'} ${fmt(other.price)}</span>`
+        ? ` <span class="alt-price" title="${store === 'ww' ? 'Coles' : 'Woolworths'} price${i._isGroup ? ' at the same total weight' : ''}">${store === 'ww' ? 'C' : 'W'} ${fmt(effPrice(i, store === 'ww' ? 'coles' : 'ww'))}</span>`
         : '';
       const name = escAttr(i.list_item);
       // Category entry: show WHICH product this store's side actually is (the
       // fellback row borrows the other store's pick, like any borrowed price).
-      // A fellback row borrows the OTHER store's pick, so name AND quantity must
-      // come from that store too (else "2 × 1kg" mismatches the shown product).
-      const pickStore = fellBack ? (store === 'ww' ? 'coles' : 'ww') : (store === 'ww' ? 'ww' : 'coles');
-      const pickName = i._isGroup ? (pickStore === 'ww' ? i._wwPickName : i._coPickName) : null;
-      const qtyLabel = i._isGroup ? pickQty(i, pickStore) : '';
+      const pickName = i._isGroup ? (rowStore === 'ww' ? i._wwPickName : i._coPickName) : null;
+      const qtyLabel = i._isGroup ? pickQty(i, rowStore) : '';
       const pickHtml = pickName
         ? `<div class="bg-pick" title="${escAttr(pickName)}">→ ${esc(shortName(pickName))}${qtyLabel ? ` <span class="bg-qty">(${qtyLabel})</span>` : ''}</div>`
         : '';
@@ -913,7 +929,7 @@ async function boot() {
         <td class="item-name-cell"><div class="name-wrap">${img ? `<img class="sl-thumb" loading="lazy" src="${escAttr(img)}" alt="" onerror="this.style.display='none'">` : ''}<span title="${escAttr(i._isGroup ? i._groupLabel : i.list_item)}">${esc(dispName(i))}</span></div>${pickHtml}</td>
         <td class="cat-cell" style="font-size:12px;color:#64748B;overflow:hidden;text-overflow:ellipsis">${esc(cat)}</td>
         <td class="r price-cell"><span class="price-val">${fmt(sd?.price)}</span>${onlyChip}${altPrice}</td>
-        <td class="r qty-cell"><div class="qty-step"><button type="button" class="qs-btn" data-item="${name}" data-d="-1" aria-label="Decrease quantity">−</button><span class="qs-val">${units}</span><button type="button" class="qs-btn" data-item="${name}" data-d="1" aria-label="Increase quantity">+</button></div></td>
+        <td class="r qty-cell"><div class="qty-step"><button type="button" class="qs-btn" data-item="${name}" data-d="-1" aria-label="Decrease quantity">−</button><span class="qs-val"${rowPacks > 1 ? ` title="${rowPacks} × ${pickQty(i, rowStore)} packs to match the other store's weight"` : ''}>${units * rowPacks}</span><button type="button" class="qs-btn" data-item="${name}" data-d="1" aria-label="Increase quantity">+</button></div></td>
         <td class="r total-cell"><span class="total-val">${fmt(lineTotal)}</span></td>
         <td class="act-cell"><div class="act-wrap">${canSwap || swapDisabled ? `<button type="button" class="row-btn swap" data-item="${name}" data-to="${swapTo}" title="${swapTitle}"${swapDisabled ? ' disabled' : ''}>⇄</button>` : ''}<button type="button" class="row-btn rm" data-item="${name}" title="Remove from basket">✕</button></div></td>
       </tr>`;
@@ -986,10 +1002,7 @@ async function boot() {
   }
 
   function renderShopMode(wwItems, colesItems) {
-    const lineOf = (i, store) => {
-      const sd = store === 'ww' ? i.woolworths : i.coles;
-      return (sd?.price ?? 0) * bq(i.list_item);
-    };
+    const lineOf = (i, store) => (effPrice(i, store) ?? 0) * bq(i.list_item);
     const rowsHtml = (items, store) => {
       // Category-grouped (≈ aisle order), name-sorted inside each group.
       const byCat = new Map();
@@ -1002,7 +1015,9 @@ async function boot() {
       for (const [cat, list] of byCat) {
         html += `<div class="sm-cat">${esc(cat)}</div>`;
         html += list.map(i => {
-          const units = bq(i.list_item);
+          // Shopping mode = what you grab off the shelf: packs × basket qty
+          // (a 2×1kg yoghurt bundle shows "× 2" even at basket qty 1).
+          const units = bq(i.list_item) * packsOf(i, store);
           const line = lineOf(i, store);
           const done = !!smChecked[i.list_item];
           return `<button type="button" class="sm-row${done ? ' done' : ''}" data-item="${escAttr(i.list_item)}" data-line="${line.toFixed(2)}">
@@ -1086,11 +1101,13 @@ async function boot() {
       s + (priceFor(i, store) ?? 0) * bq(i.list_item), 0);
     const wwSub = subtotalOf(wwItems, 'ww');
     const coSub = subtotalOf(colesItems, 'coles');
-    // Equal-price items (same STICKER price at both stores) - reassignable in
-    // split mode. By sticker, not cheaper_store, to match the split routing.
-    const equalItems = displayItems.filter(i =>
-      i.woolworths?.price != null && i.coles?.price != null &&
-      i.woolworths.price === i.coles.price);
+    // Equal-price items (same EFFECTIVE cost at both stores - packs-scaled for
+    // per-kg category rows) - reassignable in split mode. Matches the split
+    // routing's comparison exactly.
+    const equalItems = displayItems.filter(i => {
+      const w = effPrice(i, 'ww'), c = effPrice(i, 'coles');
+      return w != null && c != null && Math.abs(w - c) < 0.005;
+    });
     const single = slSplit ? null : singleStoreNow();
     // Card "active" highlight: single mode = the store you're buying at;
     // split mode = where equal-price items are assigned (as before).
@@ -1112,10 +1129,10 @@ async function boot() {
     const deltaHtml = d => d == null ? '' : `<span class="sc-delta">${d >= 0 ? '+' : '−'}${fmt(Math.abs(d))}</span>`;
 
     // ── Save ribbon ──────────────────────────────────────────────────────────
-    // Cheaper-by-STICKER counts (match the split routing, not $/kg cheaper_store).
-    const bothPriced = displayItems.filter(i => i.woolworths?.price != null && i.coles?.price != null);
-    const wwOnlyCount = bothPriced.filter(i => i.woolworths.price < i.coles.price).length;
-    const coOnlyCount = bothPriced.filter(i => i.coles.price < i.woolworths.price).length;
+    // Cheaper-by-EFFECTIVE-cost counts (packs-scaled; matches the split routing).
+    const bothPriced = displayItems.filter(i => effPrice(i, 'ww') != null && effPrice(i, 'coles') != null);
+    const wwOnlyCount = bothPriced.filter(i => effPrice(i, 'ww') < effPrice(i, 'coles') - 0.005).length;
+    const coOnlyCount = bothPriced.filter(i => effPrice(i, 'coles') < effPrice(i, 'ww') - 0.005).length;
     const ribbonChips = [
       wwOnlyCount > 0    ? `<span class="bar-store-chip ww-chip" title="${wwOnlyCount} cheaper at Woolworths"><span class="store-chip ww">W</span>${wwOnlyCount}<span class="chip-word"> at Woolworths</span></span>` : '',
       equalItems.length > 0 ? `<span class="bar-store-chip eq-chip" title="${equalItems.length} same price at both">${equalItems.length}<span class="chip-word"> equal-price</span></span>` : '',
