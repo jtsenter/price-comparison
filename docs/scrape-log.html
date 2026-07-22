@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=109" />
+  <link rel="stylesheet" href="style.css?v=110" />
   <style>
     .sl-main { max-width: 900px; margin: 0 auto; padding: 20px 24px 60px; }
     .sl-info-card {
@@ -76,11 +76,22 @@
     .sl-chg-col h3 { font-size: 12px; font-weight: 700; margin: 0 0 8px; }
     .sl-chg-col.ww h3 { color: var(--ww); }
     .sl-chg-col.coles h3 { color: var(--coles); }
-    .sl-chg-list { list-style: none; margin: 0; padding: 0; max-height: 320px; overflow-y: auto; }
-    .sl-chg-list li { font-size: 12px; padding: 4px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; gap: 8px; }
+    .sl-chg-list { list-style: none; margin: 0; padding: 0; max-height: 340px; overflow-y: auto; }
+    .sl-chg-list li { font-size: 12px; padding: 4px 0; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
     .sl-chg-list li:last-child { border-bottom: none; }
-    .chg-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
-    .chg-prices { white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--text-mid); }
+    /* name shrinks + ellipsises; prices never clip (this was the Coles cut-off:
+       a flex item's default min-width is auto/its content's natural width, so
+       without min-width:0 a long name refused to shrink and blew out the
+       column's grid track, pushing Coles off the right edge of the page). */
+    .chg-name { flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    .chg-prices { flex: 0 0 auto; white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--text-mid); }
+    .sl-chg-list li { min-width: 0; } /* flex item too - same shrink rule */
+    /* Price-change archive runs */
+    .sl-chg-run { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+    .sl-chg-run-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+    .sl-chg-run-body { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .sl-chg-col { min-width: 0; } /* grid item too - else it won't shrink below its list's content width */
+    @media (max-width: 640px) { .sl-chg-run-body { grid-template-columns: 1fr; } }
     .chg-up   { color: var(--coles); }  /* dearer - red family */
     .chg-down { color: var(--ww); }     /* cheaper - green family */
     .chg-arrow { font-size: 10px; }
@@ -132,10 +143,23 @@
     <ul class="sl-miss-list" id="slWishlist" style="max-height:none"></ul>
   </div>
 
+  <div class="sl-info-card" id="slChangesCard" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <h2>Price change history</h2>
+      <input type="search" id="slChangeSearch" placeholder="Filter by product…"
+             style="font-size:12px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);max-width:220px">
+    </div>
+    <p style="font-size:12px;color:var(--text-mid);margin:0 0 12px">
+      Every price move each scrape records, kept <strong>indefinitely</strong> (not capped like the run log above).
+      <span class="chg-up">▲ red</span> = went up, <span class="chg-down">▼ green</span> = went down.
+    </p>
+    <div id="slChangeRuns"></div>
+  </div>
+
   <div id="slRuns" class="sl-runs"></div>
 </main>
 
-<script src="utils.js?v=75"></script>
+<script src="utils.js?v=76"></script>
 <script>
 function $(id) { return document.getElementById(id); }
 
@@ -237,32 +261,6 @@ function renderRun(run, prevRun) {
     else if (d < -4) trend = ' <span style="color:var(--coles);font-size:11px">▼ worse</span>';
   }
 
-  // Price movements this run (ww_changes/coles_changes: [{item, old, new}]).
-  // Older log entries predate the field - show nothing rather than "0 changes"
-  // (absence of data isn't a flat-price day).
-  const wwCh = run.ww_changes || [];
-  const coCh = run.coles_changes || [];
-  const hasChangeData = run.ww_changes != null || run.coles_changes != null;
-  const fmtP = v => '$' + (+v).toFixed(2);
-  const changeChip = hasChangeData
-    ? `<span class="sl-chg-chip" title="${wwCh.length} Woolworths + ${coCh.length} Coles price changes this run">Δ ${wwCh.length + coCh.length}</span>`
-    : '';
-  const renderChanges = list => !list.length
-    ? '<p class="sl-all-good">no price changes</p>'
-    : `<ul class="sl-chg-list">${list.map(c => {
-        const up = c.new > c.old;
-        return `<li><span class="chg-name" title="${esc(c.item)}">${esc(c.item)}</span><span class="chg-prices">${fmtP(c.old)} → <b class="${up ? 'chg-up' : 'chg-down'}">${fmtP(c.new)}</b> <span class="chg-arrow">${up ? '▲' : '▼'}</span></span></li>`;
-      }).join('')}</ul>`;
-  const changesSection = hasChangeData ? `
-      <div class="sl-chg-col ww">
-        <h3>Woolworths price changes (${wwCh.length})</h3>
-        ${renderChanges(wwCh)}
-      </div>
-      <div class="sl-chg-col coles">
-        <h3>Coles price changes (${coCh.length})</h3>
-        ${renderChanges(coCh)}
-      </div>` : '';
-
   const el = document.createElement('div');
   el.className = 'sl-run';
   el.innerHTML = `
@@ -277,7 +275,6 @@ function renderRun(run, prevRun) {
         <span class="store-chip sm coles">C</span> ${coPct}%
         <span class="bar-track"><span class="bar-fill" style="width:${coPct}%"></span></span>
       </div>
-      ${changeChip}
       ${trend}
       <div class="sl-run-spacer"></div>
       <span class="sl-chevron">▸</span>
@@ -291,10 +288,58 @@ function renderRun(run, prevRun) {
         <h3>Coles missed (${coMissed.length})</h3>
         ${renderMissList(coMissed)}
       </div>
-      ${changesSection}
     </div>`;
   el.querySelector('.sl-run-head').addEventListener('click', () => el.classList.toggle('open'));
   return el;
+}
+
+// ── Price change archive (uncapped, from price_changes.json) ─────────────────
+let _changeArchive = [];
+function renderChangeArchive(changes) {
+  _changeArchive = Array.isArray(changes) ? changes : [];
+  const card = $('slChangesCard');
+  if (!_changeArchive.length) { card.style.display = 'none'; return; }
+  card.style.display = '';
+  const search = $('slChangeSearch');
+  if (search && !search._wired) {
+    search._wired = true;
+    search.addEventListener('input', () => paintChangeArchive(search.value.trim().toLowerCase()));
+  }
+  paintChangeArchive((search?.value || '').trim().toLowerCase());
+}
+
+function paintChangeArchive(q) {
+  const fmtP = v => '$' + (+v).toFixed(2);
+  const chgLine = c => {
+    const up = c.new > c.old;
+    return `<li><span class="chg-name" title="${escapeHtml(c.item)}">${escapeHtml(c.item)}</span>` +
+      `<span class="chg-prices">${fmtP(c.old)} → <b class="${up ? 'chg-up' : 'chg-down'}">${fmtP(c.new)}</b> ` +
+      `<span class="chg-arrow">${up ? '▲' : '▼'}</span></span></li>`;
+  };
+  const col = (label, cls, list) =>
+    `<div class="sl-chg-col ${cls}"><h3>${label} (${list.length})</h3>` +
+    (list.length ? `<ul class="sl-chg-list">${list.map(chgLine).join('')}</ul>`
+                 : '<p class="sl-miss-empty">no changes</p>') + '</div>';
+  // Newest first. Filter each run's lists by the query; hide runs with no match.
+  const runs = [..._changeArchive].reverse().map(run => {
+    const f = arr => (arr || []).filter(c => !q || String(c.item).toLowerCase().includes(q));
+    return { date: run.date, trigger: run.trigger, ww: f(run.ww), coles: f(run.coles) };
+  }).filter(r => r.ww.length || r.coles.length);
+
+  const host = $('slChangeRuns');
+  if (!runs.length) { host.innerHTML = '<p class="sl-empty-state">No price changes match.</p>'; return; }
+  host.innerHTML = runs.map(r => `
+    <div class="sl-chg-run">
+      <div class="sl-chg-run-head">
+        <span class="sl-run-date">${fmtDate(r.date)}<span class="rel">${timeAgo(r.date)}</span></span>
+        <span class="sl-run-trigger">${escapeHtml(r.trigger || 'run')}</span>
+        <span class="sl-chg-chip">Δ ${r.ww.length + r.coles.length}</span>
+      </div>
+      <div class="sl-chg-run-body">
+        ${col('Woolworths', 'ww', r.ww)}
+        ${col('Coles', 'coles', r.coles)}
+      </div>
+    </div>`).join('');
 }
 
 async function load() {
@@ -302,13 +347,16 @@ async function load() {
   runsEl.innerHTML = '<div class="sl-empty-state">Loading…</div>';
   let log = [];
   let latest = null;
+  let changes = [];
   try {
-    const [logRes, latestRes] = await Promise.all([
+    const [logRes, latestRes, chgRes] = await Promise.all([
       fetch(`data/scrape_log.json?t=${Date.now()}`),
       fetch(`data/latest.json?t=${Date.now()}`),
+      fetch(`data/price_changes.json?t=${Date.now()}`).catch(() => null),
     ]);
     if (logRes.ok) log = await logRes.json();
     if (latestRes.ok) latest = await latestRes.json();
+    if (chgRes && chgRes.ok) changes = await chgRes.json();
   } catch (e) {
     runsEl.innerHTML = `<div class="sl-empty-state">Could not load the scrape log: ${e.message}</div>`;
     return;
@@ -343,6 +391,7 @@ async function load() {
 
   renderChronicMisses(log);
   renderWishlist();
+  renderChangeArchive(changes);
 
   if (!log.length) {
     runsEl.innerHTML = '<div class="sl-empty-state">No scrape runs logged yet.</div>';

@@ -39,7 +39,12 @@ function extractConst(name) {
 // store, $/kg conversion, skip-empty) against controlled data rather than the
 // real 250-name seed. Membership-override resolution is covered separately via
 // variantGroupItemNames below.
-global.localStorage = { getItem: () => null };
+// Mutable localStorage mock (pendingValidationCount reads AND prunes it).
+let _lsStore = {};
+global.localStorage = {
+  getItem: k => (k in _lsStore ? _lsStore[k] : null),
+  setItem: (k, v) => { _lsStore[k] = String(v); },
+};
 global.DEFAULT_VARIANT_GROUPS = [
   { key: 'basa_fillets', label: 'Basa Fillets', items: ['Woolworths Frozen Basa Fillets 1kg', 'Coles Frozen Basa Fillet'] },
   { key: 'lamb_mince',   label: 'Lamb Mince',   items: ['Some Lamb Mince 500g'] },
@@ -50,6 +55,7 @@ eval([
   extractConst('DEAL_MIN_SPREAD'),
   extractConst('DEAL_MIN_DROP'),
   extract('clientPer100'),
+  extract('groupMetric'),
   extract('per100Pair'),
   extract('exclPriceSet'),
   extract('getTrendSeries'),
@@ -59,6 +65,7 @@ eval([
   extract('variantGroupItemNames'),
   extract('buildDealGroups'),
   extract('perKgEquivBundle'),
+  extract('pendingValidationCount'),
 ].join('\n'));
 
 let n = 0;
@@ -217,6 +224,27 @@ check('median empty -> null', _median([]), null);
   check('single store packs = 1', solo.ww.packs, 1);
   check('single store coles null', solo.coles, null);
   check('single store cheaper = ww', solo.cheaper, 'woolworths');
+}
+
+// ── groupMetric (sticker groups compare by pack price, else $/kg) ────────────
+check('groupMetric $/kg default', groupMetric({}, { price: 5, name: 'Foo 500g' }), 10); // $5/500g = $10/kg
+check('groupMetric sticker = pack price', groupMetric({ sticker: true }, { price: 4.6, name: 'Dolmio 500g' }), 4.6);
+check('groupMetric null result', groupMetric({ sticker: true }, null), null);
+
+// ── pendingValidationCount (Validate pill, resolved-suppression + self-prune) ─
+{
+  const pending = [{ item: 'A' }, { item: 'B' }, { item: 'C' }];
+  _lsStore = {};
+  check('no resolved -> full count', pendingValidationCount(pending), 3);
+  _lsStore = { pw_pv_resolved_v1: JSON.stringify(['B']) };
+  check('one resolved (still lagging) suppressed', pendingValidationCount(pending), 2);
+  // B still present so it stays tracked
+  check('resolved kept while still pending', JSON.parse(_lsStore.pw_pv_resolved_v1), ['B']);
+  // Pages caught up: B gone from pending -> pruned from the set, count unaffected
+  _lsStore = { pw_pv_resolved_v1: JSON.stringify(['B']) };
+  check('pruned when fresh data drops it', pendingValidationCount([{ item: 'A' }, { item: 'C' }]), 2);
+  check('resolved set self-pruned', JSON.parse(_lsStore.pw_pv_resolved_v1), []);
+  check('empty pending -> 0', pendingValidationCount(undefined), 0);
 }
 
 console.log(`utils_selfcheck: all ${n} cases passed`);

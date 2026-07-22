@@ -525,7 +525,8 @@ function getUnits(itemName) {
   const ov = loadUnitOverrides()[itemName];
   if (ov != null) return ov;
   if (typeof itemName === 'string' && itemName.startsWith('__group_')) {
-    return UNIT_BASED_GROUPS.has(itemName.slice(8)) ? 1 : 1.0;
+    const k = itemName.slice(8);
+    return (UNIT_BASED_GROUPS.has(k) || STICKER_GROUPS.has(k)) ? 1 : 1.0;
   }
   if (_perkgSet.has(itemName)) return 1.0;
   const qty = getAnalysisData(itemName).avg_qty;
@@ -537,8 +538,9 @@ function getUnits(itemName) {
 // (Nutella, potato bags, yoghurt tubs...) count discrete packs like normal items.
 function isKgQty(itemName) {
   if (typeof itemName !== 'string') return false;
-  const isUnitGroup = itemName.startsWith('__group_') && UNIT_BASED_GROUPS.has(itemName.slice(8));
-  return !isUnitGroup && (_perkgSet.has(itemName) || itemName.startsWith('__group_'));
+  const k = itemName.startsWith('__group_') ? itemName.slice(8) : null;
+  const packGroup = k && (UNIT_BASED_GROUPS.has(k) || STICKER_GROUPS.has(k)); // bought as packs
+  return !packGroup && (_perkgSet.has(itemName) || itemName.startsWith('__group_'));
 }
 
 // ── Category normalisation ────────────────────────────────────────────────────
@@ -610,6 +612,7 @@ function loadVariantGroups() {
       key: g.key,
       label: o.label || g.label,
       category: g.category,
+      sticker: !!g.sticker,
       items: computePerKgItems(g.items, o),
       // Per-store ordered member lists (display order hints; membership comes from
       // `items` + price qualification in resolveStoreLists). Null until the user saves.
@@ -717,7 +720,42 @@ function updateBulkBar() {
   if (archBtn) archBtn.innerHTML = inArchive ? '📤 Unarchive' : '🗄 Archive';
   const priChip = bar.querySelector('.bt-pri');
   if (priChip) priChip.style.display = inArchive ? 'none' : '';
+
+  // Show the CURRENT category + priority of the checked rows on the chips (so you
+  // see what they are before changing them). Uniform selection => the shared
+  // value, highlighted; mixed => "Mixed (N)". Stored on the chip for the dropdown
+  // to tick the matching option(s).
+  const { cats, pris } = selectionMeta();
+  const catChip = bar.querySelector('.bt-cat');
+  if (catChip) {
+    const label = cats.length === 1 ? cats[0] : cats.length ? `Mixed (${cats.length})` : 'Category';
+    catChip.innerHTML = `📁 ${esc(label)} <span class="arrow">▾</span>`;
+    catChip.classList.toggle('bt-chip-set', cats.length === 1);
+    catChip._current = cats;
+  }
+  if (priChip) {
+    const label = pris.length === 1 ? PRIORITY_LABELS[pris[0]] || pris[0]
+                : pris.length ? `Mixed (${pris.length})` : '⭐ Priority';
+    priChip.innerHTML = `${esc(label)} <span class="arrow">▾</span>`;
+    priChip.classList.toggle('bt-chip-set', pris.length === 1);
+    priChip._current = pris;
+  }
   reflectBulkQty();
+}
+
+// Category label per priority value (icon + word), reused by the bulk chip + dropdown.
+const PRIORITY_LABELS = { weekly: '⭐ Weekly', monthly: '📅 Monthly', rare: '🔵 Rare', archive: '🗄 Archived' };
+
+// Distinct categories + priorities across the currently checked rows.
+function selectionMeta() {
+  const cats = new Set(), pris = new Set();
+  const byName = new Map((_lastDisplayItems || []).map(i => [i.list_item, i]));
+  for (const name of _checkedItems) {
+    const it = byName.get(name);
+    if (it) cats.add(getCategory(it));
+    pris.add(getPriority(name));
+  }
+  return { cats: [...cats], pris: [...pris] };
 }
 
 // The bulk bar's units-to-add stepper. At 0 the ＋ Basket button flips to a
@@ -1692,10 +1730,14 @@ function buildPriceHistChart(item, excludedPrices) {
 // per-store multipliers (raw price → $/kg) using the current pack ratio, mirroring
 // groupTrendCellHTML. {perKg:false, ww:1, coles:1} for normal items (no conversion).
 function histKgRatios(item) {
-  // buildGroupHistoryItem() already stores $/kg-converted values - no further conversion.
-  if (item._isGroupHistory) return { perKg: true, ww: 1, coles: 1, groupLabel: null };
+  // buildGroupHistoryItem() already stores the group's metric (($/kg, or raw
+  // price for a sticker group) - no further conversion; only the "(...)"
+  // label differs.
+  if (item._isGroupHistory) return { perKg: !item._sticker, ww: 1, coles: 1, groupLabel: null };
   const group = loadVariantGroups().find(g => (g.items || []).includes(item.list_item));
   if (!group) return { perKg: false, ww: 1, coles: 1, groupLabel: null };
+  // Sticker groups compare raw pack prices - no $/kg conversion in the history.
+  if (group.sticker) return { perKg: false, ww: 1, coles: 1, groupLabel: group.label };
   const wwR = perKgRatio(item.woolworths);
   const coR = perKgRatio(item.coles);
   // Mixed bases are worse than none: "$8.50/kg" beside a per-unit price reads
@@ -2473,14 +2515,17 @@ function initBulkBar() {
   if (!bar) return;
 
   // Helper: floating chip dropdown anchored above its button
-  function openChipDropdown(btn, items, onSelect) {
+  function openChipDropdown(btn, items, onSelect, current) {
     document.querySelectorAll('.bt-dropdown').forEach(d => d.remove());
+    const cur = new Set(current || []); // value(s) the current selection already has
     const drop = document.createElement('div');
     drop.className = 'bt-dropdown';
     items.forEach(({ label, value }) => {
       const el = document.createElement('button');
-      el.className = 'bt-dropdown-item';
-      el.textContent = label;
+      el.className = 'bt-dropdown-item' + (cur.has(value) ? ' is-current' : '');
+      // ✓ marks the option(s) the selected rows already sit in (all of them, on
+      // a mixed selection) so you can see current state before changing it.
+      el.textContent = (cur.has(value) ? '✓ ' : '') + label;
       el.addEventListener('click', () => { onSelect(value); drop.remove(); });
       drop.appendChild(el);
     });
@@ -2510,7 +2555,7 @@ function initBulkBar() {
       _checkedItems.forEach(name => { ov[name] = cat; });
       saveCategoryOverrides(ov);
       if (_lastData) renderPage(_lastData);
-    });
+    }, e.currentTarget._current);
   });
 
   bar.querySelector('.bt-pri')?.addEventListener('click', (e) => {
@@ -2524,7 +2569,7 @@ function initBulkBar() {
       savePriorities(pr);
       if (_lastData) renderPage(_lastData);
       scheduleArchiveSync();
-    });
+    }, e.currentTarget._current);
   });
 
   // Units stepper: sets how many units of each checked item to add. Min 0;
@@ -3467,7 +3512,7 @@ function renderCards(items) {
       const pv = wwUrl ? `<a href="${wwUrl}" target="_blank" rel="noopener" class="price-link">${fmt(ww.price)}</a>` : fmt(ww.price);
       const fire = hotDeal && cheaper === 'woolworths' ? hotBadge : '';
       const unit = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : (wwP100.blanked ? '' : fmtUnit(ww.unit_price, ww.unit));
-      wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}</div>`;
+      wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}</div>${multiBuyBadge(ww)}`;
     } else {
       wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span> <a href="https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}" target="_blank" rel="noopener" class="search-link">Find →</a></div>`;
     }
@@ -3477,7 +3522,7 @@ function renderCards(items) {
       const pv = coUrl ? `<a href="${coUrl}" target="_blank" rel="noopener" class="price-link">${fmt(co.price)}</a>` : fmt(co.price);
       const fire = hotDeal && cheaper === 'coles' ? hotBadge : '';
       const unit = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : (coP100.blanked ? '' : fmtUnit(co.unit_price, co.unit));
-      coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}</div>`;
+      coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}</div>${multiBuyBadge(co)}`;
     } else {
       coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span> <a href="https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}" target="_blank" rel="noopener" class="search-link">Find →</a></div>`;
     }
@@ -3552,13 +3597,15 @@ function buildVariantGroups(byName) {
     // only if it's a member of that store's list. The cheapest in each list wins.
     const stores = resolveStoreLists(g, byName);
     const memberByName = new Map(members.map(m => [m.list_item, m]));
+    // Comparison metric: pack price for sticker groups (Bolognese sauce), $/kg
+    // otherwise. `perkg` keeps its name through the pipeline but holds whichever.
     const ww = stores.ww
       .filter(n => !excl.has(`${g.key}::${n}::ww`))
-      .map(n => ({ name: n, result: memberByName.get(n)?.woolworths, perkg: clientPerKg(memberByName.get(n)?.woolworths) }))
+      .map(n => ({ name: n, result: memberByName.get(n)?.woolworths, perkg: groupMetric(g, memberByName.get(n)?.woolworths) }))
       .filter(v => v.perkg != null).sort((a, b) => a.perkg - b.perkg);
     const co = stores.coles
       .filter(n => !excl.has(`${g.key}::${n}::coles`))
-      .map(n => ({ name: n, result: memberByName.get(n)?.coles, perkg: clientPerKg(memberByName.get(n)?.coles) }))
+      .map(n => ({ name: n, result: memberByName.get(n)?.coles, perkg: groupMetric(g, memberByName.get(n)?.coles) }))
       .filter(v => v.perkg != null).sort((a, b) => a.perkg - b.perkg);
 
     // Per-store member counts, deduped the same way the expanded panel is, so the group
@@ -3580,6 +3627,8 @@ function buildVariantGroups(byName) {
       _isGroup: true,
       _groupKey: g.key,
       _groupLabel: g.label,
+      _sticker: !!g.sticker,
+      _unitSuffix: g.sticker ? '' : '/kg',
       _members: members,
       _wwList: stores.ww,
       _coList: stores.coles,
@@ -3601,11 +3650,24 @@ function buildVariantGroups(byName) {
   return out;
 }
 
+// Multi-buy special badge ("2 for $6.00") - captured from the store's own
+// promo data (scraper.py: Coles pricing.multiBuyPromotion, minQuantity x reward),
+// shown as a small secondary pill under the price. Deliberately display-only:
+// the price shown everywhere in the app stays the real per-unit shelf price -
+// this just surfaces that buying more hits a cheaper total, without silently
+// changing any number the rest of the UI (savings, basket, trend) relies on.
+function multiBuyBadge(res) {
+  const mb = res?.multi_buy;
+  if (!mb?.qty || mb.total == null) return '';
+  return `<span class="multibuy-badge" title="Buy ${mb.qty} for $${mb.total.toFixed(2)} total - shown price is the per-unit shelf price"><svg class="mb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24L3.24 9.59A2 2 0 0 0 3.83 11l9.58 9.59a2 2 0 0 0 2.82 0l4.36-4.36a2 2 0 0 0 0-2.82Z"/><circle cx="7.5" cy="7.5" r="1"/></svg>${mb.qty} for $${mb.total.toFixed(2)}</span>`;
+}
+
 // A $/kg price cell: just the $/kg headline (linked). No pack-price subline -
 // that lives in the expanded panel, where pack size actually matters.
-function perKgCellHTML(perkg, url) {
+function perKgCellHTML(perkg, url, suffix = '/kg') {
   if (perkg == null) return '<span class="no-data">-</span>';
-  const head = `$${perkg.toFixed(2)}<span class="perkg-suffix">/kg</span>`;
+  const suf = suffix ? `<span class="perkg-suffix">${suffix}</span>` : '';
+  const head = `$${perkg.toFixed(2)}${suf}`;
   const linked = url ? `<a href="${url}" target="_blank" rel="noopener" class="price-link">${head}</a>` : head;
   return `<div class="price-main">${linked}</div>`;
 }
@@ -3620,7 +3682,12 @@ function groupTrendCellHTML(group) {
   if (!cands.length) return '';
   const best = cands.reduce((a, b) => (a.perkg <= b.perkg ? a : b));
 
-  const prices = group._members.flatMap(m => memberPerKgPrices(m, ...memberStoreFlags(group, m)));
+  // Sticker groups: the bar is raw pack prices (the metric), so it matches the
+  // sticker marker; $/kg groups convert via memberPerKgPrices.
+  const prices = group._sticker
+    ? group._members.flatMap(m => [...(m.price_history || []), ...(m.ww_price_history || []), ...(m.coles_price_history || [])]
+        .map(e => e.price).filter(p => p > 0))
+    : group._members.flatMap(m => memberPerKgPrices(m, ...memberStoreFlags(group, m)));
   if (prices.length < 2) return '';
   const hist = prices.map(p => ({ price: p }));
   // History button opens the group's own merged history (see buildGroupHistoryItem),
@@ -3651,7 +3718,8 @@ function buildGroupHistoryItem(group) {
     // per-point exclusion that writes back to the right member.
     const memberSeries = group._members.map(m => {
       if (perkgExcl.has(`${group._groupKey}::${m.list_item}::${isWw ? 'ww' : 'coles'}`)) return [];
-      const ratio = perKgRatio(isWw ? m.woolworths : m.coles);
+      // Sticker groups compare raw pack prices: ratio 1 (no $/kg conversion).
+      const ratio = group._sticker ? 1 : perKgRatio(isWw ? m.woolworths : m.coles);
       if (ratio == null) return [];
       const ex = exclSetsFor(m.list_item)[isWw ? 'ww' : 'co'];
       const raw = isWw ? [...(m.price_history || []), ...(m.ww_price_history || [])]
@@ -3689,6 +3757,7 @@ function buildGroupHistoryItem(group) {
     list_item: group._groupLabel,
     _isGroupHistory: true,
     _groupKey: group._groupKey,
+    _sticker: !!group._sticker,
     // date → winning source, for the modal's per-point exclusion buttons
     _wwMeta: new Map(wwSeries.map(e => [e.date, e])),
     _coMeta: new Map(coSeries.map(e => [e.date, e])),
@@ -3870,11 +3939,12 @@ function groupCardHTML(group, overrides) {
 
   const wwUrl = wwBest ? (overrides[wwBest.name]?.wwUrl || wwBest.result?.url || null) : null;
   const coUrl = coBest ? (overrides[coBest.name]?.colesUrl || coBest.result?.url || null) : null;
+  const suf = group._unitSuffix ? `<span class="perkg-suffix">${group._unitSuffix}</span>` : '';
   const priceHtml = (perkg, url) => perkg == null
     ? '<span class="no-data">-</span>'
     : (url
-      ? `<a href="${url}" target="_blank" rel="noopener" class="price-link">$${perkg.toFixed(2)}<span class="perkg-suffix">/kg</span></a>`
-      : `$${perkg.toFixed(2)}<span class="perkg-suffix">/kg</span>`);
+      ? `<a href="${url}" target="_blank" rel="noopener" class="price-link">$${perkg.toFixed(2)}${suf}</a>`
+      : `$${perkg.toFixed(2)}${suf}`);
 
   const wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span><span class="card-store-price">${priceHtml(group._wwPerKg, wwUrl)}</span></div>`;
   const coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span><span class="card-store-price">${priceHtml(group._coPerKg, coUrl)}</span></div>`;
@@ -3968,11 +4038,10 @@ function appendGroupRowDesktop(tbody, group, overrides) {
   else badgeHtml = '<span class="cheaper-badge equal">=</span>';
 
   const units = getUnits(group.list_item);
-  const isUnitGroup = UNIT_BASED_GROUPS.has(group._groupKey);
   const unitsCell = `<td class="units-cell">
     <div class="units-ctrl">
       <button class="units-dec" data-item="${group.list_item}">−</button>
-      <span class="units-val">${isUnitGroup ? units : units.toFixed(1) + ' kg'}</span>
+      <span class="units-val">${isKgQty(group.list_item) ? units.toFixed(1) + ' kg' : units}</span>
       <button class="units-inc" data-item="${group.list_item}">+</button>
     </div></td>`;
 
@@ -3997,8 +4066,8 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     trend:        `<td class="trend-cell">${groupTrendCellHTML(group)}</td>`,
     priority:     priorityCell,
     units:        unitsCell,
-    ww:           `<td class="price-cell ${wwClass}">${perKgCellHTML(group._wwPerKg, wwUrl)}</td>`,
-    coles:        `<td class="price-cell ${coClass}">${perKgCellHTML(group._coPerKg, coUrl)}</td>`,
+    ww:           `<td class="price-cell ${wwClass}">${perKgCellHTML(group._wwPerKg, wwUrl, group._unitSuffix)}</td>`,
+    coles:        `<td class="price-cell ${coClass}">${perKgCellHTML(group._coPerKg, coUrl, group._unitSuffix)}</td>`,
     cheaper:      `<td class="cheaper-cell">${badgeHtml}</td>`,
     pct:          `<td class="pct-cell">${pctHtml}</td>`,
     saving:       `<td><div class="saving-row">${savingContent}</div></td>`,
@@ -4693,12 +4762,14 @@ function renderMobileCards(items, data) {
           <div class="mc-price${wwCheaper ? ' cheaper' : ''}">${ww ? fmt(ww.price) : '-'}</div>
           ${wwUnit ? `<div class="mc-unit">${wwUnit}</div>` : ''}
           ${wwCheaper && saving > 0 ? `<div class="mc-save-line">Save ${fmt(saving)}</div>` : ''}
+          ${multiBuyBadge(ww)}
         </div>
         <div class="mc-store-col">
           <div class="mc-store-label coles-col"><span class="store-chip sm coles">C</span> Coles</div>
           <div class="mc-price${coCheaper ? ' cheaper-c' : ''}">${co ? fmt(co.price) : '-'}</div>
           ${coUnit ? `<div class="mc-unit">${coUnit}</div>` : ''}
           ${coCheaper && saving > 0 ? `<div class="mc-save-line">Save ${fmt(saving)}</div>` : ''}
+          ${multiBuyBadge(co)}
         </div>
       </div>`;
     }
@@ -5158,7 +5229,7 @@ function _renderPageInner(data) {
       const wwFire = hotDeal && (cheaper === 'woolworths' || (cheaper == null && ww && !co)) ? hotBadge : '';
       const wwNameTip = ww.name ? ` title="${ww.name.replace(/"/g, '&quot;')}"` : '';
       const wwUnitStr = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : (wwP100.blanked ? '' : fmtUnit(ww.unit_price, ww.unit));
-      wwCellContent = `<div class="price-main"${wwNameTip}>${wwPriceVal}${wwFire}</div><div class="price-unit">${wwUnitStr}</div>`;
+      wwCellContent = `<div class="price-main"${wwNameTip}>${wwPriceVal}${wwFire}</div><div class="price-unit">${wwUnitStr}</div>${multiBuyBadge(ww)}`;
     } else {
       const searchUrl = `https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}`;
       wwCellContent = `<a href="${searchUrl}" target="_blank" rel="noopener" class="search-link">Find on WW →</a>`;
@@ -5173,7 +5244,7 @@ function _renderPageInner(data) {
       const coFire = hotDeal && (cheaper === 'coles' || (cheaper == null && co && !ww)) ? hotBadge : '';
       const coNameTip = co.name ? ` title="${co.name.replace(/"/g, '&quot;')}"` : '';
       const coUnitStr = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : (coP100.blanked ? '' : fmtUnit(co.unit_price, co.unit));
-      coCellContent = `<div class="price-main"${coNameTip}>${coPriceVal}${coFire}</div><div class="price-unit">${coUnitStr}</div>`;
+      coCellContent = `<div class="price-main"${coNameTip}>${coPriceVal}${coFire}</div><div class="price-unit">${coUnitStr}</div>${multiBuyBadge(co)}`;
     } else {
       const searchUrl = `https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}`;
       coCellContent = `<a href="${searchUrl}" target="_blank" rel="noopener" class="search-link">Find on Coles →</a>`;
@@ -5337,7 +5408,7 @@ function _renderPageInner(data) {
   _stickyNeedsSync = true;
   onStickyScroll(); // update immediately if already scrolled past thead
 
-  updateValidateNavBadge(data?.pending_validation?.length ?? 0);
+  updateValidateNavBadge(pendingValidationCount(data?.pending_validation));
 }
 
 // ── Validate nav badge ────────────────────────────────────────────────────────

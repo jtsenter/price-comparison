@@ -888,6 +888,19 @@ tr:hover .item-edit-btn { opacity: 1; }
   line-height: 1;
 }
 
+/* Multi-buy special ("2 for $6.00") - a secondary hint under the price/unit
+   line; the price shown stays the real per-unit shelf price everywhere.
+   Neutral (not green/red) so it's never mistaken for the ww/coles-cheaper
+   or hot-deal signals that already own those colours. */
+.multibuy-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 11px; font-weight: 700; line-height: 1;
+  margin-top: 3px; padding: 2px 7px; border-radius: 10px;
+  background: var(--bg); color: var(--text-mid, #64748B); border: 1px solid var(--border);
+  white-space: nowrap;
+}
+.mb-ico { width: 11px; height: 11px; flex-shrink: 0; }
+
 /* Trip count badge */
 .trip-count {
   font-size: 10px;
@@ -1757,6 +1770,12 @@ td.priority-cell { text-align: center; }
 }
 .bt-chip:hover { background: #5D6E87; }
 .bt-chip .arrow { color: #B6C2D1; font-size: 14px; line-height: 1; }
+/* Chip reflects the selection's CURRENT category/priority when uniform - tinted
+   green so you can see the shared value at a glance vs a mixed selection. */
+.bt-chip.bt-chip-set { background: var(--green, #16A34A); border-color: transparent; }
+.bt-chip.bt-chip-set:hover { background: #12833b; }
+.bt-chip.bt-chip-set .arrow { color: rgba(255,255,255,.8); }
+.bt-dropdown-item.is-current { color: #6EE7A8; font-weight: 700; }
 /* ＋ Basket with its units stepper as ONE rectangle: the word first, the
    − N + numbers to its right. At 0 units the button turns into ✕ Remove
    (drops the checked rows from the basket). */

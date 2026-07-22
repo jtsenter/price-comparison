@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>⚠️ Validate Prices - PriceWatch</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="style.css?v=109" />
+  <link rel="stylesheet" href="style.css?v=110" />
   <style>
     /* ── Validate page overrides ── */
     .validate-hero {
@@ -1066,12 +1066,28 @@ function renderEntry(entry) {
 })();
 
 // Paint the pending-validation cards from _latestData (+ archive context).
+// Item names pending at THIS page's first load. Anything that later leaves the
+// pending list was resolved here - we record those in localStorage so the other
+// pages (which read the ~1min-lagging Pages copy) can suppress the Validate pill
+// for them immediately instead of showing it until Pages catches up.
+let _pvInitialNames = null;
+function recordResolvedPV(pending) {
+  const cur = new Set((pending || []).map(e => e.item));
+  if (_pvInitialNames == null) { _pvInitialNames = cur; return; }
+  let resolved;
+  try { resolved = JSON.parse(localStorage.getItem('pw_pv_resolved_v1') || '[]'); } catch { resolved = []; }
+  const set = new Set(Array.isArray(resolved) ? resolved : []);
+  for (const n of _pvInitialNames) if (!cur.has(n)) set.add(n);
+  try { localStorage.setItem('pw_pv_resolved_v1', JSON.stringify([...set])); } catch {}
+}
+
 function buildValidateList() {
   const listEl = document.getElementById('validateList');
   const emptyEl = document.getElementById('emptyState');
   const confirmAllBtn = document.getElementById('confirmAllBtn');
   const recheckAllBtn = document.getElementById('recheckAllBtn');
   const pending = _latestData?.pending_validation || [];
+  recordResolvedPV(pending);
   updateValidateNavBadge(pending.length);
   listEl.innerHTML = '';
   if (recheckAllBtn) recheckAllBtn.style.display = '';

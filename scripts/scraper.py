@@ -77,9 +77,34 @@ _ww_debug_done = False
 _run_store_misses: list = []
 
 
+def _append_price_changes(trigger: str, ww_changes: list, coles_changes: list) -> None:
+    """Append this run's per-store price movements to price_changes.json.
+    UNCAPPED (unlike scrape_log.json, which keeps only SCRAPE_LOG_MAX runs): this
+    is a permanent archive for studying each supermarket's pricing strategy over
+    months. One entry per run: {date, trigger, ww:[{item,old,new}], coles:[...]}.
+    Runs with zero changes are skipped so the file only grows when prices move."""
+    if not ww_changes and not coles_changes:
+        return
+    path = os.path.join(DATA_DIR, "price_changes.json")
+    log = []
+    if os.path.exists(path):
+        try:
+            with open(path, encoding="utf-8") as f:
+                log = json.load(f)
+        except Exception:
+            log = []
+    log.append({
+        "date": datetime.now(timezone.utc).isoformat(),
+        "trigger": trigger,
+        "ww": ww_changes,
+        "coles": coles_changes,
+    })
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(log, f, separators=(",", ":"))
+
+
 def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed: list,
-                       ww_attempted: int | None = None, coles_attempted: int | None = None,
-                       ww_changes: list | None = None, coles_changes: list | None = None) -> None:
+                       ww_attempted: int | None = None, coles_attempted: int | None = None) -> None:
     """Append one run's per-store miss summary to docs/data/scrape_log.json (capped).
     ww_missed/coles_missed: [{"item": str, "reason": "no_results"|"no_match"}, ...].
     ww_attempted/coles_attempted: how many items were actually TRIED at each store.
@@ -677,7 +702,25 @@ COLES_EXTRACT_JS = """
         if (tiles.length > 0) break;
     }
 
-    return tiles.slice(0, 5).map(tile => {
+    // Multi-buy specials ("Any 2 $6"): read the search page's own __NEXT_DATA__
+    // (JSON, not affected by CSS changes) rather than scraping the promo text -
+    // pricing.multiBuyPromotion.{minQuantity,reward} gives an exact total
+    // (minQuantity x reward = the deal price). Matched to tiles BY INDEX: both
+    // the DOM tiles and this results array reflect the same on-page order.
+    // ponytail: an index mismatch (e.g. a sponsored tile reordering) silently
+    // drops that one tile's multi-buy badge - harmless, price fields are unaffected.
+    let multiBuyByIndex = [];
+    try {
+        const nd = JSON.parse(document.getElementById('__NEXT_DATA__').textContent);
+        const results = nd?.props?.pageProps?.searchResults?.results || [];
+        multiBuyByIndex = results.map(r => {
+            const mb = r?.pricing?.multiBuyPromotion;
+            if (!mb || !mb.minQuantity || !mb.reward) return null;
+            return { qty: mb.minQuantity, total: Math.round(mb.minQuantity * mb.reward * 100) / 100 };
+        });
+    } catch {}
+
+    return tiles.slice(0, 5).map((tile, i) => {
         let name = '';
         for (const s of ['[data-testid="product-name"]','h2[class*="title"]','[class*="product__title"]','[class*="product-title"]','h2','h3']) {
             const el = tile.querySelector(s);
@@ -723,7 +766,8 @@ COLES_EXTRACT_JS = """
         }
 
         return { name, price_text: priceText, unit_price_text: unitPriceText,
-                 url: linkEl?.getAttribute('href') || '', image_url: imageUrl };
+                 url: linkEl?.getAttribute('href') || '', image_url: imageUrl,
+                 multi_buy: multiBuyByIndex[i] || null };
     }).filter(p => p.name);
 }
 """
@@ -786,14 +830,17 @@ async def search_coles(page, query: str) -> list[dict]:
         for r in raw:
             price = parse_price(r["price_text"])
             unit_price, unit = parse_unit_price(r["unit_price_text"])
-            results.append({
+            entry = {
                 "name": r["name"],
                 "price": price,
                 "unit_price": unit_price,
                 "unit": unit,
                 "url": resolve_url(r["url"], COLES_BASE),
                 "image_url": _normalise_coles_img(r.get("image_url", "")),
-            })
+            }
+            if r.get("multi_buy"):
+                entry["multi_buy"] = r["multi_buy"]
+            results.append(entry)
         return results
     except Exception as e:
         print(f"  [Coles] Error searching '{query}': {e}")
@@ -821,7 +868,11 @@ COLES_PRODUCT_PAGE_JS = """
                     const comparable = pricing?.comparable || pricing?.cupPrice || '';
                     const rawUri = prod?.imageUris?.[0];
                     const img = (typeof rawUri === 'object' ? rawUri?.uri : rawUri) || prod?.images?.[0]?.uri || '';
-                    return { name, price_text: '$' + price, unit_price_text: comparable, image_url: img };
+                    // Multi-buy special ("Any 2 $6"): minQuantity x reward = the deal total.
+                    const mb = pricing?.multiBuyPromotion;
+                    const multiBuy = (mb && mb.minQuantity && mb.reward)
+                        ? { qty: mb.minQuantity, total: Math.round(mb.minQuantity * mb.reward * 100) / 100 } : null;
+                    return { name, price_text: '$' + price, unit_price_text: comparable, image_url: img, multi_buy: multiBuy };
                 }
             }
         } catch {}
@@ -924,7 +975,7 @@ async def fetch_coles_by_url(page, url: str) -> dict | None:
                 await _register_coles_result(True)
                 if attempt > 0:
                     print(f"  [Coles] Retry succeeded for {url}")
-                return {
+                result = {
                     "name": name,
                     "price": price,
                     "unit_price": unit_price,
@@ -932,6 +983,9 @@ async def fetch_coles_by_url(page, url: str) -> dict | None:
                     "url": url,
                     "image_url": _normalise_coles_img(raw.get("image_url", "")),
                 }
+                if raw.get("multi_buy"):
+                    result["multi_buy"] = raw["multi_buy"]
+                return result
             # Extraction yielded no product - check if it's a bot-detection page
             if attempt == 0:
                 page_title = await page.title()
@@ -2068,9 +2122,11 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                 trigger, len(_run_store_misses), _ww_missed, _co_missed,
                 ww_attempted=sum(1 for e in _run_store_misses if e["ww_attempted"]),
                 coles_attempted=sum(1 for e in _run_store_misses if e["co_attempted"]),
-                ww_changes=_store_changes("woolworths"),
-                coles_changes=_store_changes("coles"),
             )
+            # Price movements go to their OWN uncapped archive (price_changes.json),
+            # separate from the 30-run scrape_log, so the pricing-strategy record
+            # is kept indefinitely.
+            _append_price_changes(trigger, _store_changes("woolworths"), _store_changes("coles"))
 
         await context.close()  # persistent context: closing also flushes the profile to disk
 

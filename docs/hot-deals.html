@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=109" />
+  <link rel="stylesheet" href="style.css?v=110" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -476,7 +476,7 @@
 
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=54"></script>
-<script src="utils.js?v=75"></script>
+<script src="utils.js?v=76"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -1051,7 +1051,7 @@ function renderDeals() {
     if (tableWrap) tableWrap.style.display = 'none';
     if (mobileWrap) mobileWrap.style.display = 'flex';
     renderDealsMobile(sorted, exclusions, overrides);
-    updateValidateNavBadge(_data?.pending_validation?.length ?? 0);
+    updateValidateNavBadge(pendingValidationCount(_data?.pending_validation));
     return;
   }
   if (tableWrap) tableWrap.style.display = '';
@@ -1071,7 +1071,7 @@ function renderDeals() {
     const cat = getCategory(item);
     // For group rows every price is already $/kg; suffix it and drop the
     // per-100g subline (which would be a second, redundant unit conversion).
-    const kgSuffix = isGroup ? '/kg' : '';
+    const kgSuffix = (isGroup && !item._sticker) ? '/kg' : '';
 
     const imgSrc = resolveImgUrl(co?.image_url) || resolveImgUrl(ww?.image_url) || '';
     const imgHtml = imgSrc
@@ -1169,7 +1169,7 @@ function renderDeals() {
   // laid out, so heights are final - unlike an rAF that can fire mid-layout.
   fixStickyOffset();
 
-  updateValidateNavBadge(_data?.pending_validation?.length ?? 0);
+  updateValidateNavBadge(pendingValidationCount(_data?.pending_validation));
 }
 
 // ── Mobile deal cards ──────────────────────────────────────────────────────────
@@ -1275,7 +1275,7 @@ function renderDealsMobile(sorted, exclusions, overrides) {
     const name = isGroup ? item._groupLabel : (ov.displayName || (window.PW_NAME_MAP && window.PW_NAME_MAP[item.list_item]) || stripWW(item.list_item));
     const cat = getCategory(item);
     const isW = deal.store === 'woolworths';
-    const kgSuffix = isGroup ? '/kg' : '';
+    const kgSuffix = (isGroup && !item._sticker) ? '/kg' : '';
 
     const imgSrc = resolveImgUrl(co?.image_url) || resolveImgUrl(ww?.image_url) || '';
     const imgHtml = imgSrc

@@ -514,7 +514,7 @@
 </main>
 
 <script src="name_map.js?v=54"></script>
-<script src="utils.js?v=75"></script>
+<script src="utils.js?v=76"></script>
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '-';
 // Short display name (same map the rest of the site uses); falls back to the
@@ -644,10 +644,13 @@ async function boot() {
       const g = DEFAULT_VARIANT_GROUPS.find(gr => '__group_' + gr.key === key);
       if (!g) continue;
       const members = variantGroupItemNames(g, pkOv).map(n => byName.get(n)).filter(Boolean);
+      // Sticker groups (Bolognese sauce) pick + compare by pack PRICE, not $/kg.
+      const isSticker = g.sticker;
       const pick = store => {
         const priced = members.map(m => ({ m, res: m[store], kg: perKg(m[store]) }))
           .filter(x => x.res && x.res.price != null);
         if (!priced.length) return null;
+        if (isSticker) return priced.sort((a, b) => a.res.price - b.res.price)[0];
         const withKg = priced.filter(x => x.kg != null);
         return (withKg.length ? withKg.sort((a, b) => a.kg - b.kg)
                               : priced.sort((a, b) => a.res.price - b.res.price))[0];
@@ -677,13 +680,18 @@ async function boot() {
         continue;
       }
       // Store routing by $/kg (the group's metric, same as the main page);
-      // sticker price only breaks ties / covers size-less picks.
+      // sticker price only breaks ties / covers size-less picks. Sticker groups
+      // route purely by pack price.
       let cheaper;
       if (w && c) {
-        const wk = w.kg ?? Infinity, ck = c.kg ?? Infinity;
-        cheaper = wk === ck
-          ? (w.res.price === c.res.price ? 'equal' : (w.res.price < c.res.price ? 'woolworths' : 'coles'))
-          : (wk < ck ? 'woolworths' : 'coles');
+        if (isSticker) {
+          cheaper = w.res.price === c.res.price ? 'equal' : (w.res.price < c.res.price ? 'woolworths' : 'coles');
+        } else {
+          const wk = w.kg ?? Infinity, ck = c.kg ?? Infinity;
+          cheaper = wk === ck
+            ? (w.res.price === c.res.price ? 'equal' : (w.res.price < c.res.price ? 'woolworths' : 'coles'))
+            : (wk < ck ? 'woolworths' : 'coles');
+        }
       } else cheaper = w ? 'woolworths' : 'coles';
       displayItems.push({
         list_item: key, _isGroup: true, _groupLabel: g.label,
@@ -1334,7 +1342,7 @@ boot();
       const r = await fetch(`data/latest.json?t=${Date.now()}`);
       if (r.ok) {
         const data = await r.json();
-        const count = (data.pending_validation || []).length;
+        const count = pendingValidationCount(data.pending_validation);
         validateLink.style.display = count > 0 ? '' : 'none';
         if (count > 0) validateLink.textContent = `⚠️ Validate (${count})`;
       }
