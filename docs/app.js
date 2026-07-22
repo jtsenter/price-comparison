@@ -3778,7 +3778,13 @@ function groupTrendPosition(group) {
   const cands = [group._wwBest, group._coBest].filter(Boolean);
   if (!cands.length) return 999;
   const best = cands.reduce((a, b) => (a.perkg <= b.perkg ? a : b));
-  const prices = group._members.flatMap(m => memberPerKgPrices(m, ...memberStoreFlags(group, m)));
+  // Sticker groups: best.perkg already holds a raw pack price (see groupMetric),
+  // so the range must come from raw prices too - mixing it with $/kg-converted
+  // prices produced a meaningless position (the "sorts to a weird spot" bug).
+  const prices = group._sticker
+    ? group._members.flatMap(m => [...(m.price_history || []), ...(m.ww_price_history || []), ...(m.coles_price_history || [])]
+        .map(e => e.price).filter(p => p > 0))
+    : group._members.flatMap(m => memberPerKgPrices(m, ...memberStoreFlags(group, m)));
   if (prices.length < 2) return 999;
   const lo = Math.min(...prices), hi = Math.max(...prices);
   if (lo === hi) return 0.5;
@@ -3849,7 +3855,7 @@ function groupStoreVariantsHTML(group, store, overrides) {
     .filter(m => m && !m._pending)
     .map(m => {
       const res = store === 'woolworths' ? m.woolworths : m.coles;
-      return { name: m.list_item, res, pk: clientPerKg(res) };
+      return { name: m.list_item, res, pk: group._sticker ? res?.price ?? null : clientPerKg(res) };
     })
     .filter(v => v.pk != null);
   const variants = dedupePerKgVariants(raw, storeKey, overrides, memberByName);
@@ -3874,7 +3880,9 @@ function groupStoreVariantsHTML(group, store, overrides) {
     // Grey shelf price: the portion price for weight-priced items (pack_price, e.g.
     // $7.60 for a 200g salmon portion), else the pack price. The green $/kg beside it
     // stays the comparison metric; pack size already lives in the name.
-    const pack = (v.res.pack_price ?? v.res.price) != null ? fmt(v.res.pack_price ?? v.res.price) : '';
+    // Sticker groups compare by this same number, so showing it twice is redundant -
+    // leave this span blank and let the bold span below carry it once, unsuffixed.
+    const pack = group._sticker ? '' : ((v.res.pack_price ?? v.res.price) != null ? fmt(v.res.pack_price ?? v.res.price) : '');
     const safeKey = v.name.replace(/"/g, '&quot;');
     const url = pinnedUrlFor(v.name, storeKey) || v.res.url || null;
     const wwImg = resolveImgUrl(group._members.find(m => m.list_item === v.name)?.woolworths?.image_url) || '';
@@ -3892,7 +3900,7 @@ function groupStoreVariantsHTML(group, store, overrides) {
         ${imgHtml}
         ${nameHtml}
         <span class="vg-pv-pack">${pack}</span>
-        <span class="vg-pv-kg">$${v.pk.toFixed(2)}/kg</span>
+        <span class="vg-pv-kg">$${v.pk.toFixed(2)}${group._sticker ? '' : '/kg'}</span>
         <button class="vg-pv-basket${inBasket ? ' selected' : ''}" data-item="${safeKey}" title="${inBasket ? 'Remove from basket' : 'Add to basket'}" aria-label="${inBasket ? 'Remove from basket' : 'Add to basket'}">${inBasket ? '✓' : '＋'}</button>
       </div>`;
   }).join('');
@@ -4122,7 +4130,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
           ${groupStoreVariantsHTML(group, 'coles', overrides)}
         </div>
       </div>
-      <div class="vg-panel-note">Highlighted = lowest $/kg at each store. The cheapest sticker price isn't always cheapest per kilo.</div>
+      <div class="vg-panel-note">${group._sticker ? 'Highlighted = cheapest price at each store.' : 'Highlighted = lowest $/kg at each store. The cheapest sticker price isn\'t always cheapest per kilo.'}</div>
     </div>
   </td></tr>`;
   tbody.insertAdjacentHTML('beforeend', panel);
@@ -4324,7 +4332,8 @@ function openCategoryEditModal(groupKey) {
 
   const priceFor = (name, store) => {
     const d = byName.get(name);
-    return clientPerKg(store === 'ww' ? d?.woolworths : d?.coles) ?? Infinity;
+    const res = store === 'ww' ? d?.woolworths : d?.coles;
+    return (cat.sticker ? res?.price : clientPerKg(res)) ?? Infinity;
   };
 
   const colHTML = (store, names) => {
