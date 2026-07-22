@@ -2730,7 +2730,7 @@ function renderSavingInfo(s) {
   let maxRow = '';
   if (s.max_saving > s.total_saving + 0.005) {
     maxRow = line(splitIcon, 'Split saving',
-      'The bold green number is what these items cost split across both stores (each at its cheaper one). The bracket is what that saves vs the dearer store',
+      'Buying each item at whichever store is cheapest for it costs this total - the bracket is the extra you save vs shopping at one store only',
       `<span class="sv-total">${fmt(s.split_total)}</span>${disc(s.max_saving)}`);
   }
   return basket + maxRow;

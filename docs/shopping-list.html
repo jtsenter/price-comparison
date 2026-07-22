@@ -1192,7 +1192,7 @@ async function boot() {
     const showSplitLine = plan.splits && splitSaving > basketSaving + 0.005;
     const splitSavingLine = showSplitLine
       ? svLine(splitDisc, 'Split saving',
-          'The bold green number is what these items cost split across both stores (each at its cheaper one). The bracket is what that saves vs the dearer store. Use the Split shop toggle to plan it.',
+          'Buying each item at whichever store is cheapest for it costs this total - the bracket is the extra you save vs shopping at one store only. Use the Split shop toggle to plan it.',
           `<span class="sv-total">${fmt(plan.total)}</span>${svDisc(splitSaving)}`)
       : '';
     const savingInfoHtml = basketSavingLine + splitSavingLine;
