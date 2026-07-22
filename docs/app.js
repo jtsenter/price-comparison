@@ -4931,6 +4931,15 @@ function _renderPageInner(data) {
   // (3-strike, below) and clears _scrapeActive. This is what stopped the bar
   // "disappearing midway with no feedback".
   const rawProg = data.scrape_progress;
+  // A NEW run (different started_at) must not inherit the previous run's baseline:
+  // when two runs overlapped, done could jump backwards (260/284 then 155/284) and
+  // the stall timer read that as "no progress" and flashed ⚠ Stalled. Reset the
+  // baseline on a run change so each run is judged on its own movement.
+  if (rawProg && _lastProgress && scrapeRunId(rawProg) !== scrapeRunId(_lastProgress)) {
+    _progressLastDone = null;
+    _progressLastChangeTime = null;
+    _progressDismissed = false;
+  }
   if (rawProg) { _lastProgress = rawProg; _scrapeActive = true; }
   const prog = rawProg || (_scrapeActive ? _lastProgress : null);
 

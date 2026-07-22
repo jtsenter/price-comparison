@@ -88,6 +88,11 @@
     .sl-chg-list li { min-width: 0; } /* flex item too - same shrink rule */
     /* Price-change archive runs */
     .sl-chg-run { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+    /* A run that moved no prices is recorded but visually recessive - present as
+       evidence the scrape ran, without competing with runs that actually moved. */
+    .sl-chg-run.quiet { background: transparent; opacity: 0.72; padding: 8px 14px; }
+    .sl-chg-run.quiet .sl-chg-run-head { margin-bottom: 0; }
+    .sl-chg-chip.quiet { font-weight: 600; color: var(--text-soft); background: transparent; }
     .sl-chg-run-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
     .sl-chg-run-body { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .sl-chg-col { min-width: 0; } /* grid item too - else it won't shrink below its list's content width */
@@ -323,11 +328,16 @@ function paintChangeArchive(q) {
     `<div class="sl-chg-col ${cls}"><h3>${label} (${list.length})</h3>` +
     (list.length ? `<ul class="sl-chg-list">${list.map(chgLine).join('')}</ul>`
                  : '<p class="sl-miss-empty">no changes</p>') + '</div>';
-  // Newest first. Filter each run's lists by the query; hide runs with no match.
+  // Newest first. Runs that moved NOTHING are kept and shown as "no changes" - a
+  // quiet run is itself a data point (a flat stretch must be distinguishable from
+  // a stretch that never ran). While filtering by product, though, only runs that
+  // actually match are useful, so zero-match runs drop out then.
   const runs = [..._changeArchive].reverse().map(run => {
     const f = arr => (arr || []).filter(c => !q || String(c.item).toLowerCase().includes(q));
-    return { date: run.date, trigger: run.trigger, ww: f(run.ww), coles: f(run.coles) };
-  }).filter(r => r.ww.length || r.coles.length);
+    const ww = f(run.ww), coles = f(run.coles);
+    const quiet = !(run.ww || []).length && !(run.coles || []).length;
+    return { date: run.date, trigger: run.trigger, ww, coles, quiet };
+  }).filter(r => q ? (r.ww.length || r.coles.length) : true);
 
   const host = $('slChangeRuns');
   if (!_changeArchive.length) {
@@ -336,16 +346,16 @@ function paintChangeArchive(q) {
   }
   if (!runs.length) { host.innerHTML = '<p class="sl-empty-state">No price changes match.</p>'; return; }
   host.innerHTML = runs.map(r => `
-    <div class="sl-chg-run">
+    <div class="sl-chg-run${r.quiet ? ' quiet' : ''}">
       <div class="sl-chg-run-head">
         <span class="sl-run-date">${fmtDate(r.date)}<span class="rel">${timeAgo(r.date)}</span></span>
         <span class="sl-run-trigger">${escapeHtml(r.trigger || 'run')}</span>
-        <span class="sl-chg-chip">Δ ${r.ww.length + r.coles.length}</span>
+        <span class="sl-chg-chip${r.quiet ? ' quiet' : ''}">${r.quiet ? 'no price moves' : 'Δ ' + (r.ww.length + r.coles.length)}</span>
       </div>
-      <div class="sl-chg-run-body">
+      ${r.quiet ? '' : `<div class="sl-chg-run-body">
         ${col('Woolworths', 'ww', r.ww)}
         ${col('Coles', 'coles', r.coles)}
-      </div>
+      </div>`}
     </div>`).join('');
 }
 

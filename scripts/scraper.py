@@ -82,9 +82,11 @@ def _append_price_changes(trigger: str, ww_changes: list, coles_changes: list) -
     UNCAPPED (unlike scrape_log.json, which keeps only SCRAPE_LOG_MAX runs): this
     is a permanent archive for studying each supermarket's pricing strategy over
     months. One entry per run: {date, trigger, ww:[{item,old,new}], coles:[...]}.
-    Runs with zero changes are skipped so the file only grows when prices move."""
-    if not ww_changes and not coles_changes:
-        return
+
+    EVERY run is recorded, including ones that moved nothing (empty ww/coles). A
+    run where no price budged is itself a data point - "Coles held everything for
+    three weeks" is only visible if the quiet runs are on the record too. Skipping
+    them made a flat stretch indistinguishable from a stretch that never ran."""
     path = os.path.join(DATA_DIR, "price_changes.json")
     log = []
     if os.path.exists(path):
