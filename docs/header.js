@@ -59,6 +59,9 @@
     '.scrape-strip-pct{font-size:11px;color:var(--text-soft,#94A3B8);white-space:nowrap;min-width:30px;text-align:right}' +
     '.scrape-strip-retry{background:none;border:1px solid var(--border,#E2E8F0);border-radius:6px;cursor:pointer;color:var(--text-mid,#475569);font-size:12px;font-weight:600;padding:2px 10px;white-space:nowrap}' +
     '.scrape-strip-dismiss{background:none;border:none;cursor:pointer;color:var(--text-soft,#94A3B8);font-size:14px;line-height:1;padding:0 2px;flex-shrink:0}' +
+    /* Scrape strip is a web-only convenience; hidden on phones (app.js sets an
+       inline display:flex, so the override needs !important to win). */
+    '@media (max-width:700px){.scrape-strip{display:none!important}}' +
     /* Header icon sizing lives HERE (not per-page CSS) so the hot/basket/options
        buttons are pixel-identical on every page - basket's inline stylesheet was
        missing style.css's 38px rule, so its icons rendered 33x29 vs 38x38. */
@@ -226,9 +229,26 @@
      polling once idle so we don't refetch a large file forever. */
   if (page !== 'index' && page !== 'hot-deals') {
     var stripDismissed = false;
+    var lastProg = null;
+    // "Dismiss forever": a completed (done>=total) or killed run can leave
+    // scrape_progress stuck in latest.json; the old in-memory flag reset on
+    // refresh so ✕ never stuck. Persist the run's started_at so ✕ buries THAT
+    // run for good, across reloads and pages. Shared key with app.js.
+    var SCRAPE_DISMISS_KEY = 'pw_scrape_dismissed_v1';
+    var scrapeRunId = function (p) { return p && (p.started_at || (p.total != null ? 'legacy_' + p.total : '')) || ''; };
+    var scrapeRunDismissed = function (p) {
+      var id = scrapeRunId(p); if (!id) return false;
+      try { return (JSON.parse(localStorage.getItem(SCRAPE_DISMISS_KEY) || '[]') || []).indexOf(id) >= 0; } catch (e) { return false; }
+    };
+    var markScrapeRunDismissed = function (p) {
+      var id = scrapeRunId(p); if (!id) return;
+      try { var a = JSON.parse(localStorage.getItem(SCRAPE_DISMISS_KEY) || '[]') || [];
+        if (a.indexOf(id) < 0) { a.push(id); localStorage.setItem(SCRAPE_DISMISS_KEY, JSON.stringify(a.slice(-20))); } } catch (e) {}
+    };
     var dismissBtn = document.getElementById('scrapeStripDismiss');
     if (dismissBtn) dismissBtn.addEventListener('click', function () {
       stripDismissed = true;
+      markScrapeRunDismissed(lastProg);
       try { localStorage.removeItem('pw_scrape_dispatched_v1'); } catch (e) {}
       var s = document.getElementById('scrapeStrip');
       if (s) s.style.display = 'none';
@@ -242,6 +262,11 @@
           var strip = document.getElementById('scrapeStrip');
           if (!strip || stripDismissed) return;
           var prog = d && d.scrape_progress;
+          lastProg = prog || null;
+          // A run at done>=total is finished (the field just wasn't cleared) - treat
+          // it as no-progress so a stuck 53-of-53 auto-hides instead of lingering.
+          if (prog && prog.total > 0 && prog.done >= prog.total) prog = null;
+          if (prog && scrapeRunDismissed(prog)) prog = null;
           var disp = null;
           try { disp = localStorage.getItem('pw_scrape_dispatched_v1'); } catch (e) {}
           var t = disp ? Date.parse(disp) : NaN;

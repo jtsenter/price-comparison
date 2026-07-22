@@ -3293,7 +3293,27 @@ const _pendingRefreshItems = new Set();
 let _preScrapeData = null;          // snapshot of data when scrape started
 let _progressLastDone = null;       // last seen done count
 let _progressLastChangeTime = null; // timestamp of last progress change
-let _progressDismissed = false;     // user dismissed the header progress widget
+let _progressDismissed = false;     // user dismissed the header progress widget (this session)
+// "Dismiss forever": a finished (done>=total) or killed run can leave scrape_progress
+// stuck in latest.json, and the in-memory flag above reset on every refresh - so ✕
+// never stuck and the strip kept returning. Persist the run's started_at (its unique
+// id) so ✕ buries THAT run for good across reloads/pages. Shared key with header.js.
+const SCRAPE_DISMISS_KEY = 'pw_scrape_dismissed_v1';
+function scrapeRunId(p) { return p && (p.started_at || (p.total != null ? 'legacy_' + p.total : '')) || ''; }
+function isScrapeRunDismissed(p) {
+  const id = scrapeRunId(p);
+  if (!id) return false;
+  try { return (JSON.parse(localStorage.getItem(SCRAPE_DISMISS_KEY) || '[]') || []).includes(id); }
+  catch { return false; }
+}
+function markScrapeRunDismissed(p) {
+  const id = scrapeRunId(p);
+  if (!id) return;
+  try {
+    const arr = JSON.parse(localStorage.getItem(SCRAPE_DISMISS_KEY) || '[]') || [];
+    if (!arr.includes(id)) { arr.push(id); localStorage.setItem(SCRAPE_DISMISS_KEY, JSON.stringify(arr.slice(-20))); }
+  } catch {}
+}
 let _progressSeenThisSession = false; // true once scrape_progress first appeared this trigger
 let _lastProgress = null;           // last scrape_progress we saw (keeps the strip up across transient no-progress fetches)
 let _scrapeActive = false;          // true between first progress and confirmed completion (3-strike)
@@ -4937,7 +4957,10 @@ function _renderPageInner(data) {
   // ── Scrape strip (full-width row below header) ─────────────────
   const strip = $('scrapeStrip');
   if (strip) {
-    if (prog && prog.total > 0 && !_progressDismissed) {
+    // done>=total means the run finished (the field just wasn't cleared) - fall
+    // through to hide so a stuck 53-of-53 doesn't linger. isScrapeRunDismissed
+    // keeps a ✕'d run buried across refreshes.
+    if (prog && prog.total > 0 && prog.done < prog.total && !_progressDismissed && !isScrapeRunDismissed(prog)) {
       const pct = Math.round((prog.done / prog.total) * 100);
       const isStale = _progressLastChangeTime && (Date.now() - _progressLastChangeTime > STALE_PROGRESS_MS);
       strip.style.display = 'flex';
@@ -6164,8 +6187,10 @@ async function boot() {
 
   $('scrapeStripDismiss')?.addEventListener('click', () => {
     _progressDismissed = true;
-    // Dismiss also spends the dispatch marker, or the strip would pop back on
-    // the next page load / other pages' pollers.
+    // Persist the dismissal keyed on the run's id so ✕ survives a hard refresh
+    // (the reported "keeps coming back" bug), plus spend the dispatch marker so
+    // the strip doesn't pop back via another page's poller.
+    markScrapeRunDismissed(_lastProgress || _lastData?.scrape_progress);
     try { localStorage.removeItem('pw_scrape_dispatched_v1'); } catch {}
     const strip = $('scrapeStrip');
     if (strip) strip.style.display = 'none';

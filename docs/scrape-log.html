@@ -107,7 +107,7 @@
 <body>
 
 <header data-page="scrape-log"></header>
-<script src="header.js?v=10"></script>
+<script src="header.js?v=11"></script>
 
 <main class="sl-main">
   <div class="sl-info-card">
@@ -298,13 +298,16 @@ let _changeArchive = [];
 function renderChangeArchive(changes) {
   _changeArchive = Array.isArray(changes) ? changes : [];
   const card = $('slChangesCard');
-  if (!_changeArchive.length) { card.style.display = 'none'; return; }
+  // Always visible so the feature is discoverable even before the first change
+  // lands - it hid itself entirely while price_changes.json was still empty,
+  // which read as "the section doesn't exist".
   card.style.display = '';
   const search = $('slChangeSearch');
   if (search && !search._wired) {
     search._wired = true;
     search.addEventListener('input', () => paintChangeArchive(search.value.trim().toLowerCase()));
   }
+  if (search) search.style.display = _changeArchive.length ? '' : 'none';
   paintChangeArchive((search?.value || '').trim().toLowerCase());
 }
 
@@ -327,6 +330,10 @@ function paintChangeArchive(q) {
   }).filter(r => r.ww.length || r.coles.length);
 
   const host = $('slChangeRuns');
+  if (!_changeArchive.length) {
+    host.innerHTML = '<p class="sl-empty-state">No price changes recorded yet. Every scrape adds any price moves here and keeps them indefinitely.</p>';
+    return;
+  }
   if (!runs.length) { host.innerHTML = '<p class="sl-empty-state">No price changes match.</p>'; return; }
   host.innerHTML = runs.map(r => `
     <div class="sl-chg-run">
