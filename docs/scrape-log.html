@@ -32,6 +32,15 @@
     .sl-info-stat { }
     .sl-info-stat .n { font-size: 20px; font-weight: 700; color: var(--text); }
     .sl-info-stat .l { font-size: 11px; color: var(--text-soft); text-transform: uppercase; letter-spacing: .04em; }
+    /* There are exactly 6 stats. auto-fit's 150px minimum only fits 5 across the
+       900px card, so the 6th wrapped onto its own row. Force all 6 into one row
+       above the mobile breakpoint (minmax(0,1fr) lets columns shrink below their
+       label's natural width - labels wrap onto 2 lines instead, which is fine). */
+    @media (min-width: 641px) {
+      .sl-info-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+      .sl-info-stat .n { font-size: 17px; }
+      .sl-info-stat .l { font-size: 10px; }
+    }
     .sl-info-notes { list-style: none; padding: 0; margin: 10px 0 0; font-size: 12px; color: var(--text-mid); border-top: 1px solid var(--border); padding-top: 10px; }
     .sl-info-notes li { padding: 3px 0 3px 16px; position: relative; }
     .sl-info-notes li::before { content: '•'; position: absolute; left: 0; color: var(--text-soft); }
@@ -107,6 +116,10 @@
     :root[data-theme="dark"] .sl-miss-reason.no_results { background: #450a0a; color: #fca5a5; }
     :root[data-theme="dark"] .sl-miss-reason.no_match { background: #422006; color: #fcd34d; }
     .sl-empty-state { text-align: center; padding: 60px 20px; color: var(--text-soft); }
+    /* The run list sits directly under the stats card with no heading of its own,
+       so it read as a continuation of "Scrape log" above rather than its own
+       section - same h2 treatment the other cards already use. */
+    .sl-section-h { font-size: 14px; font-weight: 700; margin: 4px 0 10px; color: var(--text); }
   </style>
 </head>
 <body>
@@ -161,6 +174,7 @@
     <div id="slChangeRuns"></div>
   </div>
 
+  <h2 class="sl-section-h">Recent runs</h2>
   <div id="slRuns" class="sl-runs"></div>
 </main>
 

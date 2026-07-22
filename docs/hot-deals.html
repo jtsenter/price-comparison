@@ -428,17 +428,22 @@
     <div class="deals-table-wrap">
       <table class="deals-table">
         <thead id="dealsHead">
+          <!-- Placeholder only - renderHdHead() replaces this from HD_ALL_COLS before
+               #dealsContainer is ever shown, so this markup is never seen. Kept in
+               sync with HD_ALL_COLS' order/labels anyway so the source isn't misleading. -->
           <tr>
             <th data-col="name">Product <span class="sort-arrow"></span></th>
-            <th data-col="deal">Best <span class="sort-arrow"></span></th>
+            <th data-col="avg" style="min-width:160px">Trend <span class="sort-arrow"></span></th>
             <th data-col="ww">
-              <span class="store-chip ww sm">W</span> WW Price <span class="sort-arrow"></span>
+              <span class="store-chip ww sm">W</span> WW <span class="sort-arrow"></span>
             </th>
             <th data-col="coles">
-              <span class="store-chip coles sm">C</span> Coles Price <span class="sort-arrow"></span>
+              <span class="store-chip coles sm">C</span> Coles <span class="sort-arrow"></span>
             </th>
+            <th data-col="save">Save <span class="sort-arrow"></span></th>
+            <th data-col="store">Store <span class="sort-arrow"></span></th>
             <th data-col="category" style="min-width:110px">Category <span class="sort-arrow"></span></th>
-            <th data-col="avg" style="min-width:160px">Trend <span class="sort-arrow"></span></th>
+            <th data-col="deal">Deal <span class="sort-arrow"></span></th>
             <th data-col="watch" style="width:48px">Watch <span class="sort-arrow"></span></th>
           </tr>
         </thead>
@@ -752,11 +757,11 @@ function renderSortBar() {
 }
 
 // ── Column order / widths / visibility (Hot Deals) ───────────────────────────
-const HD_ALL_COLS       = ['name','deal','store','save','ww','coles','category','avg','watch'];
+const HD_ALL_COLS       = ['name','avg','ww','coles','save','store','category','deal','watch'];
 const HD_DEFAULT_WIDTHS = { name:240, deal:140, store:64, save:90, ww:140, coles:140, category:110, avg:160, watch:60 };
 const HD_COL_LABELS     = {
-  name: 'Product', deal: 'Deal (why)', store: 'Best store', save: 'Save vs usual', ww: 'WW price',
-  coles: 'Coles price', category: 'Category', avg: 'Trend', watch: 'Watch',
+  name: 'Product', deal: 'Deal (why)', store: 'Best store', save: 'Save vs usual', ww: 'WW',
+  coles: 'Coles', category: 'Category', avg: 'Trend', watch: 'Watch',
 };
 
 let _hdColOrder = (() => {
@@ -851,8 +856,8 @@ function hdColHtml(col) {
     case 'deal':     return `<th data-col="deal" style="${ws}">Deal <span class="sort-arrow"></span>${rh}</th>`;
     case 'store':    return `<th data-col="store" style="${ws}">Store <span class="sort-arrow"></span>${rh}</th>`;
     case 'save':     return `<th data-col="save" style="${ws}">Save <span class="sort-arrow"></span>${rh}</th>`;
-    case 'ww':       return `<th data-col="ww" style="${ws}"><span class="store-chip ww sm">W</span> WW Price <span class="sort-arrow"></span>${rh}</th>`;
-    case 'coles':    return `<th data-col="coles" style="${ws}"><span class="store-chip coles sm">C</span> Coles Price <span class="sort-arrow"></span>${rh}</th>`;
+    case 'ww':       return `<th data-col="ww" style="${ws}"><span class="store-chip ww sm">W</span> WW <span class="sort-arrow"></span>${rh}</th>`;
+    case 'coles':    return `<th data-col="coles" style="${ws}"><span class="store-chip coles sm">C</span> Coles <span class="sort-arrow"></span>${rh}</th>`;
     case 'category': return `<th data-col="category" style="${ws}">Category <span class="sort-arrow"></span>${rh}</th>`;
     case 'avg':      return `<th data-col="avg" style="${ws}">Trend <span class="sort-arrow"></span>${rh}</th>`;
     case 'watch':    return `<th data-col="watch" style="${ws}">Watch <span class="sort-arrow"></span>${rh}</th>`;
