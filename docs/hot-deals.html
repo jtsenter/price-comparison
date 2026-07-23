@@ -359,7 +359,7 @@
 <body>
 
 <header data-page="hot-deals"></header>
-<script src="header.js?v=11"></script>
+<script src="header.js?v=12"></script>
 
 <div class="deals-hero">
   <div class="deals-hero-title">🔥 Hot Deals</div>
@@ -1481,10 +1481,21 @@ function initSortHeaders() {
 
 // ── Scrape progress strip ─────────────────────────────────────────────────────
 
+// Sticky across a progress-less fetch, same reason as header.js/app.js: one of
+// GitHub Pages' CDN edges can still be serving a pre-run copy, and treating that
+// as "run finished" made the strip blink off mid-scrape.
+let _hdStickyProg = null;
+let _hdNoProgStreak = 0;
+
 function renderScrapeStrip(data) {
   const strip = document.getElementById('scrapeStrip');
   if (!strip) return;
-  const prog = data?.scrape_progress;
+  let prog = data?.scrape_progress;
+  // done>=total means finished (field just wasn't cleared) - don't linger on it.
+  if (prog && prog.total > 0 && prog.done >= prog.total) prog = null;
+  if (prog) { _hdStickyProg = prog; _hdNoProgStreak = 0; }
+  else if (_hdStickyProg && ++_hdNoProgStreak >= 3) { _hdStickyProg = null; _hdNoProgStreak = 0; }
+  prog = prog || _hdStickyProg;
   if (prog && prog.total > 0 && !_progressDismissed) {
     if (_progressLastDone == null) {
       _progressLastDone = prog.done;
@@ -1722,7 +1733,10 @@ async function pollForCompletionHD(user, repo, token, dispatchedAt) {
         const fresh = await r.json();
         _data = fresh;
         renderScrapeStrip(fresh);
-        if (!fresh.scrape_progress) {
+        // Only stop once renderScrapeStrip has actually let go of the run (its
+        // 3-strike streak). Stopping on the first progress-less response killed
+        // the poller on a CDN hiccup, freezing the strip for the rest of the run.
+        if (!fresh.scrape_progress && !_hdStickyProg) {
           clearInterval(window._hdProgressTimer);
           window._hdProgressTimer = null;
           renderDeals();

@@ -3082,6 +3082,7 @@ async function triggerRefresh() {
   }
   if (refreshCooldown) return;
   _progressSeenThisSession = false;
+  _sawAnyProgress = false;   // new dispatch: "waiting for first progress" is valid again
 
   const btn = $('refreshBtn');
   btn.disabled = true;
@@ -3315,6 +3316,10 @@ function markScrapeRunDismissed(p) {
   } catch {}
 }
 let _progressSeenThisSession = false; // true once scrape_progress first appeared this trigger
+// True once ANY progress count has been observed for the current dispatch. Guards the
+// "waiting for first progress" strip: after a count has appeared, that message is
+// factually wrong, so a transient no-progress fetch must never bring it back.
+let _sawAnyProgress = false;
 let _lastProgress = null;           // last scrape_progress we saw (keeps the strip up across transient no-progress fetches)
 let _scrapeActive = false;          // true between first progress and confirmed completion (3-strike)
 
@@ -4940,7 +4945,7 @@ function _renderPageInner(data) {
     _progressLastChangeTime = null;
     _progressDismissed = false;
   }
-  if (rawProg) { _lastProgress = rawProg; _scrapeActive = true; }
+  if (rawProg) { _lastProgress = rawProg; _scrapeActive = true; _sawAnyProgress = true; }
   const prog = rawProg || (_scrapeActive ? _lastProgress : null);
 
   // ── Pre-scrape snapshot: keep all items visible while scraping ──
@@ -4992,7 +4997,7 @@ function _renderPageInner(data) {
       $('scrapeStripPct').textContent = '';
       const retryBtn = $('scrapeStripRetry');
       if (retryBtn) retryBtn.style.display = 'none';
-    } else if (scrapeDispatchPending(data) && !_progressDismissed) {
+    } else if (scrapeDispatchPending(data) && !_progressDismissed && !_sawAnyProgress) {
       // A full scrape was triggered (possibly in another tab / before a
       // refresh) but the scraper hasn't pushed its first progress yet.
       strip.style.display = 'flex';
@@ -5069,6 +5074,7 @@ function _renderPageInner(data) {
             window._progressNoDataStreak = 0;
             _scrapeActive = false;   // confirmed done → allow the strip to hide
             _lastProgress = null;
+            _sawAnyProgress = false; // run over; a NEW dispatch may legitimately wait again
             renderPage(fresh);       // final render hides the bar
           }
           return; // don't hide bar yet

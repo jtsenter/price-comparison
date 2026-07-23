@@ -230,6 +230,16 @@
   if (page !== 'index' && page !== 'hot-deals') {
     var stripDismissed = false;
     var lastProg = null;
+    // Sticky progress. A single fetch can come back WITHOUT scrape_progress mid-run -
+    // GitHub Pages' CDN serves several edge caches and one of them can still be
+    // holding a copy from before the run started. Reacting to that immediately made
+    // the strip flip to "waiting for first progress" and back on almost every poll
+    // (reported as 65→waiting→70→waiting→70→75). app.js already rode these out via
+    // _lastProgress; this poller had no such guard. Keep the last count until THREE
+    // consecutive fetches agree the run is over.
+    var stickyProg = null;
+    var noProgStreak = 0;
+    var sawProgress = false;
     // "Dismiss forever": a completed (done>=total) or killed run can leave
     // scrape_progress stuck in latest.json; the old in-memory flag reset on
     // refresh so ✕ never stuck. Persist the run's started_at so ✕ buries THAT
@@ -262,11 +272,15 @@
           var strip = document.getElementById('scrapeStrip');
           if (!strip || stripDismissed) return;
           var prog = d && d.scrape_progress;
-          lastProg = prog || null;
+          if (prog) lastProg = prog;
           // A run at done>=total is finished (the field just wasn't cleared) - treat
           // it as no-progress so a stuck 53-of-53 auto-hides instead of lingering.
           if (prog && prog.total > 0 && prog.done >= prog.total) prog = null;
           if (prog && scrapeRunDismissed(prog)) prog = null;
+          // Ride out a single progress-less fetch (see stickyProg above).
+          if (prog) { stickyProg = prog; sawProgress = true; noProgStreak = 0; }
+          else if (stickyProg && ++noProgStreak >= 3) { stickyProg = null; sawProgress = false; noProgStreak = 0; }
+          prog = prog || stickyProg;
           var disp = null;
           try { disp = localStorage.getItem('pw_scrape_dispatched_v1'); } catch (e) {}
           var t = disp ? Date.parse(disp) : NaN;
@@ -281,7 +295,9 @@
             document.getElementById('scrapeStripFill').style.width = pct + '%';
             document.getElementById('scrapeStripPct').textContent = pct + '%';
             activeScrape = true;
-          } else if (disp && !spent) {
+          } else if (disp && !spent && !sawProgress) {
+            // Only before the FIRST progress of this dispatch. Once a count has been
+            // seen, regressing to "waiting for first progress" is simply wrong.
             strip.style.display = 'flex';
             document.getElementById('scrapeStripLabel').textContent = '⏳ Scrape triggered - waiting for first progress…';
             document.getElementById('scrapeStripFill').style.width = '0%';
