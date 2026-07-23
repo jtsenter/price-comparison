@@ -66,6 +66,8 @@ eval([
   extract('buildDealGroups'),
   extract('perKgEquivBundle'),
   extract('pendingValidationCount'),
+  extract('multiBuyCost'),
+  extract('multiBuyNudge'),
 ].join('\n'));
 
 let n = 0;
@@ -245,6 +247,29 @@ check('groupMetric null result', groupMetric({ sticker: true }, null), null);
   check('pruned when fresh data drops it', pendingValidationCount([{ item: 'A' }, { item: 'C' }]), 2);
   check('resolved set self-pruned', JSON.parse(_lsStore.pw_pv_resolved_v1), []);
   check('empty pending -> 0', pendingValidationCount(undefined), 0);
+}
+
+// ── multiBuyCost / multiBuyNudge ────────────────────────────────────────────
+// Mirrors scripts/multibuy_selfcheck.py - the same numbers must come out of the
+// Python (scraper) and JS (basket) sides or a basket total silently disagrees
+// with what the register charges.
+{
+  const DIPS = { qty: 2, total: 7 };   // WW Chris' Dips: 2 for $7, shelf $4.50
+  check('mb: below threshold pays shelf', multiBuyCost(1, 4.5, DIPS), 4.5);
+  check('mb: exactly one block',          multiBuyCost(2, 4.5, DIPS), 7);
+  check('mb: block + remainder',          multiBuyCost(3, 4.5, DIPS), 11.5);
+  check('mb: two whole blocks',           multiBuyCost(4, 4.5, DIPS), 14);
+  check('mb: no promo multiplies',        multiBuyCost(3, 4.5, null), 13.5);
+  check('mb: zero qty',                   multiBuyCost(0, 4.5, DIPS), 0);
+  // A dearer-than-shelf "deal" is still what the store charges - report reality.
+  check('mb: worse promo still applied',  multiBuyCost(2, 5, { qty: 2, total: 12 }), 12);
+
+  check('nudge: 1 short of the deal', multiBuyNudge(1, 4.5, DIPS), { need: 1, saving: 2 });
+  check('nudge: already on a block',  multiBuyNudge(2, 4.5, DIPS), null);
+  check('nudge: 3 -> 1 more',         multiBuyNudge(3, 4.5, DIPS), { need: 1, saving: 2 });
+  check('nudge: no promo',            multiBuyNudge(1, 4.5, null), null);
+  // A promo that saves nothing must not nag the shopper.
+  check('nudge: pointless promo stays quiet', multiBuyNudge(1, 3, { qty: 2, total: 6 }), null);
 }
 
 console.log(`utils_selfcheck: all ${n} cases passed`);

@@ -249,6 +249,41 @@ function isHotDeal(item, exclusions) {
 // failure so each caller keeps its own reporting (alert / showSyncError /
 // fire-and-forget). validate.html keeps its own githubPut: it threads a known
 // sha end-to-end for its stale-read race fix, different semantics.
+// ── Multi-buy pricing ───────────────────────────────────────────────────────
+// `mb` is the normalised {qty, total} the scraper writes for BOTH stores, where
+// total is the price of one whole promo block. (The two stores publish different
+// shapes - WW's MultibuyData.Price is already a total, Coles' multiBuyPromotion
+// .reward is per-unit and gets multiplied - scraper.py normalises before this.)
+//
+// Whole blocks price at the deal rate, the remainder pays shelf: 3 dips against
+// "2 for $7" at $4.50 each = $7.00 + $4.50, not $10.50 and not $21.
+// Deliberately reports what the store WILL charge, even if a "deal" is dearer
+// than buying singles - the app mirrors the shelf, it doesn't second-guess it.
+// Per-SKU only: "any 2 from this range" offers are not modelled.
+// Mirrored by multi_buy_cost() in scripts/multibuy_selfcheck.py.
+function multiBuyCost(qty, unitPrice, mb) {
+  if (!(qty > 0) || !(unitPrice >= 0)) return 0;
+  if (!mb || !mb.qty || mb.total == null || qty < mb.qty) {
+    return +(qty * unitPrice).toFixed(2);
+  }
+  const blocks = Math.floor(qty / mb.qty);
+  const rest = qty % mb.qty;
+  return +(blocks * mb.total + rest * unitPrice).toFixed(2);
+}
+
+// How many MORE units are needed to reach the next promo block, and what that
+// step would save versus paying shelf price for them. null when there's no
+// promo or the shopper is already exactly on a block boundary.
+function multiBuyNudge(qty, unitPrice, mb) {
+  if (!mb || !mb.qty || mb.total == null || !(unitPrice > 0)) return null;
+  const rest = qty % mb.qty;
+  const need = rest === 0 ? (qty === 0 ? mb.qty : 0) : mb.qty - rest;
+  if (need <= 0) return null;
+  const saving = +(multiBuyCost(qty, unitPrice, mb) + need * unitPrice
+                   - multiBuyCost(qty + need, unitPrice, mb)).toFixed(2);
+  return saving > 0 ? { need, saving } : null;
+}
+
 // ── Viewer (read-only) mode ─────────────────────────────────────────────────
 // A VIEWER is anyone without a GitHub token. Every repo-write path below already
 // refuses to run without that token, so this is a UX/behaviour layer over an

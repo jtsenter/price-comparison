@@ -341,6 +341,32 @@ def _ww_pack_price(cup_price, product_unit, package_size):
     return None
 
 
+def _ww_multi_buy(p: dict) -> dict | None:
+    """Woolworths multi-buy promo ("2 for $7.00"), or None.
+
+    WW hangs it off the product's tag payload as MultibuyData {Quantity, Price},
+    where Price is the TOTAL for that quantity. That is NOT the same shape as
+    Coles' multiBuyPromotion, whose `reward` is PER UNIT and has to be multiplied
+    by minQuantity - do not "unify" the two, they mean different things.
+
+    Free to collect: this rides on the search/product payload the scraper already
+    downloads for name and price, so it adds no request and no scrape time.
+    Which tag slot carries it varies by product, hence the sweep.
+    """
+    for slot in ("CentreTag", "HeaderTag", "ImageTag", "FooterTag"):
+        tag = p.get(slot)
+        mb = tag.get("MultibuyData") if isinstance(tag, dict) else None
+        if not isinstance(mb, dict):
+            continue
+        qty, total = mb.get("Quantity"), mb.get("Price")
+        try:
+            if qty and total and int(qty) > 1 and float(total) > 0:
+                return {"qty": int(qty), "total": round(float(total), 2)}
+        except (TypeError, ValueError):
+            continue
+    return None
+
+
 def _parse_ww_products(product_list: list) -> list[dict]:
     results = []
     for p in product_list:
@@ -386,6 +412,9 @@ def _parse_ww_products(product_list: list) -> list[dict]:
         }
         if _pack is not None:
             entry["pack_price"] = _pack
+        _mb = _ww_multi_buy(p)
+        if _mb:
+            entry["multi_buy"] = _mb
         results.append(entry)
         if len(results) >= MAX_RESULTS:
             break
@@ -678,6 +707,9 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
                     }
                     if pack_price is not None:
                         out["pack_price"] = pack_price
+                    _mb = _ww_multi_buy(product)
+                    if _mb:
+                        out["multi_buy"] = _mb
                     return out
         print(f"  [WW] __NEXT_DATA__ product not found for: {url}")
     except Exception as e:
