@@ -23,6 +23,25 @@
   if (!host) return;
   var page = host.getAttribute('data-page');
 
+  /* ── Viewer (read-only) mode ───────────────────────────────────────────────
+     Anyone without a GitHub token is a VIEWER. Every repo-write path in this app
+     already refuses to run without that token, so this is a UX layer over an
+     existing security boundary, not the boundary itself: it hides the controls
+     that could only ever fail for a visitor (Update Prices, Auto-update Setup,
+     Validate, the strip's Retry) instead of letting them click into an error.
+     A viewer's priorities/categories/filters stay in their own browser and are
+     never published - see initUserSettings() in app.js.
+     `?setup=1` forces owner mode so the owner can paste a token on a new device.
+     Duplicated from utils.js isViewerMode() on purpose: header.js runs BEFORE
+     utils.js on every page (same reason the CSS above is duplicated). */
+  var viewer = (function () {
+    try {
+      if (new URLSearchParams(location.search).has('setup')) return false;
+      return !(localStorage.getItem('gh_token') || '').trim();
+    } catch (e) { return true; }   // storage blocked → assume viewer, the safe side
+  })();
+  document.documentElement.classList.toggle('pw-viewer', viewer);
+
   /* ── SVG icons (kept as consts so the templates stay readable) ── */
   var SVG_HOT   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg>';
   var SVG_CART  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
@@ -52,6 +71,10 @@
     '.opt-seg-btn.active{background:var(--card,#fff);color:var(--text,#1A1F2E);box-shadow:0 1px 2px rgba(0,0,0,.08)}' +
     '.validate-pill{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 12px;flex-shrink:0;border-radius:9px;text-decoration:none;white-space:nowrap;font-size:13px;font-weight:600;background:transparent;color:var(--text-mid,#475569);border:1px solid var(--border,#CBD5E1);transition:background .12s,color .12s,border-color .12s}' +
     '.validate-pill:hover{background:var(--bg,#F0F4F8);color:var(--text,#1A1F2E)}' +
+    '.pw-viewer-badge{display:inline-flex;align-items:center;height:20px;padding:0 8px;margin-left:8px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--bg,#F0F4F8);color:var(--text-soft,#94A3B8);border:1px solid var(--border,#E2E8F0);cursor:default;flex-shrink:0}' +
+    /* Any control that writes to the repo can carry data-owner-only and vanish
+       for visitors, without each page needing its own viewer-mode wiring. */
+    '.pw-viewer [data-owner-only]{display:none!important}' +
     '.scrape-strip{display:flex;align-items:center;gap:10px;padding:5px 20px;background:var(--card,#fff);border-top:1px solid var(--border,#E2E8F0);font-size:12px;color:var(--text-mid,#475569)}' +
     '.scrape-strip-label{white-space:nowrap;font-weight:600;min-width:120px}' +
     '.scrape-strip-track{flex:1;height:5px;background:var(--bg,#F0F4F8);border-radius:3px;overflow:hidden;border:1px solid var(--border,#E2E8F0)}' +
@@ -106,9 +129,15 @@
   /* Validate pill - shown by page JS when flagged prices exist. Identical slot
      on every page (index's app.js and the other pages' initNavBell both key
      off the id). */
-  var VALIDATE =
+  var VALIDATE = viewer ? '' :
     '<a href="validate.html" id="validateNavLink" class="validate-pill"' +
     (page === 'validate' ? '' : ' style="display:none"') + '>⚠️ Validate</a>';
+
+  /* Tells a visitor WHY the owner-only controls aren't there, so "the buttons are
+     missing" doesn't come back as a bug report. */
+  var VIEWER_BADGE = viewer
+    ? '<span class="pw-viewer-badge" title="Read-only demo. Your filters, categories and priorities are saved in this browser only - they are never sent anywhere.">Demo</span>'
+    : '';
 
   /* Scrape progress strip - on EVERY page, so a running scrape stays visible
      wherever you navigate. index/hot-deals update it from their own data
@@ -118,7 +147,9 @@
       '<span id="scrapeStripLabel" class="scrape-strip-label">Scraping…</span>' +
       '<div class="scrape-strip-track"><div class="scrape-strip-fill" id="scrapeStripFill" style="width:0%"></div></div>' +
       '<span id="scrapeStripPct" class="scrape-strip-pct">0%</span>' +
-      '<button id="scrapeStripRetry" class="scrape-strip-retry" style="display:none" title="Trigger a new scrape run">↺ Retry</button>' +
+      // Retry dispatches a fresh scrape - owner only. The rest of the strip is
+      // read-only status, so viewers still see a run in progress.
+      (viewer ? '' : '<button id="scrapeStripRetry" class="scrape-strip-retry" style="display:none" title="Trigger a new scrape run">↺ Retry</button>') +
       '<button id="scrapeStripDismiss" class="scrape-strip-dismiss" title="Dismiss">✕</button>' +
     '</div>';
 
@@ -135,7 +166,7 @@
             '<button class="opt-seg-btn" data-theme-opt="dark">Dark</button>' +
             '<button class="opt-seg-btn" data-theme-opt="auto">Auto</button>' +
           '</div></div>' +
-        (page === 'index'
+        (page === 'index' && !viewer
           ? '<div class="options-divider"></div>' +
             '<button class="more-dropdown-item" id="importBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Items</button>' +
             '<button class="more-dropdown-item" id="settingsBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Auto-update Setup</button>'
@@ -148,7 +179,9 @@
      (that lives on index); basket's Print moved to PRINT_LEAD (before the nav
      cluster) so the two headers read identically apart from that one button. */
   var TRAIL =
-    page === 'index'      ? '<button class="btn btn-primary btn-icon" id="refreshBtn" title="Update prices">' + SVG_REF + '</button>' :
+    // Update Prices dispatches a workflow - owner only. (scrape-log's Refresh just
+    // re-reads the log file, so it stays for everyone.)
+    (page === 'index' && !viewer) ? '<button class="btn btn-primary btn-icon" id="refreshBtn" title="Update prices">' + SVG_REF + '</button>' :
     page === 'scrape-log' ? '<button class="btn btn-ghost" id="slRefreshBtn" title="Reload log">' + SVG_REF + ' Refresh</button>' :
     '';
 
@@ -174,7 +207,7 @@
 
   host.innerHTML =
     '<div class="header-inner">' +
-      '<div class="header-left">' + HOME + BRAND + '</div>' +
+      '<div class="header-left">' + HOME + BRAND + VIEWER_BADGE + '</div>' +
       SEARCH +
       '<div class="header-right">' + VALIDATE + PRINT_LEAD + navCluster(active) + OPTIONS + TRAIL + '</div>' +
     '</div>' + STRIP;

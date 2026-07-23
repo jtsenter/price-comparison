@@ -249,6 +249,23 @@ function isHotDeal(item, exclusions) {
 // failure so each caller keeps its own reporting (alert / showSyncError /
 // fire-and-forget). validate.html keeps its own githubPut: it threads a known
 // sha end-to-end for its stale-read race fix, different semantics.
+// ── Viewer (read-only) mode ─────────────────────────────────────────────────
+// A VIEWER is anyone without a GitHub token. Every repo-write path below already
+// refuses to run without that token, so this is a UX/behaviour layer over an
+// existing security boundary, not the boundary itself: it hides controls that
+// could only ever fail for a visitor, and keeps their priorities/categories in
+// their own browser instead of letting the owner's published settings overwrite
+// them. `?setup=1` forces owner mode so the owner can paste a token on a new
+// device (the token form is hidden from viewers).
+// NOTE: header.js carries its own copy - it deliberately runs before utils.js.
+// Keep the two in sync.
+function isViewerMode() {
+  try {
+    if (new URLSearchParams(location.search).has('setup')) return false;
+    return !(localStorage.getItem('gh_token') || '').trim();
+  } catch { return true; }   // storage blocked → assume viewer, the safe side
+}
+
 function _ghHeaders(s) {
   return { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
 }

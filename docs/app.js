@@ -321,8 +321,17 @@ async function initUserSettings() {
         // Merge so the repo and this device agree. Repo values win on conflict
         // (changes push immediately, so the repo is the freshest source); any
         // local-only keys are preserved, so nothing is ever silently deleted.
-        localStorage.setItem('pw_priorities_v1', JSON.stringify(dropRemovedKeys({ ...loadPriorities(), ...(remote.priorities || {}) })));
-        localStorage.setItem('pw_units_v1',      JSON.stringify(dropRemovedKeys({ ...loadUnitOverrides(), ...(remote.units || {}) })));
+        //
+        // VIEWERS invert that precedence. A visitor can't publish (no token), so
+        // repo-wins would silently undo their own weekly/monthly/rare and category
+        // choices every time the owner published - the one thing they were invited
+        // to play with. Local-wins keeps their edits and still lets the repo fill
+        // in keys they've never touched, so a first-time viewer (empty localStorage)
+        // still inherits the owner's full curated setup as their starting point.
+        const viewer = isViewerMode();
+        const merge = (mine, theirs) => viewer ? { ...theirs, ...mine } : { ...mine, ...theirs };
+        localStorage.setItem('pw_priorities_v1', JSON.stringify(dropRemovedKeys(merge(loadPriorities(), remote.priorities || {}))));
+        localStorage.setItem('pw_units_v1',      JSON.stringify(dropRemovedKeys(merge(loadUnitOverrides(), remote.units || {}))));
         if (Array.isArray(remote.perkg)) {
           _perkgSet = new Set([..._perkgSet, ...remote.perkg].filter(n => !REMOVED_ITEMS.has(n)));
           savePerkgLocal(_perkgSet);
@@ -3075,6 +3084,10 @@ function renderTableHead() {
 let refreshCooldown = false;
 
 async function triggerRefresh() {
+  // Defence in depth: the button is not rendered for viewers, but this is the one
+  // action that spends real compute on the self-hosted runner, so refuse outright
+  // rather than relying on the UI having hidden it.
+  if (isViewerMode()) return;
   const s = loadSettings();
   if (!s.token) {
     alert('Please add your GitHub token first (⚙ Auto-update Setup button).');
