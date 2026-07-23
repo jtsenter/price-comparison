@@ -75,6 +75,9 @@ _ww_debug_done = False
 # Per-store fresh misses for the in-progress run: [(item, ww_missed, co_missed)].
 # Reset at the start of each full run; read after it to write the scrape log.
 _run_store_misses: list = []
+# [writer, already_checkpointed] - lets the per-item loop write a provisional
+# scrape-log entry at ~95% without threading the writer through every call.
+_log_checkpoint: list = [None, False]
 
 
 def _append_price_changes(trigger: str, ww_changes: list, coles_changes: list) -> None:
@@ -106,7 +109,8 @@ def _append_price_changes(trigger: str, ww_changes: list, coles_changes: list) -
 
 
 def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed: list,
-                       ww_attempted: int | None = None, coles_attempted: int | None = None) -> None:
+                       ww_attempted: int | None = None, coles_attempted: int | None = None,
+                       partial: bool = False) -> None:
     """Append one run's per-store miss summary to docs/data/scrape_log.json (capped).
     ww_missed/coles_missed: [{"item": str, "reason": "no_results"|"no_match"}, ...].
     ww_attempted/coles_attempted: how many items were actually TRIED at each store.
@@ -135,13 +139,21 @@ def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed
         entry["ww_attempted"] = ww_attempted
     if coles_attempted is not None:
         entry["coles_attempted"] = coles_attempted
-    # Per-store price movements this run: [{"item", "old", "new"}, ...] - kept in
-    # every log entry so ~2 months of runs builds a picture of each store's
-    # pricing strategy (what moved, how often, and by how much).
-    if ww_changes is not None:
-        entry["ww_changes"] = ww_changes
-    if coles_changes is not None:
-        entry["coles_changes"] = coles_changes
+    # Price movements deliberately do NOT live here any more - they go to the
+    # uncapped price_changes.json via _append_price_changes(). (This function used
+    # to take ww_changes/coles_changes; when those params were dropped the body
+    # kept referencing them, so every full run died with NameError at the very
+    # last step - after all 284 items had been scraped - and the workflow's commit
+    # step, being skipped on failure, threw the whole run away. Four runs lost.)
+    #
+    # A run writes a PROVISIONAL entry at ~95% and its real one at the end. The
+    # provisional is popped here so a run leaves exactly one entry either way -
+    # but if the tail dies, that 95% entry survives as the record of the run
+    # instead of the scrape vanishing from history entirely.
+    if log and log[-1].get("partial"):
+        log.pop()
+    if partial:
+        entry["partial"] = True
     log.append(entry)
     log = log[-SCRAPE_LOG_MAX:]
     with open(path, "w") as f:
@@ -2108,6 +2120,19 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                                 started_at=_scrape_start_time,
                                 pending_validation=merged_pv if merged_pv else None,
                             )
+                        # Checkpoint the scrape log once ~95% of items are done.
+                        # No full run ever finishes completely clean, and a crash
+                        # in the tail used to erase the entire scrape from the
+                        # record. This entry is marked partial and is replaced by
+                        # the final one if the run does reach the end.
+                        if (_log_checkpoint[0] and not _log_checkpoint[1] and total_to_scrape
+                                and completed[0] >= total_to_scrape * 0.95):
+                            _log_checkpoint[1] = True
+                            try:
+                                _log_checkpoint[0](True)
+                                print(f"  -> Scrape log checkpointed at {completed[0]}/{total_to_scrape}")
+                            except Exception as _e:
+                                print(f"  [warn] scrape-log checkpoint failed: {_e}")
                         if timed_out:
                             # Reset pages after mid-navigation cancellation
                             for _p, _base in [(ww_page, WOOLWORTHS_BASE), (co_page, COLES_BASE)]:
@@ -2118,6 +2143,21 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                         await ww_pool.put(ww_page)
                         await co_pool.put(co_page)
 
+            # One writer for both the 95% checkpoint and the final entry, so the
+            # provisional and real rows can never drift apart.
+            def _write_scrape_log(partial: bool) -> None:
+                _append_scrape_log(
+                    trigger, len(_run_store_misses),
+                    sorted(({"item": e["item"], "reason": e["ww_reason"]}
+                            for e in _run_store_misses if e["ww_missed"]), key=lambda x: x["item"]),
+                    sorted(({"item": e["item"], "reason": e["co_reason"]}
+                            for e in _run_store_misses if e["co_missed"]), key=lambda x: x["item"]),
+                    ww_attempted=sum(1 for e in _run_store_misses if e["ww_attempted"]),
+                    coles_attempted=sum(1 for e in _run_store_misses if e["co_attempted"]),
+                    partial=partial,
+                )
+
+            _log_checkpoint[0] = _write_scrape_log
             _run_store_misses.clear()
             await asyncio.gather(*[scrape_one(name) for name in to_scrape])
 
@@ -2152,15 +2192,22 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                         out.append({"item": it["list_item"], "old": op, "new": np})
                 return sorted(out, key=lambda e: e["item"])
 
-            _append_scrape_log(
-                trigger, len(_run_store_misses), _ww_missed, _co_missed,
-                ww_attempted=sum(1 for e in _run_store_misses if e["ww_attempted"]),
-                coles_attempted=sum(1 for e in _run_store_misses if e["co_attempted"]),
-            )
+            # End-of-run bookkeeping must NEVER be able to discard a finished
+            # scrape. A NameError in here once killed four consecutive full runs:
+            # all 284 items had been scraped, the process exited 1, and the
+            # workflow's commit step - skipped on failure - threw the lot away.
+            # Log the problem and let the run exit clean so the data still lands.
+            try:
+                _write_scrape_log(partial=False)
+            except Exception as e:
+                print(f"  [warn] scrape log write failed (data is unaffected): {e}")
             # Price movements go to their OWN uncapped archive (price_changes.json),
             # separate from the 30-run scrape_log, so the pricing-strategy record
             # is kept indefinitely.
-            _append_price_changes(trigger, _store_changes("woolworths"), _store_changes("coles"))
+            try:
+                _append_price_changes(trigger, _store_changes("woolworths"), _store_changes("coles"))
+            except Exception as e:
+                print(f"  [warn] price-change archive write failed (data is unaffected): {e}")
 
         await context.close()  # persistent context: closing also flushes the profile to disk
 
