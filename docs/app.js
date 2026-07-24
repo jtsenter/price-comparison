@@ -5123,9 +5123,37 @@ function _renderPageInner(data) {
     window._progressNoDataStreak = 0; // reset streak whenever we see progress
     if (!window._progressPollTimer) {
       window._progressPollTimer = setInterval(async () => {
-        const fresh = await loadData();
+        // WHERE progress lives matters. While a run is in flight the scraper
+        // publishes it ONLY to the scrape-progress branch (push_progress ->
+        // GitHub contents API); main - what Pages serves, and what loadData()
+        // reads - gets scrape_progress only in the run's final commit.
+        // So polling loadData() here saw "no scrape_progress" on EVERY tick
+        // mid-run: the 3-strike "run finished" rule fired every ~21s, cleared
+        // _scrapeActive and hid the strip, and the branch poll re-showed it a
+        // few seconds later. That cycle is why the bar kept disappearing (and,
+        // before the message was gated, why it flipped to "waiting for first
+        // progress"). Ask the branch when we have a token; a FAILED branch read
+        // is inconclusive, not an answer, so it must never count as a strike.
+        const s = loadSettings();
+        const viaBranch = s.token ? await loadProgressData() : null;
+        const authoritative = s.token ? !!viaBranch : true;
+        const fresh = viaBranch || await loadData();
         if (!fresh) return;
-        if (!fresh.scrape_progress) {
+        const fp = fresh.scrape_progress;
+        // A finished run leaves its last push (done == total) on the branch -
+        // that never "goes missing", so completion has to be recognised here too.
+        if (fp && fp.total > 0 && fp.done >= fp.total) {
+          clearInterval(window._progressPollTimer);
+          window._progressPollTimer = null;
+          window._progressNoDataStreak = 0;
+          _scrapeActive = false;
+          _lastProgress = null;
+          _sawAnyProgress = false;
+          renderPage(fresh);
+          return;
+        }
+        if (!fp) {
+          if (!authoritative) return;  // couldn't reach the branch - don't guess
           // Require 3 consecutive no-progress responses before declaring done.
           // A single missing response could be a CDN hiccup or a between-push window -
           // the strip stays up (via _scrapeActive/_lastProgress) until we're sure.
@@ -5142,7 +5170,7 @@ function _renderPageInner(data) {
           return; // don't hide bar yet
         }
         window._progressNoDataStreak = 0;
-        if (fresh.scrape_progress?.done !== _lastData?.scrape_progress?.done) {
+        if (fp.done !== _lastData?.scrape_progress?.done) {
           renderPage(fresh);
         }
       }, 7000);
