@@ -229,6 +229,12 @@
     .price-val { font-size: 15px; font-weight: 700; }
     .unit-val { font-size: 11px; color: var(--text-soft); }
     .total-val { font-size: 15px; font-weight: 700; color: var(--text); }
+    /* Multi-buy note under a line total. Secondary by design - the per-unit
+       price and the line total stay the headline numbers. `saved` = the deal is
+       already in this total; `hint` = one more unit would reach it. */
+    .mb-line { font-size: 10px; font-weight: 700; line-height: 1.25; margin-top: 2px; white-space: nowrap; }
+    .mb-line.saved { color: var(--ww, #00843D); }
+    .mb-line.hint  { color: var(--text-soft, #94A3B8); font-weight: 600; }
     /* Money and quantities align digit-for-digit down a column */
     .price-val, .total-val, .unit-val, .qs-val, .sc-price, .saving-amount, tfoot td { font-variant-numeric: tabular-nums; }
     tfoot td { background: var(--bg); font-weight: 700; font-size: 15px; border-top: 2px solid var(--border); padding: 11px 14px; }
@@ -514,7 +520,7 @@
 </main>
 
 <script src="name_map.js?v=54"></script>
-<script src="utils.js?v=78"></script>
+<script src="utils.js?v=79"></script>
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '-';
 // Short display name (same map the rest of the site uses); falls back to the
@@ -757,6 +763,33 @@ async function boot() {
     return effPrice(i, store === 'ww' ? 'coles' : 'ww');
   }
 
+  // ── Multi-buy ("2 for $7") ────────────────────────────────────────────────
+  // The PER-UNIT price on screen never changes - only what the line actually
+  // costs. Units at the register = basket qty × packs (a per-kg row can be
+  // several packs), so the promo is counted against real packs, not rows.
+  const mbOf = (i, store) => ((store === 'ww' ? i.woolworths : i.coles) || {}).multi_buy || null;
+  const unitsOf = (i, store) => bq(i.list_item) * packsOf(i, store);
+  function lineCost(i, store) {
+    const p = store === 'ww' ? i.woolworths?.price : i.coles?.price;
+    if (p == null) return null;
+    return multiBuyCost(unitsOf(i, store), p, mbOf(i, store));   // utils.js
+  }
+  // Line cost with the same single-mode fallback priceFor uses, so a table
+  // subtotal always equals its store-card total.
+  function lineCostFor(i, store) {
+    const own = lineCost(i, store);
+    if (own != null || slSplit) return own;
+    return lineCost(i, store === 'ww' ? 'coles' : 'ww');
+  }
+  // What this line saves right now because of a multi-buy (0 when none applies).
+  function lineMbSaving(i, store) {
+    const mb = mbOf(i, store);
+    const p = store === 'ww' ? i.woolworths?.price : i.coles?.price;
+    if (!mb || p == null) return 0;
+    const u = unitsOf(i, store);
+    return +(u * p - multiBuyCost(u, p, mb)).toFixed(2);
+  }
+
   // Per-table sort state - survives renderContent() re-renders
   let wwSortKey = 'category', wwSortDir = 'asc';
   let colesSortKey = 'category', colesSortDir = 'asc';
@@ -784,8 +817,8 @@ async function boot() {
         av = priceFor(a, store) ?? Infinity;
         bv = priceFor(b, store) ?? Infinity;
       } else if (key === 'total') {
-        av = (priceFor(a, store) ?? 0) * bq(a.list_item);
-        bv = (priceFor(b, store) ?? 0) * bq(b.list_item);
+        av = lineCostFor(a, store) ?? 0;   // multi-buy aware, matches the cell
+        bv = lineCostFor(b, store) ?? 0;
       }
       return typeof av === 'string' ? av.localeCompare(bv) * mul : (av - bv) * mul;
     });
@@ -802,13 +835,17 @@ async function boot() {
   // Computed per render (not once at boot): qty steppers and row removals
   // change them live.
   function computeTotals() {
+    // Multi-buy aware (lineCost), so "which store is cheaper" is decided on what
+    // you'd actually be charged - a store can win on promos despite a dearer
+    // shelf price. Same fallback rule as before: an item the store doesn't sell
+    // is counted at the other store's price, so both totals cover the same set.
     const wwTotal = displayItems.reduce((s, i) => {
-      const p = effPrice(i, 'ww') ?? effPrice(i, 'coles');
-      return p != null ? s + p * bq(i.list_item) : s;
+      const c = lineCost(i, 'ww') ?? lineCost(i, 'coles');
+      return c != null ? s + c : s;
     }, 0);
     const coTotal = displayItems.reduce((s, i) => {
-      const p = effPrice(i, 'coles') ?? effPrice(i, 'ww');
-      return p != null ? s + p * bq(i.list_item) : s;
+      const c = lineCost(i, 'coles') ?? lineCost(i, 'ww');
+      return c != null ? s + c : s;
     }, 0);
     // diff drives the ribbon chip state (cheaper / paying-more / equal).
     const diff = Math.abs(wwTotal - coTotal);
@@ -823,7 +860,7 @@ async function boot() {
   // "Split saving" while the plan put every single item in one store.
   function computePlan() {
     const { wwItems, colesItems } = computeSplit();
-    const sub = (items, store) => items.reduce((s, i) => s + (priceFor(i, store) ?? 0) * bq(i.list_item), 0);
+    const sub = (items, store) => items.reduce((s, i) => s + (lineCostFor(i, store) ?? 0), 0);
     return {
       wwItems, colesItems,
       total: sub(wwItems, 'ww') + sub(colesItems, 'coles'),
@@ -887,7 +924,7 @@ async function boot() {
     const pfx    = store === 'ww' ? 'ww' : 'coles';
     const sorted = sortItems(storeItems, store, sortKey, sortDir);
     const subtotal = sorted.reduce((s, i) =>
-      s + (priceFor(i, store) ?? 0) * bq(i.list_item), 0);
+      s + (lineCostFor(i, store) ?? 0), 0);
     const arrow = (key) => sortKey === key ? (sortDir === 'asc' ? ' ↑' : ' ↓') : ' ↕';
     const rows = sorted.map(i => {
       const own = store === 'ww' ? i.woolworths : i.coles;
@@ -901,7 +938,21 @@ async function boot() {
       // borrow everything from the other store).
       const rowStore = fellBack ? (store === 'ww' ? 'coles' : 'ww') : store;
       const rowPacks = packsOf(i, rowStore);
-      const lineTotal = (sd?.price ?? 0) * rowPacks * units;
+      // Multi-buy applies to PACKS at the register, not basket rows.
+      const rowUnits = rowPacks * units;
+      const rowMb = mbOf(i, rowStore);
+      const lineTotal = multiBuyCost(rowUnits, sd?.price ?? 0, rowMb);
+      const mbSaved = +((rowUnits * (sd?.price ?? 0)) - lineTotal).toFixed(2);
+      // Either "you're getting the deal" or "one more unit and you would be".
+      // The per-unit price above is untouched either way.
+      const nudge = (sd?.price != null) ? multiBuyNudge(rowUnits, sd.price, rowMb) : null;
+      const mbNote = rowMb
+        ? (mbSaved > 0
+            ? `<div class="mb-line saved" title="${rowMb.qty} for ${fmt(rowMb.total)} - already applied to this line">${rowMb.qty} for ${fmt(rowMb.total)} · −${fmt(mbSaved)}</div>`
+            : nudge
+              ? `<div class="mb-line hint" title="Buy ${nudge.need} more to reach ${rowMb.qty} for ${fmt(rowMb.total)}">+${nudge.need} → save ${fmt(nudge.saving)}</div>`
+              : '')
+        : '';
       const cat = getCategory(i, catOv);
       const img = sd?.image_url;
       // Split mode: ⇄ swaps the row to the other store. When the other store
@@ -938,7 +989,7 @@ async function boot() {
         <td class="cat-cell" style="font-size:12px;color:#64748B;overflow:hidden;text-overflow:ellipsis">${esc(cat)}</td>
         <td class="r price-cell"><span class="price-val">${fmt(sd?.price)}</span>${onlyChip}${altPrice}</td>
         <td class="r qty-cell"><div class="qty-step"><button type="button" class="qs-btn" data-item="${name}" data-d="-1" aria-label="Decrease quantity">−</button><span class="qs-val"${rowPacks > 1 ? ` title="${rowPacks} × ${pickQty(i, rowStore)} packs to match the other store's weight"` : ''}>${units * rowPacks}</span><button type="button" class="qs-btn" data-item="${name}" data-d="1" aria-label="Increase quantity">+</button></div></td>
-        <td class="r total-cell"><span class="total-val">${fmt(lineTotal)}</span></td>
+        <td class="r total-cell"><span class="total-val">${fmt(lineTotal)}</span>${mbNote}</td>
         <td class="act-cell"><div class="act-wrap">${canSwap || swapDisabled ? `<button type="button" class="row-btn swap" data-item="${name}" data-to="${swapTo}" title="${swapTitle}"${swapDisabled ? ' disabled' : ''}>⇄</button>` : ''}<button type="button" class="row-btn rm" data-item="${name}" title="Remove from basket">✕</button></div></td>
       </tr>`;
     }).join('');
@@ -1106,7 +1157,7 @@ async function boot() {
     // Split mode: planned spend per store under the current assignment
     // (equal-price choice + per-row ⇄ swaps) - shown on the cards there.
     const subtotalOf = (items, store) => items.reduce((s, i) =>
-      s + (priceFor(i, store) ?? 0) * bq(i.list_item), 0);
+      s + (lineCostFor(i, store) ?? 0), 0);
     const wwSub = subtotalOf(wwItems, 'ww');
     const coSub = subtotalOf(colesItems, 'coles');
     // Equal-price items (same EFFECTIVE cost at both stores - packs-scaled for

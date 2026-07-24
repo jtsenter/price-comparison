@@ -3098,19 +3098,17 @@ async function triggerRefresh() {
   _sawAnyProgress = false;   // new dispatch: "waiting for first progress" is valid again
 
   const btn = $('refreshBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spin">↻</span> Checking…';
+  setRefreshState('working');
 
   // Pre-flight: confirm the self-hosted runner is online before dispatching
   const { anyOnline } = await getRunnerStatus(s);
   if (!anyOnline) {
     showRunnerOfflineBanner();
-    btn.disabled = false;
-    btn.innerHTML = '↻ Update Prices';
+    setRefreshState('idle');
     return;
   }
   hideRunnerOfflineBanner();
-  btn.innerHTML = '<span class="spin">↻</span> Updating…';
+
 
   try {
     const res = await fetch(
@@ -3143,7 +3141,7 @@ async function triggerRefresh() {
         const retryBtn = $('scrapeStripRetry');
         if (retryBtn) retryBtn.style.display = 'none';
       }
-      btn.innerHTML = '✓ Triggered - polling…';
+
       const dispatchedAt = new Date().toISOString();
       pollForCompletion(s, dispatchedAt);
       refreshCooldown = true;
@@ -3151,13 +3149,45 @@ async function triggerRefresh() {
     } else {
       const err = await res.json().catch(() => ({}));
       alert(`GitHub API error ${res.status}: ${err.message || 'Unknown error'}`);
-      btn.disabled = false;
-      btn.innerHTML = '↻ Update Prices';
+      setRefreshState('error');
     }
   } catch (e) {
     alert(`Network error: ${e.message}`);
+    setRefreshState('error');
+  }
+}
+
+// ── Update-Prices button state ──────────────────────────────────────────────
+// The button is ALWAYS the same icon-only square: same slot, same size, no text
+// ever. It used to rewrite itself to "↻ Update Prices" / "✓ Triggered - polling…"
+// / "⚠ Run failed", which resized it and pushed the header around mid-scrape.
+// State is carried by colour + a tick, nothing else.
+const SVG_REFRESH_ICO = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
+const SVG_CHECK_ICO   = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+// state: 'idle' | 'working' (dispatching or scrape running) | 'done' | 'error'
+function setRefreshState(state) {
+  const btn = $('refreshBtn');
+  if (!btn) return;
+  btn.classList.remove('is-working', 'is-done', 'is-error');
+  if (state === 'working') {
+    btn.classList.add('is-working');
+    btn.disabled = true;
+    btn.title = 'Updating prices…';
+    btn.innerHTML = SVG_REFRESH_ICO;
+  } else if (state === 'done') {
+    btn.classList.add('is-done');
+    btn.disabled = true;
+    btn.title = 'Prices updated';
+    btn.innerHTML = SVG_CHECK_ICO;
+  } else if (state === 'error') {
+    btn.classList.add('is-error');
     btn.disabled = false;
-    btn.innerHTML = '↻ Update Prices';
+    btn.title = 'Update failed - click to retry';
+    btn.innerHTML = SVG_REFRESH_ICO;
+  } else {
+    btn.disabled = false;
+    btn.title = 'Update prices';
+    btn.innerHTML = SVG_REFRESH_ICO;
   }
 }
 
@@ -3172,16 +3202,15 @@ async function pollForCompletion(s, dispatchedAt) {
   const finish = (success) => {
     clearInterval(dataPollTimer);
     if (success) {
-      btn.innerHTML = '✓ Done - reloading…';
+      setRefreshState('done');
       setTimeout(() => {
         fetch(`data/latest.json?t=${Date.now()}`)
           .then(r => r.json())
-          .then(d => { renderPage(d); btn.innerHTML = '↻ Update Prices'; btn.disabled = false; })
+          .then(d => { renderPage(d); setRefreshState('idle'); })
           .catch(() => location.reload());
       }, 2000);
     } else {
-      btn.innerHTML = '⚠ Run failed';
-      setTimeout(() => { btn.innerHTML = '↻ Update Prices'; btn.disabled = false; }, 4000);
+      setRefreshState('error');
     }
   };
 
@@ -3191,8 +3220,20 @@ async function pollForCompletion(s, dispatchedAt) {
   const lostConnection = () => {
     // Do NOT clear dataPollTimer - the data poll keeps running in case the
     // scrape-progress branch catches up later.
-    btn.innerHTML = '↻ Update Prices';
-    btn.disabled = false;
+    //
+    // This is about the GitHub Actions API poll, NOT the scrape. If the data
+    // poll is still watching the count climb, the run is demonstrably alive and
+    // "Lost connection" is simply false - saying it anyway made the strip
+    // alternate between the message and the live count on every tick
+    // (150 -> lost -> 155 -> lost -> 160). Stay quiet and keep retrying; the
+    // stall detector already covers a run that genuinely stops moving.
+    const movingRecently = _progressLastChangeTime
+      && (Date.now() - _progressLastChangeTime) < STALE_PROGRESS_MS;
+    if (movingRecently) {
+      findAttempts = 0;
+      setTimeout(findRun, 15000);
+      return;
+    }
     const strip = $('scrapeStrip');
     if (strip && strip.style.display !== 'none') {
       $('scrapeStripLabel').innerHTML =
@@ -4988,6 +5029,9 @@ function _renderPageInner(data) {
     // through to hide so a stuck 53-of-53 doesn't linger. isScrapeRunDismissed
     // keeps a ✕'d run buried across refreshes.
     if (prog && prog.total > 0 && prog.done < prog.total && !_progressDismissed && !isScrapeRunDismissed(prog)) {
+      // Keep the button in its working state for the whole run, including after a
+      // reload mid-scrape (the strip survives; the button should agree with it).
+      setRefreshState('working');
       const pct = Math.round((prog.done / prog.total) * 100);
       const isStale = _progressLastChangeTime && (Date.now() - _progressLastChangeTime > STALE_PROGRESS_MS);
       strip.style.display = 'flex';
