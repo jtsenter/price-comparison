@@ -890,11 +890,13 @@ function getColNumericValue(col, item) {
       if (ww == null || co == null) return null;
       return Math.abs(ww - co) / Math.max(ww, co) * 100;
     }
-    case 'saving':    { const s = savingAmount(item); return s != null ? s * getUnits(item.list_item) : null; }
+    case 'saving':    return mbSaving(item);
     case 'units':     return getUnits(item.list_item);
     case 'trips':     return item.trip_count || 0;
-    case 'ww_total':  return item.woolworths?.price != null ? item.woolworths.price * getUnits(item.list_item) : null;
-    case 'coles_total': return item.coles?.price != null ? item.coles.price * getUnits(item.list_item) : null;
+    // Both total columns now show the cheaper store's line cost (see mbBestTotal /
+    // the Total cell), so they sort by that same number.
+    case 'ww_total':
+    case 'coles_total': return mbBestTotal(item).total;
     default: return null;
   }
 }
@@ -935,12 +937,9 @@ function getColValue(col, item) {
     case 'last_scraped': return item.last_scraped
       ? new Date(item.last_scraped).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
       : '-';
-    case 'ww_total': {
-      const v = item.woolworths?.price != null ? item.woolworths.price * getUnits(item.list_item) : null;
-      return v != null ? fmt(v) : '-';
-    }
+    case 'ww_total':
     case 'coles_total': {
-      const v = item.coles?.price != null ? item.coles.price * getUnits(item.list_item) : null;
+      const v = mbBestTotal(item).total;
       return v != null ? fmt(v) : '-';
     }
     default: return '';
@@ -994,8 +993,8 @@ function colHeadHtml(col) {
     case 'units':        return th('units', '', 'Qty');
     case 'category':     return th('category', '', 'Category');
     case 'last_scraped': return th('last_scraped', '', 'Last Scraped');
-    case 'ww_total':     return th('ww_total', '', '<span class="store-chip ww sm">W</span> Total');
-    case 'coles_total':  return th('coles_total', '', '<span class="store-chip coles sm">C</span> Total');
+    case 'ww_total':     return th('ww_total', '', 'Total');
+    case 'coles_total':  return th('coles_total', '', 'Total');
     default: return '';
   }
 }
@@ -2643,6 +2642,48 @@ function initBulkBar() {
   });
 }
 
+// ── Multi-buy + quantity aware money (main page) ─────────────────────────────
+// The whole main page used sticker price × qty, so a "2 for $4" never changed
+// which store wins, the Total, or the Savings - only a little badge hinted at
+// it (avocado ×2 showed Best = WW, Total $4.40, when Coles' 2-for-$4 is $4.00).
+// Every money figure - summary, Best, Savings, Total, sorting - now routes
+// through these, using the SAME per-store line cost the basket page uses, so the
+// numbers can't disagree with each other. units = the QTY column; a store's
+// promo lives in res.multi_buy {qty,total}. multiBuyCost is in utils.js.
+function mbLineCost(res, units) {
+  if (res?.price == null) return null;
+  return multiBuyCost(units, res.price, res.multi_buy);
+}
+// Which store is cheaper for this item at its CURRENT qty. Falls back to the
+// scraper's sticker-based call when a store is missing (no contest to re-decide).
+// For items without a promo this equals cheaper_store (units cancel), so only
+// multi-buy rows at/over the deal quantity actually change.
+function mbCheaperStore(item) {
+  const u = getUnits(item.list_item);
+  const w = mbLineCost(item.woolworths, u), c = mbLineCost(item.coles, u);
+  if (w == null || c == null) return item.cheaper_store;
+  if (w < c - 0.005) return 'woolworths';
+  if (c < w - 0.005) return 'coles';
+  return 'equal';
+}
+// qty-weighted saving at the current qty; null when the two stores aren't comparable.
+function mbSaving(item) {
+  const u = getUnits(item.list_item);
+  const w = mbLineCost(item.woolworths, u), c = mbLineCost(item.coles, u);
+  return (w == null || c == null) ? null : Math.abs(w - c);
+}
+// The cheapest line cost across both stores at the current qty, plus which store
+// it is - this is the "Total" the table shows (what you'd actually pay for this
+// item at its better store), not a fixed store's total.
+function mbBestTotal(item) {
+  const u = getUnits(item.list_item);
+  const w = mbLineCost(item.woolworths, u), c = mbLineCost(item.coles, u);
+  if (w == null && c == null) return { total: null, store: null };
+  if (w == null) return { total: c, store: 'coles' };
+  if (c == null) return { total: w, store: 'woolworths' };
+  return w <= c ? { total: w, store: 'woolworths' } : { total: c, store: 'coles' };
+}
+
 // ── Banner stats (priority-aware) ────────────────────────────────────────────
 
 function computeBannerStats(items) {
@@ -2679,21 +2720,15 @@ function computeBannerStats(items) {
   const filtered = applyValueFilters(baseFiltered);
   const ww_avail = filtered.some(i => i.woolworths?.price != null);
   // Totals weighted by units
-  const ww_total = filtered.reduce((s, i) => {
-    const u = getUnits(i.list_item);
-    return s + (i.woolworths?.price ?? 0) * u;
-  }, 0);
-  const co_total = filtered.reduce((s, i) => {
-    const u = getUnits(i.list_item);
-    return s + (i.coles?.price ?? 0) * u;
-  }, 0);
+  const ww_total = filtered.reduce((s, i) => s + (mbLineCost(i.woolworths, getUnits(i.list_item)) ?? 0), 0);
+  const co_total = filtered.reduce((s, i) => s + (mbLineCost(i.coles, getUnits(i.list_item)) ?? 0), 0);
   const total_saving = Math.abs(ww_total - co_total);
   // "Max saving": buy each item at whichever store is cheapest, vs doing the
   // whole shop at the more expensive single store. This is the most you could
   // possibly save by splitting the basket across both stores.
   const cherry_total = filtered.reduce((s, i) => {
     const u = getUnits(i.list_item);
-    return s + Math.min(i.woolworths.price, i.coles.price) * u;
+    return s + Math.min(mbLineCost(i.woolworths, u), mbLineCost(i.coles, u));
   }, 0);
   const max_saving = Math.max(ww_total, co_total) - cherry_total;
   let cheaper_store;
@@ -3477,8 +3512,8 @@ function sortItems(items) {
       case 'name':     return dispSortName(item);
       case 'ww':       return wwShown ?? NaN;
       case 'coles':    return coShown ?? NaN;
-      case 'cheaper':  return item.cheaper_store ?? 'zzz';
-      case 'saving':   return savingAmount(item) ?? NaN;
+      case 'cheaper':  return mbCheaperStore(item) ?? 'zzz';
+      case 'saving':   return item._isGroup ? (savingAmount(item) ?? NaN) : (mbSaving(item) ?? NaN);
       case 'trips':    return item.trip_count || 0;
       // Kg rows sort as a contiguous block after pack-count rows (offset), so
       // "1.0kg" items sit together instead of interleaving with "1 unit" items.
@@ -3490,8 +3525,16 @@ function sortItems(items) {
       case 'trend': return trendPositionOf(item); // 0.0=best deal, 1.0=expensive, 999=no history (sorts last)
       case 'category':     return getCategory(item).toLowerCase();
       case 'last_scraped': return item.last_scraped || '';
-      case 'ww_total':     return wwShown != null ? wwShown * getUnits(item.list_item) : NaN;
-      case 'coles_total':  return coShown != null ? coShown * getUnits(item.list_item) : NaN;
+      // Both totals sort by the cheaper store's line cost (matches the cell).
+      // Groups have no per-store multi_buy, so they use their $/kg best × qty.
+      case 'ww_total':
+      case 'coles_total':  {
+        if (item._isGroup) {
+          const v = [wwShown, coShown].filter(x => x != null);
+          return v.length ? Math.min(...v) * getUnits(item.list_item) : NaN;
+        }
+        return mbBestTotal(item).total ?? NaN;
+      }
       default: return item.trip_count || 0;
     }
   }
@@ -3762,6 +3805,21 @@ function multiBuyBadge(res) {
   const mb = res?.multi_buy;
   if (!mb?.qty || mb.total == null) return '';
   return `<span class="multibuy-badge" title="Buy ${mb.qty} for $${mb.total.toFixed(2)} total - shown price is the per-unit shelf price"><svg class="mb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24L3.24 9.59A2 2 0 0 0 3.83 11l9.58 9.59a2 2 0 0 0 2.82 0l4.36-4.36a2 2 0 0 0 0-2.82Z"/><circle cx="7.5" cy="7.5" r="1"/></svg>${mb.qty} for $${mb.total.toFixed(2)}</span>`;
+}
+
+const MB_TAG_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24L3.24 9.59A2 2 0 0 0 3.83 11l9.58 9.59a2 2 0 0 0 2.82 0l4.36-4.36a2 2 0 0 0 0-2.82Z"/><circle cx="7.5" cy="7.5" r="1"/></svg>`;
+// Qty-aware multi-buy tag for the main table's price cell. GREEN with the
+// effective per-unit once the deal is live at the current QTY ("$2.00 ea");
+// a muted icon-only hint below the deal quantity (full terms on hover). Compact
+// by design so it never wraps the row onto a second line.
+function multiBuyTag(res, units) {
+  const mb = res?.multi_buy;
+  if (!mb?.qty || mb.total == null || res.price == null) return '';
+  if (units >= mb.qty) {
+    const eff = multiBuyCost(units, res.price, mb) / units;
+    return `<span class="mb-tag on" title="${mb.qty} for $${mb.total.toFixed(2)} applied - $${eff.toFixed(2)} each at ${units}">${MB_TAG_SVG}<span class="mb-eff">$${eff.toFixed(2)} ea</span></span>`;
+  }
+  return `<span class="mb-tag off" title="Multi-buy: ${mb.qty} for $${mb.total.toFixed(2)} (you're buying ${units}) - buy ${mb.qty - (units % mb.qty)} more to unlock">${MB_TAG_SVG}</span>`;
 }
 
 // A $/kg price cell: just the $/kg headline (linked). No pack-price subline -
@@ -4165,6 +4223,13 @@ function appendGroupRowDesktop(tbody, group, overrides) {
 
   const wwTotal = group._wwPerKg != null ? group._wwPerKg * units : null;
   const coTotal = group._coPerKg != null ? group._coPerKg * units : null;
+  // Total column = the cheaper store's cost (matches normal rows), with its chip.
+  let gBestTotal = null, gBestChip = '';
+  if (wwTotal != null || coTotal != null) {
+    if (coTotal == null || (wwTotal != null && wwTotal <= coTotal)) { gBestTotal = wwTotal; gBestChip = '<span class="store-chip ww sm">W</span> '; }
+    else { gBestTotal = coTotal; gBestChip = '<span class="store-chip coles sm">C</span> '; }
+  }
+  const gTotalCell = `<td class="total-cell" style="font-size:13px;font-weight:600;white-space:nowrap">${gBestTotal != null ? gBestChip + fmt(gBestTotal) : '<span class="no-data">-</span>'}</td>`;
   let savingContent = '<span class="no-data">-</span>';
   if (group._wwPerKg != null && group._coPerKg != null) {
     const sav = Math.abs(group._wwPerKg - group._coPerKg) * units;
@@ -4184,8 +4249,8 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     trips:        `<td class="trips-cell"></td>`,
     category:     `<td style="font-size:12px;color:var(--text-mid)">${getCategory(group)}</td>`,
     last_scraped: `<td></td>`,
-    ww_total:     `<td style="font-size:13px;font-weight:600">${wwTotal != null ? fmt(wwTotal) : '<span class="no-data">-</span>'}</td>`,
-    coles_total:  `<td style="font-size:13px;font-weight:600">${coTotal != null ? fmt(coTotal) : '<span class="no-data">-</span>'}</td>`,
+    ww_total:     gTotalCell,
+    coles_total:  gTotalCell,
   };
 
   // Selection checkbox (selects the whole category - basket uses its cheapest option).
@@ -5323,7 +5388,10 @@ function _renderPageInner(data) {
     if (item._isGroup) { appendGroupRowDesktop(tbody, item, overrides); return; }
     const ww = item.woolworths;
     const co = item.coles;
-    const cheaper = item.cheaper_store;
+    const units = getUnits(item.list_item);
+    // Multi-buy + qty aware winner (a "2 for $4" flips this once you buy 2), used
+    // for Best, cell highlight, hot-deal fire, %-cheaper colour and the trend ref.
+    const cheaper = mbCheaperStore(item);
     const ov = overrides[item.list_item] || {};
 
     const wwUrl  = ov.wwUrl    || ww?.url  || null;
@@ -5386,7 +5454,7 @@ function _renderPageInner(data) {
       const wwUnitStr = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : (wwP100.blanked ? '' : fmtUnit(ww.unit_price, ww.unit));
       // Badge rides INSIDE the unit line - as a sibling block it added a whole
       // extra line of height to every promo row.
-      wwCellContent = `<div class="price-main"${wwNameTip}>${wwPriceVal}${wwFire}</div><div class="price-unit">${wwUnitStr}${multiBuyBadge(ww)}</div>`;
+      wwCellContent = `<div class="price-main"${wwNameTip}>${wwPriceVal}${wwFire}</div><div class="price-unit">${wwUnitStr}${multiBuyTag(ww, units)}</div>`;
     } else {
       const searchUrl = `https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}`;
       wwCellContent = `<a href="${searchUrl}" target="_blank" rel="noopener" class="search-link">Find on WW →</a>`;
@@ -5401,7 +5469,7 @@ function _renderPageInner(data) {
       const coFire = hotDeal && (cheaper === 'coles' || (cheaper == null && co && !ww)) ? hotBadge : '';
       const coNameTip = co.name ? ` title="${co.name.replace(/"/g, '&quot;')}"` : '';
       const coUnitStr = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : (coP100.blanked ? '' : fmtUnit(co.unit_price, co.unit));
-      coCellContent = `<div class="price-main"${coNameTip}>${coPriceVal}${coFire}</div><div class="price-unit">${coUnitStr}${multiBuyBadge(co)}</div>`;
+      coCellContent = `<div class="price-main"${coNameTip}>${coPriceVal}${coFire}</div><div class="price-unit">${coUnitStr}${multiBuyTag(co, units)}</div>`;
     } else {
       const searchUrl = `https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}`;
       coCellContent = `<a href="${searchUrl}" target="_blank" rel="noopener" class="search-link">Find on Coles →</a>`;
@@ -5419,15 +5487,12 @@ function _renderPageInner(data) {
       badgeHtml = '<span class="cheaper-badge equal">=</span>';
     }
 
-    // Units cell (declared before unitsSaving so it's in scope)
-    const units = getUnits(item.list_item);
-
     const hasBothPrices = ww?.price != null && co?.price != null;
     let savingContent;
     if (!hasBothPrices) {
       savingContent = `<span class="no-data">-</span>`;
     } else {
-      const unitsSaving = (savingAmount(item) ?? 0) * units;
+      const unitsSaving = mbSaving(item) ?? 0;   // multi-buy + qty aware
       savingContent = unitsSaving > 0
         ? `<span class="saving-cell">${fmt(unitsSaving)}</span>`
         : `<span class="no-data">$0.00</span>`;
@@ -5470,8 +5535,14 @@ function _renderPageInner(data) {
       </div>
     </td>`;
 
-    const wwTotalVal   = ww?.price != null ? ww.price * units : null;
-    const colesTotalVal = co?.price != null ? co.price * units : null;
+    // The Total column shows what you'd actually pay for this item at its cheaper
+    // store, quantity and multi-buy accounted for (2 avocados = Coles $4.00, not
+    // WW $4.40). Both total columns render this same best-total, tagged with the
+    // winning store's chip.
+    const best = mbBestTotal(item);
+    const bestChip = best.store === 'woolworths' ? '<span class="store-chip ww sm">W</span> '
+                   : best.store === 'coles' ? '<span class="store-chip coles sm">C</span> ' : '';
+    const totalCell = `<td class="total-cell" style="font-size:13px;font-weight:600;white-space:nowrap">${best.total != null ? bestChip + fmt(best.total) : '<span class="no-data">-</span>'}</td>`;
     const scrapedDate = item.last_scraped
       ? new Date(item.last_scraped).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
       : '-';
@@ -5490,8 +5561,8 @@ function _renderPageInner(data) {
       trips:        `<td class="trips-cell">${tripsHtml}</td>`,
       category:     `<td style="font-size:12px;color:var(--text-mid)">${getCategory(item)}</td>`,
       last_scraped: `<td style="font-size:11px;color:var(--text-soft);white-space:nowrap">${scrapedDate}</td>`,
-      ww_total:     `<td style="font-size:13px;font-weight:600">${wwTotalVal != null ? fmt(wwTotalVal) : '<span class="no-data">-</span>'}</td>`,
-      coles_total:  `<td style="font-size:13px;font-weight:600">${colesTotalVal != null ? fmt(colesTotalVal) : '<span class="no-data">-</span>'}</td>`,
+      ww_total:     totalCell,
+      coles_total:  totalCell,
     };
 
     const checked = _checkedItems.has(item.list_item) ? ' checked' : '';
@@ -5513,17 +5584,19 @@ function _renderPageInner(data) {
   const _fWWAvail    = s.ww_data_available;
   const _fCoAvail    = s.items_compared > 0;
   const footerSaving = s.total_saving;
-  // ww_total / coles_total columns include all visible items, qty-weighted
-  let _fWWQty = 0, _fCoQty = 0;
+  // Total column = cheaper store's line cost per row (multi-buy + qty aware), so
+  // its footer is the sum of those best totals across every visible item.
+  let _fBest = 0;
   for (const item of sorted) {
-    // Per-kg groups contribute $/kg × weight; normal items contribute pack price × qty.
-    const wwUnit = item._isGroup ? (item._wwPerKg ?? 0) : (item.woolworths?.price ?? 0);
-    const coUnit = item._isGroup ? (item._coPerKg ?? 0) : (item.coles?.price ?? 0);
-    _fWWQty += wwUnit * getUnits(item.list_item);
-    _fCoQty += coUnit * getUnits(item.list_item);
+    if (item._isGroup) {
+      const u = getUnits(item.list_item);
+      const v = [item._wwPerKg, item._coPerKg].filter(x => x != null);
+      if (v.length) _fBest += Math.min(...v) * u;
+    } else {
+      _fBest += mbBestTotal(item).total ?? 0;
+    }
   }
-  const footWWQty  = Math.round(_fWWQty * 100) / 100;
-  const footCoQty  = Math.round(_fCoQty * 100) / 100;
+  const footBest = Math.round(_fBest * 100) / 100;
 
   const tfootRow = document.querySelector('tfoot tr');
   if (tfootRow) {
@@ -5540,8 +5613,8 @@ function _renderPageInner(data) {
       trips:        `<td></td>`,
       category:     `<td></td>`,
       last_scraped: `<td></td>`,
-      ww_total:     `<td style="font-weight:700">${_fWWAvail ? fmt(footWWQty) : '-'}</td>`,
-      coles_total:  `<td style="font-weight:700">${_fCoAvail ? fmt(footCoQty) : '-'}</td>`,
+      ww_total:     `<td style="font-weight:700">${fmt(footBest)}</td>`,
+      coles_total:  `<td style="font-weight:700">${fmt(footBest)}</td>`,
     };
     tfootRow.innerHTML = '<td></td>' + getVisibleCols().map(col => footMap[col] || '<td></td>').join('') + '<td></td>';
   }

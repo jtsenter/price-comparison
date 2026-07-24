@@ -920,6 +920,18 @@ tr:hover .item-edit-btn { opacity: 1; }
 }
 .mb-ico { width: 10px; height: 10px; flex-shrink: 0; }
 
+/* Qty-aware multi-buy tag on the main table. GREEN + effective per-unit once the
+   deal is live at the current QTY; a muted icon-only hint below the deal qty. */
+.mb-tag {
+  display: inline-flex; align-items: center; gap: 3px;
+  margin-left: 5px; vertical-align: middle;
+  font-size: 10px; font-weight: 700; line-height: 1; white-space: nowrap;
+}
+.mb-tag svg { width: 11px; height: 11px; flex-shrink: 0; }
+.mb-tag.on  { color: var(--ww, #00843D); }          /* deal applied - green */
+.mb-tag.off { color: var(--text-soft, #94A3B8); }   /* hint - muted, icon only */
+.mb-eff { font-variant-numeric: tabular-nums; }
+
 /* Trip count badge */
 .trip-count {
   font-size: 10px;
