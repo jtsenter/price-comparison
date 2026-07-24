@@ -912,12 +912,14 @@ tr:hover .item-edit-btn { opacity: 1; }
    or hot-deal signals that already own those colours. */
 .multibuy-badge {
   display: inline-flex; align-items: center; gap: 3px;
-  font-size: 11px; font-weight: 700; line-height: 1;
-  margin-top: 3px; padding: 2px 7px; border-radius: 10px;
+  font-size: 10px; font-weight: 700; line-height: 1;
+  /* Rides INSIDE the unit-price line (no margin-top): as a sibling block it
+     added a full extra line of height to every promo row. */
+  margin-left: 5px; vertical-align: middle; padding: 1px 6px; border-radius: 9px;
   background: var(--bg); color: var(--text-mid, #64748B); border: 1px solid var(--border);
   white-space: nowrap;
 }
-.mb-ico { width: 11px; height: 11px; flex-shrink: 0; }
+.mb-ico { width: 10px; height: 10px; flex-shrink: 0; }
 
 /* Trip count badge */
 .trip-count {

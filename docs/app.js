@@ -1339,7 +1339,12 @@ function initSettingsModal() {
   };
   const close = () => modal.classList.remove('open');
 
-  $('settingsBtn').addEventListener('click', open);
+  // Optional chain: header.js doesn't render the ⚙ Auto-update Setup entry for
+  // VIEWERS, and this unguarded listener threw on the null - killing init()
+  // before renderPage, so a visitor (or any owner device without a token) got a
+  // permanently "Loading price data…" page. The modal itself stays wired: the
+  // ?setup=1 escape hatch re-renders the button and needs it working.
+  $('settingsBtn')?.addEventListener('click', open);
   $('modalClose').addEventListener('click', close);
   $('modalCancel').addEventListener('click', close);
   modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
@@ -3591,7 +3596,7 @@ function renderCards(items) {
       const pv = wwUrl ? `<a href="${wwUrl}" target="_blank" rel="noopener" class="price-link">${fmt(ww.price)}</a>` : fmt(ww.price);
       const fire = hotDeal && cheaper === 'woolworths' ? hotBadge : '';
       const unit = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : (wwP100.blanked ? '' : fmtUnit(ww.unit_price, ww.unit));
-      wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}</div>${multiBuyBadge(ww)}`;
+      wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}${multiBuyBadge(ww)}</div>`;
     } else {
       wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span> <a href="https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}" target="_blank" rel="noopener" class="search-link">Find →</a></div>`;
     }
@@ -3601,7 +3606,7 @@ function renderCards(items) {
       const pv = coUrl ? `<a href="${coUrl}" target="_blank" rel="noopener" class="price-link">${fmt(co.price)}</a>` : fmt(co.price);
       const fire = hotDeal && cheaper === 'coles' ? hotBadge : '';
       const unit = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : (coP100.blanked ? '' : fmtUnit(co.unit_price, co.unit));
-      coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}</div>${multiBuyBadge(co)}`;
+      coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}${multiBuyBadge(co)}</div>`;
     } else {
       coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span> <a href="https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}" target="_blank" rel="noopener" class="search-link">Find →</a></div>`;
     }
@@ -5333,7 +5338,9 @@ function _renderPageInner(data) {
       const wwFire = hotDeal && (cheaper === 'woolworths' || (cheaper == null && ww && !co)) ? hotBadge : '';
       const wwNameTip = ww.name ? ` title="${ww.name.replace(/"/g, '&quot;')}"` : '';
       const wwUnitStr = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : (wwP100.blanked ? '' : fmtUnit(ww.unit_price, ww.unit));
-      wwCellContent = `<div class="price-main"${wwNameTip}>${wwPriceVal}${wwFire}</div><div class="price-unit">${wwUnitStr}</div>${multiBuyBadge(ww)}`;
+      // Badge rides INSIDE the unit line - as a sibling block it added a whole
+      // extra line of height to every promo row.
+      wwCellContent = `<div class="price-main"${wwNameTip}>${wwPriceVal}${wwFire}</div><div class="price-unit">${wwUnitStr}${multiBuyBadge(ww)}</div>`;
     } else {
       const searchUrl = `https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}`;
       wwCellContent = `<a href="${searchUrl}" target="_blank" rel="noopener" class="search-link">Find on WW →</a>`;
@@ -5348,7 +5355,7 @@ function _renderPageInner(data) {
       const coFire = hotDeal && (cheaper === 'coles' || (cheaper == null && co && !ww)) ? hotBadge : '';
       const coNameTip = co.name ? ` title="${co.name.replace(/"/g, '&quot;')}"` : '';
       const coUnitStr = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : (coP100.blanked ? '' : fmtUnit(co.unit_price, co.unit));
-      coCellContent = `<div class="price-main"${coNameTip}>${coPriceVal}${coFire}</div><div class="price-unit">${coUnitStr}</div>${multiBuyBadge(co)}`;
+      coCellContent = `<div class="price-main"${coNameTip}>${coPriceVal}${coFire}</div><div class="price-unit">${coUnitStr}${multiBuyBadge(co)}</div>`;
     } else {
       const searchUrl = `https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}`;
       coCellContent = `<a href="${searchUrl}" target="_blank" rel="noopener" class="search-link">Find on Coles →</a>`;
