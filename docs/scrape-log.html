@@ -139,28 +139,6 @@
     </details>
   </div>
 
-  <div class="sl-info-card" id="slChronicCard" style="display:none">
-    <h2>Chronic misses - items to track down</h2>
-    <p style="font-size:12px;color:var(--text-mid);margin:0 0 10px">
-      Missed in more than one logged run. A one-off miss is noise; a repeat miss means
-      the price is quietly going stale - usually a broken match or a delisted product
-      worth re-pinning via ✎ Edit on the main page.
-    </p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" class="sl-chronic-cols" id="slChronicCols"></div>
-  </div>
-
-  <div class="sl-info-card" id="slWishlistCard" style="display:none">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
-      <h2>Searches with no results</h2>
-      <button class="btn btn-ghost" id="slWishlistClear" style="font-size:12px">Clear</button>
-    </div>
-    <p style="font-size:12px;color:var(--text-mid);margin:0 0 10px">
-      Things you searched for that aren't in your list yet - candidates to add to
-      <code>shopping_list.xlsx</code>. Recorded on this device only.
-    </p>
-    <ul class="sl-miss-list" id="slWishlist" style="max-height:none"></ul>
-  </div>
-
   <div class="sl-info-card" id="slChangesCard" style="display:none">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
       <h2>Price change history</h2>
@@ -176,6 +154,36 @@
 
   <h2 class="sl-section-h">Recent runs</h2>
   <div id="slRuns" class="sl-runs"></div>
+
+  <!-- Diagnostic drill-downs, moved to the bottom and collapsed by default:
+       useful when hunting a specific problem, but neither is the reason
+       anyone opens this page day-to-day - they used to push the actual run
+       list a full screen down. -->
+  <div class="sl-info-card" id="slChronicCard" style="display:none">
+    <details class="sl-info-details">
+      <summary class="sl-section-h" style="cursor:pointer;display:inline-block">Chronic misses - items to track down</summary>
+      <p style="font-size:12px;color:var(--text-mid);margin:10px 0">
+        Missed in more than one logged run. A one-off miss is noise; a repeat miss means
+        the price is quietly going stale - usually a broken match or a delisted product
+        worth re-pinning via ✎ Edit on the main page.
+      </p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" class="sl-chronic-cols" id="slChronicCols"></div>
+    </details>
+  </div>
+
+  <div class="sl-info-card" id="slWishlistCard" style="display:none">
+    <details class="sl-info-details">
+      <summary class="sl-section-h" style="cursor:pointer;display:inline-block">Searches with no results</summary>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px">
+        <p style="font-size:12px;color:var(--text-mid);margin:0">
+          Things you searched for that aren't in your list yet - candidates to add to
+          <code>shopping_list.xlsx</code>. Recorded on this device only.
+        </p>
+        <button class="btn btn-ghost" id="slWishlistClear" style="font-size:12px;flex-shrink:0">Clear</button>
+      </div>
+      <ul class="sl-miss-list" id="slWishlist" style="max-height:none;margin-top:10px"></ul>
+    </details>
+  </div>
 </main>
 
 <script src="utils.js?v=79"></script>
