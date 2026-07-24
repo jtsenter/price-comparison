@@ -229,12 +229,13 @@
     .price-val { font-size: 15px; font-weight: 700; }
     .unit-val { font-size: 11px; color: var(--text-soft); }
     .total-val { font-size: 15px; font-weight: 700; color: var(--text); }
-    /* Multi-buy note under a line total. Secondary by design - the per-unit
-       price and the line total stay the headline numbers. `saved` = the deal is
-       already in this total; `hint` = one more unit would reach it. */
-    .mb-line { font-size: 10px; font-weight: 700; line-height: 1.25; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-    .mb-line.saved { color: var(--ww, #00843D); }
-    .mb-line.hint  { color: var(--text-soft, #94A3B8); font-weight: 600; }
+    /* Multi-buy tag icon beside a line total (hover for the full deal). Inline
+       so it never adds a second row. `saved` = the deal is already in this
+       total (green); `hint` = one more unit would reach it (muted). */
+    .mb-ico { display: inline-flex; vertical-align: middle; margin-left: 4px; line-height: 0; cursor: help; }
+    .mb-ico svg { display: block; }
+    .mb-ico.saved { color: var(--ww, #00843D); }
+    .mb-ico.hint  { color: var(--text-soft, #94A3B8); }
     /* Other store's promo marker inside the muted alt price ("C $3.50 2/$6") */
     .alt-mb { font-size: 10px; font-weight: 700; color: var(--text-soft, #94A3B8); border: 1px solid var(--border); border-radius: 7px; padding: 0 4px; }
     /* Money and quantities align digit-for-digit down a column */
@@ -791,6 +792,22 @@ async function boot() {
     const u = unitsOf(i, store);
     return +(u * p - multiBuyCost(u, p, mb)).toFixed(2);
   }
+  // Which store is cheaper for this row RIGHT NOW - multi-buy AND qty aware
+  // (lineCost, not effPrice), so a "2 for $4" that only beats the other store
+  // at 2+ units flips the answer as the shopper steps the qty up (the avocado
+  // case: WW cheaper at 1, Coles cheaper at 2). Matches computeSplit's sticker()
+  // routing, so the ribbon counts and the split plan can never disagree.
+  function cheaperStoreNow(i) {
+    const w = lineCost(i, 'ww'), c = lineCost(i, 'coles');
+    if (w == null || c == null) return null;   // single-store item - no contest
+    if (w < c - 0.005) return 'ww';
+    if (c < w - 0.005) return 'coles';
+    return 'equal';
+  }
+  // Multi-buy marker for a line total: a small tag icon, not a second text row
+  // (the old "deal −$X" wrapped and grew every promo row). The full wording -
+  // deal terms and the exact saving - lives in the hover title.
+  const mbTag = (cls, title) => `<span class="mb-ico ${cls}" title="${escAttr(title)}"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path fill="currentColor" d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41s-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg></span>`;
 
   // Per-table sort state - survives renderContent() re-renders
   let wwSortKey = 'category', wwSortDir = 'asc';
@@ -953,13 +970,14 @@ async function boot() {
       // Either "you're getting the deal" or "one more unit and you would be".
       // The per-unit price above is untouched either way.
       const nudge = (sd?.price != null) ? multiBuyNudge(rowUnits, sd.price, rowMb) : null;
-      // Short enough to FIT the 110px total column ("2 for $5.25 · −$1.75"
-      // overflowed and clipped mid-text); the full wording lives in the title.
+      // A tag icon beside the total, not a wrapping second line. Full wording
+      // (deal terms + exact saving) is in the hover title. `saved` = the deal is
+      // already in this total (green); `hint` = one more unit reaches it (muted).
       const mbNote = rowMb
         ? (mbSaved > 0
-            ? `<div class="mb-line saved" title="${rowMb.qty} for ${fmt(rowMb.total)} multi-buy - already applied, saving ${fmt(mbSaved)} on this line">deal −${fmt(mbSaved)}</div>`
+            ? mbTag('saved', `${rowMb.qty} for ${fmt(rowMb.total)} multi-buy - already applied, saving ${fmt(mbSaved)} on this line`)
             : nudge
-              ? `<div class="mb-line hint" title="Buy ${nudge.need} more to get ${rowMb.qty} for ${fmt(rowMb.total)} and save ${fmt(nudge.saving)}">+${nudge.need} → −${fmt(nudge.saving)}</div>`
+              ? mbTag('hint', `Buy ${nudge.need} more to get ${rowMb.qty} for ${fmt(rowMb.total)} and save ${fmt(nudge.saving)}`)
               : '')
         : '';
       const cat = getCategory(i, catOv);
@@ -1178,10 +1196,7 @@ async function boot() {
     // Equal-price items (same EFFECTIVE cost at both stores - packs-scaled for
     // per-kg category rows) - reassignable in split mode. Matches the split
     // routing's comparison exactly.
-    const equalItems = displayItems.filter(i => {
-      const w = effPrice(i, 'ww'), c = effPrice(i, 'coles');
-      return w != null && c != null && Math.abs(w - c) < 0.005;
-    });
+    const equalItems = displayItems.filter(i => cheaperStoreNow(i) === 'equal');
     const single = slSplit ? null : singleStoreNow();
     // Card "active" highlight: single mode = the store you're buying at;
     // split mode = where equal-price items are assigned (as before).
@@ -1203,10 +1218,12 @@ async function boot() {
     const deltaHtml = d => d == null ? '' : `<span class="sc-delta">${d >= 0 ? '+' : '−'}${fmt(Math.abs(d))}</span>`;
 
     // ── Save ribbon ──────────────────────────────────────────────────────────
-    // Cheaper-by-EFFECTIVE-cost counts (packs-scaled; matches the split routing).
-    const bothPriced = displayItems.filter(i => effPrice(i, 'ww') != null && effPrice(i, 'coles') != null);
-    const wwOnlyCount = bothPriced.filter(i => effPrice(i, 'ww') < effPrice(i, 'coles') - 0.005).length;
-    const coOnlyCount = bothPriced.filter(i => effPrice(i, 'coles') < effPrice(i, 'ww') - 0.005).length;
+    // Cheaper-store counts are multi-buy AND qty aware (cheaperStoreNow →
+    // lineCost), so they flip with the stepper exactly like the totals and the
+    // split routing - no more "cheaper at WW" on an item a "2 for $4" makes
+    // cheaper at Coles the moment you buy 2.
+    const wwOnlyCount = displayItems.filter(i => cheaperStoreNow(i) === 'ww').length;
+    const coOnlyCount = displayItems.filter(i => cheaperStoreNow(i) === 'coles').length;
     const ribbonChips = [
       wwOnlyCount > 0    ? `<span class="bar-store-chip ww-chip" title="${wwOnlyCount} cheaper at Woolworths"><span class="store-chip ww">W</span>${wwOnlyCount}<span class="chip-word"> at Woolworths</span></span>` : '',
       equalItems.length > 0 ? `<span class="bar-store-chip eq-chip" title="${equalItems.length} same price at both">${equalItems.length}<span class="chip-word"> equal-price</span></span>` : '',
