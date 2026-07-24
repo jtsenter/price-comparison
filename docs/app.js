@@ -2655,7 +2655,7 @@ function computeBannerStats(items) {
   // porterhouse member (monthly by trip-count) was tallied while its group row
   // was hidden. The banner/footer now match exactly what's on screen.
   const perkgMembers = new Set(loadVariantGroups().flatMap(g => g.items));
-  const filtered = items.filter(item => {
+  const baseFiltered = items.filter(item => {
     if (perkgMembers.has(item.list_item)) return false;
     if (_activePriority === 'watchlist') {
       if (!_watchlist.has(item.list_item)) return false;
@@ -2673,6 +2673,10 @@ function computeBannerStats(items) {
     if (item.woolworths?.price == null || item.coles?.price == null) return false;
     return true;
   });
+  // Narrow by the SAME search + column filters the visible table applies, so the
+  // cards/footer reflect only what's on screen (a search for "avo" summarises the
+  // avocado alone, not the whole weekly basket).
+  const filtered = applyValueFilters(baseFiltered);
   const ww_avail = filtered.some(i => i.woolworths?.price != null);
   // Totals weighted by units
   const ww_total = filtered.reduce((s, i) => {
@@ -3419,21 +3423,26 @@ function applyFilters(items, skipCol = null) {
     filtered = filtered.filter(i => getCategory(i) === _activeCategory);
   }
 
+  return applyValueFilters(filtered, skipCol);
+}
+
+// The column (checkbox + numeric) and search filters, split out of applyFilters
+// so the banner/footer totals can run the EXACT same narrowing the visible rows
+// do. Without this the cards summed the whole priority+category basket while the
+// table showed only the searched rows - a search for "avo" left the summary on
+// the full weekly total. One helper = the two can never drift again.
+function applyValueFilters(list, skipCol = null) {
+  let filtered = list;
   // Per-column value (checkbox) filters
   for (const [col, vals] of Object.entries(_colFilters)) {
     if (!vals?.size || col === skipCol) continue;
     filtered = filtered.filter(i => vals.has(getColValue(col, i)));
   }
-
   // Per-column numeric filters (AND'd with checkbox filters)
   for (const [col, nf] of Object.entries(_colNumFilters)) {
     if (!nf || col === skipCol) continue;
-    filtered = filtered.filter(i => {
-      const numVal = getColNumericValue(col, i);
-      return applyNumFilter(numVal, nf);
-    });
+    filtered = filtered.filter(i => applyNumFilter(getColNumericValue(col, i), nf));
   }
-
   // Search query filter
   if (_searchQuery) {
     const terms = searchTerms(_searchQuery);
@@ -3441,7 +3450,6 @@ function applyFilters(items, skipCol = null) {
     filtered = filtered.filter(i =>
       nameMatchesSearch(ovr[i.list_item]?.displayName || i.list_item, terms));
   }
-
   return filtered;
 }
 
