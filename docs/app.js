@@ -886,9 +886,10 @@ function getColNumericValue(col, item) {
     case 'ww':        return item.woolworths?.price ?? null;
     case 'coles':     return item.coles?.price ?? null;
     case 'pct': {
-      const ww = item.woolworths?.price, co = item.coles?.price;
-      if (ww == null || co == null) return null;
-      return Math.abs(ww - co) / Math.max(ww, co) * 100;
+      const u = getUnits(item.list_item);
+      const w = mbEffUnit(item.woolworths, u), c = mbEffUnit(item.coles, u);
+      if (w == null || c == null) return null;
+      return Math.abs(w - c) / Math.max(w, c) * 100;
     }
     case 'saving':    return mbSaving(item);
     case 'units':     return getUnits(item.list_item);
@@ -2666,6 +2667,13 @@ function mbCheaperStore(item) {
   if (c < w - 0.005) return 'coles';
   return 'equal';
 }
+// Effective per-unit price at the current qty (line cost ÷ units) - the number
+// the price column shows once a deal is live, and what the DIFF % must compare
+// (else avocado ×2 stays "12%" off sticker while the real gap is 9% the other way).
+function mbEffUnit(res, units) {
+  const lc = mbLineCost(res, units);
+  return (lc == null || !(units > 0)) ? null : lc / units;
+}
 // qty-weighted saving at the current qty; null when the two stores aren't comparable.
 function mbSaving(item) {
   const u = getUnits(item.list_item);
@@ -3519,9 +3527,13 @@ function sortItems(items) {
       // "1.0kg" items sit together instead of interleaving with "1 unit" items.
       case 'units':    { const u = getUnits(item.list_item); return isKgQty(item.list_item) ? 1e6 + u : u; }
       case 'priority': return PRIORITY_ORDER[getPriority(item.list_item)] ?? 99;
-      case 'pct':
-        return (wwShown != null && coShown != null)
+      case 'pct': {
+        if (item._isGroup) return (wwShown != null && coShown != null)
           ? Math.abs(wwShown - coShown) / Math.max(wwShown, coShown) : NaN;
+        const u = getUnits(item.list_item);
+        const w = mbEffUnit(item.woolworths, u), c = mbEffUnit(item.coles, u);
+        return (w != null && c != null) ? Math.abs(w - c) / Math.max(w, c) : NaN;
+      }
       case 'trend': return trendPositionOf(item); // 0.0=best deal, 1.0=expensive, 999=no history (sorts last)
       case 'category':     return getCategory(item).toLowerCase();
       case 'last_scraped': return item.last_scraped || '';
@@ -5419,12 +5431,14 @@ function _renderPageInner(data) {
     const _trendSeriesPage = getTrendSeries(item);
     const bar = _trendSeriesPage.prices.length ? buildPriceBar(item.list_item, _trendSeriesPage.prices.map(p => ({price: p})), _trendSeriesPage.current) : '';
 
-    // % Cheaper
-    const wwPrice = ww?.price;
-    const coPrice = co?.price;
+    // % Cheaper - compares the EFFECTIVE per-unit prices at the current qty, so a
+    // multi-buy changes the gap (and which store it favours) instead of freezing
+    // on the sticker difference.
+    const wwEff = mbEffUnit(ww, units);
+    const coEff = mbEffUnit(co, units);
     let pctHtml = '';
-    if (wwPrice != null && coPrice != null && wwPrice !== coPrice) {
-      const pct = Math.round(Math.abs(wwPrice - coPrice) / Math.max(wwPrice, coPrice) * 100);
+    if (wwEff != null && coEff != null && Math.abs(wwEff - coEff) > 0.005) {
+      const pct = Math.round(Math.abs(wwEff - coEff) / Math.max(wwEff, coEff) * 100);
       pctHtml = `<span class="${cheaper === 'woolworths' ? 'pct-ww' : 'pct-coles'}">${pct}%</span>`;
     }
 
