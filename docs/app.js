@@ -3450,6 +3450,12 @@ function sortItems(items) {
   const _sortOvr = loadOverrides(); // hoisted: name sort uses displayed names (renames included)
   const filtered = applyFilters(items);
 
+  // Display name as the eye reads it (group label / rename / short name). Used
+  // both by the name sort AND the tiebreaker below, so a per-kg group ties on
+  // "Chicken Thigh", not its internal "__group_chicken_thigh" key.
+  const dispSortName = item => item._isGroup ? item._groupLabel.toLowerCase()
+    : (_sortOvr[item.list_item]?.displayName || (window.PW_NAME_MAP && PW_NAME_MAP[item.list_item]) || stripWW(item.list_item)).toLowerCase();
+
   function getSortVal(col, item) {
     // Price columns must sort by the number the cell DISPLAYS: per-kg groups show
     // $/kg, normal items show pack price. Missing values return NaN so the NaN
@@ -3460,8 +3466,7 @@ function sortItems(items) {
     switch (col) {
       // Sort by what the row DISPLAYS (group label / rename / short name) so
       // A-Z order matches what the eye reads, groups interleaved with items.
-      case 'name':     return item._isGroup ? item._groupLabel.toLowerCase()
-        : (_sortOvr[item.list_item]?.displayName || (window.PW_NAME_MAP && PW_NAME_MAP[item.list_item]) || stripWW(item.list_item)).toLowerCase();
+      case 'name':     return dispSortName(item);
       case 'ww':       return wwShown ?? NaN;
       case 'coles':    return coShown ?? NaN;
       case 'cheaper':  return item.cheaper_store ?? 'zzz';
@@ -3503,8 +3508,13 @@ function sortItems(items) {
       if (ai < bi) return -1 * mul;
       if (ai > bi) return  1 * mul;
     }
-    // Name tiebreaker: ensures identical sort values produce a stable, deterministic order
-    return a.list_item.localeCompare(b.list_item);
+    // Name tiebreaker: identical sort values fall back to the DISPLAYED name, not
+    // the raw list_item. Groups key on "__group_…", whose leading underscore sorts
+    // before every letter - so on a trend sort (where dozens of items legitimately
+    // tie at all-time-low, position 0), all per-kg groups used to float to the very
+    // top ahead of alphabetically-earlier items like Broccolini. Tiebreaking on the
+    // visible name interleaves them the way name→trend already did.
+    return dispSortName(a).localeCompare(dispSortName(b));
   });
 }
 
