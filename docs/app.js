@@ -3808,16 +3808,17 @@ function multiBuyBadge(res) {
 }
 
 const MB_TAG_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24L3.24 9.59A2 2 0 0 0 3.83 11l9.58 9.59a2 2 0 0 0 2.82 0l4.36-4.36a2 2 0 0 0 0-2.82Z"/><circle cx="7.5" cy="7.5" r="1"/></svg>`;
-// Qty-aware multi-buy tag for the main table's price cell. GREEN with the
-// effective per-unit once the deal is live at the current QTY ("$2.00 ea");
-// a muted icon-only hint below the deal quantity (full terms on hover). Compact
-// by design so it never wraps the row onto a second line.
+// Qty-aware multi-buy tag icon for the main table's price cell - rides on the
+// PRICE line, not the unit line. GREEN once the deal is live at the current QTY
+// (the price itself switches to the effective per-unit); a muted hint below the
+// deal quantity. Icon only - the discounted number is shown by the price itself,
+// so a "$X ea" label here would just be noise. Full terms on hover.
 function multiBuyTag(res, units) {
   const mb = res?.multi_buy;
   if (!mb?.qty || mb.total == null || res.price == null) return '';
   if (units >= mb.qty) {
     const eff = multiBuyCost(units, res.price, mb) / units;
-    return `<span class="mb-tag on" title="${mb.qty} for $${mb.total.toFixed(2)} applied - $${eff.toFixed(2)} each at ${units}">${MB_TAG_SVG}<span class="mb-eff">$${eff.toFixed(2)} ea</span></span>`;
+    return `<span class="mb-tag on" title="Multi-buy applied: ${mb.qty} for $${mb.total.toFixed(2)} - $${eff.toFixed(2)} each at ${units} (shelf $${res.price.toFixed(2)})">${MB_TAG_SVG}</span>`;
   }
   return `<span class="mb-tag off" title="Multi-buy: ${mb.qty} for $${mb.total.toFixed(2)} (you're buying ${units}) - buy ${mb.qty - (units % mb.qty)} more to unlock">${MB_TAG_SVG}</span>`;
 }
@@ -5446,15 +5447,22 @@ function _renderPageInner(data) {
     // WW price cell
     let wwCellContent;
     if (ww) {
-      const wwPriceVal = wwUrl
-        ? `<a href="${wwUrl}" target="_blank" rel="noopener" class="price-link">${fmt(ww.price)}</a>`
-        : fmt(ww.price);
+      // Once a multi-buy is live at the current qty, the PRICE itself becomes the
+      // effective per-unit (green) - so a "cheaper" mark is self-explanatory
+      // instead of $3.30 vs $3.30 with a mystery winner.
+      const wwActive = !!(ww.multi_buy?.qty && ww.multi_buy.total != null && units >= ww.multi_buy.qty);
+      const wwShown = wwActive ? multiBuyCost(units, ww.price, ww.multi_buy) / units : ww.price;
+      const wwInner = wwUrl
+        ? `<a href="${wwUrl}" target="_blank" rel="noopener" class="price-link">${fmt(wwShown)}</a>`
+        : fmt(wwShown);
+      const wwPriceVal = wwActive ? `<span class="mb-price">${wwInner}</span>` : wwInner;
       const wwFire = hotDeal && (cheaper === 'woolworths' || (cheaper == null && ww && !co)) ? hotBadge : '';
       const wwNameTip = ww.name ? ` title="${ww.name.replace(/"/g, '&quot;')}"` : '';
-      const wwUnitStr = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : (wwP100.blanked ? '' : fmtUnit(ww.unit_price, ww.unit));
-      // Badge rides INSIDE the unit line - as a sibling block it added a whole
-      // extra line of height to every promo row.
-      wwCellContent = `<div class="price-main"${wwNameTip}>${wwPriceVal}${wwFire}</div><div class="price-unit">${wwUnitStr}${multiBuyTag(ww, units)}</div>`;
+      // /100g follows the effective price too, so a $2.50 headline never sits above a sticker /100g.
+      const wwUnitVal = (wwActive && wwP100.value != null) ? wwP100.value * (wwShown / ww.price) : wwP100.value;
+      const wwUnitStr = wwUnitVal != null ? `$${wwUnitVal.toFixed(2)}/${wwP100.label}` : (wwP100.blanked ? '' : fmtUnit(ww.unit_price, ww.unit));
+      // Tag rides on the PRICE line (green icon when live), not the unit line.
+      wwCellContent = `<div class="price-main"${wwNameTip}>${wwPriceVal}${multiBuyTag(ww, units)}${wwFire}</div><div class="price-unit">${wwUnitStr}</div>`;
     } else {
       const searchUrl = `https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}`;
       wwCellContent = `<a href="${searchUrl}" target="_blank" rel="noopener" class="search-link">Find on WW →</a>`;
@@ -5463,13 +5471,17 @@ function _renderPageInner(data) {
     // Coles price cell
     let coCellContent;
     if (co) {
-      const coPriceVal = coUrl
-        ? `<a href="${coUrl}" target="_blank" rel="noopener" class="price-link">${fmt(co.price)}</a>`
-        : fmt(co.price);
+      const coActive = !!(co.multi_buy?.qty && co.multi_buy.total != null && units >= co.multi_buy.qty);
+      const coShown = coActive ? multiBuyCost(units, co.price, co.multi_buy) / units : co.price;
+      const coInner = coUrl
+        ? `<a href="${coUrl}" target="_blank" rel="noopener" class="price-link">${fmt(coShown)}</a>`
+        : fmt(coShown);
+      const coPriceVal = coActive ? `<span class="mb-price">${coInner}</span>` : coInner;
       const coFire = hotDeal && (cheaper === 'coles' || (cheaper == null && co && !ww)) ? hotBadge : '';
       const coNameTip = co.name ? ` title="${co.name.replace(/"/g, '&quot;')}"` : '';
-      const coUnitStr = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : (coP100.blanked ? '' : fmtUnit(co.unit_price, co.unit));
-      coCellContent = `<div class="price-main"${coNameTip}>${coPriceVal}${coFire}</div><div class="price-unit">${coUnitStr}${multiBuyTag(co, units)}</div>`;
+      const coUnitVal = (coActive && coP100.value != null) ? coP100.value * (coShown / co.price) : coP100.value;
+      const coUnitStr = coUnitVal != null ? `$${coUnitVal.toFixed(2)}/${coP100.label}` : (coP100.blanked ? '' : fmtUnit(co.unit_price, co.unit));
+      coCellContent = `<div class="price-main"${coNameTip}>${coPriceVal}${multiBuyTag(co, units)}${coFire}</div><div class="price-unit">${coUnitStr}</div>`;
     } else {
       const searchUrl = `https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}`;
       coCellContent = `<a href="${searchUrl}" target="_blank" rel="noopener" class="search-link">Find on Coles →</a>`;

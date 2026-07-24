@@ -930,7 +930,9 @@ tr:hover .item-edit-btn { opacity: 1; }
 .mb-tag svg { width: 11px; height: 11px; flex-shrink: 0; }
 .mb-tag.on  { color: var(--ww, #00843D); }          /* deal applied - green */
 .mb-tag.off { color: var(--text-soft, #94A3B8); }   /* hint - muted, icon only */
-.mb-eff { font-variant-numeric: tabular-nums; }
+/* Price shown at its multi-buy effective per-unit (deal live) - green like the tag */
+.mb-price { color: var(--ww, #00843D); }
+.mb-price .price-link { color: inherit; }
 
 /* Trip count badge */
 .trip-count {
