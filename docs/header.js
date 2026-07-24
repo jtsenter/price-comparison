@@ -45,6 +45,7 @@
   /* ── SVG icons (kept as consts so the templates stay readable) ── */
   var SVG_HOT   = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z"/></svg>';
   var SVG_CART  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
+  var SVG_WARN  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
   var SVG_REF   = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
   var SVG_SEARCH= '<svg class="header-search-ico" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
   var SVG_GEAR  = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
@@ -69,8 +70,11 @@
     '.opt-seg-btn{flex:1;padding:6px 8px;font-size:12px;font-weight:600;color:var(--text-mid,#475569);background:none;border:none;border-radius:6px;cursor:pointer;transition:background .12s,color .12s}' +
     '.opt-seg-btn:hover{color:var(--text,#1A1F2E)}' +
     '.opt-seg-btn.active{background:var(--card,#fff);color:var(--text,#1A1F2E);box-shadow:0 1px 2px rgba(0,0,0,.08)}' +
-    '.validate-pill{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 12px;flex-shrink:0;border-radius:9px;text-decoration:none;white-space:nowrap;font-size:13px;font-weight:600;background:transparent;color:var(--text-mid,#475569);border:1px solid var(--border,#CBD5E1);transition:background .12s,color .12s,border-color .12s}' +
-    '.validate-pill:hover{background:var(--bg,#F0F4F8);color:var(--text,#1A1F2E)}' +
+    /* Icon-only now, matching every other header button - word lives in the
+       title tooltip instead of on the button (was "⚠️ Validate (N)" as
+       visible text, alone among the icon-only cluster). */
+    '.validate-btn{position:relative}' +
+    '.validate-badge{position:absolute;top:-4px;right:-4px;display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#c95000;color:#fff;font-size:10px;font-weight:700;line-height:1;border:2px solid var(--card,#fff)}' +
     '.pw-viewer-badge{display:inline-flex;align-items:center;height:20px;padding:0 8px;margin-left:8px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--bg,#F0F4F8);color:var(--text-soft,#94A3B8);border:1px solid var(--border,#E2E8F0);cursor:default;flex-shrink:0}' +
     /* Any control that writes to the repo can carry data-owner-only and vanish
        for visitors, without each page needing its own viewer-mode wiring. */
@@ -89,7 +93,7 @@
        buttons are pixel-identical on every page - basket's inline stylesheet was
        missing style.css's 38px rule, so its icons rendered 33x29 vs 38x38. */
     'header .header-right .btn-icon{height:38px;min-width:38px;justify-content:center;box-sizing:border-box}' +
-    '@media (max-width:700px){.validate-pill{display:none}}';
+    '@media (max-width:700px){.validate-btn{display:none}}';
   var styleEl = document.createElement('style');
   styleEl.id = 'pw-header-css';
   styleEl.textContent = CSS;
@@ -130,8 +134,8 @@
      on every page (index's app.js and the other pages' initNavBell both key
      off the id). */
   var VALIDATE = viewer ? '' :
-    '<a href="validate.html" id="validateNavLink" class="validate-pill"' +
-    (page === 'validate' ? '' : ' style="display:none"') + '>⚠️ Validate</a>';
+    '<a href="validate.html" id="validateNavLink" class="btn btn-ghost btn-icon validate-btn" title="Validate"' +
+    (page === 'validate' ? '' : ' style="display:none"') + '>' + SVG_WARN + '</a>';
 
   /* Tells a visitor WHY the owner-only controls aren't there, so "the buttons are
      missing" doesn't come back as a bug report. */

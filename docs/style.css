@@ -127,18 +127,17 @@ nav a.active { background: var(--bg); color: var(--text); font-weight: 600; }
    mobile nav-destination/fire leak). Height only; centring comes from .btn. */
 header .header-right .btn-icon { height: 38px; min-width: 38px; justify-content: center; }
 
-/* Validate: a quiet pill between the search box and the icon cluster (only
-   rendered when there are prices to review). Deliberately low-key - ghost
-   chrome, muted text - so it's findable without shouting for attention. */
-.validate-pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  height: 38px; padding: 0 12px; flex-shrink: 0;
-  border-radius: 9px; text-decoration: none; white-space: nowrap;
-  font-size: 13px; font-weight: 600;
-  background: transparent; color: var(--text-mid); border: 1px solid var(--border-strong);
-  transition: background .12s, color .12s, border-color .12s;
+/* Validate: icon-only, matching every other header button (only rendered
+   when there are prices to review) - word lives in the title tooltip, count
+   in a small corner badge, same pattern as .import-badge. */
+.validate-btn { position: relative; }
+.validate-badge {
+  position: absolute; top: -4px; right: -4px;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px;
+  background: #c95000; color: #fff; font-size: 10px; font-weight: 700; line-height: 1;
+  border: 2px solid var(--card, #fff);
 }
-.validate-pill:hover { background: var(--bg); color: var(--text); border-color: var(--text-soft); }
 
 /* Icon-only nav destinations in the header action cluster (Hot Deals, Basket,
    Watchlist). Same ghost-button chrome as the utility buttons beside them, but
@@ -2014,7 +2013,7 @@ td.priority-cell { text-align: center; }
   .price-bar-outer { display: none; }
   /* Mobile: the bottom tab bar + header action icons cover navigation, so drop
      the left nav and the desktop nav-icon cluster to give the search room. */
-  #mainNav, .nav-icon-btn, .header-div, .validate-pill { display: none; }
+  #mainNav, .nav-icon-btn, .header-div, .validate-btn { display: none; }
   .header-search { min-width: 60px; }
   /* The "Category" row label is desktop-only - on a phone it just steals width
      from the scrolling category tabs. (Desktop keeps it as a section cue.) */

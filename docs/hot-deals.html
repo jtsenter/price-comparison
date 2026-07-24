@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=112" />
+  <link rel="stylesheet" href="style.css?v=113" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -359,7 +359,7 @@
 <body>
 
 <header data-page="hot-deals"></header>
-<script src="header.js?v=13"></script>
+<script src="header.js?v=14"></script>
 
 <div class="deals-hero">
   <div class="deals-hero-title">🔥 Hot Deals</div>
@@ -1341,7 +1341,16 @@ function updateValidateNavBadge(count) {
   const link = document.getElementById('validateNavLink');
   if (!link) return;
   link.style.display = count > 0 ? '' : 'none';
-  link.textContent = `⚠️ Validate (${count})`;
+  // textContent would wipe the icon header.js already put there - update the
+  // tooltip and a small corner count badge instead, same pattern as importBtn.
+  link.title = count > 0 ? `Validate (${count} pending)` : 'Validate';
+  let badge = link.querySelector('.validate-badge');
+  if (!badge) {
+    badge = document.createElement('span');
+    badge.className = 'validate-badge';
+    link.appendChild(badge);
+  }
+  badge.textContent = count;
 }
 
 // ── Tooltip ───────────────────────────────────────────────────────────────────

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>⚠️ Validate Prices - PriceWatch</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="style.css?v=112" />
+  <link rel="stylesheet" href="style.css?v=113" />
   <style>
     /* ── Validate page overrides ── */
     .validate-hero {
@@ -263,7 +263,7 @@
 <body>
 
 <header data-page="validate"></header>
-<script src="header.js?v=13"></script>
+<script src="header.js?v=14"></script>
 
 <div class="notif-dropdown" id="notifDropdown" style="display:none">
   <div class="notif-header">
@@ -798,8 +798,18 @@ function markCardResolved(cardEl) {
 function updateValidateNavBadge(count) {
   const link = document.getElementById('validateNavLink');
   if (!link) return;
-  // On the validate page itself the link is always visible/active
-  link.textContent = count > 0 ? `⚠️ Validate (${count})` : '⚠️ Validate';
+  // On the validate page itself the link is always visible/active. textContent
+  // would wipe the icon header.js already put there - tooltip + corner badge
+  // carry the count instead.
+  link.title = count > 0 ? `Validate (${count} pending)` : 'Validate';
+  let badge = link.querySelector('.validate-badge');
+  if (!badge) {
+    badge = document.createElement('span');
+    badge.className = 'validate-badge';
+    link.appendChild(badge);
+  }
+  badge.style.display = count > 0 ? '' : 'none';
+  badge.textContent = count;
 }
 
 // ── Confirm All ───────────────────────────────────────────────────────────────

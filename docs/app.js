@@ -5556,7 +5556,16 @@ function updateValidateNavBadge(count) {
   const link = document.getElementById('validateNavLink');
   if (!link) return;
   link.style.display = count > 0 ? '' : 'none';
-  link.textContent = `⚠️ Validate (${count})`;
+  // textContent would wipe the icon header.js already put there - update the
+  // tooltip and a small corner count badge instead, same pattern as importBtn.
+  link.title = count > 0 ? `Validate (${count} pending)` : 'Validate';
+  let badge = link.querySelector('.validate-badge');
+  if (!badge) {
+    badge = document.createElement('span');
+    badge.className = 'validate-badge';
+    link.appendChild(badge);
+  }
+  badge.textContent = count;
 }
 
 // (The name-changes notification bell was retired - the validate pill is the

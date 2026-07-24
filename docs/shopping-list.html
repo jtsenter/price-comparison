@@ -515,7 +515,7 @@
 </head>
 <body>
 <header data-page="shopping-list"></header>
-<script src="header.js?v=13"></script>
+<script src="header.js?v=14"></script>
 
 <main id="main">
   <div class="empty">Loading…</div>
@@ -1410,7 +1410,18 @@ boot();
         const data = await r.json();
         const count = pendingValidationCount(data.pending_validation);
         validateLink.style.display = count > 0 ? '' : 'none';
-        if (count > 0) validateLink.textContent = `⚠️ Validate (${count})`;
+        // textContent would wipe the icon header.js already put there - the
+        // tooltip and a small corner count badge carry the count instead.
+        if (count > 0) {
+          validateLink.title = `Validate (${count} pending)`;
+          let badge = validateLink.querySelector('.validate-badge');
+          if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'validate-badge';
+            validateLink.appendChild(badge);
+          }
+          badge.textContent = count;
+        }
       }
     } catch {}
   }
