@@ -20,54 +20,139 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=113" />
+  <link rel="stylesheet" href="style.css?v=115" />
   <style>
-    .sl-main { max-width: 900px; margin: 0 auto; padding: 20px 24px 60px; }
-    .sl-info-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius, 10px);
-      padding: 16px 20px; margin-bottom: 20px;
+    .sl-main { max-width: 960px; margin: 0 auto; padding: 20px 24px 60px; }
+
+    /* ── Hero: the one-glance answer (did the last scrape work, and how well) ── */
+    .sl-hero {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 18px 20px; margin-bottom: 14px;
+      display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 20px; align-items: center;
     }
+    .sl-hero-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .sl-hero-dot.ok { background: var(--ww); }
+    .sl-hero-dot.warn { background: #D97706; }
+    .sl-hero-dot.bad { background: var(--coles); }
+    .sl-hero-label { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em; color: var(--text-soft); }
+    .sl-hero-h { font-size: 23px; font-weight: 700; color: var(--text); margin: 5px 0 3px; line-height: 1.15; }
+    .sl-hero-sub { font-size: 12.5px; color: var(--text-mid); }
+    .sl-hero-sub b { color: var(--text); font-weight: 600; }
+    /* Two store gauges, side by side, right of the headline */
+    .sl-gauges { display: flex; gap: 10px; }
+    .sl-gauge {
+      min-width: 108px; border: 1px solid var(--border); border-radius: 11px;
+      padding: 9px 12px 10px; background: var(--bg);
+    }
+    .sl-gauge-top { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: var(--text-mid); }
+    .sl-gauge-pct { font-size: 21px; font-weight: 700; color: var(--text); line-height: 1.1; margin-top: 3px; font-variant-numeric: tabular-nums; }
+    .sl-gauge-meta { font-size: 10.5px; color: var(--text-soft); font-variant-numeric: tabular-nums; }
+    .sl-gauge-track { height: 4px; border-radius: 2px; background: var(--border); overflow: hidden; margin-top: 6px; }
+    .sl-gauge-fill { height: 100%; border-radius: 2px; display: block; }
+    .sl-gauge.ww .sl-gauge-fill { background: var(--ww); }
+    .sl-gauge.coles .sl-gauge-fill { background: var(--coles); }
+    @media (max-width: 640px) {
+      .sl-main { padding: 14px 14px 60px; }
+      .sl-hero { grid-template-columns: 1fr; gap: 14px; padding: 15px 16px; }
+      .sl-hero-h { font-size: 19px; }
+      .sl-gauges { display: grid; grid-template-columns: 1fr 1fr; }
+      .sl-gauge { min-width: 0; }
+    }
+
+    /* ── Generic card ── */
+    .sl-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px 20px; margin-bottom: 14px;
+    }
+    .sl-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+    .sl-card h2 { font-size: 14px; font-weight: 700; margin: 0; color: var(--text); }
+    .sl-card-sub { font-size: 11.5px; color: var(--text-soft); }
+    /* Legacy alias so the diagnostics cards keep their look */
+    .sl-info-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin-bottom: 14px; }
     .sl-info-card h2 { font-size: 14px; font-weight: 700; margin: 0 0 10px; color: var(--text); }
-    .sl-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 12px; }
-    .sl-info-stat { }
-    .sl-info-stat .n { font-size: 20px; font-weight: 700; color: var(--text); }
-    .sl-info-stat .l { font-size: 11px; color: var(--text-soft); text-transform: uppercase; letter-spacing: .04em; }
-    /* There are exactly 6 stats. auto-fit's 150px minimum only fits 5 across the
-       900px card, so the 6th wrapped onto its own row. Force all 6 into one row
-       above the mobile breakpoint (minmax(0,1fr) lets columns shrink below their
-       label's natural width - labels wrap onto 2 lines instead, which is fine). */
-    @media (min-width: 641px) {
-      .sl-info-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
-      .sl-info-stat .n { font-size: 17px; }
-      .sl-info-stat .l { font-size: 10px; }
-    }
     .sl-info-notes { list-style: none; padding: 0; margin: 10px 0 0; font-size: 12px; color: var(--text-mid); border-top: 1px solid var(--border); padding-top: 10px; }
     .sl-info-notes li { padding: 3px 0 3px 16px; position: relative; }
     .sl-info-notes li::before { content: '•'; position: absolute; left: 0; color: var(--text-soft); }
     .sl-info-notes a { color: var(--ww); }
 
-    .sl-runs { display: flex; flex-direction: column; gap: 10px; }
-    .sl-run { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius, 10px); overflow: hidden; }
+    /* ── Match-rate trend chart (SVG, one line per store) ── */
+    .sl-chart-wrap { margin-top: 10px; position: relative; }
+    .sl-chart-wrap svg { display: block; width: 100%; height: 132px; overflow: visible; }
+    .sl-chart-legend { display: flex; gap: 14px; align-items: center; font-size: 11.5px; color: var(--text-mid); margin-top: 8px; flex-wrap: wrap; }
+    .sl-leg { display: inline-flex; align-items: center; gap: 5px; }
+    .sl-leg i { width: 12px; height: 3px; border-radius: 2px; display: inline-block; }
+    .sl-chart-tip {
+      position: absolute; pointer-events: none; opacity: 0; transition: opacity .12s;
+      background: var(--text); color: var(--card); font-size: 11px; line-height: 1.45;
+      padding: 6px 9px; border-radius: 7px; white-space: nowrap; z-index: 5; font-variant-numeric: tabular-nums;
+    }
+    .sl-chart-tip.on { opacity: 1; }
+
+    /* ── Secondary stat strip ── */
+    .sl-stats { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+    .sl-stat { background: var(--bg); border-radius: 10px; padding: 10px 12px; }
+    .sl-stat .n { font-size: 17px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+    .sl-stat .l { font-size: 10.5px; color: var(--text-soft); text-transform: uppercase; letter-spacing: .04em; margin-top: 1px; }
+    @media (max-width: 640px) { .sl-stats { grid-template-columns: 1fr 1fr; } }
+
+    /* ── Tabs ── */
+    .sl-tabs { display: flex; gap: 4px; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 11px; padding: 4px; margin-bottom: 14px; }
+    .sl-tab {
+      flex: 1; border: none; background: transparent; cursor: pointer;
+      font-size: 12.5px; font-weight: 600; color: var(--text-mid);
+      padding: 8px 10px; border-radius: 8px; font-family: inherit;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .sl-tab:hover { color: var(--text); }
+    .sl-tab.active { background: var(--card); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+    .sl-tab .cnt { font-size: 10.5px; font-weight: 700; color: var(--text-soft); background: var(--bg);
+      border-radius: 9px; padding: 1px 6px; }
+    .sl-tab.active .cnt { background: var(--bg); color: var(--text-mid); }
+    @media (max-width: 480px) { .sl-tab { font-size: 11.5px; padding: 8px 4px; } .sl-tab .cnt { display: none; } }
+
+    .sl-runs { display: flex; flex-direction: column; gap: 8px; }
+    .sl-run { background: var(--card); border: 1px solid var(--border); border-radius: 11px; overflow: hidden; }
+    .sl-run.open { border-color: var(--text-soft); }
+    /* A run where a whole store collapsed (<50%) gets a red edge - the "Coles got
+       rate-banned" runs must be findable by eye in a list of 30. */
+    .sl-run.alarm { border-left: 3px solid var(--coles); }
     .sl-run-head {
-      display: flex; align-items: center; gap: 14px; padding: 12px 16px; cursor: pointer;
-      flex-wrap: wrap;
+      display: grid; grid-template-columns: 150px auto minmax(0,1fr) auto auto; align-items: center;
+      gap: 14px; padding: 11px 14px; cursor: pointer;
     }
     .sl-run-head:hover { background: var(--bg); }
-    .sl-run-date { font-size: 13px; font-weight: 700; color: var(--text); min-width: 150px; }
-    .sl-run-date .rel { font-weight: 500; color: var(--text-soft); font-size: 11px; display: block; }
+    .sl-run-date { font-size: 12.5px; font-weight: 600; color: var(--text); }
+    .sl-run-date .rel { font-weight: 500; color: var(--text-soft); font-size: 10.5px; display: block; }
     .sl-run-trigger {
-      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
-      padding: 2px 8px; border-radius: 10px; background: var(--bg); color: var(--text-mid); border: 1px solid var(--border);
+      font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+      padding: 2px 7px; border-radius: 9px; background: var(--bg); color: var(--text-mid);
+      border: 1px solid var(--border); justify-self: start;
     }
-    .sl-store-stat { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
-    .sl-store-stat .bar-track { width: 60px; height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
-    .sl-store-stat .bar-fill { height: 100%; border-radius: 3px; }
+    /* Both store rates share one cell so the bars line up down the whole list */
+    .sl-run-rates { display: flex; gap: 14px; align-items: center; min-width: 0; }
+    .sl-store-stat { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600;
+      font-variant-numeric: tabular-nums; }
+    .sl-store-stat .bar-track { width: 54px; height: 5px; border-radius: 3px; background: var(--border); overflow: hidden; }
+    .sl-store-stat .bar-fill { height: 100%; border-radius: 3px; display: block; }
     .sl-store-stat.ww .bar-fill { background: var(--ww); }
     .sl-store-stat.coles .bar-fill { background: var(--coles); }
-    .sl-run-spacer { flex: 1; }
-    .sl-chevron { font-size: 12px; color: var(--text-soft); transition: transform .15s; }
+    .sl-miss-count { font-size: 11.5px; color: var(--text-soft); white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .sl-chevron { font-size: 11px; color: var(--text-soft); transition: transform .15s; }
     .sl-run.open .sl-chevron { transform: rotate(90deg); }
-    .sl-run-body { display: none; border-top: 1px solid var(--border); padding: 14px 16px; }
+    .sl-run-body { display: none; border-top: 1px solid var(--border); padding: 14px 16px; background: var(--bg); }
+    /* Mobile: flex-wrap into exactly TWO lines (date+trigger+chevron / rates+missed).
+       The grid stacked all four cells and made every row 131px - punishing in a
+       30-run list. The 200px flex-basis is what forces the break before rates. */
+    @media (max-width: 700px) {
+      .sl-run-head { display: flex; flex-wrap: wrap; align-items: center; gap: 7px 9px; }
+      .sl-run-date { flex: 1 1 auto; }
+      .sl-run-trigger { flex: 0 0 auto; }
+      .sl-chevron { flex: 0 0 auto; }
+      .sl-run-rates { flex: 1 1 200px; }
+      .sl-miss-count { flex: 0 0 auto; margin-left: auto; }
+    }
     .sl-run.open .sl-run-body { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     @media (max-width: 640px) {
       .sl-run.open .sl-run-body { grid-template-columns: 1fr; }
@@ -116,10 +201,6 @@
     :root[data-theme="dark"] .sl-miss-reason.no_results { background: #450a0a; color: #fca5a5; }
     :root[data-theme="dark"] .sl-miss-reason.no_match { background: #422006; color: #fcd34d; }
     .sl-empty-state { text-align: center; padding: 60px 20px; color: var(--text-soft); }
-    /* The run list sits directly under the stats card with no heading of its own,
-       so it read as a continuation of "Scrape log" above rather than its own
-       section - same h2 treatment the other cards already use. */
-    .sl-section-h { font-size: 14px; font-weight: 700; margin: 4px 0 10px; color: var(--text); }
   </style>
 </head>
 <body>
@@ -128,61 +209,88 @@
 <script src="header.js?v=14"></script>
 
 <main class="sl-main">
-  <div class="sl-info-card">
-    <h2>Scrape log</h2>
-    <div class="sl-info-grid" id="slInfoGrid"></div>
-    <!-- Collapsed by default: the stats above are the signal, this prose pushed
-         the actual run data a full screen down (especially on mobile). -->
-    <details class="sl-info-details">
-      <summary style="cursor:pointer;font-size:12px;font-weight:600;color:var(--text-mid);padding:4px 0">How to read this log</summary>
-      <ul class="sl-info-notes" id="slInfoNotes"></ul>
-    </details>
-  </div>
-
-  <div class="sl-info-card" id="slChangesCard" style="display:none">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-      <h2>Price change history</h2>
-      <input type="search" id="slChangeSearch" placeholder="Filter by product…"
-             style="font-size:12px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);max-width:220px">
+  <!-- Hero: the question this page exists to answer - did the last scrape work? -->
+  <section class="sl-hero">
+    <div>
+      <div class="sl-hero-label"><span class="sl-hero-dot" id="slHeroDot"></span><span id="slHeroKicker">Last scrape</span></div>
+      <div class="sl-hero-h" id="slHeroH">Loading…</div>
+      <div class="sl-hero-sub" id="slHeroSub"></div>
     </div>
-    <p style="font-size:12px;color:var(--text-mid);margin:0 0 12px">
-      Every price move each scrape records, kept <strong>indefinitely</strong> (not capped like the run log above).
-      <span class="chg-up">▲ red</span> = went up, <span class="chg-down">▼ green</span> = went down.
-    </p>
-    <div id="slChangeRuns"></div>
+    <div class="sl-gauges" id="slGauges"></div>
+  </section>
+
+  <!-- The trend nobody could see before: match rate per store across every run. -->
+  <section class="sl-card" id="slTrendCard" style="display:none">
+    <div class="sl-card-head">
+      <h2>Match rate over time</h2>
+      <span class="sl-card-sub" id="slTrendSub"></span>
+    </div>
+    <div class="sl-chart-wrap">
+      <div class="sl-chart-tip" id="slTip"></div>
+      <div id="slChart"></div>
+    </div>
+    <div class="sl-chart-legend">
+      <span class="sl-leg"><i style="background:var(--ww)"></i> Woolworths</span>
+      <span class="sl-leg"><i style="background:var(--coles)"></i> Coles</span>
+      <span class="sl-leg" style="color:var(--text-soft)">Hover a point for that run</span>
+    </div>
+  </section>
+
+  <section class="sl-card">
+    <div class="sl-stats" id="slStats"></div>
+  </section>
+
+  <div class="sl-tabs" role="tablist">
+    <button class="sl-tab active" data-tab="runs" role="tab">Runs <span class="cnt" id="slCntRuns"></span></button>
+    <button class="sl-tab" data-tab="changes" role="tab">Price changes <span class="cnt" id="slCntChg"></span></button>
+    <button class="sl-tab" data-tab="diag" role="tab">Diagnostics</button>
   </div>
 
-  <h2 class="sl-section-h">Recent runs</h2>
-  <div id="slRuns" class="sl-runs"></div>
+  <div data-panel="runs">
+    <div id="slRuns" class="sl-runs"></div>
+  </div>
 
-  <!-- Diagnostic drill-downs, moved to the bottom and collapsed by default:
-       useful when hunting a specific problem, but neither is the reason
-       anyone opens this page day-to-day - they used to push the actual run
-       list a full screen down. -->
-  <div class="sl-info-card" id="slChronicCard" style="display:none">
-    <details class="sl-info-details">
-      <summary class="sl-section-h" style="cursor:pointer;display:inline-block">Chronic misses - items to track down</summary>
-      <p style="font-size:12px;color:var(--text-mid);margin:10px 0">
+  <div data-panel="changes" hidden>
+    <div class="sl-card" id="slChangesCard">
+      <div class="sl-card-head">
+        <h2>Price change history</h2>
+        <input type="search" id="slChangeSearch" placeholder="Filter by product…"
+               style="font-size:12px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);max-width:220px">
+      </div>
+      <p style="font-size:12px;color:var(--text-mid);margin:6px 0 12px">
+        Every price move each scrape records, kept <strong>indefinitely</strong> (not capped like the run log).
+        <span class="chg-up">▲ red</span> = went up, <span class="chg-down">▼ green</span> = went down.
+      </p>
+      <div id="slChangeRuns"></div>
+    </div>
+  </div>
+
+  <div data-panel="diag" hidden>
+    <div class="sl-info-card" id="slChronicCard" style="display:none">
+      <h2>Chronic misses — items to track down</h2>
+      <p style="font-size:12px;color:var(--text-mid);margin:0 0 12px">
         Missed in more than one logged run. A one-off miss is noise; a repeat miss means
-        the price is quietly going stale - usually a broken match or a delisted product
+        the price is quietly going stale — usually a broken match or a delisted product
         worth re-pinning via ✎ Edit on the main page.
       </p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" class="sl-chronic-cols" id="slChronicCols"></div>
-    </details>
-  </div>
+    </div>
 
-  <div class="sl-info-card" id="slWishlistCard" style="display:none">
-    <details class="sl-info-details">
-      <summary class="sl-section-h" style="cursor:pointer;display:inline-block">Searches with no results</summary>
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px">
-        <p style="font-size:12px;color:var(--text-mid);margin:0">
-          Things you searched for that aren't in your list yet - candidates to add to
-          <code>shopping_list.xlsx</code>. Recorded on this device only.
-        </p>
+    <div class="sl-info-card" id="slWishlistCard" style="display:none">
+      <div class="sl-card-head"><h2>Searches with no results</h2>
         <button class="btn btn-ghost" id="slWishlistClear" style="font-size:12px;flex-shrink:0">Clear</button>
       </div>
+      <p style="font-size:12px;color:var(--text-mid);margin:6px 0 0">
+        Things you searched for that aren't in your list yet — candidates to add to
+        <code>shopping_list.xlsx</code>. Recorded on this device only.
+      </p>
       <ul class="sl-miss-list" id="slWishlist" style="max-height:none;margin-top:10px"></ul>
-    </details>
+    </div>
+
+    <div class="sl-info-card">
+      <h2>How to read this log</h2>
+      <ul class="sl-info-notes" id="slInfoNotes" style="border-top:none;padding-top:0"></ul>
+    </div>
   </div>
 </main>
 
@@ -284,26 +392,31 @@ function renderRun(run, prevRun) {
     const prevCoMissed = normaliseMissed(prevRun.coles_missed).length;
     const prevCoPct = Math.round((prevCoTotal - prevCoMissed) / prevCoTotal * 100);
     const d = (wwPct - prevWwPct) + (coPct - prevCoPct);
-    if (d > 4) trend = ' <span style="color:var(--ww);font-size:11px">▲ improving</span>';
-    else if (d < -4) trend = ' <span style="color:var(--coles);font-size:11px">▼ worse</span>';
+    if (d > 4) trend = '<span style="color:var(--ww);font-size:11px;font-weight:600">▲ improving</span>';
+    else if (d < -4) trend = '<span style="color:var(--coles);font-size:11px;font-weight:600">▼ worse</span>';
   }
 
+  const totalMissed = wwMissed.length + coMissed.length;
   const el = document.createElement('div');
-  el.className = 'sl-run';
+  // A run where either store fell below half is the shape of a rate-ban - flag it
+  // so it stands out in a list of 30 near-identical rows.
+  el.className = 'sl-run' + ((wwPct < 50 || coPct < 50) ? ' alarm' : '');
   el.innerHTML = `
     <div class="sl-run-head">
       <div class="sl-run-date">${fmtDate(run.date)}<span class="rel">${timeAgo(run.date)}</span></div>
-      <span class="sl-run-trigger">${run.trigger || 'unknown'}</span>
-      <div class="sl-store-stat ww" title="${wwOk} of ${wwTotal} items attempted at Woolworths matched this run">
-        <span class="store-chip sm ww">W</span> ${wwPct}%
-        <span class="bar-track"><span class="bar-fill" style="width:${wwPct}%"></span></span>
+      <span class="sl-run-trigger">${escapeHtml(run.trigger || 'unknown')}</span>
+      <div class="sl-run-rates">
+        <div class="sl-store-stat ww" title="${wwOk} of ${wwTotal} items attempted at Woolworths matched this run">
+          <span class="store-chip sm ww">W</span> ${wwPct}%
+          <span class="bar-track"><span class="bar-fill" style="width:${wwPct}%"></span></span>
+        </div>
+        <div class="sl-store-stat coles" title="${coOk} of ${coTotal} items attempted at Coles matched this run">
+          <span class="store-chip sm coles">C</span> ${coPct}%
+          <span class="bar-track"><span class="bar-fill" style="width:${coPct}%"></span></span>
+        </div>
+        ${trend}
       </div>
-      <div class="sl-store-stat coles" title="${coOk} of ${coTotal} items attempted at Coles matched this run">
-        <span class="store-chip sm coles">C</span> ${coPct}%
-        <span class="bar-track"><span class="bar-fill" style="width:${coPct}%"></span></span>
-      </div>
-      ${trend}
-      <div class="sl-run-spacer"></div>
+      <span class="sl-miss-count">${totalMissed ? totalMissed + ' missed' : 'all matched'}</span>
       <span class="sl-chevron">▸</span>
     </div>
     <div class="sl-run-body">
@@ -318,6 +431,74 @@ function renderRun(run, prevRun) {
     </div>`;
   el.querySelector('.sl-run-head').addEventListener('click', () => el.classList.toggle('open'));
   return el;
+}
+
+// ── Match-rate trend chart ───────────────────────────────────────────────────
+// One polyline per store across every logged run, oldest → newest. Y is 0-100%
+// so a collapse (rate-ban) reads as a cliff rather than a wiggle in a rescaled
+// window. Points carry their run's numbers for the hover tip.
+function runPct(run, store) {
+  const t = attempted(run, store);
+  const missed = normaliseMissed(store === 'ww' ? run.ww_missed : run.coles_missed).length;
+  return t ? Math.round((t - missed) / t * 100) : 0;
+}
+
+function renderTrendChart(log) {
+  const card = $('slTrendCard');
+  if (log.length < 2) { card.style.display = 'none'; return; }
+  card.style.display = '';
+  $('slTrendSub').textContent = `last ${log.length} runs`;
+
+  const W = 900, H = 132, padL = 30, padR = 8, padT = 10, padB = 20;
+  const n = log.length;
+  const x = i => padL + (n === 1 ? 0 : i * (W - padL - padR) / (n - 1));
+  const y = p => padT + (100 - p) * (H - padT - padB) / 100;
+
+  const pts = store => log.map((r, i) => ({ i, x: x(i), y: y(runPct(r, store)), pct: runPct(r, store), run: r }));
+  const wwPts = pts('ww'), coPts = pts('coles');
+  const path = ps => ps.map((p, i) => `${i ? 'L' : 'M'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+  // Only dot the ends on a long series - 30 circles per line is noise.
+  const dots = (ps, col) => ps.map(p =>
+    `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${n > 16 ? 2 : 3}" fill="${col}"/>`).join('');
+  const grid = [0, 50, 100].map(p =>
+    `<line x1="${padL}" y1="${y(p)}" x2="${W - padR}" y2="${y(p)}" stroke="var(--border)" stroke-width="1"/>` +
+    `<text x="${padL - 6}" y="${y(p) + 3.5}" text-anchor="end" font-size="9.5" fill="var(--text-soft)">${p}%</text>`
+  ).join('');
+
+  $('slChart').innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img"
+         aria-label="Match rate per store across the last ${n} scrape runs">
+      ${grid}
+      <path d="${path(wwPts)}" fill="none" stroke="var(--ww)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+      <path d="${path(coPts)}" fill="none" stroke="var(--coles)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+      ${dots(wwPts, 'var(--ww)')}${dots(coPts, 'var(--coles)')}
+      <text x="${padL}" y="${H - 6}" font-size="9.5" fill="var(--text-soft)">oldest</text>
+      <text x="${W - padR}" y="${H - 6}" text-anchor="end" font-size="9.5" fill="var(--text-soft)">newest</text>
+      <rect id="slChartHit" x="${padL}" y="0" width="${W - padL - padR}" height="${H}" fill="transparent"/>
+    </svg>`;
+
+  // Hover: nearest run by x, in the SVG's own viewBox coordinates (the svg is
+  // width:100% so client px ≠ viewBox units - scale by the rendered width).
+  const svg = $('slChart').querySelector('svg');
+  const tip = $('slTip');
+  const wrap = svg.closest('.sl-chart-wrap');
+  const move = (clientX) => {
+    const box = svg.getBoundingClientRect();
+    const vx = (clientX - box.left) * W / box.width;
+    let best = 0, bestD = Infinity;
+    for (let i = 0; i < n; i++) { const d = Math.abs(x(i) - vx); if (d < bestD) { bestD = d; best = i; } }
+    const r = log[best];
+    tip.innerHTML = `<b>${fmtDate(r.date)}</b><br>W ${runPct(r, 'ww')}% · C ${runPct(r, 'coles')}%`;
+    tip.classList.add('on');
+    const wb = wrap.getBoundingClientRect();
+    const px = box.left - wb.left + x(best) * box.width / W;
+    tip.style.left = Math.max(0, Math.min(px - tip.offsetWidth / 2, wb.width - tip.offsetWidth)) + 'px';
+    tip.style.top = '0px';
+  };
+  svg.addEventListener('mousemove', e => move(e.clientX));
+  svg.addEventListener('mouseleave', () => tip.classList.remove('on'));
+  svg.addEventListener('touchstart', e => move(e.touches[0].clientX), { passive: true });
+  svg.addEventListener('touchmove', e => move(e.touches[0].clientX), { passive: true });
 }
 
 // ── Price change archive (uncapped, from price_changes.json) ─────────────────
@@ -412,14 +593,56 @@ async function load() {
     ? Math.round((attempted(lastRun, 'coles') - normaliseMissed(lastRun.coles_missed).length) / (attempted(lastRun, 'coles') || 1) * 100)
     : null;
 
-  $('slInfoGrid').innerHTML = `
-    <div class="sl-info-stat"><div class="n">${log.length}</div><div class="l">Runs logged</div></div>
-    <div class="sl-info-stat"><div class="n">${items.length}</div><div class="l">Items tracked</div></div>
-    <div class="sl-info-stat"><div class="n">${archivedCount}</div><div class="l">Archived (skipped weekly)</div></div>
-    <div class="sl-info-stat"><div class="n">${lastRun ? timeAgo(lastRun.date) : '-'}</div><div class="l">Last scrape</div></div>
-    <div class="sl-info-stat"><div class="n">${lastRunWwPct != null ? lastRunWwPct + '%' : '-'}</div><div class="l">WW success (last run)</div></div>
-    <div class="sl-info-stat"><div class="n">${lastRunCoPct != null ? lastRunCoPct + '%' : '-'}</div><div class="l">Coles success (last run)</div></div>
+  // ── Hero ──────────────────────────────────────────────────────────────────
+  // Worst store drives the verdict: a 96% WW run is not "healthy" if Coles got 0%.
+  const worst = Math.min(lastRunWwPct ?? 0, lastRunCoPct ?? 0);
+  const state = !lastRun ? 'bad' : worst >= 85 ? 'ok' : worst >= 50 ? 'warn' : 'bad';
+  // Describes the SCRAPE, not the prices - "prices are up to date" next to
+  // "34 items missed" contradicts itself (a chronic miss carries a stale price
+  // forward, which is exactly what this page exists to surface).
+  const verdict = !lastRun ? 'No scrapes logged yet'
+    : state === 'ok' ? 'Last scrape looks healthy'
+    : state === 'warn' ? 'Last scrape was patchy'
+    : 'Last scrape mostly failed';
+  $('slHeroDot').className = 'sl-hero-dot ' + state;
+  $('slHeroKicker').textContent = lastRun ? `Last scrape · ${escapeHtml(lastRun.trigger || 'run')}` : 'Scrape log';
+  $('slHeroH').textContent = verdict;
+  const missedNow = lastRun
+    ? normaliseMissed(lastRun.ww_missed).length + normaliseMissed(lastRun.coles_missed).length : 0;
+  $('slHeroSub').innerHTML = lastRun
+    ? `<b>${timeAgo(lastRun.date)}</b> · ${fmtDate(lastRun.date)}` +
+      (missedNow ? ` · <b>${missedNow}</b> item${missedNow === 1 ? '' : 's'} missed` : ' · every item matched')
+    : 'Run a scrape from the main page to populate this log.';
+
+  const gauge = (cls, chip, label, pct, run, store) => {
+    if (pct == null) return `<div class="sl-gauge ${cls}"><div class="sl-gauge-top">${chip} ${label}</div>
+      <div class="sl-gauge-pct">–</div><div class="sl-gauge-meta">no data</div></div>`;
+    const t = attempted(run, store);
+    const ok = t - normaliseMissed(store === 'ww' ? run.ww_missed : run.coles_missed).length;
+    return `<div class="sl-gauge ${cls}" title="${ok} of ${t} items attempted at ${label} matched on the last run">
+      <div class="sl-gauge-top">${chip} ${label}</div>
+      <div class="sl-gauge-pct">${pct}%</div>
+      <div class="sl-gauge-meta">${ok}/${t} matched</div>
+      <div class="sl-gauge-track"><span class="sl-gauge-fill" style="width:${pct}%"></span></div>
+    </div>`;
+  };
+  $('slGauges').innerHTML =
+    gauge('ww', '<span class="store-chip sm ww">W</span>', 'Woolworths', lastRunWwPct, lastRun, 'ww') +
+    gauge('coles', '<span class="store-chip sm coles">C</span>', 'Coles', lastRunCoPct, lastRun, 'coles');
+
+  // Average match rate across the whole logged window - the "is this normal?" number.
+  const avgAll = log.length
+    ? Math.round(log.reduce((s, r) => s + (runPct(r, 'ww') + runPct(r, 'coles')) / 2, 0) / log.length)
+    : null;
+  $('slStats').innerHTML = `
+    <div class="sl-stat"><div class="n">${log.length}</div><div class="l">Runs logged</div></div>
+    <div class="sl-stat"><div class="n">${items.length}</div><div class="l">Items tracked</div></div>
+    <div class="sl-stat"><div class="n">${archivedCount}</div><div class="l">Archived</div></div>
+    <div class="sl-stat"><div class="n">${avgAll != null ? avgAll + '%' : '–'}</div><div class="l">Avg match rate</div></div>
   `;
+  $('slCntRuns').textContent = log.length;
+  $('slCntChg').textContent = (changes || []).reduce((s, r) => s + (r.ww || []).length + (r.coles || []).length, 0);
+  renderTrendChart(log);
   $('slInfoNotes').innerHTML = `
     <li>Only full scrapes (scheduled or manual "Update Prices") are logged here - single-item refreshes from the ✎ Edit dialog aren't.</li>
     <li>A missed item's price isn't blank on the main site - the last known price carries forward, so a chronic miss can look fine there while quietly going stale. This page is the place to catch that.</li>
@@ -463,7 +686,18 @@ $('slWishlistClear').addEventListener('click', () => {
   try { localStorage.removeItem('pw_search_misses_v1'); } catch {}
   renderWishlist();
 });
-$('slRefreshBtn').addEventListener('click', load);
+// slRefreshBtn is rendered by header.js for this page - guard anyway so a header
+// change can never take the whole page's boot down with it (load() is next).
+$('slRefreshBtn')?.addEventListener('click', load);
+
+// Tabs: 30 runs + the price archive + diagnostics used to be one endless scroll.
+document.querySelectorAll('.sl-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.sl-tab').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== btn.dataset.tab; });
+  });
+});
+
 load();
 </script>
 <nav id="bottomTabBar">
