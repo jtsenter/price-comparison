@@ -254,8 +254,17 @@
     <div class="sl-card" id="slChangesCard">
       <div class="sl-card-head">
         <h2>Price change history</h2>
-        <input type="search" id="slChangeSearch" placeholder="Filter by product…"
-               style="font-size:12px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);max-width:220px">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <input type="search" id="slChangeSearch" placeholder="Filter by product…"
+                 style="font-size:12px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);max-width:220px">
+          <button class="btn btn-ghost" id="slChgDownload" style="font-size:12px;white-space:nowrap"
+                  title="Download every recorded price change as an Excel workbook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>Download
+          </button>
+        </div>
       </div>
       <p style="font-size:12px;color:var(--text-mid);margin:6px 0 12px">
         Every price move each scrape records, kept <strong>indefinitely</strong> (not capped like the run log).
@@ -295,6 +304,7 @@
 </main>
 
 <script src="utils.js?v=79"></script>
+<script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
 
@@ -552,7 +562,6 @@ function paintChangeArchive(q) {
     <div class="sl-chg-run${r.quiet ? ' quiet' : ''}">
       <div class="sl-chg-run-head">
         <span class="sl-run-date">${fmtDate(r.date)}<span class="rel">${timeAgo(r.date)}</span></span>
-        <span class="sl-run-trigger">${escapeHtml(r.trigger || 'run')}</span>
         <span class="sl-chg-chip${r.quiet ? ' quiet' : ''}">${r.quiet ? 'no price moves' : 'Δ ' + (r.ww.length + r.coles.length)}</span>
       </div>
       ${r.quiet ? '' : `<div class="sl-chg-run-body">
@@ -560,6 +569,51 @@ function paintChangeArchive(q) {
         ${col('Coles', 'coles', r.coles)}
       </div>`}
     </div>`).join('');
+}
+
+// ── Excel export ─────────────────────────────────────────────────────────────
+// Exports the WHOLE archive, not the current filter - the button says "download
+// all of the data" and a silently filtered export is the kind of thing you only
+// notice after building an analysis on top of it. Sorted oldest → newest so the
+// sheet reads chronologically without touching Excel.
+function changeRowsForExport() {
+  const rows = [];
+  for (const run of _changeArchive) {
+    const when = new Date(run.date);
+    for (const [store, list] of [['Woolworths', run.ww], ['Coles', run.coles]]) {
+      for (const c of (list || [])) {
+        rows.push([
+          { t: 'd', v: when },
+          { t: 'time', v: when },
+          String(c.item),
+          { t: 'money', v: +c.old },
+          { t: 'money', v: +c.new },
+          store,
+        ]);
+      }
+    }
+  }
+  return rows;
+}
+
+function downloadChangesXlsx() {
+  const rows = changeRowsForExport();
+  if (!rows.length) { alert('No price changes recorded yet - nothing to export.'); return; }
+  const headers = ['Date', 'Time', 'Product', 'Previous price', 'New price', 'Store'];
+  const blob = buildXlsx(headers, rows, {
+    sheetName: 'Price changes',
+    colWidths: [11, 8, 52, 15, 12, 13],
+  });
+  const stamp = new Date().toISOString().slice(0, 10);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `pricewatch-price-changes-${stamp}.xlsx`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  // Revoking immediately can cancel the download in some browsers - let it start.
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
 }
 
 async function load() {
@@ -689,6 +743,7 @@ $('slWishlistClear').addEventListener('click', () => {
 // slRefreshBtn is rendered by header.js for this page - guard anyway so a header
 // change can never take the whole page's boot down with it (load() is next).
 $('slRefreshBtn')?.addEventListener('click', load);
+$('slChgDownload')?.addEventListener('click', downloadChangesXlsx);
 
 // Tabs: 30 runs + the price archive + diagnostics used to be one endless scroll.
 document.querySelectorAll('.sl-tab').forEach(btn => {

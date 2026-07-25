@@ -39,6 +39,7 @@ jobs:
           node scripts/utils_selfcheck.js
           node scripts/perkg_selfcheck.js
           node scripts/github_put_selfcheck.js
+          node scripts/xlsx_selfcheck.js
 
       - name: Python self-checks
         working-directory: scripts
@@ -50,3 +51,7 @@ jobs:
           python matcher_selfcheck.py
           python categories_selfcheck.py
           python multibuy_selfcheck.py
+          # Opens the workbook the node xlsx_selfcheck step just wrote, using
+          # Python's own zipfile/XML - an independent parser, so a bug in our
+          # hand-rolled ZIP can't hide behind a matching bug in our reader.
+          python xlsx_verify.py
