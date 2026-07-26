@@ -894,10 +894,8 @@ function getColNumericValue(col, item) {
     case 'saving':    return mbSaving(item);
     case 'units':     return getUnits(item.list_item);
     case 'trips':     return item.trip_count || 0;
-    // Both total columns now show the cheaper store's line cost (see mbBestTotal /
-    // the Total cell), so they sort by that same number.
-    case 'ww_total':
-    case 'coles_total': return mbBestTotal(item).total;
+    case 'ww_total':    return rowStoreTotal(item, 'ww');
+    case 'coles_total': return rowStoreTotal(item, 'coles');
     default: return null;
   }
 }
@@ -940,7 +938,7 @@ function getColValue(col, item) {
       : '-';
     case 'ww_total':
     case 'coles_total': {
-      const v = mbBestTotal(item).total;
+      const v = rowStoreTotal(item, col === 'ww_total' ? 'ww' : 'coles');
       return v != null ? fmt(v) : '-';
     }
     default: return '';
@@ -994,8 +992,8 @@ function colHeadHtml(col) {
     case 'units':        return th('units', '', 'Qty');
     case 'category':     return th('category', '', 'Category');
     case 'last_scraped': return th('last_scraped', '', 'Last Scraped');
-    case 'ww_total':     return th('ww_total', '', 'Total');
-    case 'coles_total':  return th('coles_total', '', 'Total');
+    case 'ww_total':     return th('ww_total', '', '<span class="store-chip ww sm">W</span> Total');
+    case 'coles_total':  return th('coles_total', '', '<span class="store-chip coles sm">C</span> Total');
     default: return '';
   }
 }
@@ -2681,15 +2679,28 @@ function mbSaving(item) {
   return (w == null || c == null) ? null : Math.abs(w - c);
 }
 // The cheapest line cost across both stores at the current qty, plus which store
-// it is - this is the "Total" the table shows (what you'd actually pay for this
-// item at its better store), not a fixed store's total.
+// it is. Used by the basket/split math - NOT by the Total columns, which are
+// per-store (see rowStoreTotal).
 function mbBestTotal(item) {
   const u = getUnits(item.list_item);
-  const w = mbLineCost(item.woolworths, u), c = mbLineCost(item.coles, u);
+  const w = rowStoreTotal(item, 'ww'), c = rowStoreTotal(item, 'coles');
   if (w == null && c == null) return { total: null, store: null };
   if (w == null) return { total: c, store: 'coles' };
   if (c == null) return { total: w, store: 'woolworths' };
   return w <= c ? { total: w, store: 'woolworths' } : { total: c, store: 'coles' };
+}
+
+// What this row costs AT ONE STORE for the current qty - the number the "W Total"
+// / "C Total" columns show. Multi-buy aware; per-kg groups bill $/kg x weight.
+// These are two INDEPENDENT columns (each store's own basket cost), which is the
+// whole point of having both - don't collapse them into a single best-of column.
+function rowStoreTotal(item, store) {
+  const u = getUnits(item.list_item);
+  if (item._isGroup) {
+    const v = store === 'ww' ? item._wwPerKg : item._coPerKg;
+    return v == null ? null : v * u;
+  }
+  return mbLineCost(store === 'ww' ? item.woolworths : item.coles, u);
 }
 
 // ── Banner stats (priority-aware) ────────────────────────────────────────────
@@ -3555,16 +3566,9 @@ function sortItems(items) {
       case 'trend': return trendPositionOf(item); // 0.0=best deal, 1.0=expensive, 999=no history (sorts last)
       case 'category':     return getCategory(item).toLowerCase();
       case 'last_scraped': return item.last_scraped || '';
-      // Both totals sort by the cheaper store's line cost (matches the cell).
-      // Groups have no per-store multi_buy, so they use their $/kg best × qty.
-      case 'ww_total':
-      case 'coles_total':  {
-        if (item._isGroup) {
-          const v = [wwShown, coShown].filter(x => x != null);
-          return v.length ? Math.min(...v) * getUnits(item.list_item) : NaN;
-        }
-        return mbBestTotal(item).total ?? NaN;
-      }
+      // Each total column sorts by ITS OWN store's line cost (matches its cell).
+      case 'ww_total':     return rowStoreTotal(item, 'ww') ?? NaN;
+      case 'coles_total':  return rowStoreTotal(item, 'coles') ?? NaN;
       default: return item.trip_count || 0;
     }
   }
@@ -4254,13 +4258,12 @@ function appendGroupRowDesktop(tbody, group, overrides) {
 
   const wwTotal = group._wwPerKg != null ? group._wwPerKg * units : null;
   const coTotal = group._coPerKg != null ? group._coPerKg * units : null;
-  // Total column = the cheaper store's cost (matches normal rows), with its chip.
-  let gBestTotal = null, gBestChip = '';
-  if (wwTotal != null || coTotal != null) {
-    if (coTotal == null || (wwTotal != null && wwTotal <= coTotal)) { gBestTotal = wwTotal; gBestChip = '<span class="store-chip ww sm">W</span> '; }
-    else { gBestTotal = coTotal; gBestChip = '<span class="store-chip coles sm">C</span> '; }
-  }
-  const gTotalCell = `<td class="total-cell" style="font-size:13px;font-weight:600;white-space:nowrap">${gBestTotal != null ? gBestChip + fmt(gBestTotal) : '<span class="no-data">-</span>'}</td>`;
+  // Two independent per-store totals (matches normal rows); cheaper side tinted.
+  const gCell = (v, isWin, cls) =>
+    `<td class="total-cell ${isWin ? cls : ''}" style="font-size:13px;font-weight:600;white-space:nowrap">${
+      v != null ? fmt(v) : '<span class="no-data">-</span>'}</td>`;
+  const gWwWin = wwTotal != null && coTotal != null && wwTotal < coTotal - 0.005;
+  const gCoWin = wwTotal != null && coTotal != null && coTotal < wwTotal - 0.005;
   let savingContent = '<span class="no-data">-</span>';
   if (group._wwPerKg != null && group._coPerKg != null) {
     const sav = Math.abs(group._wwPerKg - group._coPerKg) * units;
@@ -4280,8 +4283,8 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     trips:        `<td class="trips-cell"></td>`,
     category:     `<td style="font-size:12px;color:var(--text-mid)">${getCategory(group)}</td>`,
     last_scraped: `<td></td>`,
-    ww_total:     gTotalCell,
-    coles_total:  gTotalCell,
+    ww_total:     gCell(wwTotal, gWwWin, 'cell-ww'),
+    coles_total:  gCell(coTotal, gCoWin, 'cell-coles'),
   };
 
   // Selection checkbox (selects the whole category - basket uses its cheapest option).
@@ -5579,14 +5582,16 @@ function _renderPageInner(data) {
       </div>
     </td>`;
 
-    // The Total column shows what you'd actually pay for this item at its cheaper
-    // store, quantity and multi-buy accounted for (2 avocados = Coles $4.00, not
-    // WW $4.40). Both total columns render this same best-total, tagged with the
-    // winning store's chip.
-    const best = mbBestTotal(item);
-    const bestChip = best.store === 'woolworths' ? '<span class="store-chip ww sm">W</span> '
-                   : best.store === 'coles' ? '<span class="store-chip coles sm">C</span> ' : '';
-    const totalCell = `<td class="total-cell" style="font-size:13px;font-weight:600;white-space:nowrap">${best.total != null ? bestChip + fmt(best.total) : '<span class="no-data">-</span>'}</td>`;
+    // Two independent per-store totals: what this row costs at WW, and at Coles
+    // (qty x price, multi-buy applied). The cheaper side is tinted, so you can
+    // still read the winner at a glance without losing either number.
+    const wwTotalVal = rowStoreTotal(item, 'ww');
+    const coTotalVal = rowStoreTotal(item, 'coles');
+    const totalCellFor = (v, isWin, cls) =>
+      `<td class="total-cell ${isWin ? cls : ''}" style="font-size:13px;font-weight:600;white-space:nowrap">${
+        v != null ? fmt(v) : '<span class="no-data">-</span>'}</td>`;
+    const wwTotWin = wwTotalVal != null && coTotalVal != null && wwTotalVal < coTotalVal - 0.005;
+    const coTotWin = wwTotalVal != null && coTotalVal != null && coTotalVal < wwTotalVal - 0.005;
     const scrapedDate = item.last_scraped
       ? new Date(item.last_scraped).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
       : '-';
@@ -5605,8 +5610,8 @@ function _renderPageInner(data) {
       trips:        `<td class="trips-cell">${tripsHtml}</td>`,
       category:     `<td style="font-size:12px;color:var(--text-mid)">${getCategory(item)}</td>`,
       last_scraped: `<td style="font-size:11px;color:var(--text-soft);white-space:nowrap">${scrapedDate}</td>`,
-      ww_total:     totalCell,
-      coles_total:  totalCell,
+      ww_total:     totalCellFor(wwTotalVal, wwTotWin, 'cell-ww'),
+      coles_total:  totalCellFor(coTotalVal, coTotWin, 'cell-coles'),
     };
 
     const checked = _checkedItems.has(item.list_item) ? ' checked' : '';
@@ -5627,19 +5632,16 @@ function _renderPageInner(data) {
   const footCoBase   = s.total_coles;
   const _fWWAvail    = s.ww_data_available;
   const _fCoAvail    = s.items_compared > 0;
-  // Total column = cheaper store's line cost per row (multi-buy + qty aware), so
-  // its footer is the sum of those best totals across every visible item.
-  let _fBest = 0;
+  // Each Total column sums ITS OWN store across every visible row (multi-buy +
+  // qty aware), so "W Total" is the whole basket at Woolworths and "C Total" the
+  // whole basket at Coles - two numbers you can actually compare.
+  let _fWWTot = 0, _fCoTot = 0;
   for (const item of sorted) {
-    if (item._isGroup) {
-      const u = getUnits(item.list_item);
-      const v = [item._wwPerKg, item._coPerKg].filter(x => x != null);
-      if (v.length) _fBest += Math.min(...v) * u;
-    } else {
-      _fBest += mbBestTotal(item).total ?? 0;
-    }
+    _fWWTot += rowStoreTotal(item, 'ww') ?? 0;
+    _fCoTot += rowStoreTotal(item, 'coles') ?? 0;
   }
-  const footBest = Math.round(_fBest * 100) / 100;
+  const footWWTot = Math.round(_fWWTot * 100) / 100;
+  const footCoTot = Math.round(_fCoTot * 100) / 100;
 
   const tfootRow = document.querySelector('tfoot tr');
   if (tfootRow) {
@@ -5659,8 +5661,8 @@ function _renderPageInner(data) {
       trips:        `<td></td>`,
       category:     `<td></td>`,
       last_scraped: `<td></td>`,
-      ww_total:     `<td style="font-weight:700">${fmt(footBest)}</td>`,
-      coles_total:  `<td style="font-weight:700">${fmt(footBest)}</td>`,
+      ww_total:     `<td style="font-weight:700">${fmt(footWWTot)}</td>`,
+      coles_total:  `<td style="font-weight:700">${fmt(footCoTot)}</td>`,
     };
     tfootRow.innerHTML = '<td></td>' + getVisibleCols().map(col => footMap[col] || '<td></td>').join('') + '<td></td>';
   }
