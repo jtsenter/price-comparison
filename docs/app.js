@@ -948,6 +948,9 @@ function getColValue(col, item) {
 function resetColumns() {
   _colOrder      = [...DEFAULT_COL_ORDER];
   _colVisibility = { ...DEFAULT_COL_VISIBILITY };
+  // Reset means "go back to defaults", including auto-picking the cheaper
+  // store's Total column again.
+  try { localStorage.removeItem('pw_col_total_manual'); } catch {}
   _colWidths     = {};
   _colFilters    = {};
   _colNumFilters = {};
@@ -2754,19 +2757,22 @@ function computeBannerStats(items) {
   // avocado alone, not the whole weekly basket).
   const filtered = applyValueFilters(baseFiltered);
   const ww_avail = filtered.some(i => shownStorePrice(i, 'ww') != null);
-  // Each store's total is the SUM OF THE NUMBERS IN THAT COLUMN - the per-unit
-  // price each row displays ($/kg for a group, the multi-buy-effective price for
-  // a promo item). Deliberately NOT qty-weighted: the Qty column's effect is
-  // already carried by the Total column, and mixing the two bases is what made
-  // the header and the footer disagree.
-  const ww_total = filtered.reduce((s, i) => s + (shownStorePrice(i, 'ww') ?? 0), 0);
-  const co_total = filtered.reduce((s, i) => s + (shownStorePrice(i, 'coles') ?? 0), 0);
+  // TWO different bases, deliberately, because two different things are being
+  // asked on this page:
+  //   • store TOTALS (top cards, and the W/C Total columns) = what the basket
+  //     actually costs at that store - qty-weighted, multi-buy applied.
+  //   • the WW/Coles PRICE column footers = the sum of that column's own numbers,
+  //     which are per-unit prices. A column footer sums its column.
+  const ww_total = filtered.reduce((s, i) => s + (rowStoreTotal(i, 'ww') ?? 0), 0);
+  const co_total = filtered.reduce((s, i) => s + (rowStoreTotal(i, 'coles') ?? 0), 0);
+  const col_ww = filtered.reduce((s, i) => s + (shownStorePrice(i, 'ww') ?? 0), 0);
+  const col_coles = filtered.reduce((s, i) => s + (shownStorePrice(i, 'coles') ?? 0), 0);
   const total_saving = Math.abs(ww_total - co_total);
   // "Max saving": buy each item at whichever store is cheapest, vs doing the
-  // whole shop at the more expensive single store. Same per-unit basis as above,
-  // so the saving it reports is comparable to the two store totals.
+  // whole shop at the more expensive single store. Same qty-weighted basis as the
+  // store totals, so cherry_total IS the Total-column best-of-each figure.
   const cherry_total = filtered.reduce((s, i) =>
-    s + Math.min(shownStorePrice(i, 'ww'), shownStorePrice(i, 'coles')), 0);
+    s + Math.min(rowStoreTotal(i, 'ww'), rowStoreTotal(i, 'coles')), 0);
   const max_saving = Math.max(ww_total, co_total) - cherry_total;
   let cheaper_store;
   if (!ww_avail) cheaper_store = 'coles_only';
@@ -2782,6 +2788,10 @@ function computeBannerStats(items) {
     total_saving: Math.round(total_saving * 100) / 100,
     max_saving: Math.round(max_saving * 100) / 100,
     split_total: Math.round(cherry_total * 100) / 100, // the split trip's own price
+    // Price-column footers only: the sum of the per-unit numbers those columns
+    // display. NOT a basket cost - see the two-bases note above.
+    col_ww: Math.round(col_ww * 100) / 100,
+    col_coles: Math.round(col_coles * 100) / 100,
     items_compared: filtered.length,
   };
 }
@@ -3459,6 +3469,10 @@ let _lastProgress = null;           // last scrape_progress we saw (keeps the st
 let _scrapeActive = false;          // true between first progress and confirmed completion (3-strike)
 
 const PRIORITY_ORDER = { weekly: 0, monthly: 1, rare: 2, archive: 3 };
+
+// One-shot latch: the cheaper store's Total column is defaulted on at first
+// render only, so it can't flicker as filters/search change (see _renderPageInner).
+let _totalColDefaulted = false;
 
 // The row-filter pipeline, shared by sortItems (skipCol=null) and the column
 // filter dropdown (skipCol=that column), which must offer only values present
@@ -5072,6 +5086,22 @@ function _renderPageInner(data) {
 
   // Always compute banner stats client-side so savings are units-weighted
   const s = computeBannerStats(data.items);
+
+  // Default the CHEAPER store's Total column on, once per page load. Deliberately
+  // not re-evaluated on every render: recomputing it per filter/keystroke made a
+  // column appear and vanish while typing in the search box, which is far more
+  // disorienting than useful. Skipped entirely once the user has ticked either
+  // Total column themselves (pw_col_total_manual) - their choice wins forever.
+  if (!_totalColDefaulted) {
+    _totalColDefaulted = true;
+    let manual = false;
+    try { manual = localStorage.getItem('pw_col_total_manual') === '1'; } catch {}
+    if (!manual && (s.cheaper_store === 'woolworths' || s.cheaper_store === 'coles')) {
+      _colVisibility.ww_total    = s.cheaper_store === 'woolworths';
+      _colVisibility.coles_total = s.cheaper_store === 'coles';
+      saveColVisibility();
+    }
+  }
   const wwCard    = $('wwCard');
   const colesCard = $('colesCard');
   const wwTotalEl = $('wwTotal');
@@ -5628,8 +5658,11 @@ function _renderPageInner(data) {
 
   // Tfoot - use the same banner stats so the desktop footer and mobile banner
   // always show identical basket totals (qty-weighted, items with both prices).
-  const footWWBase   = s.total_woolworths;
-  const footCoBase   = s.total_coles;
+  // The WW/Coles PRICE columns show per-unit prices, so their footers sum those
+  // (col_ww/col_coles). The basket cost per store lives in the W/C Total columns
+  // and the top cards - a different, qty-weighted number by design.
+  const footWWBase   = s.col_ww;
+  const footCoBase   = s.col_coles;
   const _fWWAvail    = s.ww_data_available;
   const _fCoAvail    = s.items_compared > 0;
   // Each Total column sums ITS OWN store across every visible row (multi-buy +
@@ -6073,6 +6106,11 @@ function initColumnChooser() {
     const col = e.target.dataset?.col;
     if (col) {
       _colVisibility[col] = e.target.checked;
+      // Touching either Total column is an explicit choice - stop auto-managing
+      // which one shows from here on, and never override it again.
+      if (col === 'ww_total' || col === 'coles_total') {
+        try { localStorage.setItem('pw_col_total_manual', '1'); } catch {}
+      }
       saveColVisibility();
       if (_lastData) renderPage(_lastData);
     }
