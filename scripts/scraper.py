@@ -1074,21 +1074,46 @@ def find_alternatives(all_results: list[dict], matched: dict | None, max_alts: i
 # Incremental push helpers
 # ---------------------------------------------------------------------------
 
+def _entry_recency(it: dict) -> tuple:
+    """Sort key for choosing between two entries of the SAME item. A priced entry
+    always beats a priceless one (a failed re-scrape must never clobber good
+    carried-forward data); among priced entries, the newest scrape wins."""
+    has_price = ((it.get("woolworths") or {}).get("price") is not None
+                 or (it.get("coles") or {}).get("price") is not None)
+    return (1 if has_price else 0, it.get("last_scraped") or "")
+
+
 def _purge_alias_items(items: list) -> list:
     """Drop items recorded under a stale alias name when their canonical name
     (per KNOWN_NAME_CHANGES) is also present. Without this, a renamed/merged
     product can linger as a duplicate forever via carry-forward and single-item
-    runs (e.g. "Capsicum Green" alongside "Woolworths Capsicum Green")."""
+    runs (e.g. "Capsicum Green" alongside "Woolworths Capsicum Green").
+
+    Also collapses exact-name duplicates, keeping the FRESHEST entry. Keeping the
+    first one instead caused a phantom repeating price change (2026-07-26):
+    archived items are pre-populated from existing data early in the run (so they
+    survive a stalled run's progress push), and manual runs never skip archived
+    items - so the same item got scraped again and appended a second time. The
+    price-change differ walked both entries and logged the FRESH price
+    ("Australian Grown Carrots $2.00 -> $1.70"), while this function kept the
+    STALE one, so latest.json never moved and the next run logged the identical
+    change again. The same move appeared to repeat daily while the price on the
+    site never changed. See scripts/alias_purge_selfcheck.py."""
     present = {i["list_item"] for i in items}
-    out, seen = [], set()
-    for it in items:
+    # Winning index per name, decided by recency rather than position.
+    winner: dict = {}
+    for idx, it in enumerate(items):
+        name = it["list_item"]
+        if name not in winner or _entry_recency(it) >= _entry_recency(items[winner[name]]):
+            winner[name] = idx
+    out = []
+    for idx, it in enumerate(items):
         name = it["list_item"]
         canon = clean_name(name)
         if canon != name and canon in present:
             continue                      # alias whose canonical entry exists - drop it
-        if name in seen:
-            continue                      # exact duplicate guard
-        seen.add(name)
+        if winner[name] != idx:
+            continue                      # a fresher entry for this name exists
         out.append(it)
     return out
 
