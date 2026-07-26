@@ -2694,17 +2694,32 @@ function mbBestTotal(item) {
 
 // ── Banner stats (priority-aware) ────────────────────────────────────────────
 
+// The price this row SHOWS in a store's column: per-kg groups show $/kg, normal
+// items show their effective per-unit price (multi-buy applied). NOT multiplied
+// by qty - the column footers sum the numbers actually on screen, and the Qty
+// column's effect already lives in the Total column.
+function shownStorePrice(item, store) {
+  if (item._isGroup) return store === 'ww' ? item._wwPerKg : item._coPerKg;
+  const res = store === 'ww' ? item.woolworths : item.coles;
+  return mbEffUnit(res, getUnits(item.list_item));
+}
+
 function computeBannerStats(items) {
   const exclusions = loadExclusions();
-  // Per-kg member products are shown in the table collapsed into a single group
-  // row (with the group's own priority + $/kg), never as individual rows - so
-  // they must NOT be counted here either. Counting them made the WW/Coles footer
-  // and the comparison banner include products the user can't see as rows: e.g.
-  // Monthly + Meat showed 2 rows but the footer summed 3 items, because a beef
-  // porterhouse member (monthly by trip-count) was tallied while its group row
-  // was hidden. The banner/footer now match exactly what's on screen.
+  // Per-kg member products render collapsed into a single group row, so the
+  // members themselves must not be counted. They used to be dropped and NOTHING
+  // put back, so every per-kg group was silently missing from the totals - a
+  // search showing 4 rows summed only 2 of them, the WW/Coles cards disagreed
+  // with the Total column, and a real Split saving vanished because the groups
+  // (which the other store often wins) were invisible to the split math.
+  // Collapse them into the same synthetic group rows the table renders instead.
   const perkgMembers = new Set(loadVariantGroups().flatMap(g => g.items));
-  const baseFiltered = items.filter(item => {
+  let pool = items;
+  if (_activePriority !== 'archive') {   // archive view renders raw members, so match it
+    const groups = buildVariantGroups(new Map(items.map(i => [i.list_item, i])));
+    if (groups.length) pool = items.filter(i => !perkgMembers.has(i.list_item)).concat(groups);
+  }
+  const baseFiltered = pool.filter(item => {
     if (perkgMembers.has(item.list_item)) return false;
     if (_activePriority === 'watchlist') {
       if (!_watchlist.has(item.list_item)) return false;
@@ -2718,26 +2733,29 @@ function computeBannerStats(items) {
       }
     }
     if (_activeCategory !== 'All' && getCategory(item) !== _activeCategory) return false;
-    // Only include items that have prices at both stores
-    if (item.woolworths?.price == null || item.coles?.price == null) return false;
+    // Only items priced at BOTH stores can be compared. Group rows carry their
+    // price as _wwPerKg/_coPerKg, not woolworths.price, so ask shownStorePrice.
+    if (shownStorePrice(item, 'ww') == null || shownStorePrice(item, 'coles') == null) return false;
     return true;
   });
   // Narrow by the SAME search + column filters the visible table applies, so the
   // cards/footer reflect only what's on screen (a search for "avo" summarises the
   // avocado alone, not the whole weekly basket).
   const filtered = applyValueFilters(baseFiltered);
-  const ww_avail = filtered.some(i => i.woolworths?.price != null);
-  // Totals weighted by units
-  const ww_total = filtered.reduce((s, i) => s + (mbLineCost(i.woolworths, getUnits(i.list_item)) ?? 0), 0);
-  const co_total = filtered.reduce((s, i) => s + (mbLineCost(i.coles, getUnits(i.list_item)) ?? 0), 0);
+  const ww_avail = filtered.some(i => shownStorePrice(i, 'ww') != null);
+  // Each store's total is the SUM OF THE NUMBERS IN THAT COLUMN - the per-unit
+  // price each row displays ($/kg for a group, the multi-buy-effective price for
+  // a promo item). Deliberately NOT qty-weighted: the Qty column's effect is
+  // already carried by the Total column, and mixing the two bases is what made
+  // the header and the footer disagree.
+  const ww_total = filtered.reduce((s, i) => s + (shownStorePrice(i, 'ww') ?? 0), 0);
+  const co_total = filtered.reduce((s, i) => s + (shownStorePrice(i, 'coles') ?? 0), 0);
   const total_saving = Math.abs(ww_total - co_total);
   // "Max saving": buy each item at whichever store is cheapest, vs doing the
-  // whole shop at the more expensive single store. This is the most you could
-  // possibly save by splitting the basket across both stores.
-  const cherry_total = filtered.reduce((s, i) => {
-    const u = getUnits(i.list_item);
-    return s + Math.min(mbLineCost(i.woolworths, u), mbLineCost(i.coles, u));
-  }, 0);
+  // whole shop at the more expensive single store. Same per-unit basis as above,
+  // so the saving it reports is comparable to the two store totals.
+  const cherry_total = filtered.reduce((s, i) =>
+    s + Math.min(shownStorePrice(i, 'ww'), shownStorePrice(i, 'coles')), 0);
   const max_saving = Math.max(ww_total, co_total) - cherry_total;
   let cheaper_store;
   if (!ww_avail) cheaper_store = 'coles_only';
@@ -5609,7 +5627,6 @@ function _renderPageInner(data) {
   const footCoBase   = s.total_coles;
   const _fWWAvail    = s.ww_data_available;
   const _fCoAvail    = s.items_compared > 0;
-  const footerSaving = s.total_saving;
   // Total column = cheaper store's line cost per row (multi-buy + qty aware), so
   // its footer is the sum of those best totals across every visible item.
   let _fBest = 0;
@@ -5635,7 +5652,10 @@ function _renderPageInner(data) {
       coles:        `<td id="footColes">${_fCoAvail ? fmt(footCoBase) : '-'}</td>`,
       cheaper:      `<td></td>`,
       pct:          `<td></td>`,
-      saving:       `<td id="footSaving" style="text-align:right" title="Total savings vs most expensive store"><span class="saving-cell">${fmt(footerSaving)}</span><div style="font-size:11px;color:var(--text-soft);font-weight:400">saved</div></td>`,
+      // No total: each row's saving belongs to whichever store wins THAT row, so
+      // adding them up mixes money saved at Woolworths with money saved at Coles
+      // and produces a number that describes no real shopping trip.
+      saving:       `<td id="footSaving"></td>`,
       trips:        `<td></td>`,
       category:     `<td></td>`,
       last_scraped: `<td></td>`,
