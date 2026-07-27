@@ -2612,7 +2612,17 @@ function initBulkBar() {
     if (!add.length) return;
     const before = _selectedItems.size;
     const q = basketQtyMap();
-    add.forEach(n => { _selectedItems.add(n); q[n] = (Number(q[n]) || 0) + _bulkQty; });
+    add.forEach(n => {
+      _selectedItems.add(n);
+      // Carry the row's OWN Qty into the basket. It used to add _bulkQty flat, so
+      // a row showing Qty 4 (Truss Tomatoes) landed in the basket as 1 and the two
+      // pages disagreed by that difference. The stepper is now a multiplier on top.
+      // Per-kg rows are excluded: their Qty is in KILOGRAMS while basket qty counts
+      // PACKS, so 1.5kg must not become "2 packs" - the basket's own pack-matching
+      // (packsOf) already scales those to a comparable weight.
+      const rowQty = isKgQty(n) ? 1 : Math.max(1, Math.round(getUnits(n)));
+      q[n] = (Number(q[n]) || 0) + rowQty * _bulkQty;
+    });
     writeBasket(q);
     _updateSelectedPill();
     const added = _selectedItems.size - before;

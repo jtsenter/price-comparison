@@ -238,6 +238,14 @@
     .mb-ico.hint  { color: var(--text-soft, #94A3B8); }
     /* Other store's promo marker inside the muted alt price ("C $3.50 2/$6") */
     .alt-mb { font-size: 10px; font-weight: 700; color: var(--text-soft, #94A3B8); border: 1px solid var(--border); border-radius: 7px; padding: 0 4px; }
+    /* Why this page's totals differ from the main page's - shown only when the
+       basket actually holds per-kg group rows, so it never nags without cause. */
+    .sl-pack-note {
+      font-size: 12px; line-height: 1.5; color: var(--text-mid);
+      background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+      padding: 9px 13px; margin: 0 0 14px;
+    }
+    .sl-pack-note strong { color: var(--text); font-weight: 600; }
     /* Money and quantities align digit-for-digit down a column */
     .price-val, .total-val, .unit-val, .qs-val, .sc-price, .saving-amount, tfoot td { font-variant-numeric: tabular-nums; }
     tfoot td { background: var(--bg); font-weight: 700; font-size: 15px; border-top: 2px solid var(--border); padding: 11px 14px; }
@@ -1320,6 +1328,13 @@ async function boot() {
           ${slSplit ? `<div class="trip-bar"><span class="tb-label">🧾 Split shop total</span><strong>${fmt(wwSub + coSub)}</strong></div>` : ''}
         </div>
       </div>
+
+      ${displayItems.some(i => i._isGroup) ? `<p class="sl-pack-note">
+        <strong>📦 Per-kg items are priced as whole packs here</strong> - the real 450g tray or 2kg bag you'd
+        actually put in the trolley, not one kilogram. That's why these totals differ from the main page,
+        which compares the stores by $/kg. Both are right: the main page tells you which store is cheaper,
+        this page tells you what the trip really costs.
+      </p>` : ''}
 
       ${!wwItems.length && !slSplit ? '' : `<div class="store-section">
         <div class="section-header">

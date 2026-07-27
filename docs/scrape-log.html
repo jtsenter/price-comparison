@@ -180,6 +180,21 @@
     .chg-name { flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
     .chg-prices { flex: 0 0 auto; white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--text-mid); }
     .sl-chg-list li { min-width: 0; } /* flex item too - same shrink rule */
+    /* Per-day roll-up table above the change list */
+    .sl-sum-wrap { overflow-x: auto; margin: 0 0 16px; }
+    .sl-sum { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    .sl-sum th {
+      text-align: left; font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .04em; color: var(--text-soft); padding: 0 10px 6px 0;
+      border-bottom: 1px solid var(--border); white-space: nowrap;
+    }
+    .sl-sum td { padding: 7px 10px 7px 0; border-bottom: 1px solid var(--border); white-space: nowrap;
+      font-variant-numeric: tabular-nums; color: var(--text); }
+    .sl-sum tbody tr:last-child td { border-bottom: none; }
+    .sl-sum tfoot td { border-top: 2px solid var(--border); border-bottom: none; padding-top: 8px; }
+    .sl-sum-split { margin-left: 7px; font-size: 11px; font-weight: 700; }
+    .sl-sum-split > span + span { margin-left: 6px; }
+    .sl-sum-zero { color: var(--text-soft); }
     /* Price-change archive runs */
     .sl-chg-run { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
     /* A run that moved no prices is recorded but visually recessive - present as
@@ -270,6 +285,7 @@
         Every price move each scrape records, kept <strong>indefinitely</strong> (not capped like the run log).
         <span class="chg-up">▲ red</span> = went up, <span class="chg-down">▼ green</span> = went down.
       </p>
+      <div id="slChgSummary"></div>
       <div id="slChangeRuns"></div>
     </div>
   </div>
@@ -529,7 +545,74 @@ function renderChangeArchive(changes) {
   paintChangeArchive((search?.value || '').trim().toLowerCase());
 }
 
+// Per-DAY roll-up: how many products each store moved, split into rises/falls.
+// Grouped by calendar date, not by run - two scrapes on the same day are one
+// day's worth of movement. Honours the product filter so it can't contradict the
+// list underneath it.
+function paintChangeSummary(q) {
+  const host = $('slChgSummary');
+  if (!host) return;
+  const byDay = new Map();   // 'YYYY-MM-DD' -> {ww:{up,down}, coles:{up,down}}
+  for (const run of _changeArchive) {
+    const day = String(run.date || '').slice(0, 10);
+    if (!day) continue;
+    if (!byDay.has(day)) byDay.set(day, { ww: { up: 0, down: 0 }, coles: { up: 0, down: 0 } });
+    const bucket = byDay.get(day);
+    for (const [key, list] of [['ww', run.ww], ['coles', run.coles]]) {
+      for (const c of (list || [])) {
+        if (q && !String(c.item).toLowerCase().includes(q)) continue;
+        if (+c.new > +c.old) bucket[key].up++; else if (+c.new < +c.old) bucket[key].down++;
+      }
+    }
+  }
+  const days = [...byDay.entries()]
+    .filter(([, b]) => b.ww.up + b.ww.down + b.coles.up + b.coles.down > 0)
+    .sort((a, b) => b[0].localeCompare(a[0]));   // newest first
+  if (!days.length) { host.innerHTML = ''; return; }
+
+  const dayLabel = d => {
+    const dt = new Date(d + 'T00:00:00');
+    return isNaN(dt) ? d : dt.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+  };
+  const cell = b => {
+    const n = b.up + b.down;
+    if (!n) return '<span class="sl-sum-zero">-</span>';
+    return `<strong>${n}</strong>` +
+      `<span class="sl-sum-split">` +
+        (b.down ? `<span class="chg-down">▼${b.down}</span>` : '') +
+        (b.up ? `<span class="chg-up">▲${b.up}</span>` : '') +
+      `</span>`;
+  };
+  const tot = { ww: { up: 0, down: 0 }, coles: { up: 0, down: 0 } };
+  days.forEach(([, b]) => { tot.ww.up += b.ww.up; tot.ww.down += b.ww.down; tot.coles.up += b.coles.up; tot.coles.down += b.coles.down; });
+
+  host.innerHTML = `
+    <div class="sl-sum-wrap">
+      <table class="sl-sum">
+        <thead><tr>
+          <th>Date</th>
+          <th><span class="store-chip ww sm">W</span> Woolworths</th>
+          <th><span class="store-chip coles sm">C</span> Coles</th>
+          <th>Total</th>
+        </tr></thead>
+        <tbody>${days.map(([d, b]) => `<tr>
+          <td>${dayLabel(d)}</td>
+          <td>${cell(b.ww)}</td>
+          <td>${cell(b.coles)}</td>
+          <td>${b.ww.up + b.ww.down + b.coles.up + b.coles.down}</td>
+        </tr>`).join('')}</tbody>
+        ${days.length > 1 ? `<tfoot><tr>
+          <td><strong>All time</strong></td>
+          <td>${cell(tot.ww)}</td>
+          <td>${cell(tot.coles)}</td>
+          <td><strong>${tot.ww.up + tot.ww.down + tot.coles.up + tot.coles.down}</strong></td>
+        </tr></tfoot>` : ''}
+      </table>
+    </div>`;
+}
+
 function paintChangeArchive(q) {
+  paintChangeSummary(q);
   const fmtP = v => '$' + (+v).toFixed(2);
   const chgLine = c => {
     const up = c.new > c.old;
