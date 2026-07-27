@@ -1802,6 +1802,11 @@ td.priority-cell { text-align: center; }
   transition: background .15s;
 }
 .bt-chip:hover { background: #5D6E87; }
+/* Destructive + irreversible, so it must not look like the neutral chips beside
+   it. Red only on hover: loud enough to make you pause, quiet enough at rest
+   that it isn't shouting on every selection. */
+.bt-chip.bt-delete { background: #7F1D1D; }
+.bt-chip.bt-delete:hover { background: var(--coles, #CC0000); }
 .bt-chip .arrow { color: #B6C2D1; font-size: 14px; line-height: 1; }
 /* Chip reflects the selection's CURRENT category/priority when uniform - tinted
    green so you can see the shared value at a glance vs a mixed selection. */

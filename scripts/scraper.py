@@ -1843,6 +1843,29 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         except Exception:
             pass
 
+    # Permanently-deleted items (written by the UI's "Delete forever" action).
+    # THE scraper-side half of deletion: the browser can purge the JSON files but
+    # it cannot touch shopping_list.xlsx, so without this gate the next run would
+    # read the Excel, re-scrape the name and resurrect it - which is exactly how
+    # "Plum Red" came back before. Enforced at every entry point below: the
+    # shopping list, url_overrides' manual adds, and the carry-forward map.
+    removed_path = os.path.join(DATA_DIR, "removed_items.json")
+    removed_set: set[str] = set()
+    if os.path.exists(removed_path):
+        try:
+            with open(removed_path) as _f:
+                removed_set = set(json.load(_f))
+        except Exception:
+            pass
+    if removed_set:
+        archived_set -= removed_set
+        # Drops the name from BOTH the active list and the archived list, since
+        # each is derived from these two.
+        _before = len(purchase_history)
+        purchase_history = {k: v for k, v in purchase_history.items() if k not in removed_set}
+        if len(purchase_history) != _before:
+            print(f"  [removed] skipping {_before - len(purchase_history)} permanently-deleted item(s)")
+
     if single_item:
         shopping_list = [single_item]
         print(f"Single-item refresh: {single_item}" + (f" [WW URL]" if ww_url else "") + (f" [Coles URL]" if coles_url else ""))
@@ -1910,6 +1933,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                 manually_added = [
                     n for n, v in _url_ov.items()
                     if n and n != "undefined" and n not in shopping_set
+                    and n not in removed_set          # a pin must not resurrect a deleted item
                     and (v.get("ww_url") or v.get("coles_url"))
                 ]
                 if manually_added:
@@ -1928,6 +1952,11 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         with open(latest_path) as f:
             existing_data = json.load(f)
     existing_map = {i["list_item"]: i for i in existing_data.get("items", [])}
+    # Third gate: the universal carry-forward below preserves anything already in
+    # latest.json, which would quietly restore a deleted item that a stale
+    # progress push had re-added mid-run. Drop them here so no later step sees them.
+    for _rm in removed_set:
+        existing_map.pop(_rm, None)
 
     items_output = []
     not_found = []

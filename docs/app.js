@@ -713,6 +713,120 @@ function persistBasketStore() { writeBasket(basketQtyMap()); }
   _updateSelectedPill();
 })();
 
+// ── Permanent delete ─────────────────────────────────────────────────────────
+// Owner-only (needs the GitHub token, so a viewer/demo copy simply can't).
+// Purges a product everywhere it can reach and writes the tombstone that stops
+// the next scrape re-creating it from shopping_list.xlsx.
+//
+// The tombstone is written FIRST and deliberately: if any later PUT fails (rate
+// limit, conflict, connection drop) the gate is already in place, so the item
+// stays gone instead of coming back on the next run. Everything after it is
+// cleanup that can be retried by simply deleting again.
+async function deleteItemsForever(names) {
+  const s = loadSettings();
+  if (!s?.token) {
+    alert('Permanent delete needs the owner GitHub token - it is disabled in the shared/demo copy.');
+    return;
+  }
+  names = [...new Set(names.filter(Boolean))];
+  if (!names.length) return;
+
+  const shown = names.slice(0, 8).map(n => '• ' + stripWW(n)).join('\n');
+  const more = names.length > 8 ? `\n…and ${names.length - 8} more` : '';
+  if (!confirm(
+    `Permanently delete ${names.length} product${names.length !== 1 ? 's' : ''}?\n\n${shown}${more}\n\n` +
+    `This removes them from current prices, the price-change archive and the scrape log, ` +
+    `and blocks future scrapes from bringing them back.\n\nThis cannot be undone.`)) return;
+
+  const rm = new Set(names);
+  const drop = list => (list || []).filter(n => !rm.has(typeof n === 'string' ? n : n?.item));
+  showToast(`Deleting ${names.length} product${names.length !== 1 ? 's' : ''}…`, 60000);
+  let failed = [];
+  const step = async (label, fn) => { try { await fn(); } catch (e) { failed.push(`${label}: ${e.message}`); } };
+
+  // 1. THE GATE - do this before anything else.
+  await step('removed_items.json', async () => {
+    const cur = await githubGetJson(s, 'docs/data/removed_items.json');
+    const merged = [...new Set([...(Array.isArray(cur) ? cur : []), ...names])].sort();
+    await githubPutJson(s, 'docs/data/removed_items.json', merged,
+      `chore: permanently delete ${names.length} product(s)`);
+    mergeRemovedItems(names);
+  });
+
+  // 2. Current prices (race-guarded - warns if a scrape is live).
+  await step('latest.json', async () => {
+    const d = await githubGetJson(s, 'docs/data/latest.json');
+    if (!d?.items) return;
+    d.items = d.items.filter(i => !rm.has(i.list_item));
+    d.not_found_items = drop(d.not_found_items);
+    await persistLatestJson(d, `chore: remove ${names.length} deleted product(s)`);
+  });
+
+  // 3. Pinned URLs - the single biggest resurrection vector (the scraper re-adds
+  //    anything still keyed here), so it must be cleared even though the scraper
+  //    now also gates on the tombstone.
+  await step('url_overrides.json', async () => {
+    const ov = await githubGetJson(s, 'docs/data/url_overrides.json');
+    if (!ov || typeof ov !== 'object') return;
+    let changed = false;
+    names.forEach(n => { if (n in ov) { delete ov[n]; changed = true; } });
+    if (changed) await githubPutJson(s, 'docs/data/url_overrides.json', ov, 'chore: drop pins for deleted products');
+  });
+
+  await step('archived_items.json', async () => {
+    const a = await githubGetJson(s, 'docs/data/archived_items.json');
+    if (!Array.isArray(a)) return;
+    const next = drop(a);
+    if (next.length !== a.length) await githubPutJson(s, 'docs/data/archived_items.json', next, 'chore: drop deleted products from archive');
+  });
+
+  // 4. History.
+  await step('price_changes.json', async () => {
+    const p = await githubGetJson(s, 'docs/data/price_changes.json');
+    if (!Array.isArray(p)) return;
+    let changed = false;
+    p.forEach(run => ['ww', 'coles'].forEach(k => {
+      const before = (run[k] || []).length;
+      run[k] = drop(run[k]);
+      if (run[k].length !== before) changed = true;
+    }));
+    if (changed) await githubPutJson(s, 'docs/data/price_changes.json', p, 'chore: drop deleted products from price history');
+  });
+
+  await step('scrape_log.json', async () => {
+    const l = await githubGetJson(s, 'docs/data/scrape_log.json');
+    if (!Array.isArray(l)) return;
+    let changed = false;
+    l.forEach(run => ['ww_missed', 'coles_missed'].forEach(k => {
+      const before = (run[k] || []).length;
+      run[k] = drop(run[k]);
+      if (run[k].length !== before) changed = true;
+    }));
+    if (changed) await githubPutJson(s, 'docs/data/scrape_log.json', l, 'chore: drop deleted products from scrape log');
+  });
+
+  // 5. This device's own state. user_settings/watchlist need no repo write - the
+  //    existing REMOVED_ITEMS filters on the sync paths strip them on next push,
+  //    and mergeRemovedItems() above just taught those filters these names.
+  try {
+    const pr = loadPriorities(); names.forEach(n => delete pr[n]); savePriorities(pr);
+    const ov = loadOverrides(); names.forEach(n => delete ov[n]); localStorage.setItem('pw_overrides_v1', JSON.stringify(ov));
+    const u = JSON.parse(localStorage.getItem('pw_units_v1') || '{}'); names.forEach(n => delete u[n]);
+    localStorage.setItem('pw_units_v1', JSON.stringify(u));
+    const w = loadWatchlistLocal(); names.forEach(n => w.delete(n)); saveWatchlistLocal(w);
+    const q = basketQtyMap(); names.forEach(n => { delete q[n]; _selectedItems.delete(n); }); writeBasket(q);
+  } catch {}
+  names.forEach(n => _checkedItems.delete(n));
+
+  // Drop from the in-memory copy so the rows disappear now, not after a reload.
+  if (_lastData?.items) _lastData.items = _lastData.items.filter(i => !rm.has(i.list_item));
+  updateBulkBar();
+  if (_lastData) renderPage(_lastData);
+  showToast(failed.length
+    ? `Deleted, but ${failed.length} file(s) failed: ${failed[0]}`
+    : `🗑 ${names.length} product${names.length !== 1 ? 's' : ''} permanently deleted`, failed.length ? 9000 : 4000);
+}
+
 function updateBulkBar() {
   const bar = $('bulkToolbar');
   if (!bar) return;
@@ -729,6 +843,11 @@ function updateBulkBar() {
   if (archBtn) archBtn.innerHTML = inArchive ? '📤 Unarchive' : '🗄 Archive';
   const priChip = bar.querySelector('.bt-pri');
   if (priChip) priChip.style.display = inArchive ? 'none' : '';
+  // Permanent delete is owner-only: it writes to the repo, so a viewer could
+  // never complete it. Hide rather than disable - a dead button on the demo copy
+  // invites clicks that can only fail.
+  const delBtn = bar.querySelector('.bt-delete');
+  if (delBtn) delBtn.style.display = (typeof isViewerMode === 'function' && isViewerMode()) ? 'none' : '';
 
   // Show the CURRENT category + priority of the checked rows on the chips (so you
   // see what they are before changing them). Uniform selection => the shared
@@ -2628,6 +2747,13 @@ function initBulkBar() {
     const added = _selectedItems.size - before;
     showToast(`🛒 ${_bulkQty === 1 ? '' : _bulkQty + ' units of '}${added || add.length} item${(added || add.length) !== 1 ? 's' : ''} added - ${_selectedItems.size} in basket`);
     if (_lastData) renderPage(_lastData); // sync ✓ marks on panel rows / cards
+  });
+
+  // Permanent delete. checkedRealNames(true) expands a per-kg group to its member
+  // products, so deleting a group row removes the real products behind it rather
+  // than leaving orphans the scraper would keep fetching.
+  bar.querySelector('.bt-delete')?.addEventListener('click', () => {
+    deleteItemsForever(checkedRealNames(true).filter(n => !String(n).startsWith('__group_')));
   });
 
   bar.querySelector('.bt-archive')?.addEventListener('click', () => {
@@ -6550,7 +6676,9 @@ async function boot() {
   });
 
   // Load analysis data and watchlist before first render
-  await Promise.all([loadItemAnalysis(), initWatchlist(), initUserSettings(), mergeArchivedFromRepo(), loadRepoUrlOverrides()]);
+  // loadRemovedItems() runs alongside the rest so the deleted-name tombstones are
+  // in REMOVED_ITEMS before the first sync/render - the sync filters read that set.
+  await Promise.all([loadItemAnalysis(), initWatchlist(), initUserSettings(), mergeArchivedFromRepo(), loadRepoUrlOverrides(), loadRemovedItems()]);
   const data = await loadData();
 
   {

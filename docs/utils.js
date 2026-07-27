@@ -623,6 +623,24 @@ const REMOVED_ITEMS = new Set([
   "McKenzie's Pepper Black Corns Blended",
 ]);
 
+// The list above is the frozen legacy seed. Everything deleted from the UI goes
+// into docs/data/removed_items.json instead - a DATA file, because it has to be
+// writable from the browser AND readable by the Python scraper (which is the
+// half that stops a deleted name being re-scraped out of the Excel). Merged in
+// at boot; both halves are enforced together everywhere REMOVED_ITEMS is used.
+function mergeRemovedItems(names) {
+  (names || []).forEach(n => { if (n) REMOVED_ITEMS.add(n); });
+  return REMOVED_ITEMS;
+}
+
+async function loadRemovedItems() {
+  try {
+    const r = await fetch(`data/removed_items.json?t=${Date.now()}`, { cache: 'no-store' });
+    if (r.ok) mergeRemovedItems(await r.json());
+  } catch {}
+  return REMOVED_ITEMS;
+}
+
 // One group's resolved member names under the user's current overrides.
 // ponytail: legacy v1 overrides are treated as pure adds, a close-enough mirror
 // of app.js's migratePerKgOverride for a display/grouping filter.

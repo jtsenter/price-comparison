@@ -22,7 +22,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=115" />
+  <link rel="stylesheet" href="style.css?v=116" />
 </head>
 <body>
 
@@ -41,6 +41,8 @@
   </div>
   <div class="bt-right">
     <button class="bt-chip bt-archive">🗄 Archive</button>
+    <!-- Owner-only: hidden entirely in viewer/demo mode (see updateBulkBar) -->
+    <button class="bt-chip bt-delete" title="Permanently delete the selected products - removes them from prices and history, and stops future scrapes bringing them back">🗑 Delete forever</button>
     <div class="bt-basket-seg">
       <button class="bt-chip bt-sl" title="Add the selected items to your basket">＋ Basket</button>
       <div class="bt-qty-step" title="Multiplier: each item is added at its own Qty from the table, times this. Leave at 1 to add exactly the quantities shown.">
@@ -389,8 +391,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=80"></script>
-<script src="app.js?v=149"></script>
+<script src="utils.js?v=81"></script>
+<script src="app.js?v=150"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">

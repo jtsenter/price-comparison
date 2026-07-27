@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=115" />
+  <link rel="stylesheet" href="style.css?v=116" />
   <style>
     .sl-main { max-width: 960px; margin: 0 auto; padding: 20px 24px 60px; }
 
@@ -256,7 +256,7 @@
   </section>
 
   <div class="sl-tabs" role="tablist">
-    <button class="sl-tab active" data-tab="runs" role="tab">Runs <span class="cnt" id="slCntRuns"></span></button>
+    <button class="sl-tab active" data-tab="runs" role="tab">Runs</button>
     <button class="sl-tab" data-tab="changes" role="tab">Price changes <span class="cnt" id="slCntChg"></span></button>
     <button class="sl-tab" data-tab="diag" role="tab">Diagnostics</button>
   </div>
@@ -319,7 +319,7 @@
   </div>
 </main>
 
-<script src="utils.js?v=80"></script>
+<script src="utils.js?v=81"></script>
 <script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
@@ -778,7 +778,6 @@ async function load() {
     <div class="sl-stat"><div class="n">${archivedCount}</div><div class="l">Archived</div></div>
     <div class="sl-stat"><div class="n">${avgAll != null ? avgAll + '%' : '–'}</div><div class="l">Avg match rate</div></div>
   `;
-  $('slCntRuns').textContent = log.length;
   // Badge = moves in the MOST RECENT scrape, not the all-time total. The running
   // total only ever grows and told you nothing actionable; "5 changed last run"
   // is the number worth glancing at. All-time still lives in the table's footer.
