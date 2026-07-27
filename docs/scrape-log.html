@@ -319,7 +319,7 @@
   </div>
 </main>
 
-<script src="utils.js?v=79"></script>
+<script src="utils.js?v=80"></script>
 <script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
@@ -572,7 +572,8 @@ function paintChangeSummary(q) {
 
   const dayLabel = d => {
     const dt = new Date(d + 'T00:00:00');
-    return isNaN(dt) ? d : dt.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+    return isNaN(dt) ? d
+      : dt.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
   };
   const cell = b => {
     const n = b.up + b.down;
@@ -599,7 +600,7 @@ function paintChangeSummary(q) {
           <td>${dayLabel(d)}</td>
           <td>${cell(b.ww)}</td>
           <td>${cell(b.coles)}</td>
-          <td>${b.ww.up + b.ww.down + b.coles.up + b.coles.down}</td>
+          <td><strong>${b.ww.up + b.ww.down + b.coles.up + b.coles.down}</strong></td>
         </tr>`).join('')}</tbody>
         ${days.length > 1 ? `<tfoot><tr>
           <td><strong>All time</strong></td>
@@ -778,7 +779,16 @@ async function load() {
     <div class="sl-stat"><div class="n">${avgAll != null ? avgAll + '%' : '–'}</div><div class="l">Avg match rate</div></div>
   `;
   $('slCntRuns').textContent = log.length;
-  $('slCntChg').textContent = (changes || []).reduce((s, r) => s + (r.ww || []).length + (r.coles || []).length, 0);
+  // Badge = moves in the MOST RECENT scrape, not the all-time total. The running
+  // total only ever grows and told you nothing actionable; "5 changed last run"
+  // is the number worth glancing at. All-time still lives in the table's footer.
+  {
+    const lastRun = (changes || [])[(changes || []).length - 1];
+    const lastCount = lastRun ? (lastRun.ww || []).length + (lastRun.coles || []).length : 0;
+    const el = $('slCntChg');
+    el.textContent = lastCount;
+    el.title = `${lastCount} price change${lastCount === 1 ? '' : 's'} in the most recent scrape`;
+  }
   renderTrendChart(log);
   $('slInfoNotes').innerHTML = `
     <li>Only full scrapes (scheduled or manual "Update Prices") are logged here - single-item refreshes from the ✎ Edit dialog aren't.</li>

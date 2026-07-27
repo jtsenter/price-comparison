@@ -617,6 +617,10 @@ const REMOVED_ITEMS = new Set([
   "Arnold's Farm Granola Pink Lady Apple & Cinnamon",
   'Balconi Mix Max Spgnckes Cocoa',
   'Vevelle 2 Ply White Toilet Tissue',
+  // 2026-07-26: deleted at user request. Not an alias of anything, so its 3
+  // Excel receipt rows were removed too (a KNOWN_NAME_CHANGES alias would have
+  // had to keep them - they feed the renamed product).
+  "McKenzie's Pepper Black Corns Blended",
 ]);
 
 // One group's resolved member names under the user's current overrides.

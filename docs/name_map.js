@@ -57,7 +57,6 @@ window.PW_NAME_MAP = {
   "Manning Valley 12 Extra Large Free Range Eggs": "Manning Valley Eggs 12pk",
   "McKenzie's Dried Veg Pearl Barley": "McKenzie's Pearl Barley",
   "McKenzie's Green Lentil Whole": "McKenzie's Green Lentils",
-  "McKenzie's Pepper Black Corns Blended": "McKenzie's Black Pepper",
   "McKenzie's Red Lentils": "McKenzie's Red Lentils",
   "McVitie's Digestives Milk Chocolate": "McVitie's Digestives",
   "McVitie's Hobnobs Milk Chocolate": "McVitie's Hobnobs",
