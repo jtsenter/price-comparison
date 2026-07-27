@@ -930,8 +930,22 @@ tr:hover .item-edit-btn { opacity: 1; }
 .mb-tag svg { width: 11px; height: 11px; flex-shrink: 0; }
 .mb-tag.on  { color: var(--ww, #00843D); }          /* deal applied - green */
 .mb-tag.off { color: var(--text-soft, #94A3B8); }   /* hint - muted, icon only */
-/* Price shown at its multi-buy effective per-unit (deal live) - green like the tag */
-.mb-price { color: var(--ww, #00843D); }
+/* The one-line explanation of how the two store totals are built. */
+.banner-note {
+  margin: 12px auto 0; max-width: 780px; padding: 0 4px;
+  font-size: 12px; line-height: 1.55; color: var(--text-mid); text-align: center;
+}
+.banner-note strong { color: var(--text); font-weight: 600; }
+.banner-note em { font-style: normal; font-variant-numeric: tabular-nums; color: var(--text); }
+@media (max-width: 640px) { .banner-note { font-size: 11px; line-height: 1.5; } }
+
+/* Price shown at its multi-buy effective per-unit (deal live).
+   Deliberately NOT coloured. Green+bold on this table means "this store is
+   cheaper for this row", which .cell-ww/.cell-coles decides on the real
+   multi-buy-aware line cost. Colouring every live promo green made a $7.50
+   promo price look like the winner beside a $7.00 rival. Only the lower number
+   goes green; the multi-buy TAG keeps its own green as the promo indicator. */
+.mb-price { color: inherit; }
 .mb-price .price-link { color: inherit; }
 
 /* Trip count badge */

@@ -477,9 +477,7 @@ function updateImportBadge() {
 
 // ── Unit quantity overrides ──────────────────────────────────────────────────
 
-function loadUnitOverrides() {
-  try { return JSON.parse(localStorage.getItem('pw_units_v1') || '{}'); } catch { return {}; }
-}
+// loadUnitOverrides() lives in utils.js - the basket reads the same quantities.
 function saveUnitOverrides(obj) {
   localStorage.setItem('pw_units_v1', JSON.stringify(obj));
   scheduleUserSettingsSync();
@@ -531,12 +529,11 @@ function getPriority(itemName) {
 }
 
 function getUnits(itemName) {
+  // Category rows defer to groupUnits() (utils.js) so the basket, which has no
+  // access to _perkgSet or the analysis data, plans them at the same quantity.
+  if (typeof itemName === 'string' && itemName.startsWith('__group_')) return groupUnits(itemName);
   const ov = loadUnitOverrides()[itemName];
   if (ov != null) return ov;
-  if (typeof itemName === 'string' && itemName.startsWith('__group_')) {
-    const k = itemName.slice(8);
-    return (UNIT_BASED_GROUPS.has(k) || STICKER_GROUPS.has(k)) ? 1 : 1.0;
-  }
   if (_perkgSet.has(itemName)) return 1.0;
   const qty = getAnalysisData(itemName).avg_qty;
   return qty != null ? Math.round(qty) : 1;
@@ -583,80 +580,8 @@ let _perkgFilter = 'all';  // per-kg group visibility: 'all' | 'only' | 'hidden'
 
 // Effective categories = seed defaults merged with the user's saved label/membership
 // overrides (pw_perkg_cats_v1). Returns a fresh array each call.
-// ── Per-kg override model (pure helpers; unit-tested in scripts/perkg_selfcheck.js) ──
-// The override is a DIFF against the code defaults, not a frozen snapshot. This is the
-// whole point: defaults stay authoritative, so a member removed in code disappears and
-// a member added in code appears - while the user's own add/remove/rename still stick.
-// The old snapshot form ({items, ww_items, coles_items}) is migrated on read.
-//
-//   v2 shape: { v:2, label?, add:[], remove:[], ww_order?, coles_order? }
-//
-// Known migration limit: a union snapshot can't tell a user-added item from a default
-// that was later pruned in code - both look like "extra" names - so on upgrade they're
-// kept as `add`. The user can remove such a straggler once and it now stays removed.
-function migratePerKgOverride(o, defaultItems) {
-  if (!o || typeof o !== 'object') return { v: 2, add: [], remove: [] };
-  if (o.v === 2) return o;
-  const out = { v: 2, label: o.label, add: [], remove: [] };
-  if (Array.isArray(o.items)) out.add = o.items.filter(n => !defaultItems.includes(n));
-  if (Array.isArray(o.ww_items)) out.ww_order = o.ww_items;
-  if (Array.isArray(o.coles_items)) out.coles_order = o.coles_items;
-  return out;
-}
-
-// Flat member list = (defaults minus user-removed) then user-added, de-duped vs defaults.
-function computePerKgItems(defaultItems, override) {
-  const o = migratePerKgOverride(override, defaultItems);
-  const remove = new Set(o.remove || []);
-  const add = (o.add || []).filter(n => !defaultItems.includes(n));
-  return [...defaultItems.filter(n => !remove.has(n)), ...add];
-}
-
-function loadVariantGroups() {
-  let ov = {};
-  try { ov = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}
-  return DEFAULT_VARIANT_GROUPS.map(g => {
-    const o = migratePerKgOverride(ov[g.key], g.items);
-    return {
-      key: g.key,
-      label: o.label || g.label,
-      category: g.category,
-      sticker: !!g.sticker,
-      items: computePerKgItems(g.items, o),
-      // Per-store ordered member lists (display order hints; membership comes from
-      // `items` + price qualification in resolveStoreLists). Null until the user saves.
-      ww_items: Array.isArray(o.ww_order) ? o.ww_order : null,
-      coles_items: Array.isArray(o.coles_order) ? o.coles_order : null,
-    };
-  });
-}
-
-// Resolve a category's per-store member lists (ordered). If the override has an
-// explicit ww_items/coles_items list, use it verbatim (explicit membership - keep
-// even pending items). Otherwise derive: an item belongs to a store's list if it
-// has a pinned URL or a real (>0) price there.
-function resolveStoreLists(group, byName) {
-  const qualifies = (name, store) => {
-    const data = byName.get(name);
-    const price = store === 'ww' ? data?.woolworths?.price : data?.coles?.price;
-    return price != null && price > 0;
-  };
-  const build = (orderArr, store) => {
-    let names;
-    if (Array.isArray(orderArr)) {
-      names = orderArr.filter(n => group.items.includes(n) && qualifies(n, store));
-      // Append any union item that now qualifies for this store but isn't listed yet.
-      for (const it of group.items) if (!names.includes(it) && qualifies(it, store)) names.push(it);
-    } else {
-      names = group.items.filter(n => qualifies(n, store));
-    }
-    return names;
-  };
-  return {
-    ww: build(group.ww_items, 'ww'),
-    coles: build(group.coles_items, 'coles'),
-  };
-}
+// migratePerKgOverride / computePerKgItems / loadVariantGroups / resolveStoreLists
+// live in utils.js - the basket builds the same category rows from them.
 function saveVariantGroupOverride(key, patch) {
   let ov = {};
   try { ov = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}
@@ -666,11 +591,7 @@ function saveVariantGroupOverride(key, patch) {
   delete ov[key].items; delete ov[key].ww_items; delete ov[key].coles_items; // strip legacy snapshot keys
   localStorage.setItem('pw_perkg_cats_v1', JSON.stringify(ov));
 }
-// Products excluded from a category's $/kg (per category+item+store). Key form:
-// "catKey::list_item::ww|coles". Stored in pw_perkg_excl_v1.
-function loadPerKgExclusions() {
-  try { return new Set(JSON.parse(localStorage.getItem('pw_perkg_excl_v1') || '[]')); } catch { return new Set(); }
-}
+// loadPerKgExclusions() lives in utils.js (the basket honours the same exclusions).
 function savePerKgExclusions(set) {
   localStorage.setItem('pw_perkg_excl_v1', JSON.stringify([...set]));
 }
@@ -1890,7 +1811,8 @@ function openHistoryFromManageBtn(itemName) {
   if (!_lastData || !itemName) return;
   if (itemName.startsWith('__group_')) {
     const byName = new Map(_lastData.items.map(i => [i.list_item, i]));
-    const group = buildVariantGroups(byName).find(g => g._groupKey === itemName.replace('__group_', ''));
+    const _g0 = buildVariantGroups(byName).find(g => g._groupKey === itemName.replace('__group_', ''));
+    const group = _g0 ? withGroupCounts(_g0) : _g0;
     if (group) openPriceHistoryModal(buildGroupHistoryItem(group));
     return;
   }
@@ -2834,12 +2756,8 @@ function mbBestTotal(item) {
 // These are two INDEPENDENT columns (each store's own basket cost), which is the
 // whole point of having both - don't collapse them into a single best-of column.
 function rowStoreTotal(item, store) {
-  const u = getUnits(item.list_item);
-  if (item._isGroup) {
-    const v = store === 'ww' ? item._wwPerKg : item._coPerKg;
-    return v == null ? null : v * u;
-  }
-  return mbLineCost(store === 'ww' ? item.woolworths : item.coles, u);
+  if (item._isGroup) return groupStoreTotal(item, store);   // utils.js - basket uses the same
+  return mbLineCost(store === 'ww' ? item.woolworths : item.coles, getUnits(item.list_item));
 }
 
 // ── Banner stats (priority-aware) ────────────────────────────────────────────
@@ -2870,7 +2788,7 @@ function computeBannerStats(items) {
   // _renderPageInner.
   let pool = items;
   if (_activePriority !== 'archive') {
-    const groups = buildVariantGroups(new Map(items.map(i => [i.list_item, i])));
+    const groups = buildVariantGroups(new Map(items.map(i => [i.list_item, i]))).map(withGroupCounts);
     if (groups.length) pool = items.filter(i => !perkgMembers.has(i.list_item)).concat(groups);
   }
   const baseFiltered = pool.filter(item => {
@@ -2887,9 +2805,12 @@ function computeBannerStats(items) {
       }
     }
     if (_activeCategory !== 'All' && getCategory(item) !== _activeCategory) return false;
-    // Only items priced at BOTH stores can be compared. Group rows carry their
-    // price as _wwPerKg/_coPerKg, not woolworths.price, so ask shownStorePrice.
-    if (shownStorePrice(item, 'ww') == null || shownStorePrice(item, 'coles') == null) return false;
+    // An item needs a price SOMEWHERE to count. It used to need one at BOTH
+    // stores, which quietly dropped single-store items from the cards - so these
+    // totals disagreed with the Basket's, and neither answered "what does this
+    // whole shop cost?". Group rows carry their price as _wwPerKg/_coPerKg, not
+    // woolworths.price, so ask shownStorePrice.
+    if (shownStorePrice(item, 'ww') == null && shownStorePrice(item, 'coles') == null) return false;
     return true;
   });
   // Narrow by the SAME search + column filters the visible table applies, so the
@@ -2903,8 +2824,14 @@ function computeBannerStats(items) {
   //     actually costs at that store - qty-weighted, multi-buy applied.
   //   • the WW/Coles PRICE column footers = the sum of that column's own numbers,
   //     which are per-unit prices. A column footer sums its column.
-  const ww_total = filtered.reduce((s, i) => s + (rowStoreTotal(i, 'ww') ?? 0), 0);
-  const co_total = filtered.reduce((s, i) => s + (rowStoreTotal(i, 'coles') ?? 0), 0);
+  // An item a store doesn't stock is counted at the price you'd actually pay for
+  // it elsewhere - you still have to buy it. Both totals therefore cover the SAME
+  // item set, which is the only way the comparison means anything (and is exactly
+  // what the Basket page does, so the two pages' figures match).
+  const storeTotal = (i, store) =>
+    rowStoreTotal(i, store) ?? rowStoreTotal(i, store === 'ww' ? 'coles' : 'ww') ?? 0;
+  const ww_total = filtered.reduce((s, i) => s + storeTotal(i, 'ww'), 0);
+  const co_total = filtered.reduce((s, i) => s + storeTotal(i, 'coles'), 0);
   const col_ww = filtered.reduce((s, i) => s + (shownStorePrice(i, 'ww') ?? 0), 0);
   const col_coles = filtered.reduce((s, i) => s + (shownStorePrice(i, 'coles') ?? 0), 0);
   const total_saving = Math.abs(ww_total - co_total);
@@ -2912,7 +2839,7 @@ function computeBannerStats(items) {
   // whole shop at the more expensive single store. Same qty-weighted basis as the
   // store totals, so cherry_total IS the Total-column best-of-each figure.
   const cherry_total = filtered.reduce((s, i) =>
-    s + Math.min(rowStoreTotal(i, 'ww'), rowStoreTotal(i, 'coles')), 0);
+    s + Math.min(storeTotal(i, 'ww'), storeTotal(i, 'coles')), 0);
   const max_saving = Math.max(ww_total, co_total) - cherry_total;
   let cheaper_store;
   if (!ww_avail) cheaper_store = 'coles_only';
@@ -3913,74 +3840,18 @@ function renderCards(items) {
 // product as its own row with $/kg at each store.
 
 // Build synthetic group items from the per-kg member products present in the list.
-function buildVariantGroups(byName) {
-  const out = [];
-  const excl = loadPerKgExclusions();
-  for (const g of loadVariantGroups()) {
-    // Members that aren't in latest.json yet (never scraped / scrape failed)
-    // are kept as pending placeholders so they remain visible in the panel.
-    const members = g.items.map(n => {
-      const item = byName.get(n);
-      if (!item) return { list_item: n, _pending: true, woolworths: null, coles: null, price_history: [] };
-      return item.pending ? { ...item, _pending: true } : item;
-    });
-    if (!members.length) continue;
-
-    // Woolworths and Coles are independent lists - a product contributes to a store
-    // only if it's a member of that store's list. The cheapest in each list wins.
-    const stores = resolveStoreLists(g, byName);
-    const memberByName = new Map(members.map(m => [m.list_item, m]));
-    // Comparison metric: pack price for sticker groups (Bolognese sauce), $/kg
-    // otherwise. `perkg` keeps its name through the pipeline but holds whichever.
-    const ww = stores.ww
-      .filter(n => !excl.has(`${g.key}::${n}::ww`))
-      .map(n => ({ name: n, result: memberByName.get(n)?.woolworths, perkg: groupMetric(g, memberByName.get(n)?.woolworths) }))
-      .filter(v => v.perkg != null).sort((a, b) => a.perkg - b.perkg);
-    const co = stores.coles
-      .filter(n => !excl.has(`${g.key}::${n}::coles`))
-      .map(n => ({ name: n, result: memberByName.get(n)?.coles, perkg: groupMetric(g, memberByName.get(n)?.coles) }))
-      .filter(v => v.perkg != null).sort((a, b) => a.perkg - b.perkg);
-
-    // Per-store member counts, deduped the same way the expanded panel is, so the group
-    // sub-label ("N Woolworths · M Coles") matches the rows actually shown (no inflated
-    // counts from product aliases or wrong cross-store matches).
-    const ovr = loadOverrides();
-    const wwCount = dedupePerKgVariants(ww.map(x => ({ name: x.name, res: x.result, pk: x.perkg })), 'ww', ovr, memberByName).length;
-    const coCount = dedupePerKgVariants(co.map(x => ({ name: x.name, res: x.result, pk: x.perkg })), 'coles', ovr, memberByName).length;
-
-    const wwBest = ww[0] || null;
-    const coBest = co[0] || null;
-    let cheaper = null;
-    if (wwBest && coBest) cheaper = wwBest.perkg < coBest.perkg ? 'woolworths' : (coBest.perkg < wwBest.perkg ? 'coles' : 'equal');
-    else if (wwBest) cheaper = 'woolworths';
-    else if (coBest) cheaper = 'coles';
-
-    out.push({
-      list_item: `__group_${g.key}`,
-      _isGroup: true,
-      _groupKey: g.key,
-      _groupLabel: g.label,
-      _sticker: !!g.sticker,
-      _unitSuffix: g.sticker ? '' : '/kg',
-      _members: members,
-      _wwList: stores.ww,
-      _coList: stores.coles,
-      _wwCount: wwCount,
-      _coCount: coCount,
-      _wwBest: wwBest,
-      _coBest: coBest,
-      _wwPerKg: wwBest ? wwBest.perkg : null,
-      _coPerKg: coBest ? coBest.perkg : null,
-      // Shape like a normal item so sort/helpers work; price = best variant's pack price.
-      woolworths: wwBest ? wwBest.result : null,
-      coles: coBest ? coBest.result : null,
-      cheaper_store: cheaper,
-      category: g.category || 'Meat & Seafood',
-      trip_count: null,
-      price_history: [],
-    });
-  }
-  return out;
+// buildVariantGroups() lives in utils.js so the basket builds IDENTICAL category
+// rows (same members, same $/kg exclusions, same metric) - that is what makes the
+// two pages' store totals agree. Display-only member counts are attached by
+// withGroupCounts() below, which needs this file's name/dedupe helpers.
+function withGroupCounts(group) {
+  const ovr = loadOverrides();
+  const memberByName = new Map(group._members.map(m => [m.list_item, m]));
+  const count = (list, storeKey) =>
+    dedupePerKgVariants(list.map(x => ({ name: x.name, res: x.result, pk: x.perkg })), storeKey, ovr, memberByName).length;
+  group._wwCount = count(group._wwAll || [], 'ww');
+  group._coCount = count(group._coAll || [], 'coles');
+  return group;
 }
 
 // Multi-buy special badge ("2 for $6.00") - captured from the store's own
@@ -5530,7 +5401,7 @@ function _renderPageInner(data) {
   {
     const memberNames = new Set(loadVariantGroups().flatMap(g => g.items));
     const byName = new Map(allDisplayItems.map(i => [i.list_item, i]));
-    const groups = buildVariantGroups(byName);
+    const groups = buildVariantGroups(byName).map(withGroupCounts);
     if (groups.length || memberNames.size) {
       allDisplayItems = allDisplayItems.filter(i => !memberNames.has(i.list_item));
       // Group rows themselves are Weekly, so they belong in every view EXCEPT

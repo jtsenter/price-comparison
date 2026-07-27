@@ -6,6 +6,7 @@ import random
 import re
 import sys
 import threading
+import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone, date, timedelta
@@ -110,7 +111,8 @@ def _append_price_changes(trigger: str, ww_changes: list, coles_changes: list) -
 
 def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed: list,
                        ww_attempted: int | None = None, coles_attempted: int | None = None,
-                       partial: bool = False) -> None:
+                       partial: bool = False, duration_s: float | None = None,
+                       duration_p90_s: float | None = None, archived: int | None = None) -> None:
     """Append one run's per-store miss summary to docs/data/scrape_log.json (capped).
     ww_missed/coles_missed: [{"item": str, "reason": "no_results"|"no_match"}, ...].
     ww_attempted/coles_attempted: how many items were actually TRIED at each store.
@@ -139,6 +141,17 @@ def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed
         entry["ww_attempted"] = ww_attempted
     if coles_attempted is not None:
         entry["coles_attempted"] = coles_attempted
+    if archived is not None:
+        entry["archived"] = archived
+    # How long the run took, so "how long would 1000 products take?" is answerable
+    # from data instead of guesswork. duration_p90_s is the same clock stopped at
+    # 90% of items: if the two are close the run finishes evenly, and if p90 is far
+    # short of the total then the tail really is where the time goes. Recorded from
+    # this run onward - older entries simply have no duration and the UI skips them.
+    if duration_s is not None:
+        entry["duration_s"] = round(duration_s, 1)
+    if duration_p90_s is not None:
+        entry["duration_p90_s"] = round(duration_p90_s, 1)
     # Price movements deliberately do NOT live here any more - they go to the
     # uncapped price_changes.json via _append_price_changes(). (This function used
     # to take ww_changes/coles_changes; when those params were dropped the body
@@ -2112,6 +2125,12 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             # is None (no previous push), so the lock check never fires and the
             # background thread starts without delay.
             _scrape_start_time = datetime.now(timezone.utc).isoformat()
+            # [0] = run start (monotonic), [1] = seconds to reach 90% of items.
+            # Two numbers instead of one because the progress bar appears to sit
+            # near the end for a while: if p90 lands close to the total, the run
+            # is even and that impression is wrong; if it lands far short, the
+            # tail genuinely dominates and 90% is the honest yardstick.
+            _run_clock = [time.monotonic(), None]
             if total_to_scrape > 0:
                 push_progress_bg(
                     items_output, not_found,
@@ -2157,6 +2176,9 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                         not_found.append(name)   # keep item visible; final pass will carry forward
                     finally:
                         completed[0] += 1
+                        if (_run_clock[1] is None and total_to_scrape
+                                and completed[0] >= total_to_scrape * 0.90):
+                            _run_clock[1] = time.monotonic() - _run_clock[0]
                         if completed[0] % 5 == 0 or _force_push or (total_to_scrape - completed[0]) < 5:
                             _pv_snap = {**existing_pv, **{e["item"]: e for e in new_validation_entries}}
                             merged_pv = list(_pv_snap.values())
@@ -2209,6 +2231,9 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                     ww_attempted=sum(1 for e in _run_store_misses if e["ww_attempted"]),
                     coles_attempted=sum(1 for e in _run_store_misses if e["co_attempted"]),
                     partial=partial,
+                    duration_s=time.monotonic() - _run_clock[0],
+                    duration_p90_s=_run_clock[1],
+                    archived=sum(1 for e in _run_store_misses if e["item"] in archived_set),
                 )
 
             _log_checkpoint[0] = _write_scrape_log

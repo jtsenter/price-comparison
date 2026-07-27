@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=116" />
+  <link rel="stylesheet" href="style.css?v=117" />
   <style>
     .sl-main { max-width: 960px; margin: 0 auto; padding: 20px 24px 60px; }
 
@@ -80,6 +80,39 @@
     .sl-chart-wrap { margin-top: 10px; position: relative; }
     .sl-chart-wrap svg { display: block; width: 100%; height: 132px; overflow: visible; }
     .sl-chart-legend { display: flex; gap: 14px; align-items: center; font-size: 11.5px; color: var(--text-mid); margin-top: 8px; flex-wrap: wrap; }
+    .sl-chart-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+    /* Runs-tab headline: last run's per-store success rates */
+    .sl-runs-head {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      margin: 0 0 12px; padding: 10px 14px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    }
+    .sl-runs-head:empty { display: none; }
+    .srh-label { font-size: 12px; font-weight: 600; color: var(--text-mid); }
+    .srh-rate {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums;
+      padding: 3px 9px; border-radius: 999px; background: var(--bg); border: 1px solid var(--border);
+    }
+    .srh-rate.good { color: var(--ww, #00843D); }
+    .srh-rate.warn { color: #B45309; }
+    .srh-rate.bad  { color: var(--coles, #CC0000); }
+    .srh-when { font-size: 11.5px; color: var(--text-soft); margin-left: auto; }
+
+    /* Chronic-miss rows: last-failure date beside the miss count */
+    .sl-miss-meta { display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0; }
+    .sl-miss-last { font-size: 10.5px; color: var(--text-soft); font-variant-numeric: tabular-nums; }
+
+    /* Per-day summary extras */
+    .sl-sum-dow { font-size: 11.5px; color: var(--text-soft); }
+    .sl-sum-rate { font-size: 11px; color: var(--text-soft); font-weight: 500; text-align: right; }
+
+    /* Price-change bar chart */
+    .sl-chg-chart { margin: 4px 0 18px; }
+    .sl-chg-chart-head { display: flex; align-items: baseline; gap: 8px; font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .sl-chg-chart svg { display: block; width: 100%; height: 120px; }
+    .sl-chg-chart-axis { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-soft); margin-top: 2px; }
     .sl-leg { display: inline-flex; align-items: center; gap: 5px; }
     .sl-leg i { width: 12px; height: 3px; border-radius: 2px; display: inline-block; }
     .sl-chart-tip {
@@ -256,16 +289,17 @@
   </section>
 
   <div class="sl-tabs" role="tablist">
-    <button class="sl-tab active" data-tab="runs" role="tab">Runs</button>
-    <button class="sl-tab" data-tab="changes" role="tab">Price changes <span class="cnt" id="slCntChg"></span></button>
+    <button class="sl-tab active" data-tab="changes" role="tab">Price changes <span class="cnt" id="slCntChg"></span></button>
+    <button class="sl-tab" data-tab="runs" role="tab">Runs</button>
     <button class="sl-tab" data-tab="diag" role="tab">Diagnostics</button>
   </div>
 
-  <div data-panel="runs">
+  <div data-panel="runs" hidden>
+    <div id="slRunsHead" class="sl-runs-head"></div>
     <div id="slRuns" class="sl-runs"></div>
   </div>
 
-  <div data-panel="changes" hidden>
+  <div data-panel="changes">
     <div class="sl-card" id="slChangesCard">
       <div class="sl-card-head">
         <h2>Price change history</h2>
@@ -285,6 +319,7 @@
         Every price move each scrape records, kept <strong>indefinitely</strong> (not capped like the run log).
         <span class="chg-up">▲ red</span> = went up, <span class="chg-down">▼ green</span> = went down.
       </p>
+      <div id="slChgChart"></div>
       <div id="slChgSummary"></div>
       <div id="slChangeRuns"></div>
     </div>
@@ -319,7 +354,7 @@
   </div>
 </main>
 
-<script src="utils.js?v=81"></script>
+<script src="utils.js?v=82"></script>
 <script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
@@ -371,19 +406,66 @@ function renderMissList(list) {
 function renderChronicMisses(log) {
   const card = $('slChronicCard');
   if (log.length < 2) { card.style.display = 'none'; return; }
+  // Products deleted from the system entirely must not linger here as "misses" -
+  // they are not missing, they are gone.
+  const removed = _removedSet;
+
+  const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+  const cutoff = Date.now() - WEEK_MS;
+
   const tally = (key) => {
-    const counts = new Map();
-    log.forEach(run => normaliseMissed(run[key]).forEach(e => counts.set(e.item, (counts.get(e.item) || 0) + 1)));
-    return [...counts.entries()].filter(([, n]) => n > 1).sort((a, b) => b[1] - a[1]).slice(0, 15);
+    const counts = new Map();     // item -> times missed
+    const lastMiss = new Map();   // item -> ISO date of most recent miss
+    const attemptedSince = new Map(); // item -> was it TRIED at this store in the last week
+    const missedSince = new Map();    // item -> did it miss in the last week
+    const store = key === 'ww_missed' ? 'ww' : 'coles';
+
+    for (const run of log) {
+      const t = Date.parse(run.date || '');
+      const recent = Number.isFinite(t) && t >= cutoff;
+      const missedNames = new Set();
+      for (const e of normaliseMissed(run[key])) {
+        missedNames.add(e.item);
+        counts.set(e.item, (counts.get(e.item) || 0) + 1);
+        if (!lastMiss.has(e.item) || String(run.date) > lastMiss.get(e.item)) lastMiss.set(e.item, run.date);
+        if (recent) missedSince.set(e.item, true);
+      }
+      // A run that TRIED this store is evidence for every chronic name: if the
+      // name isn't in that run's miss list, it scraped fine.
+      if (recent && attempted(run, store) > 0) {
+        for (const name of counts.keys()) {
+          if (!missedNames.has(name)) attemptedSince.set(name, true);
+        }
+      }
+    }
+
+    return [...counts.entries()]
+      .filter(([item, n]) => {
+        if (n <= 1) return false;                         // single misses are noise
+        if (removed.has(item)) return false;              // deleted from the system
+        // Scraped cleanly at some point in the last week and hasn't missed since:
+        // it fixed itself, so it isn't something to track down any more.
+        if (attemptedSince.get(item) && !missedSince.get(item)) return false;
+        return true;
+      })
+      .sort((a, b) => b[1] - a[1]).slice(0, 15)
+      .map(([item, n]) => [item, n, lastMiss.get(item)]);
+  };
+  const shortDate = iso => {
+    const d = new Date(iso);
+    return isNaN(d) ? '' : d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
   };
   const col = (label, cls, rows) => `
     <div class="sl-miss-col ${cls}">
       <h3>${label} (${rows.length})</h3>
       ${rows.length
-        ? '<ul class="sl-miss-list">' + rows.map(([item, n]) =>
-            `<li><span>${escapeHtml(item)}</span><span class="sl-miss-reason unknown" title="Missed in ${n} of the last ${log.length} logged runs">×${n}</span></li>`
+        ? '<ul class="sl-miss-list">' + rows.map(([item, n, last]) =>
+            `<li><span>${escapeHtml(item)}</span><span class="sl-miss-meta">` +
+            (last ? `<span class="sl-miss-last" title="Most recent failed scrape">${shortDate(last)}</span>` : '') +
+            `<span class="sl-miss-reason unknown" title="Missed in ${n} of the last ${log.length} logged runs">×${n}</span>` +
+            `</span></li>`
           ).join('') + '</ul>'
-        : '<div class="sl-miss-empty">No repeat offenders.</div>'}
+        : '<div class="sl-miss-empty">Nothing outstanding — every repeat offender has scraped cleanly in the last week.</div>'}
     </div>`;
   $('slChronicCols').innerHTML =
     col('Woolworths', 'ww', tally('ww_missed')) + col('Coles', 'coles', tally('coles_missed'));
@@ -529,6 +611,11 @@ function renderTrendChart(log) {
 
 // ── Price change archive (uncapped, from price_changes.json) ─────────────────
 let _changeArchive = [];
+// The run log, kept alongside so the per-day summary can report how much work
+// each day's scrapes actually did (items scraped, how many archived, how long).
+let _runLog = [];
+// Names permanently deleted from PriceWatch (docs/data/removed_items.json).
+let _removedSet = new Set();
 function renderChangeArchive(changes) {
   _changeArchive = Array.isArray(changes) ? changes : [];
   const card = $('slChangesCard');
@@ -549,6 +636,72 @@ function renderChangeArchive(changes) {
 // Grouped by calendar date, not by run - two scrapes on the same day are one
 // day's worth of movement. Honours the product filter so it can't contradict the
 // list underneath it.
+// Stacked daily bars of price movement (falls green, rises red), oldest left.
+// `days` arrives newest-first from paintChangeSummary and already respects the
+// product filter, so the chart and the table can never disagree.
+function paintChangeChart(days) {
+  const host = $('slChgChart');
+  if (!host) return;
+  if (days.length < 2) { host.innerHTML = ''; return; }
+
+  const series = [...days].reverse().map(([d, b]) => ({
+    d, up: b.ww.up + b.coles.up, down: b.ww.down + b.coles.down,
+  }));
+  const max = Math.max(...series.map(s => s.up + s.down), 1);
+  const W = 900, H = 120, padL = 26, padR = 6, padT = 8, padB = 16;
+  const plotH = H - padT - padB;
+  const n = series.length;
+  const slot = (W - padL - padR) / n;
+  const bw = Math.max(2, Math.min(18, slot * 0.62));
+
+  const bars = series.map((s, i) => {
+    const cx = padL + slot * (i + 0.5);
+    const x = cx - bw / 2;
+    const hUp = (s.up / max) * plotH;
+    const hDown = (s.down / max) * plotH;
+    const yDown = padT + plotH - hDown;
+    const yUp = yDown - hUp;
+    const label = new Date(s.d + 'T00:00:00');
+    const title = `${isNaN(label) ? s.d : label.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short' })}\n` +
+                  `${s.down} down · ${s.up} up · ${s.up + s.down} total`;
+    return `<g><title>${escapeHtml(title)}</title>` +
+      (hDown ? `<rect x="${x.toFixed(1)}" y="${yDown.toFixed(1)}" width="${bw.toFixed(1)}" height="${hDown.toFixed(1)}" fill="var(--ww,#00843D)" rx="1"/>` : '') +
+      (hUp ? `<rect x="${x.toFixed(1)}" y="${yUp.toFixed(1)}" width="${bw.toFixed(1)}" height="${hUp.toFixed(1)}" fill="var(--coles,#CC0000)" rx="1"/>` : '') +
+      `</g>`;
+  }).join('');
+
+  // Three gridlines is enough to read a count off; more is chartjunk.
+  const ticks = [0, Math.round(max / 2), max].filter((v, i, a) => a.indexOf(v) === i);
+  const grid = ticks.map(v => {
+    const yy = padT + plotH - (v / max) * plotH;
+    return `<line x1="${padL}" y1="${yy.toFixed(1)}" x2="${W - padR}" y2="${yy.toFixed(1)}" stroke="var(--border)" stroke-width="1"/>` +
+           `<text x="${padL - 5}" y="${(yy + 3.5).toFixed(1)}" text-anchor="end" font-size="9.5" fill="var(--text-soft)">${v}</text>`;
+  }).join('');
+
+  const first = series[0].d, last = series[n - 1].d;
+  const endLabel = iso => {
+    const dt = new Date(iso + 'T00:00:00');
+    return isNaN(dt) ? iso : dt.toLocaleDateString('en-AU', { day: 'numeric', month: 'short' });
+  };
+
+  host.innerHTML = `
+    <div class="sl-chg-chart">
+      <div class="sl-chg-chart-head">
+        <span>Price changes over time</span>
+        <span class="sl-card-sub">${n} day${n === 1 ? '' : 's'} with movement</span>
+      </div>
+      <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img"
+           aria-label="Daily count of price changes, falls and rises stacked">
+        ${grid}${bars}
+      </svg>
+      <div class="sl-chg-chart-axis"><span>${endLabel(first)}</span><span>${endLabel(last)}</span></div>
+      <div class="sl-chart-legend">
+        <span><i style="background:var(--ww,#00843D)"></i> went down</span>
+        <span><i style="background:var(--coles,#CC0000)"></i> went up</span>
+      </div>
+    </div>`;
+}
+
 function paintChangeSummary(q) {
   const host = $('slChgSummary');
   if (!host) return;
@@ -568,12 +721,47 @@ function paintChangeSummary(q) {
   const days = [...byDay.entries()]
     .filter(([, b]) => b.ww.up + b.ww.down + b.coles.up + b.coles.down > 0)
     .sort((a, b) => b[0].localeCompare(a[0]));   // newest first
-  if (!days.length) { host.innerHTML = ''; return; }
+  if (!days.length) { host.innerHTML = ''; paintChangeChart([]); return; }
 
   const dayLabel = d => {
     const dt = new Date(d + 'T00:00:00');
-    return isNaN(dt) ? d
-      : dt.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+    return isNaN(dt) ? d : dt.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+  };
+  const weekdayLabel = d => {
+    const dt = new Date(d + 'T00:00:00');
+    return isNaN(dt) ? '' : dt.toLocaleDateString('en-AU', { weekday: 'short' });
+  };
+
+  // How much work each day's scrape(s) did. Runs are matched to the same
+  // calendar day as the price changes they produced.
+  const effortByDay = new Map();
+  for (const run of _runLog) {
+    const day = String(run.date || '').slice(0, 10);
+    if (!day) continue;
+    if (!effortByDay.has(day)) effortByDay.set(day, { scraped: 0, archived: 0, secs: 0, p90: 0, timed: 0, runs: 0 });
+    const e = effortByDay.get(day);
+    e.runs++;
+    e.scraped += Number(run.scraped) || 0;
+    e.archived += Number(run.archived) || 0;
+    // duration_s only exists on runs recorded after timing was added, so a day
+    // with older runs shows "-" rather than a misleadingly small total.
+    if (typeof run.duration_s === 'number') { e.secs += run.duration_s; e.timed++; }
+    if (typeof run.duration_p90_s === 'number') e.p90 += run.duration_p90_s;
+  }
+  const fmtDur = s => {
+    if (!(s > 0)) return '';
+    const m = Math.floor(s / 60), sec = Math.round(s % 60);
+    return m ? `${m}m ${String(sec).padStart(2, '0')}s` : `${sec}s`;
+  };
+  const effortCells = (d) => {
+    const e = effortByDay.get(d);
+    if (!e) return '<td class="sl-sum-zero">-</td><td class="sl-sum-zero">-</td><td class="sl-sum-zero">-</td>';
+    const dur = e.timed
+      ? `<span title="${e.timed} of ${e.runs} run(s) timed${e.p90 ? ` · 90% done after ${fmtDur(e.p90)}` : ''}">${fmtDur(e.secs)}</span>`
+      : '<span class="sl-sum-zero" title="This run predates duration tracking">-</span>';
+    return `<td>${e.scraped || '<span class="sl-sum-zero">-</span>'}</td>` +
+           `<td>${e.archived || '<span class="sl-sum-zero">-</span>'}</td>` +
+           `<td>${dur}</td>`;
   };
   const cell = b => {
     const n = b.up + b.down;
@@ -587,26 +775,47 @@ function paintChangeSummary(q) {
   const tot = { ww: { up: 0, down: 0 }, coles: { up: 0, down: 0 } };
   days.forEach(([, b]) => { tot.ww.up += b.ww.up; tot.ww.down += b.ww.down; tot.coles.up += b.coles.up; tot.coles.down += b.coles.down; });
 
+  // Price movement over time. Bars, not a line: these are counts per day, and a
+  // line would imply a continuous value between scrape days. Rises stack above
+  // falls in the same bar so the day's mix reads at a glance.
+  paintChangeChart(days);
+
   host.innerHTML = `
     <div class="sl-sum-wrap">
       <table class="sl-sum">
         <thead><tr>
           <th>Date</th>
+          <th>Day</th>
           <th><span class="store-chip ww sm">W</span> Woolworths</th>
           <th><span class="store-chip coles sm">C</span> Coles</th>
           <th>Total</th>
+          <th title="Products the scrape processed that day">Scraped</th>
+          <th title="How many of those were archived items">Archived</th>
+          <th title="Wall-clock time of that day's scrape(s). Hover a value for the 90%-done mark.">Time</th>
         </tr></thead>
         <tbody>${days.map(([d, b]) => `<tr>
           <td>${dayLabel(d)}</td>
+          <td class="sl-sum-dow">${weekdayLabel(d)}</td>
           <td>${cell(b.ww)}</td>
           <td>${cell(b.coles)}</td>
           <td><strong>${b.ww.up + b.ww.down + b.coles.up + b.coles.down}</strong></td>
+          ${effortCells(d)}
         </tr>`).join('')}</tbody>
         ${days.length > 1 ? `<tfoot><tr>
           <td><strong>All time</strong></td>
+          <td></td>
           <td>${cell(tot.ww)}</td>
           <td>${cell(tot.coles)}</td>
           <td><strong>${tot.ww.up + tot.ww.down + tot.coles.up + tot.coles.down}</strong></td>
+          <td colspan="3" class="sl-sum-rate">${(() => {
+            // Seconds per product, across every timed run - the number that
+            // answers "how long would 1000 products take?".
+            let secs = 0, items = 0;
+            for (const e of effortByDay.values()) if (e.timed) { secs += e.secs; items += e.scraped; }
+            if (!(secs > 0 && items > 0)) return '';
+            const per = secs / items;
+            return `≈ ${per.toFixed(1)}s per product · 1000 would take ~${Math.round(per * 1000 / 60)} min`;
+          })()}</td>
         </tr></tfoot>` : ''}
       </table>
     </div>`;
@@ -707,14 +916,21 @@ async function load() {
   let latest = null;
   let changes = [];
   try {
-    const [logRes, latestRes, chgRes] = await Promise.all([
+    const [logRes, latestRes, chgRes, rmRes] = await Promise.all([
       fetch(`data/scrape_log.json?t=${Date.now()}`),
       fetch(`data/latest.json?t=${Date.now()}`),
       fetch(`data/price_changes.json?t=${Date.now()}`).catch(() => null),
+      fetch(`data/removed_items.json?t=${Date.now()}`).catch(() => null),
     ]);
     if (logRes.ok) log = await logRes.json();
     if (latestRes.ok) latest = await latestRes.json();
     if (chgRes && chgRes.ok) changes = await chgRes.json();
+    // Permanently deleted products must drop off the chronic-miss list: they are
+    // not failing to scrape, they no longer exist.
+    if (rmRes && rmRes.ok) {
+      const r = await rmRes.json();
+      if (Array.isArray(r)) _removedSet = new Set(r);
+    }
   } catch (e) {
     runsEl.innerHTML = `<div class="sl-empty-state">Could not load the scrape log: ${e.message}</div>`;
     return;
@@ -797,6 +1013,22 @@ async function load() {
     <li><a href="data/scrape_log.json" target="_blank" rel="noopener">View raw scrape_log.json</a></li>
   `;
 
+  // Runs-tab headline: how each store actually did on the LAST run, so the
+  // answer is on screen before you expand anything.
+  const runsHead = $('slRunsHead');
+  if (runsHead) {
+    const pct = (v) => v == null ? '—' : `${v}%`;
+    const cls = (v) => v == null ? '' : v >= 85 ? ' good' : v >= 50 ? ' warn' : ' bad';
+    runsHead.innerHTML = !lastRun ? '' : `
+      <span class="srh-label">Last run · ${escapeHtml(lastRun.trigger || 'run')}</span>
+      <span class="srh-rate${cls(lastRunWwPct)}" title="${attempted(lastRun, 'ww') - normaliseMissed(lastRun.ww_missed).length} of ${attempted(lastRun, 'ww')} Woolworths items matched">
+        <span class="store-chip ww sm">W</span> ${pct(lastRunWwPct)}</span>
+      <span class="srh-rate${cls(lastRunCoPct)}" title="${attempted(lastRun, 'coles') - normaliseMissed(lastRun.coles_missed).length} of ${attempted(lastRun, 'coles')} Coles items matched">
+        <span class="store-chip coles sm">C</span> ${pct(lastRunCoPct)}</span>
+      <span class="srh-when">${timeAgo(lastRun.date)}</span>`;
+  }
+
+  _runLog = log;
   renderChronicMisses(log);
   renderWishlist();
   renderChangeArchive(changes);

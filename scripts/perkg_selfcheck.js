@@ -5,12 +5,16 @@ const fs = require('fs');
 const path = require('path');
 const assert = require('assert');
 
-const src = fs.readFileSync(path.join(__dirname, '..', 'docs', 'app.js'), 'utf8');
+// The per-kg override model moved to utils.js (the basket builds the same
+// category rows from it); deriveNameFromUrl is still app.js display logic.
+const src = ['utils.js', 'app.js']
+  .map(f => fs.readFileSync(path.join(__dirname, '..', 'docs', f), 'utf8'))
+  .join('\n');
 
 // Slice `function NAME(...) { ... }` by brace-matching from the first '{'.
 function extract(name) {
   const at = src.indexOf('function ' + name + '(');
-  assert(at !== -1, `function ${name} not found in app.js`);
+  assert(at !== -1, `function ${name} not found in utils.js/app.js`);
   let i = src.indexOf('{', at), depth = 0;
   for (let j = i; j < src.length; j++) {
     if (src[j] === '{') depth++;

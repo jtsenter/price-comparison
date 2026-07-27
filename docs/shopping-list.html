@@ -227,6 +227,8 @@
     .bg-pick { font-size: 11px; color: var(--text-soft); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .bg-qty { color: var(--text-mid); font-weight: 600; }
     .price-val { font-size: 15px; font-weight: 700; }
+    /* "/kg" after a category row's rate - same treatment as the main table */
+    .pv-suffix { font-size: 10px; font-weight: 600; color: var(--text-soft, #94A3B8); margin-left: 1px; }
     .unit-val { font-size: 11px; color: var(--text-soft); }
     .total-val { font-size: 15px; font-weight: 700; color: var(--text); }
     /* Multi-buy tag icon beside a line total (hover for the full deal). Inline
@@ -531,7 +533,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=81"></script>
+<script src="utils.js?v=82"></script>
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '-';
 // Short display name (same map the rest of the site uses); falls back to the
@@ -543,7 +545,9 @@ const dispName = i => i._isGroup ? i._groupLabel : shortName(i.list_item);
 // rendered beside the pick name. The pack MULTIPLIER is not shown here: it
 // lives in the row's qty cell (2 units of 1kg vs 1 unit of 2kg).
 const pickQty = (i, store) => {
-  const size = store === 'ww' ? i._wwSize : i._coSize;
+  const best = store === 'ww' ? i._wwBest : i._coBest;
+  // Pack size in kg = pack price ÷ its $/kg.
+  const size = (best?.result?.price != null && best?.perkg) ? best.result.price / best.perkg : null;
   if (size == null) return '';
   // Snap to 0.05kg: size is derived as price ÷ $/kg and $/kg is rounded to 4dp,
   // so a clean 4kg bag can read as 3.99. Grocery pack sizes are 0.05kg-grained.
@@ -649,75 +653,28 @@ async function boot() {
   // size resolves) - so a category is never "one store only" as long as either
   // store prices any variant, and price changes move the pick automatically.
   {
-    let pkOv = {};
-    try { pkOv = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}
     const byName = new Map((data.items || []).map(i => [i.list_item, i]));
-    const perKg = res => {
-      if (!res || res.price == null) return null;
-      const p = clientPer100(res);
-      return p.value != null ? p.value * 10 : null;
-    };
-    for (const key of [...basketNames].filter(n => n.startsWith('__group_'))) {
-      const g = DEFAULT_VARIANT_GROUPS.find(gr => '__group_' + gr.key === key);
-      if (!g) continue;
-      const members = variantGroupItemNames(g, pkOv).map(n => byName.get(n)).filter(Boolean);
-      // Sticker groups (Bolognese sauce) pick + compare by pack PRICE, not $/kg.
-      const isSticker = g.sticker;
-      const pick = store => {
-        const priced = members.map(m => ({ m, res: m[store], kg: perKg(m[store]) }))
-          .filter(x => x.res && x.res.price != null);
-        if (!priced.length) return null;
-        if (isSticker) return priced.sort((a, b) => a.res.price - b.res.price)[0];
-        const withKg = priced.filter(x => x.kg != null);
-        return (withKg.length ? withKg.sort((a, b) => a.kg - b.kg)
-                              : priced.sort((a, b) => a.res.price - b.res.price))[0];
+    // ONE builder, shared with the main table (utils.js). This page used to have
+    // its own copy that disagreed on member lists, $/kg exclusions and the
+    // comparison metric, so a category could total differently on the two pages.
+    const wanted = new Set([...basketNames].filter(n => n.startsWith('__group_')));
+    for (const g of buildVariantGroups(byName)) {
+      if (!wanted.has(g.list_item)) continue;
+      if (g._wwPerKg == null && g._coPerKg == null) continue; // nothing priced yet
+      // How many whole packs of the picked product make up the planned quantity -
+      // shown next to the pick so you know what to actually put in the trolley.
+      // It does NOT drive the money: see groupStoreTotal().
+      const packsFor = (best) => {
+        if (!best?.result || best.result.price == null || !best.perkg) return null;
+        const packKg = best.result.price / best.perkg;         // pack size in kg
+        return packKg > 0 ? Math.max(1, Math.ceil(groupUnits(g.list_item) / packKg)) : null;
       };
-      const w = pick('woolworths'), c = pick('coles');
-      if (!w && !c) continue; // no priced variant anywhere - nothing to buy yet
-      // UNIT-BASED groups (yoghurt, potato...) are bought as whole packs, so when
-      // each store's cheapest-$/kg pick is a different size (WW 1kg vs Coles 2kg)
-      // comparing lone stickers is apples-to-oranges. Scale each store to a common
-      // weight in whole packs (2 × WW 1kg vs 1 × Coles 2kg). The row keeps the
-      // PER-PACK sticker; the pack multiplier lives in _wwPacks/_coPacks and the
-      // QTY CELL shows it (price × packs happens in effPrice, used everywhere).
-      // Variable-weight cuts (meat) skip this: you buy those by the kilo, so
-      // "2 trays to match" makes no sense.
-      if (UNIT_BASED_GROUPS.has(g.key) && w && w.kg != null && c && c.kg != null) {
-        const b = perKgEquivBundle({ price: w.res.price, perKg: w.kg }, { price: c.res.price, perKg: c.kg });
-        displayItems.push({
-          list_item: key, _isGroup: true, _groupLabel: g.label,
-          category: g.category || 'Meat & Seafood',
-          woolworths: { ...w.res },
-          coles:      { ...c.res },
-          cheaper_store: b.cheaper,
-          _wwPickName: w.m.list_item, _coPickName: c.m.list_item,
-          _wwPacks: b.ww.packs, _coPacks: b.coles.packs,
-          _wwSize: w.res.price / w.kg, _coSize: c.res.price / c.kg,
-        });
-        continue;
-      }
-      // Store routing by $/kg (the group's metric, same as the main page);
-      // sticker price only breaks ties / covers size-less picks. Sticker groups
-      // route purely by pack price.
-      let cheaper;
-      if (w && c) {
-        if (isSticker) {
-          cheaper = w.res.price === c.res.price ? 'equal' : (w.res.price < c.res.price ? 'woolworths' : 'coles');
-        } else {
-          const wk = w.kg ?? Infinity, ck = c.kg ?? Infinity;
-          cheaper = wk === ck
-            ? (w.res.price === c.res.price ? 'equal' : (w.res.price < c.res.price ? 'woolworths' : 'coles'))
-            : (wk < ck ? 'woolworths' : 'coles');
-        }
-      } else cheaper = w ? 'woolworths' : 'coles';
       displayItems.push({
-        list_item: key, _isGroup: true, _groupLabel: g.label,
-        category: g.category || 'Meat & Seafood',
-        woolworths: w ? { ...w.res } : null,
-        coles: c ? { ...c.res } : null,
-        cheaper_store: cheaper,
-        _wwPickName: w ? w.m.list_item : null,
-        _coPickName: c ? c.m.list_item : null,
+        ...g,
+        _wwPickName: g._wwBest ? g._wwBest.name : null,
+        _coPickName: g._coBest ? g._coBest.name : null,
+        _wwPacks: packsFor(g._wwBest),
+        _coPacks: packsFor(g._coBest),
       });
     }
   }
@@ -756,12 +713,13 @@ async function boot() {
   // smaller pack up to the group's comparison weight (2 × 1kg vs 1 × 2kg);
   // everything else is 1.
   const packsOf = (i, store) => (store === 'ww' ? i._wwPacks : i._coPacks) ?? 1;
-  // Effective one-line cost at `store`: per-pack sticker × packs. Null when the
-  // store doesn't price it. EVERY total/comparison uses this, so a 1kg pick is
-  // never weighed against a 2kg one.
+  // The price this row SHOWS at `store` - the SAME number the main table shows:
+  // $/kg for a weighed category, pack price for everything else. Null when the
+  // store doesn't price it.
   const effPrice = (i, store) => {
+    if (i._isGroup) return store === 'ww' ? i._wwPerKg : i._coPerKg;
     const p = store === 'ww' ? i.woolworths?.price : i.coles?.price;
-    return p == null ? null : p * packsOf(i, store);
+    return p == null ? null : p;
   };
   // Effective price of an item at `store`. In SINGLE mode, items the store
   // doesn't sell fall back to the other store's price (you have no choice for
@@ -779,8 +737,12 @@ async function boot() {
   // costs. Units at the register = basket qty × packs (a per-kg row can be
   // several packs), so the promo is counted against real packs, not rows.
   const mbOf = (i, store) => ((store === 'ww' ? i.woolworths : i.coles) || {}).multi_buy || null;
-  const unitsOf = (i, store) => bq(i.list_item) * packsOf(i, store);
+  const unitsOf = (i, store) => bq(i.list_item);
+  // What this row costs at `store` = the price shown x the quantity shown - the
+  // SAME rule (and for categories the SAME function) as the main table's Total
+  // column, which is why the two pages' store totals agree to the cent.
   function lineCost(i, store) {
+    if (i._isGroup) return groupStoreTotal(i, store);            // utils.js
     const p = store === 'ww' ? i.woolworths?.price : i.coles?.price;
     if (p == null) return null;
     return multiBuyCost(unitsOf(i, store), p, mbOf(i, store));   // utils.js
@@ -970,14 +932,18 @@ async function boot() {
       // borrow everything from the other store).
       const rowStore = fellBack ? (store === 'ww' ? 'coles' : 'ww') : store;
       const rowPacks = packsOf(i, rowStore);
-      // Multi-buy applies to PACKS at the register, not basket rows.
-      const rowUnits = rowPacks * units;
-      const rowMb = mbOf(i, rowStore);
-      const lineTotal = multiBuyCost(rowUnits, sd?.price ?? 0, rowMb);
-      const mbSaved = +((rowUnits * (sd?.price ?? 0)) - lineTotal).toFixed(2);
+      // Multi-buy applies to PACKS at the register, not basket rows. Category
+      // rows are priced by rate (see groupStoreTotal), so no promo maths there.
+      const rowUnits = units;
+      const rowMb = i._isGroup ? null : mbOf(i, rowStore);
+      // The price this row shows, and its total = that price x the qty shown.
+      const shownPrice = effPrice(i, rowStore);
+      const rowQty = i._isGroup ? groupUnits(i.list_item) : units;
+      const lineTotal = lineCostFor(i, store) ?? 0;
+      const mbSaved = rowMb ? +((rowUnits * (sd?.price ?? 0)) - lineTotal).toFixed(2) : 0;
       // Either "you're getting the deal" or "one more unit and you would be".
       // The per-unit price above is untouched either way.
-      const nudge = (sd?.price != null) ? multiBuyNudge(rowUnits, sd.price, rowMb) : null;
+      const nudge = (rowMb && sd?.price != null) ? multiBuyNudge(rowUnits, sd.price, rowMb) : null;
       // A tag icon beside the total, not a wrapping second line. Full wording
       // (deal terms + exact saving) is in the hover title. `saved` = the deal is
       // already in this total (green); `hint` = one more unit reaches it (muted).
@@ -1028,8 +994,8 @@ async function boot() {
       return `<tr${fellBack ? ' class="row-fellback"' : ''}>
         <td class="item-name-cell"><div class="name-wrap">${img ? `<img class="sl-thumb" loading="lazy" src="${escAttr(img)}" alt="" onerror="this.style.display='none'">` : ''}<span title="${escAttr(i._isGroup ? i._groupLabel : i.list_item)}">${esc(dispName(i))}</span></div>${pickHtml}</td>
         <td class="cat-cell" style="font-size:12px;color:#64748B;overflow:hidden;text-overflow:ellipsis">${esc(cat)}</td>
-        <td class="r price-cell"><span class="price-val">${fmt(sd?.price)}</span>${onlyChip}${altPrice}</td>
-        <td class="r qty-cell"><div class="qty-step"><button type="button" class="qs-btn" data-item="${name}" data-d="-1" aria-label="Decrease quantity">−</button><span class="qs-val"${rowPacks > 1 ? ` title="${rowPacks} × ${pickQty(i, rowStore)} packs to match the other store's weight"` : ''}>${units * rowPacks}</span><button type="button" class="qs-btn" data-item="${name}" data-d="1" aria-label="Increase quantity">+</button></div></td>
+        <td class="r price-cell"><span class="price-val">${fmt(shownPrice)}${i._isGroup && i._unitSuffix ? `<span class="pv-suffix">${i._unitSuffix}</span>` : ''}</span>${onlyChip}${altPrice}</td>
+        <td class="r qty-cell"><div class="qty-step"><button type="button" class="qs-btn" data-item="${name}" data-d="-1" aria-label="Decrease quantity">−</button><span class="qs-val"${i._isGroup && rowPacks > 1 ? ` title="About ${rowPacks} × ${pickQty(i, rowStore)} packs to cover this"` : ''}>${i._isGroup ? (i._unitSuffix ? `${rowQty.toFixed(1)}kg` : rowQty) : units}</span><button type="button" class="qs-btn" data-item="${name}" data-d="1" aria-label="Increase quantity">+</button></div></td>
         <td class="r total-cell"><span class="total-val">${fmt(lineTotal)}</span>${mbNote}</td>
         <td class="act-cell"><div class="act-wrap">${canSwap || swapDisabled ? `<button type="button" class="row-btn swap" data-item="${name}" data-to="${swapTo}" title="${swapTitle}"${swapDisabled ? ' disabled' : ''}>⇄</button>` : ''}<button type="button" class="row-btn rm" data-item="${name}" title="Remove from basket">✕</button></div></td>
       </tr>`;
@@ -1102,7 +1068,7 @@ async function boot() {
   }
 
   function renderShopMode(wwItems, colesItems) {
-    const lineOf = (i, store) => (effPrice(i, store) ?? 0) * bq(i.list_item);
+    const lineOf = (i, store) => lineCostFor(i, store) ?? 0;   // same rule as the table
     const rowsHtml = (items, store) => {
       // Category-grouped (≈ aisle order), name-sorted inside each group.
       const byCat = new Map();
@@ -1115,9 +1081,9 @@ async function boot() {
       for (const [cat, list] of byCat) {
         html += `<div class="sm-cat">${esc(cat)}</div>`;
         html += list.map(i => {
-          // Shopping mode = what you grab off the shelf: packs × basket qty
-          // (a 2×1kg yoghurt bundle shows "× 2" even at basket qty 1).
-          const units = bq(i.list_item) * packsOf(i, store);
+          // Shopping mode = what you grab off the shelf: whole packs for a
+          // category row, basket qty for a normal product.
+          const units = i._isGroup ? packsOf(i, store) : bq(i.list_item);
           const line = lineOf(i, store);
           const done = !!smChecked[i.list_item];
           return `<button type="button" class="sm-row${done ? ' done' : ''}" data-item="${escAttr(i.list_item)}" data-line="${line.toFixed(2)}">
@@ -1330,10 +1296,12 @@ async function boot() {
       </div>
 
       ${displayItems.some(i => i._isGroup) ? `<p class="sl-pack-note">
-        <strong>📦 Per-kg items are priced as whole packs here</strong> - the real 450g tray or 2kg bag you'd
-        actually put in the trolley, not one kilogram. That's why these totals differ from the main page,
-        which compares the stores by $/kg. Both are right: the main page tells you which store is cheaper,
-        this page tells you what the trip really costs.
+        <strong>⚖️ Per-kg categories are counted at their rate, not their pack price</strong> - so
+        <em>$10/kg × 1kg = $10</em>, whether the store sells it in 500g trays or one 2kg bag. These totals
+        match the main page exactly. The arrow under a category name still tells you which product to grab
+        and roughly how many packs; that part is the shopping instruction, not the sum. Counting the whole
+        2kg bag instead would make the store with the <em>best</em> rate look expensive just for selling in
+        bulk - the opposite of the answer you want.
       </p>` : ''}
 
       ${!wwItems.length && !slSplit ? '' : `<div class="store-section">
@@ -1390,7 +1358,21 @@ async function boot() {
     // column, a different concept from "how many packs am I buying".
     main.querySelectorAll('.qs-btn').forEach(b => b.addEventListener('click', () => {
       const name = b.dataset.item;
-      const next = Math.max(1, bq(name) + Number(b.dataset.d));
+      const d = Number(b.dataset.d);
+      // Category rows step the SHARED quantity (pw_units_v1) the main page's
+      // Units column writes - that is what keeps the two pages' totals equal.
+      // Weighed categories step in 0.2kg, like the main page; packs step by 1.
+      if (name.startsWith('__group_')) {
+        const weighed = !UNIT_BASED_GROUPS.has(name.slice(8)) && !STICKER_GROUPS.has(name.slice(8));
+        const step = weighed ? 0.2 : 1;
+        const next = Math.max(step, +(groupUnits(name) + d * step).toFixed(1));
+        const ov = loadUnitOverrides();
+        ov[name] = next;
+        localStorage.setItem('pw_units_v1', JSON.stringify(ov));
+        renderContent();
+        return;
+      }
+      const next = Math.max(1, bq(name) + d);
       if (next === bq(name)) return;
       basketQty[name] = next;
       persistBasket();
