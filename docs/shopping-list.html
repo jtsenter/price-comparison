@@ -68,6 +68,9 @@
     .store-card-sl.ww.card-active    { background: #F0FDF4; border-color: var(--ww); }
     .store-card-sl.coles.card-active { background: #FEF5F5; border-color: var(--coles); }
     .store-card-sl.card-inactive:hover { background: var(--bg); }
+    /* Split mode: two real subtotals, neither store is "selected" - not
+       clickable, so no pointer cursor and no hover affordance. */
+    .store-card-sl.card-neutral { cursor: default; }
     .sc-icon { grid-area: icon; }
     .sc-icon-chip {
       display: inline-flex; align-items: center; justify-content: center;
@@ -240,14 +243,14 @@
     .mb-ico.hint  { color: var(--text-soft, #94A3B8); }
     /* Other store's promo marker inside the muted alt price ("C $3.50 2/$6") */
     .alt-mb { font-size: 10px; font-weight: 700; color: var(--text-soft, #94A3B8); border: 1px solid var(--border); border-radius: 7px; padding: 0 4px; }
-    /* Why this page's totals differ from the main page's - shown only when the
-       basket actually holds per-kg group rows, so it never nags without cause. */
+    /* One small line + info icon (shown only when the basket holds per-kg
+       category rows) - the pricing-basis explanation matters once, not as a
+       standing paragraph on every visit. */
     .sl-pack-note {
-      font-size: 12px; line-height: 1.5; color: var(--text-mid);
-      background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
-      padding: 9px 13px; margin: 0 0 14px;
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; color: var(--text-soft); margin: 0 0 10px;
     }
-    .sl-pack-note strong { color: var(--text); font-weight: 600; }
+    .sl-pack-note .info-ico:hover::after, .sl-pack-note .info-ico:focus::after { width: 290px; }
     /* Money and quantities align digit-for-digit down a column */
     .price-val, .total-val, .unit-val, .qs-val, .sc-price, .saving-amount, tfoot td { font-variant-numeric: tabular-nums; }
     tfoot td { background: var(--bg); font-weight: 700; font-size: 15px; border-top: 2px solid var(--border); padding: 11px 14px; }
@@ -533,7 +536,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=82"></script>
+<script src="utils.js?v=83"></script>
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '-';
 // Short display name (same map the rest of the site uses); falls back to the
@@ -695,7 +698,10 @@ async function boot() {
   const filterNoteHtml = () =>
     `<strong>${displayItems.length}</strong> item${displayItems.length !== 1 ? 's' : ''} in your basket`;
 
-  let equalStore = 'ww'; // split mode: which store equal-price items are assigned to
+  // Split mode: which table a truly equal-priced item is LISTED under (the two
+  // tables can't overlap). It costs the same either way, so this is a fixed
+  // tie-breaker, not a user choice - see the store-card click removal below.
+  const equalStore = 'ww';
 
   // View model: ONE store by default - the realistic plan is buying the whole
   // basket at whichever store totals cheaper. "Split shop" opts into the
@@ -1172,17 +1178,19 @@ async function boot() {
     // routing's comparison exactly.
     const equalItems = displayItems.filter(i => cheaperStoreNow(i) === 'equal');
     const single = slSplit ? null : singleStoreNow();
-    // Card "active" highlight: single mode = the store you're buying at;
-    // split mode = where equal-price items are assigned (as before).
-    const wwActive = slSplit ? equalStore === 'ww' : single === 'ww';
+    // Card "active" highlight only means something in single mode (the store
+    // you're buying the whole basket at). Split-mode cards are two REAL
+    // subtotals for two different item sets - neither is "selected", so
+    // neither is clickable and neither is highlighted over the other.
+    const wwActive = !slSplit && single === 'ww';
 
     // Card classes - the store class lets the active card carry its own store colour
-    const wwCardCls = `store-card-sl ww ${wwActive ? 'card-active' : 'card-inactive'}`;
-    const coCardCls = `store-card-sl coles ${!wwActive ? 'card-active' : 'card-inactive'}`;
+    const wwCardCls = `store-card-sl ww ${slSplit ? 'card-neutral' : (wwActive ? 'card-active' : 'card-inactive')}`;
+    const coCardCls = `store-card-sl coles ${slSplit ? 'card-neutral' : (!wwActive ? 'card-active' : 'card-inactive')}`;
 
-    // Price colour - active card always green, inactive always grey
-    const wwPriceCls = wwActive ? 'price-active' : 'price-inactive';
-    const coPriceCls = !wwActive ? 'price-active' : 'price-inactive';
+    // Price colour - active card always green, inactive always grey, split mode neutral
+    const wwPriceCls = slSplit ? '' : (wwActive ? 'price-active' : 'price-inactive');
+    const coPriceCls = slSplit ? '' : (!wwActive ? 'price-active' : 'price-inactive');
 
     // Inactive card shows its distance from the chosen store's total. Single
     // mode only - split cards cover different item sets, so a delta between
@@ -1274,7 +1282,7 @@ async function boot() {
             </div>
             <div class="sc-price ${wwPriceCls}">${fmt(slSplit ? wwSub : wwTotal)}</div>
             <div class="sc-foreign-row">${foreignNote(wwForeign, 'Coles')}</div>
-            <div class="sc-badge-row">${wwActive && !isEqual ? `<span class="sc-badge">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>` : deltaHtml(wwDelta)}</div>
+            <div class="sc-badge-row">${slSplit ? '' : (wwActive && !isEqual ? '<span class="sc-badge">✓ Buying here</span>' : deltaHtml(wwDelta))}</div>
           </div>
           <div class="sl-savings-panel">
             <div class="saving-info">${savingInfoHtml}</div>
@@ -1289,19 +1297,15 @@ async function boot() {
             </div>
             <div class="sc-price ${coPriceCls}">${fmt(slSplit ? coSub : coTotal)}</div>
             <div class="sc-foreign-row">${foreignNote(coForeign, 'Woolworths')}</div>
-            <div class="sc-badge-row">${!wwActive && !isEqual ? `<span class="sc-badge">${slSplit ? '✓ Selected store' : '✓ Buying here'}</span>` : deltaHtml(coDelta)}</div>
+            <div class="sc-badge-row">${slSplit ? '' : (!wwActive && !isEqual ? '<span class="sc-badge">✓ Buying here</span>' : deltaHtml(coDelta))}</div>
           </div>
           ${slSplit ? `<div class="trip-bar"><span class="tb-label">🧾 Split shop total</span><strong>${fmt(wwSub + coSub)}</strong></div>` : ''}
         </div>
       </div>
 
       ${displayItems.some(i => i._isGroup) ? `<p class="sl-pack-note">
-        <strong>⚖️ Per-kg categories are counted at their rate, not their pack price</strong> - so
-        <em>$10/kg × 1kg = $10</em>, whether the store sells it in 500g trays or one 2kg bag. These totals
-        match the main page exactly. The arrow under a category name still tells you which product to grab
-        and roughly how many packs; that part is the shopping instruction, not the sum. Counting the whole
-        2kg bag instead would make the store with the <em>best</em> rate look expensive just for selling in
-        bulk - the opposite of the answer you want.
+        ⚖️ Per-kg categories are priced by rate
+        ${infoIcoHTML('Per-kg categories are counted at their rate, not their pack price - so $10/kg × 1kg = $10, whether the store sells it in 500g trays or one 2kg bag. These totals match the main page exactly. The arrow under a category name still tells you which product to grab and roughly how many packs; that part is the shopping instruction, not the sum. Counting the whole 2kg bag instead would make the store with the best rate look expensive just for selling in bulk - the opposite of the answer you want.')}
       </p>` : ''}
 
       ${!wwItems.length && !slSplit ? '' : `<div class="store-section">
@@ -1341,17 +1345,21 @@ async function boot() {
     // (One-store ⇄ Split-shop toggle is wired by wireSeg(), shared with
     // shopping mode.)
 
-    // Store-card clicks. Single mode: choose which store to buy the whole
-    // basket at. Split mode: reassign equal-price items (as before). Either
-    // way a card click RESETS any per-row ⇄ swaps back to the default plan.
-    const cardClick = (store) => () => {
-      storeOverride.clear();
-      if (slSplit) equalStore = store;
-      else chosenStore = store;
-      renderContent();
-    };
-    document.getElementById('wwTotalBlock')?.addEventListener('click', cardClick('ww'));
-    document.getElementById('colesTotalBlock')?.addEventListener('click', cardClick('coles'));
+    // Store-card clicks: single mode only, to choose which store to buy the
+    // whole basket at (resets any per-row ⇄ swaps back to the default plan).
+    // Split mode cards used to be clickable to reassign equal-price items, but
+    // an equal-price item costs the same either way - the click changed which
+    // table a row appeared in and nothing else, which read as "does nothing".
+    // Removed rather than fixed: there was nothing worth fixing it into.
+    if (!slSplit) {
+      const cardClick = (store) => () => {
+        storeOverride.clear();
+        chosenStore = store;
+        renderContent();
+      };
+      document.getElementById('wwTotalBlock')?.addEventListener('click', cardClick('ww'));
+      document.getElementById('colesTotalBlock')?.addEventListener('click', cardClick('coles'));
+    }
 
     // Qty steppers - cart quantities only (persisted with the basket). They no
     // longer touch pw_units_v1: that map is the main page's kg-planning Units

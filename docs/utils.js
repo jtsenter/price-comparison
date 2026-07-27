@@ -20,6 +20,15 @@ function escAttr(s) {
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 }
 
+// A small circled "?" that reveals its explanation on hover OR tap/focus
+// (tabindex makes :focus-visible tooltips work on touch). CSS: .info-ico.
+// Used instead of an always-visible paragraph for anything explanatory but not
+// essential to read every time - the tooltip is there when wanted, invisible
+// when not.
+function infoIcoHTML(tip) {
+  return `<span class="info-ico" tabindex="0" role="note" aria-label="${escAttr(tip)}" data-tip="${escAttr(tip)}">?</span>`;
+}
+
 // ── Per-100g / per-100ml price ─────────────────────────────────────────────
 // Compute per-100g or per-100ml price from a product result object.
 // Prioritises size extracted from the product name (reliable for pack goods)

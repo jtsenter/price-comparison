@@ -2863,15 +2863,11 @@ function computeBannerStats(items) {
   };
 }
 
+// infoIcoHTML() lives in utils.js - the basket uses it too (per-kg rate note).
 // Renders the two saving figures shown between the store cards:
 //   • Basket saving - the gap between the two whole-basket totals (matches the cards).
 //   • Max saving - buy each item at its cheaper store vs the dearer single store.
 //     Only shown when splitting the shop beats just visiting the cheaper store.
-// A small circled "?" that reveals its explanation on hover OR tap/focus
-// (tabindex makes :focus-visible tooltips work on touch). CSS: .info-ico.
-function infoIcoHTML(tip) {
-  return `<span class="info-ico" tabindex="0" role="note" aria-label="${escAttr(tip)}" data-tip="${escAttr(tip)}">?</span>`;
-}
 
 function renderSavingInfo(s) {
   // Basket saving carries the cheaper store's logo; max saving carries a split
