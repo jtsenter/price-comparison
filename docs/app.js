@@ -2864,8 +2864,12 @@ function computeBannerStats(items) {
   // (which the other store often wins) were invisible to the split math.
   // Collapse them into the same synthetic group rows the table renders instead.
   const perkgMembers = new Set(loadVariantGroups().flatMap(g => g.items));
+  // Members are excluded unconditionally by the filter below (they render only as
+  // part of their group, in every view). Group ROWS are added everywhere except
+  // the archive view, matching what the table draws - see the collapse block in
+  // _renderPageInner.
   let pool = items;
-  if (_activePriority !== 'archive') {   // archive view renders raw members, so match it
+  if (_activePriority !== 'archive') {
     const groups = buildVariantGroups(new Map(items.map(i => [i.list_item, i])));
     if (groups.length) pool = items.filter(i => !perkgMembers.has(i.list_item)).concat(groups);
   }
@@ -5514,15 +5518,24 @@ function _renderPageInner(data) {
   }
 
   // Collapse per-kg member products into synthetic variant-group rows so they
-  // render inline as normal-looking rows (treated as Weekly). Skip in archive
-  // view so the raw items remain individually reachable/unarchivable there.
-  if (_activePriority !== 'archive') {
+  // render inline as normal-looking rows (treated as Weekly).
+  //
+  // A member is NEVER a loose row - not even in the Archive view, which used to
+  // be exempt "so the raw items remain individually reachable". That exemption
+  // showed the same product twice: once nested in its category everywhere else,
+  // and again loose under Archived. There is only ever ONE data entry per product
+  // (the group is a live aggregate over its members, and an archived member still
+  // feeds its group's price and history), so the second row was pure duplication.
+  // Members are now managed through the group's ✎ edit dialog instead.
+  {
     const memberNames = new Set(loadVariantGroups().flatMap(g => g.items));
     const byName = new Map(allDisplayItems.map(i => [i.list_item, i]));
     const groups = buildVariantGroups(byName);
-    if (groups.length) {
+    if (groups.length || memberNames.size) {
       allDisplayItems = allDisplayItems.filter(i => !memberNames.has(i.list_item));
-      allDisplayItems.push(...groups);
+      // Group rows themselves are Weekly, so they belong in every view EXCEPT
+      // the archive one (where a Weekly row would be out of place).
+      if (_activePriority !== 'archive') allDisplayItems.push(...groups);
     }
   }
 
