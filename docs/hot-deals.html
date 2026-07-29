@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=118" />
+  <link rel="stylesheet" href="style.css?v=119" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -481,7 +481,7 @@
 
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=83"></script>
+<script src="utils.js?v=84"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -1145,7 +1145,7 @@ function renderDeals() {
 
     // Trend cell - price bar only, same as main page
     const _trendSeriesHD = getTrendSeries(item);
-    const avgCell = buildPriceBar(item.list_item, _trendSeriesHD.prices.map(p => ({price: p})), _trendSeriesHD.current) || '-';
+    const avgCell = buildPriceBar(item.list_item, _trendSeriesHD.past.map(p => ({price: p})), _trendSeriesHD.current) || '-';
 
     const wwClass  = deal.store === 'woolworths' ? 'cell-deal-ww' : '';
     const coClass  = deal.store === 'coles'      ? 'cell-deal-coles' : '';
@@ -1298,7 +1298,7 @@ function renderDealsMobile(sorted, exclusions, overrides) {
       : saveStr;
 
     const _ts = getTrendSeries(item);
-    const bar = buildPriceBar(item.list_item, _ts.prices.map(p => ({ price: p })), _ts.current) || '';
+    const bar = buildPriceBar(item.list_item, _ts.past.map(p => ({ price: p })), _ts.current) || '';
 
     const safe = item.list_item.replace(/"/g, '&quot;');
     const watched = _watchlistHD.has(item.list_item);

@@ -2896,7 +2896,11 @@ function renderSavingInfo(s) {
       'Buying each item at whichever store is cheapest for it costs this total - the bracket is the extra you save vs shopping at one store only',
       `<span class="sv-total">${fmt(s.split_total)}</span>${disc(s.max_saving)}`);
   }
-  return basket + maxRow;
+  // How the two store totals are built. Rides along inside this panel (which has
+  // spare room) rather than as its own full-width line under the cards.
+  const rule = `<div class="saving-rule">How these totals are calculated${infoIcoHTML(
+    'Each total adds up the price shown in the row × its Qty. Per-kg categories count at their rate — $10/kg × 1kg = $10 — whether the store sells that in 500g trays or one 2kg bag, so a store never looks expensive just for selling in bulk. Your basket uses the identical rule, so its totals match these.')}</div>`;
+  return basket + maxRow + rule;
 }
 
 // ── Category tabs ────────────────────────────────────────────────────────────
@@ -3793,7 +3797,7 @@ function renderCards(items) {
       : '';
 
     const _trendSeries = getTrendSeries(item);
-    const bar = buildPriceBar(item.list_item, _trendSeries.prices.map(p => ({price: p})), _trendSeries.current);
+    const bar = buildPriceBar(item.list_item, _trendSeries.past.map(p => ({price: p})), _trendSeries.current);
     const isChecked = _checkedItems.has(item.list_item);
     const notFound = !ww && !co;
 
@@ -4923,7 +4927,7 @@ function renderMobileCards(items, data) {
                      : (co?.price ?? ww?.price);
     const _trendSeriesMC = getTrendSeries(item);
     const barHtml = _trendSeriesMC.prices.length
-      ? buildPriceBar(item.list_item, _trendSeriesMC.prices.map(p => ({price: p})), _trendSeriesMC.current)
+      ? buildPriceBar(item.list_item, _trendSeriesMC.past.map(p => ({price: p})), _trendSeriesMC.current)
       : '';
 
     const { ww: wwP100, coles: coP100 } = per100Pair(ww, co);
@@ -5496,7 +5500,7 @@ function _renderPageInner(data) {
     // Price bar uses cheaper store's price as reference (or fallback)
     const currentRef = cheaper === 'woolworths' ? ww?.price : (cheaper === 'coles' ? co?.price : (co?.price ?? ww?.price));
     const _trendSeriesPage = getTrendSeries(item);
-    const bar = _trendSeriesPage.prices.length ? buildPriceBar(item.list_item, _trendSeriesPage.prices.map(p => ({price: p})), _trendSeriesPage.current) : '';
+    const bar = _trendSeriesPage.past.length ? buildPriceBar(item.list_item, _trendSeriesPage.past.map(p => ({price: p})), _trendSeriesPage.current) : '';
 
     // % Cheaper - compares the EFFECTIVE per-unit prices at the current qty, so a
     // multi-buy changes the gap (and which store it favours) instead of freezing

@@ -930,14 +930,14 @@ tr:hover .item-edit-btn { opacity: 1; }
 .mb-tag svg { width: 11px; height: 11px; flex-shrink: 0; }
 .mb-tag.on  { color: var(--ww, #00843D); }          /* deal applied - green */
 .mb-tag.off { color: var(--text-soft, #94A3B8); }   /* hint - muted, icon only */
-/* A single small line + info icon, not a paragraph - the explanation of how
-   totals are built matters once, not on every visit. */
-.banner-note {
-  display: flex; align-items: center; justify-content: center; gap: 5px;
-  margin: 8px 0 0; font-size: 11px; color: var(--text-soft);
+/* "How these totals are calculated" - a quiet trailing line inside the saving
+   panel, not its own full-width row under the store cards. */
+.saving-rule {
+  display: flex; align-items: center; gap: 5px;
+  margin-top: 6px; font-size: 10.5px; color: var(--text-soft);
 }
-/* This tooltip's text is longer than the default .info-ico width covers. */
-.banner-note .info-ico:hover::after, .banner-note .info-ico:focus::after { width: 290px; }
+/* These tooltips are longer than the default .info-ico width covers. */
+.saving-rule .info-ico:hover::after, .saving-rule .info-ico:focus::after { width: 290px; }
 
 /* Price shown at its multi-buy effective per-unit (deal live).
    Deliberately NOT coloured. Green+bold on this table means "this store is

@@ -243,14 +243,12 @@
     .mb-ico.hint  { color: var(--text-soft, #94A3B8); }
     /* Other store's promo marker inside the muted alt price ("C $3.50 2/$6") */
     .alt-mb { font-size: 10px; font-weight: 700; color: var(--text-soft, #94A3B8); border: 1px solid var(--border); border-radius: 7px; padding: 0 4px; }
-    /* One small line + info icon (shown only when the basket holds per-kg
-       category rows) - the pricing-basis explanation matters once, not as a
-       standing paragraph on every visit. */
-    .sl-pack-note {
-      display: flex; align-items: center; gap: 5px;
-      font-size: 11px; color: var(--text-soft); margin: 0 0 10px;
-    }
-    .sl-pack-note .info-ico:hover::after, .sl-pack-note .info-ico:focus::after { width: 290px; }
+    /* Pricing-basis note - rides on the end of the item-count line (only when
+       the basket holds per-kg category rows) rather than taking its own row. */
+    .sl-rate-note { color: var(--text-soft); font-size: 11px; white-space: nowrap; }
+    .sl-rate-note .info-ico { vertical-align: middle; margin-left: 3px; }
+    .sl-rate-note .info-ico:hover::after, .sl-rate-note .info-ico:focus::after { width: 290px; }
+    @media (max-width: 700px) { .sl-rate-note { display: none; } }
     /* Money and quantities align digit-for-digit down a column */
     .price-val, .total-val, .unit-val, .qs-val, .sc-price, .saving-amount, tfoot td { font-variant-numeric: tabular-nums; }
     tfoot td { background: var(--bg); font-weight: 700; font-size: 15px; border-top: 2px solid var(--border); padding: 11px 14px; }
@@ -536,7 +534,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=83"></script>
+<script src="utils.js?v=84"></script>
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '-';
 // Short display name (same map the rest of the site uses); falls back to the
@@ -1114,7 +1112,7 @@ async function boot() {
       <div class="sl-topbar">
         ${splitSegHtml()}
         ${segHtml()}
-        <div class="sl-note">📋 ${filterNoteHtml()}</div>
+        <div class="sl-note">📋 ${filterNoteHtml()}${displayItems.some(i => i._isGroup) ? ` <span class="sl-rate-note">· per-kg categories priced by rate${infoIcoHTML('Per-kg categories are counted at their rate, not their pack price - so $10/kg × 1kg = $10, whether the store sells it in 500g trays or one 2kg bag. These totals match the main page exactly. The arrow under a category name still tells you which product to grab and roughly how many packs; that part is the shopping instruction, not the sum.')}</span>` : ''}</div>
         <div class="sl-flexspacer" style="flex:1"></div>
         <button id="smResetBtn" class="btn-outline-danger">↺ Reset picks</button>
       </div>
@@ -1266,7 +1264,7 @@ async function boot() {
       <div class="sl-topbar">
         ${splitSegHtml()}
         ${segHtml()}
-        <div class="sl-note">📋 ${filterNoteHtml()}</div>
+        <div class="sl-note">📋 ${filterNoteHtml()}${displayItems.some(i => i._isGroup) ? ` <span class="sl-rate-note">· per-kg categories priced by rate${infoIcoHTML('Per-kg categories are counted at their rate, not their pack price - so $10/kg × 1kg = $10, whether the store sells it in 500g trays or one 2kg bag. These totals match the main page exactly. The arrow under a category name still tells you which product to grab and roughly how many packs; that part is the shopping instruction, not the sum.')}</span>` : ''}</div>
         <div class="sl-flexspacer" style="flex:1"></div>
         <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
       </div>
@@ -1303,10 +1301,6 @@ async function boot() {
         </div>
       </div>
 
-      ${displayItems.some(i => i._isGroup) ? `<p class="sl-pack-note">
-        ⚖️ Per-kg categories are priced by rate
-        ${infoIcoHTML('Per-kg categories are counted at their rate, not their pack price - so $10/kg × 1kg = $10, whether the store sells it in 500g trays or one 2kg bag. These totals match the main page exactly. The arrow under a category name still tells you which product to grab and roughly how many packs; that part is the shopping instruction, not the sum. Counting the whole 2kg bag instead would make the store with the best rate look expensive just for selling in bulk - the opposite of the answer you want.')}
-      </p>` : ''}
 
       ${!wwItems.length && !slSplit ? '' : `<div class="store-section">
         <div class="section-header">

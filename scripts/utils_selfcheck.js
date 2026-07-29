@@ -58,6 +58,7 @@ eval([
   extract('groupMetric'),
   extract('per100Pair'),
   extract('exclPriceSet'),
+  extract('mbUnitPrice'),      // getTrendSeries prices the current point through this
   extract('getTrendSeries'),
   extract('_median'),
   extract('getDealQuality'),
@@ -270,6 +271,44 @@ check('groupMetric null result', groupMetric({ sticker: true }, null), null);
   check('nudge: no promo',            multiBuyNudge(1, 4.5, null), null);
   // A promo that saves nothing must not nag the shopper.
   check('nudge: pointless promo stays quiet', multiBuyNudge(1, 3, { qty: 2, total: 6 }), null);
+}
+
+// ── Trend: a multi-buy must be able to beat the all-time low ────────────────
+// Two separate faults made the "below everything ever seen" marker unreachable:
+// the current point was the SHELF price (so a promo never counted), and the
+// series the bar was drawn against already contained that current price (so it
+// could never fall outside its own range). Both are pinned here.
+{
+  check('mbUnitPrice: no promo -> shelf price', mbUnitPrice({ price: 4.5 }), 4.5);
+  check('mbUnitPrice: promo rate wins',   mbUnitPrice({ price: 4.5, multi_buy: { qty: 2, total: 7 } }), 3.5);
+  // "2 for $12" on a $5 item is dearer per unit - the shelf price is the truth.
+  check('mbUnitPrice: dearer promo ignored', mbUnitPrice({ price: 5, multi_buy: { qty: 2, total: 12 } }), 5);
+  check('mbUnitPrice: unpriced store -> null', mbUnitPrice({ price: null }), null);
+  check('mbUnitPrice: missing store -> null',  mbUnitPrice(null), null);
+
+  // Shelf $4.50, never seen below $4.50, but "2 for $7" = $3.50 each.
+  const promoItem = {
+    list_item: 'X',
+    price_history: [{ date: '2026-01-01', price: 5 }, { date: '2026-02-01', price: 4.5 }],
+    woolworths: { price: 4.5, multi_buy: { qty: 2, total: 7 } },
+    coles: null,
+  };
+  const t = getTrendSeries(promoItem);
+  check('trend current follows the promo', t.current, 3.5);
+  // THE REGRESSION: `past` is history only. If the current price leaks in here,
+  // min(past) becomes 3.5 and the marker can never sit left of the bar.
+  check('trend past excludes current', Math.min(...t.past), 4.5);
+  check('trend past is history only',  t.past.length, 2);
+  assert.ok(t.current < Math.min(...t.past),
+    'a promo below every historical price must read as off-range');
+  n += 1;
+
+  // Without a promo the current price sits inside the historical range, so the
+  // bar draws normally - the off-range marker must not fire for everyone.
+  const plain = { ...promoItem, woolworths: { price: 4.8 } };
+  const t2 = getTrendSeries(plain);
+  assert.ok(t2.current >= Math.min(...t2.past), 'a normal price is not off-range');
+  n += 1;
 }
 
 console.log(`utils_selfcheck: all ${n} cases passed`);

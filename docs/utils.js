@@ -93,6 +93,21 @@ function exclPriceSet(exclKeys) {
   }));
 }
 
+// The best per-unit price obtainable from this store RIGHT NOW: the multi-buy
+// rate when one is running and actually beats the shelf price, else the shelf
+// price. Deliberately uses the DEAL quantity, not the shopper's current Qty -
+// the trend answers "is this a good price?", and that shouldn't flicker every
+// time the Qty stepper moves. Returns null when the store has no price.
+function mbUnitPrice(res) {
+  if (!res || res.price == null) return null;
+  const mb = res.multi_buy;
+  if (mb?.qty > 0 && mb.total != null) {
+    const per = mb.total / mb.qty;
+    if (per < res.price) return per;
+  }
+  return res.price;
+}
+
 // ── Unified trend data source ──────────────────────────────────────────────
 // Single series for both slider and sort: includes price_history + current prices.
 function getTrendSeries(item) {
@@ -114,13 +129,29 @@ function getTrendSeries(item) {
   const histPrices = hist
     .map(h => Number(h.price))
     .filter(p => p > 0 && !excluded.has(p.toFixed(2)));
-  const w = item.woolworths?.price, c = item.coles?.price;
+  // Current price = what you'd actually pay per unit RIGHT NOW, so a live
+  // multi-buy counts. Using the sticker here meant a promo that beat the
+  // all-time low still plotted mid-range: the price column showed the green
+  // effective price while the trend marker sat nowhere near the left end, and
+  // the off-range marker (below every price ever seen) was unreachable via a
+  // promo. History stays at sticker prices - those are what was observed then.
+  const w = mbUnitPrice(item.woolworths), c = mbUnitPrice(item.coles);
   const prices = [...histPrices, w, c].filter(p => typeof p === 'number' && p > 0);
   const current = Math.min(
     w != null ? w : Infinity,
     c != null ? c : Infinity
   );
-  return { prices, current: isFinite(current) ? current : null };
+  // `prices` (history + both current prices) is the SORT series - current has to
+  // be inside it for a stable 0..1 ranking.
+  // `past` is history only, and is what the trend BAR is drawn against: a bar
+  // whose range already contains the current price can never show it as
+  // off-range, which is why the "below everything ever seen" marker had quietly
+  // become unreachable. Keeping them separate is what makes it fire again.
+  return {
+    prices,
+    past: histPrices.filter(p => typeof p === 'number' && p > 0),
+    current: isFinite(current) ? current : null,
+  };
 }
 
 // ── Trend Position Calculation ──────────────────────────────────────────────

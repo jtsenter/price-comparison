@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>⚠️ Validate Prices - PriceWatch</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="style.css?v=118" />
+  <link rel="stylesheet" href="style.css?v=119" />
   <style>
     /* ── Validate page overrides ── */
     .validate-hero {
@@ -630,7 +630,41 @@ async function commitDecision(s, entry, dec) {
   await githubPut(s, 'docs/data/latest.json', JSON.stringify(updated),
     `validate: ${entry.item} - ww:${dec.ww ?? 'n/a'} coles:${dec.coles ?? 'n/a'}`, _latestSha);
   _latestData = updated;
+  await logValidatedPriceChanges(s, entry.item, [
+    { store: 'ww',    on: wwConfirmed,    old: entry.ww_prev_price,    now: entry.ww_price },
+    { store: 'coles', on: colesConfirmed, old: entry.coles_prev_price, now: entry.coles_price },
+  ]);
   return updatedPV.length;
+}
+
+// A price approved here is a REAL price move, but the scraper is the only thing
+// that writes price_changes.json - and it writes it by diffing against
+// latest.json. Once an approval lands, latest.json already holds the new price,
+// so the next scrape diffs new-vs-new, sees nothing, and the move is gone for
+// good. (Confirmed case: The Odd Bunch Capsicum, WW $5.50 -> $3.10 on 28 Jul,
+// present in ww_price_history and absent from the change log forever.) So we
+// append it here, at the moment we know both the old and new price.
+// Best-effort: a failure here must never lose the approval that already
+// succeeded above, so it warns instead of throwing.
+async function logValidatedPriceChanges(s, item, moves) {
+  const real = moves.filter(m =>
+    m.on && m.old != null && m.now != null && Math.abs(+m.old - +m.now) > 0.005);
+  if (!real.length) return;
+  try {
+    const { json, sha } = await ghGetJson(s, 'docs/data/price_changes.json');
+    const log = Array.isArray(json) ? json : [];
+    const row = m => ({ item, old: +m.old, new: +m.now });
+    log.push({
+      date: new Date().toISOString(),
+      trigger: 'validated',
+      ww:    real.filter(m => m.store === 'ww').map(row),
+      coles: real.filter(m => m.store === 'coles').map(row),
+    });
+    await githubPut(s, 'docs/data/price_changes.json', JSON.stringify(log),
+      `chore: log validated price change for ${item}`, sha);
+  } catch (e) {
+    console.warn('Could not log validated price change:', e);
+  }
 }
 
 // GET a repo JSON file with its blob sha (for read-modify-write via githubPut).
@@ -872,6 +906,15 @@ async function confirmAll() {
       `validate: confirm all (${toConfirm.length} item${toConfirm.length !== 1 ? 's' : ''})`, _latestSha);
 
     _latestData = updated;
+
+    // Same reasoning as the single-item path: these are real price moves and
+    // nothing else will ever record them.
+    for (const entry of toConfirm) {
+      await logValidatedPriceChanges(s, entry.item, [
+        { store: 'ww',    on: entry.ww_suspicious,    old: entry.ww_prev_price,    now: entry.ww_price },
+        { store: 'coles', on: entry.coles_suspicious, old: entry.coles_prev_price, now: entry.coles_price },
+      ]);
+    }
 
     // Mark every card confirmed and resolved
     toConfirm.forEach(entry => {

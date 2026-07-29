@@ -1483,18 +1483,27 @@ async def _scrape_single_item(
                     print(f"  Coles pinned URL failed, searching by: {_fq!r}")
                     coles_results = await search_with_retry(search_coles, coles_page, _fq)
                     if coles_results:
-                        # Prefer exact slug match; otherwise trust the user's URL choice
-                        # and use first result (skip the matcher - user already chose this product).
+                        # Only the pinned product will do. Falling back to the top
+                        # search result here silently attributed ANOTHER product's
+                        # price to this one: a pinned item that goes "Currently
+                        # unavailable" drops out of search, so the top hit is a
+                        # sibling pack - e.g. the Lilydale 545g small pack showed
+                        # the 900g bulk price, and the free-range RSPCA cutlets
+                        # showed the non-free-range ones. With the matcher bypassed
+                        # (_skip_picker_co) nothing downstream could catch it.
+                        # No pinned match = no price, which is the truth.
                         _slug_m = re.search(r'/product/([^/?]+)', pinned_co)
+                        _co_hit = None
                         if _slug_m:
                             _pinned_slug = _slug_m.group(1)
                             _co_hit = next((r for r in coles_results if _pinned_slug in r.get('url', '')), None)
-                            if _co_hit:
-                                print(f"  Coles: matched by pinned slug")
-                                coles_results = [_co_hit]
-                            else:
-                                print(f"  Coles: using top search result (pinned slug not in results)")
-                        _skip_picker_co = True  # bypass matcher; user chose this product
+                        if _co_hit:
+                            print(f"  Coles: matched by pinned slug")
+                            coles_results = [_co_hit]
+                            _skip_picker_co = True  # bypass matcher; user chose this product
+                        else:
+                            print(f"  Coles: pinned product not in search results - treating as unavailable")
+                            coles_results = []
             else:
                 # Woolworths-only pinned item - don't name-search Coles (same mis-match risk).
                 coles_results = []
