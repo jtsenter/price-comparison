@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=120" />
+  <link rel="stylesheet" href="style.css?v=121" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -300,20 +300,6 @@
     .deals-empty-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
 
     /* ── Fixed tooltip (same as main) ── */
-    .price-tooltip-fixed {
-      position: fixed;
-      z-index: 9999;
-      background: rgba(26,31,46,0.97);
-      color: #fff;
-      font-size: 12px;
-      font-family: ui-monospace, monospace;
-      padding: 10px 14px;
-      border-radius: 8px;
-      pointer-events: none;
-      white-space: pre;
-      max-width: 300px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-    }
 
     /* ── Mobile deal cards ─────────────────────────────────────── */
     .deals-mobile { flex-direction: column; gap: 9px; padding-top: 12px; }
@@ -477,11 +463,10 @@
   </div>
 </div>
 
-<div id="priceTooltip" class="price-tooltip-fixed" style="display:none"></div>
 
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=85"></script>
+<script src="utils.js?v=86"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -570,70 +555,9 @@ function getSimpleDealInfo(item, exclusions) {
 }
 
 // ── Price bar ──────────────────────────────────────────────────────────────────
+// buildPriceBar() comes from utils.js - this page used to carry its own copy
+// with a hover histogram, the same feature already dropped from the main page.
 
-function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
-  if (!priceHistory?.length || currentPrice == null) return '';
-  const exclusions = loadExclusions();
-  const excluded = new Set((exclusions[itemName] || []).map(p => Number(p).toFixed(2)));
-  // Use raw history prices - they are already actual shelf prices.
-  // _ww_price_factor is only used for cheaper_store comparison in the scraper.
-  const prices = priceHistory
-    .map(p => p.price)
-    .filter((p, i) => p > 0 && !excluded.has(Number(priceHistory[i].price).toFixed(2)));
-  if (prices.length < 2) return '';
-  const minP = Math.min(...prices);
-  const maxP = Math.max(...prices);
-
-  if (minP === maxP) {
-    if (Math.abs(currentPrice - minP) < 0.005) {
-      // Truly same price - flat bar (current price equals stable historical price)
-      return `
-      <div class="price-bar-outer">
-        <div class="price-bar price-bar-flat"><div class="price-marker" style="left:50%"></div></div>
-        <div class="price-bar-labels price-bar-labels-flat"><span class="price-bar-always">${fmt(minP)}</span></div>
-      </div>`;
-    }
-    // Deal price differs from stable historical price - show a range bar
-    const barMin = Math.min(currentPrice, minP);
-    const barMax = Math.max(currentPrice, minP);
-    const rawPos2 = ((currentPrice - barMin) / (barMax - barMin)) * 100;
-    const tooltip = `Stable: ${fmt(minP)}&#10;Deal: ${fmt(currentPrice)}&#10;${currentPrice < minP ? 'Now cheaper than stable price ✓' : 'Now above stable price'}`;
-    const track2 = rawPos2 < 0
-      ? `<div class="price-bar-track-wrap"><div class="price-marker-off-left"></div><div class="price-bar"></div></div>`
-      : `<div class="price-bar"><div class="price-marker" style="left:${rawPos2.toFixed(1)}%"></div></div>`;
-    return `<div class="price-bar-outer" data-tooltip="${tooltip}">
-      ${track2}
-      <div class="price-bar-labels"><span>${fmt(barMin)}</span><span>${fmt(barMax)}</span></div>
-    </div>`;
-  }
-  const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
-  const pos = Math.max(0, Math.min(100, rawPos));
-
-  const counts = {};
-  prices.forEach(p => { const k = p.toFixed(2); counts[k] = (counts[k] || 0) + 1; });
-  const total = prices.length;
-  const lines = Object.entries(counts).sort(([a], [b]) => +a - +b)
-    .map(([p, c]) => { const pct = Math.round(c / total * 100); return `$${p}  ${'█'.repeat(Math.round(pct / 10)).padEnd(10)}  ${pct}% (${c}×)`; });
-  const cheaperPct = Math.round(prices.filter(p => p > currentPrice).length / total * 100);
-  lines.push('');
-  lines.push(cheaperPct > 0 ? `Now cheaper than ${cheaperPct}% of past prices ✓` : `Now at all-time low ✓`);
-  const tooltip = lines.join('\n').replace(/"/g, '&quot;');
-
-  let trackHtml;
-  if (rawPos < 0) {
-    trackHtml = `<div class="price-bar-track-wrap"><div class="price-marker-off-left"></div><div class="price-bar"></div></div>`;
-  } else if (rawPos > 100) {
-    trackHtml = `<div class="price-bar-track-wrap"><div class="price-bar"></div><div class="price-marker-off-right"></div></div>`;
-  } else {
-    trackHtml = `<div class="price-bar"><div class="price-marker" style="left:${pos.toFixed(1)}%"></div></div>`;
-  }
-
-  const allTimeLowBadge = rawPos === 0 ? '<span class="trophy-icon">🏆</span>' : '';
-  return `<div class="price-bar-outer" data-tooltip="${tooltip}">
-    ${trackHtml}
-    <div class="price-bar-labels"><span>${fmt(minP)}${allTimeLowBadge}</span><span>${fmt(maxP)}</span></div>
-  </div>`;
-}
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
@@ -1145,7 +1069,7 @@ function renderDeals() {
 
     // Trend cell - price bar only, same as main page
     const _trendSeriesHD = getTrendSeries(item);
-    const avgCell = buildPriceBar(item.list_item, _trendSeriesHD.past.map(p => ({price: p})), _trendSeriesHD.current) || '-';
+    const avgCell = buildPriceBar(item.list_item, _trendSeriesHD.past.map(p => ({price: p})), _trendSeriesHD.current, 1, false) || '-';
 
     const wwClass  = deal.store === 'woolworths' ? 'cell-deal-ww' : '';
     const coClass  = deal.store === 'coles'      ? 'cell-deal-coles' : '';
@@ -1298,7 +1222,7 @@ function renderDealsMobile(sorted, exclusions, overrides) {
       : saveStr;
 
     const _ts = getTrendSeries(item);
-    const bar = buildPriceBar(item.list_item, _ts.past.map(p => ({ price: p })), _ts.current) || '';
+    const bar = buildPriceBar(item.list_item, _ts.past.map(p => ({ price: p })), _ts.current, 1, false) || '';
 
     const safe = item.list_item.replace(/"/g, '&quot;');
     const watched = _watchlistHD.has(item.list_item);
@@ -1354,32 +1278,8 @@ function updateValidateNavBadge(count) {
 }
 
 // ── Tooltip ───────────────────────────────────────────────────────────────────
+// The trend hover tooltip is gone (see above); nothing emits data-tooltip now.
 
-function initTooltip() {
-  const tip = document.getElementById('priceTooltip');
-  if (!tip) return;
-  document.addEventListener('mouseover', (e) => {
-    const el = e.target.closest('.price-bar-outer[data-tooltip]');
-    if (!el) return;
-    tip.textContent = el.dataset.tooltip;
-    tip.style.display = 'block';
-  });
-  document.addEventListener('mousemove', (e) => {
-    if (tip.style.display === 'none') return;
-    const margin = 12;
-    const tipH = tip.offsetHeight, tipW = tip.offsetWidth;
-    let top = e.clientY - tipH - margin;
-    let left = e.clientX - tipW / 2;
-    if (top < 8) top = e.clientY + margin;
-    if (left < 8) left = 8;
-    if (left + tipW > window.innerWidth - 8) left = window.innerWidth - tipW - 8;
-    tip.style.top = `${top}px`;
-    tip.style.left = `${left}px`;
-  });
-  document.addEventListener('mouseout', (e) => {
-    if (e.target.closest('.price-bar-outer[data-tooltip]')) tip.style.display = 'none';
-  });
-}
 
 // ── Store filter ──────────────────────────────────────────────────────────────
 
@@ -1680,7 +1580,6 @@ async function pollForCompletionHD(user, repo, token, dispatchedAt) {
   // persistent cart and ONLY explicit adds put items in it. Deals get in via
   // the row checkboxes + the Add to Basket bar (initHdBulkBar).
   initHdBulkBar();
-  initTooltip();
   initHdColChooser();
   document.getElementById('hdResetColsBtn')?.addEventListener('click', resetHdCols);
 

@@ -25,6 +25,10 @@ function extract(name) {
 // in the real app, hoisted before use there). Stub it here; tests override per-case.
 let _exclStub = {};
 global.loadExclusions = () => _exclStub;
+// buildPriceBar formats its min/max labels with the host page's fmt() - both
+// index.html and hot-deals.html define one. Same implicit dependency it had
+// before moving into utils.js; stubbed here.
+global.fmt = (v) => v == null ? '-' : '$' + Number(v).toFixed(2);
 
 // getDealQuality() closes over these two module-level tuning constants.
 function extractConst(name) {
@@ -59,6 +63,7 @@ eval([
   extract('per100Pair'),
   extract('exclPriceSet'),
   extract('mbUnitPrice'),      // getTrendSeries prices the current point through this
+  extract('buildPriceBar'),    // moved here from app.js; hot-deals draws the same bar
   extract('getTrendSeries'),
   extract('_median'),
   extract('getDealQuality'),
@@ -311,6 +316,32 @@ check('groupMetric null result', groupMetric({ sticker: true }, null), null);
   const t2 = getTrendSeries(plain, 1);
   assert.ok(t2.current >= Math.min(...t2.past), 'a normal price is not off-range');
   n += 1;
+}
+
+// ── buildPriceBar: off-range marker + optional History button ───────────────
+{
+  const hist = [{ price: 4.5 }, { price: 5 }, { price: 6 }];
+  // Below every historical price -> the off-range marker, NOT a clamped bar.
+  const off = buildPriceBar('X', hist, 3.5);
+  assert.ok(/price-marker-off-left/.test(off), 'below-history must draw the off-left marker');
+  assert.ok(!/price-marker" style/.test(off), 'off-range must not also draw an in-range marker');
+  n += 2;
+  // Above every historical price -> the right-hand off-range marker.
+  assert.ok(/price-marker-off-right/.test(buildPriceBar('X', hist, 9)),
+    'above-history must draw the off-right marker');
+  n += 1;
+  // In range -> an ordinary positioned marker, no off-range markers.
+  const mid = buildPriceBar('X', hist, 5);
+  assert.ok(/price-marker" style/.test(mid) && !/off-left|off-right/.test(mid),
+    'an in-range price draws a normal marker');
+  n += 1;
+  // The History button is opt-out for pages with no history modal - a button
+  // that does nothing is worse than no button.
+  assert.ok(/price-bar-manage/.test(buildPriceBar('X', hist, 5)), 'History button on by default');
+  assert.ok(!/price-bar-manage/.test(buildPriceBar('X', hist, 5, 1, false)), 'History button suppressible');
+  n += 2;
+  // Too little history to place anything -> no bar at all.
+  check('single history point -> no bar', buildPriceBar('X', [{ price: 4 }], 4), '');
 }
 
 // ── A deal you haven't qualified for is not a price you can pay ─────────────

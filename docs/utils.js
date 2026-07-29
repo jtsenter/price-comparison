@@ -158,6 +158,75 @@ function getTrendSeries(item, units = 1) {
   };
 }
 
+
+// `historyBtn` renders the clock/"History" button that opens the price-history
+// modal. Pages that do not host that modal pass false rather than shipping a
+// button that does nothing when clicked.
+function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1, historyBtn = true) {
+  if (!priceHistory?.length || currentPrice == null) return '';
+
+  // exclPriceSet (utils.js) handles both "ww:X.XX"/"coles:X.XX" and legacy bare keys.
+  // For trend bars (mixed WW+Coles series) a price excluded at either store is dropped.
+  const excluded = exclPriceSet(loadExclusions()[itemName]);
+  // Use raw history prices - they are already in the same monetary units (pack/shelf price)
+  // as currentPrice. _ww_price_factor is only used for cheaper_store comparison in the scraper.
+  const prices = priceHistory
+    .map(p => p.price)
+    .filter((p, i) => p > 0 && !excluded.has(Number(priceHistory[i].price).toFixed(2)));
+  if (prices.length < 2) return '';
+
+  const minP = Math.min(...prices);
+  const maxP = Math.max(...prices);
+
+  if (minP === maxP) {
+    const safeItemName = itemName.replace(/"/g, '&quot;');
+    let flatTrack;
+    if (currentPrice < minP - 0.005) {
+      // Current price is below all historical prices - green circle left
+      flatTrack = `<div class="price-bar-track-wrap"><div class="price-marker-off-left"></div><div class="price-bar price-bar-flat"></div></div>`;
+    } else if (currentPrice > minP + 0.005) {
+      // Current price is above all historical prices - red circle right
+      flatTrack = `<div class="price-bar-track-wrap"><div class="price-bar price-bar-flat"></div><div class="price-marker-off-right"></div></div>`;
+    } else {
+      flatTrack = `<div class="price-bar price-bar-flat"><div class="price-marker" style="left:50%"></div></div>`;
+    }
+    return `
+    <div class="price-bar-outer">
+      ${flatTrack}
+      <div class="price-bar-labels price-bar-labels-flat"><span class="price-bar-always">${fmt(minP)}</span></div>
+    </div>
+    ${historyBtn ? `<button class="price-bar-manage" data-manage-item="${safeItemName}" aria-label="View price history"><svg class="pbm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg><span class="pbm-txt">History</span></button>` : ''}`;
+  }
+
+  const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
+  const pos = Math.max(0, Math.min(100, rawPos));
+  // (The old hover histogram tooltip was removed as redundant - the History
+  // modal, one click away on the always-visible clock icon, shows the same
+  // data properly.)
+  const safeItemName = itemName.replace(/"/g, '&quot;');
+
+  // Off-range: green circle LEFT (price below min) or red circle RIGHT (price above max)
+  let trackHtml;
+  if (rawPos < 0) {
+    trackHtml = `<div class="price-bar-track-wrap"><div class="price-marker-off-left"></div><div class="price-bar"></div></div>`;
+  } else if (rawPos > 100) {
+    trackHtml = `<div class="price-bar-track-wrap"><div class="price-bar"></div><div class="price-marker-off-right"></div></div>`;
+  } else {
+    trackHtml = `<div class="price-bar"><div class="price-marker" style="left:${pos.toFixed(1)}%"></div></div>`;
+  }
+
+  const allTimeLowBadge = rawPos === 0 ? '<span class="trophy-icon" title="All-time low - the cheapest this item has ever been recorded at">🏆</span>' : '';
+  return `
+    <div class="price-bar-outer">
+      ${trackHtml}
+      <div class="price-bar-labels">
+        <span>${fmt(minP)}${allTimeLowBadge}</span>
+        <span>${fmt(maxP)}</span>
+      </div>
+    </div>
+    ${historyBtn ? `<button class="price-bar-manage" data-manage-item="${safeItemName}" aria-label="View price history"><svg class="pbm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg><span class="pbm-txt">History</span></button>` : ''}`;
+}
+
 // ── Trend Position Calculation ──────────────────────────────────────────────
 // Returns 0.0–1.0 where current best price sits in purchase-history range:
 //   0.0 = at/below all-time low   (best deal, maximum savings)

@@ -1055,71 +1055,8 @@ function savingAmount(item) {
   if (w == null || c == null) return item.saving_per_item ?? 0;
   return Math.abs(w - c);
 }
+// buildPriceBar() lives in utils.js - hot-deals draws the identical bar.
 
-function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1) {
-  if (!priceHistory?.length || currentPrice == null) return '';
-
-  // exclPriceSet (utils.js) handles both "ww:X.XX"/"coles:X.XX" and legacy bare keys.
-  // For trend bars (mixed WW+Coles series) a price excluded at either store is dropped.
-  const excluded = exclPriceSet(loadExclusions()[itemName]);
-  // Use raw history prices - they are already in the same monetary units (pack/shelf price)
-  // as currentPrice. _ww_price_factor is only used for cheaper_store comparison in the scraper.
-  const prices = priceHistory
-    .map(p => p.price)
-    .filter((p, i) => p > 0 && !excluded.has(Number(priceHistory[i].price).toFixed(2)));
-  if (prices.length < 2) return '';
-
-  const minP = Math.min(...prices);
-  const maxP = Math.max(...prices);
-
-  if (minP === maxP) {
-    const safeItemName = itemName.replace(/"/g, '&quot;');
-    let flatTrack;
-    if (currentPrice < minP - 0.005) {
-      // Current price is below all historical prices - green circle left
-      flatTrack = `<div class="price-bar-track-wrap"><div class="price-marker-off-left"></div><div class="price-bar price-bar-flat"></div></div>`;
-    } else if (currentPrice > minP + 0.005) {
-      // Current price is above all historical prices - red circle right
-      flatTrack = `<div class="price-bar-track-wrap"><div class="price-bar price-bar-flat"></div><div class="price-marker-off-right"></div></div>`;
-    } else {
-      flatTrack = `<div class="price-bar price-bar-flat"><div class="price-marker" style="left:50%"></div></div>`;
-    }
-    return `
-    <div class="price-bar-outer">
-      ${flatTrack}
-      <div class="price-bar-labels price-bar-labels-flat"><span class="price-bar-always">${fmt(minP)}</span></div>
-    </div>
-    <button class="price-bar-manage" data-manage-item="${safeItemName}" aria-label="View price history"><svg class="pbm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg><span class="pbm-txt">History</span></button>`;
-  }
-
-  const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
-  const pos = Math.max(0, Math.min(100, rawPos));
-  // (The old hover histogram tooltip was removed as redundant - the History
-  // modal, one click away on the always-visible clock icon, shows the same
-  // data properly.)
-  const safeItemName = itemName.replace(/"/g, '&quot;');
-
-  // Off-range: green circle LEFT (price below min) or red circle RIGHT (price above max)
-  let trackHtml;
-  if (rawPos < 0) {
-    trackHtml = `<div class="price-bar-track-wrap"><div class="price-marker-off-left"></div><div class="price-bar"></div></div>`;
-  } else if (rawPos > 100) {
-    trackHtml = `<div class="price-bar-track-wrap"><div class="price-bar"></div><div class="price-marker-off-right"></div></div>`;
-  } else {
-    trackHtml = `<div class="price-bar"><div class="price-marker" style="left:${pos.toFixed(1)}%"></div></div>`;
-  }
-
-  const allTimeLowBadge = rawPos === 0 ? '<span class="trophy-icon" title="All-time low - the cheapest this item has ever been recorded at">🏆</span>' : '';
-  return `
-    <div class="price-bar-outer">
-      ${trackHtml}
-      <div class="price-bar-labels">
-        <span>${fmt(minP)}${allTimeLowBadge}</span>
-        <span>${fmt(maxP)}</span>
-      </div>
-    </div>
-    <button class="price-bar-manage" data-manage-item="${safeItemName}" aria-label="View price history"><svg class="pbm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg><span class="pbm-txt">History</span></button>`;
-}
 
 // ── Per-item refresh ─────────────────────────────────────────────────────────
 
@@ -1858,12 +1795,11 @@ function openPriceHistoryModal(item) {
   // Merge per-scrape WW and Coles by date (always scraped together)
   const wwMap = new Map((item.ww_price_history    || []).map(e => [e.date, e.price]));
   const coMap = new Map((item.coles_price_history || []).map(e => [e.date, e.price]));
-  // Multi-buy running on that date, recorded by the scraper alongside the shelf
-  // price. The stored price stays the SHELF price (so min/max/average are
-  // unchanged); this just lets the row say "there was a deal on, here's what it
-  // worked out to".
-  const wwMb = new Map((item.ww_price_history    || []).filter(e => e.mb).map(e => [e.date, e.mb]));
-  const coMb = new Map((item.coles_price_history || []).filter(e => e.mb).map(e => [e.date, e.mb]));
+  // Days when a multi-buy beat the ticket price. The stored `price` IS the promo
+  // rate (a real price the item sold at, so it counts toward the range and the
+  // trend); `shelf` is what the ticket said, surfaced in the row's "?".
+  const wwMb = new Map((item.ww_price_history    || []).filter(e => e.mb).map(e => [e.date, e]));
+  const coMb = new Map((item.coles_price_history || []).filter(e => e.mb).map(e => [e.date, e]));
   const scrapeDates = new Set([...wwMap.keys(), ...coMap.keys()]);
   const scrapeEntries = [...scrapeDates].map(d => ({
     date: d, ww: wwMap.get(d) ?? null, coles: coMap.get(d) ?? null, source: 'scrape',
@@ -1882,8 +1818,16 @@ function openPriceHistoryModal(item) {
   const liveEntry = !alreadyInHistory && (wwLive != null || coLive != null)
     ? [{ date: liveDate, ww: wwLive, coles: coLive, source: 'live' }]
     : [];
-  if (item.woolworths?.multi_buy) wwMb.set(liveDate, item.woolworths.multi_buy);
-  if (item.coles?.multi_buy)      coMb.set(liveDate, item.coles.multi_buy);
+  // Live row: a deal running right now, shaped like a stored entry.
+  const liveMb = (res) => {
+    const mb = res?.multi_buy;
+    if (!mb?.qty || mb.total == null || res.price == null) return null;
+    const per = mb.total / mb.qty;
+    return per < res.price ? { mb, shelf: res.price } : null;
+  };
+  const wwLiveMb = liveMb(item.woolworths), coLiveMb = liveMb(item.coles);
+  if (wwLiveMb) wwMb.set(liveDate, wwLiveMb);
+  if (coLiveMb) coMb.set(liveDate, coLiveMb);
 
   const allEntries = [...liveEntry, ...excelEntries, ...scrapeEntries]
     .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
@@ -1958,18 +1902,17 @@ function openPriceHistoryModal(item) {
     const coEditBtns = item._isGroupHistory ? (innerWidth > 700 ? grpBtn('coles') : '') : simplified ? '' : `
            <button class="price-excl-x" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="${coExcluded ? 'Re-include' : 'Exclude'}">✕</button>
            <button class="price-fork-btn" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="Different item">${forkSvg}</button>`;
-    // "?" = a multi-buy was running that day. The number shown stays the shelf
-    // price; the hover explains the deal and what it actually worked out to.
+    // "?" = the price shown is a multi-buy rate; the ticket price was higher.
+    // Uses a native title tooltip on purpose: the history list is a scroll
+    // container (overflow-y:auto), which clipped a CSS-positioned bubble.
     const mbNote = (store) => {
-      const mb = (store === 'ww' ? wwMb : coMb).get(entry.date);
-      const shelf = store === 'ww' ? entry.ww : entry.coles;
-      if (!mb?.qty || mb.total == null || shelf == null) return '';
-      const per = mb.total / mb.qty;
-      const off = shelf > 0 ? Math.round((1 - per / shelf) * 100) : 0;
-      return `<span class="price-hist-mb" tabindex="0" role="note" data-tip="${escAttr(
-        `Multi-buy on this day: ${mb.qty} for $${mb.total.toFixed(2)} - $${per.toFixed(2)} each` +
-        (off > 0 ? `, ${off}% off the $${Number(shelf).toFixed(2)} shelf price` : '') +
-        '. The price shown is the shelf price.')}">?</span>`;
+      const rec = (store === 'ww' ? wwMb : coMb).get(entry.date);
+      const mb = rec?.mb;
+      if (!mb?.qty || mb.total == null || rec.shelf == null) return '';
+      const off = rec.shelf > 0 ? Math.round((1 - (mb.total / mb.qty) / rec.shelf) * 100) : 0;
+      return `<span class="price-hist-mb" tabindex="0" role="note" title="${escAttr(
+        `Shelf $${Number(rec.shelf).toFixed(2)} · ${mb.qty} for $${mb.total.toFixed(2)}${off > 0 ? ` (−${off}%)` : ''}`
+      )}">?</span>`;
     };
     const wwHtml = entry.ww != null
       ? `<span class="price-history-store-cell price-history-store-ww">

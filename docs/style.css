@@ -2731,22 +2731,14 @@ td.priority-cell { text-align: center; }
   & .mc-price.cheaper-c::after { background: #dc2626; color: #fff; }
 }
 
-/* "?" beside a history price: a multi-buy was running that day. The price shown
-   stays the shelf price - this only says a deal existed and what it came to. */
+/* "?" beside a history price: the price shown is a multi-buy rate, and the
+   ticket price was higher. Uses the browser's own title tooltip - the history
+   list scrolls (overflow-y:auto), which clipped a CSS-positioned bubble. */
 .price-hist-mb {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 13px; height: 13px; margin-left: 5px; border-radius: 50%;
+  width: 13px; height: 13px; margin-left: 4px; border-radius: 50%;
   border: 1px solid var(--border-strong); color: var(--text-soft);
   font-size: 9px; font-weight: 800; line-height: 1;
-  cursor: help; position: relative; flex-shrink: 0;
+  cursor: help; flex-shrink: 0;
 }
 .price-hist-mb:hover, .price-hist-mb:focus { color: var(--ww); border-color: var(--ww); outline: none; }
-.price-hist-mb:hover::after, .price-hist-mb:focus::after {
-  content: attr(data-tip);
-  position: absolute; bottom: calc(100% + 7px); right: -6px;
-  background: var(--text); color: var(--card);
-  font-size: 11px; font-weight: 500; line-height: 1.45; text-align: left;
-  padding: 7px 11px; border-radius: 7px; width: 235px;
-  white-space: normal; z-index: 600; pointer-events: none;
-  box-shadow: 0 4px 14px rgba(0,0,0,.2);
-}

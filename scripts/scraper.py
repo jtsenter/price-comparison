@@ -1724,15 +1724,21 @@ async def _scrape_single_item(
         coles_reasons = coles_reasons + [_co_jump]
 
     def _hist_entry(price, match):
-        """One history point. `price` stays the SHELF price - that is what was on
-        the ticket that day and what every min/max/average must keep using. A
-        multi-buy running at the time is recorded alongside it as `mb`, so the
-        history can show "there was a deal on" (and what it worked out to) without
-        a promo rate quietly redefining the item's price range."""
-        e = {"date": today_str, "price": round(price, 2)}
+        """One history point. `price` is the LOWEST price actually obtainable that
+        day: the multi-buy unit rate when a deal was running and beat the ticket,
+        otherwise the shelf price. A promo price is a real price the item sold at,
+        so it belongs in the history and in the trend range. The shelf price is
+        kept as `shelf` (only when it differs) so the UI can show what the ticket
+        said and how big the discount was."""
+        best = round(price, 2)
+        e = {"date": today_str, "price": best}
         mb = (match or {}).get("multi_buy")
         if mb and mb.get("qty") and mb.get("total") is not None:
-            e["mb"] = {"qty": mb["qty"], "total": mb["total"]}
+            per = round(mb["total"] / mb["qty"], 2)
+            if per < best:
+                e["price"] = per
+                e["shelf"] = best
+                e["mb"] = {"qty": mb["qty"], "total": mb["total"]}
         return e
 
     # WW history: withhold if suspicious; append if price changed or ≥7 days since last entry
