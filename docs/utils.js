@@ -100,6 +100,22 @@ function exclPriceSet(exclKeys) {
 // trend marker down - the marker would claim an all-time low you can't buy.
 // Same formula as the price column, so the number under the marker and the
 // number in the cell are always the same. Returns null when unpriced.
+// The lowest per-unit price this store is offering, ignoring how many you're
+// buying: the multi-buy rate when it beats the ticket, else the ticket price.
+// This is the number the HISTORY records and the history chart plots - a promo
+// price is a real price the item sold at, so it belongs in the range and the
+// trend. Distinct from mbUnitPrice(), which is qty-gated because the trend
+// MARKER must only claim a price you have actually qualified for.
+function promoUnitPrice(res) {
+  if (!res || res.price == null) return null;
+  const mb = res.multi_buy;
+  if (mb?.qty > 0 && mb.total != null) {
+    const per = mb.total / mb.qty;
+    if (per < res.price) return +per.toFixed(2);
+  }
+  return res.price;
+}
+
 function mbUnitPrice(res, units = 1) {
   if (!res || res.price == null) return null;
   const mb = res.multi_buy;

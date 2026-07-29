@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=121" />
+  <link rel="stylesheet" href="style.css?v=122" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -466,7 +466,9 @@
 
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=86"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="utils.js?v=87"></script>
+<script src="history-modal.js?v=1"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -1069,7 +1071,7 @@ function renderDeals() {
 
     // Trend cell - price bar only, same as main page
     const _trendSeriesHD = getTrendSeries(item);
-    const avgCell = buildPriceBar(item.list_item, _trendSeriesHD.past.map(p => ({price: p})), _trendSeriesHD.current, 1, false) || '-';
+    const avgCell = buildPriceBar(item.list_item, _trendSeriesHD.past.map(p => ({price: p})), _trendSeriesHD.current) || '-';
 
     const wwClass  = deal.store === 'woolworths' ? 'cell-deal-ww' : '';
     const coClass  = deal.store === 'coles'      ? 'cell-deal-coles' : '';
@@ -1222,7 +1224,7 @@ function renderDealsMobile(sorted, exclusions, overrides) {
       : saveStr;
 
     const _ts = getTrendSeries(item);
-    const bar = buildPriceBar(item.list_item, _ts.past.map(p => ({ price: p })), _ts.current, 1, false) || '';
+    const bar = buildPriceBar(item.list_item, _ts.past.map(p => ({ price: p })), _ts.current) || '';
 
     const safe = item.list_item.replace(/"/g, '&quot;');
     const watched = _watchlistHD.has(item.list_item);
@@ -1573,6 +1575,14 @@ async function pollForCompletionHD(user, repo, token, dispatchedAt) {
 
   renderHdHead();
   initStoreFilter();
+  // Shared price-history modal. Read-only here: this page has no exclusion
+  // write path (no saveExclusions/undo toast), so Save/Reset stay hidden and
+  // it opens in the same simplified layout the mobile view already uses.
+  initHistoryModal({
+    getItems: () => _data?.items || [],
+    editable: false,
+    delegate: true,   // hot-deals has no per-row click routing of its own
+  });
   initWatchlistFilter();
   initDealTune();
   // Basket icon is plain navigation. It used to dump every visible deal into

@@ -22,7 +22,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=121" />
+  <link rel="stylesheet" href="style.css?v=122" />
 </head>
 <body>
 
@@ -267,25 +267,7 @@
 </div>
 
 <!-- Price History modal -->
-<div class="modal-overlay" id="priceHistoryModal">
-  <div class="modal modal-wide modal-scrollable">
-    <div class="modal-header">
-      <h2 id="priceHistoryTitle">Price History</h2>
-      <div style="flex:1"></div>
-      <button class="modal-close" id="priceHistoryClose">✕</button>
-    </div>
-    <div id="priceHistChartWrap" style="height:200px;margin-bottom:16px;display:none;">
-      <canvas id="priceHistChart"></canvas>
-    </div>
-    <div id="priceHistoryList" class="price-history-list"></div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost price-history-edit-actions" id="priceHistoryReset">Reset exclusions</button>
-      <div style="flex:1"></div>
-      <button class="btn btn-ghost" id="priceHistoryClose2">Cancel</button>
-      <button class="btn btn-primary price-history-edit-actions" id="priceHistorySave">Save</button>
-    </div>
-  </div>
-</div>
+<!-- The price-history modal markup is injected by history-modal.js (shared with hot-deals). -->
 
 <!-- Mass upload modal -->
 <div class="modal-overlay" id="uploadModal">
@@ -391,8 +373,9 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=86"></script>
-<script src="app.js?v=156"></script>
+<script src="utils.js?v=87"></script>
+<script src="history-modal.js?v=1"></script>
+<script src="app.js?v=157"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">
