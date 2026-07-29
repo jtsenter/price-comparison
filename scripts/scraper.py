@@ -1723,11 +1723,23 @@ async def _scrape_single_item(
     if _co_jump and not _is_approved(coles_price, _item_approved.get("coles")):
         coles_reasons = coles_reasons + [_co_jump]
 
+    def _hist_entry(price, match):
+        """One history point. `price` stays the SHELF price - that is what was on
+        the ticket that day and what every min/max/average must keep using. A
+        multi-buy running at the time is recorded alongside it as `mb`, so the
+        history can show "there was a deal on" (and what it worked out to) without
+        a promo rate quietly redefining the item's price range."""
+        e = {"date": today_str, "price": round(price, 2)}
+        mb = (match or {}).get("multi_buy")
+        if mb and mb.get("qty") and mb.get("total") is not None:
+            e["mb"] = {"qty": mb["qty"], "total": mb["total"]}
+        return e
+
     # WW history: withhold if suspicious; append if price changed or ≥7 days since last entry
     if ww_reasons:
         new_ww_hist = existing_ww_hist
     elif ww_add:
-        new_ww_hist = existing_ww_hist + [{"date": today_str, "price": round(ww_price, 2)}]
+        new_ww_hist = existing_ww_hist + [_hist_entry(ww_price, ww_match)]
     else:
         new_ww_hist = existing_ww_hist
 
@@ -1735,7 +1747,7 @@ async def _scrape_single_item(
     if coles_reasons:
         new_co_hist = existing_co_hist
     elif co_add:
-        new_co_hist = existing_co_hist + [{"date": today_str, "price": round(coles_price, 2)}]
+        new_co_hist = existing_co_hist + [_hist_entry(coles_price, coles_match)]
     else:
         new_co_hist = existing_co_hist
 

@@ -93,24 +93,28 @@ function exclPriceSet(exclKeys) {
   }));
 }
 
-// The best per-unit price obtainable from this store RIGHT NOW: the multi-buy
-// rate when one is running and actually beats the shelf price, else the shelf
-// price. Deliberately uses the DEAL quantity, not the shopper's current Qty -
-// the trend answers "is this a good price?", and that shouldn't flicker every
-// time the Qty stepper moves. Returns null when the store has no price.
-function mbUnitPrice(res) {
+// What you'd actually pay per unit at this store RIGHT NOW, at the quantity
+// you're buying: the multi-buy effective rate ONLY once the deal is genuinely
+// live (units >= the deal quantity), otherwise the shelf price. A deal you
+// haven't qualified for isn't a price you can pay, so it must not drag the
+// trend marker down - the marker would claim an all-time low you can't buy.
+// Same formula as the price column, so the number under the marker and the
+// number in the cell are always the same. Returns null when unpriced.
+function mbUnitPrice(res, units = 1) {
   if (!res || res.price == null) return null;
   const mb = res.multi_buy;
-  if (mb?.qty > 0 && mb.total != null) {
-    const per = mb.total / mb.qty;
-    if (per < res.price) return per;
+  if (mb?.qty > 0 && mb.total != null && units >= mb.qty) {
+    return multiBuyCost(units, res.price, mb) / units;
   }
   return res.price;
 }
 
 // ── Unified trend data source ──────────────────────────────────────────────
 // Single series for both slider and sort: includes price_history + current prices.
-function getTrendSeries(item) {
+// `units` is the quantity the shopper is actually buying - it decides whether a
+// multi-buy counts (see mbUnitPrice). Defaults to 1 for callers with no Qty
+// concept (hot-deals), where a deal needing 2+ is correctly not yet in effect.
+function getTrendSeries(item, units = 1) {
   // Include every observed price: Excel receipts (price_history) plus the scraped
   // WW and Coles histories. Previously only price_history was used, so items whose
   // lows live in ww_price_history (e.g. added from receipts) showed a too-high
@@ -135,7 +139,7 @@ function getTrendSeries(item) {
   // effective price while the trend marker sat nowhere near the left end, and
   // the off-range marker (below every price ever seen) was unreachable via a
   // promo. History stays at sticker prices - those are what was observed then.
-  const w = mbUnitPrice(item.woolworths), c = mbUnitPrice(item.coles);
+  const w = mbUnitPrice(item.woolworths, units), c = mbUnitPrice(item.coles, units);
   const prices = [...histPrices, w, c].filter(p => typeof p === 'number' && p > 0);
   const current = Math.min(
     w != null ? w : Infinity,
@@ -161,12 +165,19 @@ function getTrendSeries(item) {
 //   1.0 = at/above all-time high  (worst deal, least savings)
 //   999 = no usable history (sorts last)
 
-function calcTrendPosition(item) {
-  const { prices, current } = getTrendSeries(item);
-  if (prices.length < 2 || current == null) return 999;
-  const lo = Math.min(...prices), hi = Math.max(...prices);
-  if (lo === hi) return 0.5;
-  return Math.max(0, Math.min(1, (current - lo) / (hi - lo)));
+function calcTrendPosition(item, units = 1) {
+  // Measured against history ONLY (`past`), the same series the bar is drawn
+  // against - so the sort order and the marker position always agree.
+  const { past, current } = getTrendSeries(item, units);
+  if (past.length < 2 || current == null) return 999;
+  const lo = Math.min(...past), hi = Math.max(...past);
+  // Flat history: cheaper than the one price ever seen is still off-range.
+  if (lo === hi) return current < lo - 0.005 ? -1 : 0.5;
+  // NOT clamped at the low end. A price below everything ever recorded is
+  // "better than the best we've seen" and has to sort AHEAD of an item merely
+  // sitting at its own historical low (0). Clamping to 0 made the two
+  // indistinguishable, so off-range rows scattered among ordinary ones.
+  return Math.min(1, (current - lo) / (hi - lo));
 }
 
 // ── Trend Sort Comparator ──────────────────────────────────────────────────

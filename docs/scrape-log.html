@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=119" />
+  <link rel="stylesheet" href="style.css?v=120" />
   <style>
     .sl-main { max-width: 960px; margin: 0 auto; padding: 20px 24px 60px; }
 
@@ -354,7 +354,7 @@
   </div>
 </main>
 
-<script src="utils.js?v=84"></script>
+<script src="utils.js?v=85"></script>
 <script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
@@ -789,7 +789,7 @@ function paintChangeSummary(q) {
           <th><span class="store-chip ww sm">W</span> Woolworths</th>
           <th><span class="store-chip coles sm">C</span> Coles</th>
           <th>Total</th>
-          <th title="Products the scrape processed that day">Scraped</th>
+          <th title="Products the scrape processed that day - each is one product across both stores">Products</th>
           <th title="How many of those were archived items">Archived</th>
           <th title="Wall-clock time of that day's scrape(s). Hover a value for the 90%-done mark.">Time</th>
         </tr></thead>
@@ -814,7 +814,7 @@ function paintChangeSummary(q) {
             for (const e of effortByDay.values()) if (e.timed) { secs += e.secs; items += e.scraped; }
             if (!(secs > 0 && items > 0)) return '';
             const per = secs / items;
-            return `≈ ${per.toFixed(1)}s per product · 1000 would take ~${Math.round(per * 1000 / 60)} min`;
+            return `≈ ${per.toFixed(1)}s per product (both stores) · 1000 would take ~${Math.round(per * 1000 / 60)} min`;
           })()}</td>
         </tr></tfoot>` : ''}
       </table>
@@ -999,11 +999,11 @@ async function load() {
     const items = timed.reduce((s, r) => s + r.scraped, 0);
     const per = secs / items;
     speedN = per.toFixed(1) + 's';
-    speedL = `Per product · ~${Math.round(per * 1000 / 60)} min per 1000`;
+    speedL = `Per product (both stores) · ~${Math.round(per * 1000 / 60)} min per 1000`;
   }
   $('slStats').innerHTML = `
     <div class="sl-stat" title="Averaged over ${timed.length} timed run${timed.length === 1 ? '' : 's'}"><div class="n">${speedN}</div><div class="l">${speedL}</div></div>
-    <div class="sl-stat"><div class="n">${items.length}</div><div class="l">Items tracked</div></div>
+    <div class="sl-stat"><div class="n">${items.length}</div><div class="l">Products tracked</div></div>
     <div class="sl-stat"><div class="n">${archivedCount}</div><div class="l">Archived</div></div>
     <div class="sl-stat"><div class="n">${avgAll != null ? avgAll + '%' : '–'}</div><div class="l">Avg match rate</div></div>
   `;

@@ -280,9 +280,10 @@ check('groupMetric null result', groupMetric({ sticker: true }, null), null);
 // could never fall outside its own range). Both are pinned here.
 {
   check('mbUnitPrice: no promo -> shelf price', mbUnitPrice({ price: 4.5 }), 4.5);
-  check('mbUnitPrice: promo rate wins',   mbUnitPrice({ price: 4.5, multi_buy: { qty: 2, total: 7 } }), 3.5);
-  // "2 for $12" on a $5 item is dearer per unit - the shelf price is the truth.
-  check('mbUnitPrice: dearer promo ignored', mbUnitPrice({ price: 5, multi_buy: { qty: 2, total: 12 } }), 5);
+  check('mbUnitPrice: live promo rate wins', mbUnitPrice({ price: 4.5, multi_buy: { qty: 2, total: 7 } }, 2), 3.5);
+  // "2 for $12" on a $5 item is dearer per unit - multiBuyCost still charges it
+  // (that is what the register does), so the shelf price is not silently kept.
+  check('mbUnitPrice: dearer promo still charged', mbUnitPrice({ price: 5, multi_buy: { qty: 2, total: 12 } }, 2), 6);
   check('mbUnitPrice: unpriced store -> null', mbUnitPrice({ price: null }), null);
   check('mbUnitPrice: missing store -> null',  mbUnitPrice(null), null);
 
@@ -293,8 +294,9 @@ check('groupMetric null result', groupMetric({ sticker: true }, null), null);
     woolworths: { price: 4.5, multi_buy: { qty: 2, total: 7 } },
     coles: null,
   };
-  const t = getTrendSeries(promoItem);
-  check('trend current follows the promo', t.current, 3.5);
+  // Qty 2 = the deal quantity, so the promo is genuinely live here.
+  const t = getTrendSeries(promoItem, 2);
+  check('trend current follows a LIVE promo', t.current, 3.5);
   // THE REGRESSION: `past` is history only. If the current price leaks in here,
   // min(past) becomes 3.5 and the marker can never sit left of the bar.
   check('trend past excludes current', Math.min(...t.past), 4.5);
@@ -306,9 +308,49 @@ check('groupMetric null result', groupMetric({ sticker: true }, null), null);
   // Without a promo the current price sits inside the historical range, so the
   // bar draws normally - the off-range marker must not fire for everyone.
   const plain = { ...promoItem, woolworths: { price: 4.8 } };
-  const t2 = getTrendSeries(plain);
+  const t2 = getTrendSeries(plain, 1);
   assert.ok(t2.current >= Math.min(...t2.past), 'a normal price is not off-range');
   n += 1;
+}
+
+// ── A deal you haven't qualified for is not a price you can pay ─────────────
+{
+  const DEAL = { price: 4.5, multi_buy: { qty: 2, total: 7 } };
+  check('mbUnitPrice: below deal qty -> shelf price', mbUnitPrice(DEAL, 1), 4.5);
+  check('mbUnitPrice: at deal qty -> promo rate',     mbUnitPrice(DEAL, 2), 3.5);
+  // 3 units of "2 for $7" at $4.50 = $7 + $4.50 = $11.50 -> $3.83 each. Must
+  // match the price column exactly, which is why it uses multiBuyCost.
+  check('mbUnitPrice: partial block averages out',
+        +mbUnitPrice(DEAL, 3).toFixed(2), 3.83);
+
+  const item = {
+    list_item: 'Y',
+    price_history: [{ date: '2026-01-01', price: 5 }, { date: '2026-02-01', price: 4.5 }],
+    woolworths: DEAL, coles: null,
+  };
+  // At Qty 1 the deal is dormant: the marker must sit at the shelf price, NOT
+  // claim an all-time low the shopper cannot actually buy.
+  assert.ok(getTrendSeries(item, 1).current >= Math.min(...getTrendSeries(item, 1).past),
+    'a dormant deal must not read as off-range');
+  assert.ok(getTrendSeries(item, 2).current < Math.min(...getTrendSeries(item, 2).past),
+    'a live deal below every historical price must read as off-range');
+  n += 2;
+
+  // Off-range sorts AHEAD of an item merely sitting at its own historical low.
+  const atLow = {
+    list_item: 'Z',
+    price_history: [{ date: '2026-01-01', price: 5 }, { date: '2026-02-01', price: 4.5 }],
+    woolworths: { price: 4.5 }, coles: null,
+  };
+  const pOff = calcTrendPosition(item, 2);
+  const pLow = calcTrendPosition(atLow, 1);
+  check('at historical low scores 0', pLow, 0);
+  assert.ok(pOff < 0, `off-range must score below 0 (got ${pOff})`);
+  assert.ok(pOff < pLow, 'off-range must sort ahead of at-its-low');
+  n += 2;
+
+  // Dormant deal ranks the same as no deal at all.
+  check('dormant deal ranks as its shelf price', calcTrendPosition(item, 1), 0);
 }
 
 console.log(`utils_selfcheck: all ${n} cases passed`);

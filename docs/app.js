@@ -1858,6 +1858,12 @@ function openPriceHistoryModal(item) {
   // Merge per-scrape WW and Coles by date (always scraped together)
   const wwMap = new Map((item.ww_price_history    || []).map(e => [e.date, e.price]));
   const coMap = new Map((item.coles_price_history || []).map(e => [e.date, e.price]));
+  // Multi-buy running on that date, recorded by the scraper alongside the shelf
+  // price. The stored price stays the SHELF price (so min/max/average are
+  // unchanged); this just lets the row say "there was a deal on, here's what it
+  // worked out to".
+  const wwMb = new Map((item.ww_price_history    || []).filter(e => e.mb).map(e => [e.date, e.mb]));
+  const coMb = new Map((item.coles_price_history || []).filter(e => e.mb).map(e => [e.date, e.mb]));
   const scrapeDates = new Set([...wwMap.keys(), ...coMap.keys()]);
   const scrapeEntries = [...scrapeDates].map(d => ({
     date: d, ww: wwMap.get(d) ?? null, coles: coMap.get(d) ?? null, source: 'scrape',
@@ -1876,6 +1882,8 @@ function openPriceHistoryModal(item) {
   const liveEntry = !alreadyInHistory && (wwLive != null || coLive != null)
     ? [{ date: liveDate, ww: wwLive, coles: coLive, source: 'live' }]
     : [];
+  if (item.woolworths?.multi_buy) wwMb.set(liveDate, item.woolworths.multi_buy);
+  if (item.coles?.multi_buy)      coMb.set(liveDate, item.coles.multi_buy);
 
   const allEntries = [...liveEntry, ...excelEntries, ...scrapeEntries]
     .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
@@ -1950,15 +1958,28 @@ function openPriceHistoryModal(item) {
     const coEditBtns = item._isGroupHistory ? (innerWidth > 700 ? grpBtn('coles') : '') : simplified ? '' : `
            <button class="price-excl-x" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="${coExcluded ? 'Re-include' : 'Exclude'}">✕</button>
            <button class="price-fork-btn" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="Different item">${forkSvg}</button>`;
+    // "?" = a multi-buy was running that day. The number shown stays the shelf
+    // price; the hover explains the deal and what it actually worked out to.
+    const mbNote = (store) => {
+      const mb = (store === 'ww' ? wwMb : coMb).get(entry.date);
+      const shelf = store === 'ww' ? entry.ww : entry.coles;
+      if (!mb?.qty || mb.total == null || shelf == null) return '';
+      const per = mb.total / mb.qty;
+      const off = shelf > 0 ? Math.round((1 - per / shelf) * 100) : 0;
+      return `<span class="price-hist-mb" tabindex="0" role="note" data-tip="${escAttr(
+        `Multi-buy on this day: ${mb.qty} for $${mb.total.toFixed(2)} - $${per.toFixed(2)} each` +
+        (off > 0 ? `, ${off}% off the $${Number(shelf).toFixed(2)} shelf price` : '') +
+        '. The price shown is the shelf price.')}">?</span>`;
+    };
     const wwHtml = entry.ww != null
       ? `<span class="price-history-store-cell price-history-store-ww">
-           <span class="price-history-price">${fmt(entry.ww * kgR.ww)}</span>${wwEditBtns}
+           <span class="price-history-price">${fmt(entry.ww * kgR.ww)}</span>${mbNote('ww')}${wwEditBtns}
          </span>`
       : `<span style="color:var(--text-soft)">-</span>`;
 
     const coHtml = entry.coles != null
       ? `<span class="price-history-store-cell price-history-store-coles">
-           <span class="price-history-price" style="color:var(--coles)">${fmt(entry.coles * kgR.coles)}</span>${coEditBtns}
+           <span class="price-history-price" style="color:var(--coles)">${fmt(entry.coles * kgR.coles)}</span>${mbNote('coles')}${coEditBtns}
          </span>`
       : `<span style="color:var(--text-soft)">-</span>`;
 
@@ -3796,7 +3817,7 @@ function renderCards(items) {
       ? `<div class="card-saving">${cheaper==='woolworths'?'<span class="store-chip ww sm">W</span>':'<span class="store-chip coles sm">C</span>'} Save ${savingAmt}</div>`
       : '';
 
-    const _trendSeries = getTrendSeries(item);
+    const _trendSeries = getTrendSeries(item, getUnits(item.list_item));
     const bar = buildPriceBar(item.list_item, _trendSeries.past.map(p => ({price: p})), _trendSeries.current);
     const isChecked = _checkedItems.has(item.list_item);
     const notFound = !ww && !co;
@@ -4014,7 +4035,7 @@ function groupTrendPosition(group) {
 // Trend position for any row: groups use their $/kg series, normal items use the shared
 // calcTrendPosition. One dispatcher so desktop and mobile trend sorts stay consistent.
 function trendPositionOf(item) {
-  return item._isGroup ? groupTrendPosition(item) : calcTrendPosition(item);
+  return item._isGroup ? groupTrendPosition(item) : calcTrendPosition(item, getUnits(item.list_item));
 }
 
 // Assemble a <tr> from a column→<td> map, respecting current visible columns.
@@ -4925,7 +4946,7 @@ function renderMobileCards(items, data) {
     const currentRef = cheaper === 'woolworths' ? ww?.price
                      : cheaper === 'coles'      ? co?.price
                      : (co?.price ?? ww?.price);
-    const _trendSeriesMC = getTrendSeries(item);
+    const _trendSeriesMC = getTrendSeries(item, getUnits(item.list_item));
     const barHtml = _trendSeriesMC.prices.length
       ? buildPriceBar(item.list_item, _trendSeriesMC.past.map(p => ({price: p})), _trendSeriesMC.current)
       : '';
@@ -5499,7 +5520,7 @@ function _renderPageInner(data) {
 
     // Price bar uses cheaper store's price as reference (or fallback)
     const currentRef = cheaper === 'woolworths' ? ww?.price : (cheaper === 'coles' ? co?.price : (co?.price ?? ww?.price));
-    const _trendSeriesPage = getTrendSeries(item);
+    const _trendSeriesPage = getTrendSeries(item, getUnits(item.list_item));
     const bar = _trendSeriesPage.past.length ? buildPriceBar(item.list_item, _trendSeriesPage.past.map(p => ({price: p})), _trendSeriesPage.current) : '';
 
     // % Cheaper - compares the EFFECTIVE per-unit prices at the current qty, so a

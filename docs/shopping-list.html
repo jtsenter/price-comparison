@@ -244,8 +244,13 @@
     /* Other store's promo marker inside the muted alt price ("C $3.50 2/$6") */
     .alt-mb { font-size: 10px; font-weight: 700; color: var(--text-soft, #94A3B8); border: 1px solid var(--border); border-radius: 7px; padding: 0 4px; }
     /* Pricing-basis note - rides on the end of the item-count line (only when
-       the basket holds per-kg category rows) rather than taking its own row. */
-    .sl-rate-note { color: var(--text-soft); font-size: 11px; white-space: nowrap; }
+       the basket holds per-kg category rows) rather than taking its own row.
+       Inherits the count line's size so the two read as one sentence; a spaced
+       pipe separates them (they were running together at the same weight). */
+    .sl-rate-note {
+      color: var(--text-soft); font-size: inherit; white-space: nowrap;
+      margin-left: 10px; padding-left: 12px; border-left: 1px solid var(--border);
+    }
     .sl-rate-note .info-ico { vertical-align: middle; margin-left: 3px; }
     .sl-rate-note .info-ico:hover::after, .sl-rate-note .info-ico:focus::after { width: 290px; }
     @media (max-width: 700px) { .sl-rate-note { display: none; } }
@@ -534,7 +539,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=84"></script>
+<script src="utils.js?v=85"></script>
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '-';
 // Short display name (same map the rest of the site uses); falls back to the
@@ -1112,7 +1117,7 @@ async function boot() {
       <div class="sl-topbar">
         ${splitSegHtml()}
         ${segHtml()}
-        <div class="sl-note">📋 ${filterNoteHtml()}${displayItems.some(i => i._isGroup) ? ` <span class="sl-rate-note">· per-kg categories priced by rate${infoIcoHTML('Per-kg categories are counted at their rate, not their pack price - so $10/kg × 1kg = $10, whether the store sells it in 500g trays or one 2kg bag. These totals match the main page exactly. The arrow under a category name still tells you which product to grab and roughly how many packs; that part is the shopping instruction, not the sum.')}</span>` : ''}</div>
+        <div class="sl-note">📋 ${filterNoteHtml()}${displayItems.some(i => i._isGroup) ? ` <span class="sl-rate-note">Per-kg categories priced by rate${infoIcoHTML('Per-kg categories are counted at their rate, not their pack price - so $10/kg × 1kg = $10, whether the store sells it in 500g trays or one 2kg bag. These totals match the main page exactly. The arrow under a category name still tells you which product to grab and roughly how many packs; that part is the shopping instruction, not the sum.')}</span>` : ''}</div>
         <div class="sl-flexspacer" style="flex:1"></div>
         <button id="smResetBtn" class="btn-outline-danger">↺ Reset picks</button>
       </div>
@@ -1264,7 +1269,7 @@ async function boot() {
       <div class="sl-topbar">
         ${splitSegHtml()}
         ${segHtml()}
-        <div class="sl-note">📋 ${filterNoteHtml()}${displayItems.some(i => i._isGroup) ? ` <span class="sl-rate-note">· per-kg categories priced by rate${infoIcoHTML('Per-kg categories are counted at their rate, not their pack price - so $10/kg × 1kg = $10, whether the store sells it in 500g trays or one 2kg bag. These totals match the main page exactly. The arrow under a category name still tells you which product to grab and roughly how many packs; that part is the shopping instruction, not the sum.')}</span>` : ''}</div>
+        <div class="sl-note">📋 ${filterNoteHtml()}${displayItems.some(i => i._isGroup) ? ` <span class="sl-rate-note">Per-kg categories priced by rate${infoIcoHTML('Per-kg categories are counted at their rate, not their pack price - so $10/kg × 1kg = $10, whether the store sells it in 500g trays or one 2kg bag. These totals match the main page exactly. The arrow under a category name still tells you which product to grab and roughly how many packs; that part is the shopping instruction, not the sum.')}</span>` : ''}</div>
         <div class="sl-flexspacer" style="flex:1"></div>
         <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
       </div>
