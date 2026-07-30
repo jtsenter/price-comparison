@@ -22,9 +22,7 @@ function closeHeaderDropdowns(exceptId) {
 
 // Strip "Woolworths " prefix for display. The underlying list_item key stays
 // unchanged so price history and localStorage keys keep working.
-const stripWW  = (name) => name.replace(/^Woolworths\s+/i, '');
 // Short telegram display name (from name_map.js); falls back to stripWW.
-const shortName = (name) => (window.PW_NAME_MAP && window.PW_NAME_MAP[name]) || stripWW(name);
 // Per-store display name for a per-kg category member. Woolworths and Coles names
 // are independent: an explicit per-store override wins, else the store's scraped
 // product name, else the stripped list_item key.

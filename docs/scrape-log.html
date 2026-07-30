@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=127" />
+  <link rel="stylesheet" href="style.css?v=129" />
   <style>
     .sl-main { max-width: 960px; margin: 0 auto; padding: 20px 24px 60px; }
 
@@ -354,7 +354,8 @@
   </div>
 </main>
 
-<script src="utils.js?v=90"></script>
+<script src="name_map.js?v=55"></script>
+<script src="utils.js?v=91"></script>
 <script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
@@ -397,7 +398,7 @@ function renderMissList(list) {
     const title = cls === 'no_results' ? 'Search or page fetch returned nothing this run - likely a block or a broken page selector'
       : cls === 'no_match' ? 'Got search results back, but none matched the product name well enough'
       : 'Reason not recorded (older log entry)';
-    return `<li><span>${escapeHtml(e.item)}</span><span class="sl-miss-reason ${cls}" title="${title}">${label}</span></li>`;
+    return `<li><span title="${escapeHtml(e.item)}">${escapeHtml(shortName(e.item))}</span><span class="sl-miss-reason ${cls}" title="${title}">${label}</span></li>`;
   }).join('') + '</ul>';
 }
 
@@ -460,7 +461,7 @@ function renderChronicMisses(log) {
       <h3>${label} (${rows.length})</h3>
       ${rows.length
         ? '<ul class="sl-miss-list">' + rows.map(([item, n, last]) =>
-            `<li><span>${escapeHtml(item)}</span><span class="sl-miss-meta">` +
+            `<li><span title="${escapeHtml(item)}">${escapeHtml(shortName(item))}</span><span class="sl-miss-meta">` +
             (last ? `<span class="sl-miss-last" title="Most recent failed scrape">${shortDate(last)}</span>` : '') +
             `<span class="sl-miss-reason unknown" title="Missed in ${n} of the last ${log.length} logged runs">×${n}</span>` +
             `</span></li>`
@@ -702,12 +703,25 @@ function paintChangeChart(days) {
     </div>`;
 }
 
+// A run's date in the VIEWER's timezone. scrape_log/price_changes store UTC
+// ISO stamps, and slicing the first 10 chars takes the UTC day - but every run
+// row on this page renders its date with toLocaleDateString, i.e. local. In
+// Melbourne (UTC+10) any run after 14:00 UTC therefore displayed as one day but
+// grouped under the previous one: the 31 Jul 09:19 scrape (23:19Z on the 30th)
+// vanished into the 30 Jul row instead of getting its own.
+function localDay(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return String(iso || '').slice(0, 10);
+  const p = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
 function paintChangeSummary(q) {
   const host = $('slChgSummary');
   if (!host) return;
   const byDay = new Map();   // 'YYYY-MM-DD' -> {ww:{up,down}, coles:{up,down}}
   for (const run of _changeArchive) {
-    const day = String(run.date || '').slice(0, 10);
+    const day = localDay(run.date);
     if (!day) continue;
     if (!byDay.has(day)) byDay.set(day, { ww: { up: 0, down: 0 }, coles: { up: 0, down: 0 } });
     const bucket = byDay.get(day);
@@ -736,7 +750,7 @@ function paintChangeSummary(q) {
   // calendar day as the price changes they produced.
   const effortByDay = new Map();
   for (const run of _runLog) {
-    const day = String(run.date || '').slice(0, 10);
+    const day = localDay(run.date);
     if (!day) continue;
     if (!effortByDay.has(day)) effortByDay.set(day, { scraped: 0, archived: 0, secs: 0, p90: 0, timed: 0, runs: 0 });
     const e = effortByDay.get(day);
@@ -826,7 +840,7 @@ function paintChangeArchive(q) {
   const fmtP = v => '$' + (+v).toFixed(2);
   const chgLine = c => {
     const up = c.new > c.old;
-    return `<li><span class="chg-name" title="${escapeHtml(c.item)}">${escapeHtml(c.item)}</span>` +
+    return `<li><span class="chg-name" title="${escapeHtml(c.item)}">${escapeHtml(shortName(c.item))}</span>` +
       `<span class="chg-prices">${fmtP(c.old)} → <b class="${up ? 'chg-up' : 'chg-down'}">${fmtP(c.new)}</b> ` +
       `<span class="chg-arrow">${up ? '▲' : '▼'}</span></span></li>`;
   };
@@ -878,7 +892,7 @@ function changeRowsForExport() {
         rows.push([
           { t: 'd', v: when },
           { t: 'time', v: when },
-          String(c.item),
+          shortName(c.item),
           { t: 'money', v: +c.old },
           { t: 'money', v: +c.new },
           store,

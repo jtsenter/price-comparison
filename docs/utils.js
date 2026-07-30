@@ -36,6 +36,16 @@ const TOTALS_RULE_TIP =
   'store look cheaper purely for not stocking it.\n\n' +
   'The main page and your basket apply these same three rules, so their totals match.';
 
+// Display name for a product. The stored list_item keeps its "Woolworths "
+// prefix (it is the key for price history and localStorage), but that prefix is
+// just how the shopping list happens to name things - it does NOT mean the
+// product is Woolworths'. Showing it raw made Coles price changes read
+// "Woolworths Cookie Caramel Bar Slice". Defined here once; app.js, hot-deals
+// and shopping-list previously each had their own copy.
+const stripWW = (name) => String(name == null ? '' : name).replace(/^Woolworths\s+/i, '');
+// Short display name from name_map.js when the page loads it; else stripWW.
+const shortName = (name) => (window.PW_NAME_MAP && window.PW_NAME_MAP[name]) || stripWW(name);
+
 // A small circled "?" that reveals its explanation on hover OR tap/focus
 // (tabindex makes :focus-visible tooltips work on touch). CSS: .info-ico.
 // Used instead of an always-visible paragraph for anything explanatory but not

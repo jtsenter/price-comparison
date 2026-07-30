@@ -551,12 +551,11 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=90"></script>
+<script src="utils.js?v=91"></script>
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '-';
 // Short display name (same map the rest of the site uses); falls back to the
 // raw name minus the "Woolworths " prefix when an item isn't in the map.
-const shortName = n => (window.PW_NAME_MAP && window.PW_NAME_MAP[n]) || String(n).replace(/^Woolworths /, '');
 // Category entries render their group label, never the raw __group_* key.
 const dispName = i => i._isGroup ? i._groupLabel : shortName(i.list_item);
 // PACK SIZE of a unit-based per-kg group's pick at `store` ("1kg", "2kg") -

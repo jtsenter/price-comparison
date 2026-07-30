@@ -1328,8 +1328,21 @@ tr:hover .item-refresh-btn { opacity: 1; pointer-events: auto; }
   background: var(--card);
   z-index: 10;
   padding-bottom: 8px;
-  display: flex; align-items: center; justify-content: space-between;
   margin-bottom: 8px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+/* Scrollable modals: the sticky header has to cover the modal's 32px padding,
+   or rows scrolling up stay visible in the padding above and beside it - which
+   is how the title and ✕ ended up sitting on top of the list. Pulling the
+   header up with a negative top margin moved what sticky top:0 anchors to
+   (measured 32px off), so instead the modal drops its own top padding and the
+   header PROVIDES it: the header starts at the very top of the scroll content
+   and bleeds ±32px sideways to cover the full width. .modal keeps 32px padding
+   at every width - no mobile override - so these numbers hold on small screens. */
+.modal-scrollable { padding-top: 0; }
+.modal-scrollable .modal-header {
+  margin: 0 -32px 8px;
+  padding: 32px 32px 8px;
 }
 .modal-header h2 { margin-bottom: 0; }
 .modal-header .modal-close {
