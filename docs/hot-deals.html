@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=123" />
+  <link rel="stylesheet" href="style.css?v=124" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -328,6 +328,11 @@
        under it - as a block it doubled the card's bar height (31px -> 57px) and
        took a whole line to itself. Same treatment .trend-cell gets on the main
        page's table. */
+    /* style.css reserves 30px on .trend-cell for the History button, but this
+       page's `.deals-table td` rule (0,1,1) outranks `.trend-cell` (0,1,0) and
+       reset it to 12px - so the button sat 16px on top of the bar. Restate it
+       at higher specificity rather than weakening the shared rule. */
+    .deals-table td.trend-cell { padding-right: 30px; }
     .dm-bar { margin-top: 9px; position: relative; padding-right: 28px; }
     .dm-bar .price-bar-outer { display: block !important; }
     .dm-bar .price-bar-manage {
@@ -474,8 +479,8 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=88"></script>
-<script src="history-modal.js?v=2"></script>
+<script src="utils.js?v=89"></script>
+<script src="history-modal.js?v=3"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
