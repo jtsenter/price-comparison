@@ -937,7 +937,14 @@ tr:hover .item-edit-btn { opacity: 1; }
   margin-top: 6px; font-size: 10.5px; color: var(--text-soft);
 }
 /* These tooltips are longer than the default .info-ico width covers. */
-.saving-rule .info-ico:hover::after, .saving-rule .info-ico:focus::after { width: 320px; }
+.saving-rule .info-ico:hover::after, .saving-rule .info-ico:focus::after {
+  width: 320px;
+  /* Opens DOWNWARD. The default bubble points up, which is fine for a one-line
+     tip, but this one is ~200px tall and the icon sits ~190px below the top of
+     the viewport - so upward ran off the top of the screen and was cut off.
+     Both places that use this text sit near the top of their page. */
+  top: calc(100% + 7px); bottom: auto;
+}
 
 /* Price shown at its multi-buy effective per-unit (deal live).
    Deliberately NOT coloured. Green+bold on this table means "this store is
@@ -1045,6 +1052,20 @@ tr:hover .item-edit-btn { opacity: 1; }
   padding: 7px 11px; border-radius: 7px; width: 230px; text-align: left;
   white-space: pre-line; z-index: 600; pointer-events: none;
   box-shadow: 0 4px 14px rgba(0,0,0,.2);
+}
+
+/* Long explanatory tooltips on a narrow screen. Centring a 320px bubble on a
+   13px icon puts its left edge off-screen (measured -171px at 375px wide), so
+   below 700px they switch to position:fixed and span the viewport instead of
+   the icon. `top:auto` leaves the bubble at its static position - i.e. beside
+   the icon - which is close enough vertically without needing JS. */
+@media (max-width: 700px) {
+  .saving-rule .info-ico:hover::after, .saving-rule .info-ico:focus::after,
+  .sl-rate-note .info-ico:hover::after, .sl-rate-note .info-ico:focus::after {
+    position: fixed;
+    left: 12px; right: 12px; width: auto; max-width: none;
+    top: auto; bottom: auto; transform: none;
+  }
 }
 
 .price-bar-flat { background: #CBD5E1 !important; }

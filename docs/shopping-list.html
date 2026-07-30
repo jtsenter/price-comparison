@@ -252,7 +252,19 @@
       margin-left: 10px; padding-left: 12px; border-left: 1px solid var(--border);
     }
     .sl-rate-note .info-ico { vertical-align: middle; margin-left: 3px; }
-    .sl-rate-note .info-ico:hover::after, .sl-rate-note .info-ico:focus::after { width: 320px; }
+    .sl-rate-note .info-ico:hover::after, .sl-rate-note .info-ico:focus::after {
+      width: 320px; top: calc(100% + 7px); bottom: auto;   /* too tall to open upward */
+    }
+    /* Narrow screens: a 320px bubble centred on a 13px icon starts off-screen
+       (measured -171px at 375px wide), so pin it to the viewport instead.
+       Duplicated from style.css because this page does not load it. */
+    @media (max-width: 700px) {
+      .sl-rate-note .info-ico:hover::after, .sl-rate-note .info-ico:focus::after {
+        position: fixed;
+        left: 12px; right: 12px; width: auto; max-width: none;
+        top: auto; bottom: auto; transform: none;
+      }
+    }
     @media (max-width: 700px) { .sl-rate-note { display: none; } }
     /* Money and quantities align digit-for-digit down a column */
     .price-val, .total-val, .unit-val, .qs-val, .sc-price, .saving-amount, tfoot td { font-variant-numeric: tabular-nums; }
