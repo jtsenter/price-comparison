@@ -252,7 +252,7 @@
       margin-left: 10px; padding-left: 12px; border-left: 1px solid var(--border);
     }
     .sl-rate-note .info-ico { vertical-align: middle; margin-left: 3px; }
-    .sl-rate-note .info-ico:hover::after, .sl-rate-note .info-ico:focus::after { width: 290px; }
+    .sl-rate-note .info-ico:hover::after, .sl-rate-note .info-ico:focus::after { width: 320px; }
     @media (max-width: 700px) { .sl-rate-note { display: none; } }
     /* Money and quantities align digit-for-digit down a column */
     .price-val, .total-val, .unit-val, .qs-val, .sc-price, .saving-amount, tfoot td { font-variant-numeric: tabular-nums; }
@@ -539,7 +539,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=89"></script>
+<script src="utils.js?v=90"></script>
 <script>
 const fmt = n => n != null ? `$${Number(n).toFixed(2)}` : '-';
 // Short display name (same map the rest of the site uses); falls back to the
@@ -1117,7 +1117,7 @@ async function boot() {
       <div class="sl-topbar">
         ${splitSegHtml()}
         ${segHtml()}
-        <div class="sl-note">📋 ${filterNoteHtml()}${displayItems.some(i => i._isGroup) ? ` <span class="sl-rate-note">Per-kg categories priced by rate${infoIcoHTML('Per-kg categories are counted at their rate, not their pack price - so $10/kg × 1kg = $10, whether the store sells it in 500g trays or one 2kg bag. These totals match the main page exactly. The arrow under a category name still tells you which product to grab and roughly how many packs; that part is the shopping instruction, not the sum.')}</span>` : ''}</div>
+        <div class="sl-note">📋 ${filterNoteHtml()} <span class="sl-rate-note">How these totals are calculated${infoIcoHTML(TOTALS_RULE_TIP)}</span></div>
         <div class="sl-flexspacer" style="flex:1"></div>
         <button id="smResetBtn" class="btn-outline-danger">↺ Reset picks</button>
       </div>
@@ -1269,7 +1269,7 @@ async function boot() {
       <div class="sl-topbar">
         ${splitSegHtml()}
         ${segHtml()}
-        <div class="sl-note">📋 ${filterNoteHtml()}${displayItems.some(i => i._isGroup) ? ` <span class="sl-rate-note">Per-kg categories priced by rate${infoIcoHTML('Per-kg categories are counted at their rate, not their pack price - so $10/kg × 1kg = $10, whether the store sells it in 500g trays or one 2kg bag. These totals match the main page exactly. The arrow under a category name still tells you which product to grab and roughly how many packs; that part is the shopping instruction, not the sum.')}</span>` : ''}</div>
+        <div class="sl-note">📋 ${filterNoteHtml()} <span class="sl-rate-note">How these totals are calculated${infoIcoHTML(TOTALS_RULE_TIP)}</span></div>
         <div class="sl-flexspacer" style="flex:1"></div>
         <button id="removeAllBtn" class="btn-outline-danger">🗑 Remove All</button>
       </div>

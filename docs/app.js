@@ -2362,8 +2362,7 @@ function renderSavingInfo(s) {
   }
   // How the two store totals are built. Rides along inside this panel (which has
   // spare room) rather than as its own full-width line under the cards.
-  const rule = `<div class="saving-rule">How these totals are calculated${infoIcoHTML(
-    'Each total adds up the price shown in the row × its Qty. Per-kg categories count at their rate — $10/kg × 1kg = $10 — whether the store sells that in 500g trays or one 2kg bag, so a store never looks expensive just for selling in bulk. Your basket uses the identical rule, so its totals match these.')}</div>`;
+  const rule = `<div class="saving-rule">How these totals are calculated${infoIcoHTML(TOTALS_RULE_TIP)}</div>`;
   return basket + maxRow + rule;
 }
 

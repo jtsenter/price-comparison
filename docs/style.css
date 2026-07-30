@@ -937,7 +937,7 @@ tr:hover .item-edit-btn { opacity: 1; }
   margin-top: 6px; font-size: 10.5px; color: var(--text-soft);
 }
 /* These tooltips are longer than the default .info-ico width covers. */
-.saving-rule .info-ico:hover::after, .saving-rule .info-ico:focus::after { width: 290px; }
+.saving-rule .info-ico:hover::after, .saving-rule .info-ico:focus::after { width: 320px; }
 
 /* Price shown at its multi-buy effective per-unit (deal live).
    Deliberately NOT coloured. Green+bold on this table means "this store is
@@ -1043,7 +1043,7 @@ tr:hover .item-edit-btn { opacity: 1; }
   background: var(--text); color: var(--card);
   font-size: 11px; font-weight: 500; line-height: 1.45; text-transform: none; letter-spacing: 0;
   padding: 7px 11px; border-radius: 7px; width: 230px; text-align: left;
-  white-space: normal; z-index: 600; pointer-events: none;
+  white-space: pre-line; z-index: 600; pointer-events: none;
   box-shadow: 0 4px 14px rgba(0,0,0,.2);
 }
 
