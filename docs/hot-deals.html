@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=122" />
+  <link rel="stylesheet" href="style.css?v=123" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -288,7 +288,7 @@
 
     /* ── Price bar - style.css provides all bar/dot/label rules.
          Only override the outer container for this page's layout context. ── */
-    .price-bar-outer { cursor: help; margin-top: 4px; }
+    .price-bar-outer { margin-top: 4px; }   /* no longer a tooltip target */
 
     /* ── Empty state ── */
     .deals-empty {
@@ -324,8 +324,15 @@
     .dm-vs s { color: var(--coles); }
     .dm-watch { background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.35; padding: 0 2px; line-height: 1; }
     .dm-watch.active { opacity: 1; }
-    .dm-bar { margin-top: 9px; }
+    /* The History button overlays the right of the bar rather than stacking
+       under it - as a block it doubled the card's bar height (31px -> 57px) and
+       took a whole line to itself. Same treatment .trend-cell gets on the main
+       page's table. */
+    .dm-bar { margin-top: 9px; position: relative; padding-right: 28px; }
     .dm-bar .price-bar-outer { display: block !important; }
+    .dm-bar .price-bar-manage {
+      position: absolute; right: 0; top: 8px; padding: 2px;
+    }
     /* Deal → basket selection */
     .check-cell { width: 34px; text-align: center; }
     .hd-check { width: 15px; height: 15px; cursor: pointer; accent-color: var(--ww); }
@@ -467,8 +474,8 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=87"></script>
-<script src="history-modal.js?v=1"></script>
+<script src="utils.js?v=88"></script>
+<script src="history-modal.js?v=2"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;

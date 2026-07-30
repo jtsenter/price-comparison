@@ -62,6 +62,7 @@ eval([
   extract('groupMetric'),
   extract('per100Pair'),
   extract('exclPriceSet'),
+  extract('promoUnitPrice'),   // history + hot-deal detection price through this
   extract('mbUnitPrice'),      // getTrendSeries prices the current point through this
   extract('buildPriceBar'),    // moved here from app.js; hot-deals draws the same bar
   extract('getTrendSeries'),
@@ -382,6 +383,59 @@ check('groupMetric null result', groupMetric({ sticker: true }, null), null);
 
   // Dormant deal ranks the same as no deal at all.
   check('dormant deal ranks as its shelf price', calcTrendPosition(item, 1), 0);
+}
+
+// ── Off-chart sorts to the EXTREMES, both directions ────────────────────────
+// Both ends were clamped, so "below everything ever seen" scored the same as
+// "at its own low" (0) and "above everything" the same as "at its own high" (1).
+// Trend sort therefore scattered off-chart rows among ordinary ones.
+{
+  const hist = [{ date: '2026-01-01', price: 4 }, { date: '2026-02-01', price: 6 }];
+  const mk = (p) => ({ list_item: 'T', price_history: hist, woolworths: { price: p }, coles: null });
+  const below = calcTrendPosition(mk(3));    // under the $4 low
+  const atLow = calcTrendPosition(mk(4));
+  const atHigh = calcTrendPosition(mk(6));
+  const above = calcTrendPosition(mk(7));    // over the $6 high
+  check('at historical low = 0', atLow, 0);
+  check('at historical high = 1', atHigh, 1);
+  assert.ok(below < atLow, 'below-everything must sort ahead of at-its-low');
+  assert.ok(above > atHigh, 'above-everything must sort behind at-its-high');
+  n += 2;
+
+  // Dill Fresh / Parsley: ONE price ever recorded ($3.20), now $3.30. That is
+  // off the top, not mid-range - it used to score 0.5 and land in the middle of
+  // a trend sort.
+  const flat = (p) => ({
+    list_item: 'F',
+    price_history: [{ date: '2026-01-01', price: 3.2 }, { date: '2026-02-01', price: 3.2 }],
+    woolworths: { price: p }, coles: null,
+  });
+  assert.ok(calcTrendPosition(flat(3.3)) > 1, 'flat history, dearer now = off the top');
+  assert.ok(calcTrendPosition(flat(3.0)) < 0, 'flat history, cheaper now = off the bottom');
+  check('flat history, unchanged = middle', calcTrendPosition(flat(3.2)), 0.5);
+  n += 2;
+}
+
+// ── Hot Deals must see multi-buy all-time lows ──────────────────────────────
+{
+  const base = {
+    list_item: 'Nut Bar',
+    price_history: [
+      { date: '2026-01-01', price: 5 },
+      { date: '2026-02-01', price: 5 },
+      { date: '2026-03-01', price: 4.5 },
+    ],
+    coles: null,
+  };
+  // Shelf $5 is NOT a deal - it is the usual price.
+  check('shelf price at its usual = no deal',
+        getDealQuality({ ...base, woolworths: { price: 5 } }, {}).qualifies, false);
+  // Same shelf price, but "2 for $6" = $3 each, under the $4.50 all-time low.
+  // This is the case that never reached Hot Deals.
+  const promo = getDealQuality(
+    { ...base, woolworths: { price: 5, multi_buy: { qty: 2, total: 6 } } }, {});
+  check('multi-buy all-time low qualifies', promo.qualifies, true);
+  check('multi-buy low is flagged all-time-low', promo.isAllTimeLow, true);
 }
 
 console.log(`utils_selfcheck: all ${n} cases passed`);

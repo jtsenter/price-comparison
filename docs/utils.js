@@ -256,13 +256,21 @@ function calcTrendPosition(item, units = 1) {
   const { past, current } = getTrendSeries(item, units);
   if (past.length < 2 || current == null) return 999;
   const lo = Math.min(...past), hi = Math.max(...past);
-  // Flat history: cheaper than the one price ever seen is still off-range.
-  if (lo === hi) return current < lo - 0.005 ? -1 : 0.5;
-  // NOT clamped at the low end. A price below everything ever recorded is
-  // "better than the best we've seen" and has to sort AHEAD of an item merely
-  // sitting at its own historical low (0). Clamping to 0 made the two
-  // indistinguishable, so off-range rows scattered among ordinary ones.
-  return Math.min(1, (current - lo) / (hi - lo));
+  // Flat history (one price ever seen): off-range in EITHER direction. Returning
+  // 0.5 for "dearer than the only price we know" put Dill Fresh and Parsley -
+  // freshly up from $3.20 to $3.30, so genuinely off the top - in the middle of
+  // a trend sort, between items that are actually mid-range.
+  if (lo === hi) {
+    if (current < lo - 0.005) return -1;
+    if (current > lo + 0.005) return 2;
+    return 0.5;
+  }
+  // Clamped at NEITHER end, on purpose. Below everything ever recorded is
+  // "better than the best we've seen" and must sort ahead of an item merely at
+  // its own low (0); above everything is worse than one at its own high (1) and
+  // must sort behind it. Clamping collapsed each pair into one score, which is
+  // why off-chart rows landed among ordinary ones instead of at the extremes.
+  return (current - lo) / (hi - lo);
 }
 
 // ── Trend Sort Comparator ──────────────────────────────────────────────────
@@ -325,8 +333,13 @@ function getDealQuality(item, exclusions) {
    .filter(p => p > 0 && !excludedSet.has(p.toFixed(2)));
   if (hist.length < 2) return empty;
 
-  const wwP = item.woolworths?.price;
-  const coP = item.coles?.price;
+  // promoUnitPrice, not the shelf price: a multi-buy that takes an item below
+  // everything it has ever sold for IS a deal, and reading the ticket price hid
+  // exactly those from this page (e.g. Sam's Salted Caramel Nut Bar - an
+  // all-time low on the promo rate, absent from Hot Deals entirely). History is
+  // recorded at the promo rate too, so both sides of the comparison now agree.
+  const wwP = promoUnitPrice(item.woolworths);
+  const coP = promoUnitPrice(item.coles);
   const currentBest = Math.min(wwP ?? Infinity, coP ?? Infinity);
   if (!isFinite(currentBest)) return empty;
   const store = (coP != null && coP <= (wwP ?? Infinity)) ? 'coles' : 'woolworths';

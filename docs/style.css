@@ -1012,7 +1012,10 @@ tr:hover .item-edit-btn { opacity: 1; }
 .price-bar-manage .pbm-ico { display: block; width: 16px; height: 16px; }
 .price-bar-manage .pbm-txt { display: none; }
 .price-bar-manage:hover { color: var(--ww); }
-#tableBody .trend-cell .price-bar-manage {
+/* Was scoped to #tableBody - the MAIN page's tbody id - so hot-deals never got
+   it and the History button flowed as a block, taking a whole row to itself.
+   Any .trend-cell now gets the same compact overlay. */
+.trend-cell .price-bar-manage {
   /* Centred on the coloured TRACK, not the whole cell - the bar block is
      track (top) + price labels (below), so a cell-centred icon floated
      between the two and read as misaligned. */
