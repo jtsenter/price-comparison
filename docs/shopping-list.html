@@ -415,7 +415,24 @@
       color: #fff; font-size: 15px; line-height: 1;
     }
     .sm-row.done .sm-check { background: var(--ww); border-color: var(--ww); }
-    .sm-name { flex: 1; min-width: 0; font-size: 14px; font-weight: 500; color: var(--text); }
+    /* Product shot - the whole point of shopping mode is recognising the pack on
+       a shelf, which a name alone doesn't do for own-brand items. Fixed 40px box
+       so a missing or broken image leaves a tidy placeholder instead of shunting
+       the row's whole layout sideways (onerror drops the <img>, the box stays).
+       White plate in BOTH themes: store shots are cut out on white, and letting
+       them sit on the dark card just draws a white rectangle anyway. */
+    .sm-thumb {
+      width: 40px; height: 40px; flex-shrink: 0; overflow: hidden;
+      border-radius: 7px; border: 1px solid var(--border); background: #fff;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .sm-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    /* contain, not cover: a cropped pack shot is worse than a small one. */
+    .sm-name {
+      flex: 1; min-width: 0; font-size: 14px; font-weight: 500; color: var(--text);
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden; line-height: 1.3;
+    }
     .sm-qty { font-size: 12px; color: var(--text-soft); white-space: nowrap; }
     .sm-sub { font-size: 11px; color: var(--text-soft); font-weight: 600; }
     .sm-price { font-size: 14px; font-weight: 700; min-width: 52px; text-align: right; color: var(--text); }
@@ -459,6 +476,13 @@
          two modes looked different. */
       .sl-note { grid-column: 1; align-self: center; text-align: left; font-size: 12px; }
       #removeAllBtn, #smResetBtn { grid-column: 2; justify-content: center; }
+      /* The thumbnail costs 40px of a 375px screen, so the row buys it back from
+         its own padding and gaps rather than from the product name - at 12px gaps
+         the name dropped to ~139px and clipped mid-word on ordinary items. The
+         thumbnail also makes the row taller than the 26px tick did, which is the
+         headroom the 2-line name clamp uses. */
+      .sm-row { gap: 9px; padding: 10px 11px; }
+      .sm-price { min-width: 48px; }
       /* One-line savings + tinted Split shop row come from the shared
          .sl-savings-panel base styles; mobile only shortens the chip wording */
       .chip-word { display: none; }
@@ -1089,6 +1113,16 @@ async function boot() {
 
   function renderShopMode(wwItems, colesItems) {
     const lineOf = (i, store) => lineCostFor(i, store) ?? 0;   // same rule as the table
+    // Product shot for the row's own store, falling back to the rival's: it's the
+    // same physical product on the shelf, so a Coles photo is still the right
+    // thing to look for in a Woolworths aisle - and half the misses are one-store
+    // scrape failures, not genuinely different products. Category groups already
+    // expose their best variant as .woolworths/.coles, so one helper covers both.
+    const imgFor = (i, store) => {
+      const own   = store === 'ww' ? i.woolworths : i.coles;
+      const other = store === 'ww' ? i.coles : i.woolworths;
+      return (own && own.image_url) || (other && other.image_url) || '';
+    };
     const rowsHtml = (items, store) => {
       // Category-grouped (≈ aisle order), name-sorted inside each group.
       const byCat = new Map();
@@ -1106,8 +1140,10 @@ async function boot() {
           const units = i._isGroup ? packsOf(i, store) : bq(i.list_item);
           const line = lineOf(i, store);
           const done = !!smChecked[i.list_item];
+          const img = imgFor(i, store);
           return `<button type="button" class="sm-row${done ? ' done' : ''}" data-item="${escAttr(i.list_item)}" data-line="${line.toFixed(2)}">
             <span class="sm-check">${done ? '✓' : ''}</span>
+            <span class="sm-thumb">${img ? `<img src="${escAttr(img)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">` : ''}</span>
             <span class="sm-name" title="${escAttr(i._isGroup ? i._groupLabel : i.list_item)}">${esc(dispName(i))}${i._isGroup && pickQty(i, store) ? ` <span class="sm-sub">${pickQty(i, store)}</span>` : ''}</span>
             ${units > 1 ? `<span class="sm-qty">× ${units}</span>` : ''}
             <span class="sm-price">${fmt(line)}</span>
