@@ -79,6 +79,30 @@ def _run():
     assert scraper.should_skip_item(arch_fresh, "scheduled") is True
     assert scraper.should_skip_item(arch_stale, "scheduled") is False
     assert scraper.should_skip_item(arch_fresh, "manual") is False
+    # retry_misses must never skip. An item missed at ONE store still got a fresh
+    # last_scraped from the store that DID match, so the freshness gate would skip
+    # the entire retry list and the run would scrape nothing at all.
+    assert scraper.should_skip_item(fresh, "retry_misses") is False
+    assert scraper.should_skip_item(arch_fresh, "retry_misses") is False
+
+    # _last_run_misses: the exact list a retry_misses dispatch re-scrapes. Union
+    # across both stores, deduped, and tolerant of the pre-reason-tracking format
+    # where entries were bare strings.
+    with tempfile.TemporaryDirectory() as tmp:
+        scraper.DATA_DIR = tmp
+        path = os.path.join(tmp, "scrape_log.json")
+        assert scraper._last_run_misses() == set()          # no file at all
+        json.dump([], open(path, "w"))
+        assert scraper._last_run_misses() == set()          # empty log
+        json.dump([
+            {"ww_missed": [{"item": "Old Run"}], "coles_missed": []},
+            {"ww_missed": [{"item": "A"}, {"item": "Both"}],
+             "coles_missed": [{"item": "B"}, {"item": "Both"}, "Legacy String"]},
+        ], open(path, "w"))
+        # Only the NEWEST run counts, both stores merge, "Both" appears once.
+        assert scraper._last_run_misses() == {"A", "B", "Both", "Legacy String"}
+        json.dump([{"trigger": "manual"}], open(path, "w"))
+        assert scraper._last_run_misses() == set()          # clean run → nothing to retry
 
     print("scrape_log_selfcheck: all cases passed")
 

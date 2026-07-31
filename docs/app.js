@@ -1228,25 +1228,8 @@ async function pollItemRefresh(s, btn, itemName) {
 }
 
 // ── Runner status ─────────────────────────────────────────────────────────────
-
-/** Returns { anyOnline, runners } for self-hosted runners on the repo. */
-async function getRunnerStatus(s) {
-  try {
-    const res = await fetch(
-      `https://api.github.com/repos/${s.user}/${s.repo}/actions/runners`,
-      { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
-    );
-    if (!res.ok) return { anyOnline: true, runners: [] }; // fail open - don't block on API error
-    const data = await res.json();
-    const selfHosted = (data.runners || []).filter(r =>
-      r.labels?.some(l => l.name === 'self-hosted')
-    );
-    const anyOnline = selfHosted.length > 0 && selfHosted.some(r => r.status === 'online');
-    return { anyOnline, runners: selfHosted };
-  } catch {
-    return { anyOnline: true, runners: [] }; // network error → fail open
-  }
-}
+// getRunnerStatus() lives in utils.js - scrape-log dispatches workflows too and
+// needs the same pre-flight.
 
 function showRunnerOfflineBanner() {
   let banner = $('runnerOfflineBanner');
@@ -1285,14 +1268,7 @@ async function retryRunnerCheck() {
 }
 
 // ── LocalStorage settings ────────────────────────────────────────────────────
-
-function loadSettings() {
-  return {
-    user:  localStorage.getItem('gh_user')  || 'jtsenter',
-    repo:  localStorage.getItem('gh_repo')  || 'price-comparison',
-    token: localStorage.getItem('gh_token') || '',
-  };
-}
+// loadSettings() lives in utils.js (scrape-log reads it too).
 
 function saveSettings(user, repo, token) {
   localStorage.setItem('gh_user', user);

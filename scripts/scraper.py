@@ -109,6 +109,30 @@ def _append_price_changes(trigger: str, ww_changes: list, coles_changes: list) -
         json.dump(log, f, separators=(",", ":"))
 
 
+def _last_run_misses() -> set[str]:
+    """Item names the most recent logged run failed to match, at EITHER store.
+
+    Feeds the `retry_misses` trigger. Entries are {"item", "reason"} dicts on
+    modern runs and bare strings on ones written before reason-tracking, so both
+    shapes are accepted (the UI's normaliseMissed() does the same)."""
+    path = os.path.join(DATA_DIR, "scrape_log.json")
+    try:
+        with open(path) as f:
+            log = json.load(f)
+    except Exception:
+        return set()
+    if not log:
+        return set()
+    last = log[-1]
+    names: set[str] = set()
+    for key in ("ww_missed", "coles_missed"):
+        for entry in (last.get(key) or []):
+            name = entry.get("item") if isinstance(entry, dict) else entry
+            if name:
+                names.add(name)
+    return names
+
+
 def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed: list,
                        ww_attempted: int | None = None, coles_attempted: int | None = None,
                        partial: bool = False, duration_s: float | None = None,
@@ -1293,7 +1317,7 @@ def should_skip_item(ex_data: dict | None, trigger: str) -> bool:
     # Archived items refresh on scheduled runs too, but "in a different way":
     # only when their data is stale (older than ARCHIVED_REFRESH_DAYS). This way
     # they update automatically - no separate tool - without scraping every run.
-    if ex_data.get("archived") and trigger not in ("scrape_archived", "manual"):
+    if ex_data.get("archived") and trigger not in ("scrape_archived", "manual", "retry_misses"):
         last_scraped = ex_data.get("last_scraped")
         if not last_scraped:
             return False  # never scraped → fetch it now
@@ -1302,7 +1326,10 @@ def should_skip_item(ex_data: dict | None, trigger: str) -> bool:
         except Exception:
             return False
         return age_days < ARCHIVED_REFRESH_DAYS
-    if trigger == "manual":
+    # retry_misses must never skip: an item missed at ONE store still gets a fresh
+    # last_scraped from the store that DID match, so the 12-hour gate below would
+    # skip every single item in the retry list and the run would do nothing.
+    if trigger in ("manual", "retry_misses"):
         return False
     # Scheduled runs skip items scraped within SKIP_FRESH_HOURS. Carried-forward
     # items keep their OLD last_scraped, so a failed item is still retried next
@@ -1912,6 +1939,23 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
     elif trigger == "scrape_archived":
         shopping_list = sorted(archived_set)
         print(f"Archived-only scrape: {len(shopping_list)} items")
+    elif trigger == "retry_misses":
+        # Re-scrape ONLY what the most recent logged run failed to match, at
+        # either store. Dispatched by the ↻ next to the latest run's miss count
+        # on the scrape-log page. Cheap by design: a full run is ~210 products
+        # across two stores and is exactly the request volume that trips Coles's
+        # rate ban, so hunting a handful of stragglers should not cost one.
+        # The miss list is read from the repo's own scrape_log.json, so it is the
+        # same list the page was showing. Everything not in it is carried forward
+        # untouched by the normal end-of-run merge below.
+        shopping_list = sorted(_last_run_misses() - removed_set)
+        print(f"Retry-misses scrape: {len(shopping_list)} item(s) missed by the last run")
+        if not shopping_list:
+            # Nothing to do. Return BEFORE launching a browser or writing any
+            # file - an empty run would otherwise log a 0-of-0 entry and drag the
+            # match-rate chart down with a run that never scraped anything.
+            print("Nothing to retry - last run matched everything.")
+            return
     else:
         # Order by the user's actual priority tags (synced from the UI into
         # user_settings.json): weekly first, then monthly, then rare - so if the

@@ -476,6 +476,38 @@ function isViewerMode() {
   } catch { return true; }   // storage blocked → assume viewer, the safe side
 }
 
+// GitHub connection settings. Lives here (not app.js) because scrape-log needs
+// it too - it dispatches the "retry the misses" run. validate.html keeps its own
+// copy: it is the one page that doesn't load utils.js.
+function loadSettings() {
+  return {
+    user:  localStorage.getItem('gh_user')  || 'jtsenter',
+    repo:  localStorage.getItem('gh_repo')  || 'price-comparison',
+    token: localStorage.getItem('gh_token') || '',
+  };
+}
+
+// Pre-flight for anything that dispatches a workflow: the scrape runs on a
+// self-hosted PC, and a dispatch to an offline runner queues silently forever.
+// FAILS OPEN on any API/network error - a flaky check must not block a scrape.
+async function getRunnerStatus(s) {
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${s.user}/${s.repo}/actions/runners`,
+      { headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json' } }
+    );
+    if (!res.ok) return { anyOnline: true, runners: [] };
+    const data = await res.json();
+    const selfHosted = (data.runners || []).filter(r =>
+      r.labels?.some(l => l.name === 'self-hosted')
+    );
+    const anyOnline = selfHosted.length > 0 && selfHosted.some(r => r.status === 'online');
+    return { anyOnline, runners: selfHosted };
+  } catch {
+    return { anyOnline: true, runners: [] };
+  }
+}
+
 function _ghHeaders(s) {
   return { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
 }

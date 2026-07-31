@@ -171,7 +171,22 @@
     .sl-store-stat .bar-fill { height: 100%; border-radius: 3px; display: block; }
     .sl-store-stat.ww .bar-fill { background: var(--ww); }
     .sl-store-stat.coles .bar-fill { background: var(--coles); }
-    .sl-miss-count { font-size: 11.5px; color: var(--text-soft); white-space: nowrap; font-variant-numeric: tabular-nums; }
+    /* Holds the count AND the ↻ retry button, so the head stays a 5-column grid. */
+    .sl-miss-count { font-size: 11.5px; color: var(--text-soft); white-space: nowrap; font-variant-numeric: tabular-nums;
+      display: inline-flex; align-items: center; gap: 6px; }
+    /* Re-scrape just this run's misses. Only on the newest run - retrying an old
+       run's list would re-scrape products that have matched fine since. */
+    .sl-retry-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px; padding: 0; flex-shrink: 0;
+      border: 1px solid var(--border); border-radius: 7px; background: var(--card);
+      color: var(--text-mid); font-size: 13px; line-height: 1; cursor: pointer;
+    }
+    .sl-retry-btn:hover:not(:disabled) { background: var(--bg); color: var(--text); border-color: var(--text-soft); }
+    .sl-retry-btn:disabled { opacity: .55; cursor: default; }
+    .sl-retry-btn.spinning svg, .sl-retry-btn.spinning { animation: sl-spin 1s linear infinite; }
+    @keyframes sl-spin { to { transform: rotate(360deg); } }
+    .sl-retry-done { font-size: 11px; font-weight: 600; color: var(--ww); white-space: nowrap; }
     .sl-chevron { font-size: 11px; color: var(--text-soft); transition: transform .15s; }
     .sl-run.open .sl-chevron { transform: rotate(90deg); }
     .sl-run-body { display: none; border-top: 1px solid var(--border); padding: 14px 16px; background: var(--bg); }
@@ -254,7 +269,7 @@
 <body>
 
 <header data-page="scrape-log"></header>
-<script src="header.js?v=14"></script>
+<script src="header.js?v=15"></script>
 
 <main class="sl-main">
   <!-- Hero: the question this page exists to answer - did the last scrape work? -->
@@ -355,7 +370,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=91"></script>
+<script src="utils.js?v=92"></script>
 <script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
@@ -482,7 +497,84 @@ function attempted(run, store) {
   return v != null ? v : (run.scraped || 0);
 }
 
-function renderRun(run, prevRun) {
+// A retry_misses run only ever attempts known failures, so its match rate is
+// meaningless as a health signal - 40% there is a good result, 40% on a full run
+// is a rate-ban. Kept out of the hero, the gauges and the trend chart; still
+// listed under Runs and still counted for chronic misses (a re-miss is a miss).
+const isRetryRun = (run) => (run && run.trigger) === 'retry_misses';
+const triggerLabel = (run) => String((run && run.trigger) || 'unknown').replace(/_/g, ' ');
+
+// Item names this run failed at, at EITHER store, deduped. This is the exact set
+// the scraper rebuilds from scrape_log.json when it gets a retry_misses dispatch,
+// so the number on the button is the number that will be scraped.
+function missedItemNames(run) {
+  return [...new Set(
+    [...normaliseMissed(run.ww_missed), ...normaliseMissed(run.coles_missed)].map(e => e.item)
+  )];
+}
+
+const SVG_RETRY = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
+
+// Dispatch a scrape that targets ONLY the misses of the newest run. The scraper
+// reads the list from the repo's scrape_log.json itself, so nothing is passed
+// through the workflow inputs - the button just names the trigger.
+async function retryMisses(run, btn) {
+  const names = missedItemNames(run);
+  if (!names.length) return;
+  const s = loadSettings();
+  if (!s.token) {
+    alert('Add your GitHub token first - main page → ⚙ → Auto-update Setup.');
+    return;
+  }
+  if (!confirm(
+    `Re-scrape only the ${names.length} product${names.length === 1 ? '' : 's'} this run missed?\n\n` +
+    'Every other product keeps its current price - nothing else is fetched.'
+  )) return;
+
+  btn.disabled = true;
+  btn.classList.add('spinning');
+  // A dispatch to an offline self-hosted runner queues silently forever.
+  const { anyOnline } = await getRunnerStatus(s);
+  if (!anyOnline) {
+    btn.disabled = false;
+    btn.classList.remove('spinning');
+    alert('The scraper PC is offline, so the run would sit in the queue. Start it and try again.');
+    return;
+  }
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${s.user}/${s.repo}/actions/workflows/scrape.yml/dispatches`,
+      {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ref: 'main', inputs: { trigger: 'retry_misses' } }),
+      }
+    );
+    btn.classList.remove('spinning');
+    if (res.status === 204) {
+      btn.remove();
+      const done = document.createElement('span');
+      done.className = 'sl-retry-done';
+      done.textContent = `↻ retrying ${names.length}`;
+      done.title = 'Dispatched. Progress shows in the strip below the header; hit Refresh once it finishes.';
+      btn.parentNode?.appendChild(done);
+      // Same marker index sets on Update Prices - makes the progress strip
+      // (header.js, every page) pick this run up instead of staying blank.
+      try { localStorage.setItem('pw_scrape_dispatched_v1', new Date().toISOString()); } catch {}
+      window.pwCheckScrapeStrip?.();
+    } else {
+      btn.disabled = false;
+      const err = await res.json().catch(() => ({}));
+      alert(`Error ${res.status}: ${err.message || 'Could not trigger the retry'}`);
+    }
+  } catch (e) {
+    btn.classList.remove('spinning');
+    btn.disabled = false;
+    alert(`Network error: ${e.message}`);
+  }
+}
+
+function renderRun(run, prevRun, isLatest) {
   const wwMissed = normaliseMissed(run.ww_missed);
   const coMissed = normaliseMissed(run.coles_missed);
   const wwTotal = attempted(run, 'ww');
@@ -506,6 +598,15 @@ function renderRun(run, prevRun) {
   }
 
   const totalMissed = wwMissed.length + coMissed.length;
+  // Retry only on the newest run: an older run's miss list is a snapshot, and
+  // most of those products have long since matched. data-owner-only hides it for
+  // visitors (header.js's .pw-viewer rule) - dispatching needs a token anyway.
+  // The count here is UNIQUE products, which is what actually gets scraped;
+  // `totalMissed` double-counts anything missed at both stores.
+  const retryable = isLatest ? missedItemNames(run).length : 0;
+  const retryBtn = retryable
+    ? `<button class="sl-retry-btn" data-owner-only title="Re-scrape just these ${retryable} product${retryable === 1 ? '' : 's'} - nothing else">${SVG_RETRY}</button>`
+    : '';
   const el = document.createElement('div');
   // A run where either store fell below half is the shape of a rate-ban - flag it
   // so it stands out in a list of 30 near-identical rows.
@@ -513,7 +614,7 @@ function renderRun(run, prevRun) {
   el.innerHTML = `
     <div class="sl-run-head">
       <div class="sl-run-date">${fmtDate(run.date)}<span class="rel">${timeAgo(run.date)}</span></div>
-      <span class="sl-run-trigger">${escapeHtml(run.trigger || 'unknown')}</span>
+      <span class="sl-run-trigger">${escapeHtml(triggerLabel(run))}</span>
       <div class="sl-run-rates">
         <div class="sl-store-stat ww" title="${wwOk} of ${wwTotal} items attempted at Woolworths matched this run">
           <span class="store-chip sm ww">W</span> ${wwPct}%
@@ -525,7 +626,7 @@ function renderRun(run, prevRun) {
         </div>
         ${trend}
       </div>
-      <span class="sl-miss-count">${totalMissed ? totalMissed + ' missed' : 'all matched'}</span>
+      <span class="sl-miss-count">${totalMissed ? totalMissed + ' missed' : 'all matched'}${retryBtn}</span>
       <span class="sl-chevron">▸</span>
     </div>
     <div class="sl-run-body">
@@ -538,7 +639,15 @@ function renderRun(run, prevRun) {
         ${renderMissList(coMissed)}
       </div>
     </div>`;
-  el.querySelector('.sl-run-head').addEventListener('click', () => el.classList.toggle('open'));
+  el.querySelector('.sl-run-head').addEventListener('click', (e) => {
+    // The ↻ sits inside the head, which toggles the row - don't do both.
+    if (e.target.closest('.sl-retry-btn')) return;
+    el.classList.toggle('open');
+  });
+  el.querySelector('.sl-retry-btn')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    retryMisses(run, e.currentTarget);
+  });
   return el;
 }
 
@@ -869,7 +978,9 @@ function paintChangeArchive(q) {
     <div class="sl-chg-run${r.quiet ? ' quiet' : ''}">
       <div class="sl-chg-run-head">
         <span class="sl-run-date">${fmtDate(r.date)}<span class="rel">${timeAgo(r.date)}</span></span>
-        <span class="sl-chg-chip${r.quiet ? ' quiet' : ''}">${r.quiet ? 'no price moves' : 'Δ ' + (r.ww.length + r.coles.length)}</span>
+        <!-- Plain words, not "Δ N": the delta glyph is the same upward triangle
+             as the ▲ that means "this price went up" a few pixels below it. -->
+        <span class="sl-chg-chip${r.quiet ? ' quiet' : ''}">${r.quiet ? 'no price moves' : (r.ww.length + r.coles.length) + ' changed'}</span>
       </div>
       ${r.quiet ? '' : `<div class="sl-chg-run-body">
         ${col('Woolworths', 'ww', r.ww)}
@@ -953,7 +1064,12 @@ async function load() {
   // Info card
   const items = latest?.items || [];
   const archivedCount = items.filter(i => i.archived).length;
-  const lastRun = log[log.length - 1];
+  // Health summary (hero, gauges, chart, averages) is about FULL coverage, so it
+  // reads the last full run. A retry_misses run attempts only known failures -
+  // its rate is not comparable and would read as a collapse. It still appears in
+  // the Runs list, which is where you go to see how the retry itself did.
+  const fullLog = log.filter(r => !isRetryRun(r));
+  const lastRun = fullLog[fullLog.length - 1];
   const lastRunWwPct = lastRun
     ? Math.round((attempted(lastRun, 'ww') - normaliseMissed(lastRun.ww_missed).length) / (attempted(lastRun, 'ww') || 1) * 100)
     : null;
@@ -973,7 +1089,7 @@ async function load() {
     : state === 'warn' ? 'Last scrape was patchy'
     : 'Last scrape mostly failed';
   $('slHeroDot').className = 'sl-hero-dot ' + state;
-  $('slHeroKicker').textContent = lastRun ? `Last scrape · ${escapeHtml(lastRun.trigger || 'run')}` : 'Scrape log';
+  $('slHeroKicker').textContent = lastRun ? `Last full scrape · ${escapeHtml(triggerLabel(lastRun))}` : 'Scrape log';
   $('slHeroH').textContent = verdict;
   const missedNow = lastRun
     ? normaliseMissed(lastRun.ww_missed).length + normaliseMissed(lastRun.coles_missed).length : 0;
@@ -999,8 +1115,8 @@ async function load() {
     gauge('coles', '<span class="store-chip sm coles">C</span>', 'Coles', lastRunCoPct, lastRun, 'coles');
 
   // Average match rate across the whole logged window - the "is this normal?" number.
-  const avgAll = log.length
-    ? Math.round(log.reduce((s, r) => s + (runPct(r, 'ww') + runPct(r, 'coles')) / 2, 0) / log.length)
+  const avgAll = fullLog.length
+    ? Math.round(fullLog.reduce((s, r) => s + (runPct(r, 'ww') + runPct(r, 'coles')) / 2, 0) / fullLog.length)
     : null;
   // "Runs logged" used to sit here - it is hard-capped at SCRAPE_LOG_MAX, so it
   // read "30" forever and told you nothing. Scrape speed replaces it: it varies
@@ -1031,9 +1147,10 @@ async function load() {
     el.textContent = lastCount;
     el.title = `${lastCount} price change${lastCount === 1 ? '' : 's'} in the most recent scrape`;
   }
-  renderTrendChart(log);
+  renderTrendChart(fullLog);
   $('slInfoNotes').innerHTML = `
     <li>Only full scrapes (scheduled or manual "Update Prices") are logged here - single-item refreshes from the ✎ Edit dialog aren't.</li>
+    <li>The <strong>↻</strong> beside the newest run's miss count re-scrapes <em>only</em> the products that run missed - a few dozen requests instead of a full ~210-product sweep. It's logged as a <strong>retry misses</strong> run, and because it only ever attempts known failures its match rate is left out of the summary above and the chart.</li>
     <li>A missed item's price isn't blank on the main site - the last known price carries forward, so a chronic miss can look fine there while quietly going stale. This page is the place to catch that.</li>
     <li><strong>no results</strong> = the search/page fetch returned nothing this run (usually the store blocking the runner, or its page layout changing). <strong>no match</strong> = we got candidates back but none matched the product name closely enough.</li>
     <li>Only the last 30 runs are kept - older ones are dropped automatically to keep the file small.</li>
@@ -1047,7 +1164,7 @@ async function load() {
     const pct = (v) => v == null ? '—' : `${v}%`;
     const cls = (v) => v == null ? '' : v >= 85 ? ' good' : v >= 50 ? ' warn' : ' bad';
     runsHead.innerHTML = !lastRun ? '' : `
-      <span class="srh-label">Last run · ${escapeHtml(lastRun.trigger || 'run')}</span>
+      <span class="srh-label">Last full run · ${escapeHtml(triggerLabel(lastRun))}</span>
       <span class="srh-rate${cls(lastRunWwPct)}" title="${attempted(lastRun, 'ww') - normaliseMissed(lastRun.ww_missed).length} of ${attempted(lastRun, 'ww')} Woolworths items matched">
         <span class="store-chip ww sm">W</span> ${pct(lastRunWwPct)}</span>
       <span class="srh-rate${cls(lastRunCoPct)}" title="${attempted(lastRun, 'coles') - normaliseMissed(lastRun.coles_missed).length} of ${attempted(lastRun, 'coles')} Coles items matched">
@@ -1068,7 +1185,7 @@ async function load() {
   const reversed = [...log].reverse();
   reversed.forEach((run, i) => {
     const prevRun = reversed[i + 1]; // one run older, chronologically previous
-    runsEl.appendChild(renderRun(run, prevRun));
+    runsEl.appendChild(renderRun(run, prevRun, i === 0));
   });
   // Most recent run starts expanded - it's what you came here to check.
   runsEl.firstElementChild?.classList.add('open');

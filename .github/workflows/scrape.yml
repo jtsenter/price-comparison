@@ -101,8 +101,10 @@ jobs:
     runs-on: self-hosted
     needs: [scrape]
     # Run after the main scrape regardless of whether it succeeded or timed out.
-    # Skip when this is a single-item refresh (item input is non-empty).
-    if: always() && github.event.inputs.item == ''
+    # Skip when this is a single-item refresh (item input is non-empty), and when
+    # it's a retry_misses run - that one exists precisely to avoid full-run
+    # request volume, so tacking a whole archived sweep onto it defeats it.
+    if: always() && github.event.inputs.item == '' && github.event.inputs.trigger != 'retry_misses'
     timeout-minutes: 60
 
     defaults:

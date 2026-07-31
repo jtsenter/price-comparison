@@ -181,12 +181,16 @@
 
   /* Trailing primary action. Hot Deals no longer triggers scrapes from here
      (that lives on index); basket's Print moved to PRINT_LEAD (before the nav
-     cluster) so the two headers read identically apart from that one button. */
+     cluster) so the two headers read identically apart from that one button.
+     index and scrape-log now render the SAME button (primary, icon-only, no
+     label) - the ghost "↻ Refresh" pill on scrape-log was the one header control
+     that didn't match its twin on the main page. Behaviour still differs and the
+     tooltip says so: index dispatches a scrape, scrape-log re-reads the log. */
   var TRAIL =
     // Update Prices dispatches a workflow - owner only. (scrape-log's Refresh just
     // re-reads the log file, so it stays for everyone.)
     (page === 'index' && !viewer) ? '<button class="btn btn-primary btn-icon" id="refreshBtn" title="Update prices">' + SVG_REF + '</button>' :
-    page === 'scrape-log' ? '<button class="btn btn-ghost" id="slRefreshBtn" title="Reload log">' + SVG_REF + ' Refresh</button>' :
+    page === 'scrape-log' ? '<button class="btn btn-primary btn-icon" id="slRefreshBtn" title="Reload log">' + SVG_REF + '</button>' :
     '';
 
   /* Basket's Print button, placed to the LEFT of the nav cluster so the basket
@@ -349,5 +353,10 @@
         .catch(function () {});
     };
     checkStrip();
+    /* A page that dispatches its own scrape (scrape-log's "retry the misses")
+       sets the pw_scrape_dispatched_v1 marker AFTER this poller's first pass, so
+       nothing would show until the next page load. One hook, so the strip
+       appears immediately instead. */
+    window.pwCheckScrapeStrip = checkStrip;
   }
 })();
