@@ -217,7 +217,10 @@
     '<div class="header-inner">' +
       '<div class="header-left">' + HOME + BRAND + VIEWER_BADGE + '</div>' +
       SEARCH +
-      '<div class="header-right">' + VALIDATE + PRINT_LEAD + navCluster(active) + OPTIONS + TRAIL + '</div>' +
+      /* Options (⚙) sits LEFT of the Hot/Basket pair, not after it: it is chrome,
+         and the two nav icons plus the page's primary action are the things you
+         reach for. Set here so every page inherits the same order. */
+      '<div class="header-right">' + VALIDATE + PRINT_LEAD + OPTIONS + navCluster(active) + TRAIL + '</div>' +
     '</div>' + STRIP;
 
   /* ══ Behaviour owned by the header (runs on every page) ══════════════════ */

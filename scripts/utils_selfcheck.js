@@ -61,6 +61,7 @@ eval([
   extract('clientPer100'),
   extract('groupMetric'),
   extract('per100Pair'),
+  extract('scalePer100'),      // card view restates $/100g at the multi-buy price
   extract('exclPriceSet'),
   extract('promoUnitPrice'),   // history + hot-deal detection price through this
   extract('mbUnitPrice'),      // getTrendSeries prices the current point through this
@@ -436,6 +437,25 @@ check('groupMetric null result', groupMetric({ sticker: true }, null), null);
     { ...base, woolworths: { price: 5, multi_buy: { qty: 2, total: 6 } } }, {});
   check('multi-buy all-time low qualifies', promo.qualifies, true);
   check('multi-buy low is flagged all-time-low', promo.isAllTimeLow, true);
+}
+
+// ── scalePer100: the $/100g must follow the price above it ──────────────────
+// Card view shows the multi-buy price; a $/100g still figured off the shelf
+// ticket sat directly under a lower headline and contradicted it.
+{
+  const p = { value: 1.89, label: '100g' };
+  check('no deal live leaves the measure alone', scalePer100(p, 8.5, 8.5).value, 1.89);
+  // "2 for $15" on an $8.50 pack = $7.50 each, so $/100g drops in the same ratio.
+  check('measure follows the effective price',
+        +scalePer100(p, 8.5, 7.5).value.toFixed(4), +(1.89 * 7.5 / 8.5).toFixed(4));
+  check('label is preserved', scalePer100(p, 8.5, 7.5).label, '100g');
+  check('input is not mutated', p.value, 1.89);
+  // Pass-throughs: nothing to scale, no shelf price, or no effective price.
+  check('null measure passes through', scalePer100(null, 8.5, 7.5), null);
+  check('blanked measure passes through',
+        scalePer100({ value: null, blanked: true }, 8.5, 7.5).blanked, true);
+  check('zero shelf price cannot divide', scalePer100(p, 0, 7.5).value, 1.89);
+  check('null effective price passes through', scalePer100(p, 8.5, null).value, 1.89);
 }
 
 console.log(`utils_selfcheck: all ${n} cases passed`);

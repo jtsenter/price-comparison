@@ -106,6 +106,20 @@ function per100Pair(ww, co) {
   return { ww: w, coles: c };
 }
 
+// Restate a per-100 measure ($/100g, $/100ml) at the price actually being
+// charged rather than the shelf ticket. When a multi-buy drops the headline, a
+// $/100g still figured off the ticket contradicts the number directly above it.
+// Pack size is what the measure divides by and that never changes, so scaling
+// by effective÷shelf is exact rather than an approximation.
+// Returns the input untouched when there is no measure, no shelf price, or the
+// two prices agree - callers can pass results straight through.
+function scalePer100(p100, shelfPrice, effPrice) {
+  if (!p100 || p100.value == null) return p100;
+  if (!shelfPrice || effPrice == null) return p100;
+  if (Math.abs(effPrice - shelfPrice) < 0.0001) return p100;
+  return { ...p100, value: p100.value * (effPrice / shelfPrice) };
+}
+
 // ── Exclusion-key parsing ───────────────────────────────────────────────────
 // One parser for pw_exclusions_v1 keys, which exist in three historical formats:
 // bare numbers, bare strings ("3.50"), and store-prefixed strings ("ww:3.50" /

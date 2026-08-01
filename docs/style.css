@@ -1766,10 +1766,24 @@ td.priority-cell { text-align: center; }
   text-align: center; line-height: 1.2;
 }
 .card-info { flex: 1; min-width: 0; }
-.card-name { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; }
+/* Two lines' worth reserved whether the name needs one or two, so a short-named
+   card doesn't pull its whole column up and break the row's alignment. */
+.card-name { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; min-height: 2.8em; }
 .card-cat { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
 .card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
-.card-check { cursor: pointer; accent-color: var(--ww); width: 15px; height: 15px; }
+.card-check { cursor: pointer; accent-color: var(--ww); width: 15px; height: 15px; flex-shrink: 0; margin-top: 3px; }
+/* Watchlist eye, alone in the card's top-right corner. Sized to the glyph - the
+   button used to be mostly padding, which read as a big empty box. */
+/* .item-watch-btn also matches and is declared later, so this needs the extra
+   class to win on specificity rather than source order. */
+.card-top .card-watch {
+  background: none; border: none; cursor: pointer; flex-shrink: 0;
+  padding: 0; margin: -1px 0 0; line-height: 1;
+  font-size: 19px; filter: grayscale(1); opacity: .45;
+  transition: opacity .12s, filter .12s;
+}
+.card-watch:hover { opacity: .8; filter: grayscale(.3); }
+.card-watch.active { filter: none; opacity: 1; }
 .card-priority-sel {
   font-size: 11px; padding: 2px 4px;
   border: 1px solid var(--border); border-radius: 4px;
@@ -1790,19 +1804,40 @@ td.priority-cell { text-align: center; }
 .card-store-price { font-size: 15px; font-weight: 700; color: var(--text); }
 .card-store.winner-ww .card-store-price   { color: var(--ww); }
 .card-store.winner-coles .card-store-price { color: var(--coles); }
-.card-store-unit { font-size: 10px; color: var(--text-soft); padding-left: 22px; }
+/* min-height holds the line even when empty: per-kg group cards have no $/100g
+   to show, and without the reserved line their price block came out 17px
+   shorter than a normal card's, floating their trend bar out of alignment. */
+.card-store-unit { font-size: 10px; color: var(--text-soft); padding-left: 22px; min-height: 15px; }
 .card-vs { font-size: 11px; color: var(--text-soft); text-align: center; }
+/* Verdict row: "W Save $2.00", "C Save $0.50" or "=" plus any multi-buy tag.
+   ALWAYS rendered (min-height holds the line when a tie has nothing to add), so
+   every card in a row reaches its trend bar at the same height - a collapsed
+   row used to float the tied card's bar upward, out of line with its neighbours. */
 .card-saving {
-  display: flex; align-items: center; gap: 5px;
+  display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
   font-size: 12px; font-weight: 600; color: var(--green);
-  margin-bottom: 8px;
+  margin-bottom: 8px; min-height: 20px;
 }
+.card-save-amt.is-ww { color: var(--ww); }
+.card-save-amt.is-coles { color: var(--coles); }
+.card-eq { font-size: 15px; font-weight: 700; color: var(--text-soft); line-height: 1; }
 .card-bar { margin-bottom: 8px; }
 /* Same hover-reveal problem as .mc-bar: no <tr> to hover here, so it was invisible. */
 .card-bar .price-bar-manage { opacity: 1; }
+/* Footer is now qty on the left, history clock on the right (Edit/Refresh were
+   removed - both live in the table view, and the row was otherwise dead space). */
 .card-footer {
-  display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
 }
+/* Roomier than the table's stepper: "2.0 kg" needs ~46px, and at the table's
+   28px min-width the value collided with the +/- buttons on every kg row. */
+.card-units .units-val { min-width: 48px; font-size: 12.5px; }
+.card-units .units-dec, .card-units .units-inc { width: 22px; height: 22px; }
+.card-hist {
+  background: none; border: none; cursor: pointer; padding: 2px;
+  color: var(--text-soft); line-height: 1; display: inline-flex; opacity: 1;
+}
+.card-hist:hover { color: var(--text); }
 .card-btn {
   background: none; border: 1px solid var(--border); border-radius: 6px;
   padding: 4px 8px; font-size: 11px; color: var(--text-mid);

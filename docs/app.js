@@ -3204,53 +3204,60 @@ function renderCards(items) {
     const { ww: wwP100, coles: coP100 } = per100Pair(ww, co);
     const hotBadge = hotDeal ? ' <span class="hot-badge" title="Hot Deal - meaningfully cheaper than its usual price right now">🔥</span>' : '';
 
+    // Prices come from shownStorePrice() - the SAME source as the table column,
+    // multi-buy applied at the current qty. The per-100 measure is scaled to
+    // match, so a dropped headline never sits above a shelf-price $/100g.
+    const wwShown = shownStorePrice(item, 'ww');
+    const coShown = shownStorePrice(item, 'coles');
+    const wwP100e = per100AtEffective(wwP100, ww, item.list_item);
+    const coP100e = per100AtEffective(coP100, co, item.list_item);
+
     let wwHtml;
     if (ww) {
-      const pv = wwUrl ? `<a href="${wwUrl}" target="_blank" rel="noopener" class="price-link">${fmt(ww.price)}</a>` : fmt(ww.price);
+      const shown = fmt(wwShown != null ? wwShown : ww.price);
+      const pv = wwUrl ? `<a href="${wwUrl}" target="_blank" rel="noopener" class="price-link">${shown}</a>` : shown;
       const fire = hotDeal && cheaper === 'woolworths' ? hotBadge : '';
-      const unit = wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : (wwP100.blanked ? '' : fmtUnit(ww.unit_price, ww.unit));
-      wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}${multiBuyBadge(ww)}</div>`;
+      const unit = wwP100e.value != null ? `$${wwP100e.value.toFixed(2)}/${wwP100e.label}` : (wwP100e.blanked ? '' : fmtUnit(ww.unit_price, ww.unit));
+      wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}</div>`;
     } else {
       wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span> <a href="https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.list_item)}" target="_blank" rel="noopener" class="search-link">Find →</a></div>`;
     }
 
     let coHtml;
     if (co) {
-      const pv = coUrl ? `<a href="${coUrl}" target="_blank" rel="noopener" class="price-link">${fmt(co.price)}</a>` : fmt(co.price);
+      const shown = fmt(coShown != null ? coShown : co.price);
+      const pv = coUrl ? `<a href="${coUrl}" target="_blank" rel="noopener" class="price-link">${shown}</a>` : shown;
       const fire = hotDeal && cheaper === 'coles' ? hotBadge : '';
-      const unit = coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : (coP100.blanked ? '' : fmtUnit(co.unit_price, co.unit));
-      coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}${multiBuyBadge(co)}</div>`;
+      const unit = coP100e.value != null ? `$${coP100e.value.toFixed(2)}/${coP100e.label}` : (coP100e.blanked ? '' : fmtUnit(co.unit_price, co.unit));
+      coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span><span class="card-store-price">${pv}${fire}</span></div><div class="card-store-unit">${unit}</div>`;
     } else {
       coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span> <a href="https://www.coles.com.au/search?q=${encodeURIComponent(item.list_item)}" target="_blank" rel="noopener" class="search-link">Find →</a></div>`;
     }
 
-    const wwClass   = cheaper === 'woolworths' ? 'winner-ww' : '';
-    const coClass   = cheaper === 'coles'      ? 'winner-coles' : '';
-    const units     = getUnits(item.list_item);
-    const savingAmt = savingAmount(item) != null && savingAmount(item) > 0
-      ? fmt(savingAmount(item) * units) : null;
-    const savingHtml = savingAmt
-      ? `<div class="card-saving">${cheaper==='woolworths'?'<span class="store-chip ww sm">W</span>':'<span class="store-chip coles sm">C</span>'} Save ${savingAmt}</div>`
-      : '';
+    // Winner tint follows the qty-aware comparison, so the coloured side is
+    // always the side showing the lower number above it.
+    const mbCheaper = mbCheaperStore(item);
+    const wwClass   = mbCheaper === 'woolworths' ? 'winner-ww' : '';
+    const coClass   = mbCheaper === 'coles'      ? 'winner-coles' : '';
+    // Verdict + any multi-buy tag share one always-present row (see cardVerdictHTML).
+    const mbTag = multiBuyBadge(ww) + multiBuyBadge(co);
+    const savingHtml = `<div class="card-saving">${cardVerdictHTML(item)}${mbTag}</div>`;
 
     const _trendSeries = getTrendSeries(item, getUnits(item.list_item));
-    const bar = buildPriceBar(item.list_item, _trendSeries.past.map(p => ({price: p})), _trendSeries.current);
+    // historyBtn:false - the clock moved into the card footer, beside the qty.
+    const bar = buildPriceBar(item.list_item, _trendSeries.past.map(p => ({price: p})), _trendSeries.current, 1, false);
     const isChecked = _checkedItems.has(item.list_item);
     const notFound = !ww && !co;
 
     parts.push(`<div class="item-card${notFound ? ' card-not-found' : ''}" data-item="${safeKey}">
       <div class="card-top">
+        <input type="checkbox" class="row-check card-check" data-item="${safeKey}"${isChecked?' checked':''}>
         <div class="card-img-wrap">${imgHtml}</div>
         <div class="card-info">
-          <div class="card-name">${esc(displayName)}</div>
+          <div class="card-name">${esc(displayName)}${hotDeal ? hotBadge : ''}</div>
           <div class="card-cat">${esc(cat)}</div>
         </div>
-        <div class="card-right">
-          <input type="checkbox" class="row-check card-check" data-item="${safeKey}"${isChecked?' checked':''}>
-          <select class="priority-select card-priority-sel" data-item="${safeKey}">
-            <option value="">Priority…</option>${prioOptions}
-          </select>
-        </div>
+        ${cardWatchHTML(item.list_item)}
       </div>
       <div class="card-prices">
         <div class="card-store ${wwClass}">${wwHtml}</div>
@@ -3259,10 +3266,7 @@ function renderCards(items) {
       </div>
       ${savingHtml}
       ${bar ? `<div class="card-bar">${bar}</div>` : ''}
-      <div class="card-footer">
-        <button class="item-edit-btn card-btn" data-edit-item="${safeKey}" title="Edit name or URL">✎ Edit</button>
-        <button class="item-refresh-btn card-btn" data-item="${safeKey}" title="Refresh this item's prices">↺ Refresh</button>
-      </div>
+      ${cardFooterHTML(item.list_item, !!bar)}
     </div>`);
   });
 
@@ -3289,6 +3293,75 @@ function withGroupCounts(group) {
   group._wwCount = count(group._wwAll || [], 'ww');
   group._coCount = count(group._coAll || [], 'coles');
   return group;
+}
+
+// ── Card-view shared pieces ──────────────────────────────────────────────────
+// Card view used to render raw shelf prices while the table rendered qty-aware
+// ones, so the same product read $5.50 on a card and $4.40 in the table once a
+// multi-buy went live. Everything below exists so the two views cannot diverge
+// again: cards now go through the SAME shownStorePrice()/rowStoreTotal() the
+// table uses, and the pieces that hang off the price are derived from those.
+
+// Per-unit measure ($/100g, $/100ml) recomputed at the EFFECTIVE price rather
+// than the ticket price: when a deal drops the headline, a $/100g still figured
+// off the shelf price contradicts the number directly above it. Pack size is
+// unchanged, so scaling by effective÷shelf is exact.
+function per100AtEffective(p100, res, itemName) {
+  if (!res) return p100;
+  return scalePer100(p100, res.price, mbEffUnit(res, getUnits(itemName)));   // utils.js
+}
+
+// The verdict line: which store wins AT THE CURRENT QTY and by how much in
+// total (qty included), or "=" when they tie. Always renders something, which
+// is what keeps every card the same height so the trend bars line up across a
+// row - a tie used to collapse to nothing and float its card's bar upward.
+// Works for normal items and per-kg groups alike: rowStoreTotal() already
+// branches on _isGroup.
+function cardVerdictHTML(item) {
+  const w = rowStoreTotal(item, 'ww'), c = rowStoreTotal(item, 'coles');
+  if (w == null || c == null) return '';
+  const diff = Math.abs(w - c);
+  if (diff < 0.005) return '<span class="card-eq" title="Same price at both stores">=</span>';
+  const wwWins = w < c;
+  return `<span class="store-chip ${wwWins ? 'ww' : 'coles'} sm">${wwWins ? 'W' : 'C'}</span>` +
+         `<span class="card-save-amt ${wwWins ? 'is-ww' : 'is-coles'}">Save ${fmt(diff)}</span>`;
+}
+
+// Quantity stepper + history clock, sharing the bottom row of every card. Same
+// .units-inc/.units-dec/.units-val contract the table row uses, so both views
+// read and write the one pw_units_v1 store and can never show different counts.
+function cardFooterHTML(itemName, hasBar) {
+  const safe = escAttr(itemName);
+  const u = getUnits(itemName);
+  return `<div class="card-footer">
+      <span class="units-ctrl card-units">
+        <button class="units-dec" data-item="${safe}" aria-label="Decrease quantity">−</button>
+        <span class="units-val">${isKgQty(itemName) ? u.toFixed(1) + ' kg' : u}</span>
+        <button class="units-inc" data-item="${safe}" aria-label="Increase quantity">+</button>
+      </span>
+      ${hasBar ? `<button class="price-bar-manage card-hist" data-manage-item="${safe}" title="Price history" aria-label="View price history">${HIST_CLOCK_SVG}</button>` : ''}
+    </div>`;
+}
+
+// THE one writer of pw_units_v1 from a stepper - table and card view both call
+// it, so the two views cannot end up showing different quantities for the same
+// product. kg steps for loose cuts (0.2kg, floor 0.2), whole packs otherwise.
+function stepUnits(itemName, isInc) {
+  const ov = loadUnitOverrides();
+  const cur = getUnits(itemName);
+  if (isKgQty(itemName)) {
+    ov[itemName] = Math.max(0.2, Math.round((cur + (isInc ? 0.2 : -0.2)) * 10) / 10);
+  } else {
+    ov[itemName] = Math.max(1, Math.round(cur) + (isInc ? 1 : -1));
+  }
+  saveUnitOverrides(ov);
+  if (_lastData) renderPage(_lastData);
+}
+
+// Watchlist eye, pinned to the card's top-right corner (mirrors the mobile card).
+function cardWatchHTML(itemName) {
+  const on = _watchlist.has(itemName);
+  return `<button class="item-watch-btn card-watch${on ? ' active' : ''}" data-item="${escAttr(itemName)}" title="${on ? 'Remove from watchlist' : 'Add to watchlist'}" aria-label="${on ? 'Remove from watchlist' : 'Add to watchlist'}">👁</button>`;
 }
 
 // Multi-buy special badge ("2 for $6.00") - captured from the store's own
@@ -3334,7 +3407,9 @@ function perKgCellHTML(perkg, url, suffix = '/kg') {
 // use), and the marker is the group's current best $/kg (best.perkg, the exact
 // number shown in the price column). History, current price and trend therefore
 // all share one source of truth and cannot diverge.
-function groupTrendCellHTML(group) {
+// historyBtn:false for card view, whose clock lives in the card footer beside
+// the qty. The table row keeps its inline clock.
+function groupTrendCellHTML(group, historyBtn = true) {
   const cands = [group._wwBest, group._coBest].filter(Boolean);
   if (!cands.length) return '';
   const best = cands.reduce((a, b) => (a.perkg <= b.perkg ? a : b));
@@ -3350,7 +3425,7 @@ function groupTrendCellHTML(group) {
   // History button opens the group's own merged history (see buildGroupHistoryItem),
   // not one member's - a group can mix a WW-only and a Coles-only product, so
   // picking a single member's history hides whichever store that member doesn't sell at.
-  return buildPriceBar(`__group_${group._groupKey}`, hist, best.perkg);
+  return buildPriceBar(`__group_${group._groupKey}`, hist, best.perkg, 1, historyBtn);
 }
 
 // Synthesizes a "price history" item for a per-kg group: for each store, at every
@@ -3568,10 +3643,13 @@ function groupStoreVariantsHTML(group, store, overrides) {
 // Group sub-label: per-store product counts (e.g. "2 Woolworths · 1 Coles").
 // "N products" was ambiguous - it counted the deduped union of list-items, which
 // rarely matched the two store columns the user actually sees.
+// Returns HTML, not text: the store initial is bolded and the count left plain,
+// so "7 W · 11 C" scans as a count-per-store instead of running together. Both
+// values are numbers straight from the counters, so there is nothing to escape.
 function groupSubLabel(group) {
   const parts = [];
-  if (group._wwCount) parts.push(`${group._wwCount} Woolworths`);
-  if (group._coCount) parts.push(`${group._coCount} Coles`);
+  if (group._wwCount) parts.push(`${group._wwCount} <b>W</b>`);
+  if (group._coCount) parts.push(`${group._coCount} <b>C</b>`);
   return parts.join(' · ') || 'No products';
 }
 
@@ -3611,30 +3689,31 @@ function groupCardHTML(group, overrides) {
       ? `<a href="${url}" target="_blank" rel="noopener" class="price-link">$${perkg.toFixed(2)}${suf}</a>`
       : `$${perkg.toFixed(2)}${suf}`);
 
-  const wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span><span class="card-store-price">${priceHtml(group._wwPerKg, wwUrl)}</span></div>`;
-  const coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span><span class="card-store-price">${priceHtml(group._coPerKg, coUrl)}</span></div>`;
+  // The empty unit line is deliberate: a group's headline IS $/kg so there is no
+  // second measure to show, but the element reserves the same line a normal
+  // card's $/100g occupies, keeping both card types the same height.
+  const wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span><span class="card-store-price">${priceHtml(group._wwPerKg, wwUrl)}</span></div><div class="card-store-unit"></div>`;
+  const coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span><span class="card-store-price">${priceHtml(group._coPerKg, coUrl)}</span></div><div class="card-store-unit"></div>`;
 
   const wwClass = cheaper === 'woolworths' ? 'winner-ww' : '';
   const coClass = cheaper === 'coles'      ? 'winner-coles' : '';
 
-  const units = getUnits(group.list_item);
-  const savingHtml = (group._wwPerKg != null && group._coPerKg != null && group._wwPerKg !== group._coPerKg)
-    ? `<div class="card-saving">${cheaper === 'woolworths' ? '<span class="store-chip ww sm">W</span>' : '<span class="store-chip coles sm">C</span>'} Save ${fmt(Math.abs(group._wwPerKg - group._coPerKg) * units)}</div>`
-    : '';
+  // Same always-present verdict row as the per-item card, off the same
+  // rowStoreTotal() the table sums - so a tie shows "=" and holds its line
+  // instead of collapsing and floating this card's trend bar out of alignment.
+  const savingHtml = `<div class="card-saving">${cardVerdictHTML(group)}</div>`;
 
-  const bar = groupTrendCellHTML(group);
+  const bar = groupTrendCellHTML(group, false);
 
   return `<div class="item-card" data-item="${safeKey}" data-group="${group._groupKey}">
     <div class="card-top">
+      <input type="checkbox" class="row-check card-check" data-item="${safeKey}"${isChecked ? ' checked' : ''}>
       <div class="card-img-wrap">${imgHtml}</div>
       <div class="card-info">
         <div class="card-name">${esc(group._groupLabel)}</div>
-        <div class="card-cat">${esc(getCategory(group))} · ${esc(groupSubLabel(group))}</div>
+        <div class="card-cat">${esc(getCategory(group))} · ${groupSubLabel(group)}</div>
       </div>
-      <div class="card-right">
-        <input type="checkbox" class="row-check card-check" data-item="${safeKey}"${isChecked ? ' checked' : ''}>
-        <select class="priority-select card-priority-sel" data-item="${safeKey}">${prioOptions}</select>
-      </div>
+      ${cardWatchHTML(group.list_item)}
     </div>
     <div class="card-prices">
       <div class="card-store ${wwClass}">${wwHtml}</div>
@@ -3643,10 +3722,7 @@ function groupCardHTML(group, overrides) {
     </div>
     ${savingHtml}
     ${bar ? `<div class="card-bar">${bar}</div>` : ''}
-    <div class="card-footer">
-      <button class="item-edit-btn card-btn" data-edit-item="${safeKey}" title="Edit category">✎ Edit</button>
-      <button class="item-refresh-btn card-btn" data-item="${safeKey}" title="Refresh prices for this category">↺ Refresh</button>
-    </div>
+    ${cardFooterHTML(group.list_item, !!bar)}
   </div>`;
 }
 
@@ -5880,6 +5956,12 @@ async function boot() {
     cardGrid.addEventListener('click', (e) => {
       const manageBtn = e.target.closest('.price-bar-manage');
       if (manageBtn) { openHistoryFromManageBtn(manageBtn.dataset.manageItem); return; }
+      // Qty stepper - the table's handler is bound to <tbody>, so card view needs
+      // its own. Both call stepUnits(), which is the single writer of pw_units_v1.
+      const stepBtn = e.target.closest('.units-inc, .units-dec');
+      if (stepBtn) { stepUnits(stepBtn.dataset.item, stepBtn.classList.contains('units-inc')); return; }
+      const cardWatch = e.target.closest('.item-watch-btn');
+      if (cardWatch) { toggleWatchlist(cardWatch.dataset.item); return; }
       const rowCheck = e.target.closest('.row-check');
       if (rowCheck) {
         const name = rowCheck.dataset.item;
@@ -6069,24 +6151,9 @@ async function boot() {
           return;
         }
 
-        // Units increment/decrement
+        // Units increment/decrement (shared with card view - see stepUnits).
         const incBtn = e.target.closest('.units-inc, .units-dec');
-        if (incBtn) {
-          const itemName = incBtn.dataset.item;
-          const isKgBased = isKgQty(itemName); // kg steps for loose cuts, packs otherwise
-          const isInc = incBtn.classList.contains('units-inc');
-          const ov = loadUnitOverrides();
-          const cur = getUnits(itemName);
-          if (isKgBased) {
-            const next = Math.round((cur + (isInc ? 0.2 : -0.2)) * 10) / 10;
-            ov[itemName] = Math.max(0.2, next);
-          } else {
-            ov[itemName] = Math.max(1, Math.round(cur) + (isInc ? 1 : -1));
-          }
-          saveUnitOverrides(ov);
-          if (_lastData) renderPage(_lastData);
-          return;
-        }
+        if (incBtn) { stepUnits(incBtn.dataset.item, incBtn.classList.contains('units-inc')); return; }
 
         const refreshBtn = e.target.closest('.item-refresh-btn');
         if (refreshBtn) {
