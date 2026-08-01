@@ -1754,7 +1754,7 @@ td.priority-cell { text-align: center; }
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 .card-img-wrap { flex-shrink: 0; }
 .card-img { width: 44px; height: 44px; object-fit: contain; border-radius: 6px; }
@@ -1765,10 +1765,12 @@ td.priority-cell { text-align: center; }
   font-size: 8px; font-weight: 500; color: var(--text-soft);
   text-align: center; line-height: 1.2;
 }
-.card-info { flex: 1; min-width: 0; }
-/* Two lines' worth reserved whether the name needs one or two, so a short-named
-   card doesn't pull its whole column up and break the row's alignment. */
-.card-name { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; min-height: 2.8em; }
+/* Height reserved on the BLOCK, not on .card-name. Reserving it on the name
+   pushed the category down by a whole line on every short-named card ("Lebanese
+   Cucumbers" sat two lines above "Fruit & Veg"); putting it here keeps name and
+   category adjacent and drops the slack underneath, where nothing shows. */
+.card-info { flex: 1; min-width: 0; min-height: 55px; }
+.card-name { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; }
 .card-cat { font-size: 11px; color: var(--text-soft); margin-top: 2px; }
 .card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
 .card-check { cursor: pointer; accent-color: var(--ww); width: 15px; height: 15px; flex-shrink: 0; margin-top: 3px; }
@@ -1789,39 +1791,56 @@ td.priority-cell { text-align: center; }
   border: 1px solid var(--border); border-radius: 4px;
   background: var(--bg); color: var(--text-mid); cursor: pointer;
 }
+/* Two equal columns since "vs" was removed - the comparison is self-evident and
+   the middle column was only ever there to hold that one word. align-items is
+   start, not center: with unequal content the two sides used to sit at
+   different heights, so the W and C badges didn't share a baseline. */
 .card-prices {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
   gap: 6px;
-  padding: 10px 0;
+  padding: 7px 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 }
 .card-store { display: flex; flex-direction: column; gap: 2px; }
 .card-store-price-row { display: flex; align-items: center; gap: 5px; }
-.card-store-price { font-size: 15px; font-weight: 700; color: var(--text); }
+.card-store-price { font-size: 16.5px; font-weight: 700; color: var(--text); }
 .card-store.winner-ww .card-store-price   { color: var(--ww); }
 .card-store.winner-coles .card-store-price { color: var(--coles); }
 /* min-height holds the line even when empty: per-kg group cards have no $/100g
    to show, and without the reserved line their price block came out 17px
    shorter than a normal card's, floating their trend bar out of alignment. */
-.card-store-unit { font-size: 10px; color: var(--text-soft); padding-left: 22px; min-height: 15px; }
-.card-vs { font-size: 11px; color: var(--text-soft); text-align: center; }
+/* 25px = the 20px store badge + the 5px row gap, so the unit price starts at
+   exactly the same x as the price above it. Was 22px, which sat 3px left of it.
+   min-height holds the line even when empty (per-kg groups have no $/100g). */
+.card-store-unit { font-size: 10px; color: var(--text-soft); padding-left: 25px; min-height: 15px; }
 /* Verdict row: "W Save $2.00", "C Save $0.50" or "=" plus any multi-buy tag.
    ALWAYS rendered (min-height holds the line when a tie has nothing to add), so
    every card in a row reaches its trend bar at the same height - a collapsed
    row used to float the tied card's bar upward, out of line with its neighbours. */
 .card-saving {
-  display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
   font-size: 12px; font-weight: 600; color: var(--green);
-  margin-bottom: 8px; min-height: 20px;
+  margin-bottom: 5px; min-height: 22px;
+}
+/* The saving and the multi-buy tag are two labels doing the same job on the same
+   line, so they get ONE shape: same padding, radius, border and height. Colours
+   are untouched - the saving keeps its store colour, the tag keeps its grey. */
+.card-saving .card-save-amt,
+.card-saving .multibuy-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 2px 7px; border-radius: 9px; min-height: 20px;
+  font-size: 11px; font-weight: 700; line-height: 1;
+  border: 1px solid var(--border); background: var(--bg);
+  margin-left: 0; white-space: nowrap;
 }
 .card-save-amt.is-ww { color: var(--ww); }
 .card-save-amt.is-coles { color: var(--coles); }
 .card-eq { font-size: 15px; font-weight: 700; color: var(--text-soft); line-height: 1; }
-.card-bar { margin-bottom: 8px; }
+.card-bar { margin-bottom: 5px; }
 /* Same hover-reveal problem as .mc-bar: no <tr> to hover here, so it was invisible. */
 .card-bar .price-bar-manage { opacity: 1; }
 /* Footer is now qty on the left, history clock on the right (Edit/Refresh were

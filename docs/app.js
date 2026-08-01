@@ -3261,8 +3261,7 @@ function renderCards(items) {
       </div>
       <div class="card-prices">
         <div class="card-store ${wwClass}">${wwHtml}</div>
-        <div class="card-vs">vs</div>
-        <div class="card-store ${coClass}">${coHtml}</div>
+          <div class="card-store ${coClass}">${coHtml}</div>
       </div>
       ${savingHtml}
       ${bar ? `<div class="card-bar">${bar}</div>` : ''}
@@ -3717,7 +3716,6 @@ function groupCardHTML(group, overrides) {
     </div>
     <div class="card-prices">
       <div class="card-store ${wwClass}">${wwHtml}</div>
-      <div class="card-vs">vs</div>
       <div class="card-store ${coClass}">${coHtml}</div>
     </div>
     ${savingHtml}
