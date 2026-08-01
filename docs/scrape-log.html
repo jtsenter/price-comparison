@@ -130,20 +130,57 @@
     @media (max-width: 640px) { .sl-stats { grid-template-columns: 1fr 1fr; } }
 
     /* ── Tabs ── */
-    .sl-tabs { display: flex; gap: 4px; background: var(--bg); border: 1px solid var(--border);
+    /* The active tab used to be a WHITE pill on the near-white --bg track, which
+       is almost no contrast - it wasn't obvious these were tabs at all. The
+       track is now darker than the page, and the selected tab is a bordered
+       white pill in full-strength text; unselected tabs sit in --text-soft so
+       the difference reads as on/off rather than two shades of the same thing. */
+    .sl-tabs { display: flex; gap: 4px; background: var(--border); border: 1px solid var(--border);
       border-radius: 11px; padding: 4px; margin-bottom: 14px; }
     .sl-tab {
-      flex: 1; border: none; background: transparent; cursor: pointer;
-      font-size: 12.5px; font-weight: 600; color: var(--text-mid);
+      flex: 1; border: 1px solid transparent; background: transparent; cursor: pointer;
+      font-size: 12.5px; font-weight: 600; color: var(--text-soft);
       padding: 8px 10px; border-radius: 8px; font-family: inherit;
       display: flex; align-items: center; justify-content: center; gap: 6px;
+      transition: background .12s, color .12s;
     }
-    .sl-tab:hover { color: var(--text); }
-    .sl-tab.active { background: var(--card); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+    .sl-tab:hover { color: var(--text-mid); background: rgba(255,255,255,.45); }
+    .sl-tab.active { background: var(--card); color: var(--text); font-weight: 700;
+      border-color: var(--text-soft); box-shadow: 0 1px 3px rgba(0,0,0,.10); }
     .sl-tab .cnt { font-size: 10.5px; font-weight: 700; color: var(--text-soft); background: var(--bg);
       border-radius: 9px; padding: 1px 6px; }
     .sl-tab.active .cnt { background: var(--bg); color: var(--text-mid); }
     @media (max-width: 480px) { .sl-tab { font-size: 11.5px; padding: 8px 4px; } .sl-tab .cnt { display: none; } }
+
+    /* ── Store gap tab ───────────────────────────────────────────────────── */
+    .sg-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; }
+    .sg-tile { border: 1px solid var(--border); border-radius: 11px; padding: 11px 13px; background: var(--bg); }
+    .sg-tile .l { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-soft); }
+    .sg-tile .n { font-size: 20px; font-weight: 700; color: var(--text); margin-top: 3px; font-variant-numeric: tabular-nums; }
+    .sg-tile .s { font-size: 11px; color: var(--text-mid); margin-top: 2px; }
+    .sg-wrap { overflow-x: auto; }
+    table.sg { width: 100%; border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+    table.sg th { text-align: right; font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .04em; color: var(--text-soft); padding: 6px 8px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    table.sg th:first-child, table.sg td:first-child { text-align: left; }
+    table.sg td { padding: 6px 8px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
+    table.sg tbody tr:hover { background: var(--bg); }
+    table.sg tfoot td { border-top: 2px solid var(--border); border-bottom: none; font-weight: 700; }
+    /* Cheaper store drives the colour, so the delta reads without the header. */
+    .sg-ww { color: var(--ww); font-weight: 700; }
+    .sg-co { color: var(--coles); font-weight: 700; }
+    .sg-flat { color: var(--text-soft); }
+    /* The tile's headline carries the colour class on the SAME element as .n,
+       which is more specific, so it needs the extra class to win. */
+    .sg-tile .n.sg-ww { color: var(--ww); }
+    .sg-tile .n.sg-co { color: var(--coles); }
+    .sg-tile .n.sg-flat { color: var(--text-soft); }
+    .sg-split { display: inline-flex; gap: 5px; align-items: center; }
+    .sg-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0 18px; }
+    .sg-item { display: flex; align-items: center; gap: 8px; padding: 5px 2px; border-bottom: 1px solid var(--border); font-size: 12px; }
+    .sg-item .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
+    .sg-item .pr { font-variant-numeric: tabular-nums; color: var(--text-mid); font-size: 11.5px; }
+    .sg-item .gp { font-variant-numeric: tabular-nums; min-width: 58px; text-align: right; }
 
     .sl-runs { display: flex; flex-direction: column; gap: 8px; }
     .sl-run { background: var(--card); border: 1px solid var(--border); border-radius: 11px; overflow: hidden; }
@@ -305,8 +342,29 @@
 
   <div class="sl-tabs" role="tablist">
     <button class="sl-tab active" data-tab="changes" role="tab">Price changes <span class="cnt" id="slCntChg"></span></button>
+    <button class="sl-tab" data-tab="gap" role="tab">Store gap <span class="cnt" id="slCntGap"></span></button>
     <button class="sl-tab" data-tab="runs" role="tab">Runs</button>
     <button class="sl-tab" data-tab="diag" role="tab">Diagnostics</button>
+  </div>
+
+  <div data-panel="gap" hidden>
+    <div class="sl-card">
+      <div class="sl-card-head"><h2>Woolworths vs Coles over time</h2></div>
+      <p style="font-size:12px;color:var(--text-mid);margin:6px 0 12px" id="sgMethod"></p>
+      <div class="sg-tiles" id="sgTiles"></div>
+      <div class="sg-wrap" id="sgTable"></div>
+    </div>
+    <div class="sl-card" id="sgItemsCard">
+      <div class="sl-card-head">
+        <h2>The basket <span class="section-count" id="sgItemsCount"></span></h2>
+        <input type="search" id="sgItemSearch" placeholder="Filter…"
+               style="font-size:12px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);max-width:200px">
+      </div>
+      <p style="font-size:12px;color:var(--text-mid);margin:6px 0 10px">
+        Every product priced at <strong>both</strong> stores on every date above, biggest gap first.
+      </p>
+      <div class="sg-items" id="sgItems"></div>
+    </div>
   </div>
 
   <div data-panel="runs" hidden>
@@ -825,6 +883,164 @@ function localDay(iso) {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
 }
 
+// ── Store gap: which store is cheaper, and by how much, over time ────────────
+// The naive version - total everything priced at each store per run - is a lie,
+// because the item list grows: this archive's raw gap swung +1.3% -> +10.3%
+// while the matched set went 127 -> 172 items, and it claimed the gap was
+// WIDENING when a like-for-like measure says Coles was closing it. So this uses
+// a FIXED BASKET: only products priced at BOTH stores on every date in the
+// window. Same items start to finish, so nothing here can move except prices.
+//
+// Single-store items are excluded on purpose. That is the opposite of the
+// basket page's rule (which counts them in BOTH totals so neither store looks
+// cheaper merely for not stocking something) - but that answers "what will my
+// shop cost", and this answers "which store is cheaper", where an item only one
+// store sells has no comparison to make.
+//
+// Built by REPLAYING price_changes.json BACKWARDS from today's real prices, not
+// by reading the per-store price histories. Those histories were the obvious
+// source and they are the wrong one: they record only some events, so 22% of
+// items carried a stale figure - grapes sat at their 10 June price of $6.90
+// against a real $18.91, and several stored a promo price where latest.json
+// stores the shelf price. Total distortion was $66 on a gap of $40: bigger than
+// the signal. price_changes records old AND new for every move, so stepping
+// back from a known-correct present reconstructs each earlier run exactly.
+// It also self-balances - the basket is "priced at both stores today", so the
+// same products appear in every row and no composition control is needed.
+// Only approximation left: an item added mid-window keeps its current price for
+// the runs before it existed. Bounded, and the window is short.
+let _gapPanel = null;
+
+function buildStorePanel(items, changes) {
+  if (!Array.isArray(changes) || !changes.length) return null;
+  const state = new Map();
+  for (const i of items) {
+    if (String(i.list_item || '').startsWith('__group_')) continue;
+    const w = (i.woolworths || {}).price, c = (i.coles || {}).price;
+    if (w != null && c != null && w > 0 && c > 0) state.set(i.list_item, [+w, +c]);
+  }
+  if (state.size < 10) return null;
+
+  const snap = () => {
+    let ww = 0, co = 0, wWin = 0, cWin = 0, same = 0;
+    for (const [a, b] of state.values()) {
+      ww += a; co += b;
+      if (a < b - 0.005) wWin++; else if (b < a - 0.005) cWin++; else same++;
+    }
+    return { n: state.size, ww, co, diff: co - ww, pct: ww ? (co - ww) / ww * 100 : 0, wWin, cWin, same };
+  };
+
+  const rows = [];
+  for (let k = changes.length - 1; k >= 0; k--) {
+    const run = changes[k];
+    // Snapshot BEFORE undoing: the state as it stood right after this run.
+    rows.push({ date: run.date, trigger: run.trigger, ...snap() });
+    for (const [idx, key] of [[0, 'ww'], [1, 'coles']]) {
+      for (const ch of (run[key] || [])) {
+        const cur = state.get(ch.item);
+        if (cur && ch.old != null) cur[idx] = +ch.old;
+      }
+    }
+  }
+  rows.reverse();   // oldest -> newest; paintStoreGap reverses again for display
+
+  const products = [...state.keys()].map(name => {
+    const i = items.find(x => x.list_item === name);
+    const a = +(i.woolworths || {}).price, b = +(i.coles || {}).price;
+    return { name, ww: a, co: b, diff: b - a, pct: a ? (b - a) / a * 100 : 0 };
+  }).sort((p, q) => Math.abs(q.diff) - Math.abs(p.diff));
+
+  return { rows, products, start: rows[0].date, latest: rows[rows.length - 1].date, size: state.size };
+}
+
+function paintStoreGap() {
+  const p = _gapPanel;
+  const tbl = $('sgTable');
+  if (!p) {
+    $('sgMethod').textContent = '';
+    tbl.innerHTML = '<p class="sl-empty-state">Not enough dual-store price history yet to compare the two stores.</p>';
+    $('sgItemsCard').style.display = 'none';
+    return;
+  }
+  const money = v => '$' + v.toFixed(2);
+  // diff = Coles − Woolworths, so POSITIVE means Woolworths is cheaper (green).
+  const cls = d => d > 0.005 ? 'sg-ww' : d < -0.005 ? 'sg-co' : 'sg-flat';
+
+  const first = p.rows[0], last = p.rows[p.rows.length - 1];
+  const wwMove = first.ww ? (last.ww / first.ww - 1) * 100 : 0;
+  const coMove = first.co ? (last.co / first.co - 1) * 100 : 0;
+  const winner = last.diff > 0.005 ? 'Woolworths' : last.diff < -0.005 ? 'Coles' : 'neither';
+  const wcls = last.diff > 0.005 ? 'sg-ww' : last.diff < -0.005 ? 'sg-co' : 'sg-flat';
+
+  $('sgMethod').innerHTML =
+    `The <strong>${p.size} products priced at both stores</strong>, replayed back through every recorded ` +
+    `price move to ${fmtDay(String(p.start).slice(0, 10))}. Same products in every row, so nothing here can ` +
+    `move except prices. Items only one store sells are excluded - there is nothing to compare.`;
+
+  $('sgTiles').innerHTML = `
+    <div class="sg-tile"><div class="l">Cheaper today</div><div class="n ${wcls}">${winner}</div>
+      <div class="s">${money(Math.abs(last.diff))} · ${Math.abs(last.pct).toFixed(1)}% on ${p.size} products</div></div>
+    <div class="sg-tile"><div class="l">Woolworths</div><div class="n">${money(last.ww)}</div>
+      <div class="s">${wwMove >= 0 ? '+' : ''}${wwMove.toFixed(2)}% since ${fmtDay(String(p.start).slice(0,10))}</div></div>
+    <div class="sg-tile"><div class="l">Coles</div><div class="n">${money(last.co)}</div>
+      <div class="s">${coMove >= 0 ? '+' : ''}${coMove.toFixed(2)}% since ${fmtDay(String(p.start).slice(0,10))}</div></div>
+    <div class="sg-tile"><div class="l">Item by item</div>
+      <div class="n"><span class="sg-ww">${last.wWin}</span> · <span class="sg-co">${last.cWin}</span> · <span class="sg-flat">${last.same}</span></div>
+      <div class="s">cheaper at W · at C · identical</div></div>`;
+
+  const rowHtml = r => `<tr>
+      <td>${fmtDay(String(r.date).slice(0,10))}</td>
+      <td>${r.n}</td>
+      <td>${money(r.ww)}</td>
+      <td>${money(r.co)}</td>
+      <td class="${cls(r.diff)}">${Math.abs(r.diff) < 0.005 ? '–' : money(Math.abs(r.diff))}</td>
+      <td class="${cls(r.diff)}">${Math.abs(r.pct) < 0.005 ? '–' : Math.abs(r.pct).toFixed(2) + '%'}</td>
+      <td class="sg-ww">${r.wWin}</td>
+      <td class="sg-co">${r.cWin}</td>
+      <td class="sg-flat">${r.same}</td>
+    </tr>`;
+
+  tbl.innerHTML = `<table class="sg">
+    <thead><tr>
+      <th>Date</th><th title="Products in the fixed basket">Items</th>
+      <th><span class="store-chip ww sm">W</span> total</th>
+      <th><span class="store-chip coles sm">C</span> total</th>
+      <th title="Gap in dollars, coloured by the cheaper store">Gap</th>
+      <th title="The same gap as a percentage of the cheaper store's total">Gap %</th>
+      <th title="Products cheaper at Woolworths that day"><span class="store-chip ww sm">W</span></th>
+      <th title="Products cheaper at Coles that day"><span class="store-chip coles sm">C</span></th>
+      <th title="Products priced identically at both stores">Same</th>
+    </tr></thead>
+    <tbody>${[...p.rows].reverse().map(rowHtml).join('')}</tbody>
+  </table>`;
+
+  $('slCntGap').textContent = p.size;
+  paintGapItems('');
+}
+
+function paintGapItems(q) {
+  const p = _gapPanel;
+  if (!p) return;
+  const list = p.products.filter(x => !q || String(x.name).toLowerCase().includes(q));
+  $('sgItemsCount').textContent = `${list.length} product${list.length === 1 ? '' : 's'}`;
+  if (!list.length) { $('sgItems').innerHTML = '<p class="sl-empty-state">No products match.</p>'; return; }
+  $('sgItems').innerHTML = list.map(x => {
+    const c = x.diff > 0.005 ? 'sg-ww' : x.diff < -0.005 ? 'sg-co' : 'sg-flat';
+    const amt = Math.abs(x.diff) < 0.005 ? 'same' : '$' + Math.abs(x.diff).toFixed(2);
+    return `<div class="sg-item">
+      <span class="nm" title="${escapeHtml(x.name)}">${escapeHtml(shortName(x.name))}</span>
+      <span class="pr">${'$' + x.ww.toFixed(2)} / ${'$' + x.co.toFixed(2)}</span>
+      <span class="gp ${c}">${amt}</span>
+    </div>`;
+  }).join('');
+}
+
+// Short date used across the gap tab ("29 May 2026").
+function fmtDay(d) {
+  const dt = new Date(d + 'T00:00:00');
+  return isNaN(dt) ? d : dt.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
 function paintChangeSummary(q) {
   const host = $('slChgSummary');
   if (!host) return;
@@ -861,11 +1077,19 @@ function paintChangeSummary(q) {
   for (const run of _runLog) {
     const day = localDay(run.date);
     if (!day) continue;
-    if (!effortByDay.has(day)) effortByDay.set(day, { scraped: 0, archived: 0, secs: 0, p90: 0, timed: 0, runs: 0 });
+    if (!effortByDay.has(day)) effortByDay.set(day, { scraped: 0, archived: 0, maxScraped: 0, maxArchived: 0, secs: 0, p90: 0, timed: 0, runs: 0 });
     const e = effortByDay.get(day);
     e.runs++;
+    // Two counts, because they answer different questions. The SUM is total work
+    // done that day and is the honest denominator for the seconds-per-product
+    // rate. The MAX is how many distinct products the day actually covered - and
+    // that is what the Products column shows. Summing there double-counted every
+    // product on a two-scrape day: 21 and 27 July read 567 and 571 against a list
+    // of ~285, and 17 July stacked three runs into 859.
     e.scraped += Number(run.scraped) || 0;
     e.archived += Number(run.archived) || 0;
+    e.maxScraped = Math.max(e.maxScraped, Number(run.scraped) || 0);
+    e.maxArchived = Math.max(e.maxArchived, Number(run.archived) || 0);
     // duration_s only exists on runs recorded after timing was added, so a day
     // with older runs shows "-" rather than a misleadingly small total.
     if (typeof run.duration_s === 'number') { e.secs += run.duration_s; e.timed++; }
@@ -882,8 +1106,11 @@ function paintChangeSummary(q) {
     const dur = e.timed
       ? `<span title="${e.timed} of ${e.runs} run(s) timed${e.p90 ? ` · 90% done after ${fmtDur(e.p90)}` : ''}">${fmtDur(e.secs)}</span>`
       : '<span class="sl-sum-zero" title="This run predates duration tracking">-</span>';
-    return `<td>${e.scraped || '<span class="sl-sum-zero">-</span>'}</td>` +
-           `<td>${e.archived || '<span class="sl-sum-zero">-</span>'}</td>` +
+    const multi = e.runs > 1
+      ? ` title="${e.runs} scrapes that day, ${e.scraped} product-fetches in total - this column counts each product once"`
+      : '';
+    return `<td${multi}>${e.maxScraped || '<span class="sl-sum-zero">-</span>'}${e.runs > 1 ? ` <span class="sl-sum-zero">×${e.runs}</span>` : ''}</td>` +
+           `<td>${e.maxArchived || '<span class="sl-sum-zero">-</span>'}</td>` +
            `<td>${dur}</td>`;
   };
   const cell = b => {
@@ -912,7 +1139,7 @@ function paintChangeSummary(q) {
           <th><span class="store-chip ww sm">W</span> Woolworths</th>
           <th><span class="store-chip coles sm">C</span> Coles</th>
           <th>Total</th>
-          <th title="Products the scrape processed that day - each is one product across both stores">Products</th>
+          <th title="Distinct products covered that day, counted once even when the day had several scrapes (×N marks those)">Products</th>
           <th title="How many of those were archived items">Archived</th>
           <th title="Wall-clock time of that day's scrape(s). Hover a value for the 90%-done mark.">Time</th>
         </tr></thead>
@@ -1153,6 +1380,8 @@ async function load() {
     <li>The <strong>↻</strong> beside the newest run's miss count re-scrapes <em>only</em> the products that run missed - a few dozen requests instead of a full ~210-product sweep. It's logged as a <strong>retry misses</strong> run, and because it only ever attempts known failures its match rate is left out of the summary above and the chart.</li>
     <li>A missed item's price isn't blank on the main site - the last known price carries forward, so a chronic miss can look fine there while quietly going stale. This page is the place to catch that.</li>
     <li><strong>no results</strong> = the search/page fetch returned nothing this run (usually the store blocking the runner, or its page layout changing). <strong>no match</strong> = we got candidates back but none matched the product name closely enough.</li>
+    <li><strong>Store gap</strong> starts from today's real prices and replays <code>price_changes.json</code> backwards, so every row is an exact reconstruction rather than an estimate. The per-store price histories look like the obvious source but are not: 22% of items carry a stale or promo figure there, which distorted the gap by more than the gap itself.</li>
+    <li>The gap table only reaches as far back as the price-change archive. A product added part-way through keeps its current price for the runs before it existed - the one approximation left in it.</li>
     <li>Only the last 30 runs are kept - older ones are dropped automatically to keep the file small.</li>
     <li><a href="data/scrape_log.json" target="_blank" rel="noopener">View raw scrape_log.json</a></li>
   `;
@@ -1171,6 +1400,9 @@ async function load() {
         <span class="store-chip coles sm">C</span> ${pct(lastRunCoPct)}</span>
       <span class="srh-when">${timeAgo(lastRun.date)}</span>`;
   }
+
+  _gapPanel = buildStorePanel(items, changes);
+  paintStoreGap();
 
   _runLog = log;
   renderChronicMisses(log);
@@ -1203,6 +1435,8 @@ function renderWishlist() {
   ).join('');
   card.style.display = '';
 }
+
+$('sgItemSearch')?.addEventListener('input', (e) => paintGapItems(e.target.value.trim().toLowerCase()));
 
 $('slWishlistClear').addEventListener('click', () => {
   try { localStorage.removeItem('pw_search_misses_v1'); } catch {}
