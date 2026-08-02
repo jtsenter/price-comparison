@@ -872,11 +872,13 @@ td { padding: 5px 12px; vertical-align: middle; }
   text-align: center; line-height: 1.2;
 }
 .item-info { flex: 1; min-width: 0; }
+/* Inline flow, NOT flex. As a flex container the name became one flex item and
+   the pencil another, and a flex item can never sit on another's last line - so
+   the moment the name filled the column the pencil dropped to a row of its own,
+   leaving obvious empty space beside names like "Coles I'm Perfect Sweet Potato
+   1.5kg". Inline-block in normal flow lets it follow the final word. */
 .item-title-row {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  flex-wrap: wrap;
+  display: block;
   line-height: 1.4;
   font-weight: 500;
 }
@@ -895,6 +897,18 @@ td { padding: 5px 12px; vertical-align: middle; }
   transition: opacity 0.15s, color 0.15s;
   line-height: 1;
   flex-shrink: 0;
+  /* Rides at the end of the name's last line rather than starting a new one.
+     The negative right margin is what actually does it: the name column is only
+     ~147px while the cell is ~217px, so a 134px name plus a 25px button did not
+     fit and wrapped - even though the whitespace you can SEE beside it (the
+     cell's padding) is outside the text block. Claiming ~7px of inline advance
+     instead of 25 lets the glyph overhang into that padding, which is empty,
+     rather than taking a line of its own. Hit area stays 25x24 for WCAG 2.5.8 -
+     shrinking the padding instead would have broken it. */
+  display: inline-block;
+  vertical-align: baseline;
+  margin-left: 2px;
+  margin-right: -20px;
 }
 tr:hover .item-edit-btn { opacity: 1; }
 .item-edit-btn:hover { color: var(--ww); }

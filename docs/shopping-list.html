@@ -1293,10 +1293,13 @@ async function boot() {
     // optional bold-green total then the saving as a green (−$X) bracket. The
     // brackets align in a column; the split row adds its trip total to the left.
     //   • Basket saving = bracket only (its total is the cheaper store card).
-    //   • Split saving = trip total + bracket (this panel is the only place the
-    //     split trip price shows). Only shown when the plan actually splits AND
-    //     beats the cheaper single store - else it's noise ("$5.80 split saving"
-    //     while the plan put everything in one store was the reported bug).
+    //   • Split saving = bracket only too. It used to lead with the split trip
+    //     total, but the "🧾 Split shop total" row directly underneath shows the
+    //     identical figure - so the line read "$42.80 (−$2.30)" with the $42.80
+    //     repeated two rows down. A saving line should show the saving.
+    //     Only shown when the plan actually splits AND beats the cheaper single
+    //     store - else it's noise ("$5.80 split saving" while the plan put
+    //     everything in one store was the reported bug).
     const svLine = (icon, label, tip, figs) =>
       `<div class="saving-line"><span class="saving-icon">${icon}</span><div class="saving-text"><div class="saving-label">${label}${infoIco(tip)}</div><div class="saving-figs">${figs}</div></div></div>`;
     const svDisc = v => `<span class="sv-disc">(−${fmt(v)})</span>`;
@@ -1307,8 +1310,8 @@ async function boot() {
     const showSplitLine = plan.splits && splitSaving > basketSaving + 0.005;
     const splitSavingLine = showSplitLine
       ? svLine(splitDisc, 'Split saving',
-          'Buying each item at whichever store is cheapest for it costs this total - the bracket is the extra you save vs shopping at one store only. Use the Split shop toggle to plan it.',
-          `<span class="sv-total">${fmt(plan.total)}</span>${svDisc(splitSaving)}`)
+          'What buying each item at whichever store is cheapest saves you on top of shopping at one store only. The trip total itself is the Split shop total below. Use the Split shop toggle to plan it.',
+          svDisc(splitSaving))
       : '';
     const savingInfoHtml = basketSavingLine + splitSavingLine;
 
