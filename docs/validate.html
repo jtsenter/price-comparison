@@ -321,7 +321,9 @@ function loadSettings() {
 
 function fmtPrice(p) {
   if (p == null) return '-';
-  return '$' + Number(p).toFixed(2);
+  // Grouped thousands, matching utils.js fmt(). This page is the one that
+  // doesn't load utils.js, so it keeps its own copy.
+  return '$' + Number(p).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function pctChange(newP, oldP) {

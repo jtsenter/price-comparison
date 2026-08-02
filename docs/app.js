@@ -1,7 +1,7 @@
 // ── Utilities ────────────────────────────────────────────────────────────────
 
 const $ = (id) => document.getElementById(id);
-const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '-';
+// fmt() lives in utils.js - one formatter, grouped thousands, whole site.
 
 // Clock icon for the mobile cards' History button (lives in the card's icon row,
 // next to 🔥/👁, so it never crowds the trend bar's min/max labels).

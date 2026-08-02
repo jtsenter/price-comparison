@@ -62,6 +62,8 @@ eval([
   extract('groupMetric'),
   extract('per100Pair'),
   extract('scalePer100'),      // card view restates $/100g at the multi-buy price
+  extract('fmt'),              // the one money formatter for the whole site
+  extract('sameQtyCost'),      // store-gap compares equal quantities, not packs
   extract('exclPriceSet'),
   extract('promoUnitPrice'),   // history + hot-deal detection price through this
   extract('mbUnitPrice'),      // getTrendSeries prices the current point through this
@@ -456,6 +458,36 @@ check('groupMetric null result', groupMetric({ sticker: true }, null), null);
         scalePer100({ value: null, blanked: true }, 8.5, 7.5).blanked, true);
   check('zero shelf price cannot divide', scalePer100(p, 0, 7.5).value, 1.89);
   check('null effective price passes through', scalePer100(p, 8.5, null).value, 1.89);
+}
+
+// ── fmt: grouped thousands, everywhere ──────────────────────────────────────
+{
+  check('under a thousand is unchanged', fmt(66.62), '$66.62');
+  check('thousands are grouped', fmt(1059.16), '$1,059.16');
+  check('millions group too', fmt(1234567.5), '$1,234,567.50');
+  check('always two decimals', fmt(8), '$8.00');
+  check('null renders as a dash', fmt(null), '-');
+  check('non-numeric renders as a dash', fmt('abc'), '-');
+  check('zero is a price, not a blank', fmt(0), '$0.00');
+}
+
+// ── sameQtyCost: compare equal amounts, not equal packs ─────────────────────
+// The salmon case: WW sells a $34 pack at $3.40/100g, Coles a $10 portion at
+// $5.00/100g. On pack price Coles looks $24 cheaper; per quantity it is dearer.
+{
+  const s = sameQtyCost(34, 10, 3.4, 5.0);
+  check('rival restated to the WW quantity', s.co, 50);
+  check('WW side is left alone', s.ww, 34);
+  check('flagged as normalised', s.normalised, true);
+  check('the comparison INVERTS vs pack price', s.co > s.ww, true);
+  // Equal pack sizes: normalising must be an identity, so it can run always.
+  const eq = sameQtyCost(8.5, 9.0, 1.7, 1.8);
+  check('equal sizes leave the rival untouched', eq.co, 9);
+  // No rate at one store → fall back to pack prices and say so.
+  const fb = sameQtyCost(5, 6, null, 1.2);
+  check('falls back to pack price', fb.co, 6);
+  check('fallback is flagged', fb.normalised, false);
+  check('missing a price yields null', sameQtyCost(null, 6, 1, 1), null);
 }
 
 console.log(`utils_selfcheck: all ${n} cases passed`);

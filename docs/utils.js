@@ -106,6 +106,33 @@ function per100Pair(ww, co) {
   return { ww: w, coles: c };
 }
 
+// THE money formatter for the whole site. Grouped thousands: a basket total of
+// "$1059.16" is genuinely hard to read at a glance and was doing so on every
+// page. Lived as three identical copies in app.js, hot-deals and the basket.
+function fmt(n) {
+  if (n == null || n === '' || isNaN(Number(n))) return '-';
+  return '$' + Number(n).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+// Price the SAME QUANTITY at both stores. Comparing pack prices across stores
+// silently compares different amounts of food: Woolworths sells salmon as a
+// $34 fillet pack and Coles as a $10 portion, so a pack-price comparison says
+// Coles is $24 cheaper when per-kg it is dearer ($34/kg vs $50/kg) - the
+// comparison doesn't just blur, it INVERTS.
+// Where both stores expose a per-100 rate, the rival's cost is restated at the
+// Woolworths pack quantity. When pack sizes already match this is an identity
+// (per100Co === coPrice / qty), so it can be applied unconditionally; it only
+// bites when the sizes genuinely differ. Falls back to pack prices when either
+// rate is missing, and says so via `normalised` for callers that want to flag it.
+function sameQtyCost(wwPrice, coPrice, per100Ww, per100Co) {
+  if (wwPrice == null || coPrice == null) return null;
+  if (per100Ww > 0 && per100Co > 0) {
+    const qty = wwPrice / per100Ww;              // WW pack size, in per-100 units
+    return { ww: +wwPrice, co: +(per100Co * qty).toFixed(2), normalised: true };
+  }
+  return { ww: +wwPrice, co: +coPrice, normalised: false };
+}
+
 // Restate a per-100 measure ($/100g, $/100ml) at the price actually being
 // charged rather than the shelf ticket. When a multi-buy drops the headline, a
 // $/100g still figured off the ticket contradicts the number directly above it.

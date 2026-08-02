@@ -180,7 +180,10 @@
     .sg-item { display: flex; align-items: center; gap: 8px; padding: 5px 2px; border-bottom: 1px solid var(--border); font-size: 12px; }
     .sg-item .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
     .sg-item .pr { font-variant-numeric: tabular-nums; color: var(--text-mid); font-size: 11.5px; }
-    .sg-item .gp { font-variant-numeric: tabular-nums; min-width: 58px; text-align: right; }
+    .sg-item .gp { font-variant-numeric: tabular-nums; min-width: 62px; text-align: right; }
+    .sg-grain { font-size: 11.5px; font-weight: 600; padding: 4px 10px; border-radius: 7px; cursor: pointer;
+      border: 1px solid var(--border); background: var(--card); color: var(--text-mid); font-family: inherit; }
+    .sg-grain.active { background: var(--text); color: var(--card); border-color: var(--text); }
 
     .sl-runs { display: flex; flex-direction: column; gap: 8px; }
     .sl-run { background: var(--card); border: 1px solid var(--border); border-radius: 11px; overflow: hidden; }
@@ -428,7 +431,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=93"></script>
+<script src="utils.js?v=94"></script>
 <script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
@@ -913,13 +916,52 @@ let _gapPanel = null;
 
 function buildStorePanel(items, changes) {
   if (!Array.isArray(changes) || !changes.length) return null;
+  const windowStart = String(changes[0].date || '').slice(0, 10);
+  const firstSeen = (hist) => {
+    let f = null;
+    for (const e of (hist || [])) {
+      if (e && e.date && e.price != null && +e.price > 0) { const d = String(e.date); if (!f || d < f) f = d; }
+    }
+    return f;
+  };
+
   const state = new Map();
+  const meta = new Map();
   for (const i of items) {
     if (String(i.list_item || '').startsWith('__group_')) continue;
     const w = (i.woolworths || {}).price, c = (i.coles || {}).price;
-    if (w != null && c != null && w > 0 && c > 0) state.set(i.list_item, [+w, +c]);
+    if (!(w != null && c != null && w > 0 && c > 0)) continue;
+    // Priced at both stores TODAY is not enough. Ecostore Laundry Liquid had a
+    // fresh Coles price and NO Coles history at all, so the replay happily
+    // carried that price back through runs where Coles had never priced it -
+    // inventing a rival for an item that had none. Require each store to have
+    // been pricing the product BEFORE the window opened, which is what a
+    // first-history-entry date reliably tells us even though the histories
+    // miss some later moves.
+    const fw = firstSeen(i.ww_price_history), fc = firstSeen(i.coles_price_history);
+    if (!fw || !fc || fw > windowStart || fc > windowStart) continue;
+    // Same quantity at both stores, so a $34 fillet pack is not "beaten" by a
+    // $10 portion (see sameQtyCost in utils.js).
+    const q = sameQtyCost(+w, +c, i.per_100_ww, i.per_100_coles);
+    state.set(i.list_item, [q.ww, q.co]);
+    meta.set(i.list_item, {
+      normalised: q.normalised, packWw: +w, packCo: +c,
+      // Undo-scale per store: WW is unscaled, Coles is restated to the WW pack
+      // quantity by a constant ratio (pack sizes don't move).
+      scale: [1, +c > 0 ? q.co / +c : 1],
+    });
   }
   if (state.size < 10) return null;
+
+  // Snapshot TODAY before the replay rewinds `state` - the item list is the
+  // current picture, not the oldest one.
+  const products = [...state.keys()].map(name => {
+    const m = meta.get(name);
+    const [a, b] = state.get(name);
+    return { name, ww: a, co: b, diff: b - a, pct: a ? (b - a) / a * 100 : 0,
+             normalised: m.normalised && Math.abs(b - m.packCo) > 0.005,
+             packWw: m.packWw, packCo: m.packCo };
+  }).sort((p, q2) => Math.abs(q2.diff) - Math.abs(p.diff));
 
   const snap = () => {
     let ww = 0, co = 0, wWin = 0, cWin = 0, same = 0;
@@ -938,19 +980,48 @@ function buildStorePanel(items, changes) {
     for (const [idx, key] of [[0, 'ww'], [1, 'coles']]) {
       for (const ch of (run[key] || [])) {
         const cur = state.get(ch.item);
-        if (cur && ch.old != null) cur[idx] = +ch.old;
+        if (!cur || ch.old == null) continue;
+        // price_changes stores raw PACK prices, but state holds same-quantity
+        // costs, so an undo has to be scaled into the same space. Pack sizes
+        // don't change, so the ratio is a per-item constant.
+        cur[idx] = +ch.old * (meta.get(ch.item).scale[idx]);
       }
     }
   }
   rows.reverse();   // oldest -> newest; paintStoreGap reverses again for display
 
-  const products = [...state.keys()].map(name => {
-    const i = items.find(x => x.list_item === name);
-    const a = +(i.woolworths || {}).price, b = +(i.coles || {}).price;
-    return { name, ww: a, co: b, diff: b - a, pct: a ? (b - a) / a * 100 : 0 };
-  }).sort((p, q) => Math.abs(q.diff) - Math.abs(p.diff));
-
   return { rows, products, start: rows[0].date, latest: rows[rows.length - 1].date, size: state.size };
+}
+
+// One row per period, not per run. price_changes logs EVERY run including ones
+// that moved nothing, so two scrapes in a day produced two near-identical rows.
+// Collapsing keeps the LAST run of each period - the state you ended the day
+// (or week) on - and notes how many runs it covered.
+let _gapGrain = 'day';
+
+function collapseRows(rows, grain) {
+  const keyOf = (iso) => {
+    const d = new Date(iso);
+    if (isNaN(d)) return String(iso).slice(0, 10);
+    if (grain === 'run') return String(iso);
+    const p = n => String(n).padStart(2, '0');
+    if (grain === 'week') {
+      // Week ending Saturday, so a Mon/Wed/Thu scrape week lands in one bucket.
+      const s = new Date(d); s.setDate(d.getDate() - d.getDay());
+      return `${s.getFullYear()}-${p(s.getMonth() + 1)}-${p(s.getDate())}`;
+    }
+    return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+  };
+  const byKey = new Map();
+  for (const r of rows) {
+    const k = keyOf(r.date);
+    const prev = byKey.get(k);
+    // `label` carries the LOCAL bucket key. Rendering the row from the raw
+    // timestamp instead would slice a UTC date and print two rows as the same
+    // day - the same timezone trap that once hid a whole run from this page.
+    byKey.set(k, { ...r, label: k, runs: (prev ? prev.runs : 0) + 1 });   // last wins
+  }
+  return [...byKey.values()];
 }
 
 function paintStoreGap() {
@@ -962,7 +1033,7 @@ function paintStoreGap() {
     $('sgItemsCard').style.display = 'none';
     return;
   }
-  const money = v => '$' + v.toFixed(2);
+  const money = fmt;   // utils.js - grouped thousands
   // diff = Coles − Woolworths, so POSITIVE means Woolworths is cheaper (green).
   const cls = d => d > 0.005 ? 'sg-ww' : d < -0.005 ? 'sg-co' : 'sg-flat';
 
@@ -988,11 +1059,14 @@ function paintStoreGap() {
       <div class="n"><span class="sg-ww">${last.wWin}</span> · <span class="sg-co">${last.cWin}</span> · <span class="sg-flat">${last.same}</span></div>
       <div class="s">cheaper at W · at C · identical</div></div>`;
 
+  // Cheaper store's total in bold - the answer for that row, without reading
+  // across to the gap column.
+  const tot = (v, win) => win ? `<strong>${money(v)}</strong>` : money(v);
   const rowHtml = r => `<tr>
-      <td>${fmtDay(String(r.date).slice(0,10))}</td>
+      <td>${_gapGrain === 'week' ? 'week of ' : ''}${fmtDay(r.label || String(r.date).slice(0, 10))}${r.runs > 1 ? ` <span class="sl-sum-zero">×${r.runs}</span>` : ''}</td>
       <td>${r.n}</td>
-      <td>${money(r.ww)}</td>
-      <td>${money(r.co)}</td>
+      <td>${tot(r.ww, r.diff > 0.005)}</td>
+      <td>${tot(r.co, r.diff < -0.005)}</td>
       <td class="${cls(r.diff)}">${Math.abs(r.diff) < 0.005 ? '–' : money(Math.abs(r.diff))}</td>
       <td class="${cls(r.diff)}">${Math.abs(r.pct) < 0.005 ? '–' : Math.abs(r.pct).toFixed(2) + '%'}</td>
       <td class="sg-ww">${r.wWin}</td>
@@ -1000,7 +1074,12 @@ function paintStoreGap() {
       <td class="sg-flat">${r.same}</td>
     </tr>`;
 
-  tbl.innerHTML = `<table class="sg">
+  const shown = collapseRows(p.rows, _gapGrain);
+  tbl.innerHTML = `<div style="display:flex;justify-content:flex-end;gap:4px;margin-bottom:8px">
+      ${['day', 'week', 'run'].map(g =>
+        `<button class="sg-grain${g === _gapGrain ? ' active' : ''}" data-grain="${g}">${g === 'day' ? 'Daily' : g === 'week' ? 'Weekly' : 'Every run'}</button>`).join('')}
+    </div>
+    <table class="sg">
     <thead><tr>
       <th>Date</th><th title="Products in the fixed basket">Items</th>
       <th><span class="store-chip ww sm">W</span> total</th>
@@ -1011,11 +1090,16 @@ function paintStoreGap() {
       <th title="Products cheaper at Coles that day"><span class="store-chip coles sm">C</span></th>
       <th title="Products priced identically at both stores">Same</th>
     </tr></thead>
-    <tbody>${[...p.rows].reverse().map(rowHtml).join('')}</tbody>
+    <tbody>${[...shown].reverse().map(rowHtml).join('')}</tbody>
   </table>`;
 
+  tbl.querySelectorAll('.sg-grain').forEach(b => b.addEventListener('click', () => {
+    _gapGrain = b.dataset.grain;
+    paintStoreGap();
+  }));
+
   $('slCntGap').textContent = p.size;
-  paintGapItems('');
+  paintGapItems($('sgItemSearch') ? $('sgItemSearch').value.trim().toLowerCase() : '');
 }
 
 function paintGapItems(q) {
@@ -1026,10 +1110,15 @@ function paintGapItems(q) {
   if (!list.length) { $('sgItems').innerHTML = '<p class="sl-empty-state">No products match.</p>'; return; }
   $('sgItems').innerHTML = list.map(x => {
     const c = x.diff > 0.005 ? 'sg-ww' : x.diff < -0.005 ? 'sg-co' : 'sg-flat';
-    const amt = Math.abs(x.diff) < 0.005 ? 'same' : '$' + Math.abs(x.diff).toFixed(2);
+    const amt = Math.abs(x.diff) < 0.005 ? 'same' : fmt(Math.abs(x.diff));
+    // "≈" marks a row whose rival price was restated to the Woolworths pack
+    // quantity; the tooltip carries the untouched shelf prices.
+    const tip = x.normalised
+      ? ` title="Same-quantity comparison. On the shelf: ${fmt(x.packWw)} at Woolworths for a pack this size, ${fmt(x.packCo)} at Coles for theirs."`
+      : '';
     return `<div class="sg-item">
       <span class="nm" title="${escapeHtml(x.name)}">${escapeHtml(shortName(x.name))}</span>
-      <span class="pr">${'$' + x.ww.toFixed(2)} / ${'$' + x.co.toFixed(2)}</span>
+      <span class="pr"${tip}>${x.normalised ? '≈ ' : ''}${fmt(x.ww)} / ${fmt(x.co)}</span>
       <span class="gp ${c}">${amt}</span>
     </div>`;
   }).join('');

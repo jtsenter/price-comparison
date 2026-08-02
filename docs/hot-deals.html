@@ -479,7 +479,7 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=93"></script>
+<script src="utils.js?v=94"></script>
 <script src="history-modal.js?v=3"></script>
 <script>
 if ('serviceWorker' in navigator) {
@@ -517,7 +517,7 @@ function loadExclusions() {
   try { return JSON.parse(localStorage.getItem('pw_exclusions_v1') || '{}'); } catch { return {}; }
 }
 
-const fmt = (n) => n != null ? `$${Number(n).toFixed(2)}` : '-';
+// fmt() lives in utils.js (loaded above).
 const fmtUnit = (price, unit) => {
   if (price == null) return '';
   if (!unit) return `${fmt(price)}/unit`;
