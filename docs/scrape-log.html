@@ -812,60 +812,42 @@ function paintChangeChart(days) {
   if (!host) return;
   if (days.length < 2) { host.innerHTML = ''; return; }
 
+  // ONE line per STORE, because green and red mean Woolworths and Coles
+  // everywhere else in this app. They previously meant "went down" and "went
+  // up" here, which is a second meaning for the same two colours on a page
+  // that also shows store totals in them - the legend said so and still read
+  // as wrong. The up/down split lives in the table below, per store, where the
+  // ▲/▼ glyphs carry it without borrowing the store palette.
   const series = [...days].reverse().map(([d, b]) => ({
-    d, up: b.ww.up + b.coles.up, down: b.ww.down + b.coles.down,
+    d, ww: b.ww.up + b.ww.down, co: b.coles.up + b.coles.down,
   }));
-  const max = Math.max(...series.map(s => Math.max(s.up, s.down)), 1);
-  const W = 900, H = 150, padL = 30, padR = 8, padT = 10, padB = 16;
+  const max = Math.max(...series.map(s => Math.max(s.ww, s.co)), 1);
+  const W = 900, H = 140, padL = 30, padR = 8, padT = 10, padB = 16;
   const plotH = H - padT - padB;
-  const mid = padT + plotH / 2;
-  const half = plotH / 2;
   const n = series.length;
   const x = i => padL + (n === 1 ? 0 : i * (W - padL - padR) / (n - 1));
+  const y = v => padT + plotH - (v / max) * plotH;      // plain linear
 
-  // SQUARE-ROOT scale, and this is the whole point of the redraw. Specials move
-  // on one day a week: this archive has two runs of 100+ changes against a dozen
-  // of 0-5. Linearly the quiet days were flat against the axis and unreadable,
-  // so the chart only ever said "Wednesday exists". Sqrt keeps the big days
-  // biggest while giving the small ones visible height; gridlines carry real
-  // counts so nothing has to be read off the curve's shape.
-  const sc = v => Math.sqrt(Math.max(0, v) / max) * half;
-  const yUp = v => mid - sc(v);
-  const yDown = v => mid + sc(v);
+  const path = key => series.map((s, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(s[key]).toFixed(1)}`).join(' ');
+  const dots = (key, col) => series.map((s, i) => s[key]
+    ? `<circle cx="${x(i).toFixed(1)}" cy="${y(s[key]).toFixed(1)}" r="${n > 20 ? 2 : 2.8}" fill="${col}"/>` : '').join('');
 
-  const path = (pts) => pts.map((p, i) => `${i ? 'L' : 'M'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
-  const upPts = series.map((s, i) => [x(i), yUp(s.up)]);
-  const downPts = series.map((s, i) => [x(i), yDown(s.down)]);
-  // Filled to the midline so the two directions read as opposing masses, with a
-  // line on top for the shape - a plain line at these counts is very thin.
-  const area = (pts) => `M${pts[0][0].toFixed(1)},${mid.toFixed(1)} ` +
-    pts.map(p => `L${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ') +
-    ` L${pts[pts.length - 1][0].toFixed(1)},${mid.toFixed(1)} Z`;
-
-  const dots = series.map((s, i) => {
+  const hover = series.map((s, i) => {
     const label = new Date(s.d + 'T00:00:00');
-    const title = `${isNaN(label) ? s.d : label.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short' })}
-` +
-                  `${s.down} down · ${s.up} up · ${s.up + s.down} total`;
+    const title = [
+      isNaN(label) ? s.d : label.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short' }),
+      'Woolworths ' + s.ww + ' change' + (s.ww === 1 ? '' : 's'),
+      'Coles ' + s.co + ' change' + (s.co === 1 ? '' : 's'),
+    ].join(String.fromCharCode(10));
     return `<g><title>${escapeHtml(title)}</title>` +
-      `<rect x="${(x(i) - 6).toFixed(1)}" y="${padT}" width="12" height="${plotH.toFixed(1)}" fill="transparent"/>` +
-      (s.up ? `<circle cx="${x(i).toFixed(1)}" cy="${yUp(s.up).toFixed(1)}" r="${n > 20 ? 2 : 2.8}" fill="var(--coles,#CC0000)"/>` : '') +
-      (s.down ? `<circle cx="${x(i).toFixed(1)}" cy="${yDown(s.down).toFixed(1)}" r="${n > 20 ? 2 : 2.8}" fill="var(--ww,#00843D)"/>` : '') +
-      `</g>`;
+      `<rect x="${(x(i) - 6).toFixed(1)}" y="${padT}" width="12" height="${plotH.toFixed(1)}" fill="transparent"/></g>`;
   }).join('');
 
-  // Ticks at real counts, positioned by the same sqrt scale, so the compression
-  // is visible rather than hidden: the gap 0->10 is wider than 50->100.
-  const tickVals = [...new Set([0, Math.round(max * 0.1), Math.round(max * 0.4), max])].filter(v => v <= max);
-  const grid = tickVals.map(v => {
-    const rows = v === 0
-      ? [[mid, '0']]
-      : [[yUp(v), String(v)], [yDown(v), String(v)]];
-    return rows.map(([yy, lab]) =>
-      `<line x1="${padL}" y1="${yy.toFixed(1)}" x2="${W - padR}" y2="${yy.toFixed(1)}" stroke="var(--border)" stroke-width="1"${v === 0 ? '' : ' stroke-dasharray="2 3"'}/>` +
-      `<text x="${(padL - 5)}" y="${(yy + 3.5).toFixed(1)}" text-anchor="end" font-size="9.5" fill="var(--text-soft)">${lab}</text>`
-    ).join('');
-  }).join('');
+  const ticks = [...new Set([0, Math.round(max / 2), max])];
+  const grid = ticks.map(v =>
+    `<line x1="${padL}" y1="${y(v).toFixed(1)}" x2="${W - padR}" y2="${y(v).toFixed(1)}" stroke="var(--border)" stroke-width="1"/>` +
+    `<text x="${padL - 5}" y="${(y(v) + 3.5).toFixed(1)}" text-anchor="end" font-size="9.5" fill="var(--text-soft)">${v}</text>`
+  ).join('');
 
   const first = series[0].d, last = series[n - 1].d;
   const endLabel = iso => {
@@ -877,21 +859,20 @@ function paintChangeChart(days) {
     <div class="sl-chg-chart">
       <div class="sl-chg-chart-head">
         <span>Price changes over time</span>
-        <span class="sl-card-sub">${n} day${n === 1 ? '' : 's'} with movement · square-root scale</span>
+        <span class="sl-card-sub">${n} day${n === 1 ? '' : 's'} with movement</span>
       </div>
       <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img"
-           aria-label="Price changes per day, rises above the line and falls below, on a square-root scale">
+           aria-label="Price changes per day at each store">
         ${grid}
-        <path d="${area(upPts)}" fill="var(--coles,#CC0000)" fill-opacity=".13"/>
-        <path d="${area(downPts)}" fill="var(--ww,#00843D)" fill-opacity=".13"/>
-        <path d="${path(upPts)}" fill="none" stroke="var(--coles,#CC0000)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
-        <path d="${path(downPts)}" fill="none" stroke="var(--ww,#00843D)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
-        ${dots}
+        <path d="${path('ww')}" fill="none" stroke="var(--ww,#00843D)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+        <path d="${path('co')}" fill="none" stroke="var(--coles,#CC0000)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+        ${dots('ww', 'var(--ww,#00843D)')}${dots('co', 'var(--coles,#CC0000)')}
+        ${hover}
       </svg>
       <div class="sl-chg-chart-axis"><span>${endLabel(first)}</span><span>${endLabel(last)}</span></div>
       <div class="sl-chart-legend">
-        <span><i style="background:var(--coles,#CC0000)"></i> went up</span>
-        <span><i style="background:var(--ww,#00843D)"></i> went down</span>
+        <span><i style="background:var(--ww,#00843D)"></i> Woolworths</span>
+        <span><i style="background:var(--coles,#CC0000)"></i> Coles</span>
       </div>
     </div>`;
 }
@@ -1016,31 +997,26 @@ function buildStorePanel(items, changes) {
   return { rows, products, start: rows[0].date, latest: rows[rows.length - 1].date, size: state.size };
 }
 
-// A row earns its place by MOVING, not by existing. price_changes logs every
-// run including ones that changed nothing, and grouping by day or week didn't
-// fix it: the week-of-2-Aug row was identical to week-of-26-Jul because the
-// only run in it changed nothing, while real movement INSIDE a week (Coles
-// $1,001.76 on the 26th, $995 a day later) was thrown away by keeping only the
-// week's last run. Both failure modes are the same mistake - picking rows by
-// calendar position rather than by whether anything happened.
-// So: keep a run when either store's total has moved at least GAP_MIN_MOVE
-// since the last KEPT run, plus always the oldest (baseline) and newest
-// (today). Quiet stretches collapse; a $6 swing inside a week survives.
-const GAP_MIN_MOVE = 1;   // dollars, on a basket of ~$900
-
-function significantRows(rows, minMove) {
-  if (rows.length <= 2) return rows.map(r => ({ ...r, skipped: 0 }));
-  const out = [{ ...rows[0], skipped: 0 }];
-  let last = rows[0], skipped = 0;
-  for (let i = 1; i < rows.length - 1; i++) {
-    const r = rows[i];
-    if (Math.abs(r.ww - last.ww) >= minMove || Math.abs(r.co - last.co) >= minMove) {
-      out.push({ ...r, skipped });
-      last = r; skipped = 0;
-    } else skipped++;
+// One row a week, anchored on the WEEKLY SPECIALS SCRAPE. Australian
+// supermarkets reprice on Wednesday, so that run is the only one whose numbers
+// are worth a row - everything between is the same shelf prices re-read.
+// "First run on or after Wednesday" rather than "Wednesday" so a run that slips
+// to Thursday still records that week instead of losing it; runs earlier in the
+// week (Sun-Tue) belong to the previous repricing and are skipped.
+function weeklyRows(rows) {
+  const byWeek = new Map();
+  for (const r of rows) {
+    const d = new Date(r.date);
+    if (isNaN(d)) continue;
+    const dow = d.getDay();                 // 0 Sun .. 3 Wed .. 6 Sat
+    if (dow < 3) continue;                  // before this week's reprice
+    const sun = new Date(d);
+    sun.setDate(d.getDate() - dow);         // the Sunday that opens the week
+    const p = n => String(n).padStart(2, '0');
+    const key = `${sun.getFullYear()}-${p(sun.getMonth() + 1)}-${p(sun.getDate())}`;
+    if (!byWeek.has(key)) byWeek.set(key, r);   // FIRST qualifying run wins
   }
-  out.push({ ...rows[rows.length - 1], skipped });
-  return out;
+  return [...byWeek.values()];
 }
 
 // Two lines on one dollar axis - the gap IS the space between them, which is
@@ -1118,9 +1094,7 @@ function paintStoreGap() {
   // across to the gap column.
   const tot = (v, win) => win ? `<strong>${money(v)}</strong>` : money(v);
   const rowHtml = r => `<tr>
-      <td>${fmtDay(localDay(r.date))}${dayCount.get(localDay(r.date)) > 1
-        ? ` <span class="sl-sum-zero">${new Date(r.date).toLocaleTimeString('en-AU', { hour: 'numeric', minute: '2-digit' })}</span>` : ''}${
-        r.skipped ? ` <span class="sl-sum-zero" title="${r.skipped} quiet run${r.skipped === 1 ? '' : 's'} folded in since the row below">+${r.skipped}</span>` : ''}</td>
+      <td>${fmtDay(localDay(r.date))}</td>
       <td>${r.n}</td>
       <td>${tot(r.ww, r.diff > 0.005)}</td>
       <td>${tot(r.co, r.diff < -0.005)}</td>
@@ -1131,19 +1105,8 @@ function paintStoreGap() {
       <td class="sg-flat">${r.same}</td>
     </tr>`;
 
-  const shown = significantRows(p.rows, GAP_MIN_MOVE);
-  const hidden = p.rows.length - shown.length;
-  // Two runs on one day can BOTH clear the threshold. They are different
-  // numbers, so both belong - but bare dates would read as a duplicated row,
-  // which is exactly the complaint that started this. Show the clock only on
-  // the days that actually repeat.
-  const dayCount = new Map();
-  shown.forEach(r => dayCount.set(localDay(r.date), (dayCount.get(localDay(r.date)) || 0) + 1));
+  const shown = weeklyRows(p.rows);
   tbl.innerHTML = `${gapChartHTML(p.rows)}
-    <p style="font-size:11.5px;color:var(--text-soft);margin:8px 0 6px">
-      A row appears when a store's total moved by ${fmt(GAP_MIN_MOVE)} or more.${
-        hidden ? ` ${hidden} run${hidden === 1 ? '' : 's'} changed less than that and ${hidden === 1 ? 'is' : 'are'} folded into the row above.` : ''}
-    </p>
     <table class="sg">
     <thead><tr>
       <th>Date</th><th title="Products in the fixed basket">Items</th>
@@ -1258,7 +1221,7 @@ function paintChangeSummary(q) {
     const multi = e.runs > 1
       ? ` title="${e.runs} scrapes that day, ${e.scraped} product-fetches in total - this column counts each product once"`
       : '';
-    return `<td${multi}>${e.maxScraped || '<span class="sl-sum-zero">-</span>'}${e.runs > 1 ? ` <span class="sl-sum-zero">×${e.runs}</span>` : ''}</td>` +
+    return `<td${multi}>${e.maxScraped || '<span class="sl-sum-zero">-</span>'}</td>` +
            `<td>${e.maxArchived || '<span class="sl-sum-zero">-</span>'}</td>` +
            `<td>${dur}</td>`;
   };

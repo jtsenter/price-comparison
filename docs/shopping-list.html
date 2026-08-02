@@ -1326,8 +1326,13 @@ async function boot() {
     const showSplitLine = plan.splits && splitSaving > basketSaving + 0.005;
     const splitSavingLine = showSplitLine
       ? svLine(splitDisc, 'Split saving',
-          'What buying each item at whichever store is cheapest saves you on top of shopping at one store only. The trip total itself is the Split shop total below. Use the Split shop toggle to plan it.',
-          svDisc(splitSaving))
+          'Buying each item at whichever store is cheapest for it costs this total - the bracket is the extra you save vs shopping at one store only. Use the Split shop toggle to plan it.',
+          // The trip total shows ONLY in one-store mode. Split mode renders a
+          // "🧾 Split shop total" row two lines down carrying the same figure,
+          // so printing it here too read as "$42.80 (−$2.30)" with the $42.80
+          // repeated underneath. One-store mode has no such row, so dropping it
+          // there would lose the number rather than de-duplicate it.
+          `${slSplit ? '' : `<span class="sv-total">${fmt(plan.total)}</span>`}${svDisc(splitSaving)}`)
       : '';
     const savingInfoHtml = basketSavingLine + splitSavingLine;
 
