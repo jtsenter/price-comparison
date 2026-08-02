@@ -319,27 +319,6 @@
     <div class="sl-gauges" id="slGauges"></div>
   </section>
 
-  <!-- The trend nobody could see before: match rate per store across every run. -->
-  <section class="sl-card" id="slTrendCard" style="display:none">
-    <div class="sl-card-head">
-      <h2>Match rate over time</h2>
-      <span class="sl-card-sub" id="slTrendSub"></span>
-    </div>
-    <div class="sl-chart-wrap">
-      <div class="sl-chart-tip" id="slTip"></div>
-      <div id="slChart"></div>
-    </div>
-    <div class="sl-chart-legend">
-      <span class="sl-leg"><i style="background:var(--ww)"></i> Woolworths</span>
-      <span class="sl-leg"><i style="background:var(--coles)"></i> Coles</span>
-      <span class="sl-leg" style="color:var(--text-soft)">Hover a point for that run</span>
-    </div>
-  </section>
-
-  <section class="sl-card">
-    <div class="sl-stats" id="slStats"></div>
-  </section>
-
   <div class="sl-tabs" role="tablist">
     <button class="sl-tab active" data-tab="changes" role="tab">Price changes <span class="cnt" id="slCntChg"></span></button>
     <button class="sl-tab" data-tab="gap" role="tab">Store gap <span class="cnt" id="slCntGap"></span></button>
@@ -368,6 +347,32 @@
   </div>
 
   <div data-panel="runs" hidden>
+    <!-- Match rate per store across every run, and the run-cost stats. Both
+         live HERE rather than above the tabs: they answer "how is scraping
+         going", which is this tab's whole subject, and parking them at the top
+         meant they hung over Price changes and Store gap too - neither of which
+         has anything to do with match rates. It also gives this tab the same
+         shape as Price changes: a chart, then the detail underneath. -->
+    <section class="sl-card" id="slTrendCard" style="display:none">
+      <div class="sl-card-head">
+        <h2>Match rate over time</h2>
+        <span class="sl-card-sub" id="slTrendSub"></span>
+      </div>
+      <div class="sl-chart-wrap">
+        <div class="sl-chart-tip" id="slTip"></div>
+        <div id="slChart"></div>
+      </div>
+      <div class="sl-chart-legend">
+        <span class="sl-leg"><i style="background:var(--ww)"></i> Woolworths</span>
+        <span class="sl-leg"><i style="background:var(--coles)"></i> Coles</span>
+        <span class="sl-leg" style="color:var(--text-soft)">Hover a point for that run</span>
+      </div>
+    </section>
+
+    <section class="sl-card">
+      <div class="sl-stats" id="slStats"></div>
+    </section>
+
     <div id="slRunsHead" class="sl-runs-head"></div>
     <div id="slRuns" class="sl-runs"></div>
   </div>
