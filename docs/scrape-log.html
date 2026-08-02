@@ -1016,7 +1016,14 @@ function weeklyRows(rows) {
     const key = `${sun.getFullYear()}-${p(sun.getMonth() + 1)}-${p(sun.getDate())}`;
     if (!byWeek.has(key)) byWeek.set(key, r);   // FIRST qualifying run wins
   }
-  return [...byWeek.values()];
+  const out = [...byWeek.values()];
+  // Plus the oldest run in the archive, whatever weekday it fell on. It is the
+  // baseline every later row is measured against, and the Wednesday rule alone
+  // would drop it whenever the record happens to start Sun-Tue - as it does
+  // here, on Tuesday 21 July. Same object, so a run that IS already a weekly
+  // anchor is not duplicated.
+  if (rows.length && !out.includes(rows[0])) out.unshift(rows[0]);
+  return out;
 }
 
 // Two lines on one dollar axis - the gap IS the space between them, which is
