@@ -455,10 +455,26 @@
          via grid `order`). Cards stack their content vertically on a phone. */
       .store-cards-grid { grid-template-columns: 1fr 1fr; }
       .sl-savings-panel { order: 3; grid-column: 1 / -1; }
-      .store-card-sl { display: block; padding: 12px 14px; }
-      .sc-icon { display: none; }
-      .sc-name-row { margin-bottom: 6px; }
-      .sc-badge-row { margin-top: 6px; }
+      /* The store badge is back on phones. It was hidden because the desktop
+         card puts icon / name / price on ONE row, which cannot fit in the ~168px
+         each card gets when the two sit side by side. Re-laid out instead of
+         re-hidden: badge and store name share the top row, the price takes the
+         full width beneath it. The badge is the fastest way to tell the two
+         cards apart at a glance - it carries the store's colour, so you read
+         green-or-red before you read any word. Same card in both one-store and
+         split mode, so both get it. */
+      .store-card-sl {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-areas: "icon name" "price price" "foreign foreign" "badge badge";
+        column-gap: 8px; row-gap: 3px; align-content: start;
+        padding: 12px 14px;
+      }
+      .sc-icon { display: block; align-self: center; }
+      .sc-icon-chip { width: 26px; height: 26px; font-size: 13px; border-radius: 7px; }
+      .sc-name-row { align-self: center; margin-bottom: 2px; }
+      .sc-price { justify-self: start; }
+      .sc-badge-row, .sc-foreign-row { justify-self: start; margin-top: 4px; }
       .bar-ribbon { gap: 8px; padding: 10px 14px; }
       .sc-price { font-size: 24px; margin-bottom: 2px; }
       main { padding-left: 12px; padding-right: 12px; }
