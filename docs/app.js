@@ -1129,6 +1129,7 @@ function checkPendingItemRefresh(data) {
     if (scrapedTs > m[name]) {
       delete m[name]; changed = true;
       showToast(`✓ "${stripWW(name)}" re-scraped - price updated.`);
+      notifyIfFiltered(name);
     } else if (Date.now() - m[name] > 15 * 60 * 1000) {
       delete m[name]; changed = true;
     } else if (!_pendingRefreshItems.has(name)) {
@@ -1140,6 +1141,57 @@ function checkPendingItemRefresh(data) {
     _pendingRefreshNotified = true;
     showToast(`⏳ Re-scrape still running: ${stillPending.map(stripWW).join(', ')}`, 5000);
   }
+}
+
+// A newly added item has no frequency yet, so the default "Weekly" view filters
+// it straight out: the scrape succeeds, nothing appears on screen, and it reads
+// as "adding products doesn't work". (Real case 2026-08-03 - a Coles-pinned
+// Biscoff jar scraped fine at $12.00 and was invisible until the dropdown was
+// switched to All items.) Say so, and offer one click to reveal it.
+//
+// Deferred a tick because both callers fire from inside renderPage, BEFORE the
+// rows exist - checking the DOM synchronously would always report "hidden".
+// ponytail: DOM presence is the visibility test rather than re-deriving the
+// filter predicate - it catches the category and search filters for free, and
+// can't drift from whatever renderPage actually did.
+function notifyIfFiltered(itemName) {
+  setTimeout(() => {
+    const own = `[data-item="${CSS.escape(itemName)}"]`;
+    if (document.querySelector(own)) return;   // visible in its own right
+
+    // Instant, not smooth: the row can be 8000px down an unfiltered list, and a
+    // smooth scroll that long never arrived (measured).
+    const scrollTo = (sel) => {
+      if (sel) document.querySelector(sel)?.closest('tr, .item-card')?.scrollIntoView({ block: 'center' });
+    };
+
+    // A per-kg / sticker group member has no row of its own BY DESIGN - the
+    // group row stands in for it. Saying "the filter is hiding it" would be
+    // false, and switching the filter wouldn't produce a row either. This is
+    // the case that made the Woolworths 720g Biscoff jar look like it never
+    // saved: it was folded into the "Lotus Biscoff" row the whole time.
+    const grp = (typeof loadVariantGroups === 'function' ? loadVariantGroups() : [])
+      .find(g => (g.items || []).includes(itemName));
+    const grpSel = grp ? `[data-item="__group_${grp.key}"]` : null;
+
+    if (grpSel && document.querySelector(grpSel)) {
+      showUndoToast(
+        `"${stripWW(itemName)}" was updated. It has no row of its own - it counts inside the ${grp.label} category.`,
+        () => scrollTo(grpSel), 9000, 'Show that');
+      return;
+    }
+
+    showUndoToast(
+      `"${stripWW(itemName)}" was updated, but the ${_activePriority} filter is hiding it.`,
+      () => {
+        // The pill is the canonical control - its handler also syncs the mobile
+        // freqSelect dropdown, so going through it keeps both in step. Its
+        // re-render is synchronous, so the row is queryable on the next line.
+        document.querySelector('.priority-pill[data-priority="all"]')?.click();
+        scrollTo(document.querySelector(own) ? own : grpSel);
+      },
+      9000, 'Show it');
+  }, 0);
 }
 
 // Continuity for FULL scrapes across refresh/navigation (the strip's "waiting"
@@ -1175,7 +1227,7 @@ async function pollItemRefresh(s, btn, itemName) {
       localStorage.setItem('pw_pending_refresh', JSON.stringify(m));
     } catch {}
     if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
-    if (fresh) { showToast(`✓ "${stripWW(itemName)}" updated`); renderPage(fresh); }
+    if (fresh) { showToast(`✓ "${stripWW(itemName)}" updated`); renderPage(fresh); notifyIfFiltered(itemName); }
     else { showToast(`⚠ "${stripWW(itemName)}" scrape didn't complete - check GitHub Actions`, 5000); if (_lastData) renderPage(_lastData); }
   };
 
@@ -1466,7 +1518,10 @@ function showToast(msg, durationMs = 3000) {
 
 // Toast with a one-click Undo button. `onUndo` is invoked if the user clicks
 // Undo before the toast auto-dismisses. Single-level (latest action only).
-function showUndoToast(msg, onUndo, durationMs = 8000) {
+// `label` exists because this is really "toast with one action button" - the
+// filtered-item notice reuses it with "Show it". Default keeps every existing
+// caller unchanged.
+function showUndoToast(msg, onUndo, durationMs = 8000, label = 'Undo') {
   const toast = $('toastNotif');
   if (!toast) { if (onUndo) {/* no UI: leave change applied */} return; }
   clearTimeout(toast._timer);
@@ -1475,7 +1530,7 @@ function showUndoToast(msg, onUndo, durationMs = 8000) {
   span.textContent = msg;
   const btn = document.createElement('button');
   btn.className = 'toast-undo-btn';
-  btn.textContent = 'Undo';
+  btn.textContent = label;
   const hide = () => {
     toast.style.opacity = '0';
     setTimeout(() => { toast.style.display = 'none'; toast.textContent = ''; }, 300);
