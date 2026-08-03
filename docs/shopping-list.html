@@ -584,7 +584,7 @@
 </head>
 <body>
 <header data-page="shopping-list"></header>
-<script src="header.js?v=16"></script>
+<script src="header.js?v=17"></script>
 
 <main id="main">
   <div class="empty">Loading…</div>
@@ -850,6 +850,7 @@ async function boot() {
       items: displayItems.map(i => i.list_item),
       quantities: basketQty,
     }));
+    window.pwSyncBasketBadge?.();   // header.js - basket count on the 🛒 nav icon
   }
 
   function sortItems(items, store, key, dir) {
@@ -1475,6 +1476,7 @@ async function boot() {
     document.getElementById('removeAllBtn')?.addEventListener('click', () => {
       if (confirm('Remove all items from your basket?')) {
         localStorage.removeItem('pw_sl_handoff');
+        window.pwSyncBasketBadge?.();   // header.js - clears the 🛒 count
         displayItems = [];
         storeOverride.clear();
         renderContent(); // normal screen, just empty

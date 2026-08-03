@@ -75,6 +75,11 @@
        visible text, alone among the icon-only cluster). */
     '.validate-btn{position:relative}' +
     '.validate-badge{position:absolute;top:-4px;right:-4px;display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#c95000;color:#fff;font-size:10px;font-weight:700;line-height:1;border:2px solid var(--card,#fff)}' +
+    // Basket count - same corner-badge geometry as .validate-badge, in the
+    // basket icon's own green so it reads as "how many" and not "problem".
+    // Defined only here, not in style.css: shopping-list.html doesn't load
+    // style.css, and this file runs on every page.
+    '.basket-badge{position:absolute;top:-4px;right:-4px;display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--ww,#00843D);color:#fff;font-size:10px;font-weight:700;line-height:1;border:2px solid var(--card,#fff)}' +
     '.pw-viewer-badge{display:inline-flex;align-items:center;height:20px;padding:0 8px;margin-left:8px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--bg,#F0F4F8);color:var(--text-soft,#94A3B8);border:1px solid var(--border,#E2E8F0);cursor:default;flex-shrink:0}' +
     /* Any control that writes to the repo can carry data-owner-only and vanish
        for visitors, without each page needing its own viewer-mode wiring. */
@@ -224,6 +229,38 @@
     '</div>' + STRIP;
 
   /* ══ Behaviour owned by the header (runs on every page) ══════════════════ */
+
+  /* Basket count badge on the 🛒 nav icon. Counts DISTINCT items, not total
+     units - same number the floating "🛒 (n)" cart badge shows on index and
+     hot-deals, so the two can never disagree.
+     Reads localStorage rather than taking a count argument, so it stays right
+     no matter which page mutated the basket; the pages call it from their
+     basket WRITERS (app.js writeBasket, hot-deals hdBasketSave,
+     shopping-list persistBasket), never from a renderer that might run first. */
+  window.pwSyncBasketBadge = function () {
+    var link = document.getElementById('basketNavLink');
+    if (!link) return;
+    var n = 0;
+    try {
+      n = (JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}').items || []).length;
+    } catch (e) { n = 0; }   // corrupt store - show no badge rather than NaN
+    var badge = link.querySelector('.basket-badge');
+    if (!n) { if (badge) badge.remove(); link.title = 'Basket'; return; }
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'basket-badge';
+      link.appendChild(badge);
+    }
+    // 3 digits would overflow the 38px button and shove the icon off-centre.
+    badge.textContent = n > 99 ? '99+' : String(n);
+    link.title = 'Basket (' + n + (n === 1 ? ' item)' : ' items)');
+  };
+  window.pwSyncBasketBadge();
+
+  /* Basket changed in another tab - keep the count honest without a reload. */
+  window.addEventListener('storage', function (e) {
+    if (e.key === 'pw_sl_handoff') window.pwSyncBasketBadge();
+  });
 
   /* Options dropdown toggle + outside-click close. Also closes the other
      header dropdowns (bell, columns) so only one is open at a time. */

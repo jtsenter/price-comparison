@@ -619,6 +619,7 @@ function writeBasket(qtyMap) {
   const quantities = {};
   items.forEach(n => { const q = Number((qtyMap || {})[n]); quantities[n] = Number.isFinite(q) && q >= 1 ? Math.round(q) : 1; });
   localStorage.setItem('pw_sl_handoff', JSON.stringify({ items, quantities }));
+  window.pwSyncBasketBadge?.();   // header.js - basket count on the 🛒 nav icon
 }
 // Simple add/remove (single unit, from card taps / panel ＋): keep existing
 // quantities, default new to 1.

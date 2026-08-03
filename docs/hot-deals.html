@@ -357,7 +357,7 @@
 <body>
 
 <header data-page="hot-deals"></header>
-<script src="header.js?v=16"></script>
+<script src="header.js?v=17"></script>
 
 <div class="deals-hero">
   <div class="deals-hero-title">🔥 Hot Deals</div>
@@ -1127,7 +1127,10 @@ function hdCheckedNames() { return [..._hdChecked]; }
 function hdBasket() {
   try { const s = JSON.parse(localStorage.getItem('pw_sl_handoff') || '{}'); return { items: s.items || [], quantities: s.quantities || {} }; } catch { return { items: [], quantities: {} }; }
 }
-function hdBasketSave(b) { localStorage.setItem('pw_sl_handoff', JSON.stringify(b)); }
+function hdBasketSave(b) {
+  localStorage.setItem('pw_sl_handoff', JSON.stringify(b));
+  window.pwSyncBasketBadge?.();   // header.js - basket count on the 🛒 nav icon
+}
 
 // Cart badge (🛒 (n), bottom right) - same behaviour as the prices page: shows
 // whenever the basket has items, count tracks every add/remove.
