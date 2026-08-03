@@ -853,6 +853,49 @@ function loadVariantGroups() {
   });
 }
 
+// A category with no category of its own is a meat cut - every seed group that
+// isn't Fruit & Veg / Pantry / Dairy / Sweets is. Named once so the fallback
+// can't drift between buildVariantGroups() and the member resolution below.
+const GROUP_DEFAULT_CATEGORY = 'Meat & Seafood';
+
+// The category a product belongs to, or null if it is in none.
+//
+// Membership is the ONE fact that settles a member's frequency, category and
+// watchlist state: adding a product to a category means it belongs to that
+// category in every sense, so the CATEGORY's settings are the answer and the
+// member's own entries are ignored. Before this the two silently disagreed -
+// "Lotus Biscoff Spread Smooth 720g" resolved to Pantry/rare while the "Lotus
+// Biscoff" category it sits in was Sweets/weekly.
+//
+// ponytail: the member->category index is rebuilt only when the override string
+// changes, because every render resolves this once per item (250+ calls) and
+// loadVariantGroups() re-derives all ~20 categories on each call. CEILING: a
+// full rebuild scans every seed group - fine at 20 categories, revisit if the
+// seed list ever runs to hundreds.
+let _vgIndex = null, _vgIndexKey = null;
+function variantGroupOf(itemName) {
+  if (!itemName || String(itemName).startsWith('__group_')) return null;
+  let raw = '{}';
+  try { raw = localStorage.getItem('pw_perkg_cats_v1') || '{}'; } catch {}
+  if (_vgIndexKey !== raw) {
+    _vgIndex = new Map();
+    for (const g of loadVariantGroups()) {
+      for (const n of (g.items || [])) _vgIndex.set(n, g);
+    }
+    _vgIndexKey = raw;
+  }
+  return _vgIndex.get(itemName) || null;
+}
+
+// The key a product's settings actually live under: its category's synthetic
+// key when it belongs to one, otherwise its own name. Every priority and
+// watchlist lookup goes through this, so a member and its category can never
+// hold two different answers.
+function settingsKeyFor(itemName) {
+  const g = variantGroupOf(itemName);
+  return g ? `__group_${g.key}` : itemName;
+}
+
 // Resolve a category's per-store member lists (ordered). If the override has an
 // explicit ww_items/coles_items list, use it verbatim (explicit membership - keep
 // even pending items). Otherwise derive: an item belongs to a store's list if it
@@ -945,7 +988,7 @@ function buildVariantGroups(byName) {
       woolworths: wwBest ? wwBest.result : null,
       coles: coBest ? coBest.result : null,
       cheaper_store: cheaper,
-      category: g.category || 'Meat & Seafood',
+      category: g.category || GROUP_DEFAULT_CATEGORY,
       trip_count: null,
       price_history: [],
     });
@@ -1134,7 +1177,7 @@ function buildDealGroups(items) {
       _groupLabel: g.label,
       _sticker: !!g.sticker,
       _memberNames: members.map(m => m.list_item), // for the basket handoff (re-collapsed there)
-      category: g.category || 'Meat & Seafood',
+      category: g.category || GROUP_DEFAULT_CATEGORY,
       trip_count: null,
       woolworths: wwBest ? { price: wwBest.kg, url: wwBest.m.woolworths.url, image_url: wwBest.m.woolworths.image_url, name: wwBest.m.woolworths.name } : null,
       coles:      coBest ? { price: coBest.kg, url: coBest.m.coles.url,      image_url: coBest.m.coles.image_url,      name: coBest.m.coles.name } : null,

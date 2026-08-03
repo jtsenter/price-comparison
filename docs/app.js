@@ -261,9 +261,19 @@ async function initWatchlist() {
     }
   } catch {}
 }
+// Watching a category member watches the CATEGORY - one entry, not one per
+// variant. Both read and write go through settingsKeyFor() so the eye can never
+// show "off" on a member of a watched category, or leave a stale per-member
+// entry behind when membership changes.
+// Named ...Item, not isWatched: two group renderers already keep a local
+// `const isWatched`, and shadowing this would be a silent trap.
+function isWatchedItem(itemName) {
+  return _watchlist.has(settingsKeyFor(itemName));   // utils.js
+}
 function toggleWatchlist(itemName) {
-  if (_watchlist.has(itemName)) _watchlist.delete(itemName);
-  else _watchlist.add(itemName);
+  const key = settingsKeyFor(itemName);
+  if (_watchlist.has(key)) _watchlist.delete(key);
+  else _watchlist.add(key);
   saveWatchlistLocal(_watchlist);
   persistWatchlistToRepo([..._watchlist]); // fire-and-forget
   if (_lastData) renderPage(_lastData);
@@ -302,6 +312,12 @@ async function persistUserSettingsToRepo() {
     units: dropRemovedKeys(loadUnitOverrides()),
     perkg: [..._perkgSet].filter(n => !REMOVED_ITEMS.has(n)),
     exclusions: dropRemovedKeys(loadExclusions()),
+    // Category MEMBERSHIP + renames (pw_perkg_cats_v1, written by Edit category).
+    // This was the one settings map that never left the device: adding a product
+    // to a category on the phone left the computer showing the old membership,
+    // which is a large part of why "adding a product" looked like it never
+    // worked. Keyed by category, not by item, so it needs no REMOVED_ITEMS pass.
+    perkgCats: loadVariantGroupOverrides(),
   };
   try {
     await githubPutJson(s, 'docs/data/user_settings.json', payload, 'chore: sync user settings (priorities + quantities)');
@@ -333,6 +349,14 @@ async function initUserSettings() {
         if (Array.isArray(remote.perkg)) {
           _perkgSet = new Set([..._perkgSet, ...remote.perkg].filter(n => !REMOVED_ITEMS.has(n)));
           savePerkgLocal(_perkgSet);
+        }
+        // Category membership/renames. Merged per CATEGORY (same precedence as
+        // priorities) rather than per member: the stored shape is a whole
+        // {add, remove, label} patch per category, so a half-merged one would
+        // resurrect a member the other device deliberately pulled out.
+        if (remote.perkgCats && typeof remote.perkgCats === 'object') {
+          localStorage.setItem('pw_perkg_cats_v1',
+            JSON.stringify(merge(loadVariantGroupOverrides(), remote.perkgCats)));
         }
         // Price-history exclusions (incl. per-kg group-history point removals):
         // union per item so a device never silently drops the other's exclusions.
@@ -517,6 +541,11 @@ function getPriority(itemName) {
   if (typeof itemName === 'string' && itemName.startsWith('__group_')) {
     return loadPriorities()[itemName] || 'weekly';
   }
+  // A member belongs to its category in every sense, frequency included, so the
+  // CATEGORY's answer wins outright - not "only when the member has none". Its
+  // own entry (and the trip-count guess below) is deliberately skipped.
+  const gKey = settingsKeyFor(itemName);          // utils.js
+  if (gKey !== itemName) return loadPriorities()[gKey] || 'weekly';
   const p = loadPriorities()[itemName];
   if (p) return p;  // explicit user override always wins
   const d = getAnalysisData(itemName);
@@ -559,6 +588,11 @@ function getCategory(item) {
   // Precedence: user override → per-item default → scraped category. Normalising
   // LAST is the whole trick: an old override or default naming a merged/renamed
   // category still resolves to the live one.
+  // A member takes its category's category - same reason as getPriority(). The
+  // Biscoff 720g jar was resolving to Pantry while the Lotus Biscoff category it
+  // sits in is Sweets.
+  const g = variantGroupOf(item.list_item);       // utils.js
+  if (g) return normalizeCategory(g.category || GROUP_DEFAULT_CATEGORY);
   const raw = loadCategoryOverrides()[item.list_item]
     || ITEM_CATEGORY_DEFAULTS[item.list_item]
     || item.category;
@@ -580,14 +614,17 @@ let _perkgFilter = 'all';  // per-kg group visibility: 'all' | 'only' | 'hidden'
 // overrides (pw_perkg_cats_v1). Returns a fresh array each call.
 // migratePerKgOverride / computePerKgItems / loadVariantGroups / resolveStoreLists
 // live in utils.js - the basket builds the same category rows from them.
+function loadVariantGroupOverrides() {
+  try { return JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch { return {}; }
+}
 function saveVariantGroupOverride(key, patch) {
-  let ov = {};
-  try { ov = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}
+  let ov = loadVariantGroupOverrides();
   const def = DEFAULT_VARIANT_GROUPS.find(d => d.key === key);
   const cur = migratePerKgOverride(ov[key], def ? def.items : []); // upgrade legacy in place
   ov[key] = { ...cur, ...patch, v: 2 };
   delete ov[key].items; delete ov[key].ww_items; delete ov[key].coles_items; // strip legacy snapshot keys
   localStorage.setItem('pw_perkg_cats_v1', JSON.stringify(ov));
+  scheduleUserSettingsSync();   // publish membership so the other device sees it
 }
 // loadPerKgExclusions() lives in utils.js (the basket honours the same exclusions).
 function savePerKgExclusions(set) {
@@ -2288,7 +2325,7 @@ function computeBannerStats(items) {
   const baseFiltered = pool.filter(item => {
     if (perkgMembers.has(item.list_item)) return false;
     if (_activePriority === 'watchlist') {
-      if (!_watchlist.has(item.list_item)) return false;
+      if (!isWatchedItem(item.list_item)) return false;
     } else {
       const p = getPriority(item.list_item);
       if (p === 'archive' || item.archived) {
@@ -3044,7 +3081,7 @@ function applyFilters(items, skipCol = null) {
     if (_perkgFilter === 'only') return !!item._isGroup;
     if (_perkgFilter === 'hidden' && item._isGroup) return false;
     // Watchlist filter: show only watchlisted items; bypass archive/priority checks
-    if (_activePriority === 'watchlist') return _watchlist.has(item.list_item);
+    if (_activePriority === 'watchlist') return isWatchedItem(item.list_item);
     const p = getPriority(item.list_item);
     // Archived items (by priority or item.archived flag): only visible in archive view.
     // In archive view, show ONLY those items and nothing else.
@@ -3415,7 +3452,7 @@ function stepUnits(itemName, isInc) {
 
 // Watchlist eye, pinned to the card's top-right corner (mirrors the mobile card).
 function cardWatchHTML(itemName) {
-  const on = _watchlist.has(itemName);
+  const on = isWatchedItem(itemName);
   return `<button class="item-watch-btn card-watch${on ? ' active' : ''}" data-item="${escAttr(itemName)}" title="${on ? 'Remove from watchlist' : 'Add to watchlist'}" aria-label="${on ? 'Remove from watchlist' : 'Add to watchlist'}">👁</button>`;
 }
 
@@ -4479,7 +4516,7 @@ function renderMobileCards(items, data) {
     const displayName = ov.displayName || shortName(item.list_item);
     const priority = getPriority(item.list_item);
     const hotDeal  = isHotDeal(item, exclusions);
-    const isWatchedMC = _watchlist.has(item.list_item);
+    const isWatchedMC = isWatchedItem(item.list_item);
 
     const coImgSrc = resolveImgUrl(co?.image_url) || '';
     const wwImgSrc = resolveImgUrl(ww?.image_url) || '';
@@ -4980,7 +5017,7 @@ function _renderPageInner(data) {
   const categoryTabItems = _activePriority === 'archive'
     ? allDisplayItems.filter(i => i.archived || priorities[i.list_item] === 'archive')
     : _activePriority === 'watchlist'
-      ? allDisplayItems.filter(i => _watchlist.has(i.list_item))
+      ? allDisplayItems.filter(i => isWatchedItem(i.list_item))
       : allDisplayItems.filter(i => !i.archived && priorities[i.list_item] !== 'archive');
   buildCategoryTabs(categoryTabItems);
 
@@ -5164,7 +5201,7 @@ function _renderPageInner(data) {
 
     const tripsHtml = item.trip_count != null ? `<span class="trips-cell">${item.trip_count}</span>` : '';
 
-    const isWatched = _watchlist.has(item.list_item);
+    const isWatched = isWatchedItem(item.list_item);
     const watchBtn  = `<button class="item-watch-btn${isWatched ? ' active' : ''}" data-item="${safeKey}" title="${isWatched ? 'Remove from watchlist' : 'Add to watchlist'}">👁</button>`;
     const refreshBtn = `<button class="item-refresh-btn" data-item="${safeKey}" title="Refresh prices for this item">↻</button>`;
     const unarchiveBtn = _activePriority === 'archive'

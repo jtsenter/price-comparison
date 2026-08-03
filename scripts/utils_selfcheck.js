@@ -49,6 +49,13 @@ global.localStorage = {
   getItem: k => (k in _lsStore ? _lsStore[k] : null),
   setItem: (k, v) => { _lsStore[k] = String(v); },
 };
+// variantGroupOf() caches its member->category index in two module-level lets.
+// extract() pulls functions only, so declare them here - as globals, since a
+// `let` inside the direct eval below would not be visible to the extracted
+// function bodies.
+global._vgIndex = null;
+global._vgIndexKey = null;
+global.GROUP_DEFAULT_CATEGORY = 'Meat & Seafood';
 global.DEFAULT_VARIANT_GROUPS = [
   { key: 'basa_fillets', label: 'Basa Fillets', items: ['Woolworths Frozen Basa Fillets 1kg', 'Coles Frozen Basa Fillet'] },
   { key: 'lamb_mince',   label: 'Lamb Mince',   items: ['Some Lamb Mince 500g'] },
@@ -73,6 +80,11 @@ eval([
   extract('getDealQuality'),
   extract('calcTrendPosition'),
   extract('variantGroupItemNames'),
+  extract('migratePerKgOverride'),
+  extract('computePerKgItems'),
+  extract('loadVariantGroups'),
+  extract('variantGroupOf'),   // member -> its category
+  extract('settingsKeyFor'),   // the key a member's settings actually live under
   extract('buildDealGroups'),
   extract('perKgEquivBundle'),
   extract('pendingValidationCount'),
@@ -184,6 +196,42 @@ check('median empty -> null', _median([]), null);
   check('legacy v1 items = pure adds', variantGroupItemNames(g, { k: { items: ['A', 'B', 'C', 'X'] } }), ['A', 'B', 'C', 'X']);
   check('v2 remove drops a seed member', variantGroupItemNames(g, { k: { v: 2, remove: ['B'] } }), ['A', 'C']);
   check('v2 add + remove together', variantGroupItemNames(g, { k: { v: 2, add: ['X'], remove: ['A'] } }), ['B', 'C', 'X']);
+}
+
+// ── variantGroupOf / settingsKeyFor ─────────────────────────────────────────
+// A product added to a category belongs to it in every sense, so its frequency,
+// category and watchlist state resolve against the CATEGORY key, not its own
+// name. These two functions are what every such lookup goes through, and the
+// index they cache has to notice a membership change - that cache is the part
+// most likely to break silently.
+{
+  const MEMBER = 'Woolworths Frozen Basa Fillets 1kg';   // seed member of basa_fillets
+  const LOOSE  = 'Some Unrelated Product 500g';
+
+  _lsStore = {};   // no membership overrides
+  check('seed member resolves to its category', variantGroupOf(MEMBER).key, 'basa_fillets');
+  check('non-member resolves to null',          variantGroupOf(LOOSE), null);
+  check('member settings key = category key',   settingsKeyFor(MEMBER), '__group_basa_fillets');
+  check('loose item keeps its own key',         settingsKeyFor(LOOSE), LOOSE);
+  // A category key passed back in must not be re-resolved into another category.
+  check('category key is not a member',    variantGroupOf('__group_basa_fillets'), null);
+  check('category key maps to itself',     settingsKeyFor('__group_basa_fillets'), '__group_basa_fillets');
+  check('empty name is safe',              variantGroupOf(''), null);
+
+  // Adding a product to a category through Edit category must take effect at
+  // once - the cached index is keyed on the override string for exactly this.
+  _lsStore['pw_perkg_cats_v1'] = JSON.stringify({ basa_fillets: { v: 2, add: [LOOSE] } });
+  check('added member resolves immediately', variantGroupOf(LOOSE).key, 'basa_fillets');
+  check('added member inherits the key',     settingsKeyFor(LOOSE), '__group_basa_fillets');
+
+  // ...and removing it must too, rather than serving a stale index.
+  _lsStore['pw_perkg_cats_v1'] = JSON.stringify({ basa_fillets: { v: 2, remove: [MEMBER] } });
+  check('removed member drops out at once',  variantGroupOf(MEMBER), null);
+  check('removed member gets its own key',   settingsKeyFor(MEMBER), MEMBER);
+  check('the add is gone with its override', variantGroupOf(LOOSE), null);
+
+  _lsStore = {};
+  check('clearing overrides restores seed',  variantGroupOf(MEMBER).key, 'basa_fillets');
 }
 
 // ── buildDealGroups (cheapest $/kg per store, other groups skipped) ──────────
