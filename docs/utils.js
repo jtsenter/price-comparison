@@ -773,6 +773,16 @@ const DEFAULT_VARIANT_GROUPS = [
     'Macro Organic Pasta Sauce Chunky Bolognese',
     'Dolmio Extra Bolognese Tomato Pasta Sauce',
   ]},
+  // Nappies are not weighed, so there is no $/kg to compare - they ride here as a
+  // STICKER group purely so they sit in the same category system and the same
+  // filter as everything else. KNOWN LIMIT: sticker means the panel ranks on PACK
+  // price, and these packs are 30 vs 40, so the ranking is not per-nappy yet. The
+  // honest metric is price/count, which needs the pack count threaded into
+  // groupMetric() - do that rather than pretending the pack prices compare.
+  { key: 'nappies_size6', label: 'Nappies size 6', category: 'Baby & Care', sticker: true, items: [
+    "Little One's Ultra Dry Nappies Size 6 40pk",
+    'Millie Moon Luxury Nappies Size 6 30pk',
+  ]},
 ];
 
 // Groups compared by PACK PRICE, not $/kg (the group's headline shows "$X", no
@@ -887,6 +897,25 @@ function loadVariantGroups() {
       coles_items: Array.isArray(o.coles_order) ? o.coles_order : null,
     };
   });
+}
+
+// Every category member ends with its pack size in brackets - "Macro Black Chia
+// Seeds (1kg)" - because in a $/kg category the size is the thing that makes two
+// rows different, and a bare trailing "1kg" reads as part of the product name.
+// Takes the size from the display name if it is there, otherwise from the
+// list_item key (single-store pins carry it there), and always re-emits it in
+// ONE place and ONE format. Purely cosmetic: no key is ever renamed.
+const SIZE_TOKEN = /(\d+(?:\.\d+)?)\s*(kg|g|ml|l|pk|pack)\b/i;
+function nameWithSize(displayName, key) {
+  const name = String(displayName || '').trim();
+  if (!name) return name;
+  if (/\([^)]*\d[^)]*\)\s*$/.test(name)) return name;   // already bracketed
+  const m = name.match(SIZE_TOKEN) || String(key || '').match(SIZE_TOKEN);
+  if (!m) return name;
+  const size = `${m[1]}${m[2].toLowerCase()}`;
+  // Drop a bare trailing size off the name so it is not printed twice.
+  const stripped = name.replace(new RegExp(`\\s*${m[1]}\\s*${m[2]}\\b\\s*$`, 'i'), '').trim();
+  return `${stripped || name} (${size})`;
 }
 
 // ── Third stores (not Woolworths, not Coles) ────────────────────────────────

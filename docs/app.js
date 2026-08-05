@@ -654,22 +654,34 @@ function thirdPanelRowHTML(item, ww, co, colspan) {
   const bestPrice = prices.length ? Math.min(...prices) : null;
   const isBest = (p) => p != null && bestPrice != null && p <= bestPrice + 0.0001;
 
-  const pv = (chipCls, letter, name, price, extraTag) => {
+  // Same shape as a per-kg category member row: thumbnail, name that links to the
+  // product page, then the price. A third store has no image of its own, so it
+  // borrows the supermarket photo of the SAME product rather than showing a hole.
+  const wwImg = resolveImgUrl(ww?.image_url) || '';
+  const coImg = resolveImgUrl(co?.image_url) || '';
+  const pv = (chipCls, letter, name, price, url, img, extraTag) => {
     if (price == null) {
-      return `<div class="vg-pv empty"><span class="vg-pv-noimg"></span>` +
+      return `<div class="vg-pv empty"><span class="vg-pv-img vg-pv-noimg"></span>` +
              `<span class="vg-pv-name">Not stocked</span></div>`;
     }
+    const src = img || wwImg || coImg;
+    const imgHtml = src
+      ? `<img class="vg-pv-img" src="${escAttr(src)}" alt="" loading="lazy" />`
+      : '<span class="vg-pv-img vg-pv-noimg"></span>';
+    const chip = letter ? `<span class="store-chip ${chipCls} sm">${letter}</span> ` : '';
     const unit = extraTag ? `<span class="third-tag">${extraTag}</span>` : '';
-    return `<div class="vg-pv${isBest(price) ? ' win' : ''}">` +
-           `<span class="vg-pv-noimg"></span>` +
-           `<span class="vg-pv-name">${letter ? `<span class="store-chip ${chipCls} sm">${letter}</span> ` : ''}${esc(name || '-')}${unit}</span>` +
+    const label = `${chip}${esc(name || '-')}${unit}`;
+    const nameHtml = url
+      ? `<a class="vg-pv-name" href="${escAttr(url)}" target="_blank" rel="noopener">${label}</a>`
+      : `<span class="vg-pv-name">${label}</span>`;
+    return `<div class="vg-pv${isBest(price) ? ' win' : ''}">${imgHtml}${nameHtml}` +
            `<span class="vg-pv-kg">${fmt(price)}</span></div>`;
   };
 
   const others = ranked.map(e => {
     const meta = THIRD_STORES[e.store] || { letter: '?', label: e.store };
     const u = thirdUnitPrice(e);
-    return pv('third', meta.letter, e.name,  e.price,
+    return pv('third', meta.letter, e.name, e.price, e.url, resolveImgUrl(e.image),
               u ? `${fmt(u.value)}${u.label === 'each' ? ' each' : '/' + u.label}` : '');
   }).join('');
 
@@ -682,8 +694,8 @@ function thirdPanelRowHTML(item, ww, co, colspan) {
   return `<tr class="vg-panel-row third-panel-row"><td colspan="${colspan}"><div class="vg-panel">
       <div class="vg-panel-head"><span class="vg-panel-title">Also sold at</span>${verdict}</div>
       <div class="vg-panel-cols third-cols">
-        <div class="vg-panel-store">${pv('ww', 'W', ww?.name, ww?.price, '')}</div>
-        <div class="vg-panel-store">${pv('coles', 'C', co?.name, co?.price, '')}</div>
+        <div class="vg-panel-store">${pv('ww', 'W', ww?.name, ww?.price, pinnedUrlFor(item.list_item, 'ww') || ww?.url, wwImg, '')}</div>
+        <div class="vg-panel-store">${pv('coles', 'C', co?.name, co?.price, pinnedUrlFor(item.list_item, 'coles') || co?.url, coImg, '')}</div>
         <div class="vg-panel-store">${others}</div>
       </div>
       <div class="vg-panel-note">Other shops are shown for reference only - they never change the winner, the saving or any basket total.</div>
@@ -3787,11 +3799,10 @@ function groupStoreVariantsHTML(group, store, overrides) {
 
   const variantRows = variants.map((v) => {
     const ov = overrides[v.name] || {};
-    let name = displayName(v);
-    if (nameCount[name] > 1) {
-      const sz = v.name.match(/(\d+(?:\.\d+)?\s*(?:kg|g|ml|l|pk|pack)\b)/i);
-      if (sz && !new RegExp(sz[1].replace(/\s+/g, '\\s*'), 'i').test(name)) name += ` (${sz[1].trim()})`;
-    }
+    // Size in brackets on EVERY member, not just where two names collide: in a
+    // $/kg category the pack size is what tells the rows apart, so it is part of
+    // the identity rather than a tie-breaker. nameWithSize() lives in utils.js.
+    let name = nameWithSize(displayName(v), v.name);
     // Grey shelf price: the portion price for weight-priced items (pack_price, e.g.
     // $7.60 for a 200g salmon portion), else the pack price. The green $/kg beside it
     // stays the comparison metric; pack size already lives in the name.
@@ -6359,10 +6370,17 @@ async function boot() {
         const watchBtn = e.target.closest('.item-watch-btn');
         if (watchBtn) { toggleWatchlist(watchBtn.dataset.item); return; }
 
-        // Third-store chip: expand/collapse the "also sold at" panel.
+        // Third-store panel: the chip, or ANYWHERE on the row - a per-kg category
+        // row expands on a click anywhere, and a row with third-store prices
+        // should not behave differently. Guarded so the row's own controls
+        // (checkbox, links, ✎, qty, price bar) still do their own job.
         const thirdBtn = e.target.closest('.third-chip');
-        if (thirdBtn) {
-          const key = thirdBtn.dataset.third;
+        const thirdRow = thirdBtn ? null : e.target.closest('tr[data-item]');
+        const rowKey = thirdRow && !e.target.closest('a, button, input, select, .price-bar, .units-ctrl')
+          ? thirdRow.dataset.item : null;
+        const key = thirdBtn ? thirdBtn.dataset.third
+                  : (rowKey && thirdEntriesFor(rowKey).length ? rowKey : null);
+        if (key) {
           if (_thirdOpen.has(key)) _thirdOpen.delete(key); else _thirdOpen.add(key);
           if (_lastData) renderPage(_lastData);
           return;

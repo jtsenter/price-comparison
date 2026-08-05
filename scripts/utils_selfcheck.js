@@ -83,6 +83,8 @@ eval([
   extract('migratePerKgOverride'),
   extract('computePerKgItems'),
   extract('loadVariantGroups'),
+  extractConst('SIZE_TOKEN'),  // nameWithSize closes over it
+  extract('nameWithSize'),     // "... 1kg" -> "... (1kg)"
   extract('thirdUnitPrice'),   // third-store rate: per piece, or $/100g from the name
   extract('thirdRanked'),
   extract('thirdBeats'),       // decides whether the row's chip goes loud
@@ -199,6 +201,27 @@ check('median empty -> null', _median([]), null);
   check('legacy v1 items = pure adds', variantGroupItemNames(g, { k: { items: ['A', 'B', 'C', 'X'] } }), ['A', 'B', 'C', 'X']);
   check('v2 remove drops a seed member', variantGroupItemNames(g, { k: { v: 2, remove: ['B'] } }), ['A', 'C']);
   check('v2 add + remove together', variantGroupItemNames(g, { k: { v: 2, add: ['X'], remove: ['A'] } }), ['B', 'C', 'X']);
+}
+
+// ── nameWithSize ────────────────────────────────────────────────────────────
+// Cosmetic, but it rewrites every category member name on screen, so the risk is
+// mangling a name rather than getting the brackets wrong.
+{
+  check('bare trailing size gets bracketed', nameWithSize('Macro Black Chia Seeds 1kg', 'x'), 'Macro Black Chia Seeds (1kg)');
+  check('size is not printed twice',         nameWithSize('Macro Black Chia Seeds 350g', 'x'), 'Macro Black Chia Seeds (350g)');
+  check('already bracketed is left alone',   nameWithSize('Macro Black Chia Seeds (1kg)', 'x'), 'Macro Black Chia Seeds (1kg)');
+  check('size taken from the key',           nameWithSize('Macro Black Chia Seeds', 'Macro Black Chia Seeds 1kg'), 'Macro Black Chia Seeds (1kg)');
+  check('unit is normalised to lower case',  nameWithSize('Sunflower Kernels 500G', 'x'), 'Sunflower Kernels (500g)');
+  check('decimal sizes survive',             nameWithSize('Potato Bag 1.5kg', 'x'), 'Potato Bag (1.5kg)');
+  check('pack counts work too',              nameWithSize("Little One's Nappies 40pk", 'x'), "Little One's Nappies (40pk)");
+  // A size in the MIDDLE is a real part of the name - moving it would read wrong,
+  // so it is re-emitted at the end and the original left in place.
+  check('mid-name size is not stripped',     nameWithSize('Chicken 1kg Tray Fresh', 'x'), 'Chicken 1kg Tray Fresh (1kg)');
+  check('no size at all -> untouched',       nameWithSize('Woolworths Lean Beef Mince', 'no size here'), 'Woolworths Lean Beef Mince');
+  check('empty name is safe',                nameWithSize('', 'x 1kg'), '');
+  check('null name is safe',                 nameWithSize(null, 'x 1kg'), '');
+  // "Size 6" must not be mistaken for a pack size - 6 has no unit after it.
+  check('a bare number is not a size',       nameWithSize('Nappies Size 6', 'x'), 'Nappies Size 6');
 }
 
 // ── third stores ────────────────────────────────────────────────────────────
