@@ -733,6 +733,38 @@ const DEFAULT_VARIANT_GROUPS = [
     'Lotus Biscoff Spread',
     'Lotus Biscoff Spread Smooth 720g',
   ]},
+  // Seeds and kernels. Every member is a single-store pin (url_overrides.json)
+  // and the pack sizes are all over the place - 150g to 1kg - which is exactly
+  // what a $/kg category is for: the 1kg Macro chia at $17.00 and the 350g at
+  // $6.00 are $17.00/kg and $17.14/kg, near-identical rates that the shelf
+  // prices hide completely. Sizes are IN the names on purpose: two of the
+  // Woolworths chia URLs are both "macro-black-chia-seeds" and would otherwise
+  // collide into one entry.
+  { key: 'pumpkin_kernels', label: 'Pumpkin kernels', category: 'Pantry', items: [
+    'Macro Natural Pumpkin Kernels 250g',
+    'Macro Organic Natural Pumpkin Kernels 250g',
+    'Wellness Road Pumpkin Seeds 300g',
+  ]},
+  { key: 'sunflower_kernels', label: 'Sunflower kernels', category: 'Pantry', items: [
+    'Macro Natural Sunflower Kernels 500g',
+    'Woolworths Sunflower Seeds 200g',
+    'Coles Sunflower Seeds 150g',
+    'Wellness Road Sunflower Kernels 500g',
+    'Gaganis Premium Raw Sunflower Kernels 500g',
+  ]},
+  { key: 'chia_seeds', label: 'Chia seeds', category: 'Pantry', items: [
+    'Macro Black Chia Seeds 350g',
+    'Macro Organic Black Chia Seeds 300g',
+    'Macro Black Chia Seeds 1kg',
+    'Wellness Road Black Chia Seeds 300g',
+    'Red Tractor Black Chia Seeds 600g',
+    // A chia MIX, not pure chia - kept because it was on the list, but its $/kg
+    // isn't strictly like-for-like. Pull it out via Edit category if it skews.
+    'Coles Black Chia Mix 200g',
+    'Coles Wellness Road Black Chia Seeds 1kg',
+    'Wellness Road Organic Black Chia Seeds 300g',
+  ]},
+
   // STICKER group (sticker: true): compared + displayed by PACK PRICE, not $/kg.
   // For near-same-size complementary products the user treats as interchangeable
   // (like the per-kg groups, but "just a normal category"). WW side = cheapest of
@@ -770,6 +802,10 @@ function groupMetric(g, res) {
 const UNIT_BASED_GROUPS = new Set([
   'nutella', 'lotus_biscoff', 'washed_potatoes', 'carrots',
   'brown_onions', 'red_onions', 'greek_yoghurt',
+  // Seeds and kernels: compared by $/kg (that's the point - the pack sizes run
+  // 150g to 1kg) but bought as sealed bags, so Units counts BAGS. "1.4kg of
+  // chia" is not how you shop, same reasoning as Nutella above.
+  'pumpkin_kernels', 'sunflower_kernels', 'chia_seeds',
 ]);
 
 // ── Shared per-kg category (variant group) model ─────────────────────────────
