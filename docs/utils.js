@@ -779,9 +779,19 @@ const DEFAULT_VARIANT_GROUPS = [
   // price, and these packs are 30 vs 40, so the ranking is not per-nappy yet. The
   // honest metric is price/count, which needs the pack count threaded into
   // groupMetric() - do that rather than pretending the pack prices compare.
+  //
+  // Every member is a SINGLE-store pin and the category does the cross-store
+  // comparison, same as the seed categories. An earlier attempt pinned only the
+  // Woolworths URLs with coles_url:"" hoping Coles would still be name-searched -
+  // it is not. An empty string is falsy, so scraper.py reads it as a single-store
+  // pin and skips Coles by design ("a single-store pin means a single store").
+  // Both nappies came back Coles-less because of it.
   { key: 'nappies_size6', label: 'Nappies size 6', category: 'Baby & Care', sticker: true, items: [
     "Little One's Ultra Dry Nappies Size 6 40pk",
     'Millie Moon Luxury Nappies Size 6 30pk',
+    'Coles Nappies Unisex Junior Size 6 40pk',
+    'Rascals Premium Nappies Size 6 30pk',
+    'Huggies Ultra Dry Nappies Boys Size 6 30pk',
   ]},
 ];
 
