@@ -83,6 +83,9 @@ eval([
   extract('migratePerKgOverride'),
   extract('computePerKgItems'),
   extract('loadVariantGroups'),
+  extract('thirdUnitPrice'),   // third-store rate: per piece, or $/100g from the name
+  extract('thirdRanked'),
+  extract('thirdBeats'),       // decides whether the row's chip goes loud
   extract('variantGroupOf'),   // member -> its category
   extract('settingsKeyFor'),   // the key a member's settings actually live under
   extract('buildDealGroups'),
@@ -196,6 +199,47 @@ check('median empty -> null', _median([]), null);
   check('legacy v1 items = pure adds', variantGroupItemNames(g, { k: { items: ['A', 'B', 'C', 'X'] } }), ['A', 'B', 'C', 'X']);
   check('v2 remove drops a seed member', variantGroupItemNames(g, { k: { v: 2, remove: ['B'] } }), ['A', 'C']);
   check('v2 add + remove together', variantGroupItemNames(g, { k: { v: 2, add: ['X'], remove: ['A'] } }), ['B', 'C', 'X']);
+}
+
+// ── third stores ────────────────────────────────────────────────────────────
+// thirdBeats() is the one that shows on screen without being asked for: it
+// turns a row's chip loud. A false positive says "cheaper at Priceline" about
+// something that isn't, so the cases below lean on when it must stay quiet.
+{
+  const pl = (price, name, packs) => ({ store: 'priceline', name, price, packs });
+  const cw = (price, name, packs) => ({ store: 'chemist_warehouse', name, price, packs });
+
+  // unit price: from the name, or per piece when sold by the piece
+  check('$/100g from the name', thirdUnitPrice(pl(5.50, 'Rexona Sport 52g')).value, 10.5769);
+  check('label follows the unit', thirdUnitPrice(pl(5.50, 'Rexona Sport 52mL')).label, '100ml');
+  check('packs -> per piece', thirdUnitPrice(cw(15.99, 'Huggies Size 6', 44)).value, 0.363);
+  check('packs label', thirdUnitPrice(cw(15.99, 'Huggies Size 6', 44)).label, 'each');
+  check('no size, no packs -> null', thirdUnitPrice(pl(5.50, 'Mystery item')), null);
+  check('no price -> null', thirdUnitPrice({ store: 'priceline', name: 'x 52g' }), null);
+
+  // ranking
+  const mixed = [pl(5.50, 'A 52g'), cw(4.29, 'B 52g')];
+  check('cheapest first', thirdRanked(mixed)[0].price, 4.29);
+  check('ranked keeps both', thirdRanked(mixed).length, 2);
+  check('empty list is safe', thirdRanked([]).length, 0);
+  check('undefined is safe', thirdRanked(undefined).length, 0);
+  check('priceless entries dropped', thirdRanked([pl(null, 'x 52g'), pl(3, 'y 52g')]).length, 1);
+  // a list where only SOME entries have a unit price must not compare $/100g
+  // against dollars - it falls back to shelf price for every entry.
+  const halfKnown = [pl(9.00, 'Big pack 500g'), cw(4.00, 'Mystery pack')];
+  check('mixed unit availability ranks on price', thirdRanked(halfKnown)[0].price, 4.00);
+
+  // thirdBeats - the loud chip
+  check('beats both',        thirdBeats(mixed, 4.90, 5.50).store, 'chemist_warehouse');
+  check('ties do NOT win',   thirdBeats([pl(4.90, 'A 52g')], 4.90, 5.50), null);
+  check('dearer does NOT win', thirdBeats([pl(5.50, 'A 52g')], 4.90, 5.50), null);
+  check('beats the cheaper of the two, not the dearer',
+        thirdBeats([pl(5.20, 'A 52g')], 4.90, 5.50), null);
+  check('one store priced only', thirdBeats([pl(3.00, 'A 52g')], null, 5.50).price, 3.00);
+  check('no supermarket price -> quiet', thirdBeats([pl(3.00, 'A 52g')], null, null), null);
+  check('zero price is not a rival',     thirdBeats([pl(3.00, 'A 52g')], 0, null), null);
+  check('no entries -> quiet',           thirdBeats([], 4.90, 5.50), null);
+  check('undefined entries -> quiet',    thirdBeats(undefined, 4.90, 5.50), null);
 }
 
 // ── variantGroupOf / settingsKeyFor ─────────────────────────────────────────

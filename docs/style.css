@@ -525,6 +525,37 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 .vg-pv-fetch { flex-shrink: 0; padding: 3px 8px !important; font-size: 12px !important; }
 .vg-panel-note { margin-top: 10px; font-size: 11px; color: var(--text-soft); }
 
+/* ── Third stores (Chemist Warehouse / Priceline) ──────────────────────────
+   Indigo, so a third-store chip is never mistaken for the green W or red C.
+   That also lets Chemist Warehouse keep the letter C without colliding. */
+.store-chip.third { background: #4338CA; }
+/* Quiet by default - the same visual weight as the ✎ beside it. Only items
+   with an entry in third_store.json get one at all. */
+.third-chip {
+  display: inline-flex; align-items: center; gap: 3px;
+  margin-left: 6px; padding: 1px 6px;
+  border: 1px solid var(--border-strong); border-radius: 9px;
+  background: var(--card); color: var(--text-mid);
+  font-size: 10.5px; font-weight: 700; line-height: 1.5;
+  cursor: pointer; vertical-align: 1px; white-space: nowrap;
+}
+.third-chip:hover { border-color: var(--text-soft); background: var(--bg); }
+.third-chip.open  { border-color: var(--text-soft); background: var(--bg); }
+/* Loud ONLY when a third shop undercuts both supermarkets, so the column can
+   be scanned for "worth opening" without opening anything. */
+.third-chip.beats { background: #4338CA; border-color: #4338CA; color: #fff; }
+.third-chip.beats:hover { background: #3730A3; border-color: #3730A3; }
+.third-caret { font-size: 8px; }
+.vg-panel-winner.third { background: #EEF2FF; color: #4338CA; }
+/* Three equal columns instead of two: W, C, and everything else combined. */
+.third-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+/* The per-unit rate beside a third-store price - $/100g, or per piece. */
+.third-tag {
+  display: inline-block; margin-left: 6px; padding: 1px 6px;
+  border-radius: 6px; background: #EEF2FF; color: #4338CA;
+  font-size: 10px; font-weight: 700; vertical-align: 1px;
+}
+
 /* Category edit modal - two independent columns (Woolworths | Coles) */
 .cat-edit-note { font-size: 12px; color: var(--text-soft); margin: 10px 0 0; }
 .cat-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }

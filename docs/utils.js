@@ -889,6 +889,56 @@ function loadVariantGroups() {
   });
 }
 
+// ── Third stores (not Woolworths, not Coles) ────────────────────────────────
+// ONE extra column holds all of them, not a column per retailer: the point is
+// "is it cheaper somewhere else", and two mostly-empty columns would cost the
+// table width for nothing. Each entry carries a one-letter chip like W and C.
+// The letter C is reused for Chemist Warehouse - the third column and its own
+// indigo colour keep it apart from the red Coles C.
+const THIRD_STORES = {
+  chemist_warehouse: { letter: 'C', label: 'Chemist Warehouse' },
+  priceline:         { letter: 'P', label: 'Priceline' },
+};
+
+// Comparable rate for one third-store entry: per piece when it is sold by the
+// piece (nappies), otherwise $/100g or $/100ml parsed out of the product name -
+// the same rule and the same function the W/C columns already use.
+function thirdUnitPrice(entry) {
+  if (!entry || entry.price == null) return null;
+  if (entry.packs > 0) {
+    return { value: +(entry.price / entry.packs).toFixed(3), label: 'each' };
+  }
+  const p = clientPer100({ price: entry.price, name: entry.name || '' });
+  return p.value == null ? null : { value: p.value, label: p.label };
+}
+
+// Cheapest first. Rank on unit price when EVERY entry has one, else on shelf
+// price - a mixed list would otherwise compare $/100g against dollars.
+function thirdRanked(entries) {
+  const list = (entries || []).filter(e => e && e.price != null);
+  const units = list.map(thirdUnitPrice);
+  const allHaveUnit = list.length > 0 && units.every(u => u && u.value != null);
+  return list
+    .map((e, i) => ({ entry: e, sort: allHaveUnit ? units[i].value : e.price }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(x => x.entry);
+}
+
+// The entry that beats BOTH supermarkets, or null. This is what turns the row's
+// chip loud, so it has to be conservative: a missing store price is not a win.
+//
+// ponytail: compares SHELF price, which is right while a third store stocks the
+// same product the row does. CEILING: for different-size alternatives (the size
+// 6 nappy case) this wants unit price on both sides, which needs the W/C pack
+// counts too - do that when the first packs-based entry lands, not before.
+function thirdBeats(entries, wwPrice, colesPrice) {
+  const best = thirdRanked(entries)[0];
+  if (!best) return null;
+  const rivals = [wwPrice, colesPrice].filter(p => p != null && p > 0);
+  if (!rivals.length) return null;
+  return best.price < Math.min(...rivals) ? best : null;
+}
+
 // A category with no category of its own is a meat cut - every seed group that
 // isn't Fruit & Veg / Pantry / Dairy / Sweets is. Named once so the fallback
 // can't drift between buildVariantGroups() and the member resolution below.

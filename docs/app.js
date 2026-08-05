@@ -599,6 +599,97 @@ function getCategory(item) {
   return normalizeCategory(raw);
 }
 
+// ── Third stores (Chemist Warehouse / Priceline) ─────────────────────────────
+// Strictly an add-on. An item with no entry in third_store.json renders exactly
+// as it always did - no chip, no panel, no change to any column. Nothing here
+// touches the winner badge, the Save figure or a basket total: Woolworths vs
+// Coles stays THE comparison and this only reports what a third shop charges.
+let _thirdStores = {};             // list_item -> [entry, ...]
+const _thirdOpen = new Set();      // list_items whose panel is expanded
+
+async function initThirdStores() {
+  try {
+    const res = await fetch(`data/third_store.json?t=${Date.now()}`);
+    if (!res.ok) return;                       // absent file = feature simply off
+    const raw = await res.json();
+    if (raw && typeof raw === 'object') {
+      delete raw._readme;
+      _thirdStores = raw;
+    }
+  } catch { /* unreadable = feature off, never a broken page */ }
+}
+
+function thirdEntriesFor(itemName) {
+  const e = _thirdStores[itemName];
+  return Array.isArray(e) ? e.filter(x => x && x.price != null) : [];
+}
+
+// The chip that sits after the ✎. Quiet when a third store merely exists; loud,
+// naming the shop and its price, when one undercuts BOTH supermarkets - so the
+// column can be scanned for "worth opening" without opening anything.
+function thirdChipHTML(item, ww, co) {
+  const entries = thirdEntriesFor(item.list_item);
+  if (!entries.length) return '';
+  const open = _thirdOpen.has(item.list_item);
+  const beat = thirdBeats(entries, ww?.price, co?.price);   // utils.js
+  const meta = beat ? THIRD_STORES[beat.store] : null;
+  const label = beat && meta
+    ? `＋${entries.length} · ${esc(meta.label)} ${fmt(beat.price)}`
+    : `＋${entries.length}`;
+  return `<button class="third-chip${beat ? ' beats' : ''}${open ? ' open' : ''}"` +
+         ` data-third="${escAttr(item.list_item)}"` +
+         ` title="${beat ? 'Cheaper at ' + esc(meta.label) : 'Also sold at other stores'}">` +
+         `${label} <span class="third-caret">${open ? '▴' : '▾'}</span></button>`;
+}
+
+// One panel row, styled with the per-kg category classes so an expanded item and
+// an expanded category look identical. Three columns: W, C, and ONE column for
+// every other shop combined - two near-empty columns would cost table width for
+// nothing.
+function thirdPanelRowHTML(item, ww, co, colspan) {
+  const ranked = thirdRanked(thirdEntriesFor(item.list_item));   // utils.js
+  if (!ranked.length) return '';
+
+  const prices = [ww?.price, co?.price, ...ranked.map(e => e.price)].filter(p => p != null && p > 0);
+  const bestPrice = prices.length ? Math.min(...prices) : null;
+  const isBest = (p) => p != null && bestPrice != null && p <= bestPrice + 0.0001;
+
+  const pv = (chipCls, letter, name, price, extraTag) => {
+    if (price == null) {
+      return `<div class="vg-pv empty"><span class="vg-pv-noimg"></span>` +
+             `<span class="vg-pv-name">Not stocked</span></div>`;
+    }
+    const unit = extraTag ? `<span class="third-tag">${extraTag}</span>` : '';
+    return `<div class="vg-pv${isBest(price) ? ' win' : ''}">` +
+           `<span class="vg-pv-noimg"></span>` +
+           `<span class="vg-pv-name">${letter ? `<span class="store-chip ${chipCls} sm">${letter}</span> ` : ''}${esc(name || '-')}${unit}</span>` +
+           `<span class="vg-pv-kg">${fmt(price)}</span></div>`;
+  };
+
+  const others = ranked.map(e => {
+    const meta = THIRD_STORES[e.store] || { letter: '?', label: e.store };
+    const u = thirdUnitPrice(e);
+    return pv('third', meta.letter, e.name,  e.price,
+              u ? `${fmt(u.value)}${u.label === 'each' ? ' each' : '/' + u.label}` : '');
+  }).join('');
+
+  const beat = thirdBeats(thirdEntriesFor(item.list_item), ww?.price, co?.price);
+  const bm = beat ? THIRD_STORES[beat.store] : null;
+  const verdict = beat && bm
+    ? `<span class="vg-panel-winner third">${esc(bm.label)} cheapest</span>`
+    : `<span class="vg-panel-winner ww">Cheaper at your usual shops</span>`;
+
+  return `<tr class="vg-panel-row third-panel-row"><td colspan="${colspan}"><div class="vg-panel">
+      <div class="vg-panel-head"><span class="vg-panel-title">Also sold at</span>${verdict}</div>
+      <div class="vg-panel-cols third-cols">
+        <div class="vg-panel-store">${pv('ww', 'W', ww?.name, ww?.price, '')}</div>
+        <div class="vg-panel-store">${pv('coles', 'C', co?.name, co?.price, '')}</div>
+        <div class="vg-panel-store">${others}</div>
+      </div>
+      <div class="vg-panel-note">Other shops are shown for reference only - they never change the winner, the saving or any basket total.</div>
+    </div></td></tr>`;
+}
+
 // ── Filter state ─────────────────────────────────────────────────────────────
 
 let _activePriority = 'weekly';
@@ -5121,7 +5212,7 @@ function _renderPageInner(data) {
       <div class="item-row">
         ${imgHtml}
         <div class="item-info">
-          <div class="item-title-row">${esc(displayName)}${editBtn}</div>
+          <div class="item-title-row">${esc(displayName)}${editBtn}${thirdChipHTML(item, ww, co)}</div>
           ${altHintHTML(item)}
         </div>
       </div>`;
@@ -5275,6 +5366,10 @@ function _renderPageInner(data) {
     const priceChanged = (prevWw != null && prevWw !== ww?.price) || (prevCo != null && prevCo !== co?.price);
     const rowClass = isPending ? ' class="row-pending"' : (priceChanged ? ' class="row-flash"' : '');
     tbody.insertAdjacentHTML('beforeend', `<tr${rowClass} data-item="${safeKey}"><td class="check-cell"><input type="checkbox" class="row-check" data-item="${safeKey}"${checked}></td>${getVisibleCols().map(col => tdMap[col] || '').join('')}<td class="actions-cell">${unarchiveBtn}${watchBtn}${refreshBtn}</td></tr>`);
+    // +2 check cell and actions cell, so the panel spans the whole row.
+    if (_thirdOpen.has(item.list_item)) {
+      tbody.insertAdjacentHTML('beforeend', thirdPanelRowHTML(item, ww, co, getVisibleCols().length + 2));
+    }
 
     _prevPrices[item.list_item] = { ww: ww?.price, co: co?.price };
     if (priceChanged && _pendingRefreshItems.has(item.list_item)) _pendingRefreshItems.delete(item.list_item);
@@ -6182,7 +6277,7 @@ async function boot() {
   // Load analysis data and watchlist before first render
   // loadRemovedItems() runs alongside the rest so the deleted-name tombstones are
   // in REMOVED_ITEMS before the first sync/render - the sync filters read that set.
-  await Promise.all([loadItemAnalysis(), initWatchlist(), initUserSettings(), mergeArchivedFromRepo(), loadRepoUrlOverrides(), loadRemovedItems()]);
+  await Promise.all([loadItemAnalysis(), initWatchlist(), initUserSettings(), mergeArchivedFromRepo(), loadRepoUrlOverrides(), loadRemovedItems(), initThirdStores()]);
   const data = await loadData();
 
   {
@@ -6263,6 +6358,15 @@ async function boot() {
         }
         const watchBtn = e.target.closest('.item-watch-btn');
         if (watchBtn) { toggleWatchlist(watchBtn.dataset.item); return; }
+
+        // Third-store chip: expand/collapse the "also sold at" panel.
+        const thirdBtn = e.target.closest('.third-chip');
+        if (thirdBtn) {
+          const key = thirdBtn.dataset.third;
+          if (_thirdOpen.has(key)) _thirdOpen.delete(key); else _thirdOpen.add(key);
+          if (_lastData) renderPage(_lastData);
+          return;
+        }
 
         const unarchiveBtn = e.target.closest('.item-unarchive-btn');
         if (unarchiveBtn) { unarchiveItem(unarchiveBtn.dataset.item); return; }

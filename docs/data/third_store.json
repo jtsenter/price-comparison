@@ -1,0 +1,32 @@
+{
+  "_readme": [
+    "Prices from stores that are NOT Woolworths or Coles, for the handful of items",
+    "where a third retailer is worth watching. Keyed by list_item, exactly as it",
+    "appears in latest.json. Absent key = the row looks and behaves like any other.",
+    "",
+    "Entry fields:",
+    "  store   'chemist_warehouse' | 'priceline'  (see THIRD_STORES in utils.js)",
+    "  name    product name AS SOLD there - the size in it drives the unit price,",
+    "          same as everywhere else in this app",
+    "  url     product page",
+    "  price   shelf price in AUD",
+    "  packs   OPTIONAL, count for items sold by the piece (nappies): unit price",
+    "          becomes price/packs 'each' instead of $/100g",
+    "  checked ISO date the price was last confirmed",
+    "",
+    "Hand-maintained for now. Both retailers serve an empty shell to an automated",
+    "browser (Priceline runs a Cloudflare JS challenge, Chemist Warehouse renders",
+    "client-side), so neither is scrapeable the way Woolworths and Coles are - a",
+    "per-store adapter using the scraper's persistent Chrome profile is the",
+    "remaining piece. This file is the contract that adapter will fill."
+  ],
+  "Rexona Men 48hr Deodorant Stick Sport Defence": [
+    {
+      "store": "priceline",
+      "name": "Rexona Men Antiperspirant Deodorant Stick Sport 52g",
+      "url": "https://www.priceline.com.au/product/346268/rexona-men-antiperspirant-deodorant-stick-sport-52g",
+      "price": 5.5,
+      "checked": "2026-08-05"
+    }
+  ]
+}
