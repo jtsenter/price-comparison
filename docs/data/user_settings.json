@@ -200,21 +200,19 @@
       ]
     },
     "lamb_mince": {
+      "v": 2,
       "label": "Lamb Mince",
-      "items": [
+      "add": [],
+      "remove": [
         "Woolworths Lamb Mince",
-        "Macro Grass Fed Australian Lamb Mince 450g (15% fat)",
-        "Fettayleh Foods Lamb Mince 500g",
-        "El- Amin's Halal Lamb Mince | 500g"
+        "Coles 3 Star Lamb Mince 500g"
       ],
-      "ww_items": [
-        "Woolworths Lamb Mince",
-        "Macro Grass Fed Australian Lamb Mince 450g (15% fat)",
-        "Fettayleh Foods Lamb Mince 500g"
+      "ww_order": [
+        "Macro Grass Fed Australian Lamb Mince 450g"
       ],
-      "coles_items": [
-        "Woolworths Lamb Mince",
-        "El- Amin's Halal Lamb Mince | 500g"
+      "coles_order": [
+        "El-Amin's Halal Lamb Mince 500g",
+        "Coles Graze Lamb Mince 500g"
       ]
     },
     "chicken_thigh": {
@@ -370,6 +368,21 @@
         "Wellness Road Sunflower Kernels 500g",
         "Coles Sunflower Seeds 150g"
       ]
+    },
+    "nappies_size6": {
+      "v": 2,
+      "add": [],
+      "remove": [
+        "Coles Nappies Unisex Junior Size 6 40pk",
+        "Rascals Premium Nappies Size 6 30pk",
+        "Huggies Ultra Dry Nappies Boys Size 6 30pk"
+      ],
+      "label": "Diapers Nappies size 6",
+      "ww_order": [
+        "Little One's Ultra Dry Nappies Size 6 40pk",
+        "Millie Moon Luxury Nappies Size 6 30pk"
+      ],
+      "coles_order": []
     }
   }
 }
