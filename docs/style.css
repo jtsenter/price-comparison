@@ -549,6 +549,40 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 .vg-panel-winner.third { background: #EEF2FF; color: #4338CA; }
 /* Three equal columns instead of two: W, C, and everything else combined. */
 .third-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+/* Collapsed, the outside stores cost a thin rail instead of a third of the
+   width - the two supermarkets are what you actually compare, so they keep
+   their full columns until you ask for more. */
+.third-rail-cols { grid-template-columns: minmax(0,1fr) minmax(0,1fr) 30px; }
+.third-rail {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; padding: 0; align-self: stretch;
+  border: 1px dashed var(--border-strong); border-radius: 8px;
+  background: var(--card); color: var(--text-mid); cursor: pointer;
+}
+.third-rail:hover { border-style: solid; border-color: var(--text-soft); background: var(--bg); }
+.third-rail.beats { border-style: solid; background: #4338CA; border-color: #4338CA; color: #fff; }
+.third-rail-count {
+  writing-mode: vertical-rl; font-size: 11px; font-weight: 700; letter-spacing: .5px;
+}
+/* Sits in the expanded column's own header, so collapsing is where expanding was. */
+.third-rail-close {
+  margin-left: auto; padding: 0 4px; border: 0; background: none;
+  color: var(--text-soft); font-size: 11px; cursor: pointer;
+}
+.third-rail-close:hover { color: var(--text); }
+/* Mobile: no room for a third column, so outside stores stack under the two
+   supermarkets as a normal collapsible section. */
+.vgm-third-h {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  width: 100%; padding: 0; border: 0; background: none;
+  color: var(--text-mid); font-size: 12px; font-weight: 700; cursor: pointer;
+}
+.vgm-third-h.beats { color: #4338CA; }
+.vgm-third-count {
+  padding: 1px 6px; border-radius: 8px;
+  background: #EEF2FF; color: #4338CA; font-size: 10.5px;
+}
+.vgm-third-sec .vg-pv { margin-top: 8px; }
 /* The per-unit rate beside a third-store price - $/100g, or per piece. */
 .third-tag {
   display: inline-block; margin-left: 6px; padding: 1px 6px;
@@ -2375,8 +2409,12 @@ td.priority-cell { text-align: center; }
   /* Desktop table + card-grid always hidden; mobile cards take over */
   #tableContainer, #cardGrid { display: none !important; }
 
-  /* Hide desktop-only controls */
-  .col-chooser-wrap, .view-toggle-btn { display: none !important; }
+  /* Hide desktop-only controls. #optionsWrap is exempt: it borrows
+     .col-chooser-wrap for its dropdown positioning but is NOT the desktop-only
+     column chooser - it holds theme, scrape log and "fix stuck data", which a
+     phone needs at least as much as a desktop. Hiding it here meant the cache
+     fix was unreachable on the one device most likely to have a stuck cache. */
+  .col-chooser-wrap:not(#optionsWrap), .view-toggle-btn { display: none !important; }
 
   /* Mobile top bar = just the search. The Watchlist eye moved DOWN into the
      sort-chips toolbar (it read as too prominent in the header); Basket and

@@ -361,10 +361,11 @@
     .nav-icon-btn.nav-basket:hover { color: #006B31; background: rgba(0,132,61,.08); }
     .nav-icon-btn.nav-watch:hover  { color: #B45309; background: rgba(217,119,6,.08); }
     .nav-icon-btn.here.nav-basket  { background: rgba(0,132,61,.10); border-color: rgba(0,132,61,.35); }
-    /* Mirrors style.css's mobile header: nav cluster + bell + ⚙ hidden, but
-       keep the Watchlist shortcut (its only mobile entry point). */
+    /* Mirrors style.css's mobile header: nav cluster + bell hidden, but keep the
+       Watchlist shortcut (its only mobile entry point) AND ⚙ Options - Options
+       carries theme, scrape log and "fix stuck data", which a phone needs too. */
     @media (max-width: 700px) {
-      .nav-icon-btn, .header-div, #optionsWrap { display: none; }
+      .nav-icon-btn, .header-div { display: none; }
       #notifBtn { display: none !important; }
       .header-right .nav-icon-btn.nav-watch { display: inline-flex; }
     }
@@ -591,7 +592,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=103"></script>
+<script src="utils.js?v=104"></script>
 <script>
 // fmt() lives in utils.js (loaded above).
 // Short display name (same map the rest of the site uses); falls back to the

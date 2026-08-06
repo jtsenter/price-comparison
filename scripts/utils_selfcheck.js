@@ -96,6 +96,10 @@ eval([
   extract('thirdRanked'),
   extract('thirdBeats'),       // decides whether the row's chip goes loud
   extract('thirdBeatsUnit'),   // same, but for a per-kg/per-pack CATEGORY's metric
+  extract('thirdOpenState'),   // default-open tri-state for the "other stores" section
+  extract('thirdToggleState'),
+  extract('groupThirdScale'),  // which scale a CATEGORY compares a third store on
+  extract('groupThirdBeat'),
   extract('variantGroupOf'),   // member -> its category
   extract('settingsKeyFor'),   // the key a member's settings actually live under
   extract('buildDealGroups'),
@@ -292,6 +296,79 @@ check('median empty -> null', _median([]), null);
   check('zero is not a rival',      thirdBeatsUnit(cwFortyPack, 0, null), null);
   check('empty entries -> quiet',   thirdBeatsUnit([], 0.29, 0.29), null);
   check('undefined entries -> quiet', thirdBeatsUnit(undefined, 0.29, 0.29), null);
+}
+
+// ── groupThirdScale / groupThirdBeat (picking the right comparison scale) ────
+// The bug this exists to prevent: a STICKER category's metric is a shelf price,
+// but it was being compared per-100g, so a genuinely cheaper deodorant read as
+// dearer. Silent in the UI - the chip just stays quiet - so it needs a test.
+{
+  const stickerG = { _sticker: true,  _wwPerKg: 4.90, _coPerKg: 5.50 };
+  const packG    = { _perPack: true,  _wwPerKg: 0.29, _coPerKg: 0.29 };
+  const weighedG = {                  _wwPerKg: 17.00, _coPerKg: 17.00 };
+
+  check('a sticker category compares on RAW price', groupThirdScale(stickerG).perUnit, false);
+  check('a perPack category compares per unit',     groupThirdScale(packG).perUnit,    true);
+  check('a weighed category offers no rivals at all',
+        groupThirdScale(weighedG).ww, null);
+
+  // The exact regression: $4.00/52g really is cheaper than a $4.90 stick.
+  const pricelineCheap = [{ store: 'priceline', name: 'Rexona Sport 52g', price: 4.00 }];
+  check('a cheaper sticker alternative IS detected',
+        groupThirdBeat(stickerG, pricelineCheap)?.name, 'Rexona Sport 52g');
+  const pricelineDear = [{ store: 'priceline', name: 'Rexona Sport 52g', price: 5.90 }];
+  check('a dearer sticker alternative is not',
+        groupThirdBeat(stickerG, pricelineDear), null);
+
+  // The nappies case still has to work off per-piece, not raw.
+  const cw40 = [{ store: 'chemist_warehouse', name: 'Huggies 40pk', price: 13.99, packs: 40 }];
+  check('a dearer-per-nappy pack does not beat', groupThirdBeat(packG, cw40), null);
+  check('a cheaper-per-nappy pack does beat',
+        groupThirdBeat({ _perPack: true, _wwPerKg: 0.40, _coPerKg: 0.40 }, cw40)?.name, 'Huggies 40pk');
+
+  // A weighed category must stay silent rather than compare $/kg against $/100g.
+  check('a weighed category never returns a verdict',
+        groupThirdBeat(weighedG, [{ store: 'priceline', name: 'Chia 1kg', price: 1.00 }]), null);
+}
+
+// ── thirdOpenState / thirdToggleState (default-open tri-state) ───────────────
+// "Cheaper elsewhere" must open ITSELF - the user asked for exactly this, so a
+// saving isn't hidden behind a badge nobody remembers to press. The subtlety is
+// that the default must stay a default: an explicit collapse of a cheaper row
+// has to survive, and so does an explicit expand of a not-cheaper one.
+{
+  const fresh = () => [new Set(), new Set()];
+
+  let [op, cl] = fresh();
+  check('not cheaper -> collapsed by default', thirdOpenState('k', null, op, cl), false);
+  check('cheaper -> OPEN by default',          thirdOpenState('k', { store: 'p' }, op, cl), true);
+
+  // Collapsing a cheaper-elsewhere row must stick, or the auto-open becomes a
+  // lock the user cannot escape - it would spring back open on every render.
+  [op, cl] = fresh();
+  thirdToggleState('k', { store: 'p' }, op, cl);
+  check('collapsing a cheaper row sticks', thirdOpenState('k', { store: 'p' }, op, cl), false);
+  thirdToggleState('k', { store: 'p' }, op, cl);
+  check('and re-expanding it works',       thirdOpenState('k', { store: 'p' }, op, cl), true);
+
+  // The mirror case: expanding a row that ISN'T cheaper must also stick.
+  [op, cl] = fresh();
+  thirdToggleState('k', null, op, cl);
+  check('expanding a not-cheaper row sticks', thirdOpenState('k', null, op, cl), true);
+  thirdToggleState('k', null, op, cl);
+  check('and re-collapsing it works',         thirdOpenState('k', null, op, cl), false);
+
+  // Each branch must clear its opposite, or a stale entry decides the next click.
+  [op, cl] = fresh();
+  thirdToggleState('k', null, op, cl);              // -> explicit open
+  thirdToggleState('k', null, op, cl);              // -> explicit closed
+  check('toggling never leaves a key in BOTH sets', op.has('k') && cl.has('k'), false);
+
+  // Keys are independent - one row's choice must not move another's.
+  [op, cl] = fresh();
+  thirdToggleState('a', null, op, cl);
+  check('an unrelated key keeps its default', thirdOpenState('b', null, op, cl), false);
+  check('and the toggled one is open',        thirdOpenState('a', null, op, cl), true);
 }
 
 // ── categoryRemovals (Edit-category's removal diff) ─────────────────────────

@@ -1055,6 +1055,56 @@ function thirdBeatsUnit(entries, wwUnitPrice, colesUnitPrice) {
   return best.unit < Math.min(...rivals) ? best.entry : null;
 }
 
+// WHICH scale a CATEGORY's own metric is on, and therefore how a third store has
+// to be compared against it. Getting this wrong is silent: the verdict just
+// comes out backwards, with nothing to notice.
+//   sticker  -> the metric IS a shelf price, so compare raw-to-raw. Routing a
+//               sticker group through the per-unit path compares a $/100g figure
+//               against a pack price - a $4.00 deodorant reads as DEARER than a
+//               $4.90 one, because 4.00/0.52 = 7.69 > 4.90.
+//   perPack  -> the metric is dollars-per-piece, which lines up with a third
+//               entry's own per-piece price (its `packs`). The nappies case.
+//   weighed  -> $/kg, while thirdUnitPrice is per 100g: off by 10x, and not
+//               fixable by scaling alone (an entry may be priced per piece
+//               instead). No verdict at all rather than a wrong one.
+function groupThirdScale(group) {
+  const usable = group._sticker || group._perPack;
+  return {
+    perUnit: !!group._perPack,
+    ww: usable && group._wwPerKg != null ? { price: group._wwPerKg } : null,
+    co: usable && group._coPerKg != null ? { price: group._coPerKg } : null,
+  };
+}
+
+// The ONE place a category's "is it cheaper elsewhere?" verdict is decided, so
+// the chip, the desktop panel and the mobile card cannot disagree with it.
+function groupThirdBeat(group, entries) {
+  const s = groupThirdScale(group);
+  if (!s.ww && !s.co) return null;
+  return s.perUnit ? thirdBeatsUnit(entries, s.ww?.price, s.co?.price)
+                   : thirdBeats(entries, s.ww?.price, s.co?.price);
+}
+
+// Is the "other stores" section showing? Open by DEFAULT when a third store
+// actually undercuts both supermarkets - a saving you only see after
+// remembering to expand a badge is a saving you don't see. Two sets, not one
+// flag, because "default" has to mean default: collapsing a cheaper-elsewhere
+// row must stick, and expanding a not-cheaper one must stick too. Sets are
+// passed in rather than closed over so this stays pure and testable.
+function thirdOpenState(key, beats, openSet, closedSet) {
+  if (closedSet.has(key)) return false;
+  if (openSet.has(key)) return true;
+  return !!beats;
+}
+
+// Flip whichever way the CURRENT resolved state points, recording the choice as
+// explicit. Writing to only one set would let a stale entry in the other win on
+// the next click, so each branch clears its opposite.
+function thirdToggleState(key, beats, openSet, closedSet) {
+  if (thirdOpenState(key, beats, openSet, closedSet)) { openSet.delete(key); closedSet.add(key); }
+  else { closedSet.delete(key); openSet.add(key); }
+}
+
 // A category with no category of its own is a meat cut - every seed group that
 // isn't Fruit & Veg / Pantry / Dairy / Sweets is. Named once so the fallback
 // can't drift between buildVariantGroups() and the member resolution below.

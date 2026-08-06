@@ -615,7 +615,14 @@ function getCategory(item) {
 // touches the winner badge, the Save figure or a basket total: Woolworths vs
 // Coles stays THE comparison and this only reports what a third shop charges.
 let _thirdStores = {};             // list_item -> [entry, ...]
-const _thirdOpen = new Set();      // list_items whose panel is expanded
+const _thirdOpen = new Set();      // list_items the user explicitly EXPANDED
+const _thirdClosed = new Set();    // list_items the user explicitly COLLAPSED
+
+// Thin wrappers binding this module's two Sets to the pure resolvers in
+// utils.js (thirdOpenState / thirdToggleState), where the tri-state rule and
+// its self-check live.
+function isThirdOpen(key, beats) { return thirdOpenState(key, beats, _thirdOpen, _thirdClosed); }
+function toggleThird(key, beats) { thirdToggleState(key, beats, _thirdOpen, _thirdClosed); }
 
 async function initThirdStores() {
   try {
@@ -648,10 +655,10 @@ function thirdEntriesFor(itemName) {
 // to false, unchanged from before this parameter existed.
 function thirdChipHTML(key, entries, ww, co, compareUnit) {
   if (!entries.length) return '';
-  const open = _thirdOpen.has(key);
   const beat = compareUnit
     ? thirdBeatsUnit(entries, ww?.price, co?.price)    // utils.js
     : thirdBeats(entries, ww?.price, co?.price);       // utils.js
+  const open = isThirdOpen(key, beat);
   const meta = beat ? THIRD_STORES[beat.store] : null;
   // The chip has to show the SAME figure the comparison was made on - raw shelf
   // price normally, but the per-unit price (what actually won) when compareUnit
@@ -660,8 +667,11 @@ function thirdChipHTML(key, entries, ww, co, compareUnit) {
   const label = beat && meta && beatPrice != null
     ? `＋${entries.length} · ${esc(meta.label)} ${fmt(beatPrice)}`
     : `＋${entries.length}`;
+  // data-third-beats lets the click handler resolve the same default this render
+  // used, without re-deriving prices from a different scale than the one the
+  // chip was built with (see isThirdOpen).
   return `<button class="third-chip${beat ? ' beats' : ''}${open ? ' open' : ''}"` +
-         ` data-third="${escAttr(key)}"` +
+         ` data-third="${escAttr(key)}"${beat ? ' data-third-beats="1"' : ''}` +
          ` title="${beat ? 'Cheaper at ' + esc(meta.label) : 'Also sold at other stores'}">` +
          `${label} <span class="third-caret">${open ? '▴' : '▾'}</span></button>`;
 }
@@ -752,11 +762,13 @@ function thirdPanelRowHTML(key, entries, ww, co, colspan) {
 // all (see the identical guard on the panel's own third column) rather than a
 // wrong one - no weighed category has third-store data yet.
 function groupThirdChipHTML(group) {
-  const metricScale = group._sticker || group._perPack;
-  const ww = metricScale && group._wwPerKg != null ? { price: group._wwPerKg } : null;
-  const co = metricScale && group._coPerKg != null ? { price: group._coPerKg } : null;
-  return thirdChipHTML(group.list_item, groupThirdEntries(group), ww, co, true);
+  const s = groupThirdScale(group);
+  return thirdChipHTML(group.list_item, groupThirdEntries(group), s.ww, s.co, s.perUnit);
 }
+
+// groupThirdScale / groupThirdBeat live in utils.js - pure, and covered by the
+// self-check, because picking the wrong scale fails SILENTLY (a cheaper store
+// just reads as dearer).
 
 // Every third-store entry attached to any member of this category, merged into
 // one list - a category compares different PRODUCTS already (that is the whole
@@ -4140,27 +4152,35 @@ function appendGroupRowDesktop(tbody, group, overrides) {
   // when the chip's own toggle (_thirdOpen, same Set the plain-item chip uses)
   // is on AND the category actually has any outside-store data.
   const gThirdEntries = groupThirdEntries(group);
-  const showThird = gThirdEntries.length && _thirdOpen.has(group.list_item);
-  // group._wwPerKg/_coPerKg are real $/kg for a WEIGHED group - a different scale
-  // to a third store's per-piece price (thirdUnitPrice), so highlighting would be
-  // comparing $/kg against $/each. Only sticker/perPack groups share the "raw
-  // dollar" scale a third-store entry uses; a true $/kg group gets no highlight
-  // here rather than a wrong one (no weighed category has third-store data yet).
-  const gMetricPrices = (group._sticker || group._perPack)
-    ? [group._wwPerKg, group._coPerKg].filter(p => p != null) : [];
-  const thirdCol = showThird
+  // Highlighting and the verdict both have to use the category's OWN scale -
+  // see groupThirdScale for why a weighed group gets neither.
+  const gScale = groupThirdScale(group);
+  const gMetricPrices = [gScale.ww?.price, gScale.co?.price].filter(p => p != null);
+  const gBeat = groupThirdBeat(group, gThirdEntries);
+  const showThird = gThirdEntries.length && isThirdOpen(group.list_item, gBeat);
+  // Collapsed, the outside stores are a narrow rail on the RIGHT rather than a
+  // third of the panel's width: two supermarket columns stay full-size, which is
+  // what you actually compare, and the rail costs ~28px to say "there is more
+  // here". Expanded it becomes a normal column. Cheaper-elsewhere opens itself.
+  const thirdCol = !gThirdEntries.length ? ''
+    : showThird
     ? `<div class="vg-panel-store">
-        <div class="vg-store-h">Other stores</div>
-        ${thirdOthersColumnHTML(gThirdEntries, gMetricPrices.length ? Math.min(...gMetricPrices) : null, undefined, true)}
+        <div class="vg-store-h">Other stores
+          <button class="third-rail-close" data-third="${escAttr(group.list_item)}"${gBeat ? ' data-third-beats="1"' : ''} title="Hide other stores">▸</button>
+        </div>
+        ${thirdOthersColumnHTML(gThirdEntries, gMetricPrices.length ? Math.min(...gMetricPrices) : null, undefined, gScale.perUnit)}
       </div>`
-    : '';
+    : `<button class="third-rail${gBeat ? ' beats' : ''}" data-third="${escAttr(group.list_item)}"${gBeat ? ' data-third-beats="1"' : ''}
+         title="Show ${gThirdEntries.length} other store${gThirdEntries.length > 1 ? 's' : ''}">
+        <span class="third-rail-count">＋${gThirdEntries.length}</span>
+      </button>`;
   const panel = `<tr class="vg-panel-row" data-group="${group._groupKey}"><td colspan="${colSpan}">
     <div class="vg-panel">
       <div class="vg-panel-head">
         <span class="vg-panel-title">${esc(group._groupLabel)}</span>
         ${winnerTag}
       </div>
-      <div class="vg-panel-cols${showThird ? ' third-cols' : ''}">
+      <div class="vg-panel-cols${showThird ? ' third-cols' : (gThirdEntries.length ? ' third-rail-cols' : '')}">
         <div class="vg-panel-store">
           <div class="vg-store-h"><span class="store-chip ww sm">W</span> Woolworths</div>
           ${groupStoreVariantsHTML(group, 'woolworths', overrides)}
@@ -4256,7 +4276,7 @@ function appendGroupCardMobile(container, group, overrides) {
           </span>
         </div>
         <div class="mc-badges">
-          <div class="mc-badges-left">${prioHtml}</div>
+          <div class="mc-badges-left">${prioHtml}${groupThirdChipHTML(group)}</div>
         </div>
       </div>
     </div>
@@ -4274,6 +4294,23 @@ function appendGroupCardMobile(container, group, overrides) {
     </div>`;
 
   if (isExpanded) {
+    // Outside stores stack UNDER the two supermarkets here rather than beside
+    // them - a phone has no room for a third column, and the desktop panel's
+    // right-hand rail becomes a normal collapsed section on this axis. Same
+    // open-by-default-when-cheaper rule as everywhere else (see isThirdOpen).
+    const mThirdEntries = groupThirdEntries(group);
+    const mScale = groupThirdScale(group);
+    const mMetricPrices = [mScale.ww?.price, mScale.co?.price].filter(p => p != null);
+    const mBeat = groupThirdBeat(group, mThirdEntries);
+    const mOpen = isThirdOpen(group.list_item, mBeat);
+    const thirdSec = !mThirdEntries.length ? '' : `
+      <div class="vgm-store-sec vgm-third-sec">
+        <button class="vgm-third-h${mBeat ? ' beats' : ''}" data-third="${escAttr(group.list_item)}"${mBeat ? ' data-third-beats="1"' : ''} aria-expanded="${mOpen}">
+          <span>Other stores <span class="vgm-third-count">＋${mThirdEntries.length}</span></span>
+          <span class="third-caret">${mOpen ? '▾' : '▸'}</span>
+        </button>
+        ${mOpen ? thirdOthersColumnHTML(mThirdEntries, mMetricPrices.length ? Math.min(...mMetricPrices) : null, undefined, mScale.perUnit) : ''}
+      </div>`;
     html += `<div class="vgm-body">
       <div class="vgm-store-sec">
         <div class="vg-store-h"><span class="store-chip ww sm">W</span> Woolworths</div>
@@ -4283,6 +4320,7 @@ function appendGroupCardMobile(container, group, overrides) {
         <div class="vg-store-h"><span class="store-chip coles sm">C</span> Coles</div>
         ${groupStoreVariantsHTML(group, 'coles', overrides)}
       </div>
+      ${thirdSec}
     </div>`;
   }
 
@@ -5491,8 +5529,9 @@ function _renderPageInner(data) {
     const rowClass = isPending ? ' class="row-pending"' : (priceChanged ? ' class="row-flash"' : '');
     tbody.insertAdjacentHTML('beforeend', `<tr${rowClass} data-item="${safeKey}"><td class="check-cell"><input type="checkbox" class="row-check" data-item="${safeKey}"${checked}></td>${getVisibleCols().map(col => tdMap[col] || '').join('')}<td class="actions-cell">${unarchiveBtn}${watchBtn}${refreshBtn}</td></tr>`);
     // +2 check cell and actions cell, so the panel spans the whole row.
-    if (_thirdOpen.has(item.list_item)) {
-      tbody.insertAdjacentHTML('beforeend', thirdPanelRowHTML(item.list_item, thirdEntriesFor(item.list_item), ww, co, getVisibleCols().length + 2));
+    const pThird = thirdEntriesFor(item.list_item);
+    if (pThird.length && isThirdOpen(item.list_item, thirdBeats(pThird, ww?.price, co?.price))) {
+      tbody.insertAdjacentHTML('beforeend', thirdPanelRowHTML(item.list_item, pThird, ww, co, getVisibleCols().length + 2));
     }
 
     _prevPrices[item.list_item] = { ww: ww?.price, co: co?.price };
@@ -6487,14 +6526,19 @@ async function boot() {
         // row expands on a click anywhere, and a row with third-store prices
         // should not behave differently. Guarded so the row's own controls
         // (checkbox, links, ✎, qty, price bar) still do their own job.
-        const thirdBtn = e.target.closest('.third-chip');
+        const thirdBtn = e.target.closest('.third-chip, .third-rail, .third-rail-close');
         const thirdRow = thirdBtn ? null : e.target.closest('tr[data-item]');
         const rowKey = thirdRow && !e.target.closest('a, button, input, select, .price-bar, .units-ctrl')
           ? thirdRow.dataset.item : null;
         const key = thirdBtn ? thirdBtn.dataset.third
                   : (rowKey && thirdEntriesFor(rowKey).length ? rowKey : null);
         if (key) {
-          if (_thirdOpen.has(key)) _thirdOpen.delete(key); else _thirdOpen.add(key);
+          // The control carries whether a third store currently wins, so the
+          // toggle resolves against the SAME default this render drew. Clicking
+          // the row rather than the chip has to read it off that row's own chip,
+          // or the first click on an already-default-open row would no-op.
+          const thirdCtl = thirdBtn || thirdRow?.querySelector('.third-chip');
+          toggleThird(key, thirdCtl?.dataset.thirdBeats === '1');
           // A category's third column lives INSIDE its own panel (see
           // appendGroupRowDesktop), not a separate one - so opening it here has
           // to also open the category itself, or the toggle would flip with
@@ -6557,6 +6601,17 @@ async function boot() {
         if (_expandedGroups.has(key)) _expandedGroups.delete(key);
         else _expandedGroups.add(key);
         if (_lastData) renderPage(_lastData); // renderPage preserves scroll itself
+        return;
+      }
+      // Outside-stores toggle. The chip sits on the COLLAPSED card face, so it
+      // has to open the card too - otherwise it would flip a section that isn't
+      // on screen (same reasoning as the desktop chip opening its category).
+      const mThird = e.target.closest('.third-chip, .vgm-third-h');
+      if (mThird) {
+        toggleThird(mThird.dataset.third, mThird.dataset.thirdBeats === '1');
+        const gk = mThird.closest('.vg-mobile-card')?.dataset.group;
+        if (gk) _expandedGroups.add(gk);
+        if (_lastData) renderPage(_lastData);
         return;
       }
       // Other links/buttons/images (product links, edit, image hover) handle themselves.
