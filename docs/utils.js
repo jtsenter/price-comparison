@@ -797,6 +797,15 @@ const DEFAULT_VARIANT_GROUPS = [
     'Rascals Premium Nappies Size 6 30pk',
     'Huggies Ultra Dry Nappies Boys Size 6 30pk',
   ]},
+  // Single member, both stores already pinned on that ONE item (unlike nappies,
+  // this was never split into separate single-store products) - a sticker group
+  // of one exists purely so it inherits the per-kg filter, the click-anywhere
+  // expand and the "also sold at" third column, same as every other category.
+  // See the "add all items with third-party websites... categorize them as per
+  // kilogram items" request this shipped for.
+  { key: 'rexona_deodorant', label: 'Rexona Men 48hr Deodorant', category: 'Household', sticker: true, items: [
+    'Rexona Men 48hr Deodorant Stick Sport Defence',
+  ]},
 ];
 
 // Groups compared by PACK PRICE, not $/kg (the group's headline shows "$X", no
@@ -1019,15 +1028,31 @@ function thirdRanked(entries) {
 // chip loud, so it has to be conservative: a missing store price is not a win.
 //
 // ponytail: compares SHELF price, which is right while a third store stocks the
-// same product the row does. CEILING: for different-size alternatives (the size
-// 6 nappy case) this wants unit price on both sides, which needs the W/C pack
-// counts too - do that when the first packs-based entry lands, not before.
+// same product the row does.
 function thirdBeats(entries, wwPrice, colesPrice) {
   const best = thirdRanked(entries)[0];
   if (!best) return null;
   const rivals = [wwPrice, colesPrice].filter(p => p != null && p > 0);
   if (!rivals.length) return null;
   return best.price < Math.min(...rivals) ? best : null;
+}
+
+// The size-6-nappy case the comment above used to flag as a future ceiling: for
+// a per-kg/per-pack CATEGORY, wwPrice/colesPrice arrive as a per-unit metric
+// (e.g. dollars per nappy), not a raw pack price - comparing that against a
+// third entry's raw shelf price would be $0.29-a-nappy against $13.99-for-forty,
+// never meaningfully true. Ranks and compares on thirdUnitPrice() instead.
+function thirdBeatsUnit(entries, wwUnitPrice, colesUnitPrice) {
+  const withUnit = (entries || [])
+    .filter(e => e && e.price != null)
+    .map(e => ({ entry: e, unit: thirdUnitPrice(e)?.value }))
+    .filter(x => x.unit != null)
+    .sort((a, b) => a.unit - b.unit);
+  const best = withUnit[0];
+  if (!best) return null;
+  const rivals = [wwUnitPrice, colesUnitPrice].filter(p => p != null && p > 0);
+  if (!rivals.length) return null;
+  return best.unit < Math.min(...rivals) ? best.entry : null;
 }
 
 // A category with no category of its own is a meat cut - every seed group that

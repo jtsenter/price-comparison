@@ -1,8 +1,10 @@
 {
   "_readme": [
-    "Prices from stores that are NOT Woolworths or Coles, for the handful of items",
-    "where a third retailer is worth watching. Keyed by list_item, exactly as it",
-    "appears in latest.json. Absent key = the row looks and behaves like any other.",
+    "Prices from stores that are NOT Woolworths or Coles. Keyed by list_item for a",
+    "single product, OR by a category's synthetic '__group_<key>' when the",
+    "alternative doesn't map 1:1 to any one existing member (an app.js category",
+    "merges entries from BOTH its own group key and every member's own name - see",
+    "groupThirdEntries). Absent key = the row looks and behaves like any other.",
     "",
     "Entry fields:",
     "  store   'chemist_warehouse' | 'priceline'  (see THIRD_STORES in utils.js)",
@@ -14,11 +16,19 @@
     "          becomes price/packs 'each' instead of $/100g",
     "  checked ISO date the price was last confirmed",
     "",
-    "Hand-maintained for now. Both retailers serve an empty shell to an automated",
-    "browser (Priceline runs a Cloudflare JS challenge, Chemist Warehouse renders",
-    "client-side), so neither is scrapeable the way Woolworths and Coles are - a",
-    "per-store adapter using the scraper's persistent Chrome profile is the",
-    "remaining piece. This file is the contract that adapter will fill."
+    "Hand-maintained for now, but reachability is per-PAGE-TYPE, not per-site, and",
+    "was wrong in an earlier version of this note - checked directly, 2026-08-06:",
+    "  Priceline    - product pages AND search are both a Cloudflare JS-challenge",
+    "                 shell (~1.3KB, no price) to an automated browser. Confirmed",
+    "                 twice, a day apart. Neither is reachable.",
+    "  Chemist Wh.  - SEARCH is a client-side-only shell (empty __NEXT_DATA__,",
+    "                 title literally 'undefined'), but a PRODUCT PAGE (/buy/<id>/",
+    "                 <slug>) renders server-side with a real, current price - the",
+    "                 CW nappies entry below was fetched this way, live, not from",
+    "                 a cached snippet. So CW needs a URL-discovery step (Google's",
+    "                 own index works: site:chemistwarehouse.com.au <query>) rather",
+    "                 than a bot-evasion one - a materially smaller adapter than",
+    "                 Priceline needs, if either is ever built into the scraper."
   ],
   "Rexona Men 48hr Deodorant Stick Sport Defence": [
     {
@@ -27,6 +37,16 @@
       "url": "https://www.priceline.com.au/product/346268/rexona-men-antiperspirant-deodorant-stick-sport-52g",
       "price": 5.5,
       "checked": "2026-08-05"
+    }
+  ],
+  "__group_nappies_size6": [
+    {
+      "store": "chemist_warehouse",
+      "name": "Huggies Essentials Nappies Size 6 (16+kg) 40 Pack",
+      "url": "https://www.chemistwarehouse.com.au/buy/88034/huggies-essentials-size-6-16kg-over-40-nappies",
+      "price": 13.99,
+      "packs": 40,
+      "checked": "2026-08-06"
     }
   ]
 }

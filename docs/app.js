@@ -637,27 +637,85 @@ function thirdEntriesFor(itemName) {
 // The chip that sits after the ✎. Quiet when a third store merely exists; loud,
 // naming the shop and its price, when one undercuts BOTH supermarkets - so the
 // column can be scanned for "worth opening" without opening anything.
-function thirdChipHTML(item, ww, co) {
-  const entries = thirdEntriesFor(item.list_item);
+//
+// Takes `entries` directly rather than deriving them from `key` internally, so
+// a group row can pass its MERGED entries (every member's third-store data
+// combined) while a plain row passes just its own - one renderer, two sources.
+//
+// `compareUnit`: for a per-kg/per-pack CATEGORY, ww/co arrive as a per-unit
+// metric (dollars per nappy), not a raw pack price - thirdBeatsUnit compares
+// unit-to-unit instead of thirdBeats' raw-shelf comparison. Plain items default
+// to false, unchanged from before this parameter existed.
+function thirdChipHTML(key, entries, ww, co, compareUnit) {
   if (!entries.length) return '';
-  const open = _thirdOpen.has(item.list_item);
-  const beat = thirdBeats(entries, ww?.price, co?.price);   // utils.js
+  const open = _thirdOpen.has(key);
+  const beat = compareUnit
+    ? thirdBeatsUnit(entries, ww?.price, co?.price)    // utils.js
+    : thirdBeats(entries, ww?.price, co?.price);       // utils.js
   const meta = beat ? THIRD_STORES[beat.store] : null;
-  const label = beat && meta
-    ? `＋${entries.length} · ${esc(meta.label)} ${fmt(beat.price)}`
+  // The chip has to show the SAME figure the comparison was made on - raw shelf
+  // price normally, but the per-unit price (what actually won) when compareUnit
+  // is set, or "Chemist Warehouse $13.99" would misreport a per-nappy verdict.
+  const beatPrice = beat && compareUnit ? thirdUnitPrice(beat)?.value : beat?.price;
+  const label = beat && meta && beatPrice != null
+    ? `＋${entries.length} · ${esc(meta.label)} ${fmt(beatPrice)}`
     : `＋${entries.length}`;
   return `<button class="third-chip${beat ? ' beats' : ''}${open ? ' open' : ''}"` +
-         ` data-third="${escAttr(item.list_item)}"` +
+         ` data-third="${escAttr(key)}"` +
          ` title="${beat ? 'Cheaper at ' + esc(meta.label) : 'Also sold at other stores'}">` +
          `${label} <span class="third-caret">${open ? '▴' : '▾'}</span></button>`;
+}
+
+// One .vg-pv row (image, linked name, price) - the shared building block for
+// every store column, W/C/third alike, so a supermarket entry and a
+// third-store entry are visually the SAME kind of thing, not a special case.
+function thirdPvRowHTML(chipCls, letter, name, price, url, img, extraTag, isBest) {
+  if (price == null) {
+    return `<div class="vg-pv empty"><span class="vg-pv-img vg-pv-noimg"></span>` +
+           `<span class="vg-pv-name">Not stocked</span></div>`;
+  }
+  const imgHtml = img
+    ? `<img class="vg-pv-img" src="${escAttr(img)}" alt="" loading="lazy" />`
+    : '<span class="vg-pv-img vg-pv-noimg"></span>';
+  const chip = letter ? `<span class="store-chip ${chipCls} sm">${letter}</span> ` : '';
+  const unit = extraTag ? `<span class="third-tag">${extraTag}</span>` : '';
+  const label = `${chip}${esc(name || '-')}${unit}`;
+  const nameHtml = url
+    ? `<a class="vg-pv-name" href="${escAttr(url)}" target="_blank" rel="noopener">${label}</a>`
+    : `<span class="vg-pv-name">${label}</span>`;
+  return `<div class="vg-pv${isBest ? ' win' : ''}">${imgHtml}${nameHtml}` +
+         `<span class="vg-pv-kg">${fmt(price)}</span></div>`;
+}
+
+// The "other stores" column's inner rows, ranked cheapest first. `bestPrice`
+// comes from whoever is calling this - a plain item's own W/C prices, or a
+// group's cheapest member - so "win" highlighting is relative to the SAME
+// comparison the surrounding panel is already making, not a third-store-only one.
+//
+// `compareUnit`: a per-kg/per-pack CATEGORY's bestPrice is a per-unit metric, not
+// a raw shelf price (see thirdBeatsUnit's comment) - highlighting must compare
+// unit-to-unit there too, or a cheap-per-nappy alternative could never light up
+// against its own $13.99-for-forty shelf price. Plain items default to false and
+// keep comparing raw price, exactly as before this parameter existed.
+function thirdOthersColumnHTML(entries, bestPrice, fallbackImg, compareUnit) {
+  const isBest = (p) => p != null && bestPrice != null && p <= bestPrice + 0.0001;
+  return thirdRanked(entries).map(e => {
+    const meta = THIRD_STORES[e.store] || { letter: '?', label: e.store };
+    const u = thirdUnitPrice(e);
+    return thirdPvRowHTML('third', meta.letter, e.name, e.price, e.url,
+      resolveImgUrl(e.image) || fallbackImg, u ? `${fmt(u.value)}${u.label === 'each' ? ' each' : '/' + u.label}` : '',
+      isBest(compareUnit ? u?.value : e.price));
+  }).join('');
 }
 
 // One panel row, styled with the per-kg category classes so an expanded item and
 // an expanded category look identical. Three columns: W, C, and ONE column for
 // every other shop combined - two near-empty columns would cost table width for
-// nothing.
-function thirdPanelRowHTML(item, ww, co, colspan) {
-  const ranked = thirdRanked(thirdEntriesFor(item.list_item));   // utils.js
+// nothing. Used for a PLAIN item that isn't part of a category - a category's own
+// third column instead renders inline inside its existing panel (see
+// groupThirdColumnHTML), since that panel already exists and opens on the same click.
+function thirdPanelRowHTML(key, entries, ww, co, colspan) {
+  const ranked = thirdRanked(entries);   // utils.js
   if (!ranked.length) return '';
 
   const prices = [ww?.price, co?.price, ...ranked.map(e => e.price)].filter(p => p != null && p > 0);
@@ -669,33 +727,8 @@ function thirdPanelRowHTML(item, ww, co, colspan) {
   // borrows the supermarket photo of the SAME product rather than showing a hole.
   const wwImg = resolveImgUrl(ww?.image_url) || '';
   const coImg = resolveImgUrl(co?.image_url) || '';
-  const pv = (chipCls, letter, name, price, url, img, extraTag) => {
-    if (price == null) {
-      return `<div class="vg-pv empty"><span class="vg-pv-img vg-pv-noimg"></span>` +
-             `<span class="vg-pv-name">Not stocked</span></div>`;
-    }
-    const src = img || wwImg || coImg;
-    const imgHtml = src
-      ? `<img class="vg-pv-img" src="${escAttr(src)}" alt="" loading="lazy" />`
-      : '<span class="vg-pv-img vg-pv-noimg"></span>';
-    const chip = letter ? `<span class="store-chip ${chipCls} sm">${letter}</span> ` : '';
-    const unit = extraTag ? `<span class="third-tag">${extraTag}</span>` : '';
-    const label = `${chip}${esc(name || '-')}${unit}`;
-    const nameHtml = url
-      ? `<a class="vg-pv-name" href="${escAttr(url)}" target="_blank" rel="noopener">${label}</a>`
-      : `<span class="vg-pv-name">${label}</span>`;
-    return `<div class="vg-pv${isBest(price) ? ' win' : ''}">${imgHtml}${nameHtml}` +
-           `<span class="vg-pv-kg">${fmt(price)}</span></div>`;
-  };
 
-  const others = ranked.map(e => {
-    const meta = THIRD_STORES[e.store] || { letter: '?', label: e.store };
-    const u = thirdUnitPrice(e);
-    return pv('third', meta.letter, e.name, e.price, e.url, resolveImgUrl(e.image),
-              u ? `${fmt(u.value)}${u.label === 'each' ? ' each' : '/' + u.label}` : '');
-  }).join('');
-
-  const beat = thirdBeats(thirdEntriesFor(item.list_item), ww?.price, co?.price);
+  const beat = thirdBeats(entries, ww?.price, co?.price);
   const bm = beat ? THIRD_STORES[beat.store] : null;
   const verdict = beat && bm
     ? `<span class="vg-panel-winner third">${esc(bm.label)} cheapest</span>`
@@ -704,12 +737,36 @@ function thirdPanelRowHTML(item, ww, co, colspan) {
   return `<tr class="vg-panel-row third-panel-row"><td colspan="${colspan}"><div class="vg-panel">
       <div class="vg-panel-head"><span class="vg-panel-title">Also sold at</span>${verdict}</div>
       <div class="vg-panel-cols third-cols">
-        <div class="vg-panel-store">${pv('ww', 'W', ww?.name, ww?.price, pinnedUrlFor(item.list_item, 'ww') || ww?.url, wwImg, '')}</div>
-        <div class="vg-panel-store">${pv('coles', 'C', co?.name, co?.price, pinnedUrlFor(item.list_item, 'coles') || co?.url, coImg, '')}</div>
-        <div class="vg-panel-store">${others}</div>
+        <div class="vg-panel-store">${thirdPvRowHTML('ww', 'W', ww?.name, ww?.price, pinnedUrlFor(key, 'ww') || ww?.url, wwImg, '', isBest(ww?.price))}</div>
+        <div class="vg-panel-store">${thirdPvRowHTML('coles', 'C', co?.name, co?.price, pinnedUrlFor(key, 'coles') || co?.url, coImg, '', isBest(co?.price))}</div>
+        <div class="vg-panel-store">${thirdOthersColumnHTML(entries, bestPrice)}</div>
       </div>
       <div class="vg-panel-note">Other shops are shown for reference only - they never change the winner, the saving or any basket total.</div>
     </div></td></tr>`;
+}
+
+// The collapsed chip for a CATEGORY row. Wraps thirdChipHTML with the group's
+// own metric as ww/co - see thirdChipHTML's compareUnit doc for why a category
+// can't just reuse the plain-item call unchanged. Metric-scale comparison only
+// applies to a sticker/perPack group; a true $/kg group gets no beats-check at
+// all (see the identical guard on the panel's own third column) rather than a
+// wrong one - no weighed category has third-store data yet.
+function groupThirdChipHTML(group) {
+  const metricScale = group._sticker || group._perPack;
+  const ww = metricScale && group._wwPerKg != null ? { price: group._wwPerKg } : null;
+  const co = metricScale && group._coPerKg != null ? { price: group._coPerKg } : null;
+  return thirdChipHTML(group.list_item, groupThirdEntries(group), ww, co, true);
+}
+
+// Every third-store entry attached to any member of this category, merged into
+// one list - a category compares different PRODUCTS already (that is the whole
+// point), so its "also sold at" naturally spans whichever of its members has
+// outside-store data, not just one. A group-level key (__group_<key>) is also
+// checked, for an alternative that does not map 1:1 to any existing member.
+function groupThirdEntries(group) {
+  const own = thirdEntriesFor('__group_' + group._groupKey);
+  const fromMembers = (group._members || []).flatMap(m => thirdEntriesFor(m.list_item));
+  return [...own, ...fromMembers];
 }
 
 // ── Filter state ─────────────────────────────────────────────────────────────
@@ -3977,6 +4034,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
         <span class="vg-group-title">
           <span class="vg-group-label">${esc(group._groupLabel)}</span>
           <button class="item-edit-btn" data-edit-item="${group.list_item}" title="Edit category">✎</button>
+          ${groupThirdChipHTML(group)}
         </span>
         <span class="vg-group-sub">${groupSubLabel(group)}</span>
       </div>
@@ -4076,13 +4134,33 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     : '<span class="vg-panel-winner">Same price</span>';
 
   const colSpan = getVisibleCols().length + 2;
+  // A third column for outside stores, appended into this SAME panel rather than
+  // a second popup - the category's expand state already opened this panel, so
+  // reusing it means one click gets you everything instead of two. Only present
+  // when the chip's own toggle (_thirdOpen, same Set the plain-item chip uses)
+  // is on AND the category actually has any outside-store data.
+  const gThirdEntries = groupThirdEntries(group);
+  const showThird = gThirdEntries.length && _thirdOpen.has(group.list_item);
+  // group._wwPerKg/_coPerKg are real $/kg for a WEIGHED group - a different scale
+  // to a third store's per-piece price (thirdUnitPrice), so highlighting would be
+  // comparing $/kg against $/each. Only sticker/perPack groups share the "raw
+  // dollar" scale a third-store entry uses; a true $/kg group gets no highlight
+  // here rather than a wrong one (no weighed category has third-store data yet).
+  const gMetricPrices = (group._sticker || group._perPack)
+    ? [group._wwPerKg, group._coPerKg].filter(p => p != null) : [];
+  const thirdCol = showThird
+    ? `<div class="vg-panel-store">
+        <div class="vg-store-h">Other stores</div>
+        ${thirdOthersColumnHTML(gThirdEntries, gMetricPrices.length ? Math.min(...gMetricPrices) : null, undefined, true)}
+      </div>`
+    : '';
   const panel = `<tr class="vg-panel-row" data-group="${group._groupKey}"><td colspan="${colSpan}">
     <div class="vg-panel">
       <div class="vg-panel-head">
         <span class="vg-panel-title">${esc(group._groupLabel)}</span>
         ${winnerTag}
       </div>
-      <div class="vg-panel-cols">
+      <div class="vg-panel-cols${showThird ? ' third-cols' : ''}">
         <div class="vg-panel-store">
           <div class="vg-store-h"><span class="store-chip ww sm">W</span> Woolworths</div>
           ${groupStoreVariantsHTML(group, 'woolworths', overrides)}
@@ -4091,6 +4169,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
           <div class="vg-store-h"><span class="store-chip coles sm">C</span> Coles</div>
           ${groupStoreVariantsHTML(group, 'coles', overrides)}
         </div>
+        ${thirdCol}
       </div>
       <div class="vg-panel-note">${group._sticker ? 'Highlighted = cheapest price at each store.' : 'Highlighted = lowest $/kg at each store. The cheapest sticker price isn\'t always cheapest per kilo.'}</div>
     </div>
@@ -5257,7 +5336,7 @@ function _renderPageInner(data) {
       <div class="item-row">
         ${imgHtml}
         <div class="item-info">
-          <div class="item-title-row">${esc(displayName)}${editBtn}${thirdChipHTML(item, ww, co)}</div>
+          <div class="item-title-row">${esc(displayName)}${editBtn}${thirdChipHTML(item.list_item, thirdEntriesFor(item.list_item), ww, co)}</div>
           ${altHintHTML(item)}
         </div>
       </div>`;
@@ -5413,7 +5492,7 @@ function _renderPageInner(data) {
     tbody.insertAdjacentHTML('beforeend', `<tr${rowClass} data-item="${safeKey}"><td class="check-cell"><input type="checkbox" class="row-check" data-item="${safeKey}"${checked}></td>${getVisibleCols().map(col => tdMap[col] || '').join('')}<td class="actions-cell">${unarchiveBtn}${watchBtn}${refreshBtn}</td></tr>`);
     // +2 check cell and actions cell, so the panel spans the whole row.
     if (_thirdOpen.has(item.list_item)) {
-      tbody.insertAdjacentHTML('beforeend', thirdPanelRowHTML(item, ww, co, getVisibleCols().length + 2));
+      tbody.insertAdjacentHTML('beforeend', thirdPanelRowHTML(item.list_item, thirdEntriesFor(item.list_item), ww, co, getVisibleCols().length + 2));
     }
 
     _prevPrices[item.list_item] = { ww: ww?.price, co: co?.price };
@@ -6416,6 +6495,12 @@ async function boot() {
                   : (rowKey && thirdEntriesFor(rowKey).length ? rowKey : null);
         if (key) {
           if (_thirdOpen.has(key)) _thirdOpen.delete(key); else _thirdOpen.add(key);
+          // A category's third column lives INSIDE its own panel (see
+          // appendGroupRowDesktop), not a separate one - so opening it here has
+          // to also open the category itself, or the toggle would flip with
+          // nothing visible to show for it.
+          const thirdGroupKey = thirdBtn?.closest('.vg-group-row')?.dataset.group;
+          if (thirdGroupKey) _expandedGroups.add(thirdGroupKey);
           if (_lastData) renderPage(_lastData);
           return;
         }

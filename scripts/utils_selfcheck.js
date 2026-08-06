@@ -95,6 +95,7 @@ eval([
   extract('thirdUnitPrice'),   // third-store rate: per piece, or $/100g from the name
   extract('thirdRanked'),
   extract('thirdBeats'),       // decides whether the row's chip goes loud
+  extract('thirdBeatsUnit'),   // same, but for a per-kg/per-pack CATEGORY's metric
   extract('variantGroupOf'),   // member -> its category
   extract('settingsKeyFor'),   // the key a member's settings actually live under
   extract('buildDealGroups'),
@@ -270,6 +271,27 @@ check('median empty -> null', _median([]), null);
   check('zero price is not a rival',     thirdBeats([pl(3.00, 'A 52g')], 0, null), null);
   check('no entries -> quiet',           thirdBeats([], 4.90, 5.50), null);
   check('undefined entries -> quiet',    thirdBeats(undefined, 4.90, 5.50), null);
+}
+
+// ── thirdBeatsUnit ───────────────────────────────────────────────────────────
+// The exact nappies incident: a $13.99-for-40 alternative must NOT register as
+// "beats" a $0.29-a-nappy rival just because 13.99 > 0.29 the wrong way round -
+// thirdBeats (raw price) would get this backwards; thirdBeatsUnit must not.
+{
+  const pack = (price, packs, name) => ({ store: 'chemist_warehouse', name, price, packs });
+  const cwFortyPack = [pack(13.99, 40, 'Huggies Essentials 40pk')];   // $0.35/each
+  check('a dearer-per-unit pack does not beat a cheaper-per-unit rival',
+        thirdBeatsUnit(cwFortyPack, 0.29, 0.29), null);
+  check('genuinely cheaper per-unit DOES beat',
+        thirdBeatsUnit(cwFortyPack, 0.40, 0.40)?.name, 'Huggies Essentials 40pk');
+  check('ties do not win (unit price, same as thirdBeats)',
+        thirdBeatsUnit(cwFortyPack, 0.3498, 0.50), null);
+  check('an entry with no derivable unit price is ignored, not treated as free',
+        thirdBeatsUnit([{ store: 'priceline', name: 'no size or packs', price: 3 }], 0.29, 0.29), null);
+  check('no rival prices -> quiet', thirdBeatsUnit(cwFortyPack, null, null), null);
+  check('zero is not a rival',      thirdBeatsUnit(cwFortyPack, 0, null), null);
+  check('empty entries -> quiet',   thirdBeatsUnit([], 0.29, 0.29), null);
+  check('undefined entries -> quiet', thirdBeatsUnit(undefined, 0.29, 0.29), null);
 }
 
 // ── categoryRemovals (Edit-category's removal diff) ─────────────────────────

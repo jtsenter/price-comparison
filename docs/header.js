@@ -181,6 +181,15 @@
             '<button class="more-dropdown-item" id="settingsBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Auto-update Setup</button>'
           : '<div class="options-divider"></div>') +
         '<a class="more-dropdown-item" href="scrape-log.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Scrape Log</a>' +
+        '<div class="options-divider"></div>' +
+        // Site settings > Storage doesn't list a GitHub Pages PWA distinctly on
+        // every phone, so "clear the site's storage" is often a dead end for a
+        // stuck cache - a normal reload can't force it either (a browser may keep
+        // serving an already-installed service worker's OLD cached files for a
+        // long time). This does the same unregister-and-clear from inside the
+        // page itself, which needs no menu-hunting. Deliberately leaves
+        // localStorage alone - the GitHub token and saved preferences survive.
+        '<button class="more-dropdown-item" id="forceRefreshBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Fix stuck data / force refresh</button>' +
       '</div>' +
     '</div>';
 
@@ -282,6 +291,26 @@
       if (e.target.closest('.more-dropdown-item')) optDd.style.display = 'none';
     });
     document.addEventListener('click', function () { optDd.style.display = 'none'; });
+  }
+
+  /* "Fix stuck data / force refresh": unregisters this page's service worker
+     and clears its Cache Storage, then reloads. Same fix as clearing site data
+     from browser settings, done from inside the page so there is no menu to
+     hunt for. localStorage is untouched on purpose - the GitHub token and
+     saved priorities/units/theme all survive. */
+  var refreshBtn = document.getElementById('forceRefreshBtn');
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', function () {
+      if (!confirm('Clear this app\'s cached files and reload? Your saved settings and GitHub token are not affected.')) return;
+      var done = function () { location.reload(true); };
+      if (!('serviceWorker' in navigator)) { done(); return; }
+      navigator.serviceWorker.getRegistrations()
+        .then(function (regs) { return Promise.all(regs.map(function (r) { return r.unregister(); })); })
+        .then(function () { return ('caches' in window) ? caches.keys() : []; })
+        .then(function (keys) { return Promise.all(keys.map(function (k) { return caches.delete(k); })); })
+        .then(done)
+        .catch(done);   // even if a step fails, still reload - never leave the user stuck
+    });
   }
 
   /* Theme switcher - universal. (Row density stays app.js-wired: index-only.) */
