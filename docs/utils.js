@@ -1051,6 +1051,28 @@ function settingsKeyFor(itemName) {
 // explicit ww_items/coles_items list, use it verbatim (explicit membership - keep
 // even pending items). Otherwise derive: an item belongs to a store's list if it
 // has a pinned URL or a real (>0) price there.
+// Which default category members Edit-category's save should record as
+// user-removed. A member counts as removed ONLY if it was actually visible in
+// the modal when it opened (present in snapshotItems) and is missing from what
+// got saved (savedItems) - never merely because it's missing from the CURRENT
+// code defaults comparison.
+//
+// This is the fix for a real incident (2026-08-06): the nappies category grew
+// 3 Coles members in code, but a client whose _lastData snapshot pre-dated that
+// scrape had never seen them (unpriced members don't qualify for a store's list
+// - see resolveStoreLists' qualifies() below). Any save on that client -
+// including a bare label rename - then read "defaults minus what's on screen"
+// and recorded all 3 as removed, silently pinning them out and stripping them
+// from every device once that override synced. The bug was structural, not a
+// one-off: defItems.filter(n => !items.includes(n)) treats "never rendered"
+// and "user unchecked it" as the same signal, and the FIRST is a timing
+// accident that can recur for any category the day it gains a new member.
+function categoryRemovals(defItems, snapshotItems, savedItems) {
+  const seen = new Set(snapshotItems || []);
+  const kept = new Set(savedItems || []);
+  return (defItems || []).filter(n => seen.has(n) && !kept.has(n));
+}
+
 function resolveStoreLists(group, byName) {
   const qualifies = (name, store) => {
     const data = byName.get(name);

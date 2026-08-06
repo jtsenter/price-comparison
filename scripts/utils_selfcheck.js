@@ -66,6 +66,7 @@ eval([
   extractConst('DEAL_MIN_SPREAD'),
   extractConst('DEAL_MIN_DROP'),
   extract('clientPer100'),
+  extract('categoryRemovals'), // Edit-category's removal diff - see 2026-08-06 incident
   extract('packCountOf'),      // groupMetric's perPack branch closes over it
   extract('groupMetric'),
   extract('per100Pair'),
@@ -264,6 +265,30 @@ check('median empty -> null', _median([]), null);
   check('zero price is not a rival',     thirdBeats([pl(3.00, 'A 52g')], 0, null), null);
   check('no entries -> quiet',           thirdBeats([], 4.90, 5.50), null);
   check('undefined entries -> quiet',    thirdBeats(undefined, 4.90, 5.50), null);
+}
+
+// ── categoryRemovals (Edit-category's removal diff) ─────────────────────────
+// The exact bug: a category grows a new member in code; a client whose
+// snapshot pre-dates that never rendered it as a row; saving ANY edit on that
+// client must not be able to record it as removed.
+{
+  const DEF = ['A', 'B', 'C'];   // current code defaults for the category
+  check('user genuinely unticked a row they saw',
+        categoryRemovals(DEF, ['A', 'B'], ['A']), ['B']);
+  check('a member never shown (stale snapshot) is never removed',
+        categoryRemovals(DEF, ['A'], ['A']), []);       // C never in snapshot -> untouched
+  check('bare label rename removes nothing',
+        categoryRemovals(DEF, ['A', 'B', 'C'], ['A', 'B', 'C']), []);
+  check('empty snapshot removes nothing, however sparse the save',
+        categoryRemovals(DEF, [], []), []);
+  check('a user-added extra (not in defaults) is never a removal',
+        categoryRemovals(DEF, ['A', 'B', 'C'], ['A', 'B', 'C', 'X']), []);
+  check('every seen default dropped -> every one recorded',
+        categoryRemovals(DEF, ['A', 'B', 'C'], []), ['A', 'B', 'C']);
+  check('undefined snapshot is safe (treated as none seen)',
+        categoryRemovals(DEF, undefined, ['A']), []);
+  check('undefined defItems is safe',
+        categoryRemovals(undefined, ['A'], []), []);
 }
 
 // ── variantGroupOf / settingsKeyFor ─────────────────────────────────────────

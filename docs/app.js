@@ -4470,9 +4470,13 @@ function saveCategoryEdit() {
 
   // Persist as a diff vs the current code defaults so removals stick and future default
   // changes flow through. `remove` = defaults the user dropped; `add` = everything else.
+  // `remove` goes through categoryRemovals() (utils.js), NOT a bare defItems-minus-items
+  // diff: a member absent from `items` only because the client's snapshot never saw it
+  // (unpriced when the modal opened) must never be recorded as user-removed - see that
+  // function's comment for the incident this guards against.
   const defItems = (DEFAULT_VARIANT_GROUPS.find(d => d.key === key) || {}).items || [];
   const add = items.filter(n => !defItems.includes(n));
-  const remove = defItems.filter(n => !items.includes(n));
+  const remove = categoryRemovals(defItems, [...orig.ww, ...orig.coles], items);
   saveVariantGroupOverride(key, { label: label || undefined, add, remove, ww_order: wwItems, coles_order: coItems });
   savePerKgExclusions(excl);
   saveOverrides(ov);
