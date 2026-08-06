@@ -66,6 +66,7 @@ eval([
   extractConst('DEAL_MIN_SPREAD'),
   extractConst('DEAL_MIN_DROP'),
   extract('clientPer100'),
+  extract('packCountOf'),      // groupMetric's perPack branch closes over it
   extract('groupMetric'),
   extract('per100Pair'),
   extract('scalePer100'),      // card view restates $/100g at the multi-buy price
@@ -357,6 +358,24 @@ check('median empty -> null', _median([]), null);
 check('groupMetric $/kg default', groupMetric({}, { price: 5, name: 'Foo 500g' }), 10); // $5/500g = $10/kg
 check('groupMetric sticker = pack price', groupMetric({ sticker: true }, { price: 4.6, name: 'Dolmio 500g' }), 4.6);
 check('groupMetric null result', groupMetric({ sticker: true }, null), null);
+
+// perPack: the case a 30-pack vs 40-pack nappy category needs. This is what
+// stops "$14.40 for 30" outranking "$11.50 for 40" - $0.48 each vs $0.29 each.
+{
+  const g = { sticker: true, perPack: true };
+  check('perPack count from the item key',    groupMetric(g, { price: 11.50, name: 'Store name has none' }, 'Little One\'s Nappies 40pk'), 0.287);
+  check('perPack falls back to store name',   groupMetric(g, { price: 14.40, name: 'Huggies 30 pack' }, 'no count here'), 0.48);
+  check('perPack key wins over store name',   groupMetric(g, { price: 20.00, name: 'Wrong 10pk' }, 'Right 40pk'), 0.5);
+  check('perPack: a 40-pack now ranks BELOW a dearer 30-pack per-piece',
+        groupMetric(g, { price: 11.50 }, '40pk') < groupMetric(g, { price: 14.40 }, '30pk'), true);
+  check('perPack with no count anywhere -> null', groupMetric(g, { price: 11.50, name: 'x' }, 'y'), null);
+  check('perPack with zero count -> null',        groupMetric(g, { price: 11.50, name: 'x 0pk' }, 'y'), null);
+  check('packCountOf reads "pack" spelled out',   packCountOf('Huggies 30 pack'), 30);
+  check('packCountOf reads "pk"',                 packCountOf('40pk'), 40);
+  check('packCountOf: no count -> null',          packCountOf('no count here'), null);
+  // A weight token must not be mistaken for a pack count.
+  check('perPack ignores a kg token, not a count', groupMetric(g, { price: 10, name: '2kg' }, 'x'), null);
+}
 
 // ── pendingValidationCount (Validate pill, resolved-suppression + self-prune) ─
 {

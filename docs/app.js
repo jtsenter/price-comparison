@@ -3610,10 +3610,20 @@ function groupTrendCellHTML(group, historyBtn = true) {
   const best = cands.reduce((a, b) => (a.perkg <= b.perkg ? a : b));
 
   // Sticker groups: the bar is raw pack prices (the metric), so it matches the
-  // sticker marker; $/kg groups convert via memberPerKgPrices.
+  // sticker marker; $/kg groups convert via memberPerKgPrices. A PER-PACK sticker
+  // group (nappies) needs one more step: raw price is NOT the metric there, and
+  // packs differ per member (30 vs 40), so a 40-pack's $11.50 and a 30-pack's
+  // $17.50 are not comparable points on one axis. Divide each by ITS OWN member's
+  // pack count before merging - `best.perkg` below is already in that scale, and
+  // without this the bar plotted a ~$0.29 current marker against an $11-17 axis.
   const prices = group._sticker
-    ? group._members.flatMap(m => [...(m.price_history || []), ...(m.ww_price_history || []), ...(m.coles_price_history || [])]
-        .map(e => e.price).filter(p => p > 0))
+    ? group._members.flatMap(m => {
+        const raw = [...(m.price_history || []), ...(m.ww_price_history || []), ...(m.coles_price_history || [])]
+          .map(e => e.price).filter(p => p > 0);
+        if (!group._perPack) return raw;
+        const n = packCountOf(m.list_item);   // utils.js - same source groupMetric uses
+        return n > 0 ? raw.map(p => +(p / n).toFixed(3)) : [];
+      })
     : group._members.flatMap(m => memberPerKgPrices(m, ...memberStoreFlags(group, m)));
   if (prices.length < 2) return '';
   const hist = prices.map(p => ({ price: p }));
@@ -3646,7 +3656,13 @@ function buildGroupHistoryItem(group) {
     const memberSeries = group._members.map(m => {
       if (perkgExcl.has(`${group._groupKey}::${m.list_item}::${isWw ? 'ww' : 'coles'}`)) return [];
       // Sticker groups compare raw pack prices: ratio 1 (no $/kg conversion).
-      const ratio = group._sticker ? 1 : perKgRatio(isWw ? m.woolworths : m.coles);
+      // A per-pack sticker group (nappies) instead needs 1/count, per member -
+      // same reasoning as groupTrendCellHTML just above: a 30-pack and a 40-pack
+      // read the same $ scale here otherwise, and the cheapest-per-date pick
+      // would favour whichever pack happens to be bigger rather than cheaper.
+      const ratio = group._perPack
+        ? (packCountOf(m.list_item) > 0 ? 1 / packCountOf(m.list_item) : null)
+        : (group._sticker ? 1 : perKgRatio(isWw ? m.woolworths : m.coles));
       if (ratio == null) return [];
       const ex = exclSetsFor(m.list_item)[isWw ? 'ww' : 'co'];
       const raw = isWw ? [...(m.price_history || []), ...(m.ww_price_history || [])]
@@ -3782,7 +3798,10 @@ function groupStoreVariantsHTML(group, store, overrides) {
     .filter(m => m && !m._pending)
     .map(m => {
       const res = store === 'woolworths' ? m.woolworths : m.coles;
-      return { name: m.list_item, res, pk: group._sticker ? res?.price ?? null : clientPerKg(res) };
+      // ONE metric for the panel and the headline: groupMetric decides per-piece,
+      // pack price or $/kg. Computing it a second way here is how the two drift.
+      return { name: m.list_item, res,
+               pk: groupMetric({ sticker: group._sticker, perPack: group._perPack }, res, m.list_item) };
     })
     .filter(v => v.pk != null);
   const variants = dedupePerKgVariants(raw, storeKey, overrides, memberByName);
@@ -3826,7 +3845,7 @@ function groupStoreVariantsHTML(group, store, overrides) {
         ${imgHtml}
         ${nameHtml}
         <span class="vg-pv-pack">${pack}</span>
-        <span class="vg-pv-kg">$${v.pk.toFixed(2)}${group._sticker ? '' : '/kg'}</span>
+        <span class="vg-pv-kg">$${v.pk.toFixed(2)}${group._metricSuffix ?? (group._sticker ? '' : '/kg')}</span>
         <button class="vg-pv-basket${inBasket ? ' selected' : ''}" data-item="${safeKey}" title="${inBasket ? 'Remove from basket' : 'Add to basket'}" aria-label="${inBasket ? 'Remove from basket' : 'Add to basket'}">${inBasket ? '✓' : '＋'}</button>
       </div>`;
   }).join('');
@@ -3876,7 +3895,8 @@ function groupCardHTML(group, overrides) {
 
   const wwUrl = wwBest ? (overrides[wwBest.name]?.wwUrl || wwBest.result?.url || null) : null;
   const coUrl = coBest ? (overrides[coBest.name]?.colesUrl || coBest.result?.url || null) : null;
-  const suf = group._unitSuffix ? `<span class="perkg-suffix">${group._unitSuffix}</span>` : '';
+  const _sfx = group._metricSuffix ?? group._unitSuffix;
+  const suf = _sfx ? `<span class="perkg-suffix">${_sfx}</span>` : '';
   const priceHtml = (perkg, url) => perkg == null
     ? '<span class="no-data">-</span>'
     : (url
@@ -4006,8 +4026,8 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     trend:        `<td class="trend-cell">${groupTrendCellHTML(group)}</td>`,
     priority:     priorityCell,
     units:        unitsCell,
-    ww:           `<td class="price-cell ${wwClass}">${perKgCellHTML(group._wwPerKg, wwUrl, group._unitSuffix)}</td>`,
-    coles:        `<td class="price-cell ${coClass}">${perKgCellHTML(group._coPerKg, coUrl, group._unitSuffix)}</td>`,
+    ww:           `<td class="price-cell ${wwClass}">${perKgCellHTML(group._wwPerKg, wwUrl, group._metricSuffix ?? group._unitSuffix)}</td>`,
+    coles:        `<td class="price-cell ${coClass}">${perKgCellHTML(group._coPerKg, coUrl, group._metricSuffix ?? group._unitSuffix)}</td>`,
     cheaper:      `<td class="cheaper-cell">${badgeHtml}</td>`,
     pct:          `<td class="pct-cell">${pctHtml}</td>`,
     saving:       `<td><div class="saving-row">${savingContent}</div></td>`,

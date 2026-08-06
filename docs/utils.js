@@ -786,7 +786,11 @@ const DEFAULT_VARIANT_GROUPS = [
   // it is not. An empty string is falsy, so scraper.py reads it as a single-store
   // pin and skips Coles by design ("a single-store pin means a single store").
   // Both nappies came back Coles-less because of it.
-  { key: 'nappies_size6', label: 'Nappies size 6', category: 'Baby & Care', sticker: true, items: [
+  // perPack implies sticker (no $/kg anywhere in the pipeline) but ranks on
+  // price PER NAPPY, which is the only figure that compares a 30-pack with a
+  // 40-pack. sticker stays true so the basket, history and hot-deals paths that
+  // key off it keep treating this as a pack-bought, non-weighed category.
+  { key: 'nappies_size6', label: 'Nappies size 6', category: 'Baby & Care', sticker: true, perPack: true, items: [
     "Little One's Ultra Dry Nappies Size 6 40pk",
     'Millie Moon Luxury Nappies Size 6 30pk',
     'Coles Nappies Unisex Junior Size 6 40pk',
@@ -806,8 +810,23 @@ const STICKER_GROUPS = new Set(
 // group builders makes the whole per-kg pipeline - sort, trend, history, hot
 // deals, basket - work in "sticker space" for sticker groups (history ratio
 // becomes price/price = 1, i.e. raw prices) with no other changes.
-function groupMetric(g, res) {
+// Pack count out of a name: "... 40pk" or "... 40 pack" -> 40.
+function packCountOf(name) {
+  const m = String(name || '').match(/(\d+)\s*(?:pk|pack)\b/i);
+  return m ? +m[1] : null;
+}
+
+function groupMetric(g, res, itemName) {
   if (!res || res.price == null) return null;
+  // perPack: the comparable number is the price of ONE piece. Nappies come in
+  // 30s, 40s and 124s, so ranking on pack price is meaningless - it sorted a
+  // $14.40 30-pack ($0.48 each) above an $11.50 40-pack ($0.29 each). Count is
+  // read from the list_item key first, because that is the one string we
+  // control; the scraped store name is the fallback.
+  if (g && g.perPack) {
+    const n = packCountOf(itemName) || packCountOf(res.name);
+    return n > 0 ? +(res.price / n).toFixed(3) : null;
+  }
   if (g && g.sticker) return res.price;
   const p = clientPer100(res); // $/kg = $/100g × 10 (same as app.js clientPerKg)
   return p.value != null ? +(p.value * 10).toFixed(2) : null;
@@ -900,6 +919,13 @@ function loadVariantGroups() {
       label: o.label || g.label,
       category: g.category,
       sticker: !!g.sticker,
+      // Dropped from this returned shape once before (had to be added back for
+      // sticker itself too, going by the comment above) - groupMetric() silently
+      // fell back to raw pack price for every nappy because this flag never
+      // reached it: buildVariantGroups() iterates the OUTPUT of this function,
+      // not DEFAULT_VARIANT_GROUPS directly, so a seed-only field is invisible
+      // downstream unless it is re-exported here too.
+      perPack: !!g.perPack,
       items: computePerKgItems(g.items, o),
       // Per-store ordered member lists (display order hints; membership comes from
       // `items` + price qualification in resolveStoreLists). Null until the user saves.
@@ -1079,11 +1105,11 @@ function buildVariantGroups(byName) {
     // otherwise. `perkg` keeps its name through the pipeline but holds whichever.
     const ww = stores.ww
       .filter(n => !excl.has(`${g.key}::${n}::ww`))
-      .map(n => ({ name: n, result: memberByName.get(n)?.woolworths, perkg: groupMetric(g, memberByName.get(n)?.woolworths) }))
+      .map(n => ({ name: n, result: memberByName.get(n)?.woolworths, perkg: groupMetric(g, memberByName.get(n)?.woolworths, n) }))
       .filter(v => v.perkg != null).sort((a, b) => a.perkg - b.perkg);
     const co = stores.coles
       .filter(n => !excl.has(`${g.key}::${n}::coles`))
-      .map(n => ({ name: n, result: memberByName.get(n)?.coles, perkg: groupMetric(g, memberByName.get(n)?.coles) }))
+      .map(n => ({ name: n, result: memberByName.get(n)?.coles, perkg: groupMetric(g, memberByName.get(n)?.coles, n) }))
       .filter(v => v.perkg != null).sort((a, b) => a.perkg - b.perkg);
 
     const wwBest = ww[0] || null;
@@ -1099,7 +1125,12 @@ function buildVariantGroups(byName) {
       _groupKey: g.key,
       _groupLabel: g.label,
       _sticker: !!g.sticker,
+      _perPack: !!g.perPack,
       _unitSuffix: g.sticker ? '' : '/kg',
+      // What to PRINT after the metric. Kept apart from _unitSuffix on purpose:
+      // that one is also read as "is this category weighed?" (the basket shows kg
+      // quantities when it is truthy), and a per-pack category is not weighed.
+      _metricSuffix: g.perPack ? ' each' : (g.sticker ? '' : '/kg'),
       _members: members,
       _wwList: stores.ww,
       _coList: stores.coles,
@@ -1263,12 +1294,12 @@ function buildDealGroups(items) {
   try { ov = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}
 
   // Comparison metric: $/kg for per-kg groups, pack price for sticker groups.
-  const perKg = (g, res) => groupMetric(g, res);
+  const perKg = (g, res, itemName) => groupMetric(g, res, itemName);
   // A store's pack-price history converted to the metric via that store's own
   // current ratio (metric ÷ pack price). For sticker groups metric = price, so
   // ratio = 1 (raw prices). Null ratio (no size) => drop rather than mislabel.
-  const convHist = (g, res, arr) => {
-    const kg = perKg(g, res);
+  const convHist = (g, res, arr, itemName) => {
+    const kg = perKg(g, res, itemName);
     if (kg == null || !res.price || !arr) return [];
     const ratio = kg / res.price;
     return arr.filter(e => e.price > 0).map(e => ({ date: e.date, price: +(e.price * ratio).toFixed(2) }));
@@ -1292,8 +1323,8 @@ function buildDealGroups(items) {
     const members = variantGroupItemNames(g, ov).map(n => byName.get(n)).filter(Boolean);
     if (!members.length) continue;
 
-    const wwBest = members.map(m => ({ m, kg: perKg(g, m.woolworths) })).filter(x => x.kg != null).sort((a, b) => a.kg - b.kg)[0];
-    const coBest = members.map(m => ({ m, kg: perKg(g, m.coles)      })).filter(x => x.kg != null).sort((a, b) => a.kg - b.kg)[0];
+    const wwBest = members.map(m => ({ m, kg: perKg(g, m.woolworths, m.list_item) })).filter(x => x.kg != null).sort((a, b) => a.kg - b.kg)[0];
+    const coBest = members.map(m => ({ m, kg: perKg(g, m.coles,      m.list_item) })).filter(x => x.kg != null).sort((a, b) => a.kg - b.kg)[0];
     if (!wwBest && !coBest) continue;
 
     groups.push({
@@ -1301,13 +1332,14 @@ function buildDealGroups(items) {
       _isGroup: true,
       _groupLabel: g.label,
       _sticker: !!g.sticker,
+      _metricSuffix: g.perPack ? ' each' : (g.sticker ? '' : '/kg'),
       _memberNames: members.map(m => m.list_item), // for the basket handoff (re-collapsed there)
       category: g.category || GROUP_DEFAULT_CATEGORY,
       trip_count: null,
       woolworths: wwBest ? { price: wwBest.kg, url: wwBest.m.woolworths.url, image_url: wwBest.m.woolworths.image_url, name: wwBest.m.woolworths.name } : null,
       coles:      coBest ? { price: coBest.kg, url: coBest.m.coles.url,      image_url: coBest.m.coles.image_url,      name: coBest.m.coles.name } : null,
-      ww_price_history:    mergeSeries(members.map(m => convHist(g, m.woolworths, [...(m.price_history || []), ...(m.ww_price_history || [])]))),
-      coles_price_history: mergeSeries(members.map(m => convHist(g, m.coles, m.coles_price_history))),
+      ww_price_history:    mergeSeries(members.map(m => convHist(g, m.woolworths, [...(m.price_history || []), ...(m.ww_price_history || [])], m.list_item))),
+      coles_price_history: mergeSeries(members.map(m => convHist(g, m.coles, m.coles_price_history, m.list_item))),
       price_history: [],
     });
   }
