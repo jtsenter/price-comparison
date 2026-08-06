@@ -909,6 +909,32 @@ function computePerKgItems(defaultItems, override) {
   return [...defaultItems.filter(n => !remove.has(n)), ...add];
 }
 
+// One-time repair for a specific 2026-08-06 incident: a client whose Edit-
+// category snapshot pre-dated 3 newly-scraped Coles nappies recorded them as
+// removed purely because of that timing (see categoryRemovals() below) -
+// never a real user choice. That corrupted local override then re-published
+// itself over a server-side data fix every few minutes from an already-open
+// tab, which no server-side fix alone can outrun.
+//
+// Scoped to this EXACT shape - one category key, these exact 3 names - so it
+// can never misfire on a legitimate future removal of anything else. Runs
+// once per load (idempotent: a no-op once the bad shape is gone) from every
+// device that loads this file, so it self-heals the moment ANY client next
+// runs fresh code, without the user having to redo the edit by hand. Safe to
+// delete this and its one call site once confirmed clean everywhere (~Sept 2026).
+const KNOWN_BAD_NAPPIES_REMOVE = [
+  'Coles Nappies Unisex Junior Size 6 40pk',
+  'Rascals Premium Nappies Size 6 30pk',
+  'Huggies Ultra Dry Nappies Boys Size 6 30pk',
+];
+function repairKnownCategoryCorruption(overrides) {
+  const o = overrides && typeof overrides === 'object' ? overrides : {};
+  const cat = o.nappies_size6;
+  if (!cat || !Array.isArray(cat.remove)) return o;
+  if (!KNOWN_BAD_NAPPIES_REMOVE.every(n => cat.remove.includes(n))) return o;
+  return { ...o, nappies_size6: { ...cat, remove: cat.remove.filter(n => !KNOWN_BAD_NAPPIES_REMOVE.includes(n)) } };
+}
+
 function loadVariantGroups() {
   let ov = {};
   try { ov = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}

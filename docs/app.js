@@ -1,5 +1,15 @@
 // ── Utilities ────────────────────────────────────────────────────────────────
 
+// Runs before anything else reads pw_perkg_cats_v1 (rendering via utils.js'
+// loadVariantGroups, or syncing via loadVariantGroupOverrides below) - a device
+// still holding the corrupted override was re-publishing it over any server-side
+// fix every few minutes from an already-open tab. See repairKnownCategoryCorruption
+// in utils.js for the full incident writeup; this is its only call site.
+try {
+  const raw = localStorage.getItem('pw_perkg_cats_v1');
+  if (raw) localStorage.setItem('pw_perkg_cats_v1', JSON.stringify(repairKnownCategoryCorruption(JSON.parse(raw))));
+} catch {}
+
 const $ = (id) => document.getElementById(id);
 // fmt() lives in utils.js - one formatter, grouped thousands, whole site.
 

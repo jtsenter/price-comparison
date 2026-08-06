@@ -67,6 +67,11 @@ eval([
   extractConst('DEAL_MIN_DROP'),
   extract('clientPer100'),
   extract('categoryRemovals'), // Edit-category's removal diff - see 2026-08-06 incident
+  // const declared via direct eval doesn't leak to the outer scope the way a
+  // function declaration does - the test cases below need to reference this
+  // array directly, so promote it explicitly.
+  extractConst('KNOWN_BAD_NAPPIES_REMOVE') + '\nglobal.KNOWN_BAD_NAPPIES_REMOVE = KNOWN_BAD_NAPPIES_REMOVE;',
+  extract('repairKnownCategoryCorruption'),
   extract('packCountOf'),      // groupMetric's perPack branch closes over it
   extract('groupMetric'),
   extract('per100Pair'),
@@ -289,6 +294,37 @@ check('median empty -> null', _median([]), null);
         categoryRemovals(DEF, undefined, ['A']), []);
   check('undefined defItems is safe',
         categoryRemovals(undefined, ['A'], []), []);
+}
+
+// ── repairKnownCategoryCorruption ───────────────────────────────────────────
+// Scoped tightly on purpose: it must fix the exact known-bad shape and touch
+// NOTHING else, including a genuine future removal of these same 3 items from
+// a DIFFERENT reason, or of different items from this same category.
+{
+  const bad = { nappies_size6: { v: 2, add: [], remove: [...KNOWN_BAD_NAPPIES_REMOVE], label: 'Diapers size 6' } };
+  const fixed = repairKnownCategoryCorruption(bad);
+  check('strips exactly the known-bad names', fixed.nappies_size6.remove, []);
+  check('label (a real user edit) is preserved', fixed.nappies_size6.label, 'Diapers size 6');
+  check('is idempotent - a second pass is a no-op',
+        repairKnownCategoryCorruption(fixed).nappies_size6.remove, []);
+
+  const partial = { nappies_size6: { v: 2, remove: [KNOWN_BAD_NAPPIES_REMOVE[0]] } };
+  check('a PARTIAL match (only one of the 3) is left alone - not this incident',
+        repairKnownCategoryCorruption(partial).nappies_size6.remove, [KNOWN_BAD_NAPPIES_REMOVE[0]]);
+
+  const other = { nappies_size6: { v: 2, remove: ['Some Other Product'] } };
+  check('an unrelated removal from the same category is untouched',
+        repairKnownCategoryCorruption(other).nappies_size6.remove, ['Some Other Product']);
+
+  const mixed = { nappies_size6: { v: 2, remove: [...KNOWN_BAD_NAPPIES_REMOVE, 'Genuinely Removed Item'] } };
+  check('a real removal alongside the bad 3 survives the strip',
+        repairKnownCategoryCorruption(mixed).nappies_size6.remove, ['Genuinely Removed Item']);
+
+  check('no nappies_size6 key at all is safe', repairKnownCategoryCorruption({}), {});
+  check('empty overrides object is safe', repairKnownCategoryCorruption({}), {});
+  check('null input is safe', repairKnownCategoryCorruption(null), {});
+  check('other categories are never touched',
+        repairKnownCategoryCorruption({ other_cat: { remove: ['X'] } }).other_cat.remove, ['X']);
 }
 
 // ── variantGroupOf / settingsKeyFor ─────────────────────────────────────────
