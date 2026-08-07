@@ -188,7 +188,7 @@
         // files. Leaves localStorage alone - token and preferences survive.
         // Sits ABOVE Scrape Log (they were the other way round) and is
         // desktop-only - see .more-dropdown-item.desktop-only in style.css.
-        '<button class="more-dropdown-item desktop-only nowrap-item" id="forceRefreshBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Fix stuck data</button>' +
+        '<button class="more-dropdown-item desktop-only nowrap-item" id="forceRefreshBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Hard refresh</button>' +
         '<a class="more-dropdown-item" href="scrape-log.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Scrape Log</a>' +
       '</div>' +
     '</div>';

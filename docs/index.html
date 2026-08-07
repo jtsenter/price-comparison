@@ -22,12 +22,12 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=139" />
+  <link rel="stylesheet" href="style.css?v=140" />
 </head>
 <body>
 
 <header data-page="index"></header>
-<script src="header.js?v=19"></script>
+<script src="header.js?v=20"></script>
 
 <!-- Bulk action bar -->
 <div id="bulkToolbar" class="bulk-toolbar" style="display:none">
@@ -274,7 +274,8 @@
   <div class="modal modal-wide">
     <button class="modal-close" id="uploadModalClose">✕</button>
     <h2>Import Items</h2>
-    <p>Upload an Excel file with an <strong>Item</strong> column (same format as your shopping history). New items will be added to your basket and a price scrape will be triggered.</p>
+    <p>Upload an Excel file with an <strong>Item</strong> column (same format as your shopping history). New items will be added to your basket and a price scrape will be triggered.
+      <button type="button" class="link-btn" id="uploadTemplateBtn">Download a blank template</button></p>
     <div class="upload-drop-zone" id="uploadDropZone">
       <div class="upload-icon">📂</div>
       <div>Drop .xlsx file here or <label class="upload-browse-label" for="uploadFile">browse</label></div>
@@ -373,9 +374,9 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=105"></script>
+<script src="utils.js?v=106"></script>
 <script src="history-modal.js?v=3"></script>
-<script src="app.js?v=178"></script>
+<script src="app.js?v=179"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">

@@ -1225,7 +1225,7 @@ function getColValue(col, item) {
     case 'priority':     { const p = getPriority(item.list_item); return p === 'archive' ? 'Archived' : p[0].toUpperCase() + p.slice(1); }
     case 'ww':           return item.woolworths?.price != null ? fmt(item.woolworths.price) : '(Missing)';
     case 'coles':        return item.coles?.price != null ? fmt(item.coles.price) : '(Missing)';
-    case 'cheaper':      { const c = item.cheaper_store; return c === 'woolworths' ? 'Woolworths' : c === 'coles' ? 'Coles' : c === 'equal' ? 'Equal' : 'N/A'; }
+    case 'cheaper':      return CHEAPER_SORT_LABEL[rowCheaperStore(item)] ?? 'N/A';  // same verdict the chip and sort use
     case 'pct': {
       const ww = item.woolworths?.price, co = item.coles?.price;
       if (ww == null || co == null) return '-';
@@ -2484,6 +2484,16 @@ function mbCheaperStore(item) {
   if (c < w - 0.005) return 'coles';
   return 'equal';
 }
+// The Best column's verdict for ANY row - the ONE thing the chip and the sort
+// key both read, because they disagreed and the column looked randomly ordered.
+// A CATEGORY carries .woolworths/.coles holding its cheapest member's raw PACK
+// price, but it is judged on its per-kg/per-unit metric (that's the whole point
+// of a category), and the two routinely disagree - a cheaper pack is often the
+// dearer kilo. So a group answers with the verdict it already displays; only a
+// plain row goes through the multi-buy line-cost comparison.
+function rowCheaperStore(item) {
+  return item._isGroup ? item.cheaper_store : mbCheaperStore(item);
+}
 // Effective per-unit price at the current qty (line cost ÷ units) - the number
 // the price column shows once a deal is live, and what the DIFF % must compare
 // (else avocado ×2 stays "12%" off sticker while the real gap is 9% the other way).
@@ -3387,12 +3397,15 @@ function sortItems(items) {
       case 'name':     return dispSortName(item);
       case 'ww':       return wwShown ?? NaN;
       case 'coles':    return coShown ?? NaN;
-      case 'cheaper':  return mbCheaperStore(item) ?? 'zzz';
+      // Sort on the label the column DISPLAYS, not the internal store key:
+      // 'coles'/'equal'/'woolworths' sorted alphabetically read as C, =, W, which
+      // matches nothing the eye can see. rowCheaperStore keeps categories on the
+      // same verdict their own chip shows (see its comment).
+      case 'cheaper':  return CHEAPER_SORT_LABEL[rowCheaperStore(item)] ?? 'N/A';
       case 'saving':   return item._isGroup ? (savingAmount(item) ?? NaN) : (mbSaving(item) ?? NaN);
       case 'trips':    return item.trip_count || 0;
-      // Kg rows sort as a contiguous block after pack-count rows (offset), so
-      // "1.0kg" items sit together instead of interleaving with "1 unit" items.
-      case 'units':    { const u = getUnits(item.list_item); return isKgQty(item.list_item) ? 1e6 + u : u; }
+      // One column, one numeric order - see qtySortValue in utils.js.
+      case 'units':    return qtySortValue(getUnits(item.list_item), isKgQty(item.list_item));
       case 'priority': return PRIORITY_ORDER[getPriority(item.list_item)] ?? 99;
       case 'pct': {
         if (item._isGroup) return (wwShown != null && coShown != null)
@@ -5699,6 +5712,23 @@ function initUploadModal() {
   $('importBtn')?.addEventListener('click', () => {
     modal.classList.add('open');
     renderPendingItems();
+  });
+
+  // Built here rather than shipped as a file: SheetJS is already loaded for
+  // reading uploads, so the template can't drift from what processUploadFile
+  // actually parses - sheet named "Data", an "Item" header, one item per row.
+  $('uploadTemplateBtn')?.addEventListener('click', () => {
+    if (!window.XLSX) { alert('SheetJS not loaded - please reload the page.'); return; }
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet([
+      ['Item'],
+      ['Woolworths Full Cream Milk 2L'],
+      ['Helga\'s Traditional Wholemeal 750g'],
+      ['Cavendish Bananas 1kg'],
+    ]);
+    ws['!cols'] = [{ wch: 44 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Data');
+    XLSX.writeFile(wb, 'pricewatch-import-template.xlsx');
   });
   $('uploadModalClose').addEventListener('click', close);
   $('uploadCancel').addEventListener('click', close);

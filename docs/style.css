@@ -616,9 +616,16 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 .vgm-third-sec .vg-store-h:first-of-type { margin-top: 6px; }
 /* Keep the section title clear of the folded corner. */
 .vgm-third-sec.open .vgm-third-h, .third-open-col .vg-store-h { padding-right: 34px; }
-/* The chip moved off the category's title line onto the "2 W · 3 C" line below,
-   where it has room - on the title it pushed the product name sideways. */
-.vg-group-sub .third-chip { margin-left: 8px; }
+/* The chip sits on the "2 W · 3 C" line rather than the title (where it pushed
+   the product name sideways), pinned to the RIGHT end of that line. */
+.vg-group-sub { display: flex; align-items: center; }
+.vg-group-sub .third-chip { margin-left: auto; }
+/* Inline "download the template" affordance inside the Import dialog. */
+.link-btn {
+  padding: 0; border: 0; background: none; cursor: pointer;
+  color: var(--accent, #0072CE); font: inherit; text-decoration: underline;
+}
+.link-btn:hover { color: var(--text); }
 /* The per-unit rate beside a third-store price - $/100g, or per piece. */
 .third-tag {
   display: inline-block; margin-left: 6px; padding: 1px 6px;

@@ -101,6 +101,10 @@ eval([
   extract('groupThirdScale'),  // which scale a CATEGORY compares a third store on
   extract('groupThirdBeat'),
   extract('thirdGroupMetric'), // the price a third-store row SHOWS in the bold slot
+  extract('qtySortValue'),     // Qty column: units and kg in ONE numeric order
+  // Used directly by the test body, not just by another extracted function, so
+  // it needs the same global re-export as KNOWN_BAD_NAPPIES_REMOVE above.
+  extractConst('CHEAPER_SORT_LABEL') + '\nglobal.CHEAPER_SORT_LABEL = CHEAPER_SORT_LABEL;',
   extract('variantGroupOf'),   // member -> its category
   extract('settingsKeyFor'),   // the key a member's settings actually live under
   extract('buildDealGroups'),
@@ -366,6 +370,49 @@ check('median empty -> null', _median([]), null);
   check('a missing entry is safe',          thirdGroupMetric(stickerG, null), null);
   check('a weighed entry with no size in its name has no metric',
         thirdGroupMetric(weighedG, { name: 'Mystery bag', price: 4 }), null);
+}
+
+// ── qtySortValue (Qty column: units and kilos in ONE numeric order) ─────────
+// The old rule added 1e6 to every kg row, blocking all weights after all counts,
+// so a 0.8 kg item sorted AFTER a 20-pack. Both examples below are the ones
+// asked for verbatim.
+{
+  const sortQty = rows => rows
+    .map(r => ({ ...r, k: qtySortValue(r.u, r.kg) }))
+    .sort((a, b) => a.k - b.k)
+    .map(r => r.kg ? r.u + 'kg' : String(r.u));
+
+  check('0.8kg, 1 unit, 1.2kg sort in numeric order',
+        sortQty([{ u: 1.2, kg: true }, { u: 1, kg: false }, { u: 0.8, kg: true }]),
+        ['0.8kg', '1', '1.2kg']);
+
+  check('at the SAME number, a plain unit comes before a weight',
+        sortQty([{ u: 1, kg: true }, { u: 1, kg: false }, { u: 1, kg: true }, { u: 1, kg: false }]),
+        ['1', '1', '1kg', '1kg']);
+
+  // The specific regression: a small weight must not be exiled past a big count.
+  check('0.5kg sorts before a 20-pack, not after it',
+        sortQty([{ u: 20, kg: false }, { u: 0.5, kg: true }]), ['0.5kg', '20']);
+
+  check('the kg nudge is far smaller than a real step',
+        qtySortValue(1, true) < 1.1, true);
+  check('a unit value is left exactly alone', qtySortValue(3, false), 3);
+  check('a missing quantity is NaN, so it sinks either way',
+        Number.isNaN(qtySortValue(undefined, false)), true);
+}
+
+// ── CHEAPER_SORT_LABEL (Best column sorts by what it DISPLAYS) ───────────────
+// Sorting the raw store keys put 'coles' < 'equal' < 'woolworths', which on
+// screen read as C, =, W - an order matching nothing visible.
+{
+  const label = k => CHEAPER_SORT_LABEL[k] ?? 'N/A';
+  check('woolworths shows as Woolworths', label('woolworths'), 'Woolworths');
+  check('coles shows as Coles',           label('coles'), 'Coles');
+  check('equal shows as Equal',           label('equal'), 'Equal');
+  check('an unknown/missing store is N/A, not undefined', label(null), 'N/A');
+  check('labels sort alphabetically as displayed',
+        ['woolworths', 'equal', null, 'coles'].map(label).sort(),
+        ['Coles', 'Equal', 'N/A', 'Woolworths']);
 }
 
 // ── thirdOpenState / thirdToggleState (default-open tri-state) ───────────────

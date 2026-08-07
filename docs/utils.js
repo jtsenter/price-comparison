@@ -1055,6 +1055,23 @@ function thirdBeatsUnit(entries, wwUnitPrice, colesUnitPrice) {
   return best.unit < Math.min(...rivals) ? best.entry : null;
 }
 
+// The Best column's readable label per store key. ONE map, used by both the
+// cell/export value and the sort key - when those disagreed, "A to Z" ordered by
+// the hidden internal keys ('coles' < 'equal' < 'woolworths') and read as random.
+const CHEAPER_SORT_LABEL = { woolworths: 'Woolworths', coles: 'Coles', equal: 'Equal' };
+
+// Sort key for the Qty column, where two different units share one column: whole
+// units (3 packs) and weights (1.2 kg). These used to be blocked apart - kg rows
+// got +1e6 so they all sat after every unit row - which put a 0.8 kg item AFTER
+// a 20-pack. The column reads as one list of quantities, so it sorts as one:
+// numerically, with a hair of separation so that at the SAME number a plain unit
+// comes before a weight (1, 1, 1kg, 1kg). EPS is far below any real step (0.1).
+function qtySortValue(units, isKg) {
+  const u = Number(units);
+  if (!Number.isFinite(u)) return NaN;      // NaN sinks to the bottom either way
+  return isKg ? u + 1e-6 : u;               // 1e-6 << the 0.1 step real quantities use
+}
+
 // WHICH scale a CATEGORY's own metric is on, and therefore how a third store has
 // to be compared against it. Getting this wrong is silent: the verdict just
 // comes out backwards, with nothing to notice.
