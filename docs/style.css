@@ -564,14 +564,27 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 .third-rail-count {
   writing-mode: vertical-rl; font-size: 11px; font-weight: 700; letter-spacing: .5px;
 }
-/* Sits in the expanded column's own header, so collapsing is where expanding was. */
-.third-rail-close {
-  margin-left: auto; padding: 2px 8px; border-radius: 7px;
-  border: 1px solid var(--border-strong); background: var(--card);
-  color: var(--text-mid); font-size: 11px; font-weight: 800;
-  white-space: nowrap; cursor: pointer;
+/* Hide control as a turned-down page corner in the section's top-right: it reads
+   as "fold this away" and costs no row height, where the old full-width pill
+   pushed the content down on both layouts. */
+.third-fold {
+  position: absolute; top: 0; right: 0; z-index: 2;
+  width: 34px; height: 34px; padding: 0;
+  border: 0; background: none; cursor: pointer; line-height: 0;
 }
-.third-rail-close:hover { border-color: var(--text-soft); color: var(--text); background: var(--bg); }
+.third-fold::after {                 /* the fold itself */
+  content: ''; position: absolute; top: 0; right: 0;
+  border-top: 34px solid var(--border-strong);
+  border-left: 34px solid transparent;
+  border-top-right-radius: 8px;
+}
+.third-fold:hover::after { border-top-color: var(--text-soft); }
+.third-fold-ic {
+  position: absolute; top: 4px; right: 5px; z-index: 1;
+  color: var(--card); font-size: 12px; font-weight: 900; line-height: 1;
+}
+/* Both hosts need to be the positioning context for that corner. */
+.third-open-col, .vgm-third-sec { position: relative; }
 /* Mobile: no room for a third column, so outside stores stack under the two
    supermarkets as a collapsible section. The toggle is a real, full-width bar -
    a bare caret was too easy to miss, and this is the control that reveals a
@@ -601,8 +614,11 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 /* Outside-store rows are W/C rows: same header, same grid, same price weight. */
 .vgm-third-sec .vg-store-h { margin-top: 10px; }
 .vgm-third-sec .vg-store-h:first-of-type { margin-top: 6px; }
-/* The desktop column's own collapse control, matched to the mobile one. */
-.vg-store-h-third { display: flex; align-items: center; gap: 8px; }
+/* Keep the section title clear of the folded corner. */
+.vgm-third-sec.open .vgm-third-h, .third-open-col .vg-store-h { padding-right: 34px; }
+/* The chip moved off the category's title line onto the "2 W · 3 C" line below,
+   where it has room - on the title it pushed the product name sideways. */
+.vg-group-sub .third-chip { margin-left: 8px; }
 /* The per-unit rate beside a third-store price - $/100g, or per piece. */
 .third-tag {
   display: inline-block; margin-left: 6px; padding: 1px 6px;

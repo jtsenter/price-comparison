@@ -62,6 +62,9 @@
     '.more-dropdown-item{display:flex;align-items:center;gap:8px;width:100%;padding:8px 16px;font-size:13px;font-weight:500;color:var(--text,#1A1F2E);background:none;border:none;cursor:pointer;text-align:left;text-decoration:none;transition:background .1s}' +
     '.more-dropdown-item:hover{background:var(--bg,#F0F4F8)}' +
     '.more-dropdown-item svg{flex-shrink:0;color:var(--text-mid,#475569)}' +
+    /* One line, never wrapped onto two, and desktop-only where asked. */
+    '.more-dropdown-item.nowrap-item{white-space:nowrap}' +
+    '@media(max-width:640px){.more-dropdown-item.desktop-only{display:none}}' +
     '.options-dropdown{min-width:200px;padding:10px}' +
     '.options-group+.options-group{margin-top:12px}' +
     '.options-divider{border-top:1px solid var(--border,#E2E8F0);margin:10px -10px 4px}' +
@@ -180,16 +183,13 @@
             '<button class="more-dropdown-item" id="importBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Items</button>' +
             '<button class="more-dropdown-item" id="settingsBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Auto-update Setup</button>'
           : '<div class="options-divider"></div>') +
+        // Unregisters the service worker and clears Cache Storage from inside the
+        // page, for when a browser keeps serving an already-installed worker's OLD
+        // files. Leaves localStorage alone - token and preferences survive.
+        // Sits ABOVE Scrape Log (they were the other way round) and is
+        // desktop-only - see .more-dropdown-item.desktop-only in style.css.
+        '<button class="more-dropdown-item desktop-only nowrap-item" id="forceRefreshBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Fix stuck data</button>' +
         '<a class="more-dropdown-item" href="scrape-log.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Scrape Log</a>' +
-        '<div class="options-divider"></div>' +
-        // Site settings > Storage doesn't list a GitHub Pages PWA distinctly on
-        // every phone, so "clear the site's storage" is often a dead end for a
-        // stuck cache - a normal reload can't force it either (a browser may keep
-        // serving an already-installed service worker's OLD cached files for a
-        // long time). This does the same unregister-and-clear from inside the
-        // page itself, which needs no menu-hunting. Deliberately leaves
-        // localStorage alone - the GitHub token and saved preferences survive.
-        '<button class="more-dropdown-item" id="forceRefreshBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>Fix stuck data / force refresh</button>' +
       '</div>' +
     '</div>';
 

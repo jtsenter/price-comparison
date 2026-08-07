@@ -4091,9 +4091,8 @@ function appendGroupRowDesktop(tbody, group, overrides) {
         <span class="vg-group-title">
           <span class="vg-group-label">${esc(group._groupLabel)}</span>
           <button class="item-edit-btn" data-edit-item="${group.list_item}" title="Edit category">✎</button>
-          ${groupThirdChipHTML(group)}
         </span>
-        <span class="vg-group-sub">${groupSubLabel(group)}</span>
+        <span class="vg-group-sub">${groupSubLabel(group)}${groupThirdChipHTML(group)}</span>
       </div>
     </div></td>`;
 
@@ -4213,10 +4212,9 @@ function appendGroupRowDesktop(tbody, group, overrides) {
   // here". Expanded it becomes a normal column. Cheaper-elsewhere opens itself.
   const thirdCol = !gThirdEntries.length ? ''
     : showThird
-    ? `<div class="vg-panel-store">
-        <div class="vg-store-h vg-store-h-third">Other stores
-          <button class="third-rail-close" data-third="${escAttr(group.list_item)}"${gBeat ? ' data-third-beats="1"' : ''} title="Hide other stores">Hide ▸</button>
-        </div>
+    ? `<div class="vg-panel-store third-open-col">
+        <button class="third-fold" data-third="${escAttr(group.list_item)}"${gBeat ? ' data-third-beats="1"' : ''} title="Hide other stores" aria-label="Hide other stores"><span class="third-fold-ic">✕</span></button>
+        <div class="vg-store-h">Other stores</div>
         ${groupThirdRowsHTML(group, gThirdEntries, gBestMetric, imgSrc)}
       </div>`
     : `<button class="third-rail${gBeat ? ' beats' : ''}" data-third="${escAttr(group.list_item)}"${gBeat ? ' data-third-beats="1"' : ''}
@@ -4361,8 +4359,9 @@ function appendGroupCardMobile(container, group, overrides) {
       <div class="vgm-store-sec vgm-third-sec${mOpen ? ' open' : ''}">
         <button class="vgm-third-h${mBeat ? ' beats' : ''}" data-third="${escAttr(group.list_item)}"${mBeat ? ' data-third-beats="1"' : ''} aria-expanded="${mOpen}">
           <span class="vgm-third-label">Other stores <span class="vgm-third-count">${mThirdEntries.length}</span></span>
-          <span class="vgm-third-toggle">${mOpen ? 'Hide ▲' : 'Show ▼'}</span>
+          ${mOpen ? '' : '<span class="vgm-third-toggle">Show ▼</span>'}
         </button>
+        ${mOpen ? `<button class="third-fold" data-third="${escAttr(group.list_item)}"${mBeat ? ' data-third-beats="1"' : ''} title="Hide other stores" aria-label="Hide other stores"><span class="third-fold-ic">✕</span></button>` : ''}
         ${mOpen ? groupThirdRowsHTML(group, mThirdEntries, mBest, imgSrc) : ''}
       </div>`;
     html += `<div class="vgm-body">
@@ -6580,7 +6579,7 @@ async function boot() {
         // row expands on a click anywhere, and a row with third-store prices
         // should not behave differently. Guarded so the row's own controls
         // (checkbox, links, ✎, qty, price bar) still do their own job.
-        const thirdBtn = e.target.closest('.third-chip, .third-rail, .third-rail-close');
+        const thirdBtn = e.target.closest('.third-chip, .third-rail, .third-fold');
         const thirdRow = thirdBtn ? null : e.target.closest('tr[data-item]');
         const rowKey = thirdRow && !e.target.closest('a, button, input, select, .price-bar, .units-ctrl')
           ? thirdRow.dataset.item : null;
@@ -6660,7 +6659,7 @@ async function boot() {
       // Outside-stores toggle. The chip sits on the COLLAPSED card face, so it
       // has to open the card too - otherwise it would flip a section that isn't
       // on screen (same reasoning as the desktop chip opening its category).
-      const mThird = e.target.closest('.third-chip, .vgm-third-h');
+      const mThird = e.target.closest('.third-chip, .vgm-third-h, .third-fold');
       if (mThird) {
         toggleThird(mThird.dataset.third, mThird.dataset.thirdBeats === '1');
         const gk = mThird.closest('.vg-mobile-card')?.dataset.group;
