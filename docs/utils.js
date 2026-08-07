@@ -790,6 +790,17 @@ const DEFAULT_VARIANT_GROUPS = [
   // price PER NAPPY, which is the only figure that compares a 30-pack with a
   // 40-pack. sticker stays true so the basket, history and hot-deals paths that
   // key off it keep treating this as a pack-bought, non-weighed category.
+  // Compared per BAG. Rolls run 10 to 100 bags, and the bag SIZE (56L, 76L)
+  // varies independently of the count, so neither pack price nor litres ranks
+  // these usefully - price per bag is the number you actually compare.
+  { key: 'garbage_bags_xl', label: 'Garbage bags (extra large)', category: 'Household', perPack: true, items: [
+    'Armada Evergreen Garbage Bags Extra Large 20pk',
+    'Multix Extra Wide 56L Garbage Bags 100pk',
+    'Armada Garbage Bags 20pk',
+    'Multix Extra Wide Garbage Bags 50pk',
+    'Multix Extra Large Extra Wide Garbage Bags 76L 10pk',
+    'Glad Garbage Bag Wavetop Tie XL 30pk',
+  ]},
   // Compared per TABLET, not per pack: these run 30 to 100 tablets a box, so a
   // pack price ranks the big boxes as "expensive" when they are usually the
   // cheapest wash. Same reasoning as nappies. NOT sticker - unlike nappies the

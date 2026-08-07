@@ -52,6 +52,8 @@ KNOWN_NAME_CHANGES = {
     # the list_item first). Renaming here keeps the existing purchase history
     # attached instead of stranding it under the countless old name.
     "Shine Dishwashing Tablets": "Shine Dishwashing Tablets 30pk",
+    # Same reason, for the per-bag garbage bag category (WW 367232 is a 20 pack).
+    "Armada Evergreen Garbage Bags Extra Large": "Armada Evergreen Garbage Bags Extra Large 20pk",
 }
 
 # Resolve alias chains (A→B plus B→C would leave A pointing at a name that itself
