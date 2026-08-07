@@ -1076,6 +1076,23 @@ function groupThirdScale(group) {
   };
 }
 
+// A third-store entry expressed in the CATEGORY's own metric - the number that
+// belongs in the same bold slot where a W/C row shows "$0.29 each" or "$4.90".
+// Mirrors groupMetric() for supermarket rows: per piece for a perPack category,
+// the shelf price itself for a sticker one, $/kg for a weighed one. Showing a
+// $13.99 pack price where the column means "per nappy" is the mismatch this
+// exists to stop.
+function thirdGroupMetric(group, entry) {
+  if (!entry || entry.price == null) return null;
+  // Precedence MUST match groupMetric(): a category can carry both flags at once
+  // (nappies is sticker + perPack), and perPack wins there. Testing sticker
+  // first printed "$13.99 each" - the pack price wearing the per-piece label.
+  if (group._perPack) return entry.packs > 0 ? entry.price / entry.packs : null;
+  if (group._sticker) return entry.price;
+  const per100 = clientPer100({ price: entry.price, name: entry.name || '' });
+  return per100.value == null ? null : per100.value * 10;   // $/100g -> $/kg, as the column shows
+}
+
 // The ONE place a category's "is it cheaper elsewhere?" verdict is decided, so
 // the chip, the desktop panel and the mobile card cannot disagree with it.
 function groupThirdBeat(group, entries) {

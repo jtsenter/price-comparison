@@ -766,6 +766,51 @@ function groupThirdChipHTML(group) {
   return thirdChipHTML(group.list_item, groupThirdEntries(group), s.ww, s.co, s.perUnit);
 }
 
+// Third-store rows built to the SAME shape as a Woolworths/Coles variant row -
+// image, linked name, grey shelf price, bold metric price - and grouped under a
+// per-store header, so Priceline sits exactly where Woolworths sits rather than
+// in a shape of its own. Two things this fixes over the generic renderer:
+//   - the bold price is the CATEGORY's metric ($0.35 each), not the pack price
+//     ($13.99), which is what the W and C rows beside it are showing;
+//   - no per-100g badge on a sticker category - one deodorant's price is the
+//     price of one deodorant.
+// A third store has no photo of its own, so it borrows the category's, the same
+// way the desktop panel does, rather than leaving a hole.
+function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg) {
+  const suffix = group._metricSuffix ?? (group._sticker ? '' : '/kg');
+  const byStore = new Map();
+  for (const e of entries) {
+    if (!byStore.has(e.store)) byStore.set(e.store, []);
+    byStore.get(e.store).push(e);
+  }
+  return [...byStore.entries()].map(([storeKey, list]) => {
+    const meta = THIRD_STORES[storeKey] || { letter: '?', label: storeKey };
+    const rows = list
+      .map(e => ({ e, m: thirdGroupMetric(group, e) }))
+      .sort((a, b) => (a.m ?? Infinity) - (b.m ?? Infinity))
+      .map(({ e, m }) => {
+        const img = resolveImgUrl(e.image) || fallbackImg;
+        const imgHtml = img
+          ? `<img class="vg-pv-img" src="${escAttr(img)}" alt="" loading="lazy" />`
+          : '<span class="vg-pv-img vg-pv-noimg"></span>';
+        const nameHtml = e.url
+          ? `<a class="vg-pv-name" href="${escAttr(e.url)}" target="_blank" rel="noopener">${esc(e.name)}</a>`
+          : `<span class="vg-pv-name">${esc(e.name)}</span>`;
+        // Same slot split as a W/C row: grey pack price only where the metric
+        // isn't already the pack price (a sticker category would print it twice).
+        const pack = group._sticker ? '' : (e.price != null ? fmt(e.price) : '');
+        const isWin = m != null && bestMetric != null && m <= bestMetric + 0.0001;
+        return `<div class="vg-pv${isWin ? ' win' : ''}">
+            ${imgHtml}
+            ${nameHtml}
+            <span class="vg-pv-pack">${pack}</span>
+            <span class="vg-pv-kg">${m != null ? '$' + m.toFixed(2) + suffix : fmt(e.price)}</span>
+          </div>`;
+      }).join('');
+    return `<div class="vg-store-h"><span class="store-chip third sm">${esc(meta.letter)}</span> ${esc(meta.label)}</div>${rows}`;
+  }).join('');
+}
+
 // groupThirdScale / groupThirdBeat live in utils.js - pure, and covered by the
 // self-check, because picking the wrong scale fails SILENTLY (a cheaper store
 // just reads as dearer).
@@ -4158,6 +4203,10 @@ function appendGroupRowDesktop(tbody, group, overrides) {
   const gMetricPrices = [gScale.ww?.price, gScale.co?.price].filter(p => p != null);
   const gBeat = groupThirdBeat(group, gThirdEntries);
   const showThird = gThirdEntries.length && isThirdOpen(group.list_item, gBeat);
+  // One "cheapest" across all three columns, on the category's own metric.
+  const gThirdMetrics = gThirdEntries.map(e => thirdGroupMetric(group, e)).filter(v => v != null);
+  const gBestMetric = [...gMetricPrices, ...gThirdMetrics].length
+    ? Math.min(...gMetricPrices, ...gThirdMetrics) : null;
   // Collapsed, the outside stores are a narrow rail on the RIGHT rather than a
   // third of the panel's width: two supermarket columns stay full-size, which is
   // what you actually compare, and the rail costs ~28px to say "there is more
@@ -4165,10 +4214,10 @@ function appendGroupRowDesktop(tbody, group, overrides) {
   const thirdCol = !gThirdEntries.length ? ''
     : showThird
     ? `<div class="vg-panel-store">
-        <div class="vg-store-h">Other stores
-          <button class="third-rail-close" data-third="${escAttr(group.list_item)}"${gBeat ? ' data-third-beats="1"' : ''} title="Hide other stores">▸</button>
+        <div class="vg-store-h vg-store-h-third">Other stores
+          <button class="third-rail-close" data-third="${escAttr(group.list_item)}"${gBeat ? ' data-third-beats="1"' : ''} title="Hide other stores">Hide ▸</button>
         </div>
-        ${thirdOthersColumnHTML(gThirdEntries, gMetricPrices.length ? Math.min(...gMetricPrices) : null, undefined, gScale.perUnit)}
+        ${groupThirdRowsHTML(group, gThirdEntries, gBestMetric, imgSrc)}
       </div>`
     : `<button class="third-rail${gBeat ? ' beats' : ''}" data-third="${escAttr(group.list_item)}"${gBeat ? ' data-third-beats="1"' : ''}
          title="Show ${gThirdEntries.length} other store${gThirdEntries.length > 1 ? 's' : ''}">
@@ -4303,13 +4352,18 @@ function appendGroupCardMobile(container, group, overrides) {
     const mMetricPrices = [mScale.ww?.price, mScale.co?.price].filter(p => p != null);
     const mBeat = groupThirdBeat(group, mThirdEntries);
     const mOpen = isThirdOpen(group.list_item, mBeat);
+    // Cheapest across BOTH supermarkets and the outside stores, on the category's
+    // own metric - so the green "win" row means the same thing in all three.
+    const mThirdMetrics = mThirdEntries.map(e => thirdGroupMetric(group, e)).filter(v => v != null);
+    const mBest = [...mMetricPrices, ...mThirdMetrics].length
+      ? Math.min(...mMetricPrices, ...mThirdMetrics) : null;
     const thirdSec = !mThirdEntries.length ? '' : `
-      <div class="vgm-store-sec vgm-third-sec">
+      <div class="vgm-store-sec vgm-third-sec${mOpen ? ' open' : ''}">
         <button class="vgm-third-h${mBeat ? ' beats' : ''}" data-third="${escAttr(group.list_item)}"${mBeat ? ' data-third-beats="1"' : ''} aria-expanded="${mOpen}">
-          <span>Other stores <span class="vgm-third-count">＋${mThirdEntries.length}</span></span>
-          <span class="third-caret">${mOpen ? '▾' : '▸'}</span>
+          <span class="vgm-third-label">Other stores <span class="vgm-third-count">${mThirdEntries.length}</span></span>
+          <span class="vgm-third-toggle">${mOpen ? 'Hide ▲' : 'Show ▼'}</span>
         </button>
-        ${mOpen ? thirdOthersColumnHTML(mThirdEntries, mMetricPrices.length ? Math.min(...mMetricPrices) : null, undefined, mScale.perUnit) : ''}
+        ${mOpen ? groupThirdRowsHTML(group, mThirdEntries, mBest, imgSrc) : ''}
       </div>`;
     html += `<div class="vgm-body">
       <div class="vgm-store-sec">

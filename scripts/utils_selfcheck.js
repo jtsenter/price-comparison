@@ -100,6 +100,7 @@ eval([
   extract('thirdToggleState'),
   extract('groupThirdScale'),  // which scale a CATEGORY compares a third store on
   extract('groupThirdBeat'),
+  extract('thirdGroupMetric'), // the price a third-store row SHOWS in the bold slot
   extract('variantGroupOf'),   // member -> its category
   extract('settingsKeyFor'),   // the key a member's settings actually live under
   extract('buildDealGroups'),
@@ -329,6 +330,42 @@ check('median empty -> null', _median([]), null);
   // A weighed category must stay silent rather than compare $/kg against $/100g.
   check('a weighed category never returns a verdict',
         groupThirdBeat(weighedG, [{ store: 'priceline', name: 'Chia 1kg', price: 1.00 }]), null);
+}
+
+// ── thirdGroupMetric (what a third-store row shows in its bold price slot) ──
+// The row has to state the same KIND of number as the W/C rows beside it: a
+// nappies column means "per nappy", so a $13.99 pack price there is not a
+// smaller number, it's a different unit. And a sticker category means one item,
+// so a per-100g figure belongs nowhere near it.
+{
+  const packG    = { _perPack: true };
+  const stickerG = { _sticker: true };
+  const weighedG = {};
+
+  check('a perPack category shows price PER PIECE, not the pack price',
+        thirdGroupMetric(packG, { name: 'Huggies 40pk', price: 13.99, packs: 40 })?.toFixed(2), '0.35');
+  check('a sticker category shows the shelf price itself',
+        thirdGroupMetric(stickerG, { name: 'Rexona Sport 52g', price: 5.50 }), 5.50);
+  check('...and NOT a per-100g figure for it',
+        thirdGroupMetric(stickerG, { name: 'Rexona Sport 52g', price: 5.50 }) === 10.576923076923077, false);
+  check('a weighed category shows $/kg (per-100g x10)',
+        thirdGroupMetric(weighedG, { name: 'Chia Seeds 500g', price: 8.50 })?.toFixed(2), '17.00');
+
+  // The real nappies category carries BOTH flags, and groupMetric gives perPack
+  // priority - so this must too, or the pack price prints wearing an "each"
+  // label ("$13.99 each"). Precedence, not just the individual branches.
+  check('perPack beats sticker when a category sets both, as groupMetric does',
+        thirdGroupMetric({ _sticker: true, _perPack: true },
+                         { name: 'Huggies 40pk', price: 13.99, packs: 40 })?.toFixed(2), '0.35');
+
+  check('a perPack entry with no packs count has no metric, rather than a wrong one',
+        thirdGroupMetric(packG, { name: 'Some nappies', price: 13.99 }), null);
+  check('zero packs does not divide by zero',
+        thirdGroupMetric(packG, { name: 'x', price: 5, packs: 0 }), null);
+  check('a priceless entry has no metric', thirdGroupMetric(stickerG, { name: 'x' }), null);
+  check('a missing entry is safe',          thirdGroupMetric(stickerG, null), null);
+  check('a weighed entry with no size in its name has no metric',
+        thirdGroupMetric(weighedG, { name: 'Mystery bag', price: 4 }), null);
 }
 
 // ── thirdOpenState / thirdToggleState (default-open tri-state) ───────────────

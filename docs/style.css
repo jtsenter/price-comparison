@@ -566,23 +566,43 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 }
 /* Sits in the expanded column's own header, so collapsing is where expanding was. */
 .third-rail-close {
-  margin-left: auto; padding: 0 4px; border: 0; background: none;
-  color: var(--text-soft); font-size: 11px; cursor: pointer;
+  margin-left: auto; padding: 2px 8px; border-radius: 7px;
+  border: 1px solid var(--border-strong); background: var(--card);
+  color: var(--text-mid); font-size: 11px; font-weight: 800;
+  white-space: nowrap; cursor: pointer;
 }
-.third-rail-close:hover { color: var(--text); }
+.third-rail-close:hover { border-color: var(--text-soft); color: var(--text); background: var(--bg); }
 /* Mobile: no room for a third column, so outside stores stack under the two
-   supermarkets as a normal collapsible section. */
+   supermarkets as a collapsible section. The toggle is a real, full-width bar -
+   a bare caret was too easy to miss, and this is the control that reveals a
+   cheaper price. */
 .vgm-third-h {
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  width: 100%; padding: 0; border: 0; background: none;
-  color: var(--text-mid); font-size: 12px; font-weight: 700; cursor: pointer;
+  width: 100%; padding: 8px 10px; margin: -8px -10px 0;
+  border: 0; border-radius: 8px;
+  background: var(--card); color: var(--text);
+  font-size: 13px; font-weight: 800; cursor: pointer;
 }
-.vgm-third-h.beats { color: #4338CA; }
+.vgm-third-sec.open .vgm-third-h { margin-bottom: 4px; }
+.vgm-third-h.beats { background: #4338CA; color: #fff; }
+.vgm-third-label { display: inline-flex; align-items: center; gap: 6px; }
 .vgm-third-count {
-  padding: 1px 6px; border-radius: 8px;
-  background: #EEF2FF; color: #4338CA; font-size: 10.5px;
+  min-width: 18px; padding: 1px 6px; border-radius: 9px; text-align: center;
+  background: #EEF2FF; color: #4338CA; font-size: 11px; font-weight: 800;
 }
-.vgm-third-sec .vg-pv { margin-top: 8px; }
+.vgm-third-h.beats .vgm-third-count { background: rgba(255,255,255,.22); color: #fff; }
+/* Reads as a button, not decoration. */
+.vgm-third-toggle {
+  padding: 2px 8px; border-radius: 7px;
+  border: 1px solid var(--border-strong);
+  font-size: 11px; font-weight: 800; white-space: nowrap;
+}
+.vgm-third-h.beats .vgm-third-toggle { border-color: rgba(255,255,255,.5); }
+/* Outside-store rows are W/C rows: same header, same grid, same price weight. */
+.vgm-third-sec .vg-store-h { margin-top: 10px; }
+.vgm-third-sec .vg-store-h:first-of-type { margin-top: 6px; }
+/* The desktop column's own collapse control, matched to the mobile one. */
+.vg-store-h-third { display: flex; align-items: center; gap: 8px; }
 /* The per-unit rate beside a third-store price - $/100g, or per piece. */
 .third-tag {
   display: inline-block; margin-left: 6px; padding: 1px 6px;
