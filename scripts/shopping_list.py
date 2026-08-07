@@ -47,6 +47,11 @@ KNOWN_NAME_CHANGES = {
     "Coles RSPCA Approved Chicken Drumsticks 2kg": "Woolworths RSPCA Approved Chicken Drumsticks",
     "Tassal Salmon Portions Skin On 300g": "Woolworths Salmon Portions Skin On",
     "El-Amin's Beef Lean Mince 500g": "Woolworths Lean Beef Mince",
+    # 2026-08-08: dishwashing tablets became a per-tablet category, and a category
+    # member needs its pack count IN the name (groupMetric reads packCountOf on
+    # the list_item first). Renaming here keeps the existing purchase history
+    # attached instead of stranding it under the countless old name.
+    "Shine Dishwashing Tablets": "Shine Dishwashing Tablets 30pk",
 }
 
 # Resolve alias chains (A→B plus B→C would leave A pointing at a name that itself

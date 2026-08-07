@@ -790,6 +790,20 @@ const DEFAULT_VARIANT_GROUPS = [
   // price PER NAPPY, which is the only figure that compares a 30-pack with a
   // 40-pack. sticker stays true so the basket, history and hot-deals paths that
   // key off it keep treating this as a pack-bought, non-weighed category.
+  // Compared per TABLET, not per pack: these run 30 to 100 tablets a box, so a
+  // pack price ranks the big boxes as "expensive" when they are usually the
+  // cheapest wash. Same reasoning as nappies. NOT sticker - unlike nappies the
+  // pack price is still worth showing beside the per-tablet rate.
+  { key: 'dishwashing_tablets', label: 'Dishwashing tablets', category: 'Household', perPack: true, items: [
+    'Shine Dishwashing Tablets 30pk',
+    'Shine Optimum All In 1 Dishwasher Tablets 100pk',
+    'Shine Optimum All-In-One Dishwashing Pods 45pk',
+    'Finish Power Dishwashing Tablets Lemon 100pk',
+    'Morning Fresh Advanced Clean Dishwasher Tablets Lemon 94pk',
+    'Coles Ultra Dishwasher Tablets 40pk',
+    'Coles Ultra Dishwasher Tablets 100pk',
+    'Optix Titanium Pro Dishwashing Tablets 80pk',
+  ]},
   { key: 'nappies_size6', label: 'Nappies size 6', category: 'Baby & Care', sticker: true, perPack: true, items: [
     "Little One's Ultra Dry Nappies Size 6 40pk",
     'Millie Moon Luxury Nappies Size 6 30pk',
