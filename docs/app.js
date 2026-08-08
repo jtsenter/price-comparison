@@ -582,7 +582,7 @@ function getUnits(itemName) {
 function isKgQty(itemName) {
   if (typeof itemName !== 'string') return false;
   const k = itemName.startsWith('__group_') ? itemName.slice(8) : null;
-  const packGroup = k && (UNIT_BASED_GROUPS.has(k) || STICKER_GROUPS.has(k)); // bought as packs
+  const packGroup = k && (UNIT_BASED_GROUPS.has(k) || stickerGroups().has(k)); // bought as packs
   return !packGroup && (_perkgSet.has(itemName) || itemName.startsWith('__group_'));
 }
 

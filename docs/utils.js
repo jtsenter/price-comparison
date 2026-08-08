@@ -841,9 +841,14 @@ const DEFAULT_VARIANT_GROUPS = [
 // Groups compared by PACK PRICE, not $/kg (the group's headline shows "$X", no
 // "/kg" suffix, and Units count packs). Derived from the sticker flag on the
 // group defs so callers that only have the key (basket, units model) can check.
-const STICKER_GROUPS = new Set(
-  DEFAULT_VARIANT_GROUPS.filter(g => g.sticker).map(g => g.key)
-);
+// Was a const Set built once from the seed array. That stopped being correct the
+// moment `sticker` became editable: the Set said one thing and loadVariantGroups()
+// another, and nothing would have crashed - a category would just quietly count
+// kilos in the basket while showing a pack price in the table. Derived live, so
+// there is one answer. Cheap enough to call per row (~23 categories).
+function stickerGroups() {
+  return new Set(loadVariantGroups().filter(g => g.sticker).map(g => g.key));
+}
 // Comparison metric for a group's store-side result: pack price for sticker
 // groups, $/kg otherwise. Threading this (instead of clientPerKg) through the
 // group builders makes the whole per-kg pipeline - sort, trend, history, hot
@@ -974,23 +979,60 @@ function repairKnownCategoryCorruption(overrides) {
   return { ...o, nappies_size6: { ...cat, remove: cat.remove.filter(n => !KNOWN_BAD_NAPPIES_REMOVE.includes(n)) } };
 }
 
+// A category the user built in the UI, rather than one seeded in code. Stored in
+// the SAME override map as the patches to the seeded ones (pw_perkg_cats_v1),
+// which is what makes it sync between devices for free - that map already rides
+// along in user_settings.json under `perkgCats`. `created: true` is what tells a
+// user-made category apart from a patch to a seeded one; without it any stale key
+// left behind by an old build would materialise as a phantom category.
+function isCreatedCategory(o) {
+  return !!(o && typeof o === 'object' && o.created);
+}
+
+// Every category the app knows about, in the SEED shape (key + items + flags).
+// Several helpers apply the overrides themselves via variantGroupItemNames()
+// rather than going through loadVariantGroups(), and each one that iterated
+// DEFAULT_VARIANT_GROUPS directly was a place a user-created category would
+// silently not exist - members missing from the basket's exclusion set, absent
+// from Hot Deals. One list, so there is one answer to "what categories are there".
+// A created category has no seeded members: its whole membership arrives as the
+// override's `add`, which is exactly what an empty `items` makes happen.
+function allVariantGroupSeeds(ov) {
+  const seedKeys = new Set(DEFAULT_VARIANT_GROUPS.map(g => g.key));
+  const created = Object.keys(ov || {})
+    .filter(k => !seedKeys.has(k) && isCreatedCategory(ov[k]))
+    .map(k => ({
+      key: k,
+      label: ov[k].label || k,
+      category: ov[k].category || 'Pantry',
+      sticker: !!ov[k].sticker,
+      perPack: !!ov[k].perPack,
+      items: [],
+    }));
+  return [...DEFAULT_VARIANT_GROUPS, ...created];
+}
+
 function loadVariantGroups() {
   let ov = {};
   try { ov = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}
-  return DEFAULT_VARIANT_GROUPS.map(g => {
+  return allVariantGroupSeeds(ov).map(g => {
     const o = migratePerKgOverride(ov[g.key], g.items);
     return {
       key: g.key,
       label: o.label || g.label,
-      category: g.category,
-      sticker: !!g.sticker,
+      category: o.category || g.category,
+      // The comparison metric is now editable, so it has to be read from the
+      // override FIRST and fall back to the seed - `!!g.sticker` alone meant the
+      // UI could store a choice that nothing downstream ever read. `!= null` and
+      // not `||`, so an explicit false can turn a seeded flag back OFF.
+      sticker: o.sticker != null ? !!o.sticker : !!g.sticker,
       // Dropped from this returned shape once before (had to be added back for
       // sticker itself too, going by the comment above) - groupMetric() silently
       // fell back to raw pack price for every nappy because this flag never
       // reached it: buildVariantGroups() iterates the OUTPUT of this function,
       // not DEFAULT_VARIANT_GROUPS directly, so a seed-only field is invisible
       // downstream unless it is re-exported here too.
-      perPack: !!g.perPack,
+      perPack: o.perPack != null ? !!o.perPack : !!g.perPack,
       items: computePerKgItems(g.items, o),
       // Per-store ordered member lists (display order hints; membership comes from
       // `items` + price qualification in resolveStoreLists). Null until the user saves.
@@ -1484,7 +1526,7 @@ function perKgMemberNames() {
   let ov = {};
   try { ov = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}
   const names = new Set();
-  for (const g of DEFAULT_VARIANT_GROUPS) variantGroupItemNames(g, ov).forEach(n => names.add(n));
+  for (const g of allVariantGroupSeeds(ov)) variantGroupItemNames(g, ov).forEach(n => names.add(n));
   return names;
 }
 
@@ -1531,7 +1573,7 @@ function buildDealGroups(items) {
   };
 
   const groups = [];
-  for (const g of DEFAULT_VARIANT_GROUPS) {
+  for (const g of allVariantGroupSeeds(ov)) {
     const members = variantGroupItemNames(g, ov).map(n => byName.get(n)).filter(Boolean);
     if (!members.length) continue;
 

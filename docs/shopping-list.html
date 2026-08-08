@@ -592,7 +592,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=110"></script>
+<script src="utils.js?v=111"></script>
 <script>
 // fmt() lives in utils.js (loaded above).
 // Short display name (same map the rest of the site uses); falls back to the
@@ -1450,7 +1450,7 @@ async function boot() {
       // Units column writes - that is what keeps the two pages' totals equal.
       // Weighed categories step in 0.2kg, like the main page; packs step by 1.
       if (name.startsWith('__group_')) {
-        const weighed = !UNIT_BASED_GROUPS.has(name.slice(8)) && !STICKER_GROUPS.has(name.slice(8));
+        const weighed = !UNIT_BASED_GROUPS.has(name.slice(8)) && !stickerGroups().has(name.slice(8));
         const step = weighed ? 0.2 : 1;
         const next = Math.max(step, +(groupUnits(name) + d * step).toFixed(1));
         const ov = loadUnitOverrides();

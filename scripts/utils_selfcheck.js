@@ -89,6 +89,8 @@ eval([
   extract('variantGroupItemNames'),
   extract('migratePerKgOverride'),
   extract('computePerKgItems'),
+  extract('isCreatedCategory'),      // loadVariantGroups -> allVariantGroupSeeds
+  extract('allVariantGroupSeeds'),   // ... needs both, or it throws at call time
   extract('loadVariantGroups'),
   extractConst('SIZE_TOKEN'),  // nameWithSize closes over it
   extract('nameWithSize'),     // "... 1kg" -> "... (1kg)"

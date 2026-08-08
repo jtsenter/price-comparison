@@ -181,6 +181,16 @@ def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed
         entry["duration_s"] = round(duration_s, 1)
     if duration_p90_s is not None:
         entry["duration_p90_s"] = round(duration_p90_s, 1)
+    # Per-store seconds, so "which store is slow" stops being arithmetic over the
+    # hardcoded sleeps. Read them differently: Coles holds _COLES_SEM for its whole
+    # call, so coles_s IS the serialised critical path and comparing it to
+    # duration_s says what fraction of the run was just waiting for Coles. ww_s is
+    # spread over CONCURRENCY lanes, so it OVERSTATES the wall-clock WW costs.
+    if any(_STORE_CALLS.values()):
+        entry["store_time"] = {
+            "ww_s": round(_STORE_TIME["ww"], 1), "ww_calls": _STORE_CALLS["ww"],
+            "coles_s": round(_STORE_TIME["coles"], 1), "coles_calls": _STORE_CALLS["coles"],
+        }
     # Price movements deliberately do NOT live here any more - they go to the
     # uncapped price_changes.json via _append_price_changes(). (This function used
     # to take ww_changes/coles_changes; when those params were dropped the body
@@ -523,6 +533,7 @@ async def search_woolworths(page, query: str) -> list[dict]:
     global _ww_debug_done
     url = f"{WOOLWORTHS_BASE}/shop/search/products?searchTerm={quote(query)}"
     try:
+      async with _track("ww"):
         await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
         await page.wait_for_timeout(450)
 
@@ -583,6 +594,7 @@ async def fetch_ww_by_url(page, url: str) -> dict | None:
     if url and not url.startswith("http"):
         url = "https://" + url
     try:
+      async with _track("ww"):
         await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
         await page.wait_for_timeout(600)
         next_data = await page.evaluate("""
@@ -901,14 +913,58 @@ async def _register_coles_result(ok: bool) -> None:
         print("  [Coles] Ban persisted through cooldowns - skipping Coles for the "
               "rest of this run; last-known prices carry forward.")
 
+# Per-store wall-clock, so "which store is slow" is answered by data instead of
+# arithmetic over the hardcoded sleeps. Coles holds _COLES_SEM for its whole
+# call, so its total IS the serialised critical path; WW's is spread over
+# CONCURRENCY lanes and so overstates the wall-clock it actually costs.
+_STORE_TIME  = {"ww": 0.0, "coles": 0.0}
+_STORE_CALLS = {"ww": 0, "coles": 0}
+
+def _track(store: str):
+    """Accumulate elapsed seconds for a store. Use as `async with _track('coles'):`."""
+    class _T:
+        async def __aenter__(self):
+            self.t0 = time.monotonic()
+        async def __aexit__(self, *exc):
+            _STORE_TIME[store] += time.monotonic() - self.t0
+            _STORE_CALLS[store] += 1
+    return _T()
+
+
+# Coles selectors that prove the bit we are about to read has actually rendered.
+# Kept in sync with COLES_EXTRACT_JS / _coles_product_page_js by the self-check.
+COLES_TILE_SEL  = '[data-testid="product-tile"], article.product-tile, div[class*="product-tile"]'
+COLES_PRICE_SEL = '[data-testid="product-pricing"]'
+
+async def _settle(page, selector: str, cap_ms: int) -> None:
+    """Wait until `selector` is in the DOM, or `cap_ms` elapses - whichever first.
+
+    Replaces a flat `wait_for_timeout(cap_ms)`. The cap was sized for the worst
+    case, so every fast page paid the worst case too; this returns as soon as the
+    content exists and still never waits longer than before. It matters most for
+    Coles, whose every request holds the one-at-a-time _COLES_SEM for its whole
+    duration - time saved here is time off the run's critical path.
+
+    ponytail: one selector per page type, not a render-complete check. Ceiling -
+    a Coles redesign that renames the selector degrades this to the old flat
+    wait (never to a wrong price: an empty extract carries the last price
+    forward), and the upgrade path is to re-read the selector from the
+    extraction JS rather than duplicating it here.
+    """
+    try:
+        await page.wait_for_selector(selector, timeout=cap_ms, state="attached")
+    except Exception:
+        pass  # cap reached, or selector never appeared - proceed exactly as before
+
+
 async def search_coles(page, query: str) -> list[dict]:
     if _coles_dead:
         return []
     url = f"{COLES_BASE}/search?q={quote(query)}"
     try:
-      async with _COLES_SEM:
+      async with _COLES_SEM, _track("coles"):
         await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
-        await page.wait_for_timeout(COLES_WAIT_MS)
+        await _settle(page, COLES_TILE_SEL, COLES_WAIT_MS)
         await page.evaluate("window.scrollBy(0, 300)")
         await page.wait_for_timeout(COLES_SCROLL_WAIT_MS)
         raw = await page.evaluate(COLES_EXTRACT_JS)
@@ -1051,10 +1107,10 @@ async def fetch_coles_by_url(page, url: str) -> dict | None:
     if _coles_dead:
         return None
     for attempt in range(2):
-      async with _COLES_SEM:  # same serialisation as search_coles - one Coles request at a time
+      async with _COLES_SEM, _track("coles"):  # same serialisation as search_coles - one Coles request at a time
         try:
             await page.goto(url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MS)
-            await page.wait_for_timeout(COLES_WAIT_MS)
+            await _settle(page, COLES_PRICE_SEL, COLES_WAIT_MS)
             raw = await page.evaluate(_coles_product_page_js())
             name = raw.get("name", "")
             price = parse_price(raw.get("price_text", ""))
@@ -1460,20 +1516,25 @@ async def _scrape_single_item(
             _skip_picker_ww = True
             _ww_skipped = True
         else:
+            # Both urls given - fetch the two stores at once (same reasoning as the
+            # pinned path below). This is the ↻ button's path, so it is also the
+            # one whose latency you actually sit and watch.
             print(f"  Fetching WW by URL: {ww_url}")
-            _ww = await fetch_ww_by_url(ww_page, ww_url)
+            print(f"  Fetching Coles by URL: {coles_url}")
+
+            async def _url_co():
+                _co = await fetch_coles_by_url(coles_page, coles_url)
+                if _co:
+                    return [_co], True
+                _fq = _coles_fallback_query(coles_url, item)
+                print(f"  Coles URL fetch failed, searching by: {_fq!r}")
+                return await search_with_retry(search_coles, coles_page, _fq), False
+
+            _ww, (coles_results, _skip_picker_co) = await asyncio.gather(
+                fetch_ww_by_url(ww_page, ww_url), _url_co())
             if not _ww: print(f"  WW URL fetch failed: {ww_url}")
             ww_results = [_ww] if _ww else []
             _skip_picker_ww = True
-            print(f"  Fetching Coles by URL: {coles_url}")
-            _co = await fetch_coles_by_url(coles_page, coles_url)
-            if _co:
-                coles_results = [_co]
-                _skip_picker_co = True
-            else:
-                _fq = _coles_fallback_query(coles_url, item)
-                print(f"  Coles URL fetch failed, searching by: {_fq!r}")
-                coles_results = await search_with_retry(search_coles, coles_page, _fq)
     else:
         # Name-based search (normal scrape) - honour url_overrides.json if present
         overrides_path = os.path.join(DATA_DIR, "url_overrides.json")
@@ -1488,8 +1549,24 @@ async def _scrape_single_item(
         pinned_co  = _url_ov.get(item, {}).get("coles_url", "")
 
         if pinned_ww or pinned_co:
-            if pinned_ww:
-                _had_pinned_ww = True
+            # The two stores are independent hosts with independent rate limits, so
+            # fetching them one after the other only added WW's latency to a run
+            # whose critical path is the one-at-a-time Coles lock. 96 of the 221
+            # pinned items carry BOTH urls and paid that twice over.
+            # Each half returns its own values rather than assigning into this
+            # scope: two coroutines writing the same locals is how you get a race
+            # that only shows up under load.
+            _had_pinned_ww = bool(pinned_ww)
+
+            async def _fetch_pinned_ww():
+                """-> (ww_results, skip_picker, ww_skipped)"""
+                ww_results, _skip_picker_ww = [], False
+                if not pinned_ww:
+                    # Reached only when pinned_co is set but pinned_ww is not - i.e. a
+                    # Coles-only product. Do NOT name-search Woolworths: it mis-matches
+                    # unrelated WW items (e.g. "Coles 3 Star Lamb Mince" → "Woolworths Lamb
+                    # Mince"), polluting the data. A single-store pin means a single store.
+                    return [], False, True
                 _ww = await fetch_ww_by_url(ww_page, pinned_ww)
                 # Treat price=0 the same as a fetch failure - WW sometimes SSR-serves $0
                 # for products whose real price is only set client-side (EDLP products).
@@ -1533,14 +1610,14 @@ async def _scrape_single_item(
                                     print(f"  WW: pinned stockcode {_sc} not in results - carrying forward")
                                     ww_results = []
                                     _skip_picker_ww = True
-            else:
-                # Reached only when pinned_co is set but pinned_ww is not - i.e. a
-                # Coles-only product. Do NOT name-search Woolworths: it mis-matches
-                # unrelated WW items (e.g. "Coles 3 Star Lamb Mince" → "Woolworths Lamb
-                # Mince"), polluting the data. A single-store pin means a single store.
-                ww_results = []
-                _ww_skipped = True
-            if pinned_co:
+                return ww_results, _skip_picker_ww, False
+
+            async def _fetch_pinned_co():
+                """-> (coles_results, skip_picker, co_skipped)"""
+                coles_results, _skip_picker_co = [], False
+                if not pinned_co:
+                    # Woolworths-only pinned item - don't name-search Coles (same mis-match risk).
+                    return [], False, True
                 _co = await fetch_coles_by_url(coles_page, pinned_co)
                 if _co:
                     coles_results = [_co]
@@ -1573,10 +1650,11 @@ async def _scrape_single_item(
                         else:
                             print(f"  Coles: pinned product not in search results - treating as unavailable")
                             coles_results = []
-            else:
-                # Woolworths-only pinned item - don't name-search Coles (same mis-match risk).
-                coles_results = []
-                _co_skipped = True
+                return coles_results, _skip_picker_co, False
+
+            (ww_results, _skip_picker_ww, _ww_skipped), \
+                (coles_results, _skip_picker_co, _co_skipped) = await asyncio.gather(
+                    _fetch_pinned_ww(), _fetch_pinned_co())
         else:
             ww_results, coles_results = await asyncio.gather(
                 search_with_retry(search_woolworths, ww_page, item, retries=1),
