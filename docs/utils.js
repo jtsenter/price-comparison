@@ -1031,6 +1031,30 @@ const THIRD_STORES = {
   big_w:             { letter: 'B', label: 'Big W' },
 };
 
+// Which third store a pasted product URL belongs to, or null if it is not one
+// we know. Matched on the HOSTNAME only - a path or query can contain anything
+// (a Woolworths link carries "?googleshop=true"; a search URL can carry a rival
+// shop's name), so substring-matching the whole URL would file links under the
+// wrong store. Subdomains count (www., m.), look-alike suffixes do not
+// ("bigw.com.au.evil.com" is not Big W).
+function thirdStoreFromUrl(url) {
+  let host;
+  try {
+    host = new URL(String(url).trim()).hostname.toLowerCase();
+  } catch {
+    return null;   // not a URL at all
+  }
+  const HOSTS = {
+    'chemistwarehouse.com.au': 'chemist_warehouse',
+    'bigw.com.au':             'big_w',
+    'priceline.com.au':        'priceline',
+  };
+  for (const [domain, store] of Object.entries(HOSTS)) {
+    if (host === domain || host.endsWith('.' + domain)) return store;
+  }
+  return null;
+}
+
 // Comparable rate for one third-store entry: per piece when it is sold by the
 // piece (nappies), otherwise $/100g or $/100ml parsed out of the product name -
 // the same rule and the same function the W/C columns already use.

@@ -102,6 +102,7 @@ eval([
   extract('groupThirdBeat'),
   extract('thirdGroupMetric'), // the price a third-store row SHOWS in the bold slot
   extract('qtySortValue'),     // Qty column: units and kg in ONE numeric order
+  extract('thirdStoreFromUrl'), // which outside shop a pasted product link is
   // Used directly by the test body, not just by another extracted function, so
   // it needs the same global re-export as KNOWN_BAD_NAPPIES_REMOVE above.
   extractConst('CHEAPER_SORT_LABEL') + '\nglobal.CHEAPER_SORT_LABEL = CHEAPER_SORT_LABEL;',
@@ -301,6 +302,40 @@ check('median empty -> null', _median([]), null);
   check('zero is not a rival',      thirdBeatsUnit(cwFortyPack, 0, null), null);
   check('empty entries -> quiet',   thirdBeatsUnit([], 0.29, 0.29), null);
   check('undefined entries -> quiet', thirdBeatsUnit(undefined, 0.29, 0.29), null);
+}
+
+// ── thirdStoreFromUrl (which shop a pasted link belongs to) ─────────────────
+// Matching must be on the HOSTNAME. Real Woolworths links carry
+// "?googleshop=true"; a search URL can carry a rival shop's name in its query -
+// substring-matching the whole URL would file those under the wrong store, and
+// a look-alike domain must never be trusted.
+{
+  const cw = 'https://www.chemistwarehouse.com.au/buy/100138/ecostore-tablets';
+  check('chemist warehouse',  thirdStoreFromUrl(cw), 'chemist_warehouse');
+  check('big w',              thirdStoreFromUrl('https://www.bigw.com.au/product/x/p/184248'), 'big_w');
+  check('priceline',          thirdStoreFromUrl('https://www.priceline.com.au/product/346268/rexona'), 'priceline');
+  check('bare domain, no www', thirdStoreFromUrl('https://bigw.com.au/product/x'), 'big_w');
+  check('query string is ignored',
+        thirdStoreFromUrl('https://www.bigw.com.au/product/x/p/1?store=364'), 'big_w');
+
+  // The supermarkets are NOT third stores - they have their own columns.
+  check('woolworths is not a third store',
+        thirdStoreFromUrl('https://www.woolworths.com.au/shop/productdetails/184248'), null);
+  check('coles is not a third store',
+        thirdStoreFromUrl('https://www.coles.com.au/product/coles-ultra-3967188'), null);
+
+  // The traps.
+  check('a rival name in the PATH does not win',
+        thirdStoreFromUrl('https://www.woolworths.com.au/search?q=bigw.com.au'), null);
+  check('a look-alike suffix domain is refused',
+        thirdStoreFromUrl('https://bigw.com.au.evil.example/product'), null);
+  check('a name-only host is refused', thirdStoreFromUrl('https://notbigw.com.au/x'), null);
+  check('unknown shop -> null', thirdStoreFromUrl('https://www.iga.com.au/product/x'), null);
+  check('not a URL -> null',    thirdStoreFromUrl('chemist warehouse'), null);
+  check('empty -> null',        thirdStoreFromUrl(''), null);
+  check('null -> null',         thirdStoreFromUrl(null), null);
+  check('uppercase host still matches',
+        thirdStoreFromUrl('https://WWW.BigW.COM.AU/product/x'), 'big_w');
 }
 
 // ── groupThirdScale / groupThirdBeat (picking the right comparison scale) ────

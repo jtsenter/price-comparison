@@ -22,7 +22,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=140" />
+  <link rel="stylesheet" href="style.css?v=141" />
 </head>
 <body>
 
@@ -238,6 +238,11 @@
       <label>Coles URL</label>
       <input type="text" id="editColesUrl" placeholder="https://www.coles.com.au/…" />
     </div>
+    <div class="form-group">
+      <label>Other store URL <span class="form-hint">Chemist Warehouse, Big W or Priceline</span></label>
+      <input type="text" id="editThirdUrl" placeholder="https://www.chemistwarehouse.com.au/… " />
+      <div class="form-note" id="editThirdNote">Shown as an extra "Other stores" option. Its price is fetched on the next scrape.</div>
+    </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="editReset">Reset overrides</button>
       <button class="btn btn-ghost" id="editCancel">Cancel</button>
@@ -374,9 +379,9 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=109"></script>
+<script src="utils.js?v=110"></script>
 <script src="history-modal.js?v=3"></script>
-<script src="app.js?v=180"></script>
+<script src="app.js?v=181"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">

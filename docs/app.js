@@ -1627,6 +1627,56 @@ function initSettingsModal() {
 
 let _editingItem = null;
 
+// Live feedback under the "Other store URL" box: name the shop as soon as the
+// hostname is recognisable, and say plainly when it isn't - a silently-ignored
+// paste is exactly how "I added it and nothing happened" happens.
+function updateThirdUrlNote() {
+  const input = $('editThirdUrl'), note = $('editThirdNote');
+  if (!input || !note) return;
+  const raw = input.value.trim();
+  if (!raw) {
+    note.textContent = 'Shown as an extra "Other stores" option. Its price is fetched on the next scrape.';
+    note.classList.remove('form-note-bad', 'form-note-ok');
+    return;
+  }
+  const store = thirdStoreFromUrl(raw.startsWith('http') ? raw : 'https://' + raw);
+  if (store) {
+    note.textContent = `✓ ${THIRD_STORES[store].label} - priced on the next scrape.`;
+    note.classList.add('form-note-ok');
+    note.classList.remove('form-note-bad');
+  } else {
+    note.textContent = 'Not a store I can price. Supported: Chemist Warehouse, Big W, Priceline.';
+    note.classList.add('form-note-bad');
+    note.classList.remove('form-note-ok');
+  }
+}
+
+// Merge one item's third-store entry into the repo's third_store.json. Empty
+// url = remove this item's entry. Read-modify-write against the LIVE file so a
+// hand-maintained entry (or another device's addition) is never clobbered.
+async function persistThirdStoreEntry(s, itemName, url, storeKey) {
+  if (!s?.user || !s?.repo || !s?.token) return;
+  const doc = await githubGetJson(s, 'docs/data/third_store.json') || {};
+  if (!url) {
+    delete doc[itemName];
+  } else {
+    const prev = (doc[itemName] || [])[0] || {};
+    // price is deliberately omitted on a NEW url - third_stores.py fills it on
+    // the next run. Carrying the old price across a url change would attach one
+    // product's price to another product's link.
+    doc[itemName] = [{
+      store: storeKey,
+      name: prev.url === url ? (prev.name || itemName) : itemName,
+      url,
+      ...(prev.url === url && prev.price != null ? { price: prev.price, checked: prev.checked } : {}),
+      ...(prev.url === url && prev.packs ? { packs: prev.packs } : {}),
+      added: new Date().toISOString().slice(0, 10),
+    }];
+  }
+  await githubPutJson(s, 'docs/data/third_store.json', doc,
+                      `edit: third-store link for ${itemName}`);
+}
+
 function initEditModal() {
   const modal = $('editModal');
   if (!modal) return;
@@ -1636,6 +1686,7 @@ function initEditModal() {
   $('editModalClose').addEventListener('click', close);
   $('editCancel').addEventListener('click', close);
   modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+  $('editThirdUrl')?.addEventListener('input', updateThirdUrlNote);
 
   $('editSave').addEventListener('click', async () => {
     if (!_editingItem) return;
@@ -1662,6 +1713,18 @@ function initEditModal() {
       alert(`Removing a store needs the other store's link to stay pinned, but none is set.`);
       return;
     }
+
+    // Third store: refuse an unrecognised host rather than accepting the paste
+    // and quietly doing nothing with it.
+    const newThirdUrl = _normaliseUrl($('editThirdUrl')?.value || '') || '';
+    const thirdStoreKey = newThirdUrl ? thirdStoreFromUrl(newThirdUrl) : null;
+    if (newThirdUrl && !thirdStoreKey) {
+      alert('That "Other store" link is not a shop I can price.\n\nSupported: Chemist Warehouse, Big W, Priceline.');
+      return;
+    }
+    const prevThird = (thirdEntriesFor(_editingItem.list_item)[0]
+                       || _thirdStores[_editingItem.list_item]?.[0] || {}).url || '';
+    const thirdChanged = newThirdUrl !== prevThird;
 
     overrides[_editingItem.list_item] = {
       displayName: $('editDisplayName').value.trim() || undefined,
@@ -1709,6 +1772,15 @@ function initEditModal() {
           triggerItemRefresh(item.list_item, null, { wwUrl: newWwUrl, colesUrl: newCoUrl });
           showToast(`✓ Scrape triggered for "${item.list_item}" with the new URL.`);
         }
+        // Third store is priced by the pipeline's own step (third_stores.py),
+        // not by a single-item dispatch - so say when the price will appear
+        // rather than leaving a link that looks broken until then.
+        if (thirdChanged) {
+          await persistThirdStoreEntry(s, item.list_item, newThirdUrl, thirdStoreKey);
+          showToast(newThirdUrl
+            ? `✓ ${THIRD_STORES[thirdStoreKey].label} link saved - its price arrives with the next scrape.`
+            : `✓ Other-store link removed from "${item.list_item}".`);
+        }
       } catch (e) {
         showSyncError('URL override', e);
       } finally {
@@ -1754,6 +1826,12 @@ function openEditModal(item) {
   $('editDisplayName').value = ov.displayName || '';
   $('editWwUrl').value = ov.wwUrl || item.woolworths?.url || '';
   $('editColesUrl').value = ov.colesUrl || item.coles?.url || '';
+  // Third store: show the entry already stored for this item, if any. Only one
+  // is editable here - a product sold at two outside shops is rare, and the
+  // JSON still supports a list for the hand-maintained cases.
+  const _t3 = thirdEntriesFor(item.list_item)[0] || _thirdStores[item.list_item]?.[0];
+  if ($('editThirdUrl')) $('editThirdUrl').value = _t3?.url || '';
+  updateThirdUrlNote();
   // Re-enable in case a previous write completed between modal open/close cycles
   if (!_overridesSaving) {
     $('editSave').disabled = false;
