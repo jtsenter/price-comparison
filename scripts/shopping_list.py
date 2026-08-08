@@ -51,7 +51,9 @@ KNOWN_NAME_CHANGES = {
     # member needs its pack count IN the name (groupMetric reads packCountOf on
     # the list_item first). Renaming here keeps the existing purchase history
     # attached instead of stranding it under the countless old name.
-    "Shine Dishwashing Tablets": "Shine Dishwashing Tablets 30pk",
+    # WW 184248, a 100 pack - this is the product the receipts are for. It was
+    # briefly aliased to the 30pk (183866), a different product entirely.
+    "Shine Dishwashing Tablets": "Shine Dishwashing Tablets 100pk",
     # Same reason, for the per-bag garbage bag category (WW 367232 is a 20 pack).
     "Armada Evergreen Garbage Bags Extra Large": "Armada Evergreen Garbage Bags Extra Large 20pk",
 }

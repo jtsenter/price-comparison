@@ -21,6 +21,10 @@
     "  Priceline    - product pages AND search are both a Cloudflare JS-challenge",
     "                 shell (~1.3KB, no price) to an automated browser. Confirmed",
     "                 twice, a day apart. Neither is reachable.",
+    "  Big W       - 403 Access Denied to automation, at the edge: blocked for a",
+    "                 plain fetch AND a real browser. Like Priceline, its price",
+    "                 has to be read by hand. An entry with price null is inert",
+    "                 (thirdEntriesFor drops it) - never a placeholder number.",
     "  Chemist Wh.  - SEARCH is a client-side-only shell (empty __NEXT_DATA__,",
     "                 title literally 'undefined'), but a PRODUCT PAGE (/buy/<id>/",
     "                 <slug>) renders server-side with a real, current price - the",
@@ -131,6 +135,14 @@
       "packs": 30,
       "image": "https://static.chemistwarehouse.com.au/ams/media/pi/100138/F2D_800.jpg",
       "checked": "2026-08-07"
+    },
+    {
+      "store": "big_w",
+      "name": "Shine 10 in 1 Dishwashing Tablets 100 Pack",
+      "url": "https://www.bigw.com.au/product/shine-10-in-1-dishwashing-tablets-100-pack/p/184248",
+      "price": null,
+      "packs": 100,
+      "note": "price not filled in - bigw.com.au returns 403 to automation, so it must be read by hand"
     }
   ]
 }

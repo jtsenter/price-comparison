@@ -806,6 +806,11 @@ const DEFAULT_VARIANT_GROUPS = [
   // cheapest wash. Same reasoning as nappies. NOT sticker - unlike nappies the
   // pack price is still worth showing beside the per-tablet rate.
   { key: 'dishwashing_tablets', label: 'Dishwashing tablets', category: 'Household', perPack: true, items: [
+    // WW 184248 - the originally-tracked product, and the one the receipts are
+    // for. It is a 100 pack; an earlier version of this category pointed the
+    // tracked name at 183866 (a 30 pack) instead, which both dropped this
+    // product and would have priced its history at 3x the real per-tablet rate.
+    'Shine Dishwashing Tablets 100pk',
     'Shine Dishwashing Tablets 30pk',
     'Shine Optimum All In 1 Dishwasher Tablets 100pk',
     'Shine Optimum All-In-One Dishwashing Pods 45pk',
@@ -1023,6 +1028,7 @@ function nameWithSize(displayName, key) {
 const THIRD_STORES = {
   chemist_warehouse: { letter: 'C', label: 'Chemist Warehouse' },
   priceline:         { letter: 'P', label: 'Priceline' },
+  big_w:             { letter: 'B', label: 'Big W' },
 };
 
 // Comparable rate for one third-store entry: per piece when it is sold by the
