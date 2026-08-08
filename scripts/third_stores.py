@@ -1,0 +1,164 @@
+"""Refresh third-store prices (Chemist Warehouse / Big W / Priceline).
+
+Runs on the SELF-HOSTED runner as the last leg of the scrape pipeline
+(scrape.yml calls it after the archived sweep). That location is the whole
+point: from an ordinary fetch Big W answers 403 at the edge and Priceline
+serves a Cloudflare challenge shell, but the runner drives a real Chromium
+with the same persistent profile that already carries Coles past Incapsula -
+the one environment with a realistic chance at all three shops.
+
+Reads docs/data/third_store.json, visits each entry's product page, and
+updates `price` + `checked` ONLY when a real price was parsed. A failed or
+blocked fetch leaves the stored price untouched and stamps
+`status: "unreachable <date>"` instead - stale-but-honest beats fresh-but-
+invented. A successful fetch clears any previous status/note.
+
+Parsing is per-store, pure, and self-checked (third_stores_selfcheck.py):
+  chemist_warehouse - server-rendered __NEXT_DATA__ (proven live twice)
+  big_w / priceline - JSON-LD Product offers, then itemprop/og meta fallback
+"""
+import asyncio, json, os, re, sys
+from datetime import date
+
+DATA_DIR   = os.path.join(os.path.dirname(__file__), "..", "docs", "data")
+THIRD_PATH = os.path.join(DATA_DIR, "third_store.json")
+# Same persistent profile as scraper.py, so bot-check trust cookies are shared.
+PROFILE_DIR = os.path.join(os.environ.get("LOCALAPPDATA", ""), "pricewatch-pw-profile")
+PAGE_TIMEOUT_MS = 30_000
+MAX_PRICE = 200.0   # sanity ceiling: a parsed "price" above this is a parse bug
+
+
+# ── pure parsers (self-checked) ──────────────────────────────────────────────
+
+def parse_cw_price(html: str):
+    """Chemist Warehouse product page -> float price, or None."""
+    m = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, re.S)
+    if not m:
+        return None
+    try:
+        pp = json.loads(m.group(1))["props"]["pageProps"]["product"]
+        return _plausible(pp["prices"][0]["price"]["value"]["amount"])
+    except Exception:
+        return None
+
+
+def parse_jsonld_price(html: str):
+    """Any page with a JSON-LD Product block -> float price, or None.
+    Handles offers as a dict, a list, or an AggregateOffer (lowPrice)."""
+    for m in re.finditer(
+            r'<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>', html, re.S):
+        try:
+            data = json.loads(m.group(1))
+        except Exception:
+            continue
+        for node in data if isinstance(data, list) else [data]:
+            if not isinstance(node, dict):
+                continue
+            graph = node.get("@graph")
+            nodes = graph if isinstance(graph, list) else [node]
+            for n in nodes:
+                if not isinstance(n, dict) or n.get("@type") not in ("Product", ["Product"]):
+                    continue
+                offers = n.get("offers")
+                for off in offers if isinstance(offers, list) else [offers]:
+                    if not isinstance(off, dict):
+                        continue
+                    p = _plausible(off.get("price") or off.get("lowPrice"))
+                    if p is not None:
+                        return p
+    return None
+
+
+def parse_meta_price(html: str):
+    """itemprop/og/product meta price tags -> float price, or None."""
+    for pat in (r'itemprop="price"[^>]*content="([\d.]+)"',
+                r'property="product:price:amount"[^>]*content="([\d.]+)"',
+                r'property="og:price:amount"[^>]*content="([\d.]+)"'):
+        m = re.search(pat, html)
+        if m:
+            p = _plausible(m.group(1))
+            if p is not None:
+                return p
+    return None
+
+
+def _plausible(v):
+    try:
+        p = float(v)
+    except (TypeError, ValueError):
+        return None
+    return p if 0 < p <= MAX_PRICE else None
+
+
+PARSERS = {
+    # ordered: most reliable first for that store
+    "chemist_warehouse": (parse_cw_price, parse_jsonld_price, parse_meta_price),
+    "big_w":             (parse_jsonld_price, parse_meta_price),
+    "priceline":         (parse_jsonld_price, parse_meta_price),
+}
+
+
+def parse_price_for(store: str, html: str):
+    for fn in PARSERS.get(store, ()):
+        p = fn(html)
+        if p is not None:
+            return p
+    return None
+
+
+# ── the refresh run ──────────────────────────────────────────────────────────
+
+async def refresh() -> int:
+    with open(THIRD_PATH, encoding="utf-8") as f:
+        doc = json.load(f)
+
+    entries = [e for k, v in doc.items() if k != "_readme" and isinstance(v, list)
+               for e in v if isinstance(e, dict) and e.get("url")]
+    if not entries:
+        print("third_stores: nothing to refresh")
+        return 0
+
+    from playwright.async_api import async_playwright
+    today = date.today().isoformat()
+    updated = failed = 0
+
+    async with async_playwright() as pw:
+        ctx = await pw.chromium.launch_persistent_context(PROFILE_DIR, headless=True)
+        page = await ctx.new_page()
+        for e in entries:
+            store = e.get("store", "?")
+            try:
+                await page.goto(e["url"], timeout=PAGE_TIMEOUT_MS, wait_until="domcontentloaded")
+                # JS-challenge pages resolve a beat after domcontentloaded; give
+                # a real render a chance before reading the DOM.
+                await page.wait_for_timeout(2500)
+                html = await page.content()
+                price = parse_price_for(store, html)
+            except Exception as ex:
+                print(f"  [{store}] {e.get('name','?')[:40]}: {type(ex).__name__}")
+                price = None
+            if price is not None:
+                old = e.get("price")
+                e["price"], e["checked"] = round(price, 2), today
+                e.pop("status", None)
+                e.pop("note", None)
+                updated += 1
+                print(f"  [{store}] {e.get('name','?')[:40]}: "
+                      f"{'$%.2f' % old if old else 'no price'} -> ${price:.2f}")
+            else:
+                # keep the old price; record that this attempt could not confirm it
+                e["status"] = f"unreachable {today}"
+                failed += 1
+                print(f"  [{store}] {e.get('name','?')[:40]}: unreachable, keeping "
+                      f"{'$%.2f' % e['price'] if e.get('price') else 'no price'}")
+        await ctx.close()
+
+    with open(THIRD_PATH, "w", encoding="utf-8", newline="\n") as f:
+        json.dump(doc, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+    print(f"third_stores: {updated} updated, {failed} unreachable of {len(entries)}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(asyncio.run(refresh()))

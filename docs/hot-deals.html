@@ -357,7 +357,7 @@
 <body>
 
 <header data-page="hot-deals"></header>
-<script src="header.js?v=20"></script>
+<script src="header.js?v=21"></script>
 
 <div class="deals-hero">
   <div class="deals-hero-title">🔥 Hot Deals</div>
@@ -1439,7 +1439,7 @@ function renderScrapeStrip(data) {
     strip.classList.toggle('stale', isStale);
     document.getElementById('scrapeStripLabel').textContent = isStale
       ? `⚠ Stalled at ${prog.done} of ${prog.total} - try refreshing`
-      : pct === 0 ? `Starting price refresh…` : `Refreshing prices… ${prog.done} of ${prog.total}`;
+      : pct === 0 ? `Starting price update…` : `Updating prices… ${prog.done} of ${prog.total}`;
     document.getElementById('scrapeStripFill').style.width = `${pct}%`;
     document.getElementById('scrapeStripPct').textContent = `${pct}%`;
     const retryBtn = document.getElementById('scrapeStripRetry');

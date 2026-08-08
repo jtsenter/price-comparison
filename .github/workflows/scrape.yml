@@ -90,8 +90,11 @@ jobs:
 
       - name: Clear stalled scrape_progress
         if: always()
+        # A handoff-marked progress is NOT stalled - it is the full run holding
+        # the pipeline bar for the archived sweep that runs next (scraper.py).
+        # That job clears progress unconditionally when it finishes.
         run: |
-          "%PYTHON%" -c "import json; p='docs/data/latest.json'; d=json.load(open(p)); sp=d.pop('scrape_progress',None); sp and open(p,'w').write(json.dumps(d,separators=(',',':')))"
+          "%PYTHON%" -c "import json; p='docs/data/latest.json'; d=json.load(open(p)); sp=d.get('scrape_progress'); (sp is not None and not sp.get('handoff')) and (d.pop('scrape_progress'), open(p,'w').write(json.dumps(d,separators=(',',':'))))"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/data/latest.json
@@ -138,4 +141,34 @@ jobs:
           git diff --cached --quiet || git commit -m "chore: update archived prices"
           git pull --no-rebase -X ours origin main
           git push
+        continue-on-error: true
+
+      - name: Refresh third-store prices
+        # Chemist Warehouse / Big W / Priceline. Runs HERE because the runner's
+        # real Chromium + persistent profile is the only environment with a
+        # chance past Big W's edge 403 and Priceline's Cloudflare challenge; a
+        # plain fetch was verified blocked at both. A store that still blocks
+        # keeps its old price and gets an honest "unreachable" status - the
+        # script never invents a number (see scripts/third_stores.py).
+        run: '"%PYTHON%" scripts/third_stores.py'
+        continue-on-error: true
+
+      - name: Commit third-store prices
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/data/third_store.json
+          git diff --cached --quiet || (git pull --no-rebase -X ours origin main && git commit -m "chore: refresh third-store prices" && git push)
+        continue-on-error: true
+
+      - name: End the pipeline progress bar
+        if: always()
+        # The archived sweep is the LAST phase, so clear any progress
+        # unconditionally - including the handoff hold the main run left up.
+        run: |
+          "%PYTHON%" -c "import json; p='docs/data/latest.json'; d=json.load(open(p)); sp=d.pop('scrape_progress',None); sp is not None and open(p,'w').write(json.dumps(d,separators=(',',':')))"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/data/latest.json
+          git diff --cached --quiet || (git pull --no-rebase -X ours origin main && git commit -m "chore: scrape pipeline finished" && git push)
         continue-on-error: true

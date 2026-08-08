@@ -401,7 +401,7 @@
           if (prog && prog.total > 0) {
             var pct = Math.round((prog.done / prog.total) * 100);
             strip.style.display = 'flex';
-            document.getElementById('scrapeStripLabel').textContent = 'Refreshing prices… ' + prog.done + ' of ' + prog.total;
+            document.getElementById('scrapeStripLabel').textContent = 'Updating prices… ' + prog.done + ' of ' + prog.total;
             document.getElementById('scrapeStripFill').style.width = pct + '%';
             document.getElementById('scrapeStripPct').textContent = pct + '%';
             activeScrape = true;

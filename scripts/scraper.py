@@ -136,7 +136,8 @@ def _last_run_misses() -> set[str]:
 def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed: list,
                        ww_attempted: int | None = None, coles_attempted: int | None = None,
                        partial: bool = False, duration_s: float | None = None,
-                       duration_p90_s: float | None = None, archived: int | None = None) -> None:
+                       duration_p90_s: float | None = None, archived: int | None = None,
+                       total: int | None = None) -> None:
     """Append one run's per-store miss summary to docs/data/scrape_log.json (capped).
     ww_missed/coles_missed: [{"item": str, "reason": "no_results"|"no_match"}, ...].
     ww_attempted/coles_attempted: how many items were actually TRIED at each store.
@@ -167,6 +168,10 @@ def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed
         entry["coles_attempted"] = coles_attempted
     if archived is not None:
         entry["archived"] = archived
+    # The run's progress denominator - the archived phase reads this back as its
+    # bar offset so the two phases share ONE pipeline bar (see _pipeline_offset).
+    if total is not None:
+        entry["total"] = total
     # How long the run took, so "how long would 1000 products take?" is answerable
     # from data instead of guesswork. duration_p90_s is the same clock stopped at
     # 90% of items: if the two are close the run finishes evenly, and if p90 is far
@@ -1196,13 +1201,50 @@ def _build_output(items: list, not_found: list, trigger: str, progress: dict | N
     return out
 
 
+# ── One progress bar for the WHOLE pipeline ─────────────────────────────────
+# A full run is two workflow jobs: the main scrape, then the archived sweep
+# (scrape.yml chains them). Each used to report its own 0-based progress, so
+# the UI bar filled to 100%, vanished, then RESTARTED at "5 of 37" - reading
+# as a second, unexplained scrape. These two module globals make every
+# push_progress call report against the pipeline's grand total instead:
+#   main phase     : done 0..T_active      of T_active+T_archived
+#   archived phase : done T_active..grand  of the same grand total
+# The offset crosses the job boundary via the scrape log's `total` field
+# (written by the main run, read back by _pipeline_offset below) - no shared
+# state beyond the repo itself.
+_PROG_OFFSET = 0   # items an earlier phase of this pipeline already covered
+_PROG_EXTRA  = 0   # items a LATER phase will still cover after this one
+
+def _pipeline_offset() -> int:
+    """The main run's item total, IF the last logged run was a recent full one.
+
+    Used by the scrape_archived phase to continue the bar instead of restarting
+    it. Anything unexpected (no log, stale entry, retry/archived trigger, or a
+    log written before `total` existed) returns 0 - which is exactly the old
+    per-phase behaviour, so this can only ever degrade to the status quo."""
+    try:
+        with open(os.path.join(DATA_DIR, "scrape_log.json")) as f:
+            last = (json.load(f) or [])[-1]
+        if last.get("trigger") not in ("scheduled", "manual"):
+            return 0
+        age = datetime.now(timezone.utc) - datetime.fromisoformat(last["date"])
+        if age.total_seconds() > 3 * 3600:
+            return 0
+        return int(last.get("total") or 0)
+    except Exception:
+        return 0
+
+
 _PROGRESS_BRANCH  = "scrape-progress"
 _PROGRESS_API_URL = "https://api.github.com/repos/jtsenter/price-comparison/contents/docs/data/latest.json"
 
 def push_progress(items: list, not_found: list, done: int, total: int, trigger: str,
                   current_item: str = "", started_at: str = "",
                   pending_validation: list | None = None):
-    progress: dict = {"done": done, "total": total}
+    # Report against the pipeline's grand total, not this phase's own count
+    # (see the _PROG_OFFSET/_PROG_EXTRA comment above).
+    progress: dict = {"done": _PROG_OFFSET + done,
+                      "total": _PROG_OFFSET + total + _PROG_EXTRA}
     if started_at:
         progress["started_at"] = started_at
     if current_item:
@@ -2167,6 +2209,15 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             total_all = len(shopping_list)
             total_to_scrape = len(to_scrape)
             skipped = len(fresh_items)
+
+            # Pipeline bar phases (see _PROG_OFFSET/_PROG_EXTRA at top). A full
+            # run advertises the archived sweep that scrape.yml will chain next;
+            # the archived run continues from the full run's logged total.
+            global _PROG_OFFSET, _PROG_EXTRA
+            if trigger == "scrape_archived":
+                _PROG_OFFSET = _pipeline_offset()
+            elif not single_item and trigger != "retry_misses":
+                _PROG_EXTRA = len(archived_set)
             if skipped:
                 print(f"Skipping {skipped} recently-scraped items. Scraping {total_to_scrape} items.")
 
@@ -2305,6 +2356,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                     duration_s=time.monotonic() - _run_clock[0],
                     duration_p90_s=_run_clock[1],
                     archived=sum(1 for e in _run_store_misses if e["item"] in archived_set),
+                    total=total_all,
                 )
 
             _log_checkpoint[0] = _write_scrape_log
@@ -2519,8 +2571,19 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         for name in scraped_this_run - new_entry_names:
             merged_pv_dict.pop(name, None)
         merged_pv = list(merged_pv_dict.values())
+        # A full run is NOT the end of the pipeline: the archived sweep follows.
+        # Keep the bar held at the hand-off point instead of clearing it, so the
+        # UI shows one continuous "X of grand-total" instead of done-then-restart.
+        # `handoff: True` tells scrape.yml's clear-stalled step to leave it alone;
+        # the archived job clears progress unconditionally when it finishes (or
+        # the UI's 3-minute stall detector flags it if that job never runs).
+        _handoff = None
+        if _PROG_EXTRA > 0 and trigger not in ("scrape_archived", "retry_misses"):
+            _handoff = {"done": total_all, "total": total_all + _PROG_EXTRA,
+                        "handoff": True, "started_at": _scrape_start_time}
         output = _build_output(
             items_output, not_found, trigger,
+            progress=_handoff,
             pending_validation=merged_pv if merged_pv else None,
             approved_prices=existing_approved if existing_approved else None,
         )

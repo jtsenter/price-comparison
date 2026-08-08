@@ -3508,7 +3508,7 @@ function renderCards(items) {
     if (item._isGroup) { parts.push(groupCardHTML(item, overrides)); return; }
     const ww = item.woolworths;
     const co = item.coles;
-    const cheaper = item.cheaper_store;
+    const cheaper = rowCheaperStore(item);  // multi-buy-aware, same verdict as the desktop table
     const ov = overrides[item.list_item] || {};
     const displayName = ov.displayName || shortName(item.list_item);
     const cat = getCategory(item);
@@ -4830,7 +4830,7 @@ function renderMobileCards(items, data) {
     if (item._isGroup) { appendGroupCardMobile(container, item, overrides); return; }
     const ww      = item.woolworths;
     const co      = item.coles;
-    const cheaper = item.cheaper_store;
+    const cheaper = rowCheaperStore(item);  // multi-buy-aware, same verdict as the desktop table
     const ov      = overrides[item.list_item] || {};
     const displayName = ov.displayName || shortName(item.list_item);
     const priority = getPriority(item.list_item);
@@ -5125,8 +5125,8 @@ function _renderPageInner(data) {
       $('scrapeStripLabel').textContent = isStale
         ? `⚠ Stalled at ${prog.done} of ${prog.total} - try refreshing`
         : pct === 0
-          ? `Starting price refresh…`
-          : `Refreshing prices… ${prog.done} of ${prog.total}`;
+          ? `Starting price update…`
+          : `Updating prices… ${prog.done} of ${prog.total}`;
       $('scrapeStripFill').style.width = `${pct}%`;
       $('scrapeStripPct').textContent = `${pct}%`;
       const retryBtn = $('scrapeStripRetry');
