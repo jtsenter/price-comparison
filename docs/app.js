@@ -4309,7 +4309,6 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     : showThird
     ? `<div class="vg-panel-store third-open-col">
         <button class="third-fold" data-third="${escAttr(group.list_item)}"${gBeat ? ' data-third-beats="1"' : ''} title="Hide other stores" aria-label="Hide other stores"><span class="third-fold-ic">✕</span></button>
-        <div class="vg-store-h">Other stores</div>
         ${groupThirdRowsHTML(group, gThirdEntries, gBestMetric, imgSrc)}
       </div>`
     : `<button class="third-rail${gBeat ? ' beats' : ''}" data-third="${escAttr(group.list_item)}"${gBeat ? ' data-third-beats="1"' : ''}
@@ -4453,7 +4452,7 @@ function appendGroupCardMobile(container, group, overrides) {
     const thirdSec = !mThirdEntries.length ? '' : `
       <div class="vgm-store-sec vgm-third-sec${mOpen ? ' open' : ''}">
         <button class="vgm-third-h${mBeat ? ' beats' : ''}" data-third="${escAttr(group.list_item)}"${mBeat ? ' data-third-beats="1"' : ''} aria-expanded="${mOpen}">
-          <span class="vgm-third-label">Other stores <span class="vgm-third-count">${mThirdEntries.length}</span></span>
+          <span class="vgm-third-label"><span class="vgm-third-count">${mThirdEntries.length}</span></span>
           ${mOpen ? '' : '<span class="vgm-third-toggle">Show ▼</span>'}
         </button>
         ${mOpen ? `<button class="third-fold" data-third="${escAttr(group.list_item)}"${mBeat ? ' data-third-beats="1"' : ''} title="Hide other stores" aria-label="Hide other stores"><span class="third-fold-ic">✕</span></button>` : ''}
