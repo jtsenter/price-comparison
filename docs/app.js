@@ -1360,10 +1360,14 @@ async function triggerItemRefresh(itemName, btn, urlOverrides) {
       // the status - checkPendingItemRefresh() picks the marker up on any load.
       try {
         const m = JSON.parse(localStorage.getItem('pw_pending_refresh') || '{}');
-        m[itemName] = Date.now();
+        // A category refresh sends "A|B|C" as one dispatch. Mark each MEMBER
+        // pending, not the joined string - checkPendingItemRefresh matches a
+        // marker against list_item, so the joined key would never resolve and
+        // the "re-scraped" toast would never fire.
+        for (const n of itemName.split('|').filter(Boolean)) m[n] = Date.now();
         localStorage.setItem('pw_pending_refresh', JSON.stringify(m));
       } catch {}
-      if (btn) pollItemRefresh(s, btn, itemName);
+      if (btn) pollItemRefresh(s, btn, itemName.split('|')[0]);
     } else {
       const err = await res.json().catch(() => ({}));
       alert(`Error ${res.status}: ${err.message || 'Could not trigger refresh'}`);
@@ -4791,14 +4795,15 @@ function initCategoryEditModal() {
 }
 
 // Refresh every product in a category (each is a real item; dispatch one scrape each).
+// ONE dispatch for the whole category, not one per member. Firing N dispatches
+// queued N workflow runs on a single self-hosted runner - each re-doing checkout
+// and pip install - so a 9-member category took ~10 minutes and looked like the
+// button had done nothing. The scraper splits this list on "|" (see its
+// single_item branch) and patches every result back into latest.json.
 function refreshCategory(groupKey, btn) {
   const cat = loadVariantGroups().find(g => g.key === groupKey);
-  if (!cat) return;
-  const ov = loadOverrides();
-  cat.items.forEach((name, i) => {
-    const o = ov[name] || {};
-    triggerItemRefresh(name, i === 0 ? btn : null, { wwUrl: o.wwUrl, colesUrl: o.colesUrl });
-  });
+  if (!cat || !cat.items.length) return;
+  triggerItemRefresh(cat.items.join('|'), btn, {});
 }
 
 // ── Mobile card view (≤640px) ─────────────────────────────────────────────────

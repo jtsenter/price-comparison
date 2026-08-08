@@ -1976,8 +1976,19 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             print(f"  [removed] skipping {_before - len(purchase_history)} permanently-deleted item(s)")
 
     if single_item:
-        shopping_list = [single_item]
-        print(f"Single-item refresh: {single_item}" + (f" [WW URL]" if ww_url else "") + (f" [Coles URL]" if coles_url else ""))
+        # A category's ↻ sends its whole member list in ONE dispatch, pipe-
+        # separated. It used to fire one workflow_dispatch PER member: nine runs
+        # queued behind each other on a single self-hosted runner, each paying
+        # checkout + pip install again, so a category refresh took ~10 minutes
+        # and looked like nothing was happening. Explicit ww_url/coles_url only
+        # make sense for a single product, so they are ignored for a list.
+        shopping_list = [n.strip() for n in single_item.split("|") if n.strip()]
+        if len(shopping_list) > 1:
+            ww_url = coles_url = ""
+            print(f"Category refresh: {len(shopping_list)} items - {', '.join(shopping_list[:4])}"
+                  + (" ..." if len(shopping_list) > 4 else ""))
+        else:
+            print(f"Single-item refresh: {single_item}" + (f" [WW URL]" if ww_url else "") + (f" [Coles URL]" if coles_url else ""))
     elif trigger == "scrape_archived":
         shopping_list = sorted(archived_set)
         print(f"Archived-only scrape: {len(shopping_list)} items")
@@ -2476,15 +2487,18 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             with open(latest_path) as f:
                 existing = json.load(f)
         all_items = existing.get("items", [])
-        if items_output:
-            replaced = False
-            for idx, ex in enumerate(all_items):
-                if ex["list_item"] == single_item:
-                    all_items[idx] = items_output[0]
-                    replaced = True
-                    break
-            if not replaced:
-                all_items.append(items_output[0])
+        # Patch EVERY scraped result back in by name (one for a single-item
+        # refresh, several for a category refresh), leaving all other items
+        # exactly as they were.
+        by_name = {it["list_item"]: idx for idx, it in enumerate(all_items)}
+        for res in items_output:
+            idx = by_name.get(res["list_item"])
+            if idx is None:
+                by_name[res["list_item"]] = len(all_items)
+                all_items.append(res)
+            else:
+                all_items[idx] = res
+
         # Merge single-item validation entry into existing pending_validation
         merged_pv = existing.get("pending_validation", [])
         if single_item_ve:
