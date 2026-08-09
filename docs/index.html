@@ -22,7 +22,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=141" />
+  <link rel="stylesheet" href="style.css?v=142" />
 </head>
 <body>
 
@@ -243,6 +243,10 @@
       <input type="text" id="editThirdUrl" placeholder="https://www.chemistwarehouse.com.au/… " />
       <div class="form-note" id="editThirdNote">Shown as an extra "Other stores" option. Its price is fetched on the next scrape.</div>
     </div>
+    <div class="form-note edit-convert-note">
+      Sold in several versions, or at different pack sizes?
+      <button type="button" class="linklike" id="editConvert">Compare it against other products →</button>
+    </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="editReset">Reset overrides</button>
       <button class="btn btn-ghost" id="editCancel">Cancel</button>
@@ -258,9 +262,20 @@
       <h2 id="catEditTitle">Edit category</h2>
       <button class="modal-close" id="catEditClose">✕</button>
     </div>
-    <div class="form-group">
-      <label>Category name</label>
-      <input type="text" id="catEditName" />
+    <div class="cat-edit-top">
+      <div class="form-group">
+        <label>Category name</label>
+        <input type="text" id="catEditName" />
+      </div>
+      <div class="form-group">
+        <label>Compare prices by</label>
+        <div class="seg" id="catEditMetric" role="radiogroup" aria-label="Compare prices by">
+          <button type="button" data-metric="pack"  role="radio" aria-checked="false">Pack price</button>
+          <button type="button" data-metric="kg"    role="radio" aria-checked="false">Per kg / L</button>
+          <button type="button" data-metric="piece" role="radio" aria-checked="false">Per piece</button>
+        </div>
+        <div class="form-note" id="catEditMetricNote"></div>
+      </div>
     </div>
     <div id="catEditBody"></div>
     <p class="cat-edit-note">Tick the products that belong in this category. The cheapest ticked product at each store sets the category's $/kg.</p>
@@ -379,9 +394,9 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=111"></script>
+<script src="utils.js?v=112"></script>
 <script src="history-modal.js?v=3"></script>
-<script src="app.js?v=184"></script>
+<script src="app.js?v=185"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">

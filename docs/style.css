@@ -682,7 +682,50 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 .cat-add-product:hover { background: var(--bg); border-color: var(--ww); }
 .cat-add-coles { color: var(--coles, #e2001a); }
 .cat-add-coles:hover { border-color: var(--coles, #e2001a); }
-@media (max-width: 700px) { .cat-cols { grid-template-columns: 1fr; } }
+.cat-add-third { color: var(--third, #4338CA); }
+.cat-add-third:hover { border-color: var(--third, #4338CA); }
+.cat-cols3 { grid-template-columns: 1fr 1fr 1fr; }
+.cat-col-third .cat-col-h { color: var(--third, #4338CA); }
+/* Which shop the pasted URL resolved to. Echoing it back is what replaces the
+   store dropdown - an unsupported host says so here instead of silently
+   dropping the row at save time. */
+.cat-third-tag { font-size: 10.5px; font-weight: 700; color: var(--third, #4338CA); min-height: 13px; }
+.cat-third-tag.bad { color: #c0392b; }
+.cat-third-warn { color: #c95000; font-weight: 600; }
+
+/* Category name + comparison metric sit side by side above the columns. */
+.cat-edit-top { display: flex; gap: 22px; flex-wrap: wrap; align-items: flex-start; }
+.cat-edit-top .form-group { margin-bottom: 6px; }
+.cat-edit-top .form-group:first-child { flex: 1 1 240px; }
+
+.seg { display: inline-flex; background: var(--bg); border: 1px solid var(--border); border-radius: 9px; padding: 3px; }
+.seg button {
+  padding: 7px 13px; font-size: 12.5px; font-weight: 700; color: var(--text-soft);
+  background: none; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;
+}
+.seg button.on { background: var(--accent); color: #fff; }
+
+/* Pieces-per-pack. Hidden unless the category is compared per piece, so the
+   column stays as narrow as it was for every other metric. */
+.cat-pcs { display: none; align-items: center; gap: 4px; flex-shrink: 0; }
+.show-pcs .cat-pcs { display: flex; }
+.cat-pcs span { font-size: 9.5px; font-weight: 800; color: var(--text-soft); text-transform: uppercase; }
+.cat-pcs input { width: 42px; padding: 4px 5px; font-size: 12px; text-align: center; font-weight: 700; }
+/* Dashed + grey = "this came from the product name, you don't have to touch it".
+   Typing a different value drops .auto (see the input handler) and it goes solid. */
+.cat-pcs input.auto { color: var(--text-soft); font-style: italic; border-style: dashed; }
+.cat-pcs input[readonly] { background: var(--bg); cursor: default; }
+
+@media (max-width: 700px) { .cat-cols, .cat-cols3 { grid-template-columns: 1fr; } }
+
+/* A button that reads as a link - used for the "compare it against other
+   products" action, which navigates rather than submitting the form it sits in. */
+.linklike {
+  background: none; border: none; padding: 0; font: inherit; cursor: pointer;
+  color: var(--accent); font-weight: 700; text-decoration: underline;
+}
+.linklike:hover { text-decoration: none; }
+.edit-convert-note { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
 
 /* Mobile variant group cards */
 /* Block flow like every other .mobile-card, so the shared 8px mc-top/mc-bar/

@@ -33,12 +33,33 @@ const DEFAULT_VARIANT_GROUPS = [
 let _ovStore = {};
 const localStorage = { getItem: () => JSON.stringify(_ovStore) };
 
+const appSrc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'app.js'), 'utf8');
+function extractApp(name) {
+  const at = appSrc.indexOf('function ' + name + '(');
+  assert(at !== -1, `function ${name} not found in app.js`);
+  let i = appSrc.indexOf('{', at), depth = 0;
+  for (let j = i; j < appSrc.length; j++) {
+    if (appSrc[j] === '{') depth++;
+    else if (appSrc[j] === '}' && --depth === 0) return appSrc.slice(at, j + 1);
+  }
+  throw new Error(`unbalanced braces in ${name}`);
+}
+// `const` inside eval() stays in eval's own scope, unlike a function declaration
+// which hoists out. Rebind to globalThis so the assertions below can see it.
+function extractAppConst(name) {
+  const m = appSrc.match(new RegExp(`const ${name}\\s*=\\s*\\{[\\s\\S]*?\\n\\};`));
+  assert(m, `const ${name} not found in app.js`);
+  return m[0].replace(/^const /, 'globalThis.');
+}
+
 // eslint-disable-next-line no-eval
 eval([
   extract('migratePerKgOverride'), extract('computePerKgItems'),
-  extract('isCreatedCategory'), extract('allVariantGroupSeeds'),
+  extract('isCreatedCategory'), extract('categoryKeyFor'),
+  extract('allVariantGroupSeeds'),
   extract('loadVariantGroups'), extract('variantGroupItemNames'),
   extract('perKgMemberNames'), extract('stickerGroups'),
+  extractAppConst('CAT_METRICS'), extractApp('catMetricOf'),
 ].join('\n'));
 
 const byKey = () => Object.fromEntries(loadVariantGroups().map(g => [g.key, g]));
@@ -105,4 +126,45 @@ for (const junk of [null, 0, 'str', [], { created: true }]) {
   assert.doesNotThrow(() => loadVariantGroups(), `threw on override value ${JSON.stringify(junk)}`);
 }
 
-console.log('category_create_selfcheck: 8/8 OK');
+// 9. The metric control must round-trip. catMetricOf(applied flags) has to give
+//    back the button that was clicked, or reopening the dialog shows the wrong
+//    one selected and the next save silently rewrites the category's metric.
+for (const m of ['pack', 'kg', 'piece']) {
+  const flags = CAT_METRICS[m];
+  assert.strictEqual(catMetricOf(flags), m, `metric ${m} did not round-trip`);
+}
+// "Per piece" MUST set perPack - groupMetric() checks perPack before sticker, so
+// a piece metric that only set sticker would quietly compare pack prices.
+assert.strictEqual(CAT_METRICS.piece.perPack, true);
+assert.strictEqual(CAT_METRICS.kg.sticker, false);
+assert.strictEqual(CAT_METRICS.kg.perPack, false);
+// Matches the seeded nappies shape (sticker + perPack) that already ships.
+assert.strictEqual(catMetricOf({ sticker: true, perPack: true }), 'piece');
+// A category with neither flag is $/kg - the historical default.
+assert.strictEqual(catMetricOf({}), 'kg');
+assert.strictEqual(catMetricOf(undefined), 'kg');
+
+// 10. categoryKeyFor: safe keys only, and no key at all from an unusable name.
+assert.strictEqual(categoryKeyFor('Dishwashing Tablets'), 'dishwashing_tablets');
+assert.strictEqual(categoryKeyFor("Kellogg's Corn Flakes 500g"), 'kellogg_s_corn_flakes_500g');
+assert.strictEqual(categoryKeyFor('  spaced  out  '), 'spaced_out');
+assert.strictEqual(categoryKeyFor('!!!'), '', 'punctuation-only name must yield no key');
+assert.strictEqual(categoryKeyFor(''), '');
+assert.strictEqual(categoryKeyFor(null), '');
+assert(!/[^a-z0-9_]/.test(categoryKeyFor('Café Crème 1kg — "special"')), 'key leaked an unsafe character');
+assert(categoryKeyFor('x'.repeat(200)).length <= 48, 'key not length-capped');
+
+// 11. A converted product becomes a one-member category that behaves like any
+//     other - this is the whole "turn a normal product into a category" path.
+_ovStore = {};
+const convKey = categoryKeyFor('Shine Dishwashing Tablets 100pk');
+_ovStore[convKey] = { v: 2, created: true, label: 'Dishwashing tablets',
+                      category: 'Household', sticker: false, perPack: false,
+                      add: ['Shine Dishwashing Tablets 100pk'], remove: [] };
+const conv = byKey()[convKey];
+assert(conv, 'converted product did not become a category');
+assert.deepStrictEqual(conv.items, ['Shine Dishwashing Tablets 100pk']);
+assert.strictEqual(catMetricOf(conv), 'kg', 'conversion must default to $/kg');
+assert(perKgMemberNames().has('Shine Dishwashing Tablets 100pk'));
+
+console.log('category_create_selfcheck: 11/11 OK');

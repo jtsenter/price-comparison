@@ -989,6 +989,19 @@ function isCreatedCategory(o) {
   return !!(o && typeof o === 'object' && o.created);
 }
 
+// Stable key for a category made from a product name. The key is what every
+// override, exclusion and third_store entry is filed under, so it must contain
+// nothing that needs escaping later - lowercase, digits and underscores only.
+// Returns '' for a name with no usable characters, which the caller must treat
+// as "can't make a category from this" rather than filing one under ''.
+function categoryKeyFor(name) {
+  return String(name || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .slice(0, 48);
+}
+
 // Every category the app knows about, in the SEED shape (key + items + flags).
 // Several helpers apply the overrides themselves via variantGroupItemNames()
 // rather than going through loadVariantGroups(), and each one that iterated

@@ -1681,6 +1681,36 @@ async function persistThirdStoreEntry(s, itemName, url, storeKey) {
                       `edit: third-store link for ${itemName}`);
 }
 
+// Replace one key's WHOLE third-store list (the category editor's Other-stores
+// column). Same read-modify-write against the live file as the single-entry
+// version, so other keys are never touched.
+//
+// A price is carried over ONLY when that exact url is unchanged - a re-pointed
+// link keeps no price, or third_stores.py would leave one product's price
+// attached to another product's link until the next run overwrote it. `status`
+// is deliberately dropped: it is the scraper's to set, and a stale
+// "unreachable" would otherwise outlive the fix.
+async function persistThirdStoreList(s, key, list) {
+  if (!s?.user || !s?.repo || !s?.token) return;
+  const doc = await githubGetJson(s, 'docs/data/third_store.json') || {};
+  const prevByUrl = new Map((doc[key] || []).map(e => [e.url, e]));
+  if (!list.length) {
+    delete doc[key];
+  } else {
+    const today = new Date().toISOString().slice(0, 10);
+    doc[key] = list.map(e => {
+      const prev = prevByUrl.get(e.url);
+      return {
+        ...e,
+        ...(prev?.price != null ? { price: prev.price, checked: prev.checked } : {}),
+        added: prev?.added || today,
+      };
+    });
+  }
+  await githubPutJson(s, 'docs/data/third_store.json', doc,
+                      `edit: other-store links for ${key}`);
+}
+
 function initEditModal() {
   const modal = $('editModal');
   if (!modal) return;
@@ -1691,6 +1721,33 @@ function initEditModal() {
   $('editCancel').addEventListener('click', close);
   modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
   $('editThirdUrl')?.addEventListener('input', updateThirdUrlNote);
+
+  // Turn a plain product into a category, which is the only difference between
+  // the two: a category is a product with room for rivals. No data is moved and
+  // nothing is deleted - the item becomes the new category's first member, so
+  // undoing it is just deleting the category again.
+  $('editConvert')?.addEventListener('click', () => {
+    if (!_editingItem) return;
+    const name = _editingItem.list_item;
+    const key = categoryKeyFor(name);
+    if (!key) return;
+    if (loadVariantGroups().some(g => g.key === key)) {
+      alert('There is already a category with that name.');
+      return;
+    }
+    saveVariantGroupOverride(key, {
+      created: true,
+      label: (loadOverrides()[name] || {}).displayName || name,
+      category: _editingItem.category || 'Pantry',
+      add: [name], remove: [],
+      // $/kg is the safe default: it is what an un-flagged category already did,
+      // so converting never silently re-scales a price the user was reading.
+      sticker: false, perPack: false,
+    });
+    close();
+    if (_lastData) renderPage(_lastData);
+    openCategoryEditModal(key);
+  });
 
   $('editSave').addEventListener('click', async () => {
     if (!_editingItem) return;
@@ -4504,17 +4561,64 @@ function deriveNameFromUrl(url) {
   return name.replace(/\bRspca\b/g, 'RSPCA').replace(/\bBbq\b/g, 'BBQ').replace(/\bIandj\b/gi, 'I&J');
 }
 
+const CAT_STORE_LABEL = { ww: 'Woolworths', coles: 'Coles', third: 'Other store' };
+
+// The pieces-per-pack cell. Deliberately NOT something you have to fill in:
+// packCountOf() already reads "40 Pack" / "20pk" out of the product name and that
+// is what groupMetric() uses, so this shows the parsed number greyed out and only
+// becomes a real value once typed in. It exists for the occasional product whose
+// name doesn't state a count - not as a data-entry chore.
+// Rendered for every row but only VISIBLE under "Per piece" (see catEditApplyMetric),
+// so switching metric doesn't have to rebuild the columns.
+// `editable` only for third-store rows: third_store.json has a real `packs` field
+// that thirdUnitPrice() reads. A Woolworths/Coles member has no such slot - its
+// count comes from the product NAME, which is the input directly to its left, so
+// the box is a read-only readout of what packCountOf() got. Blank means "the name
+// doesn't state a count", which is exactly the thing worth seeing.
+function catEditPcsCell(name, editable) {
+  const auto = packCountOf(name);
+  const title = editable
+    ? 'Pieces in the pack. Filled in from the product name - type only to override.'
+    : 'Pieces in the pack, read from the product name. Edit the name to change it.';
+  return `<label class="cat-pcs" title="${escAttr(title)}">
+        <span>pcs</span>
+        <input type="text" inputmode="numeric" class="cat-pcs-in${auto ? ' auto' : ''}"
+               value="${auto || ''}" data-auto="${auto || ''}" placeholder="?"${editable ? '' : ' readonly'} />
+      </label>`;
+}
+
 function catEditNewRow(store) {
-  const label = store === 'ww' ? 'Woolworths' : 'Coles';
+  const label = CAT_STORE_LABEL[store] || 'Store';
+  // A third-store row has no store picker: thirdStoreFromUrl() resolves the shop
+  // from the pasted link's hostname, so asking twice would just be a way to
+  // disagree with the URL. The resolved name is echoed back in .cat-third-tag.
+  const ph = store === 'third'
+    ? 'Chemist Warehouse / Big W / Priceline URL'
+    : `${label} product URL`;
   return `<div class="cat-prod" data-store="${store}" draggable="true">
         <span class="cat-item-handle">⠿</span>
-        <input type="checkbox" class="cat-incl" checked title="Include in cheapest $/kg" />
+        <input type="checkbox" class="cat-incl" checked title="Include in the comparison" />
         <div class="cat-prod-main">
           <input type="text" class="cat-name" value="" placeholder="${label} product name" />
-          <input type="text" class="cat-url" value="" placeholder="${label} product URL" />
+          <input type="text" class="cat-url" value="" placeholder="${escAttr(ph)}" />
+          ${store === 'third' ? '<span class="cat-third-tag"></span>' : ''}
         </div>
+        ${catEditPcsCell('', store === 'third')}
         <button class="cat-prod-remove" title="Remove from this store">✕</button>
       </div>`;
+}
+
+// Which of the three comparison metrics a category is currently on, and the
+// flag pair each one means. perPack is checked BEFORE sticker in groupMetric(),
+// so "piece" must set perPack; it also sets sticker so the Units column counts
+// PACKS rather than kilos (you buy a box of nappies, not 1.2kg of them).
+const CAT_METRICS = {
+  pack:  { sticker: true,  perPack: false, note: 'Compared on the shelf price of the pack.' },
+  kg:    { sticker: false, perPack: false, note: 'Compared on $/kg, so different pack sizes line up.' },
+  piece: { sticker: true,  perPack: true,  note: 'Compared on the price of ONE piece, using the pcs box on each row.' },
+};
+function catMetricOf(cat) {
+  return cat?.perPack ? 'piece' : (cat?.sticker ? 'pack' : 'kg');
 }
 
 function openCategoryEditModal(groupKey) {
@@ -4547,12 +4651,34 @@ function openCategoryEditModal(groupKey) {
     const attrs = ` data-item="${itemName.replace(/"/g, '&quot;')}"`;
     return `<div class="cat-prod" data-store="${store}"${attrs} draggable="true">
         <span class="cat-item-handle">⠿</span>
-        <input type="checkbox" class="cat-incl"${incl ? ' checked' : ''} title="Include in cheapest $/kg" />
+        <input type="checkbox" class="cat-incl"${incl ? ' checked' : ''} title="Include in the comparison" />
         <div class="cat-prod-main">
           <input type="text" class="cat-name" value="${escAttr(name)}" placeholder="${escAttr(label)} product name" />
           <input type="text" class="cat-url" value="${url}" placeholder="${label} product URL" />
         </div>
+        ${catEditPcsCell(name, false)}
         <button class="cat-prod-remove" title="Remove from this store">✕</button>
+      </div>`;
+  };
+
+  // Third-store rows. These edit the GROUP-level list (`__group_<key>`) only -
+  // a third-store link attached to an individual MEMBER was added from that
+  // item's own dialog and stays its business, so it is left untouched here
+  // rather than being hoovered up and rewritten under the group key.
+  const thirdRow = (e) => {
+    const store = e.store || thirdStoreFromUrl(e.url);
+    const meta = THIRD_STORES[store];
+    return `<div class="cat-prod" data-store="third" data-third="1" draggable="true">
+        <span class="cat-item-handle">⠿</span>
+        <input type="checkbox" class="cat-incl" checked title="Include in the comparison" />
+        <div class="cat-prod-main">
+          <input type="text" class="cat-name" value="${escAttr(e.name || '')}" placeholder="Product name" />
+          <input type="text" class="cat-url" value="${escAttr(e.url || '')}" placeholder="Chemist Warehouse / Big W / Priceline URL" />
+          <span class="cat-third-tag">${meta ? esc(meta.label) : ''}${
+            e.status ? ` · <span class="cat-third-warn">${esc(e.status)}</span>` : ''}</span>
+        </div>
+        ${catEditPcsCell(e.packs ? `${e.packs} pack` : (e.name || ''), true)}
+        <button class="cat-prod-remove" title="Remove this link">✕</button>
       </div>`;
   };
 
@@ -4576,15 +4702,45 @@ function openCategoryEditModal(groupKey) {
       </div>`;
   };
 
+  const thirdEntries = (_thirdStores['__group_' + groupKey] || []);
+  const thirdCol = `<div class="cat-col cat-col-third">
+        <div class="cat-col-h"><span class="store-chip third sm">＋</span> Other stores</div>
+        <div class="cat-col-list" data-store="third">${
+          thirdEntries.map(thirdRow).join('') || '<div class="cat-prod-empty">No products yet</div>'
+        }</div>
+        <button class="cat-add-product cat-add-third" data-store="third">+ Add other-store product</button>
+      </div>`;
+
   $('catEditBody').innerHTML = `
-    <div class="cat-cols">
+    <div class="cat-cols cat-cols3">
       ${colHTML('ww', stores.ww)}
       ${colHTML('coles', stores.coles)}
+      ${thirdCol}
     </div>`;
 
+  catEditApplyMetric(catMetricOf(cat));
   bindCategoryEditBody();
   document.body.style.overflow = 'hidden';
   $('categoryEditModal').classList.add('open');
+}
+
+// Reflect the chosen metric: highlight the segment, explain it, and show the pcs
+// boxes only where they mean something. Kept as one function so the initial
+// render and a click go through exactly the same path.
+function catEditApplyMetric(metric) {
+  const m = CAT_METRICS[metric] ? metric : 'kg';
+  const seg = $('catEditMetric');
+  if (seg) {
+    seg.dataset.metric = m;
+    seg.querySelectorAll('button').forEach(b => {
+      const on = b.dataset.metric === m;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-checked', on ? 'true' : 'false');
+    });
+  }
+  const note = $('catEditMetricNote');
+  if (note) note.textContent = CAT_METRICS[m].note;
+  $('catEditBody')?.classList.toggle('show-pcs', m === 'piece');
 }
 
 // Bind the add/remove + drag-reorder handlers to the (persistent) modal body ONCE.
@@ -4615,15 +4771,47 @@ function bindCategoryEditBody() {
   // Paste a product URL into a NEW row → auto-fill the name from the URL slug (only
   // while the name is still blank, so manual edits are never clobbered).
   body.addEventListener('input', (e) => {
+    // Typing in the pcs box makes the number YOURS - drop the "auto" styling so
+    // it is obvious which counts came from the name and which you set.
+    const pcs = e.target.closest('.cat-pcs-in');
+    if (pcs) { pcs.classList.toggle('auto', pcs.value.trim() === pcs.dataset.auto); return; }
+
     const urlInput = e.target.closest('.cat-url');
     if (!urlInput) return;
     const row = urlInput.closest('.cat-prod');
-    if (!row || row.dataset.item) return;            // existing rows keep their name
+    if (!row) return;
+    const url = urlInput.value.trim();
+
+    // Third-store rows: echo back which shop the URL resolved to, so a typo or an
+    // unsupported store is visible BEFORE saving rather than silently dropped.
+    if (row.dataset.store === 'third') {
+      const tag = row.querySelector('.cat-third-tag');
+      const store = thirdStoreFromUrl(url);
+      if (tag) {
+        tag.textContent = !url ? '' : (store ? THIRD_STORES[store].label : 'Not a supported store');
+        tag.classList.toggle('bad', !!url && !store);
+      }
+    }
+    if (row.dataset.item) return;                    // existing rows keep their name
     const nameInput = row.querySelector('.cat-name');
     if (nameInput && !nameInput.value.trim()) {
-      const derived = deriveNameFromUrl(urlInput.value.trim());
-      if (derived) nameInput.value = derived;
+      const derived = deriveNameFromUrl(url);
+      if (derived) {
+        nameInput.value = derived;
+        // The name is what packCountOf() reads, so refresh an untouched pcs box.
+        const p = row.querySelector('.cat-pcs-in');
+        if (p && p.classList.contains('auto')) {
+          const auto = packCountOf(derived) || '';
+          p.value = auto; p.dataset.auto = auto;
+        }
+      }
     }
+  });
+
+  // Comparison metric.
+  $('catEditMetric')?.addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-metric]');
+    if (b) catEditApplyMetric(b.dataset.metric);
   });
 
   // HTML5 drag-and-drop - reordering is scoped to within a single column.
@@ -4748,17 +4936,50 @@ function saveCategoryEdit() {
   // diff: a member absent from `items` only because the client's snapshot never saw it
   // (unpriced when the modal opened) must never be recorded as user-removed - see that
   // function's comment for the incident this guards against.
+  // Other-stores column -> the group's own entry in third_store.json. The store is
+  // taken from the URL's hostname (never asked for separately), and a row whose URL
+  // resolves to no supported store is dropped rather than written as a broken entry.
+  const thirdList = [];
+  document.querySelectorAll('#catEditBody .cat-col-list[data-store="third"] .cat-prod').forEach(row => {
+    const url = row.querySelector('.cat-url').value.trim();
+    const nm = row.querySelector('.cat-name').value.trim();
+    const store = thirdStoreFromUrl(url);
+    if (!url || !store || !row.querySelector('.cat-incl').checked) return;
+    const pcs = parseInt(row.querySelector('.cat-pcs-in')?.value, 10);
+    // deriveNameFromUrl only understands WW/Coles slugs, so a Chemist Warehouse
+    // link left un-named would otherwise save a blank row. Fall back to the
+    // category's own label, which always reads sensibly ("Nappies size 6" at Big
+    // W) - never drop the row silently just because the name box is empty.
+    thirdList.push({ store, name: nm || deriveNameFromUrl(url) || label || key, url,
+                     ...(pcs > 0 ? { packs: pcs } : {}) });
+  });
+  const thirdChanged = JSON.stringify(thirdList)
+    !== JSON.stringify((_thirdStores['__group_' + key] || []).map(e => ({
+         store: e.store, name: e.name, url: e.url, ...(e.packs ? { packs: e.packs } : {}) })));
+
   const defItems = (DEFAULT_VARIANT_GROUPS.find(d => d.key === key) || {}).items || [];
   const add = items.filter(n => !defItems.includes(n));
   const remove = categoryRemovals(defItems, [...orig.ww, ...orig.coles], items);
-  saveVariantGroupOverride(key, { label: label || undefined, add, remove, ww_order: wwItems, coles_order: coItems });
+  // The comparison metric now lives in the override too, so it survives a reload
+  // and syncs to the other device - see loadVariantGroups(), which reads these
+  // override-first. Written explicitly (not omitted when false) so that turning a
+  // seeded flag OFF is a real, storable choice.
+  const metric = CAT_METRICS[$('catEditMetric')?.dataset.metric] || CAT_METRICS.kg;
+  saveVariantGroupOverride(key, { label: label || undefined, add, remove, ww_order: wwItems, coles_order: coItems,
+                                  sticker: metric.sticker, perPack: metric.perPack });
   savePerKgExclusions(excl);
   saveOverrides(ov);
+  // Reflect the third-store edit locally straight away, so the panel updates on
+  // this render rather than waiting for the next page load to re-fetch the file.
+  if (thirdChanged) {
+    if (thirdList.length) _thirdStores['__group_' + key] = thirdList;
+    else delete _thirdStores['__group_' + key];
+  }
   closeCategoryEditModal();
   if (_lastData) renderPage(_lastData);
 
   const s = loadSettings();
-  const needRepo = newFetches.length || touchedItems.size || latestChanged;
+  const needRepo = newFetches.length || touchedItems.size || latestChanged || thirdChanged;
   if (needRepo && !s.token) {
     alert('Saved locally. Add your GitHub token (Auto-update Setup) so the change reaches the scraper and other devices.');
   } else if (needRepo) {
@@ -4769,6 +4990,10 @@ function saveCategoryEdit() {
     if (latestChanged) {
       persistLatestJson(_lastData, `edit: ${key} - removed ${removals.map(r => `${r.item} @ ${r.store}`).join(', ')}`)
         .catch(err => showSyncError('latest.json', err));
+    }
+    if (thirdChanged) {
+      persistThirdStoreList(s, '__group_' + key, thirdList)
+        .catch(err => showSyncError('other-store links', err));
     }
     // New products' URLs live in url_overrides now - fetch their prices immediately.
     newFetches.forEach(f => triggerItemRefresh(f.name, null, { wwUrl: f.wwUrl, colesUrl: f.colesUrl }));
