@@ -127,7 +127,10 @@ function exclSetsFor(itemName) {
 // price, each converted with its own store's ratio, exclusions applied.
 // price_history and ww_price_history hold WW pack prices; coles_price_history
 // holds Coles pack prices.
-function memberPerKgPrices(m, useWw = true, useCo = true) {
+// histOnly: leave TODAY's prices out, so the caller gets the same "past" series
+// calcTrendPosition measures against. Mixing the current price into the range is
+// what pinned every group at position 0 - see groupTrendPosition.
+function memberPerKgPrices(m, useWw = true, useCo = true, histOnly = false) {
   if (!m) return [];
   const wwR = useWw ? perKgRatio(m.woolworths) : null;
   const coR = useCo ? perKgRatio(m.coles) : null;
@@ -142,8 +145,10 @@ function memberPerKgPrices(m, useWw = true, useCo = true) {
     ...conv(m.ww_price_history,    wwR, wwEx),
     ...conv(m.coles_price_history, coR, coEx),
   ];
-  if (useWw) { const wk = clientPerKg(m.woolworths); if (wk != null) out.push(wk); }
-  if (useCo) { const ck = clientPerKg(m.coles);      if (ck != null) out.push(ck); }
+  if (!histOnly) {
+    if (useWw) { const wk = clientPerKg(m.woolworths); if (wk != null) out.push(wk); }
+    if (useCo) { const ck = clientPerKg(m.coles);      if (ck != null) out.push(ck); }
+  }
   return out;
 }
 
@@ -3966,21 +3971,49 @@ function buildGroupHistoryItem(group) {
 // orders groups by the same metric the bar shows. calcTrendPosition can't be used on a
 // group: its price_history is empty and woolworths.price is a pack price, not $/kg, so it
 // returned a meaningless value (the "per-kg items sort weird" bug).
+function memberRawHistory(m) {
+  return [...(m.price_history || []), ...(m.ww_price_history || []), ...(m.coles_price_history || [])]
+    .map(e => e.price).filter(p => p > 0);
+}
+
+// A group's PAST prices, expressed in the same unit as groupMetric() - so the
+// range and the point being placed in it are the same kind of number. Flag
+// precedence matches groupMetric: perPack BEFORE sticker (nappies set both).
+function groupPastPrices(group) {
+  if (group._perPack) {
+    // The metric is dollars-per-piece, so the history has to be per-piece too.
+    // Measuring a $0.29 nappy against a range of $11-$25 PACK prices put every
+    // per-piece category below its own floor, i.e. permanently "cheapest ever".
+    return group._members.flatMap(m => {
+      const n = packCountOf(m.list_item) || packCountOf(m.woolworths?.name) || packCountOf(m.coles?.name);
+      return n > 0 ? memberRawHistory(m).map(p => +(p / n).toFixed(3)) : [];
+    });
+  }
+  // Sticker groups compare on the raw pack price, so the range is raw too.
+  if (group._sticker) return group._members.flatMap(memberRawHistory);
+  return group._members.flatMap(m => memberPerKgPrices(m, ...memberStoreFlags(group, m), true));
+}
+
 function groupTrendPosition(group) {
   const cands = [group._wwBest, group._coBest].filter(Boolean);
   if (!cands.length) return 999;
   const best = cands.reduce((a, b) => (a.perkg <= b.perkg ? a : b));
-  // Sticker groups: best.perkg already holds a raw pack price (see groupMetric),
-  // so the range must come from raw prices too - mixing it with $/kg-converted
-  // prices produced a meaningless position (the "sorts to a weird spot" bug).
-  const prices = group._sticker
-    ? group._members.flatMap(m => [...(m.price_history || []), ...(m.ww_price_history || []), ...(m.coles_price_history || [])]
-        .map(e => e.price).filter(p => p > 0))
-    : group._members.flatMap(m => memberPerKgPrices(m, ...memberStoreFlags(group, m)));
-  if (prices.length < 2) return 999;
-  const lo = Math.min(...prices), hi = Math.max(...prices);
-  if (lo === hi) return 0.5;
-  return Math.max(0, Math.min(1, (best.perkg - lo) / (hi - lo)));
+  // Measured against history ONLY and left UNCLAMPED - the two rules
+  // calcTrendPosition follows for a normal item. Groups used to do neither:
+  // today's price was inside the range (so a group at its own low landed exactly
+  // on 0 instead of below it) and the result was clamped to [0,1] (so it could
+  // never go below 0 anyway). Eleven of 26 groups therefore tied on 0 and the
+  // A-Z tiebreak stacked every category at the top of a trend sort, which is
+  // exactly the "per-kg items come first" report.
+  const past = groupPastPrices(group);
+  if (past.length < 2) return 999;
+  const lo = Math.min(...past), hi = Math.max(...past);
+  if (lo === hi) {
+    if (best.perkg < lo - 0.005) return -1;
+    if (best.perkg > lo + 0.005) return 2;
+    return 0.5;
+  }
+  return (best.perkg - lo) / (hi - lo);
 }
 
 // Trend position for any row: groups use their $/kg series, normal items use the shared
@@ -7076,6 +7109,7 @@ async function boot() {
         if (editBtn && _lastData) {
           const itemName = editBtn.dataset.editItem;
           if (itemName.startsWith('__group_')) { openCategoryEditModal(itemName.replace('__group_', '')); return; }
+          if (window.innerWidth > 700) { openProductEditor(itemName); return; }
           const item = _lastData.items.find(i => i.list_item === itemName);
           if (item) openEditModal(item);
           return;
