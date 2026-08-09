@@ -1722,33 +1722,6 @@ function initEditModal() {
   modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
   $('editThirdUrl')?.addEventListener('input', updateThirdUrlNote);
 
-  // Turn a plain product into a category, which is the only difference between
-  // the two: a category is a product with room for rivals. No data is moved and
-  // nothing is deleted - the item becomes the new category's first member, so
-  // undoing it is just deleting the category again.
-  $('editConvert')?.addEventListener('click', () => {
-    if (!_editingItem) return;
-    const name = _editingItem.list_item;
-    const key = categoryKeyFor(name);
-    if (!key) return;
-    if (loadVariantGroups().some(g => g.key === key)) {
-      alert('There is already a category with that name.');
-      return;
-    }
-    saveVariantGroupOverride(key, {
-      created: true,
-      label: (loadOverrides()[name] || {}).displayName || name,
-      category: _editingItem.category || 'Pantry',
-      add: [name], remove: [],
-      // $/kg is the safe default: it is what an un-flagged category already did,
-      // so converting never silently re-scales a price the user was reading.
-      sticker: false, perPack: false,
-    });
-    close();
-    if (_lastData) renderPage(_lastData);
-    openCategoryEditModal(key);
-  });
-
   $('editSave').addEventListener('click', async () => {
     if (!_editingItem) return;
     const overrides = loadOverrides();
@@ -4535,6 +4508,10 @@ function appendGroupCardMobile(container, group, overrides) {
 // ── Per-kg category edit modal ────────────────────────────────────────────────
 let _catEditKey = null;
 let _catEditOrig = null; // per-store membership at modal-open, for removal detection
+// The item name when the editor was opened on a plain product, else null. Such a
+// product is NOT a category yet - see saveCategoryEdit, which only files one once
+// the product has actually grown past what a plain item can express.
+let _catEditPlain = null;
 let _catDragSrc = null;  // drag source row, shared by the once-bound drag handlers
 
 // A blank product row for the "+ Add product" action. Matches makeRow(isNew).
@@ -4621,20 +4598,58 @@ function catMetricOf(cat) {
   return cat?.perPack ? 'piece' : (cat?.sticker ? 'pack' : 'kg');
 }
 
-function openCategoryEditModal(groupKey) {
-  const cat = loadVariantGroups().find(g => g.key === groupKey);
+// Where this editor's outside-store links live in third_store.json.
+function thirdStoreKeyFor() {
+  return _catEditPlain || ('__group_' + _catEditKey);
+}
+
+// ONE editor for everything. A plain product is not a different kind of thing
+// from a category - it is a category that happens to have one row per store - so
+// it gets the identical dialog rather than a cut-down form plus a button to
+// "convert". Nothing is created on open: a plain product stays a plain product in
+// storage until you actually give it a second product or a non-default metric,
+// at which point saveCategoryEdit files the category for you. That is the whole
+// mode switch, removed by making the two cases indistinguishable to use.
+function openProductEditor(itemName) {
+  const item = _lastData?.items?.find(i => i.list_item === itemName);
+  if (!item) return;
+  const ov = loadOverrides()[itemName] || {};
+  const cat = {
+    key: categoryKeyFor(itemName),
+    label: ov.displayName || itemName,
+    category: item.category,
+    sticker: false, perPack: false,
+    items: [itemName],
+  };
+  // Only list the item under a store it actually has, so an unpinned Coles-only
+  // product doesn't open with a phantom empty Woolworths row.
+  const stores = {
+    ww:    (item.woolworths || ov.wwUrl)    ? [itemName] : [],
+    coles: (item.coles      || ov.colesUrl) ? [itemName] : [],
+  };
+  openCategoryEditModal(cat.key, { cat, stores, plain: itemName });
+}
+
+// `opts` is the plain-product path above; without it this resolves a real
+// category by key exactly as before.
+function openCategoryEditModal(groupKey, opts) {
+  const cat = opts?.cat || loadVariantGroups().find(g => g.key === groupKey);
   if (!cat || !_lastData) return;
   _catEditKey = groupKey;
+  _catEditPlain = opts?.plain || null;
   const byName = new Map(_lastData.items.map(i => [i.list_item, i]));
   const ov = loadOverrides();
   const excl = loadPerKgExclusions();
-  const stores = resolveStoreLists(cat, byName);
+  const stores = opts?.stores || resolveStoreLists(cat, byName);
   // Snapshot the per-store membership so save can detect deletions (a member the
   // user pulled out of a store's column) and actually make them stick - see
   // saveCategoryEdit's removal handling.
   _catEditOrig = { ww: [...stores.ww], coles: [...stores.coles] };
 
   $('catEditName').value = cat.label;
+  // Same dialog, honest labels: it is "this product" until it has rivals in it.
+  if ($('catEditTitle')) $('catEditTitle').textContent = `Edit — ${cat.label}`;
+  if ($('catEditSave')) $('catEditSave').textContent = 'Save';
 
   // One product row, scoped to a single store. Woolworths and Coles each have
   // their own independent column - separate products, names, URLs, and order.
@@ -4702,7 +4717,9 @@ function openCategoryEditModal(groupKey) {
       </div>`;
   };
 
-  const thirdEntries = (_thirdStores['__group_' + groupKey] || []);
+  // A plain product's outside-store links are filed under its own name; a
+  // category's under `__group_<key>`. Same column either way.
+  const thirdEntries = (_thirdStores[thirdStoreKeyFor()] || []);
   const thirdCol = `<div class="cat-col cat-col-third">
         <div class="cat-col-h"><span class="store-chip third sm">＋</span> Other stores</div>
         <div class="cat-col-list" data-store="third">${
@@ -4852,6 +4869,28 @@ function saveCategoryEdit() {
   if (!_catEditKey) return;
   const key = _catEditKey;
   const label = $('catEditName').value.trim();
+  const plainName = _catEditPlain;
+
+  // A plain product that is still one-product-per-store on a default metric has
+  // nothing a category would add, so none is created - it saves through the same
+  // url_overrides path the old Edit Item form used. Add a second product to a
+  // column, or pick a different metric, and it becomes a category here, without
+  // ever having asked which of the two you meant.
+  if (plainName) {
+    const rowsIn = (store) => [...document.querySelectorAll(
+      `#catEditBody .cat-col-list[data-store="${store}"] .cat-prod`)];
+    const grew = rowsIn('ww').length > 1 || rowsIn('coles').length > 1;
+    const metricNow = $('catEditMetric')?.dataset.metric || 'kg';
+    if (!grew && metricNow === 'kg') { savePlainProductEdit(plainName, label); return; }
+    // Becoming a category: file it, then fall through and save as one. The
+    // product itself is untouched - it is simply now the first member.
+    saveVariantGroupOverride(key, {
+      created: true, label: label || plainName,
+      category: (_lastData?.items?.find(i => i.list_item === plainName) || {}).category || 'Pantry',
+      add: [plainName], remove: [], sticker: false, perPack: false,
+    });
+    _catEditOrig = { ww: [], coles: [] };   // nothing was a member before now
+  }
 
   const ov = loadOverrides();
   const excl = loadPerKgExclusions();
@@ -5005,8 +5044,95 @@ function saveCategoryEdit() {
   }
 }
 
+// A product that is still one-per-store, saved through the same url_overrides
+// path the old Edit Item form used - identical semantics, read out of the
+// three-column editor instead of four stacked text boxes. Clearing a store's URL
+// still MEANS "remove it from that store" (the remaining link becomes a
+// single-store pin), which is why it refuses to clear both.
+function savePlainProductEdit(name, label) {
+  const rowUrl = (store) => {
+    const row = document.querySelector(`#catEditBody .cat-col-list[data-store="${store}"] .cat-prod`);
+    const v = (row?.querySelector('.cat-url')?.value || '').trim();
+    return v && !v.startsWith('http') ? 'https://' + v : v;
+  };
+  const overrides = loadOverrides();
+  const prev = overrides[name] || {};
+  const item = _lastData?.items?.find(i => i.list_item === name);
+  const newWw = rowUrl('ww'), newCo = rowUrl('coles');
+  const prevWw = prev.wwUrl    || item?.woolworths?.url || '';
+  const prevCo = prev.colesUrl || item?.coles?.url      || '';
+  const wwRemoved = !!prevWw && !newWw, coRemoved = !!prevCo && !newCo;
+  const wwChanged = !!newWw && newWw !== prevWw, coChanged = !!newCo && newCo !== prevCo;
+
+  if (wwRemoved && coRemoved) {
+    alert('Both links removed - that would leave the product with no store at all.\nUse Archive to stop tracking it, or keep at least one link.');
+    return;
+  }
+
+  // Other-stores column, same rules as the category path.
+  const thirdList = [];
+  document.querySelectorAll('#catEditBody .cat-col-list[data-store="third"] .cat-prod').forEach(row => {
+    const url = (row.querySelector('.cat-url').value || '').trim();
+    const store = thirdStoreFromUrl(url);
+    if (!url || !store || !row.querySelector('.cat-incl').checked) return;
+    const pcs = parseInt(row.querySelector('.cat-pcs-in')?.value, 10);
+    thirdList.push({ store, name: (row.querySelector('.cat-name').value || '').trim() || label || name,
+                     url, ...(pcs > 0 ? { packs: pcs } : {}) });
+  });
+  const prevThird = (_thirdStores[name] || []).map(e => ({
+    store: e.store, name: e.name, url: e.url, ...(e.packs ? { packs: e.packs } : {}) }));
+  const thirdChanged = JSON.stringify(thirdList) !== JSON.stringify(prevThird);
+
+  overrides[name] = { ...prev,
+    displayName: label && label !== name ? label : undefined,
+    wwUrl: newWw || undefined, colesUrl: newCo || undefined };
+  if (!overrides[name].displayName && !overrides[name].wwUrl && !overrides[name].colesUrl) delete overrides[name];
+  saveOverrides(overrides);
+
+  if ((wwRemoved || coRemoved) && item) {
+    if (wwRemoved) item.woolworths = null;
+    if (coRemoved) item.coles = null;
+    item.cheaper_store = null; item.saving_per_item = null;
+  }
+  if (thirdChanged) {
+    if (thirdList.length) _thirdStores[name] = thirdList; else delete _thirdStores[name];
+  }
+  closeCategoryEditModal();
+  if (_lastData) renderPage(_lastData);
+
+  const s = loadSettings();
+  if (!(s.user && s.repo && s.token)) {
+    if (wwChanged || coChanged || wwRemoved || coRemoved || thirdChanged) {
+      alert('Saved locally. Add your GitHub token (Auto-update Setup) so the change reaches the scraper and other devices.');
+    }
+    return;
+  }
+  persistUrlOverridesToRepo(s, overrides, [name])
+    .catch(err => showSyncError('URL overrides', err));
+  if (wwRemoved || coRemoved) {
+    persistLatestJson(_lastData, `edit: ${name} - removed from ${wwRemoved ? 'Woolworths' : 'Coles'}`)
+      .catch(err => showSyncError('latest.json', err));
+    showToast(`✓ "${name}" removed from ${wwRemoved ? 'Woolworths' : 'Coles'}.`);
+  }
+  if (wwChanged || coChanged) {
+    triggerItemRefresh(name, null, { wwUrl: newWw, colesUrl: newCo });
+    showToast(`✓ Scrape triggered for "${name}" with the new URL.`);
+  }
+  if (thirdChanged) {
+    // Priced by the pipeline's own third_stores.py step, not a single-item
+    // dispatch - so say when the price arrives rather than leaving a link that
+    // looks broken until then.
+    persistThirdStoreList(s, name, thirdList)
+      .then(() => showToast(thirdList.length
+        ? '✓ Other-store link saved - its price arrives with the next scrape.'
+        : `✓ Other-store link removed from "${name}".`))
+      .catch(err => showSyncError('other-store links', err));
+  }
+}
+
 function closeCategoryEditModal() {
   _catEditKey = null;
+  _catEditPlain = null;
   document.body.style.overflow = '';
   $('categoryEditModal')?.classList.remove('open');
 }
@@ -6712,6 +6838,10 @@ async function boot() {
       if (editBtn && _lastData) {
         const key = editBtn.dataset.editItem;
         if (key.startsWith('__group_')) { openCategoryEditModal(key.replace('__group_', '')); return; }
+        // Desktop gets the same three-column editor for a plain product as for a
+        // category - that IS the design. The narrow form stays on phones, where
+        // three drag-and-drop columns do not fit.
+        if (window.innerWidth > 700) { openProductEditor(key); return; }
         const item = _lastData.items.find(i => i.list_item === key);
         if (item) openEditModal(item);
         return;

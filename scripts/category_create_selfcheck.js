@@ -167,4 +167,18 @@ assert.deepStrictEqual(conv.items, ['Shine Dishwashing Tablets 100pk']);
 assert.strictEqual(catMetricOf(conv), 'kg', 'conversion must default to $/kg');
 assert(perKgMemberNames().has('Shine Dishwashing Tablets 100pk'));
 
-console.log('category_create_selfcheck: 11/11 OK');
+// 12. The promote rule. A plain product opens in the SAME three-column editor as
+//     a category, and must stay a plain product in storage until it actually
+//     needs to be one - otherwise every product you merely LOOK at turns into a
+//     category and the table fills with one-member groups. Mirrors the condition
+//     in saveCategoryEdit: promote when a column grew, or the metric left $/kg.
+const shouldPromote = (wwRows, coRows, metric) => wwRows > 1 || coRows > 1 || metric !== 'kg';
+assert.strictEqual(shouldPromote(1, 1, 'kg'), false, 'an untouched product must NOT become a category');
+assert.strictEqual(shouldPromote(1, 0, 'kg'), false, 'a single-store product must NOT become a category');
+assert.strictEqual(shouldPromote(0, 1, 'kg'), false);
+assert.strictEqual(shouldPromote(2, 1, 'kg'), true,  'a second WW product must promote');
+assert.strictEqual(shouldPromote(1, 2, 'kg'), true,  'a second Coles product must promote');
+assert.strictEqual(shouldPromote(1, 1, 'piece'), true, 'choosing a metric must promote');
+assert.strictEqual(shouldPromote(1, 1, 'pack'), true);
+
+console.log('category_create_selfcheck: 12/12 OK');
