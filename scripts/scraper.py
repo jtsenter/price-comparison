@@ -1159,19 +1159,6 @@ async def fetch_coles_by_url(page, url: str) -> dict | None:
 # Alternatives
 # ---------------------------------------------------------------------------
 
-def find_alternatives(all_results: list[dict], matched: dict | None, max_alts: int = 3) -> list[dict]:
-    if not matched or matched.get("unit_price") is None:
-        return []
-    best_unit = matched["unit_price"]
-    alts = [r for r in all_results if r.get("unit_price") and r["unit_price"] < best_unit and r["name"] != matched["name"]]
-    alts.sort(key=lambda x: x["unit_price"])
-    return alts[:max_alts]
-
-
-# ---------------------------------------------------------------------------
-# Incremental push helpers
-# ---------------------------------------------------------------------------
-
 def _entry_recency(it: dict) -> tuple:
     """Sort key for choosing between two entries of the SAME item. A priced entry
     always beats a priceless one (a failed re-scrape must never clobber good
@@ -1835,12 +1822,12 @@ async def _scrape_single_item(
     elif ww_price is not None:
         cheaper_store = "woolworths"
 
-    all_for_item = ww_results + coles_results
-    best_match = ww_match if (ww_match and ww_match.get("unit_price")) else coles_match
-    alternatives = find_alternatives(all_for_item, best_match)
-    for alt in alternatives:
-        if not alt.get("retailer"):
-            alt["retailer"] = "woolworths" if WOOLWORTHS_BASE in alt.get("url", "") else "coles"
+    # `alternatives` (find_alternatives) is gone. It ranked search results by unit
+    # price with no category constraint, so "raspberries" matched raspberry JAM and
+    # "beef & lamb meatballs" matched DOG FOOD - 16 of the 22 suggestions it
+    # produced were a different product entirely. Nothing rendered it, and shipping
+    # it would have been worse than shipping nothing. Removed rather than left as
+    # dead data that looks authoritative.
 
     # "carried" is internal only; validate_pair uses the standard confidence vocabulary
     _vww = "low" if ww_conf == "carried" else ww_conf
@@ -2007,7 +1994,6 @@ async def _scrape_single_item(
         "coles": _final_co,
         "cheaper_store": cheaper_store,
         "saving_per_item": saving,
-        "alternatives": alternatives,
         "ww_price_history": new_ww_hist,
         "coles_price_history": new_co_hist,
         **pair_meta,
@@ -2548,7 +2534,6 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                 "coles": None,
                 "cheaper_store": None,
                 "saving_per_item": None,
-                "alternatives": [],
                 "ww_price_history": [],
                 "coles_price_history": [],
                 "match_confidence": "none",

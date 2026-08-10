@@ -413,10 +413,46 @@ function getDealQuality(item, exclusions) {
 
   const lo = Math.min(...hist), hi = Math.max(...hist);
   const typical = _median(hist);
+
+  // Everything observed BEFORE today, and when the price last actually moved.
+  // Both read the dated entries; undated ones (old Excel receipts) count as past
+  // because they certainly are.
+  const _today = new Date().toISOString().slice(0, 10);
+  const dated = [
+    ...(item.price_history || []),
+    ...(item.ww_price_history || []),
+    ...(item.coles_price_history || []),
+  ].filter(h => Number(h.price) > 0 && !excludedSet.has(Number(h.price).toFixed(2)))
+   .map(h => ({ date: String(h.date || '').slice(0, 10), price: Number(h.price) }))
+   .sort((a, b) => a.date.localeCompare(b.date));
+  const past = dated.filter(h => !h.date || h.date < _today).map(h => h.price);
+
+  // Months since the price last CHANGED (not since it was last checked). An item
+  // frozen for a year is noise on this page; one that swings every 8 weeks is
+  // exactly what belongs here even if it is between swings right now.
+  let lastChange = null;
+  for (let i = 1; i < dated.length; i++) {
+    if (Math.abs(dated[i].price - dated[i - 1].price) > 0.005) lastChange = dated[i].date;
+  }
+  const monthsSinceChange = lastChange
+    ? (Date.now() - Date.parse(lastChange)) / (30.44 * 86400000)
+    : (dated.length ? Infinity : null);   // never moved in all the history we hold
   const spread = hi > 0 ? (hi - lo) / hi : 0;
   const dropPct = typical > 0 ? (typical - currentBest) / typical : 0;
   const saveAmount = Math.max(0, typical - currentBest);
-  const isAllTimeLow = currentBest <= lo + 0.01;
+  // "All-time low" is measured against the price BEFORE today. The scrape writes
+  // today's price into the very history it was being compared with, so
+  // `currentBest <= min(everything)` was true whenever today merely TIED the old
+  // minimum - which, on a price that never moves, is true every week forever.
+  // That fired the trophy on a fifth of the catalogue and made it worthless.
+  const priorLo = past.length ? Math.min(...past) : lo;
+  const isAllTimeLow = past.length > 0 && currentBest < priorLo - 0.005;
+  // Where today sits in its own past year: 0.94 = cheaper than 94% of what it
+  // has actually sold for. A rank, not a binary, so "unusually cheap" survives
+  // on an item that simply never sets new records.
+  const pricePercentile = past.length
+    ? past.filter(p => p > currentBest + 0.005).length / past.length
+    : 0;
 
   // Recency guard: "below the long-run median" is not a deal if the item was
   // CHEAPER within the last fortnight - the price went up, not down. Items
@@ -437,14 +473,19 @@ function getDealQuality(item, exclusions) {
   const savingPct = (otherPrice != null && otherPrice > 0)
     ? (otherPrice - currentBest) / otherPrice : 0;
 
+  // A rank reads as information; a trophy on a fifth of the catalogue reads as
+  // decoration. The trophy is now reserved for a genuine new low.
   const reason = isAllTimeLow
-    ? '🏆 All-time low'
+    ? '🏆 Cheapest ever'
+    : pricePercentile >= 0.5
+    ? `Cheaper than ${Math.round(pricePercentile * 100)}% of the past year`
     : `↓ ${Math.round(dropPct * 100)}% below usual`;
 
   return {
     qualifies, store, price: currentBest, otherPrice,
     typical, lo, hi, spread, dropPct, saveAmount, isAllTimeLow,
     notAboveRecent, savingPct, reason,
+    pricePercentile, monthsSinceChange,
   };
 }
 
@@ -1709,9 +1750,16 @@ function getHotDealItems(items, opts) {
   const exclusions  = opts.exclusions  || {};
   const archivedSet = opts.archivedSet || new Set();
   const priorities  = opts.priorities  || {};
+  // Every field must be defaulted here. This function rebuilds the tune from
+  // loose opts rather than taking one, so a field added to dealPassesTune but
+  // forgotten here arrives as `undefined` - and `x >= undefined` is false, which
+  // silently rejects EVERY item. That is exactly what an empty Hot Deals page
+  // looked like the first time these two were added.
   const tune = {
     drop: opts.minDropPct      != null ? opts.minDropPct      : DEAL_TUNE_DEFAULTS.drop,
     diff: opts.minStoreDiffPct != null ? opts.minStoreDiffPct : DEAL_TUNE_DEFAULTS.diff,
+    rank:  opts.minRankPct   != null ? opts.minRankPct   : DEAL_TUNE_DEFAULTS.rank,
+    stale: opts.maxStaleMonths != null ? opts.maxStaleMonths : DEAL_TUNE_DEFAULTS.stale,
     atl:  opts.includeATL == null ? DEAL_TUNE_DEFAULTS.atl : !!opts.includeATL,
     mode: opts.mode === 'or' ? 'or' : 'and',
   };
@@ -1730,10 +1778,19 @@ function getHotDealItems(items, opts) {
 // tune: { drop, diff (whole percents), atl, mode: 'and'|'or' }.
 function dealPassesTune(deal, tune) {
   if (deal.typical == null || deal.spread < DEAL_MIN_SPREAD || !deal.notAboveRecent) return false;
+  // Staleness gate, applied BEFORE anything else can wave an item through -
+  // including the cheapest-ever escape hatch. A price frozen for longer than the
+  // cutoff is not news at any threshold; it is the same row every week. Measured
+  // from the last CHANGE, so an item that swings every 8 weeks stays eligible
+  // while it sits between swings. 0 disables the gate.
+  if (tune.stale > 0 && deal.monthsSinceChange != null && deal.monthsSinceChange > tune.stale) return false;
   const passDrop = deal.dropPct   >= tune.drop / 100;
   const passDiff = deal.savingPct >= tune.diff / 100;
-  const passSliders = tune.mode === 'or' ? (passDrop || passDiff) : (passDrop && passDiff);
-  // All-time low is an OR escape hatch (checkbox), regardless of the sliders.
+  const passRank = deal.pricePercentile != null && deal.pricePercentile >= tune.rank / 100;
+  const passSliders = tune.mode === 'or'
+    ? (passDrop || passDiff || passRank)
+    : (passDrop && passDiff && passRank);
+  // A genuine new low is still an escape hatch, but it now means what it says.
   return (tune.atl && deal.isAllTimeLow) || passSliders;
 }
 
@@ -1744,7 +1801,12 @@ function dealPassesTune(deal, tune) {
 // "deals" out of ~210 active items, which made the word meaningless. ATL stays
 // on by default: an all-time low is always worth surfacing regardless of where
 // the sliders sit, which is the point of the checkbox being an OR escape hatch.
-const DEAL_TUNE_DEFAULTS = { drop: 20, diff: 10, atl: true, mode: 'and' };
+// `stale`: hide items whose price has not moved in this many months (0 = off).
+// 6 is deliberately generous - a quarterly cycle still gets through, while the
+// 72 items frozen for over a year stop occupying the page.
+// `rank`: minimum price percentile, i.e. "cheaper than this % of its own past
+// year". 0 keeps the old behaviour for anyone who wants the sliders alone.
+const DEAL_TUNE_DEFAULTS = { drop: 20, diff: 10, rank: 75, stale: 6, atl: true, mode: 'and' };
 function loadDealTune() {
   try {
     const t = JSON.parse(localStorage.getItem('pw_hd_tune_v1') || 'null');
@@ -1752,6 +1814,10 @@ function loadDealTune() {
       return {
         atl: typeof t.atl === 'boolean' ? t.atl : DEAL_TUNE_DEFAULTS.atl,
         drop: t.drop, diff: t.diff,
+        // Saved tunes predate these two, so fall back to the defaults rather
+        // than to 0/undefined (which would silently disable the new gates).
+        rank:  typeof t.rank  === 'number' ? t.rank  : DEAL_TUNE_DEFAULTS.rank,
+        stale: typeof t.stale === 'number' ? t.stale : DEAL_TUNE_DEFAULTS.stale,
         mode: t.mode === 'or' ? 'or' : 'and',
       };
   } catch {}

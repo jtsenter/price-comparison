@@ -378,9 +378,19 @@
       <input type="range" id="hdDiffSlider" min="0" max="50" step="1">
       <strong id="hdDiffVal">0%</strong>
     </div>
-    <label class="hd-tune-atl" title="An all-time-low price is always worth seeing, even when it misses the sliders">
-      <input type="checkbox" id="hdAtlChk"> 🏆 always include all-time lows
+    <div class="hd-tune-row" title="Where today's price sits against everything this item has actually sold for. 90% means cheaper than nine out of ten prices ever recorded for it.">
+      <label for="hdRankSlider">📊 cheaper than its own past by ≥</label>
+      <input type="range" id="hdRankSlider" min="0" max="95" step="5">
+      <strong id="hdRankVal">75%</strong>
+    </div>
+    <label class="hd-tune-atl" title="A genuine new low - strictly below every price previously recorded - is always worth seeing, even when it misses the sliders">
+      <input type="checkbox" id="hdAtlChk"> 🏆 always include cheapest-ever prices
     </label>
+    <div class="hd-tune-row hd-tune-stale" title="A price that has not moved in this long is not news - it is the same row every week. Measured from the last CHANGE, so an item that swings every couple of months still qualifies while it sits between swings.">
+      <label for="hdStaleSlider">🕰 hide prices frozen for more than</label>
+      <input type="range" id="hdStaleSlider" min="0" max="24" step="1">
+      <strong id="hdStaleVal">6 months</strong>
+    </div>
     <div class="hd-tune-show">
       <span class="hd-tune-title">Show</span>
       <div id="storeFilter" class="store-filter-row">
@@ -479,7 +489,7 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=113"></script>
+<script src="utils.js?v=114"></script>
 <script src="history-modal.js?v=3"></script>
 <script>
 if ('serviceWorker' in navigator) {
@@ -936,6 +946,8 @@ function renderDeals() {
     priorities,
     minDropPct: tune.drop,
     minStoreDiffPct: tune.diff,
+    minRankPct: tune.rank,
+    maxStaleMonths: tune.stale,
     includeATL: tune.atl,
     mode: tune.mode,
   });
@@ -1361,6 +1373,8 @@ function initWatchlistFilter() {
 function initDealTune() {
   const dropS = document.getElementById('hdDropSlider');
   const diffS = document.getElementById('hdDiffSlider');
+  const rankS = document.getElementById('hdRankSlider');
+  const staleS = document.getElementById('hdStaleSlider');
   const atl   = document.getElementById('hdAtlChk');
   const modeB = document.getElementById('hdModeBtn');
   const reset = document.getElementById('hdTuneReset');
@@ -1377,16 +1391,31 @@ function initDealTune() {
     }
     document.getElementById('hdDropVal').textContent = `${t.drop}%`;
     document.getElementById('hdDiffVal').textContent = `${t.diff}%`;
+    if (rankS) {
+      rankS.value = t.rank;
+      document.getElementById('hdRankVal').textContent = t.rank ? `${t.rank}%` : 'off';
+    }
+    if (staleS) {
+      staleS.value = t.stale;
+      // 0 is the off position, and saying "0 months" would read as "hide everything".
+      document.getElementById('hdStaleVal').textContent =
+        t.stale ? `${t.stale} month${t.stale === 1 ? '' : 's'}` : 'never hide';
+    }
   };
   sync(loadDealTune());
   const onInput = () => {
-    const t = { drop: Number(dropS.value), diff: Number(diffS.value), atl: atl ? atl.checked : true, mode };
+    const t = { drop: Number(dropS.value), diff: Number(diffS.value),
+                rank: rankS ? Number(rankS.value) : 0,
+                stale: staleS ? Number(staleS.value) : 0,
+                atl: atl ? atl.checked : true, mode };
     localStorage.setItem('pw_hd_tune_v1', JSON.stringify(t));
     sync(t);
     renderDeals();
   };
   dropS.addEventListener('input', onInput);
   diffS.addEventListener('input', onInput);
+  rankS?.addEventListener('input', onInput);
+  staleS?.addEventListener('input', onInput);
   atl?.addEventListener('change', onInput);
   modeB?.addEventListener('click', () => { mode = mode === 'or' ? 'and' : 'or'; onInput(); });
   reset?.addEventListener('click', () => {

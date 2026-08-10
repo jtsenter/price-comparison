@@ -5651,6 +5651,8 @@ function _renderPageInner(data) {
     priorities: _uiPriorities,
     minDropPct: hotTune.drop,
     minStoreDiffPct: hotTune.diff,
+    minRankPct: hotTune.rank,
+    maxStaleMonths: hotTune.stale,
     includeATL: hotTune.atl,
     mode: hotTune.mode,
   }).length;
