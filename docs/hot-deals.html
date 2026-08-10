@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=145" />
+  <link rel="stylesheet" href="style.css?v=146" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -60,27 +60,68 @@
       font-size: 14px;
     }
 
-    /* ── Deal-definition + show filters, one card ── */
+    /* ── Deal-definition + show filters, one card ──
+       Three labelled blocks, not one flat list. The old layout mixed two kinds
+       of control: three CONDITIONS and two OVERRIDES (one that lets an item in
+       regardless, one that keeps it out regardless), all as identical rows, with
+       a single AND floating between the first two. Grouping them is what makes
+       the logic legible; the grid is what stops the sliders from starting at
+       four different x positions because the labels are different lengths. */
     .hd-tune {
-      display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
-      margin-top: 10px; padding: 10px 14px; width: 100%;
+      display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap;
+      margin-top: 10px; padding: 12px 14px; width: 100%;
       background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
     }
-    .hd-tune-title { font-size: 12px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: .04em; }
-    .hd-tune-and {
-      font-size: 10px; font-weight: 800; letter-spacing: .06em; color: var(--text-soft);
-      border: 1px solid var(--border-strong); border-radius: 999px; padding: 2px 8px;
-      background: var(--card); cursor: pointer; font-family: inherit;
+    .hd-block {
+      flex: 1 1 380px; min-width: 0;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 9px 11px 10px;
     }
-    .hd-tune-and:hover { color: var(--text); border-color: var(--text-soft); }
-    .hd-tune-and.or-on { color: var(--card); background: var(--text); border-color: var(--text); }
-    .hd-tune-row { display: flex; align-items: center; gap: 10px; }
-    .hd-tune-row label { font-size: 12px; font-weight: 600; color: var(--text-mid); white-space: nowrap; }
-    .hd-tune-row input[type="range"] { width: 140px; accent-color: var(--ww); cursor: pointer; }
-    .hd-tune-row strong { font-size: 13px; font-weight: 800; color: var(--text); min-width: 34px; font-variant-numeric: tabular-nums; }
-    .hd-tune-atl { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--text-mid); cursor: pointer; white-space: nowrap; }
-    .hd-tune-atl input { accent-color: var(--ww); cursor: pointer; }
-    /* Row 2 of the card: the "Show" filters (store + watchlist) + Reset */
+    .hd-block-narrow { flex: 0 1 250px; }
+    .hd-block-h { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+    .hd-block-t {
+      font-size: 10.5px; font-weight: 800; color: var(--text-soft);
+      text-transform: uppercase; letter-spacing: .06em;
+    }
+    /* The mode chip says what it DOES ("ALL of these") rather than naming a
+       boolean operator. It also now governs all three conditions, so it belongs
+       in the header rather than between two of them. */
+    .hd-mode {
+      margin-left: auto; font-size: 10px; font-weight: 800; letter-spacing: .04em;
+      color: var(--ww); background: color-mix(in srgb, var(--ww) 10%, transparent);
+      border: 1px solid color-mix(in srgb, var(--ww) 35%, transparent);
+      border-radius: 999px; padding: 2px 9px; cursor: pointer; font-family: inherit;
+      white-space: nowrap;
+    }
+    .hd-mode:hover { background: color-mix(in srgb, var(--ww) 18%, transparent); }
+    .hd-mode.or-on {
+      color: #c95000; background: #FFF7ED; border-color: #F5C9A0;
+    }
+    /* label | slider | value, aligned across every row */
+    .hd-crit {
+      display: grid; grid-template-columns: minmax(0, 1fr) 128px 58px;
+      align-items: center; gap: 10px; padding: 3px 0;
+    }
+    .hd-crit-tight { grid-template-columns: minmax(0, 1fr) 74px 72px; }
+    .hd-crit label {
+      font-size: 12px; font-weight: 600; color: var(--text-mid);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .hd-ic { display: inline-block; width: 15px; color: var(--text-soft); }
+    .hd-crit input[type="range"] { width: 100%; accent-color: var(--ww); cursor: pointer; }
+    .hd-crit strong {
+      font-size: 13px; font-weight: 800; color: var(--text);
+      text-align: right; font-variant-numeric: tabular-nums;
+    }
+    .hd-chk {
+      display: flex; align-items: center; gap: 7px; font-size: 12px;
+      font-weight: 600; color: var(--text-mid); cursor: pointer; padding: 4px 0;
+    }
+    .hd-chk input { accent-color: var(--ww); cursor: pointer; flex-shrink: 0; }
+    /* How many rows the current settings actually yield. Without it you drag a
+       slider and have to go and count the table to see if anything happened. */
+    .hd-count { font-size: 12px; font-weight: 700; color: var(--text-soft); font-variant-numeric: tabular-nums; }
+    /* Row 3 of the card: the "Show" filters (store + watchlist) + Reset */
     .hd-tune-show {
       display: flex; align-items: center; gap: 12px; width: 100%;
       border-top: 1px solid var(--border); padding-top: 9px; margin-top: 2px;
@@ -96,17 +137,16 @@
         padding: 10px 6px; font-size: 11px; text-align: center;
       }
       .deals-hero-stat strong { font-size: 20px; }
-      /* Tuner: label + value on a line, slider full width beneath, AND/OR chip
-         centered between the two, then the ATL checkbox and the Show filters.
-         (The old layout let the value badge render past the viewport edge.) */
+      /* Tuner on a phone: blocks stack full width; each condition keeps its
+         label and value on one line with the slider filling the row beneath, so
+         the value badge can never render past the viewport edge. */
       .hd-tune { gap: 10px; margin-top: 4px; padding: 10px; }
-      .hd-tune-title { display: none; } /* the AND/OR chip stays - it's a control now */
-      .hd-tune-row { width: 100%; flex-wrap: wrap; row-gap: 6px; }
-      .hd-tune-row label { flex: 1 1 auto; white-space: normal; }
-      .hd-tune-row strong { flex-shrink: 0; text-align: right; }
-      .hd-tune-row input[type="range"] { order: 3; flex: 1 1 100%; width: auto; min-width: 0; }
-      .hd-tune-and { margin: 0 auto; }
-      .hd-tune-atl { width: 100%; border-top: 1px solid var(--border); padding-top: 9px; }
+      .hd-block, .hd-block-narrow { flex: 1 1 100%; }
+      .hd-crit, .hd-crit-tight {
+        grid-template-columns: 1fr auto; row-gap: 4px; padding: 5px 0;
+      }
+      .hd-crit label { white-space: normal; }
+      .hd-crit input[type="range"] { grid-column: 1 / -1; }
       .hd-tune-show { flex-wrap: wrap; gap: 8px; padding-top: 8px; }
       .hd-tune-show #hdTuneReset { margin-left: auto; }
       /* Store filter: three equal buttons filling the row (logo chips + names) */
@@ -366,31 +406,52 @@
        grows/shrinks the list below. Row 2 ("Show") holds the store + watchlist
        filters - everything that decides WHICH deals you see lives in this card. -->
   <div class="hd-tune">
-    <span class="hd-tune-title">A deal must be</span>
-    <div class="hd-tune-row" title="How far below its usual (median historical) price an item must be">
-      <label for="hdDropSlider">↓ below its usual price by ≥</label>
-      <input type="range" id="hdDropSlider" min="0" max="50" step="1">
-      <strong id="hdDropVal">4%</strong>
+
+    <!-- The three CONDITIONS. One mode chip in the header governs all three -
+         the old layout put a single AND between the first two, so how the third
+         joined in was anyone's guess. -->
+    <div class="hd-block">
+      <div class="hd-block-h">
+        <span class="hd-block-t">A deal must be</span>
+        <button type="button" class="hd-mode" id="hdModeBtn"
+                title="Whether an item has to satisfy every condition or just one">ALL of these</button>
+      </div>
+      <div class="hd-crit" title="How far below its usual (median historical) price an item must be">
+        <label for="hdDropSlider"><span class="hd-ic">↓</span> below its usual price</label>
+        <input type="range" id="hdDropSlider" min="0" max="50" step="1">
+        <strong id="hdDropVal">20%</strong>
+      </div>
+      <div class="hd-crit" title="How much cheaper the best store must be than the other store">
+        <label for="hdDiffSlider"><span class="hd-ic">⇄</span> cheaper than the other store</label>
+        <input type="range" id="hdDiffSlider" min="0" max="50" step="1">
+        <strong id="hdDiffVal">10%</strong>
+      </div>
+      <div class="hd-crit" title="Where today's price sits against everything this item has actually sold for. 90% means cheaper than nine out of ten prices ever recorded for it.">
+        <label for="hdRankSlider"><span class="hd-ic">📊</span> cheaper than its own past</label>
+        <input type="range" id="hdRankSlider" min="0" max="95" step="5">
+        <strong id="hdRankVal">75%</strong>
+      </div>
     </div>
-    <button type="button" class="hd-tune-and" id="hdModeBtn" title="How the two conditions combine - click to switch">AND</button>
-    <div class="hd-tune-row" title="How much cheaper the best store must be vs the other store">
-      <label for="hdDiffSlider">⇄ cheaper than the other store by ≥</label>
-      <input type="range" id="hdDiffSlider" min="0" max="50" step="1">
-      <strong id="hdDiffVal">0%</strong>
+
+    <!-- The two OVERRIDES, which are not conditions at all: one lets an item in
+         regardless of the sliders, the other keeps an item out regardless. They
+         read as a third and fourth slider when they sit in the same list. -->
+    <div class="hd-block hd-block-narrow">
+      <div class="hd-block-h"><span class="hd-block-t">Always include</span></div>
+      <label class="hd-chk" title="A genuine new low - strictly below every price previously recorded - is worth seeing even when it misses the sliders">
+        <input type="checkbox" id="hdAtlChk"> <span>🏆 cheapest-ever prices</span>
+      </label>
     </div>
-    <div class="hd-tune-row" title="Where today's price sits against everything this item has actually sold for. 90% means cheaper than nine out of ten prices ever recorded for it.">
-      <label for="hdRankSlider">📊 cheaper than its own past by ≥</label>
-      <input type="range" id="hdRankSlider" min="0" max="95" step="5">
-      <strong id="hdRankVal">75%</strong>
+
+    <div class="hd-block hd-block-narrow">
+      <div class="hd-block-h"><span class="hd-block-t">Never include</span></div>
+      <div class="hd-crit hd-crit-tight" title="A price that has not moved in this long is not news - it is the same row every week. Measured from the last CHANGE, so an item that swings every couple of months still qualifies while it sits between swings.">
+        <label for="hdStaleSlider"><span class="hd-ic">🕰</span> prices frozen over</label>
+        <input type="range" id="hdStaleSlider" min="0" max="24" step="1">
+        <strong id="hdStaleVal">6 months</strong>
+      </div>
     </div>
-    <label class="hd-tune-atl" title="A genuine new low - strictly below every price previously recorded - is always worth seeing, even when it misses the sliders">
-      <input type="checkbox" id="hdAtlChk"> 🏆 always include cheapest-ever prices
-    </label>
-    <div class="hd-tune-row hd-tune-stale" title="A price that has not moved in this long is not news - it is the same row every week. Measured from the last CHANGE, so an item that swings every couple of months still qualifies while it sits between swings.">
-      <label for="hdStaleSlider">🕰 hide prices frozen for more than</label>
-      <input type="range" id="hdStaleSlider" min="0" max="24" step="1">
-      <strong id="hdStaleVal">6 months</strong>
-    </div>
+
     <div class="hd-tune-show">
       <span class="hd-tune-title">Show</span>
       <div id="storeFilter" class="store-filter-row">
@@ -400,6 +461,7 @@
       </div>
       <button class="priority-pill watchlist-pill" id="watchlistFilterBtn">👁 Watchlist</button>
       <span class="hd-show-spacer" style="flex:1"></span>
+      <span class="hd-count" id="hdCount"></span>
       <button id="hdTuneReset" class="btn btn-ghost" style="font-size:12px;padding:5px 12px">↺ Reset</button>
     </div>
   </div>
@@ -954,6 +1016,16 @@ function renderDeals() {
 
   buildCategoryTabs(allDeals.map(d => d.item));
 
+  // Live count beside Reset: drag a slider and see the effect without going and
+  // counting the table. Deliberately "of N scoreable", not "of 290" - items with
+  // too little history to judge were never candidates.
+  const countEl = document.getElementById('hdCount');
+  if (countEl) {
+    const scoreable = dealPool.filter(i => getDealQuality(i, exclusions).typical != null).length;
+    countEl.textContent = `${allDeals.length} of ${scoreable}`;
+    countEl.title = `${allDeals.length} items match these settings, out of ${scoreable} with enough price history to judge`;
+  }
+
   const filtered = filterDeals(allDeals, exclusions);
   const sorted = sortDeals(filtered.map(d => d.item), exclusions);
   // Remember what's on screen - the basket header icon hands THESE off, so
@@ -1386,7 +1458,11 @@ function initDealTune() {
     if (atl) atl.checked = t.atl !== false;
     mode = t.mode === 'or' ? 'or' : 'and';
     if (modeB) {
-      modeB.textContent = mode.toUpperCase();
+      // Says what it does, not which boolean operator it is.
+      modeB.textContent = mode === 'or' ? 'ANY of these' : 'ALL of these';
+      modeB.title = mode === 'or'
+        ? 'An item qualifies if it meets ANY one condition - click for ALL'
+        : 'An item must meet EVERY condition - click for ANY';
       modeB.classList.toggle('or-on', mode === 'or');
     }
     document.getElementById('hdDropVal').textContent = `${t.drop}%`;
