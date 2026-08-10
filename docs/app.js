@@ -3863,22 +3863,14 @@ function groupTrendCellHTML(group, historyBtn = true) {
   if (!cands.length) return '';
   const best = cands.reduce((a, b) => (a.perkg <= b.perkg ? a : b));
 
-  // Sticker groups: the bar is raw pack prices (the metric), so it matches the
-  // sticker marker; $/kg groups convert via memberPerKgPrices. A PER-PACK sticker
-  // group (nappies) needs one more step: raw price is NOT the metric there, and
-  // packs differ per member (30 vs 40), so a 40-pack's $11.50 and a 30-pack's
-  // $17.50 are not comparable points on one axis. Divide each by ITS OWN member's
-  // pack count before merging - `best.perkg` below is already in that scale, and
-  // without this the bar plotted a ~$0.29 current marker against an $11-17 axis.
-  const prices = group._sticker
-    ? group._members.flatMap(m => {
-        const raw = [...(m.price_history || []), ...(m.ww_price_history || []), ...(m.coles_price_history || [])]
-          .map(e => e.price).filter(p => p > 0);
-        if (!group._perPack) return raw;
-        const n = packCountOf(m.list_item);   // utils.js - same source groupMetric uses
-        return n > 0 ? raw.map(p => +(p / n).toFixed(3)) : [];
-      })
-    : group._members.flatMap(m => memberPerKgPrices(m, ...memberStoreFlags(group, m)));
+  // ONE series for the bar and for the sort - groupPastPrices. They used to be
+  // built separately and the two disagreed: this branched on _sticker FIRST, so a
+  // per-piece-but-not-sticker category (garbage bags, dishwashing tablets) drew a
+  // $/kg axis under a per-piece marker, and when that produced under 2 points the
+  // bar vanished altogether. groupPastPrices puts perPack first, like groupMetric.
+  // Whatever minimum the bar draws is now exactly the minimum the sort measures
+  // against, so a price below the bar really does sort ahead of one sitting on it.
+  const prices = groupPastPrices(group);
   if (prices.length < 2) return '';
   const hist = prices.map(p => ({ price: p }));
   // History button opens the group's own merged history (see buildGroupHistoryItem),
@@ -3984,9 +3976,24 @@ function groupPastPrices(group) {
     // The metric is dollars-per-piece, so the history has to be per-piece too.
     // Measuring a $0.29 nappy against a range of $11-$25 PACK prices put every
     // per-piece category below its own floor, i.e. permanently "cheapest ever".
+    // Honours the same per-point exclusions and per-store flags memberPerKgPrices
+    // does: a series the user has pruned must be pruned HERE too, or the bar's
+    // minimum and the sort's minimum quietly disagree - which is exactly how a
+    // row sitting below its own drawn minimum failed to sort ahead of one merely
+    // sitting on it.
     return group._members.flatMap(m => {
+      const [useWw, useCo] = memberStoreFlags(group, m);
       const n = packCountOf(m.list_item) || packCountOf(m.woolworths?.name) || packCountOf(m.coles?.name);
-      return n > 0 ? memberRawHistory(m).map(p => +(p / n).toFixed(3)) : [];
+      if (!(n > 0)) return [];
+      const { ww: wwEx, co: coEx } = exclSetsFor(m.list_item);
+      const take = (arr, use, ex) => (!use ? [] : (arr || [])
+        .filter(e => e.price > 0 && !ex.has(Number(e.price).toFixed(2)))
+        .map(e => +(e.price / n).toFixed(3)));
+      return [
+        ...take(m.price_history,       useWw, wwEx),
+        ...take(m.ww_price_history,    useWw, wwEx),
+        ...take(m.coles_price_history, useCo, coEx),
+      ];
     });
   }
   // Sticker groups compare on the raw pack price, so the range is raw too.
