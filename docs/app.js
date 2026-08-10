@@ -4592,8 +4592,13 @@ const CAT_STORE_LABEL = { ww: 'Woolworths', coles: 'Coles', third: 'Other store'
 // count comes from the product NAME, which is the input directly to its left, so
 // the box is a read-only readout of what packCountOf() got. Blank means "the name
 // doesn't state a count", which is exactly the thing worth seeing.
+// `name` may be several candidate strings; the first that states a count wins.
+// groupMetric reads `packCountOf(list_item) || packCountOf(scrapedName)`, so the
+// cell has to try the SAME sources in the SAME order or it reports "?" for rows
+// the metric is happily pricing per piece - which is what the Woolworths nappies
+// did: their display name carries no pack size, their list_item does.
 function catEditPcsCell(name, editable) {
-  const auto = packCountOf(name);
+  const auto = [].concat(name).map(n => packCountOf(n)).find(n => n > 0) || null;
   const title = editable
     ? 'Pieces in the pack. Filled in from the product name - type only to override.'
     : 'Pieces in the pack, read from the product name. Edit the name to change it.';
@@ -4711,7 +4716,7 @@ function openCategoryEditModal(groupKey, opts) {
           <input type="text" class="cat-name" value="${escAttr(name)}" placeholder="${escAttr(label)} product name" />
           <input type="text" class="cat-url" value="${url}" placeholder="${label} product URL" />
         </div>
-        ${catEditPcsCell(name, false)}
+        ${catEditPcsCell([itemName, name, data?.woolworths?.name, data?.coles?.name], false)}
         <button class="cat-prod-remove" title="Remove from this store">✕</button>
       </div>`;
   };
