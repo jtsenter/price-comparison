@@ -3125,7 +3125,9 @@ function renderTableHead() {
 
 let refreshCooldown = false;
 
-async function triggerRefresh() {
+async function triggerRefresh(mode) {
+  // `mode` is 'quick' | 'full'; omitted means "whatever the schedule says".
+  const scrapeMode = (mode === 'quick' || mode === 'full') ? mode : defaultScrapeMode().mode;
   // Defence in depth: the button is not rendered for viewers, but this is the one
   // action that spends real compute on the self-hosted runner, so refuse outright
   // rather than relying on the UI having hidden it.
@@ -3162,11 +3164,16 @@ async function triggerRefresh() {
           Accept: 'application/vnd.github+json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ref: 'main' }),
+        body: JSON.stringify({ ref: 'main', inputs: { scrape_mode: scrapeMode } }),
       }
     );
 
     if (res.status === 204) {
+      // Only a FULL run satisfies the weekly obligation, so only a full run
+      // stamps the week. Stamped on dispatch rather than on completion: a run
+      // that dies half way still checked the long tail, and re-defaulting to a
+      // 20-minute scrape because the tail-end failed helps nobody.
+      if (scrapeMode === 'full') markFullScrapeDone();
       // Persist the dispatch so the strip survives refreshes / other pages -
       // renderPage (and header.js's poller on non-index pages) shows a
       // "waiting" strip until scrape_progress appears or the run completes.

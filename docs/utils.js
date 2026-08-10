@@ -625,6 +625,51 @@ async function githubPutJson(s, repoPath, data, message) {
   }
 }
 
+// ── Scrape mode ─────────────────────────────────────────────────────────────
+// Quick = only items whose price actually moves. Full = everything.
+// The default is quick, EXCEPT that the first run of an ISO week from Wednesday
+// onward is a full one - so the long tail is still checked weekly without a
+// 20-minute run every day. Once a full scrape has gone out this week the default
+// drops back to quick, which is why the week has to be remembered rather than
+// just "is it Wednesday" (a second Wednesday click would otherwise re-default to
+// full forever). Stored locally: scrapes are only ever triggered from one machine.
+const FULL_SCRAPE_WEEKDAY = 3;   // 0=Sun … 3=Wed
+
+// ISO-8601 week key, e.g. "2026-W33". Thursday-based, so a week never splits
+// across a year boundary the way a naive day-of-year division does.
+function isoWeekKey(d) {
+  const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7));
+  const yearStart = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+  const week = Math.ceil(((t - yearStart) / 86400000 + 1) / 7);
+  return `${t.getUTCFullYear()}-W${String(week).padStart(2, '0')}`;
+}
+function lastFullScrapeWeek() {
+  try { return localStorage.getItem('pw_last_full_scrape_week') || ''; } catch { return ''; }
+}
+function markFullScrapeDone(now) {
+  try { localStorage.setItem('pw_last_full_scrape_week', isoWeekKey(now || new Date())); } catch {}
+}
+// -> { mode, reason } so the menu can say WHY it is about to do the slow one.
+function defaultScrapeMode(now) {
+  const d = now || new Date();
+  const doneThisWeek = lastFullScrapeWeek() === isoWeekKey(d);
+  // Sunday counts as the END of the ISO week, not the start, so it is "past
+  // Wednesday" like Thu-Sat rather than before it.
+  const pastWednesday = d.getDay() >= FULL_SCRAPE_WEEKDAY || d.getDay() === 0;
+  if (pastWednesday && !doneThisWeek) {
+    return { mode: 'full', reason: "The weekly full scrape hasn't run yet." };
+  }
+  return {
+    mode: 'quick',
+    // Three different reasons for "quick", and saying the wrong one is worse
+    // than saying nothing - "already done this week" on a Monday is just false.
+    reason: doneThisWeek
+      ? 'The weekly full scrape has already run.'
+      : 'The weekly full scrape is due Wednesday.',
+  };
+}
+
 // ── Per-kg variant groups (seed data) ───────────────────────────────────────
 // Per-kg categories. Each is a comparable product type; the two near-identical
 // salmon-fillet and basa entries are merged so each category holds its real

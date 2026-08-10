@@ -3022,3 +3022,61 @@ td.priority-cell { text-align: center; }
   cursor: help; flex-shrink: 0;
 }
 .price-hist-mb:hover, .price-hist-mb:focus { color: var(--ww); border-color: var(--ww); outline: none; }
+
+/* ── Scrape mode split button + price-change digest ───────────────────────── */
+/* The caret is welded to the Update-Prices button rather than being a separate
+   control: choosing quick/full is a variation on that one action, not a
+   different one. The plain button still works alone, so the common case stays
+   a single click. */
+.scrape-split { position: relative; display: inline-flex; }
+.scrape-split-main { border-radius: var(--radius) 0 0 var(--radius); }
+.scrape-split-caret {
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 0 7px; font-size: 11px; line-height: 1;
+  border-left: 1px solid rgba(255,255,255,.28);
+}
+.scrape-menu {
+  position: absolute; top: calc(100% + 6px); right: 0; z-index: 60;
+  min-width: 268px; padding: 5px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; box-shadow: 0 8px 26px rgba(0,0,0,.16);
+}
+.scrape-menu-item {
+  display: block; width: 100%; text-align: left; padding: 8px 10px;
+  border: 0; background: none; border-radius: 7px; cursor: pointer; font: inherit;
+}
+.scrape-menu-item:hover { background: var(--bg); }
+.scrape-menu-item strong { display: block; font-size: 13px; color: var(--text); }
+.scrape-menu-item span { display: block; font-size: 11.5px; color: var(--text-soft); margin-top: 1px; }
+/* Which one the plain button would run right now. */
+.scrape-menu-item.is-default strong::after {
+  content: 'default'; margin-left: 7px; font-size: 9.5px; font-weight: 800;
+  letter-spacing: .04em; text-transform: uppercase; color: var(--ww);
+  background: color-mix(in srgb, var(--ww) 12%, transparent);
+  padding: 1px 6px; border-radius: 8px; vertical-align: 1px;
+}
+.scrape-menu-note {
+  font-size: 11px; color: var(--text-soft); padding: 7px 10px 4px;
+  border-top: 1px solid var(--border); margin-top: 4px; line-height: 1.5;
+}
+
+/* Digest sits directly beneath the scrape strip and inherits its width. */
+.price-digest {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 12.5px; color: var(--text-mid);
+  background: var(--bg); border: 1px solid var(--border); border-top: 0;
+  border-radius: 0 0 9px 9px; padding: 6px 12px;
+}
+.pd-ic { flex-shrink: 0; }
+.pd-text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pd-text b { color: var(--text); }
+.pd-item { white-space: nowrap; }
+.pd-up { color: #c0392b; font-weight: 700; }
+.pd-down { color: var(--ww); font-weight: 700; }
+.pd-more { font-size: 12px; font-weight: 700; color: var(--ww); flex-shrink: 0; }
+.pd-x { border: 0; background: none; cursor: pointer; color: var(--text-soft); flex-shrink: 0; padding: 2px 4px; }
+.pd-x:hover { color: var(--text); }
+@media (max-width: 700px) {
+  .scrape-menu { right: auto; left: 0; min-width: 240px; }
+  .pd-text { white-space: normal; }
+}

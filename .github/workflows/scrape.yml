@@ -23,6 +23,12 @@ on:
         description: 'Coles product URL for direct fetch (optional)'
         required: false
         default: ''
+      scrape_mode:
+        description: 'quick = only items whose price moves; full = everything'
+        required: false
+        default: 'full'
+        type: choice
+        options: ['full', 'quick']
 
 concurrency:
   # QUEUE, don't cancel. With cancel-in-progress:true a second trigger killed the
@@ -69,7 +75,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          "%PYTHON%" scripts/scraper.py "${{ github.event.inputs.trigger || 'scheduled' }}" "${{ github.event.inputs.item || '' }}" "${{ github.event.inputs.ww_url || '' }}" "${{ github.event.inputs.coles_url || '' }}"
+          "%PYTHON%" scripts/scraper.py "${{ github.event.inputs.trigger || 'scheduled' }}" "${{ github.event.inputs.item || '' }}" "${{ github.event.inputs.ww_url || '' }}" "${{ github.event.inputs.coles_url || '' }}" "${{ github.event.inputs.scrape_mode || 'full' }}"
 
       - name: Commit and push results
         # Runs even if the scraper step failed. The scraper writes latest.json

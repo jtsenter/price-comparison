@@ -65,6 +65,7 @@ MAX_PRODUCT_PRICE    = 80.0     # ceiling used by COLES_PRODUCT_PAGE_JS's DOM-se
 CONCURRENCY          = 2        # parallel page-pairs (don't exceed 3)
 MAX_RESULTS          = 5        # search results fetched per store
 ARCHIVED_REFRESH_DAYS = 7       # scheduled runs refresh archived items only if older than this (else carried forward)
+QUICK_STALE_MONTHS   = 6        # quick runs skip items whose price hasn't moved in this long
 SKIP_FRESH_HOURS     = 12       # scheduled runs skip items scraped within this window (a manual
                                 # run minutes earlier otherwise gets fully re-scraped - double the
                                 # request volume, which is what trips Coles's mid-run rate ban)
@@ -2003,7 +2004,48 @@ async def _scrape_single_item(
     return result, False, _validation_entry
 
 
-async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str = "", coles_url: str = ""):
+def _quick_skip_set(existing_items: list[dict], months: int = QUICK_STALE_MONTHS) -> set[str]:
+    """Names a QUICK run should not bother re-checking.
+
+    An item qualifies only if its price has not MOVED for `months`, judged from
+    its own recorded history. Deliberately not "was checked recently": a price
+    that moves every 8 weeks must keep being watched while it sits still between
+    moves, which is the whole difference between this and SKIP_FRESH_HOURS.
+
+    Anything we cannot judge is scraped. Too little history, no dates, an
+    unreachable store last time - all fall through to being included, because
+    the cost of a needless check is seconds and the cost of a missed price
+    change is a wrong number sitting on the page for a week.
+    """
+    cutoff = datetime.now(timezone.utc) - timedelta(days=int(months * 30.44))
+    skip: set[str] = set()
+    for it in existing_items or []:
+        hist = []
+        for key in ("price_history", "ww_price_history", "coles_price_history"):
+            for e in (it.get(key) or []):
+                p, d = e.get("price"), str(e.get("date") or "")[:10]
+                if p and p > 0 and d:
+                    hist.append((d, float(p)))
+        if len(hist) < 4:            # too little to call it settled
+            continue
+        hist.sort()
+        last_change = None
+        for i in range(1, len(hist)):
+            if abs(hist[i][1] - hist[i - 1][1]) > 0.005:
+                last_change = hist[i][0]
+        if last_change is None:
+            skip.add(it["list_item"])          # never moved in all we hold
+            continue
+        try:
+            moved = datetime.fromisoformat(last_change).replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+        if moved < cutoff:
+            skip.add(it["list_item"])
+    return skip
+
+
+async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str = "", coles_url: str = "", scrape_mode: str = "full"):
     purchase_history = get_purchase_history(EXCEL_PATH)
 
     # Load archived items list (written by UI via GitHub API)
@@ -2121,6 +2163,26 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         )
         archived_list = sorted(n for n in archived_set if n in purchase_history)
         shopping_list = active + archived_list
+
+        # QUICK run: drop the settled prices. Full runs (and the weekly scheduled
+        # one) still sweep everything, so a price that starts moving again after
+        # a long freeze is picked back up within the week.
+        if scrape_mode == "quick":
+            # Read latest.json here rather than reusing `existing` - that name is
+            # only bound much later, inside the single-item branch, so touching it
+            # from up here is a NameError waiting for the first quick run.
+            _prev_items = []
+            try:
+                with open(os.path.join(DATA_DIR, "latest.json")) as _pf:
+                    _prev_items = json.load(_pf).get("items", [])
+            except Exception:
+                pass                       # no history yet = scrape everything
+            _skip = _quick_skip_set(_prev_items)
+            if _skip:
+                _before = len(shopping_list)
+                shopping_list = [n for n in shopping_list if n not in _skip]
+                print(f"Quick scrape: {len(shopping_list)} of {_before} items "
+                      f"({len(_skip)} skipped - price unchanged for {QUICK_STALE_MONTHS}+ months)")
 
         # Items pinned via url_overrides.json but not in the Excel get added here
         # so they are actively re-scraped each run (fresh prices).  The universal
@@ -2685,4 +2747,8 @@ if __name__ == "__main__":
     single_item = sys.argv[2].strip() if len(sys.argv) > 2 else ""
     ww_url = sys.argv[3].strip() if len(sys.argv) > 3 else ""
     coles_url = sys.argv[4].strip() if len(sys.argv) > 4 else ""
-    asyncio.run(scrape(trigger, single_item=single_item, ww_url=ww_url, coles_url=coles_url))
+    scrape_mode = (sys.argv[5].strip().lower() if len(sys.argv) > 5 else "full") or "full"
+    if scrape_mode not in ("quick", "full"):
+        scrape_mode = "full"          # unknown value = do the thorough thing
+    asyncio.run(scrape(trigger, single_item=single_item, ww_url=ww_url,
+                       coles_url=coles_url, scrape_mode=scrape_mode))

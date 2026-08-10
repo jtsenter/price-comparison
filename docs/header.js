@@ -163,6 +163,15 @@
       // read-only status, so viewers still see a run in progress.
       (viewer ? '' : '<button id="scrapeStripRetry" class="scrape-strip-retry" style="display:none" title="Trigger a new scrape run">↺ Retry</button>') +
       '<button id="scrapeStripDismiss" class="scrape-strip-dismiss" title="Dismiss">✕</button>' +
+    '</div>' +
+    /* What actually changed in the last run. Sits directly under the strip and
+       inherits its width. Shown ONCE per run: reloading the page clears it, so
+       it reports rather than nags. The ✕ turns it off for good. */
+    '<div id="priceDigest" class="price-digest" style="display:none">' +
+      '<span class="pd-ic">📈</span>' +
+      '<span id="priceDigestText" class="pd-text"></span>' +
+      '<a href="scrape-log.html" class="pd-more">See all</a>' +
+      '<button id="priceDigestOff" class="pd-x" title="Never show this again">✕</button>' +
     '</div>';
 
   /* Options (⚙) dropdown - identical on every page. Index-only items (Import,
@@ -203,7 +212,18 @@
   var TRAIL =
     // Update Prices dispatches a workflow - owner only. (scrape-log's Refresh just
     // re-reads the log file, so it stays for everyone.)
-    (page === 'index' && !viewer) ? '<button class="btn btn-primary btn-icon" id="refreshBtn" title="Update prices">' + SVG_REF + '</button>' :
+    (page === 'index' && !viewer)
+      ? '<div class="scrape-split">' +
+          '<button class="btn btn-primary btn-icon scrape-split-main" id="refreshBtn" title="Update prices">' + SVG_REF + '</button>' +
+          '<button class="btn btn-primary scrape-split-caret" id="scrapeModeBtn" title="Choose quick or full scrape" aria-haspopup="true" aria-expanded="false">▾</button>' +
+          '<div class="scrape-menu" id="scrapeMenu" style="display:none">' +
+            '<button class="scrape-menu-item" data-mode="quick">' +
+              '<strong>Quick scrape</strong><span>Only items whose price actually moves</span></button>' +
+            '<button class="scrape-menu-item" data-mode="full">' +
+              '<strong>Full scrape</strong><span>Everything, including the never-movers</span></button>' +
+            '<div class="scrape-menu-note" id="scrapeMenuNote"></div>' +
+          '</div>' +
+        '</div>' :
     page === 'scrape-log' ? '<button class="btn btn-primary btn-icon" id="slRefreshBtn" title="Reload log">' + SVG_REF + '</button>' :
     '';
 
@@ -292,6 +312,83 @@
     });
     document.addEventListener('click', function () { optDd.style.display = 'none'; });
   }
+
+  /* Scrape-mode menu. The caret opens it; picking an item dispatches that mode
+     directly. The plain button keeps working on its own and uses whatever the
+     schedule says, so the common case is still one click. */
+  var modeBtn = document.getElementById('scrapeModeBtn');
+  var modeMenu = document.getElementById('scrapeMenu');
+  if (modeBtn && modeMenu) {
+    modeBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = modeMenu.style.display !== 'none';
+      modeMenu.style.display = open ? 'none' : 'block';
+      modeBtn.setAttribute('aria-expanded', String(!open));
+      if (!open && typeof defaultScrapeMode === 'function') {
+        var d = defaultScrapeMode();
+        modeMenu.querySelectorAll('.scrape-menu-item').forEach(function (b) {
+          b.classList.toggle('is-default', b.dataset.mode === d.mode);
+        });
+        var note = document.getElementById('scrapeMenuNote');
+        if (note) note.textContent = d.reason + ' The plain button runs the '
+          + d.mode + ' one.';
+      }
+    });
+    modeMenu.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var item = e.target.closest('.scrape-menu-item');
+      if (!item) return;
+      modeMenu.style.display = 'none';
+      modeBtn.setAttribute('aria-expanded', 'false');
+      if (typeof triggerRefresh === 'function') triggerRefresh(item.dataset.mode);
+    });
+    document.addEventListener('click', function () {
+      modeMenu.style.display = 'none';
+      modeBtn.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  /* Price-change digest. Reads the newest entry in price_changes.json and shows
+     it ONCE - the run's date is stamped on show, so a reload finds it already
+     seen and stays quiet. ✕ sets a permanent off switch. */
+  (function () {
+    var box = document.getElementById('priceDigest');
+    if (!box) return;
+    var off = document.getElementById('priceDigestOff');
+    if (off) off.addEventListener('click', function () {
+      try { localStorage.setItem('pw_digest_off', '1'); } catch (e) {}
+      box.style.display = 'none';
+    });
+    try { if (localStorage.getItem('pw_digest_off') === '1') return; } catch (e) { return; }
+    fetch('data/price_changes.json?t=' + Date.now()).then(function (r) {
+      return r.ok ? r.json() : null;
+    }).then(function (log) {
+      if (!log || !log.length) return;
+      var run = log[log.length - 1];
+      var seen = '';
+      try { seen = localStorage.getItem('pw_digest_seen') || ''; } catch (e) {}
+      if (seen === run.date) return;              // already reported this run
+      var all = (run.ww || []).concat(run.coles || []);
+      if (!all.length) return;                     // nothing changed - say nothing
+      var moves = all.map(function (c) {
+        var pct = c.old > 0 ? Math.round((c.new - c.old) / c.old * 100) : 0;
+        return { name: c.item, pct: pct };
+      }).filter(function (m) { return m.pct !== 0; })
+        .sort(function (a, b) { return Math.abs(b.pct) - Math.abs(a.pct); });
+      if (!moves.length) return;
+      var txt = document.getElementById('priceDigestText');
+      var top = moves.slice(0, 3).map(function (m) {
+        var cls = m.pct > 0 ? 'pd-up' : 'pd-down';
+        var sign = m.pct > 0 ? '+' : '';
+        return '<span class="pd-item">' + m.name.replace(/[<>&]/g, '') +
+               ' <span class="' + cls + '">' + sign + m.pct + '%</span></span>';
+      }).join(' · ');
+      txt.innerHTML = '<b>' + all.length + ' change' + (all.length === 1 ? '' : 's') +
+                      '.</b> ' + top;
+      box.style.display = 'flex';
+      try { localStorage.setItem('pw_digest_seen', run.date); } catch (e) {}
+    }).catch(function () {});
+  })();
 
   /* "Fix stuck data / force refresh": unregisters this page's service worker
      and clears its Cache Storage, then reloads. Same fix as clearing site data
