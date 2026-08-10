@@ -625,6 +625,40 @@ async function githubPutJson(s, repoPath, data, message) {
   }
 }
 
+// ── "Worth the detour?" ─────────────────────────────────────────────────────
+// One-store shopping leaves money on the table, but splitting means a second
+// trip. Nearly always the saving is concentrated in a handful of items, so the
+// useful answer is not "split saves $56" but "these three are worth $48, the
+// other 21 are worth $8 between them - grab the three and skip the rest".
+//
+// rows: [{ name, here, there, saving }] already priced at BOTH stores, `here`
+// being the store currently being shopped. Returns null when the prompt should
+// stay silent, which is most weeks - that silence is what keeps it credible.
+const DETOUR_MAX_ITEMS  = 3;
+const DETOUR_MIN_TOTAL  = 10;    // dollars: below this a detour is never worth it
+const DETOUR_MIN_SHARE  = 0.6;   // the top few must carry this much of the saving
+function detourAdvice(rows, opts) {
+  const o = opts || {};
+  const maxItems = o.maxItems || DETOUR_MAX_ITEMS;
+  const minTotal = o.minTotal != null ? o.minTotal : DETOUR_MIN_TOTAL;
+  const minShare = o.minShare != null ? o.minShare : DETOUR_MIN_SHARE;
+  const gains = (rows || []).filter(r => r && r.saving > 0).sort((a, b) => b.saving - a.saving);
+  if (!gains.length) return null;
+  const total = gains.reduce((s, r) => s + r.saving, 0);
+  const top = gains.slice(0, maxItems);
+  const topTotal = top.reduce((s, r) => s + r.saving, 0);
+  if (topTotal < minTotal) return null;                 // not worth a detour at all
+  const share = total > 0 ? topTotal / total : 0;
+  // If the saving is spread evenly there is no "few items" story to tell, and
+  // saying "move your 3 biggest" would be arbitrary rather than useful.
+  if (share < minShare) return null;
+  return {
+    items: top, topTotal: +topTotal.toFixed(2), total: +total.toFixed(2),
+    share, restCount: gains.length - top.length,
+    restTotal: +(total - topTotal).toFixed(2),
+  };
+}
+
 // ── Scrape mode ─────────────────────────────────────────────────────────────
 // Quick = only items whose price actually moves. Full = everything.
 // The default is quick, EXCEPT that the first run of an ISO week from Wednesday

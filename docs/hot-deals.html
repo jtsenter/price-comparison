@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=147" />
+  <link rel="stylesheet" href="style.css?v=148" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -73,11 +73,13 @@
       background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
     }
     .hd-block {
-      flex: 1 1 380px; min-width: 0;
+      /* Capped. Unbounded flex-grow stretched this to ~880px, which left a
+         400px void between each short label and its slider. */
+      flex: 1 1 420px; min-width: 0; max-width: 580px;
       background: var(--card); border: 1px solid var(--border);
       border-radius: 10px; padding: 9px 11px 10px;
     }
-    .hd-block-narrow { flex: 0 1 250px; }
+    .hd-block-narrow { flex: 1 1 260px; max-width: 340px; }
     .hd-block-h { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
     .hd-block-t {
       font-size: 10.5px; font-weight: 800; color: var(--text-soft);
@@ -102,7 +104,11 @@
       display: grid; grid-template-columns: minmax(0, 1fr) 128px 58px;
       align-items: center; gap: 10px; padding: 3px 0;
     }
-    .hd-crit-tight { grid-template-columns: minmax(0, 1fr) 74px 72px; }
+    /* In a narrow block there is no room for label|slider|value on one line, so the
+       label and value share the first line and the slider takes the second. */
+    .hd-crit-tight { grid-template-columns: 1fr auto; row-gap: 5px; }
+    .hd-crit-tight input[type="range"] { grid-column: 1 / -1; }
+    .hd-crit-tight label { white-space: normal; }
     .hd-crit label {
       font-size: 12px; font-weight: 600; color: var(--text-mid);
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -446,7 +452,7 @@
     <div class="hd-block hd-block-narrow">
       <div class="hd-block-h"><span class="hd-block-t">Never include</span></div>
       <div class="hd-crit hd-crit-tight" title="A price that has not moved in this long is not news - it is the same row every week. Measured from the last CHANGE, so an item that swings every couple of months still qualifies while it sits between swings.">
-        <label for="hdStaleSlider"><span class="hd-ic">🕰</span> prices frozen over</label>
+        <label for="hdStaleSlider"><span class="hd-ic">⏳</span> prices frozen over</label>
         <input type="range" id="hdStaleSlider" min="0" max="24" step="1">
         <strong id="hdStaleVal">6 months</strong>
       </div>
@@ -551,7 +557,7 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=115"></script>
+<script src="utils.js?v=116"></script>
 <script src="history-modal.js?v=3"></script>
 <script>
 if ('serviceWorker' in navigator) {

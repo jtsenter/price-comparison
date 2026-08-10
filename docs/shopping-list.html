@@ -592,7 +592,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=115"></script>
+<script src="utils.js?v=116"></script>
 <script>
 // fmt() lives in utils.js (loaded above).
 // Short display name (same map the rest of the site uses); falls back to the
@@ -1235,6 +1235,59 @@ async function boot() {
     updateProgress();
   }
 
+  // "Worth the detour?" - one-store mode only. Silent unless a handful of items
+  // carry most of the split saving; see detourAdvice in utils.js for the bar.
+  // Dismissed per basket (the set of items), not per session: change the basket
+  // and the question is a different one, so it deserves asking again.
+  function detourKey() {
+    return displayItems.map(i => i.list_item).sort().join('|');
+  }
+  function detourDismissed() {
+    try { return localStorage.getItem('pw_detour_off') === '1'
+        || localStorage.getItem('pw_detour_hid') === detourKey(); } catch { return false; }
+  }
+  function buildDetourHtml() {
+    if (slSplit || detourDismissed()) return '';
+    const here = singleStoreNow();                 // 'ww' | 'coles'
+    const other = here === 'ww' ? 'coles' : 'ww';
+    const rows = displayItems.map(i => {
+      const a = lineCostFor(i, here), b = lineCostFor(i, other);
+      if (a == null || b == null) return null;     // not sold at both: not a choice
+      return { name: dispName(i), key: i.list_item, here: a, there: b, saving: a - b };
+    }).filter(Boolean);
+    const adv = detourAdvice(rows);
+    if (!adv) return '';
+    const otherName = other === 'ww' ? 'Woolworths' : 'Coles';
+    const chip = `<span class="store-chip sm ${other === 'ww' ? 'ww' : 'coles'}">${other === 'ww' ? 'W' : 'C'}</span>`;
+    const hereChip = `<span class="store-chip sm ${here === 'ww' ? 'ww' : 'coles'}">${here === 'ww' ? 'W' : 'C'}</span>`;
+    const list = adv.items.map(r => `
+      <div class="dt-row">
+        <span class="dt-name">${esc(r.name)}</span>
+        <span class="dt-p dt-from">${hereChip} ${fmt(r.here)}</span>
+        <span class="dt-arrow">&rarr;</span>
+        <span class="dt-p dt-to">${chip} ${fmt(r.there)}</span>
+        <span class="dt-save">save ${fmt(r.saving)}</span>
+      </div>`).join('');
+    const rest = adv.restCount > 0
+      ? `<div class="dt-verdict"><strong>The other ${adv.restCount} aren't worth it.</strong>
+           Splitting everything saves ${fmt(adv.total)}, only ${fmt(adv.restTotal)} more than
+           moving these ${adv.items.length}. One extra stop, not a second full shop.</div>`
+      : '';
+    return `<div class="detour" id="detourBox">
+        <button class="dt-x" id="detourHide" title="Hide for this basket">&#10005;</button>
+        <div class="dt-h"><span>&#128161;</span> ${adv.items.length} item${adv.items.length !== 1 ? 's' : ''} much cheaper at ${otherName}
+          <span class="dt-pct">${Math.round(adv.share * 100)}% of your split saving</span></div>
+        <div class="dt-sub">Worth <strong>${fmt(adv.topTotal)}</strong> between them.</div>
+        ${list}
+        <div class="dt-foot">
+          <span class="dt-total">Buy ${adv.items.length === 1 ? 'this one' : `these ${adv.items.length}`} at ${otherName} &rarr; save <b>${fmt(adv.topTotal)}</b></span>
+          <button class="btn btn-ghost" id="detourNever">Don't show again</button>
+          <button class="btn btn-primary" id="detourMove">Move to ${otherName}</button>
+        </div>
+        ${rest}
+      </div>`;
+  }
+
   // renderContent() re-runs on every state change: equalStore, sort, qty
   // stepper, row removal, store swap. All derived numbers are computed here.
   function renderContent() {
@@ -1386,6 +1439,7 @@ async function boot() {
         </div>
       </div>
 
+      ${buildDetourHtml()}
 
       ${!wwItems.length && !slSplit ? '' : `<div class="store-section">
         <div class="section-header">
@@ -1480,6 +1534,40 @@ async function boot() {
       storeOverride.set(b.dataset.item, b.dataset.to);
       renderContent();
     }));
+
+    // Detour prompt. "Move" switches to split mode and pins ONLY these rows to
+    // the other store - everything else keeps following the default plan, which
+    // is what makes this "one extra stop" rather than "split the whole shop".
+    document.getElementById('detourHide')?.addEventListener('click', () => {
+      try { localStorage.setItem('pw_detour_hid', detourKey()); } catch {}
+      renderContent();
+    });
+    document.getElementById('detourNever')?.addEventListener('click', () => {
+      try { localStorage.setItem('pw_detour_off', '1'); } catch {}
+      renderContent();
+    });
+    document.getElementById('detourMove')?.addEventListener('click', () => {
+      const here = singleStoreNow();
+      const other = here === 'ww' ? 'coles' : 'ww';
+      const rows = displayItems.map(i => {
+        const a = lineCostFor(i, here), b = lineCostFor(i, other);
+        return (a == null || b == null) ? null
+             : { name: dispName(i), key: i.list_item, saving: a - b };
+      }).filter(Boolean);
+      const adv = detourAdvice(rows);
+      if (!adv) return;
+      // Pin EVERY row, not just the chosen few. Split mode re-routes anything
+      // unpinned by price, so pinning only the 3 turned "one extra stop" into
+      // "split the whole shop" - 19 rows moved instead of 2, which is precisely
+      // what this prompt's own verdict line argues against. Everything else is
+      // pinned to the store already being shopped, so the plan really is
+      // "that shop, plus these".
+      displayItems.forEach(i => storeOverride.set(i.list_item, here));
+      adv.items.forEach(r => storeOverride.set(r.key, other));
+      slSplit = true;
+      renderContent();
+      showToast?.(`✓ Moved ${adv.items.length} item${adv.items.length !== 1 ? 's' : ''} to ${other === 'ww' ? 'Woolworths' : 'Coles'} - saving ${fmt(adv.topTotal)}.`);
+    });
 
     document.getElementById('removeAllBtn')?.addEventListener('click', () => {
       if (confirm('Remove all items from your basket?')) {
