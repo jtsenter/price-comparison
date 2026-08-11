@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=151" />
+  <link rel="stylesheet" href="style.css?v=152" />
   <style>
     .sl-main { max-width: 960px; margin: 0 auto; padding: 20px 24px 60px; }
 
@@ -158,6 +158,7 @@
     .cpi-verdict .up { color: var(--coles); }
     .cpi-verdict .down { color: var(--green); }
     .cpi-verdict .flat { color: var(--text-mid); }
+    .cpi-verdict .cpi-delta { font-size: 15px; font-weight: 600; color: var(--text-soft); }
     .cpi-method { font-size: 12px; color: var(--text-mid); margin-top: 12px; line-height: 1.55; }
     .cpi-movers { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .cpi-col h3 {
@@ -493,7 +494,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=121"></script>
+<script src="utils.js?v=122"></script>
 <script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
@@ -869,53 +870,64 @@ function renderCpi(items) {
   const pct = cpi.changePct;
   const dir = Math.abs(pct) < 0.5 ? 'flat' : pct > 0 ? 'up' : 'down';
   const word = dir === 'up' ? 'dearer' : 'cheaper';
+  const dollarDelta = Math.abs((cpi.latestPrice ?? 0) - (cpi.basePrice ?? 0));
   $('cpiVerdict').innerHTML = dir === 'flat'
     ? `Your basket is <span class="flat">about the same</span> as in ${CPI_MONTH_LABEL(cpi.base)}`
-    : `Your basket is <span class="${dir}">${Math.abs(pct).toFixed(1)}% ${word}</span> than in ${CPI_MONTH_LABEL(cpi.base)}`;
+    : `Your basket is <span class="${dir}">${Math.abs(pct).toFixed(1)}% ${word}</span> than in `
+      + `${CPI_MONTH_LABEL(cpi.base)} <span class="cpi-delta">(${fmt(dollarDelta)} an item)</span>`;
   $('cpiSub').textContent = `${CPI_MONTH_LABEL(cpi.base)} to ${CPI_MONTH_LABEL(cpi.latest)}`;
 
   const monthOn = pts.length > 1
     ? (pts[pts.length - 1].index / pts[pts.length - 2].index - 1) * 100 : 0;
+  const latestPt = pts[pts.length - 1];
+  const prevPt = pts[pts.length - 2];
+  // Every tile now says WHICH products it counted. Three different product
+  // counts used to be on screen at once (the tile, the chart tooltips, and the
+  // Store gap tab's basket) with nothing explaining that they measure
+  // different sets - and the tile's own caption, "priced in every month", was
+  // not even true of the number above it.
   $('cpiTiles').innerHTML = `
-    <div class="sg-tile"><div class="l">Index now</div>
-      <div class="n">${pts[pts.length - 1].index.toFixed(1)}</div>
-      <div class="s">${CPI_MONTH_LABEL(cpi.base)} = 100</div></div>
+    <div class="sg-tile"><div class="l">Average item</div>
+      <div class="n">${fmt(latestPt.price)}</div>
+      <div class="s">in ${CPI_MONTH_LABEL(cpi.latest)}, was ${fmt(cpi.basePrice)}</div></div>
     <div class="sg-tile"><div class="l">This month</div>
       <div class="n">${monthOn >= 0 ? '+' : ''}${monthOn.toFixed(1)}%</div>
-      <div class="s">vs ${CPI_MONTH_LABEL(pts[pts.length - 2].month)}</div></div>
-    <div class="sg-tile"><div class="l">Products</div>
-      <div class="n">${cpi.itemsInWindow}</div>
-      <div class="s">priced in every month</div></div>`;
+      <div class="s">vs ${CPI_MONTH_LABEL(prevPt.month)}</div></div>
+    <div class="sg-tile"><div class="l">Products compared</div>
+      <div class="n">${latestPt.n}</div>
+      <div class="s">priced in both ${CPI_MONTH_LABEL(prevPt.month)} and ${CPI_MONTH_LABEL(cpi.latest)}</div></div>`;
 
-  // Y range hugs the data but ALWAYS contains 100, so the base line stays on
-  // screen: without it a series that only ever falls would float with no anchor
-  // and a 2% drop would look like a collapse.
-  const vals = pts.map(p => p.index).concat([100]);
+  // Dollars on the axis, not index points. The shape is identical - the series
+  // is still the chained index - but "$4.84" is a number you can hold against a
+  // receipt, and "100" is not.
+  const vals = pts.map(p => p.price);
   let lo = Math.min(...vals), hi = Math.max(...vals);
-  const pad = Math.max((hi - lo) * 0.25, 1.5);
+  const pad = Math.max((hi - lo) * 0.35, 0.05);
   lo -= pad; hi += pad;
-  const W = 900, H = 132, padL = 34, padR = 10, padT = 10, padB = 20;
+  const W = 900, H = 132, padL = 40, padR = 10, padT = 10, padB = 20;
   const n = pts.length;
   const x = i => padL + (n === 1 ? 0 : i * (W - padL - padR) / (n - 1));
   const y = v => padT + (hi - v) * (H - padT - padB) / (hi - lo);
-  const path = pts.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(p.index).toFixed(1)}`).join(' ');
+  const path = pts.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(p.price).toFixed(1)}`).join(' ');
   const area = `M${x(0).toFixed(1)},${y(lo).toFixed(1)} `
-    + pts.map((p, i) => `L${x(i).toFixed(1)},${y(p.index).toFixed(1)}`).join(' ')
+    + pts.map((p, i) => `L${x(i).toFixed(1)},${y(p.price).toFixed(1)}`).join(' ')
     + ` L${x(n - 1).toFixed(1)},${y(lo).toFixed(1)} Z`;
   const dots = pts.map((p, i) =>
-    `<circle cx="${x(i).toFixed(1)}" cy="${y(p.index).toFixed(1)}" r="3.5" fill="var(--accent)"/>`).join('');
+    `<circle cx="${x(i).toFixed(1)}" cy="${y(p.price).toFixed(1)}" r="3.5" fill="var(--accent)"/>`).join('');
   const labels = pts.map((p, i) =>
     `<text x="${x(i).toFixed(1)}" y="${H - 6}" text-anchor="${i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'}"
            font-size="9.5" fill="var(--text-soft)">${CPI_MONTH_LABEL(p.month)}</text>`).join('');
-  const ticks = [hi - pad / 2, 100, lo + pad / 2].map(v =>
+  // The starting price gets the dashed line, so "above or below where I began"
+  // stays readable at a glance.
+  const ticks = [hi - pad / 2, cpi.basePrice, lo + pad / 2].map(v =>
     `<line x1="${padL}" y1="${y(v)}" x2="${W - padR}" y2="${y(v)}"
-           stroke="var(--border)" stroke-width="1" ${Math.abs(v - 100) < 0.01 ? 'stroke-dasharray="4 3"' : ''}/>` +
-    `<text x="${padL - 6}" y="${y(v) + 3.5}" text-anchor="end" font-size="9.5" fill="var(--text-soft)">${v.toFixed(0)}</text>`
+           stroke="var(--border)" stroke-width="1" ${Math.abs(v - cpi.basePrice) < 0.001 ? 'stroke-dasharray="4 3"' : ''}/>` +
+    `<text x="${padL - 6}" y="${y(v) + 3.5}" text-anchor="end" font-size="9.5" fill="var(--text-soft)">${fmt(v)}</text>`
   ).join('');
 
   $('cpiChart').innerHTML = `
     <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img"
-         aria-label="Basket price index from ${cpi.base} to ${cpi.latest}, ${cpi.base} = 100">
+         aria-label="Average price of an item on your list, ${cpi.base} to ${cpi.latest}">
       ${ticks}
       <path d="${area}" fill="rgba(var(--accent-rgb),0.10)" stroke="none"/>
       <path d="${path}" fill="none" stroke="var(--accent)" stroke-width="2.5"
@@ -932,8 +944,8 @@ function renderCpi(items) {
     let best = 0, bestD = Infinity;
     for (let i = 0; i < n; i++) { const d = Math.abs(x(i) - vx); if (d < bestD) { bestD = d; best = i; } }
     const p = pts[best];
-    tip.innerHTML = `<b>${CPI_MONTH_LABEL(p.month)}</b><br>${p.index.toFixed(1)}`
-      + ` &middot; ${p.n} products`;
+    tip.innerHTML = `<b>${CPI_MONTH_LABEL(p.month)}</b><br>${fmt(p.price)} average item`
+      + `<br><span style="opacity:.75">from ${p.n} products compared</span>`;
     tip.classList.add('on');
     const wb = wrap.getBoundingClientRect();
     const px = box.left - wb.left + x(best) * box.width / W;
@@ -949,12 +961,18 @@ function renderCpi(items) {
   // Nobody should have to guess whether a 4-month chart means 4 months of data
   // or a bug.
   $('cpiMethod').innerHTML =
-    `Each month is compared only against products priced in <em>both</em> months, and the `
-    + `comparisons are chained together - so the line tracks prices, not which products `
-    + `happened to be recorded. Weighted by how often you buy each one. `
-    + `${cpi.monthsAvailable} months hold prices, but the series starts at `
-    + `${CPI_MONTH_LABEL(cpi.base)}: earlier months are receipt prices covering too little `
-    + `of the basket to compare honestly against daily two-store scrapes.`;
+    `<strong>The line</strong> is the average price of one item off your list, weighted by how `
+    + `often you buy it. Each month is compared only against products priced in <em>both</em> `
+    + `that month and the one before, and those comparisons are chained together - so the line `
+    + `tracks prices, not which products happened to get recorded. `
+    + `<br><strong>Why the product counts differ:</strong> each month compares against whatever `
+    + `overlapped with the previous month (${pts.map(p => p.n).join(', ')} across this series), `
+    + `the movers list below uses the ${cpi.itemsInWindow} priced in both `
+    + `${CPI_MONTH_LABEL(cpi.base)} and ${CPI_MONTH_LABEL(cpi.latest)}, and the Store gap tab `
+    + `counts something different again - products carrying a price at <em>both stores</em>. `
+    + `<br><strong>Why it starts at ${CPI_MONTH_LABEL(cpi.base)}:</strong> ${cpi.monthsAvailable} `
+    + `months hold prices, but the earlier ones are receipt prices covering too little of the `
+    + `basket to compare honestly against daily two-store scrapes.`;
 
   const row = (m, cls) => `
     <div class="cpi-row">

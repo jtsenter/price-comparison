@@ -347,9 +347,16 @@ function openHistoryFromManageBtn(itemName) {
   if (item) openPriceHistoryModal(item);
 }
 
-function openPriceHistoryModal(item) {
+// opts.packPrices forces the pack-price view even for a per-kg group member.
+// The Buy/Wait cards quote what you hand over at the till ($18 for the steak
+// pack); opening them into the group's $/kg view showed $45.00 and $42.22 for
+// the same product and read as two different items. A card and the chart it
+// opens have to be in the same currency.
+function openPriceHistoryModal(item, opts) {
   _historyItem = item;
-  const kgR = histKgRatios(item);
+  const kgR = (opts && opts.packPrices)
+    ? { perKg: false, ww: 1, coles: 1, groupLabel: null }
+    : histKgRatios(item);
   // Group members show a "GroupLabel - Product name" title so it's clear this is one
   // variant's history within the per-kg comparison, not the whole group's - a group can
   // mix WW-only and Coles-only products (e.g. "Lamb Mince"), so a single member's history

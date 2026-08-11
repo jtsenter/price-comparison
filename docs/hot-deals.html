@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=151" />
+  <link rel="stylesheet" href="style.css?v=152" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -397,13 +397,12 @@
       padding: 2px 8px;
     }
     .deal-reason.atl { color: #92400E; background: #FEF3C7; }
-    .deal-reason-sub {
-      font-size: 11px;
-      color: var(--text-soft);
-      margin-top: 3px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+    /* Equal at both stores: a neutral mark, not a store chip. */
+    .deal-store-tied {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 20px; height: 20px; border-radius: 5px;
+      background: var(--bg); border: 1px solid var(--border-strong);
+      color: var(--text-soft); font-weight: 800; font-size: 12px;
     }
     /* ── Save vs usual cell ── */
     .deal-save { font-size: 15px; font-weight: 800; color: var(--green); }
@@ -660,8 +659,8 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=121"></script>
-<script src="history-modal.js?v=3"></script>
+<script src="utils.js?v=122"></script>
+<script src="history-modal.js?v=4"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -790,9 +789,15 @@ function hdDispName(item) {
 // The Save column's number: cross-store gap first (deal-store price vs the
 // other store), drop-vs-usual as the single-store fallback - keep the cell
 // renderer and the sort key reading the same value.
+// The Save column sits next to the two price columns, so it MUST be the gap
+// between the numbers those columns actually show - the shelf prices, at
+// quantity 1. Using the promo rate here made Top Deck read "$4 | $8 | save $1"
+// (Coles runs 2-for-$10, so its promo rate is $5), which looks like an
+// arithmetic error to anyone reading the row. Deal detection still uses the
+// promo rate; that is a separate question from what the row displays.
 function hdStoreGap(deal) {
-  return (deal.otherPrice != null && deal.price != null)
-    ? Math.max(0, deal.otherPrice - deal.price) : 0;
+  return (deal.otherShelfPrice != null && deal.shelfPrice != null)
+    ? Math.max(0, deal.otherShelfPrice - deal.shelfPrice) : 0;
 }
 
 function getSortValue(col, item, dealInfo) {
@@ -1124,7 +1129,10 @@ function renderBwsPanel(priorities, exclusions, tune) {
   // for the keyboard, which the native <button> gave for free.
   grid.innerHTML = cards.map(c => {
     const name = c.item.list_item;
-    const chip = c.store === 'coles'
+    // No chip on a tie. Snickers is $8 at both stores and was flying a red
+    // Coles chip, which reads as "Coles is cheaper" when nobody is.
+    const chip = c.tied ? ''
+      : c.store === 'coles'
       ? '<span class="store-chip coles sm">C</span>' : '<span class="store-chip ww sm">W</span>';
     const has = inBasket.has(name);
     return `<div class="bws-card ${c.verdict}" data-item="${escAttr(name)}"
@@ -1218,7 +1226,7 @@ function renderDeals() {
     + (allTimeLowCount
         ? `<span class="hps-pill atl" title="At their lowest price ever recorded"><b>${allTimeLowCount}</b> cheapest ever</span>`
         : '')
-    + `<span class="hps-pill" title="Items with enough recorded price history to judge. The rest were never candidates."><b>${scoreableCount}</b> scored</span>`;
+    + `<span class="hps-pill" title="Products with enough recorded price history to judge a deal. Items with fewer than two recorded prices can't be compared to anything, so they were never candidates."><b>${scoreableCount}</b> products checked</span>`;
   const headerStatEl = document.getElementById('hdHeaderStat');
   if (headerStatEl) headerStatEl.innerHTML = `<span class="hps-title">🔥 Hot Deals</span>${pills}`;
   // Mobile copy: the header is hidden on this page below 700px, so the page
@@ -1288,19 +1296,19 @@ function renderDeals() {
 
     const safeNameHD = item.list_item.replace(/"/g, '&quot;');
 
-    // Deal cell - explains WHY this is a hot deal: the discount depth or
-    // all-time-low badge, plus the cross-store gap when there is one
-    // ("12% cheaper than Coles") since that's the second thing that defines
-    // a deal here.
+    // Deal cell - why this row is here, and nothing else. The "N% cheaper than
+    // WW" subline was removed: the W and C columns are right there with both
+    // prices in them, the Save column already states the gap in dollars, and it
+    // was computed off the promo rate so it disagreed with both.
     const reasonClass = deal.isAllTimeLow ? 'deal-reason atl' : 'deal-reason';
-    const otherStoreName = deal.store === 'woolworths' ? 'Coles' : 'WW';
-    const storeGapTag = (deal.savingPct >= 0.01 && deal.otherPrice != null)
-      ? `<div class="deal-reason-sub">${Math.round(deal.savingPct * 100)}% cheaper than ${otherStoreName}</div>`
-      : '';
-    const dealCell = `<span class="${reasonClass}">${deal.reason}</span>${storeGapTag}`;
+    const dealCell = `<span class="${reasonClass}">${deal.reason}</span>`;
 
-    // Store cell - which supermarket has the deal price (own column).
-    const storeChip = deal.store === 'woolworths'
+    // Store cell - which supermarket has the deal price. Nothing when the two
+    // are level: a chip is a claim that one store won, and at equal prices
+    // neither did.
+    const storeChip = deal.tied
+      ? '<span class="deal-store-tied" title="Same price at both stores">=</span>'
+      : deal.store === 'woolworths'
       ? '<span class="store-chip ww sm">W</span>'
       : '<span class="store-chip coles sm">C</span>';
 
@@ -1421,10 +1429,26 @@ function hdToast(msg) {
   clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
+// Seed the tick boxes from the basket, so arriving on this page you can SEE
+// what you already have. Without it every box was empty on load and the page
+// gave no hint that half the list was already in the basket.
+function seedHdCheckedFromBasket() {
+  _hdChecked.clear();
+  for (const n of hdBasket().items) _hdChecked.add(n);
+}
+// True while the ticks still say exactly what the basket says.
+function hdSelectionMatchesBasket() {
+  const b = hdBasket().items;
+  return b.length === _hdChecked.size && b.every(n => _hdChecked.has(n));
+}
+
 function updateHdBulkBar() {
   const bar = document.getElementById('hdBulkBar');
   if (!bar) return;
-  bar.style.display = _hdChecked.size > 0 ? 'flex' : 'none';
+  // The bar is for acting on a CHANGE, so it stays out of the way while the
+  // ticks merely mirror the basket. Tick something new (or untick something you
+  // have) and it appears with the actions for exactly that difference.
+  bar.style.display = hdSelectionMatchesBasket() ? 'none' : 'flex';
   const pill = bar.querySelector('.bt-count-pill');
   if (pill) pill.textContent = _hdChecked.size;
   const rmBtn = bar.querySelector('.bt-rm');
@@ -1438,6 +1462,7 @@ function syncHdCheckAll() {
 
 function initHdBulkBar() {
   updateHdFab(); // badge reflects the basket from the moment the page opens
+  seedHdCheckedFromBasket();  // ...and so do the tick boxes
   const bar = document.getElementById('hdBulkBar');
   if (!bar) return;
   // Delegated: rows re-render often (sort, tune sliders, category tabs)
@@ -1448,9 +1473,12 @@ function initHdBulkBar() {
     syncHdCheckAll();
     updateHdBulkBar();
   });
+  // "Deselect" now means "undo my change", i.e. back to mirroring the basket -
+  // clearing every tick would have wiped the in-basket marks off the page too.
   bar.querySelector('.bt-deselect')?.addEventListener('click', () => {
-    _hdChecked.clear();
-    document.querySelectorAll('.hd-check').forEach(cb => { cb.checked = false; });
+    seedHdCheckedFromBasket();
+    document.querySelectorAll('.hd-check').forEach(cb => { cb.checked = _hdChecked.has(cb.dataset.item); });
+    syncHdCheckAll();
     updateHdBulkBar();
   });
   bar.querySelector('.bt-sl')?.addEventListener('click', () => {
@@ -1460,6 +1488,9 @@ function initHdBulkBar() {
     const added = names.filter(n => !b.items.includes(n));
     added.forEach(n => { b.items.push(n); b.quantities[n] = 1; });
     hdBasketSave(b);
+    seedHdCheckedFromBasket();   // ticks now mirror the new basket; bar stands down
+    document.querySelectorAll('.hd-check').forEach(cb => { cb.checked = _hdChecked.has(cb.dataset.item); });
+    syncHdCheckAll();
     updateHdBulkBar();
     updateHdFab();
     hdToast(`🛒 ${added.length} added - ${b.items.length} in basket`);
@@ -1471,6 +1502,11 @@ function initHdBulkBar() {
     const removed = b.items.length - kept.length;
     rm.forEach(n => delete b.quantities[n]);
     hdBasketSave({ items: kept, quantities: b.quantities });
+    // Re-seed: the basket just changed, so the ticks should mirror the NEW
+    // basket and the bar should stand down.
+    seedHdCheckedFromBasket();
+    document.querySelectorAll('.hd-check').forEach(cb => { cb.checked = _hdChecked.has(cb.dataset.item); });
+    syncHdCheckAll();
     updateHdBulkBar();
     updateHdFab();
     hdToast(removed ? `✕ ${removed} removed - ${kept.length} in basket` : 'None of the selected deals were in the basket');
@@ -1913,6 +1949,13 @@ async function pollForCompletionHD(user, repo, token, dispatchedAt) {
       else { b.items.splice(at, 1); delete b.quantities[name]; }
       hdBasketSave(b);
       syncBwsAddButtons();
+      // The table's tick boxes mirror the basket, so a card add has to move them
+      // too or the same item would read as in-basket on the card and not in the
+      // row below it.
+      seedHdCheckedFromBasket();
+      document.querySelectorAll('.hd-check').forEach(cb => { cb.checked = _hdChecked.has(cb.dataset.item); });
+      syncHdCheckAll();
+      updateHdBulkBar();
       updateHdFab();
       hdToast(at === -1 ? `🛒 Added - ${b.items.length} in basket`
                         : `✕ Removed - ${b.items.length} in basket`);
@@ -1921,7 +1964,8 @@ async function pollForCompletionHD(user, repo, token, dispatchedAt) {
     const card = e.target.closest('.bws-card');
     if (!card) return;
     const item = _data?.items.find(i => i.list_item === card.dataset.item);
-    if (item) openPriceHistoryModal(item);
+    // packPrices: the card quotes the pack price, so the chart must too.
+    if (item) openPriceHistoryModal(item, { packPrices: true });
   });
   // The card is a div now, so Enter/Space have to be wired by hand.
   bwsGrid?.addEventListener('keydown', (e) => {

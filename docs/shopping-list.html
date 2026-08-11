@@ -597,8 +597,12 @@
        was a different length so the store chips and prices landed in a different
        place on each line and the block read as noise. Four fixed columns line the
        chips, the arrows, the prices and the savings all up. */
+    /* Full width. The 720px cap was meant to stop a wide bubble sprawling, but
+       on a 1450px screen it left the thing sitting under two thirds of the page
+       with a large empty gap beside it, which read as broken rather than
+       restrained. The row grid already keeps the content aligned at any width. */
     .detour {
-      position: relative; max-width: 720px; margin: 22px 0 10px; padding: 15px 17px 14px;
+      position: relative; margin: 22px 0 10px; padding: 15px 17px 14px;
       border: 1.5px solid #C7D2FE; border-radius: 16px;
       background: linear-gradient(180deg, #EEF2FF, var(--card));
       box-shadow: 0 2px 10px rgba(67,56,202,.07);
@@ -628,10 +632,16 @@
       background: var(--card); border: 1px solid var(--border); border-radius: 10px;
     }
     .dt-name { min-width: 0; font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    /* The chip track was 18px while the chip itself renders at 28px, so every
+       chip spilled 10px into the price column and sat under the digits - the
+       overlap was on both the live price and the struck-through one. The track
+       is the chip's real width now, and the chip is pinned to it so it cannot
+       grow past its column again. */
     .dt-p {
-      display: grid; grid-template-columns: 18px 1fr; align-items: center; gap: 6px;
+      display: grid; grid-template-columns: 22px minmax(0, 1fr); align-items: center; gap: 7px;
       font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums;
     }
+    .dt-p .store-chip { width: 22px; height: 22px; font-size: 12px; border-radius: 6px; flex-shrink: 0; }
     .dt-from { color: var(--text-soft); }
     .dt-from .dt-amt { text-decoration: line-through; }
     .dt-to { color: var(--text); }
@@ -657,6 +667,16 @@
     }
     .dt-x:hover { color: var(--text); background: rgba(0,0,0,.05); }
     .dt-x:focus-visible { outline: 2px solid #4338CA; outline-offset: 1px; }
+    /* The "it's off" line. Quiet enough to ignore, present enough to undo. */
+    .detour-off {
+      margin: 18px 0 6px; font-size: 12.5px; color: var(--text-soft);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .detour-off button {
+      font: inherit; font-weight: 700; color: #4338CA; background: none;
+      border: 0; padding: 0; cursor: pointer; text-decoration: underline;
+    }
+    .detour-off button:hover { color: #3730A3; }
     @media (max-width: 700px) {
       .detour { margin-top: 18px; }
       .dt-row { grid-template-columns: 1fr auto; row-gap: 6px; }
@@ -687,7 +707,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=121"></script>
+<script src="utils.js?v=122"></script>
 <script>
 // fmt() lives in utils.js (loaded above).
 // Short display name (same map the rest of the site uses); falls back to the
@@ -1337,12 +1357,26 @@ async function boot() {
   function detourKey() {
     return displayItems.map(i => i.list_item).sort().join('|');
   }
+  function detourOff() {
+    try { return localStorage.getItem('pw_detour_off') === '1'; } catch { return false; }
+  }
   function detourDismissed() {
-    try { return localStorage.getItem('pw_detour_off') === '1'
-        || localStorage.getItem('pw_detour_hid') === detourKey(); } catch { return false; }
+    try { return detourOff() || localStorage.getItem('pw_detour_hid') === detourKey(); }
+    catch { return false; }
   }
   function buildDetourHtml() {
-    if (slSplit || detourDismissed()) return '';
+    if (slSplit) return '';
+    // "Don't show again" wrote a localStorage flag with nothing anywhere to
+    // clear it - the feature could be switched off permanently by one click and
+    // never brought back. Off now leaves this one line behind, which both
+    // explains where the tip went and undoes it.
+    if (detourOff()) {
+      return `<div class="detour-off" id="detourOffBar">
+          Cheaper-elsewhere tips are off.
+          <button type="button" id="detourRestore">Turn them back on</button>
+        </div>`;
+    }
+    if (detourDismissed()) return '';
     const here = singleStoreNow();                 // 'ww' | 'coles'
     const other = here === 'ww' ? 'coles' : 'ww';
     const rows = displayItems.map(i => {
@@ -1639,6 +1673,12 @@ async function boot() {
     });
     document.getElementById('detourNever')?.addEventListener('click', () => {
       try { localStorage.setItem('pw_detour_off', '1'); } catch {}
+      renderContent();
+    });
+    document.getElementById('detourRestore')?.addEventListener('click', () => {
+      // Clears the per-basket dismissal too, or the tip would come back on and
+      // still be hidden for whatever is in the basket right now.
+      try { localStorage.removeItem('pw_detour_off'); localStorage.removeItem('pw_detour_hid'); } catch {}
       renderContent();
     });
     document.getElementById('detourMove')?.addEventListener('click', () => {

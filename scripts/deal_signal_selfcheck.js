@@ -149,7 +149,42 @@ assert.strictEqual(dealPassesTune(dSalmon, { ...D, drop: 0, diff: 0, rank: 0 }),
 const salmonOk = { ...salmon, coles: { price: 34, name: 'Salmon Fillets', unit_price: 34, unit: '1KG' } };
 assert.strictEqual(getDealQuality(salmonOk, {}).comparable, true, 'like-for-like pairs must stay eligible');
 
-// 9. Real data: the badge must be rare. If a change ever makes it common again,
+// 9. Shelf vs promo. Top Deck is $4 at Woolworths and $8 at Coles, but Coles
+//    runs "2 for $10", so its promo rate is $5. Deal detection uses the promo
+//    rate (a multi-buy beating every recorded price IS a deal), but the Save
+//    column sits beside two columns showing $4 and $8 - so the SHELF figures
+//    must be carried separately or the row reads "$4 | $8 | save $1".
+const topDeck = {
+  list_item: 'Top Deck', category: 'Sweets',
+  woolworths: { price: 4, name: 'Top Deck Block 180g' },
+  coles:      { price: 8, name: 'Top Deck Block 180g', multi_buy: { qty: 2, total: 10 } },
+  price_history: [], coles_price_history: [],
+  ww_price_history: [[120, 8], [90, 8], [60, 8], [30, 8], [10, 8], [0, 4]]
+    .map(([d, p]) => ({ date: daysAgo(d), price: p })),
+};
+const dTop = getDealQuality(topDeck, {});
+assert.strictEqual(dTop.price, 4, 'the deal price is still the best promo-aware price');
+assert.strictEqual(dTop.otherPrice, 5, 'the rival at its promo rate is $5');
+assert.strictEqual(dTop.shelfPrice, 4, 'shelf price of the winning store');
+assert.strictEqual(dTop.otherShelfPrice, 8, 'shelf price of the rival, as the column shows it');
+assert.strictEqual(dTop.otherShelfPrice - dTop.shelfPrice, 4,
+  'Save must be the gap between the two numbers on screen, i.e. $4');
+
+// 10. A dead heat flies no flag. Snickers at $8 in both stores was showing a red
+//     Coles chip purely because the tie-break picks Coles, which reads as a
+//     claim that Coles is cheaper.
+const level = {
+  list_item: 'Snickers', category: 'Sweets',
+  woolworths: { price: 8, name: 'Snickers Share Bag 300g' },
+  coles:      { price: 8, name: 'Snickers Share Bag 300g' },
+  price_history: [], coles_price_history: [],
+  ww_price_history: [[120, 7.5], [90, 7], [60, 7.5], [30, 8], [10, 8], [0, 8]]
+    .map(([d, p]) => ({ date: daysAgo(d), price: p })),
+};
+assert.strictEqual(getDealQuality(level, {}).tied, true, 'equal prices must report as tied');
+assert.strictEqual(dTop.tied, false, 'unequal prices must not report as tied');
+
+// 11. Real data: the badge must be rare. If a change ever makes it common again,
 //    this fails loudly rather than quietly restoring the wallpaper.
 const items = JSON.parse(fs.readFileSync(
   path.join(__dirname, '..', 'docs', 'data', 'latest.json'), 'utf8')).items;
@@ -167,5 +202,5 @@ const mismatched = scored.filter(d => d.comparable === false).length;
 assert(scored.filter(d => d.comparable === false && dealPassesTune(d, D)).length === 0,
   'a size-mismatched item must never pass the tune, on real data or otherwise');
 
-console.log(`deal_signal_selfcheck: 10/10 OK  (cheapest-ever ${atl}/${scored.length}, `
+console.log(`deal_signal_selfcheck: 12/12 OK  (cheapest-ever ${atl}/${scored.length}, `
   + `was ${naiveAtl}; ${passing} deals at defaults; ${mismatched} size-mismatched pairs excluded)`);

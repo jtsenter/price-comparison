@@ -435,6 +435,24 @@ function getDealQuality(item, exclusions) {
   const currentBest = Math.min(wwP ?? Infinity, coP ?? Infinity);
   if (!isFinite(currentBest)) return empty;
   const store = (coP != null && coP <= (wwP ?? Infinity)) ? 'coles' : 'woolworths';
+  // A dead heat is not a win for either store. The rule above breaks ties
+  // towards Coles, which then flew a red chip over "$8 at both" and read as a
+  // claim that Coles was cheaper. Callers show no chip when this is true.
+  const tied = wwP != null && coP != null && Math.abs(wwP - coP) < 0.005;
+
+  // The SHELF prices, kept alongside the promo ones. The two are not
+  // interchangeable and confusing them produced a visible contradiction: Top
+  // Deck is $4 at Woolworths and $8 at Coles, but Coles runs "2 for $10", so
+  // the promo rate is $5 and the Save column read "$1" directly beside two
+  // columns showing $4 and $8. Deal DETECTION still uses the promo rate (a
+  // multi-buy that beats every price ever recorded is a real deal), but any
+  // figure shown next to the price columns has to be computed from the same
+  // numbers those columns display - and at quantity 1, which is the only
+  // quantity a per-item saving can honestly assume.
+  const wwShelf = item.woolworths?.price ?? null;
+  const coShelf = item.coles?.price ?? null;
+  const shelfPrice      = store === 'woolworths' ? wwShelf : coShelf;
+  const otherShelfPrice = store === 'woolworths' ? coShelf : wwShelf;
 
   const lo = Math.min(...hist), hi = Math.max(...hist);
   const typical = _median(hist);
@@ -515,6 +533,7 @@ function getDealQuality(item, exclusions) {
 
   return {
     qualifies, store, price: currentBest, otherPrice,
+    tied, shelfPrice, otherShelfPrice,
     typical, lo, hi, spread, dropPct, saveAmount, isAllTimeLow,
     notAboveRecent, savingPct, reason, comparable,
     pricePercentile, monthsSinceChange,
@@ -2047,7 +2066,7 @@ function bwsVerdict(item, deal, series, tune, today) {
   // STOCK UP - near its own floor, and it will still be good when you get to it.
   if (plausible && deal.pricePercentile >= BWS_STOCK_RANK && deal.saveAmount >= BWS_MIN_STAKE && keeps) {
     return {
-      verdict: 'stock', order: 0, price: cur, store: deal.store,
+      verdict: 'stock', order: 0, price: cur, store: deal.store, tied: deal.tied,
       stake: deal.saveAmount,
       headline: lastAsCheap ? `Cheapest in ${bwsAgo(daysSince).replace(' ago', '')}` : 'Cheapest ever recorded',
       why: `${fmt(cur)} now vs ${fmt(deal.typical)} usual. Keeps, so buy for the month.`,
@@ -2056,7 +2075,7 @@ function bwsVerdict(item, deal, series, tune, today) {
   // BUY - passes the filters you set for this page, and the saving is real money.
   if (plausible && dealPassesTune(deal, tune) && deal.saveAmount >= BWS_MIN_STAKE) {
     return {
-      verdict: 'buy', order: 1, price: cur, store: deal.store,
+      verdict: 'buy', order: 1, price: cur, store: deal.store, tied: deal.tied,
       stake: deal.saveAmount,
       headline: `${fmt(deal.saveAmount)} below its usual ${fmt(deal.typical)}`,
       why: lastAsCheap ? `Last this cheap ${bwsAgo(daysSince)}.`
@@ -2076,7 +2095,7 @@ function bwsVerdict(item, deal, series, tune, today) {
       && cur >= best.price * (1 + BWS_WAIT_GAP) && cur - best.price >= BWS_MIN_STAKE) {
     const ago = Math.round((Date.parse(today) - Date.parse(best.date)) / 86400000);
     return {
-      verdict: 'wait', order: 2, price: cur, store: deal.store,
+      verdict: 'wait', order: 2, price: cur, store: deal.store, tied: deal.tied,
       stake: cur - best.price,
       headline: `Was ${fmt(best.price)} ${bwsAgo(ago)}`,
       why: `${fmt(cur)} today is dearer than ${100 - rankPct}% of its recorded prices.`,
@@ -2179,11 +2198,26 @@ function personalCpi(items, opts) {
   if (run.length + 1 < CPI_MIN_POINTS) return null;
 
   const base = run[0].a;
-  const points = [{ month: base, index: 100, n: run[0].n, coverage: run[0].coverage }];
+
+  // Dollar anchor: what one item off your list costs on average in the base
+  // month, weighted by how often you buy it. An index reading "100" tells you
+  // nothing you can check against a receipt; "$4.84" does. The SHAPE is still
+  // the chained index - the anchor only gives the axis a unit - but every point
+  // is now a price rather than a number relative to an arbitrary start.
+  let baseW = 0, baseWP = 0;
+  for (const i of pool) {
+    const p = M.get(i.list_item).get(base);
+    if (p == null) continue;
+    baseW += i.trip_count; baseWP += i.trip_count * p;
+  }
+  const basePrice = baseW > 0 ? baseWP / baseW : null;
+
+  const points = [{ month: base, index: 100, price: basePrice, n: run[0].n, coverage: run[0].coverage }];
   let idx = 100;
   for (const l of run) {
     idx *= l.ratio;
-    points.push({ month: l.b, index: idx, n: l.n, coverage: l.coverage });
+    points.push({ month: l.b, index: idx, price: basePrice == null ? null : basePrice * idx / 100,
+                  n: l.n, coverage: l.coverage });
   }
   const latest = points[points.length - 1];
 
@@ -2196,8 +2230,14 @@ function personalCpi(items, opts) {
     return { item: i, from, to, diff: to - from, weight: (to - from) * i.trip_count };
   }).filter(m => Math.abs(m.diff) >= 0.05).sort((a, b) => b.weight - a.weight);
 
+  // itemsInWindow counts products priced in the BASE month and the LATEST one -
+  // i.e. the products the movers list is drawn from. It is NOT "priced in every
+  // month" (the label it used to carry, which was simply wrong) and it is not
+  // the per-month link overlap either. Three different counts were on screen at
+  // once with nothing saying they measured different things.
   return {
-    points, base, latest: latest.month,
+    points, base, latest: latest.month, basePrice,
+    latestPrice: latest.price,
     changePct: latest.index - 100,
     up: movers.slice(0, CPI_MOVERS).filter(m => m.diff > 0),
     down: movers.slice(-CPI_MOVERS).reverse().filter(m => m.diff < 0),
