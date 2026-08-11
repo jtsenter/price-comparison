@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=148" />
+  <link rel="stylesheet" href="style.css?v=149" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -60,77 +60,62 @@
       font-size: 14px;
     }
 
-    /* ── Deal-definition + show filters, one card ──
-       Three labelled blocks, not one flat list. The old layout mixed two kinds
-       of control: three CONDITIONS and two OVERRIDES (one that lets an item in
-       regardless, one that keeps it out regardless), all as identical rows, with
-       a single AND floating between the first two. Grouping them is what makes
-       the logic legible; the grid is what stops the sliders from starting at
-       four different x positions because the labels are different lengths. */
+    /* ── Deal definition + show filters ──
+       One block, not three. The three-block version spent a lot of width and
+       height saying very little: two of the five controls are yes/no questions
+       that only ever needed a checkbox, and one of those had a slider for a
+       number nobody tunes. Type sizes are up across the board - 10.5px labels
+       on a control panel were unreadable. */
     .hd-tune {
-      display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap;
-      margin-top: 10px; padding: 12px 14px; width: 100%;
+      display: block; width: 100%; margin-top: 10px; padding: 12px 16px;
       background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
     }
-    .hd-block {
-      /* Capped. Unbounded flex-grow stretched this to ~880px, which left a
-         400px void between each short label and its slider. */
-      flex: 1 1 420px; min-width: 0; max-width: 580px;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 10px; padding: 9px 11px 10px;
-    }
-    .hd-block-narrow { flex: 1 1 260px; max-width: 340px; }
-    .hd-block-h { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+    .hd-crit-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
     .hd-block-t {
-      font-size: 10.5px; font-weight: 800; color: var(--text-soft);
-      text-transform: uppercase; letter-spacing: .06em;
+      font-size: 12px; font-weight: 800; color: var(--text-mid);
+      text-transform: uppercase; letter-spacing: .05em;
     }
-    /* The mode chip says what it DOES ("ALL of these") rather than naming a
-       boolean operator. It also now governs all three conditions, so it belongs
-       in the header rather than between two of them. */
     .hd-mode {
-      margin-left: auto; font-size: 10px; font-weight: 800; letter-spacing: .04em;
+      font-size: 11.5px; font-weight: 800; letter-spacing: .03em;
       color: var(--ww); background: color-mix(in srgb, var(--ww) 10%, transparent);
       border: 1px solid color-mix(in srgb, var(--ww) 35%, transparent);
-      border-radius: 999px; padding: 2px 9px; cursor: pointer; font-family: inherit;
+      border-radius: 999px; padding: 3px 11px; cursor: pointer; font-family: inherit;
       white-space: nowrap;
     }
     .hd-mode:hover { background: color-mix(in srgb, var(--ww) 18%, transparent); }
-    .hd-mode.or-on {
-      color: #c95000; background: #FFF7ED; border-color: #F5C9A0;
-    }
-    /* label | slider | value, aligned across every row */
+    .hd-mode.or-on { color: #c95000; background: #FFF7ED; border-color: #F5C9A0; }
+    /* Three criteria side by side. Stacked, they made a tall narrow column with
+       a lot of empty width beside it; across, the panel is barely two rows deep
+       and the width is actually used. Label on top, slider + value beneath. */
+    .hd-crits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 20px; }
     .hd-crit {
-      display: grid; grid-template-columns: minmax(0, 1fr) 128px 58px;
-      align-items: center; gap: 10px; padding: 3px 0;
+      display: grid; grid-template-columns: 1fr 48px; align-items: center;
+      gap: 4px 10px; padding: 2px 0;
     }
-    /* In a narrow block there is no room for label|slider|value on one line, so the
-       label and value share the first line and the slider takes the second. */
-    .hd-crit-tight { grid-template-columns: 1fr auto; row-gap: 5px; }
-    .hd-crit-tight input[type="range"] { grid-column: 1 / -1; }
-    .hd-crit-tight label { white-space: normal; }
     .hd-crit label {
-      font-size: 12px; font-weight: 600; color: var(--text-mid);
-      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      grid-column: 1 / -1; font-size: 13px; font-weight: 600;
+      color: var(--text-mid); white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
     }
-    .hd-ic { display: inline-block; width: 15px; color: var(--text-soft); }
+    .hd-ic { display: inline-block; width: 16px; }
     .hd-crit input[type="range"] { width: 100%; accent-color: var(--ww); cursor: pointer; }
-    .hd-crit strong {
-      font-size: 13px; font-weight: 800; color: var(--text);
-      text-align: right; font-variant-numeric: tabular-nums;
+    .hd-crit strong { font-size: 14px; font-weight: 800; color: var(--text); text-align: right; font-variant-numeric: tabular-nums; }
+    /* The two overrides, side by side on one line. */
+    .hd-overrides {
+      display: flex; gap: 22px; flex-wrap: wrap;
+      margin-top: 9px; padding-top: 9px; border-top: 1px solid var(--border);
     }
     .hd-chk {
-      display: flex; align-items: center; gap: 7px; font-size: 12px;
-      font-weight: 600; color: var(--text-mid); cursor: pointer; padding: 4px 0;
+      display: inline-flex; align-items: center; gap: 8px; font-size: 13px;
+      font-weight: 600; color: var(--text-mid); cursor: pointer;
     }
-    .hd-chk input { accent-color: var(--ww); cursor: pointer; flex-shrink: 0; }
-    /* How many rows the current settings actually yield. Without it you drag a
-       slider and have to go and count the table to see if anything happened. */
-    .hd-count { font-size: 12px; font-weight: 700; color: var(--text-soft); font-variant-numeric: tabular-nums; }
-    /* Row 3 of the card: the "Show" filters (store + watchlist) + Reset */
+    .hd-chk input { accent-color: var(--ww); cursor: pointer; width: 15px; height: 15px; }
+    /* Deal count, inline in the page title so it never takes a line of its own. */
+    .hero-count { font-size: 13px; font-weight: 600; color: var(--text-soft); margin-left: 10px; }
+    .hero-count b { color: var(--text); font-weight: 800; }
     .hd-tune-show {
       display: flex; align-items: center; gap: 12px; width: 100%;
-      border-top: 1px solid var(--border); padding-top: 9px; margin-top: 2px;
+      border-top: 1px solid var(--border); padding-top: 10px; margin-top: 10px;
     }
     .store-filter-row { display: flex; gap: 8px; flex-wrap: wrap; }
     @media (max-width: 700px) {
@@ -143,16 +128,13 @@
         padding: 10px 6px; font-size: 11px; text-align: center;
       }
       .deals-hero-stat strong { font-size: 20px; }
-      /* Tuner on a phone: blocks stack full width; each condition keeps its
-         label and value on one line with the slider filling the row beneath, so
-         the value badge can never render past the viewport edge. */
-      .hd-tune { gap: 10px; margin-top: 4px; padding: 10px; }
-      .hd-block, .hd-block-narrow { flex: 1 1 100%; }
-      .hd-crit, .hd-crit-tight {
-        grid-template-columns: 1fr auto; row-gap: 4px; padding: 5px 0;
-      }
+      /* Tuner on a phone: label and value share a line, slider fills the next. */
+      .hd-tune { padding: 11px 12px; }
+      .hd-crit { grid-template-columns: 1fr auto; row-gap: 4px; padding: 6px 0; }
       .hd-crit label { white-space: normal; }
       .hd-crit input[type="range"] { grid-column: 1 / -1; }
+      .hd-overrides { gap: 10px; flex-direction: column; }
+      .hero-count { margin-left: 0; width: 100%; }
       .hd-tune-show { flex-wrap: wrap; gap: 8px; padding-top: 8px; }
       .hd-tune-show #hdTuneReset { margin-left: auto; }
       /* Store filter: three equal buttons filling the row (logo chips + names) */
@@ -406,56 +388,44 @@
 <script src="header.js?v=22"></script>
 
 <div class="deals-hero">
-  <div class="deals-hero-title">🔥 Hot Deals</div>
-  <div class="deals-hero-stats" id="heroStats"></div>
+  <div class="deals-hero-title">🔥 Hot Deals<span class="hero-count" id="heroStats"></span></div>
   <!-- The dials that DEFINE a deal, out in the open. Dragging either instantly
        grows/shrinks the list below. Row 2 ("Show") holds the store + watchlist
        filters - everything that decides WHICH deals you see lives in this card. -->
   <div class="hd-tune">
-
-    <!-- The three CONDITIONS. One mode chip in the header governs all three -
-         the old layout put a single AND between the first two, so how the third
-         joined in was anyone's guess. -->
-    <div class="hd-block">
-      <div class="hd-block-h">
-        <span class="hd-block-t">A deal must be</span>
-        <button type="button" class="hd-mode" id="hdModeBtn"
-                title="Whether an item has to satisfy every condition or just one">ALL of these</button>
-      </div>
-      <div class="hd-crit" title="How far below its usual (median historical) price an item must be">
-        <label for="hdDropSlider"><span class="hd-ic">↓</span> below its usual price</label>
-        <input type="range" id="hdDropSlider" min="0" max="50" step="1">
-        <strong id="hdDropVal">20%</strong>
-      </div>
-      <div class="hd-crit" title="How much cheaper the best store must be than the other store">
-        <label for="hdDiffSlider"><span class="hd-ic">⇄</span> cheaper than the other store</label>
-        <input type="range" id="hdDiffSlider" min="0" max="50" step="1">
-        <strong id="hdDiffVal">10%</strong>
-      </div>
-      <div class="hd-crit" title="Where today's price sits against everything this item has actually sold for. 90% means cheaper than nine out of ten prices ever recorded for it.">
-        <label for="hdRankSlider"><span class="hd-ic">📊</span> cheaper than its own past</label>
-        <input type="range" id="hdRankSlider" min="0" max="95" step="5">
-        <strong id="hdRankVal">75%</strong>
-      </div>
+    <div class="hd-crit-head">
+      <span class="hd-block-t">A deal must be</span>
+      <button type="button" class="hd-mode" id="hdModeBtn"
+              title="Whether an item has to satisfy every condition or just one">ALL of these</button>
+    </div>
+    <div class="hd-crits">
+    <div class="hd-crit" title="How far below its usual (median historical) price an item must be">
+      <label for="hdDropSlider"><span class="hd-ic">↓</span> below its usual price</label>
+      <input type="range" id="hdDropSlider" min="0" max="50" step="1">
+      <strong id="hdDropVal">20%</strong>
+    </div>
+    <div class="hd-crit" title="How much cheaper the best store must be than the other store">
+      <label for="hdDiffSlider"><span class="hd-ic">⇄</span> cheaper than the other store</label>
+      <input type="range" id="hdDiffSlider" min="0" max="50" step="1">
+      <strong id="hdDiffVal">10%</strong>
+    </div>
+    <div class="hd-crit" title="Where today's price sits against everything this item has actually sold for. 90% means cheaper than nine out of ten prices ever recorded for it.">
+      <label for="hdRankSlider"><span class="hd-ic">📊</span> cheaper than its own past</label>
+      <input type="range" id="hdRankSlider" min="0" max="95" step="5">
+      <strong id="hdRankVal">75%</strong>
+    </div>
     </div>
 
-    <!-- The two OVERRIDES, which are not conditions at all: one lets an item in
-         regardless of the sliders, the other keeps an item out regardless. They
-         read as a third and fourth slider when they sit in the same list. -->
-    <div class="hd-block hd-block-narrow">
-      <div class="hd-block-h"><span class="hd-block-t">Always include</span></div>
+    <!-- The two overrides are yes/no questions, so they are checkboxes. The
+         staleness one had a slider for a number nobody needs to tune; it is
+         fixed at HD_STALE_MONTHS and the box just turns it on or off. -->
+    <div class="hd-overrides">
       <label class="hd-chk" title="A genuine new low - strictly below every price previously recorded - is worth seeing even when it misses the sliders">
-        <input type="checkbox" id="hdAtlChk"> <span>🏆 cheapest-ever prices</span>
+        <input type="checkbox" id="hdAtlChk"> <span>🏆 always show cheapest-ever prices</span>
       </label>
-    </div>
-
-    <div class="hd-block hd-block-narrow">
-      <div class="hd-block-h"><span class="hd-block-t">Never include</span></div>
-      <div class="hd-crit hd-crit-tight" title="A price that has not moved in this long is not news - it is the same row every week. Measured from the last CHANGE, so an item that swings every couple of months still qualifies while it sits between swings.">
-        <label for="hdStaleSlider"><span class="hd-ic">⏳</span> prices frozen over</label>
-        <input type="range" id="hdStaleSlider" min="0" max="24" step="1">
-        <strong id="hdStaleVal">6 months</strong>
-      </div>
+      <label class="hd-chk" title="A price that has not moved in months is not news - it is the same row every week. Measured from the last CHANGE, so an item that swings every couple of months still qualifies.">
+        <input type="checkbox" id="hdStaleChk"> <span>⏳ hide prices frozen 3+ months</span>
+      </label>
     </div>
 
     <div class="hd-tune-show">
@@ -467,7 +437,6 @@
       </div>
       <button class="priority-pill watchlist-pill" id="watchlistFilterBtn">👁 Watchlist</button>
       <span class="hd-show-spacer" style="flex:1"></span>
-      <span class="hd-count" id="hdCount"></span>
       <button id="hdTuneReset" class="btn btn-ghost" style="font-size:12px;padding:5px 12px">↺ Reset</button>
     </div>
   </div>
@@ -557,7 +526,7 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=116"></script>
+<script src="utils.js?v=117"></script>
 <script src="history-modal.js?v=3"></script>
 <script>
 if ('serviceWorker' in navigator) {
@@ -1025,12 +994,9 @@ function renderDeals() {
   // Live count beside Reset: drag a slider and see the effect without going and
   // counting the table. Deliberately "of N scoreable", not "of 290" - items with
   // too little history to judge were never candidates.
-  const countEl = document.getElementById('hdCount');
-  if (countEl) {
-    const scoreable = dealPool.filter(i => getDealQuality(i, exclusions).typical != null).length;
-    countEl.textContent = `${allDeals.length} of ${scoreable}`;
-    countEl.title = `${allDeals.length} items match these settings, out of ${scoreable} with enough price history to judge`;
-  }
+  // Denominator for the title's count: items with enough history to judge, not
+  // all 290 - the rest were never candidates, so counting them flatters nothing.
+  const scoreableCount = dealPool.filter(i => getDealQuality(i, exclusions).typical != null).length;
 
   const filtered = filterDeals(allDeals, exclusions);
   const sorted = sortDeals(filtered.map(d => d.item), exclusions);
@@ -1046,12 +1012,11 @@ function renderDeals() {
   if (heroEl) {
     const allTimeLowCount = filtered.filter(({ deal }) => deal.isAllTimeLow).length;
     const showingAll = filtered.length === allDeals.length;
-    heroEl.innerHTML = [
-      showingAll
-        ? `<div class="deals-hero-stat"><strong>${allDeals.length}</strong><span class="hs-lbl">deals found</span></div>`
-        : `<div class="deals-hero-stat"><strong>${filtered.length} / ${allDeals.length}</strong><span class="hs-lbl">deals shown</span></div>`,
-      allTimeLowCount ? `<div class="deals-hero-stat"><strong>${allTimeLowCount}</strong><span class="hs-lbl">all-time lows 🏆</span></div>` : '',
-    ].join('');
+    heroEl.innerHTML =
+      `<b>${showingAll ? allDeals.length : `${filtered.length} / ${allDeals.length}`}</b> deal`
+      + `${(showingAll ? allDeals.length : filtered.length) === 1 ? '' : 's'}`
+      + (allTimeLowCount ? ` &middot; <b>${allTimeLowCount}</b> cheapest-ever 🏆` : '')
+      + ` &middot; of ${scoreableCount} with enough history`;
   }
 
   // Update sort headers
@@ -1452,7 +1417,7 @@ function initDealTune() {
   const dropS = document.getElementById('hdDropSlider');
   const diffS = document.getElementById('hdDiffSlider');
   const rankS = document.getElementById('hdRankSlider');
-  const staleS = document.getElementById('hdStaleSlider');
+  const staleC = document.getElementById('hdStaleChk');
   const atl   = document.getElementById('hdAtlChk');
   const modeB = document.getElementById('hdModeBtn');
   const reset = document.getElementById('hdTuneReset');
@@ -1477,18 +1442,14 @@ function initDealTune() {
       rankS.value = t.rank;
       document.getElementById('hdRankVal').textContent = t.rank ? `${t.rank}%` : 'off';
     }
-    if (staleS) {
-      staleS.value = t.stale;
-      // 0 is the off position, and saying "0 months" would read as "hide everything".
-      document.getElementById('hdStaleVal').textContent =
-        t.stale ? `${t.stale} month${t.stale === 1 ? '' : 's'}` : 'never hide';
-    }
+    if (staleC) staleC.checked = t.stale > 0;
   };
   sync(loadDealTune());
   const onInput = () => {
     const t = { drop: Number(dropS.value), diff: Number(diffS.value),
                 rank: rankS ? Number(rankS.value) : 0,
-                stale: staleS ? Number(staleS.value) : 0,
+                // Fixed period, not a tunable number - the box is on/off.
+                stale: (staleC ? staleC.checked : true) ? HD_STALE_MONTHS : 0,
                 atl: atl ? atl.checked : true, mode };
     localStorage.setItem('pw_hd_tune_v1', JSON.stringify(t));
     sync(t);
@@ -1497,7 +1458,7 @@ function initDealTune() {
   dropS.addEventListener('input', onInput);
   diffS.addEventListener('input', onInput);
   rankS?.addEventListener('input', onInput);
-  staleS?.addEventListener('input', onInput);
+  staleC?.addEventListener('change', onInput);
   atl?.addEventListener('change', onInput);
   modeB?.addEventListener('click', () => { mode = mode === 'or' ? 'and' : 'or'; onInput(); });
   reset?.addEventListener('click', () => {

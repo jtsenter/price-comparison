@@ -31,7 +31,7 @@ global.loadExclusions = () => ({});
 // eslint-disable-next-line no-eval
 eval([
   extractConst('DEAL_MIN_SPREAD'), extractConst('DEAL_MIN_DROP'),
-  extractConst('DEAL_TUNE_DEFAULTS'),
+  extractConst('HD_STALE_MONTHS'), extractConst('DEAL_TUNE_DEFAULTS'),
   extract('_median'), extract('exclPriceSet'), extract('mbUnitPrice'),
   extract('promoUnitPrice'), extract('getDealQuality'), extract('dealPassesTune'),
 ].join('\n'));

@@ -1885,7 +1885,10 @@ function dealPassesTune(deal, tune) {
 // 72 items frozen for over a year stop occupying the page.
 // `rank`: minimum price percentile, i.e. "cheaper than this % of its own past
 // year". 0 keeps the old behaviour for anyone who wants the sliders alone.
-const DEAL_TUNE_DEFAULTS = { drop: 20, diff: 10, rank: 75, stale: 6, atl: true, mode: 'and' };
+// Fixed, not tunable: the UI offers a checkbox, because the exact number of
+// months is not a thing anyone wants to sit and dial in.
+const HD_STALE_MONTHS = 3;
+const DEAL_TUNE_DEFAULTS = { drop: 20, diff: 10, rank: 75, stale: HD_STALE_MONTHS, atl: true, mode: 'and' };
 function loadDealTune() {
   try {
     const t = JSON.parse(localStorage.getItem('pw_hd_tune_v1') || 'null');
