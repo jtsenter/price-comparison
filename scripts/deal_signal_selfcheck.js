@@ -116,6 +116,16 @@ assert.strictEqual(dealPassesTune({ ...dC, dropPct: 0.9, savingPct: 0.9, pricePe
 const D = globalThis.DEAL_TUNE_DEFAULTS;
 assert(D.stale > 0, 'default staleness gate must be on');
 assert(D.rank > 0, 'default percentile floor must be on');
+//    Cheapest-ever is no longer a checkbox: it always shows, at ANY slider
+//    setting, because it is the strongest reason a row belongs on this page.
+//    Tightening every slider to its maximum must not hide a genuine new low.
+assert(!('atl' in D), 'the atl toggle is gone - it should not reappear in the defaults');
+const strictest = { drop: 100, diff: 100, rank: 100, stale: globalThis.HD_STALE_MONTHS, mode: 'and' };
+assert.strictEqual(
+  dealPassesTune({ typical: 5, spread: 0.5, notAboveRecent: true, dropPct: 0.05,
+                   savingPct: 0, pricePercentile: 0.1, isAllTimeLow: true,
+                   monthsSinceChange: 1, comparable: true }, strictest),
+  true, 'a genuine new low must show even with every slider maxed');
 
 // 8. The salmon trap. Woolworths sells a $38/kg fillet, Coles a $10 portion;
 //    min(38, 10) reads as "cheapest ever, save $24" and it is a lie - restated
@@ -132,8 +142,8 @@ const salmon = {
 };
 const dSalmon = getDealQuality(salmon, {});
 assert.strictEqual(dSalmon.comparable, false, 'a $10 portion against a $38 kilo is not comparable');
-assert.strictEqual(dealPassesTune(dSalmon, { ...D, drop: 0, diff: 0, rank: 0, atl: true }), false,
-  'a size mismatch must be refused even at the loosest tune and with ATL on');
+assert.strictEqual(dealPassesTune(dSalmon, { ...D, drop: 0, diff: 0, rank: 0 }), false,
+  'a size mismatch must be refused even at the loosest tune, and cheapest-ever must not rescue it');
 // Same product, matched sizes: the guard must not fire, or it would silently
 // empty the table instead of cleaning it.
 const salmonOk = { ...salmon, coles: { price: 34, name: 'Salmon Fillets', unit_price: 34, unit: '1KG' } };
@@ -157,5 +167,5 @@ const mismatched = scored.filter(d => d.comparable === false).length;
 assert(scored.filter(d => d.comparable === false && dealPassesTune(d, D)).length === 0,
   'a size-mismatched item must never pass the tune, on real data or otherwise');
 
-console.log(`deal_signal_selfcheck: 9/9 OK  (cheapest-ever ${atl}/${scored.length}, `
+console.log(`deal_signal_selfcheck: 10/10 OK  (cheapest-ever ${atl}/${scored.length}, `
   + `was ${naiveAtl}; ${passing} deals at defaults; ${mismatched} size-mismatched pairs excluded)`);

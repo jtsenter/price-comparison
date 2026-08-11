@@ -84,30 +84,11 @@ const fmtUnit = (price, unit) => {
   return m ? `${fmt(price)}/${m[0].trim()}` : fmt(price);
 };
 
-// clientPer100() is provided by utils.js (loaded before app.js in index.html).
-
-function clientPerKg(result) {
-  if (!result || result.price == null) return null;
-  const p = clientPer100(result);
-  return p.value != null ? +(p.value * 10).toFixed(2) : null;
-}
-
-// ── Per-kg single source of truth ────────────────────────────────────────────
-// Every per-kg number in the UI (current price, history modal, trend bar) is
-// derived through these three helpers so the values can never diverge.
-
-// Pack-price → $/kg multiplier for one store's result. Ratio is the store's own
-// current $/kg over its current pack price; applied to that store's historical
-// pack prices. Returns null when the store has no usable size/price data - the
-// caller must then DROP that store's history rather than treat raw pack prices
-// as $/kg (that mislabelling was a recurring source of wrong trend numbers).
-// ponytail: assumes pack size is stable over the item's history - if a product's
-// pack size changed, older points convert with the current ratio. Acceptable for
-// a personal grocery tracker; the upgrade path is storing size per history entry.
-function perKgRatio(res) {
-  const kg = clientPerKg(res);
-  return (kg != null && res?.price) ? kg / res.price : null;
-}
+// clientPer100(), clientPerKg() and perKgRatio() are provided by utils.js
+// (loaded before app.js in index.html). The last two moved there because
+// history-modal.js calls perKgRatio and is loaded by hot-deals.html, which does
+// NOT load app.js - opening a per-kg member's history from that page threw
+// "perKgRatio is not defined" for as long as both lived here.
 
 // A member's exclusions split into per-store price sets ("12.34" strings).
 // Supports "ww:X"/"coles:X" and the legacy bare-number format (treated as WW).
@@ -5660,7 +5641,6 @@ function _renderPageInner(data) {
     minStoreDiffPct: hotTune.diff,
     minRankPct: hotTune.rank,
     maxStaleMonths: hotTune.stale,
-    includeATL: hotTune.atl,
     mode: hotTune.mode,
   }).length;
   $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>${hotCount > 0 ? `<a href="hot-deals.html" class="hot-deals-link">🔥 ${hotCount} deal${hotCount !== 1 ? 's' : ''}</a>` : ''}`;

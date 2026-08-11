@@ -106,6 +106,31 @@ function per100Pair(ww, co) {
   return { ww: w, coles: c };
 }
 
+// ── Per-kg single source of truth ────────────────────────────────────────────
+// Every per-kg number in the UI (current price, history modal, trend bar) is
+// derived through these so the values can never diverge. They lived in app.js
+// until history-modal.js - which hot-deals.html loads WITHOUT app.js - started
+// calling perKgRatio: opening a per-kg group member's price history from Hot
+// Deals threw "perKgRatio is not defined" and the modal silently never opened.
+function clientPerKg(result) {
+  if (!result || result.price == null) return null;
+  const p = clientPer100(result);
+  return p.value != null ? +(p.value * 10).toFixed(2) : null;
+}
+
+// Pack-price → $/kg multiplier for one store's result. Ratio is the store's own
+// current $/kg over its current pack price; applied to that store's historical
+// pack prices. Returns null when the store has no usable size/price data - the
+// caller must then DROP that store's history rather than treat raw pack prices
+// as $/kg (that mislabelling was a recurring source of wrong trend numbers).
+// ponytail: assumes pack size is stable over the item's history - if a product's
+// pack size changed, older points convert with the current ratio. Acceptable for
+// a personal grocery tracker; the upgrade path is storing size per history entry.
+function perKgRatio(res) {
+  const kg = clientPerKg(res);
+  return (kg != null && res?.price) ? kg / res.price : null;
+}
+
 // THE money formatter for the whole site. Grouped thousands: a basket total of
 // "$1059.16" is genuinely hard to read at a glance and was doing so on every
 // page. Lived as three identical copies in app.js, hot-deals and the basket.
@@ -1846,7 +1871,6 @@ function getHotDealItems(items, opts) {
     diff: opts.minStoreDiffPct != null ? opts.minStoreDiffPct : DEAL_TUNE_DEFAULTS.diff,
     rank:  opts.minRankPct   != null ? opts.minRankPct   : DEAL_TUNE_DEFAULTS.rank,
     stale: opts.maxStaleMonths != null ? opts.maxStaleMonths : DEAL_TUNE_DEFAULTS.stale,
-    atl:  opts.includeATL == null ? DEAL_TUNE_DEFAULTS.atl : !!opts.includeATL,
     mode: opts.mode === 'or' ? 'or' : 'and',
   };
   return (items || [])
@@ -1861,7 +1885,7 @@ function getHotDealItems(items, opts) {
 // The ONE tuned-deal predicate - shared by getHotDealItems (Hot Deals page +
 // main-page count link) and isHotDeal (🔥 badges), so a 🔥 row is always a row
 // the Hot Deals page would actually show at the current slider settings.
-// tune: { drop, diff (whole percents), atl, mode: 'and'|'or' }.
+// tune: { drop, diff (whole percents), mode: 'and'|'or' }.
 function dealPassesTune(deal, tune) {
   if (deal.typical == null || deal.spread < DEAL_MIN_SPREAD || !deal.notAboveRecent) return false;
   // A "deal" that only exists because the two stores are selling different
@@ -1883,32 +1907,33 @@ function dealPassesTune(deal, tune) {
   const passSliders = tune.mode === 'or'
     ? (passDrop || passDiff || passRank)
     : (passDrop && passDiff && passRank);
-  // A genuine new low is still an escape hatch, but it now means what it says.
-  return (tune.atl && deal.isAllTimeLow) || passSliders;
+  // A genuine new low always shows. This was a checkbox; nobody would ever turn
+  // it off, because "the cheapest this has ever been" is the single strongest
+  // reason a row belongs on a page called Hot Deals. Now unconditional - the
+  // staleness and comparability gates above still apply to it, which is what
+  // stopped it being wallpaper in the first place.
+  return deal.isAllTimeLow || passSliders;
 }
 
-// Shared slider state for the two deal thresholds (Hot Deals page writes it,
-// both pages read it so their numbers agree).
+// Shared slider state for the deal thresholds (Hot Deals page writes it, both
+// pages read it so their numbers agree).
 // Slider defaults are deliberately strict - "a fifth off its usual price AND a
 // tenth cheaper than the rival". At the old 4%/0% defaults the page showed 73
-// "deals" out of ~210 active items, which made the word meaningless. ATL stays
-// on by default: an all-time low is always worth surfacing regardless of where
-// the sliders sit, which is the point of the checkbox being an OR escape hatch.
+// "deals" out of ~210 active items, which made the word meaningless.
 // `stale`: hide items whose price has not moved in this many months (0 = off).
-// 6 is deliberately generous - a quarterly cycle still gets through, while the
-// 72 items frozen for over a year stop occupying the page.
 // `rank`: minimum price percentile, i.e. "cheaper than this % of its own past
 // year". 0 keeps the old behaviour for anyone who wants the sliders alone.
 // Fixed, not tunable: the UI offers a checkbox, because the exact number of
 // months is not a thing anyone wants to sit and dial in.
+// No `atl` any more - a genuine new low always shows (see dealPassesTune). Old
+// saved tunes may still carry the key; it is simply ignored on read.
 const HD_STALE_MONTHS = 3;
-const DEAL_TUNE_DEFAULTS = { drop: 20, diff: 10, rank: 75, stale: HD_STALE_MONTHS, atl: true, mode: 'and' };
+const DEAL_TUNE_DEFAULTS = { drop: 20, diff: 10, rank: 75, stale: HD_STALE_MONTHS, mode: 'and' };
 function loadDealTune() {
   try {
     const t = JSON.parse(localStorage.getItem('pw_hd_tune_v1') || 'null');
     if (t && typeof t.drop === 'number' && typeof t.diff === 'number')
       return {
-        atl: typeof t.atl === 'boolean' ? t.atl : DEAL_TUNE_DEFAULTS.atl,
         drop: t.drop, diff: t.diff,
         // Saved tunes predate these two, so fall back to the defaults rather
         // than to 0/undefined (which would silently disable the new gates).

@@ -120,17 +120,30 @@ nav a.active { background: var(--bg); color: var(--text); font-weight: 600; }
 .header-search .search-clear { right: 10px; }
 .header-div { width: 1px; height: 24px; background: var(--border); flex-shrink: 0; margin: 0 2px; }
 
-/* Hot Deals' count, in the header's own empty middle (no search box on this
-   page to fill it). flex:1 so it claims the same space SEARCH would, left-
-   aligned like search's contents rather than centred - matches how the rest of
-   the header reads left-to-right. Empty span collapses to nothing until JS
-   fills it, so pages without it lose no width. */
+/* Hot Deals' title + counts, in the header's own empty middle (no search box on
+   this page to fill it). flex:1 so it claims the space SEARCH would.
+   Deliberately NOT one run-on sentence: a page title and two measurements are
+   three different things, and as prose they read as a caption nobody parses.
+   Title in body colour, counts as pills - each pill is a nowrap unit, so a
+   narrow header drops whole pills off the end instead of breaking a number
+   away from its label ("77" alone on a line). */
 .header-page-stat {
-  flex: 1; min-width: 0; display: flex; align-items: center;
-  font-size: 13px; font-weight: 600; color: var(--text-soft);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px;
+  overflow: hidden;
 }
-.header-page-stat b { color: var(--text); font-weight: 800; }
+.hps-title {
+  font-size: 15px; font-weight: 800; color: var(--text);
+  letter-spacing: -0.2px; white-space: nowrap; flex-shrink: 0;
+}
+.hps-pill {
+  display: inline-flex; align-items: baseline; gap: 4px; flex-shrink: 0;
+  font-size: 12px; font-weight: 600; color: var(--text-mid);
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 999px; padding: 3px 10px; white-space: nowrap;
+}
+.hps-pill b { font-size: 13px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
+.hps-pill.atl { background: #FEF3C7; border-color: #FDE68A; color: #92400E; }
+.hps-pill.atl b { color: #92400E; }
 
 /* Header action buttons match the 38px search-box height (they were ~28px, so
    the top bar looked ragged). MUST NOT set `display` - .btn is already

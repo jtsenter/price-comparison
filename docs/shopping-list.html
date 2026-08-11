@@ -114,8 +114,17 @@
     .sl-savings-panel .saving-label { margin-bottom: 0; }
     .sl-savings-panel .saving-amount { font-size: 16px; }
     /* Shared saving figures (see basketSavingLine / splitSavingLine): bold-green
-       total (split only) + green (−$X) bracket, right-aligned so brackets align. */
-    .saving-figs { display: flex; align-items: baseline; justify-content: flex-end; gap: 8px; }
+       total (split only) + green (−$X) bracket.
+       Two FIXED grid tracks, not a right-aligned flex row. As flex, the Basket
+       line (bracket only) and the Split line (total + bracket) right-aligned as
+       whole blocks, so the two brackets landed on different x - 740 vs 732 -
+       and the panel read as ragged. The total column now holds its width even
+       on the row that has no total, so the brackets line up down the panel. */
+    .saving-figs {
+      display: grid; grid-template-columns: auto minmax(0, auto);
+      align-items: baseline; justify-content: end; gap: 8px;
+    }
+    .saving-figs .sv-disc { grid-column: 2; }
     .sv-total { font-size: 18px; font-weight: 800; color: var(--green); line-height: 1; font-variant-numeric: tabular-nums; }
     .sv-disc  { font-size: 14px; font-weight: 700; color: var(--green); font-variant-numeric: tabular-nums; }
     .sl-savings-panel .saving-icon { width: 22px; font-size: 16px; }
@@ -603,8 +612,12 @@
     }
     .detour::after { top: -9px; border-bottom-color: #EEF2FF; }
     .dt-h { display: flex; align-items: center; gap: 9px; font-weight: 800; font-size: 14.5px; color: #3730A3; }
+    /* The title shrinks before the pill or the ✕ do - those two are fixed-size
+       facts, the sentence is the part that can afford an ellipsis. */
+    .dt-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .dt-pct {
-      margin-left: auto; font-size: 11.5px; font-weight: 700; color: #4338CA;
+      margin-left: auto; flex-shrink: 0;
+      font-size: 11.5px; font-weight: 700; color: #4338CA;
       background: #E0E7FF; padding: 3px 10px; border-radius: 9px; white-space: nowrap;
     }
     .dt-sub { font-size: 12.5px; color: var(--text-mid); margin: 5px 0 12px; }
@@ -631,15 +644,36 @@
       font-size: 12px; color: #7C2D12; background: #FFF7ED;
       border-left: 3px solid #c95000; padding: 9px 12px; border-radius: 0 8px 8px 0; margin-top: 12px;
     }
-    .dt-x { position: absolute; top: 10px; right: 12px; border: 0; background: none; cursor: pointer; color: var(--text-soft); font-size: 13px; }
-    .dt-x:hover { color: var(--text); }
+    /* In the header row, not absolutely positioned over it. Floating at
+       `right: 12px` it sat ON TOP of the right edge of the "% of your split
+       saving" pill - the ✕ spanned x 802-813 while the pill ended at 808. As a
+       flex item it cannot collide with anything, whatever the pill's text says.
+       24px so it is a real hit target; it was 11x17. */
+    .dt-x {
+      flex-shrink: 0; width: 24px; height: 24px; display: flex;
+      align-items: center; justify-content: center;
+      border: 0; background: none; cursor: pointer; color: var(--text-soft);
+      font-size: 13px; border-radius: 6px; padding: 0;
+    }
+    .dt-x:hover { color: var(--text); background: rgba(0,0,0,.05); }
+    .dt-x:focus-visible { outline: 2px solid #4338CA; outline-offset: 1px; }
     @media (max-width: 700px) {
       .detour { margin-top: 18px; }
       .dt-row { grid-template-columns: 1fr auto; row-gap: 6px; }
       .dt-name { grid-column: 1 / -1; white-space: normal; }
       .dt-arrow { display: none; }
       .dt-save { grid-column: 2; }
-      .dt-pct { margin-left: 0; }
+      /* At 375px all four header items on one line squeezed the title to 94px -
+         "3 items much cheaper at Woolworths" became three words. The pill is
+         the least important of the four, so it takes its own line and the
+         sentence gets the first one in full. */
+      .dt-h { flex-wrap: wrap; row-gap: 6px; align-items: flex-start; }
+      /* `1 1 0`, not `1 1 auto`: at auto the title claims its full natural
+         width and pushes the ✕ onto a line of its own. At 0 it shares the line
+         and wraps to two lines inside its own column instead. */
+      .dt-title { white-space: normal; flex: 1 1 0; min-width: 0; }
+      .dt-x { order: 3; }
+      .dt-pct { order: 4; flex-basis: 100%; margin-left: 0; }
       .dt-foot .btn { flex: 1 1 auto; }
     }
   </style>
@@ -653,7 +687,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=120"></script>
+<script src="utils.js?v=121"></script>
 <script>
 // fmt() lives in utils.js (loaded above).
 // Short display name (same map the rest of the site uses); falls back to the
@@ -1335,9 +1369,9 @@ async function boot() {
            moving these ${adv.items.length}. One extra stop, not a second full shop.</div>`
       : '';
     return `<div class="detour" id="detourBox">
-        <button class="dt-x" id="detourHide" title="Hide for this basket">&#10005;</button>
-        <div class="dt-h"><span>&#128161;</span> ${adv.items.length} item${adv.items.length !== 1 ? 's' : ''} much cheaper at ${otherName}
-          <span class="dt-pct">${Math.round(adv.share * 100)}% of your split saving</span></div>
+        <div class="dt-h"><span>&#128161;</span> <span class="dt-title">${adv.items.length} item${adv.items.length !== 1 ? 's' : ''} much cheaper at ${otherName}</span>
+          <span class="dt-pct">${Math.round(adv.share * 100)}% of your split saving</span>
+          <button class="dt-x" id="detourHide" title="Hide for this basket">&#10005;</button></div>
         <div class="dt-sub">Worth <strong>${fmt(adv.topTotal)}</strong> between them.</div>
         ${list}
         <div class="dt-foot">

@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=150" />
+  <link rel="stylesheet" href="style.css?v=151" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -104,10 +104,10 @@
     }
     .hd-chk input { accent-color: var(--ww); cursor: pointer; width: 15px; height: 15px; }
     /* Deal count. Duplicated into the header on desktop (#hdHeaderStat, see
-       style.css) so this copy only matters on mobile now - kept simple rather
-       than deleted, since the mobile layout still needs somewhere to put it. */
-    .hero-count { font-size: 13px; font-weight: 600; color: var(--text-soft); margin-left: 10px; }
-    .hero-count b { color: var(--text); font-weight: 800; }
+       style.css) so this copy only matters on mobile now - it renders the same
+       .hps-pill markup, just wrapping under the title instead of sitting in a
+       header row that this page hides on phones. */
+    .hero-count { display: inline-flex; flex-wrap: wrap; gap: 6px; margin-left: 10px; }
 
     /* Row 2: the three sliders and the Show filters share one row instead of
        stacking - the sliders don't use the panel's full width on their own,
@@ -166,8 +166,11 @@
       display: grid; gap: 10px;
       grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
     }
+    /* Row 5 is the add-to-basket button; `1fr` on the "why" row pushes it to the
+       bottom of every card so the buttons line up across the row even when one
+       card's fine print runs to two lines. */
     .bws-card {
-      display: grid; grid-template-rows: 22px 36px 20px auto;
+      display: grid; grid-template-rows: 22px 36px 20px 1fr auto;
       gap: 4px; padding: 11px 12px 12px;
       border: 1px solid var(--border); border-left: 4px solid var(--border-strong);
       border-radius: var(--radius); background: var(--bg);
@@ -194,6 +197,20 @@
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .bws-why { font-size: 11.5px; color: var(--text-mid); line-height: 1.4; }
+    .bws-add {
+      margin-top: 7px; width: 100%; padding: 6px 8px;
+      font: inherit; font-size: 12px; font-weight: 700; cursor: pointer;
+      border: 1px solid var(--border-strong); border-radius: 7px;
+      background: var(--card); color: var(--text-mid);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .bws-add:hover { border-color: var(--accent); color: var(--accent); }
+    .bws-add:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    /* In-basket is a state, not an action, so it reads as a filled chip. Still
+       clickable (it removes) - the title says so. */
+    .bws-add.in {
+      background: var(--green-light); border-color: var(--green); color: #047857;
+    }
     /* Colour carries the verdict, so it must survive being the only cue. */
     .bws-card.stock { border-left-color: var(--green); }
     .bws-card.stock .bws-tag { background: var(--green-light); color: #047857; }
@@ -210,9 +227,11 @@
       .bws-grid { grid-template-columns: 1fr; }
       /* One column: names can breathe, so the fixed rows stop earning their
          keep and only cause clipping. */
-      .bws-card { grid-template-rows: auto auto auto auto; }
+      .bws-card { grid-template-rows: auto auto auto auto auto; }
       .bws-name { -webkit-line-clamp: 3; }
       .bws-head-line { white-space: normal; line-height: 1.35; }
+      /* Thumb-sized on a phone. */
+      .bws-add { padding: 9px 8px; font-size: 13px; }
     }
     @media (max-width: 700px) {
       /* Hero: centered title, two equal stat tiles */
@@ -503,9 +522,6 @@
            The staleness one had a slider for a number nobody needs to tune;
            it is fixed at HD_STALE_MONTHS and the box just turns it on or off. -->
       <div class="hd-overrides-inline">
-        <label class="hd-chk" title="A genuine new low - strictly below every price previously recorded - is worth seeing even when it misses the sliders">
-          <input type="checkbox" id="hdAtlChk"> <span>🏆 always show cheapest-ever prices</span>
-        </label>
         <label class="hd-chk" title="A price that has not moved in months is not news - it is the same row every week. Measured from the last CHANGE, so an item that swings every couple of months still qualifies.">
           <input type="checkbox" id="hdStaleChk"> <span>⏳ hide prices frozen 3+ months</span>
         </label>
@@ -644,7 +660,7 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=120"></script>
+<script src="utils.js?v=121"></script>
 <script src="history-modal.js?v=3"></script>
 <script>
 if ('serviceWorker' in navigator) {
@@ -1101,20 +1117,45 @@ function renderBwsPanel(priorities, exclusions, tune) {
     exclusions, priorities, archivedSet: _archivedSet, tune,
   });
   panel.style.display = cards.length ? '' : 'none';
+  const inBasket = new Set(hdBasket().items);
+  // A div, not a button: it now CONTAINS a button (add to basket), and a button
+  // inside a button is invalid and swallows the inner click in some browsers.
+  // role/tabindex/keydown keep the whole-card "open history" affordance working
+  // for the keyboard, which the native <button> gave for free.
   grid.innerHTML = cards.map(c => {
+    const name = c.item.list_item;
     const chip = c.store === 'coles'
       ? '<span class="store-chip coles sm">C</span>' : '<span class="store-chip ww sm">W</span>';
-    return `<button type="button" class="bws-card ${c.verdict}" data-item="${escAttr(c.item.list_item)}"
-                    title="Open the price history for ${escAttr(shortName(c.item.list_item))}">
+    const has = inBasket.has(name);
+    return `<div class="bws-card ${c.verdict}" data-item="${escAttr(name)}"
+                 role="button" tabindex="0"
+                 title="Open the price history for ${escAttr(shortName(name))}">
       <span class="bws-top">
         <span class="bws-tag">${BWS_TAG[c.verdict]}</span>
         <span class="bws-price">${chip}${fmt(c.price)}</span>
       </span>
-      <span class="bws-name">${esc(shortName(c.item.list_item))}</span>
+      <span class="bws-name">${esc(shortName(name))}</span>
       <span class="bws-head-line">${esc(c.headline)}</span>
       <span class="bws-why">${esc(c.why)}</span>
-    </button>`;
+      <button type="button" class="bws-add${has ? ' in' : ''}" data-add="${escAttr(name)}"
+              title="${has ? 'Remove from basket' : 'Add to basket'}">
+        ${has ? '✓ In basket' : '＋ Add to basket'}
+      </button>
+    </div>`;
   }).join('');
+}
+
+// Repaint just the add buttons, without rebuilding the panel. renderBwsPanel is
+// memoised on the tune/data and would no-op here, and re-rendering the whole
+// grid on every add would be a lot of DOM for one label change.
+function syncBwsAddButtons() {
+  const inBasket = new Set(hdBasket().items);
+  document.querySelectorAll('.bws-add').forEach(btn => {
+    const has = inBasket.has(btn.dataset.add);
+    btn.classList.toggle('in', has);
+    btn.textContent = has ? '✓ In basket' : '＋ Add to basket';
+    btn.title = has ? 'Remove from basket' : 'Add to basket';
+  });
 }
 
 function renderDeals() {
@@ -1142,7 +1183,6 @@ function renderDeals() {
     minStoreDiffPct: tune.diff,
     minRankPct: tune.rank,
     maxStaleMonths: tune.stale,
-    includeATL: tune.atl,
     mode: tune.mode,
   });
 
@@ -1171,15 +1211,20 @@ function renderDeals() {
   // 700px). Same string either way; only the surrounding chrome differs.
   const allTimeLowCount = filtered.filter(({ deal }) => deal.isAllTimeLow).length;
   const showingAll = filtered.length === allDeals.length;
-  const heroHtml =
-    `<b>${showingAll ? allDeals.length : `${filtered.length} / ${allDeals.length}`}</b> deal`
-    + `${(showingAll ? allDeals.length : filtered.length) === 1 ? '' : 's'}`
-    + (allTimeLowCount ? ` &middot; <b>${allTimeLowCount}</b> cheapest-ever 🏆` : '')
-    + ` &middot; of ${scoreableCount} with enough history`;
-  const heroEl = document.getElementById('heroStats');
-  if (heroEl) heroEl.innerHTML = heroHtml;
+  const shownCount = showingAll ? allDeals.length : filtered.length;
+  const dealsLabel = showingAll ? `${allDeals.length}` : `${filtered.length} / ${allDeals.length}`;
+  const pills =
+    `<span class="hps-pill" title="Deals shown at your current filters"><b>${dealsLabel}</b> deal${shownCount === 1 ? '' : 's'}</span>`
+    + (allTimeLowCount
+        ? `<span class="hps-pill atl" title="At their lowest price ever recorded"><b>${allTimeLowCount}</b> cheapest ever</span>`
+        : '')
+    + `<span class="hps-pill" title="Items with enough recorded price history to judge. The rest were never candidates."><b>${scoreableCount}</b> scored</span>`;
   const headerStatEl = document.getElementById('hdHeaderStat');
-  if (headerStatEl) headerStatEl.innerHTML = `🔥 Hot Deals &middot; ${heroHtml}`;
+  if (headerStatEl) headerStatEl.innerHTML = `<span class="hps-title">🔥 Hot Deals</span>${pills}`;
+  // Mobile copy: the header is hidden on this page below 700px, so the page
+  // body carries the same pills under the title instead.
+  const heroEl = document.getElementById('heroStats');
+  if (heroEl) heroEl.innerHTML = pills;
 
   // Update sort headers
   const thead = document.getElementById('dealsHead');
@@ -1351,6 +1396,10 @@ function hdBasket() {
 function hdBasketSave(b) {
   localStorage.setItem('pw_sl_handoff', JSON.stringify(b));
   window.pwSyncBasketBadge?.();   // header.js - basket count on the 🛒 nav icon
+  // Every basket write repaints the panel's buttons, so an item added from the
+  // table's bulk bar immediately reads "✓ In basket" on its card too. Doing it
+  // here rather than at each call site means a new caller cannot forget.
+  syncBwsAddButtons();
 }
 
 // Cart badge (🛒 (n), bottom right) - same behaviour as the prices page: shows
@@ -1580,7 +1629,6 @@ function initDealTune() {
   const diffS = document.getElementById('hdDiffSlider');
   const rankS = document.getElementById('hdRankSlider');
   const staleC = document.getElementById('hdStaleChk');
-  const atl   = document.getElementById('hdAtlChk');
   const modeB = document.getElementById('hdModeBtn');
   const reset = document.getElementById('hdTuneReset');
   if (!dropS || !diffS) return;
@@ -1588,7 +1636,6 @@ function initDealTune() {
   const sync = (t) => {
     dropS.value = t.drop;
     diffS.value = t.diff;
-    if (atl) atl.checked = t.atl !== false;
     mode = t.mode === 'or' ? 'or' : 'and';
     if (modeB) {
       // Says what it does, not which boolean operator it is.
@@ -1612,7 +1659,7 @@ function initDealTune() {
                 rank: rankS ? Number(rankS.value) : 0,
                 // Fixed period, not a tunable number - the box is on/off.
                 stale: (staleC ? staleC.checked : true) ? HD_STALE_MONTHS : 0,
-                atl: atl ? atl.checked : true, mode };
+                mode };
     localStorage.setItem('pw_hd_tune_v1', JSON.stringify(t));
     sync(t);
     renderDeals();
@@ -1621,7 +1668,6 @@ function initDealTune() {
   diffS.addEventListener('input', onInput);
   rankS?.addEventListener('input', onInput);
   staleC?.addEventListener('change', onInput);
-  atl?.addEventListener('change', onInput);
   modeB?.addEventListener('click', () => { mode = mode === 'or' ? 'and' : 'or'; onInput(); });
   reset?.addEventListener('click', () => {
     localStorage.removeItem('pw_hd_tune_v1');
@@ -1851,14 +1897,39 @@ async function pollForCompletionHD(user, repo, token, dispatchedAt) {
     if (wb) { e.stopPropagation(); toggleWatchlistHD(wb.dataset.item); return; }
   });
 
-  // A card makes a claim about this item's own price record, so the one thing
-  // worth clicking through to is that record. Opens the same history chart the
-  // table rows use, rather than inventing a second way to show the same data.
-  document.getElementById('bwsGrid')?.addEventListener('click', (e) => {
+  // Two targets per card: the ＋ button adds/removes from the basket, anywhere
+  // else opens the price history. A card makes a claim about this item's own
+  // record, so the record is the one thing worth clicking through to - it opens
+  // the same chart the table rows use rather than inventing a second view.
+  const bwsGrid = document.getElementById('bwsGrid');
+  bwsGrid?.addEventListener('click', (e) => {
+    const add = e.target.closest('.bws-add');
+    if (add) {
+      e.stopPropagation();
+      const name = add.dataset.add;
+      const b = hdBasket();
+      const at = b.items.indexOf(name);
+      if (at === -1) { b.items.push(name); b.quantities[name] = 1; }
+      else { b.items.splice(at, 1); delete b.quantities[name]; }
+      hdBasketSave(b);
+      syncBwsAddButtons();
+      updateHdFab();
+      hdToast(at === -1 ? `🛒 Added - ${b.items.length} in basket`
+                        : `✕ Removed - ${b.items.length} in basket`);
+      return;
+    }
     const card = e.target.closest('.bws-card');
     if (!card) return;
     const item = _data?.items.find(i => i.list_item === card.dataset.item);
     if (item) openPriceHistoryModal(item);
+  });
+  // The card is a div now, so Enter/Space have to be wired by hand.
+  bwsGrid?.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const card = e.target.closest('.bws-card');
+    if (!card || e.target.closest('.bws-add')) return;   // the button handles its own keys
+    e.preventDefault();
+    card.click();
   });
 
   // Mobile deal cards - watch toggle, and tap-anywhere-else to add/remove from
