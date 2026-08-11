@@ -2040,7 +2040,16 @@ function bwsAgo(days) {
 
 // One item -> at most one card, or null. `today` is injectable so the self-check
 // can pin a date instead of racing the clock.
-function bwsVerdict(item, deal, series, tune, today) {
+// `rate` is {scale, unit}: multiply every dollar figure by scale and suffix the
+// unit. It is injected rather than computed here because deciding whether an
+// item HAS a meaningful per-kg rate needs the variant-group config, which lives
+// in the page. Passing it in keeps this function pure and means the card and
+// the history chart it opens are driven by the same decision - they diverged
+// once already (card $18, chart $45.00/kg) and that is the bug this prevents.
+function bwsVerdict(item, deal, series, tune, today, rate) {
+  const _s = (rate && rate.scale) || 1;
+  const _u = (rate && rate.unit) || '';
+  const money = (v) => fmt(v * _s) + _u;
   if (deal.typical == null || !(deal.price > 0)) return null;
   const past = series.filter(p => !p.date || p.date < today);
   if (past.length < BWS_MIN_HISTORY) return null;
@@ -2066,18 +2075,18 @@ function bwsVerdict(item, deal, series, tune, today) {
   // STOCK UP - near its own floor, and it will still be good when you get to it.
   if (plausible && deal.pricePercentile >= BWS_STOCK_RANK && deal.saveAmount >= BWS_MIN_STAKE && keeps) {
     return {
-      verdict: 'stock', order: 0, price: cur, store: deal.store, tied: deal.tied,
+      verdict: 'stock', order: 0, price: cur, store: deal.store, tied: deal.tied, rate: { scale: _s, unit: _u },
       stake: deal.saveAmount,
       headline: lastAsCheap ? `Cheapest in ${bwsAgo(daysSince).replace(' ago', '')}` : 'Cheapest ever recorded',
-      why: `${fmt(cur)} now vs ${fmt(deal.typical)} usual. Keeps, so buy for the month.`,
+      why: `${money(cur)} now vs ${money(deal.typical)} usual. Keeps, so buy for the month.`,
     };
   }
   // BUY - passes the filters you set for this page, and the saving is real money.
   if (plausible && dealPassesTune(deal, tune) && deal.saveAmount >= BWS_MIN_STAKE) {
     return {
-      verdict: 'buy', order: 1, price: cur, store: deal.store, tied: deal.tied,
+      verdict: 'buy', order: 1, price: cur, store: deal.store, tied: deal.tied, rate: { scale: _s, unit: _u },
       stake: deal.saveAmount,
-      headline: `${fmt(deal.saveAmount)} below its usual ${fmt(deal.typical)}`,
+      headline: `${money(deal.saveAmount)} below its usual ${money(deal.typical)}`,
       why: lastAsCheap ? `Last this cheap ${bwsAgo(daysSince)}.`
                        : 'Never been recorded cheaper.',
     };
@@ -2095,10 +2104,10 @@ function bwsVerdict(item, deal, series, tune, today) {
       && cur >= best.price * (1 + BWS_WAIT_GAP) && cur - best.price >= BWS_MIN_STAKE) {
     const ago = Math.round((Date.parse(today) - Date.parse(best.date)) / 86400000);
     return {
-      verdict: 'wait', order: 2, price: cur, store: deal.store, tied: deal.tied,
+      verdict: 'wait', order: 2, price: cur, store: deal.store, tied: deal.tied, rate: { scale: _s, unit: _u },
       stake: cur - best.price,
-      headline: `Was ${fmt(best.price)} ${bwsAgo(ago)}`,
-      why: `${fmt(cur)} today is dearer than ${100 - rankPct}% of its recorded prices.`,
+      headline: `Was ${money(best.price)} ${bwsAgo(ago)}`,
+      why: `${money(cur)} today is dearer than ${100 - rankPct}% of its recorded prices.`,
     };
   }
   return null;
@@ -2257,13 +2266,16 @@ function buyWaitCards(items, opts) {
   const priorities  = opts.priorities  || {};
   const tune        = opts.tune || loadDealTune();
   const today       = opts.today || new Date().toISOString().slice(0, 10);
+  // (item, store) -> {scale, unit}. Default: pack prices, exactly as before.
+  const rateFor     = opts.rateFor || (() => ({ scale: 1, unit: '' }));
 
   const cards = [];
   for (const item of items || []) {
     if (item.archived || item._isGroup) continue;   // group rows price in $/kg; mixing units in a decision panel misleads
     if (priorities[item.list_item] === 'archive' || archivedSet.has(item.list_item)) continue;
     const deal = getDealQuality(item, exclusions);
-    const card = bwsVerdict(item, deal, bwsSeries(item, exclusions), tune, today);
+    const card = bwsVerdict(item, deal, bwsSeries(item, exclusions), tune, today,
+                            rateFor(item, deal.store));
     if (!card) continue;
     card.item = item;
     card.score = card.stake * (1 + Math.min(item.trip_count || 0, 12));

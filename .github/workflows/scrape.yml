@@ -131,6 +131,22 @@ jobs:
         uses: actions/checkout@v4
         continue-on-error: true
 
+      # actions/checkout pins BOTH jobs to the SHA that triggered the workflow,
+      # so this job starts from the repo as it was BEFORE the main scrape ran -
+      # it cannot see the "chore: update prices" commit the scrape job just
+      # pushed. The archived scraper then appended its run to a stale
+      # scrape_log.json, and the `git pull -X ours` below resolved the conflict
+      # in favour of that stale copy. Net effect: every main run's log entry was
+      # silently erased by the archived sweep that followed it. From 2026-08-08
+      # the log showed nothing but 36-item, 2-minute archived rows, while the
+      # real runs (293 items, 16m47s on 2026-08-11) were written, committed,
+      # pushed, and then overwritten three minutes later.
+      # The tree is a fresh checkout here, so there is nothing local to lose.
+      - name: Sync to the main scrape's results
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
       - name: Install dependencies
         run: '"%PYTHON%" -m pip install -r requirements.txt >NUL 2>&1'
         continue-on-error: true

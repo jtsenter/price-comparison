@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>⚠️ Validate Prices - PriceWatch</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="style.css?v=152" />
+  <link rel="stylesheet" href="style.css?v=153" />
   <style>
     /* ── Validate page overrides ── */
     .validate-hero {
@@ -103,6 +103,12 @@
       background: var(--bg); color: var(--text-soft); border: 1px solid var(--border);
       white-space: nowrap;
     }
+    .validate-hist-btn {
+      font: inherit; font-size: 11.5px; font-weight: 700; cursor: pointer;
+      border: 1px solid var(--border-strong); border-radius: 7px;
+      background: var(--card); color: var(--text-mid); padding: 3px 9px; white-space: nowrap;
+    }
+    .validate-hist-btn:hover { border-color: var(--accent); color: var(--accent); }
     .validate-archive-btn {
       font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
       background: var(--card); color: var(--text-mid); border: 1px solid var(--border-strong);
@@ -263,7 +269,14 @@
 <body>
 
 <header data-page="validate"></header>
-<script src="header.js?v=23"></script>
+<script src="header.js?v=24"></script>
+<!-- The price history the flagged price should be judged against. This page
+     asks "is this new price real?" and the answer is in the item's own
+     record, so the record has to be one click away. Reuses the shared modal
+     rather than growing a second chart here. -->
+<script src="name_map.js?v=55"></script>
+<script src="utils.js?v=123"></script>
+<script src="history-modal.js?v=5"></script>
 
 <div class="notif-dropdown" id="notifDropdown" style="display:none">
   <div class="notif-header">
@@ -319,10 +332,20 @@ function loadSettings() {
   };
 }
 
+// utils.js also declares loadSettings(), with the real repo as its default.
+// This page's copy is declared LATER (its <script> follows utils.js), so this
+// one wins - deliberately: an unset user/repo must read as empty here, which is
+// how the page decides between the Contents API and the Pages copy.
+
+// The history modal reads the per-item excluded-price map. Same key and shape
+// as the other pages; this page only ever reads it.
+function loadExclusions() {
+  try { return JSON.parse(localStorage.getItem('pw_exclusions_v1') || '{}'); } catch { return {}; }
+}
+
 function fmtPrice(p) {
   if (p == null) return '-';
-  // Grouped thousands, matching utils.js fmt(). This page is the one that
-  // doesn't load utils.js, so it keeps its own copy.
+  // Grouped thousands, matching utils.js fmt().
   return '$' + Number(p).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
@@ -1038,7 +1061,7 @@ function renderEntry(entry) {
           <div class="validate-meta">Flagged ${date}</div>
         </div>
       </div>
-      <div class="validate-reasons">${reasonsHtml}${
+      <div class="validate-reasons">${reasonsHtml}<button class="validate-hist-btn" type="button" title="See every price recorded for this product">📈 History</button>${
         (_archivedSet.has(entry.item) || _itemData?.archived === true)
           ? '<span class="validate-archived-badge">📦 Archived</span>'
           : '<button class="validate-archive-btn" type="button">📦 Archive</button>'
@@ -1048,6 +1071,12 @@ function renderEntry(entry) {
       ${buildStoreCol(entry, 'ww',    entry.ww_suspicious,    entry.ww_price,    entry.ww_prev_price,    entry.ww_url)}
       ${buildStoreCol(entry, 'coles', entry.coles_suspicious, entry.coles_price, entry.coles_prev_price, entry.coles_url)}
     </div>`;
+
+  card.querySelector('.validate-hist-btn')?.addEventListener('click', () => {
+    const it = _latestData?.items?.find(i => i.list_item === entry.item);
+    if (it) openPriceHistoryModal(it);
+    else alert('No price history recorded for this product yet.');
+  });
 
   // Wire up action buttons
   card.querySelectorAll('.validate-actions .btn').forEach(btn => {
@@ -1206,6 +1235,14 @@ async function recheckAll() {
     });
   } catch {}
 })();
+
+// Price-history modal, read-only: this page judges a flagged price, it does not
+// own the exclusion write path. Standalone so it initialises on every load, not
+// only when the name-change notifier above happens to run to completion.
+initHistoryModal({
+  getItems: () => _latestData?.items || [],
+  editable: false,
+});
 </script>
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab">

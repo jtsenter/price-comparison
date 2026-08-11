@@ -159,9 +159,13 @@
       '<span id="scrapeStripLabel" class="scrape-strip-label">Scraping…</span>' +
       '<div class="scrape-strip-track"><div class="scrape-strip-fill" id="scrapeStripFill" style="width:0%"></div></div>' +
       '<span id="scrapeStripPct" class="scrape-strip-pct">0%</span>' +
-      // Retry dispatches a fresh scrape - owner only. The rest of the strip is
-      // read-only status, so viewers still see a run in progress.
-      (viewer ? '' : '<button id="scrapeStripRetry" class="scrape-strip-retry" style="display:none" title="Trigger a new scrape run">↺ Retry</button>') +
+      // Retry dispatches a fresh scrape, so it lives ONLY on the main page -
+      // the one place that owns starting a scrape. Every other page shows the
+      // strip as read-only status; a scrape trigger scattered across four pages
+      // is four ways to start an 18-minute job by accident. Viewers never get
+      // it anywhere.
+      ((viewer || page !== 'index') ? ''
+        : '<button id="scrapeStripRetry" class="scrape-strip-retry" style="display:none" title="Trigger a new scrape run">↺ Retry</button>') +
       '<button id="scrapeStripDismiss" class="scrape-strip-dismiss" title="Dismiss">✕</button>' +
     '</div>' +
     /* What actually changed in the last run. Sits directly under the strip and

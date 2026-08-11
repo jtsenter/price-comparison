@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=152" />
+  <link rel="stylesheet" href="style.css?v=153" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -504,7 +504,7 @@
 <body>
 
 <header data-page="hot-deals"></header>
-<script src="header.js?v=23"></script>
+<script src="header.js?v=24"></script>
 
 <div class="deals-hero">
   <div class="deals-hero-title">🔥 Hot Deals<span class="hero-count" id="heroStats"></span></div>
@@ -659,8 +659,8 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=122"></script>
-<script src="history-modal.js?v=4"></script>
+<script src="utils.js?v=123"></script>
+<script src="history-modal.js?v=5"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -1120,6 +1120,15 @@ function renderBwsPanel(priorities, exclusions, tune) {
   _bwsKey = key;
   const cards = buyWaitCards(_data.items, {
     exclusions, priorities, archivedSet: _archivedSet, tune,
+    // Per kilo wherever the item HAS a meaningful kilo rate - that is the
+    // number that actually compares two products. histKgRatios is the same
+    // predicate the price-history modal uses to decide, so a card and the chart
+    // it opens can never quote different units for the same product again.
+    rateFor: (item, store) => {
+      const kg = histKgRatios(item);
+      const r = store === 'coles' ? kg.coles : kg.ww;
+      return (kg.perKg && r > 0) ? { scale: r, unit: '/kg' } : { scale: 1, unit: '' };
+    },
   });
   panel.style.display = cards.length ? '' : 'none';
   const inBasket = new Set(hdBasket().items);
@@ -1140,7 +1149,7 @@ function renderBwsPanel(priorities, exclusions, tune) {
                  title="Open the price history for ${escAttr(shortName(name))}">
       <span class="bws-top">
         <span class="bws-tag">${BWS_TAG[c.verdict]}</span>
-        <span class="bws-price">${chip}${fmt(c.price)}</span>
+        <span class="bws-price">${chip}${fmt(c.price * c.rate.scale)}${c.rate.unit}</span>
       </span>
       <span class="bws-name">${esc(shortName(name))}</span>
       <span class="bws-head-line">${esc(c.headline)}</span>
@@ -1197,13 +1206,6 @@ function renderDeals() {
   buildCategoryTabs(allDeals.map(d => d.item));
   renderBwsPanel(priorities, exclusions, tune);
 
-  // Live count beside Reset: drag a slider and see the effect without going and
-  // counting the table. Deliberately "of N scoreable", not "of 290" - items with
-  // too little history to judge were never candidates.
-  // Denominator for the title's count: items with enough history to judge, not
-  // all 290 - the rest were never candidates, so counting them flatters nothing.
-  const scoreableCount = dealPool.filter(i => getDealQuality(i, exclusions).typical != null).length;
-
   const filtered = filterDeals(allDeals, exclusions);
   const sorted = sortDeals(filtered.map(d => d.item), exclusions);
   // Remember what's on screen - the basket header icon hands THESE off, so
@@ -1225,8 +1227,7 @@ function renderDeals() {
     `<span class="hps-pill" title="Deals shown at your current filters"><b>${dealsLabel}</b> deal${shownCount === 1 ? '' : 's'}</span>`
     + (allTimeLowCount
         ? `<span class="hps-pill atl" title="At their lowest price ever recorded"><b>${allTimeLowCount}</b> cheapest ever</span>`
-        : '')
-    + `<span class="hps-pill" title="Products with enough recorded price history to judge a deal. Items with fewer than two recorded prices can't be compared to anything, so they were never candidates."><b>${scoreableCount}</b> products checked</span>`;
+        : '');
   const headerStatEl = document.getElementById('hdHeaderStat');
   if (headerStatEl) headerStatEl.innerHTML = `<span class="hps-title">🔥 Hot Deals</span>${pills}`;
   // Mobile copy: the header is hidden on this page below 700px, so the page
@@ -1766,124 +1767,10 @@ function renderScrapeStrip(data) {
   }
 }
 
-// ── Update Prices button ──────────────────────────────────────────────────────
-
-let _hdRefreshCooldown = false;
-
-async function triggerRefreshHD() {
-  const user  = localStorage.getItem('gh_user') || '';
-  const repo  = localStorage.getItem('gh_repo') || '';
-  const token = localStorage.getItem('gh_token') || '';
-  if (!user || !repo || !token) {
-    alert('Please configure GitHub settings on the main page (Auto-update Setup) first.');
-    return;
-  }
-  if (_hdRefreshCooldown) return;
-
-  const btn = document.getElementById('refreshBtn');
-  if (btn) { btn.disabled = true; btn.innerHTML = 'Checking…'; }
-
-  // Pre-flight: confirm the self-hosted runner is online before dispatching
-  try {
-    const rr = await fetch(`https://api.github.com/repos/${user}/${repo}/actions/runners`,
-      { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' } });
-    if (rr.ok) {
-      const rd = await rr.json();
-      const selfHosted = (rd.runners || []).filter(r => r.labels?.some(l => l.name === 'self-hosted'));
-      const anyOnline = selfHosted.length > 0 && selfHosted.some(r => r.status === 'online');
-      if (!anyOnline) {
-        alert('⚠️ Scraper is offline - the Windows runner is not connected. Prices cannot be updated until it restarts.');
-        if (btn) { btn.disabled = false; btn.innerHTML = '↻ Update Prices'; }
-        return;
-      }
-    }
-  } catch (_) { /* fail open - proceed with dispatch on network error */ }
-
-  if (btn) btn.innerHTML = 'Triggering…';
-
-  let res;
-  try {
-    res = await fetch(`https://api.github.com/repos/${user}/${repo}/actions/workflows/scrape.yml/dispatches`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ref: 'main' }),
-    });
-  } catch (e) {
-    alert(`Network error: ${e.message}`);
-    if (btn) { btn.disabled = false; btn.innerHTML = '↻ Update Prices'; }
-    return;
-  }
-
-  if (res.status === 204) {
-    _progressDismissed = false;
-    const strip = document.getElementById('scrapeStrip');
-    if (strip) {
-      strip.style.display = 'flex';
-      strip.classList.remove('stale');
-      document.getElementById('scrapeStripLabel').textContent = 'Waiting for scraper to start…';
-      document.getElementById('scrapeStripFill').style.width = '0%';
-      document.getElementById('scrapeStripPct').textContent = '0%';
-      const retryBtn = document.getElementById('scrapeStripRetry');
-      if (retryBtn) retryBtn.style.display = 'none';
-    }
-    if (btn) btn.innerHTML = '✓ Triggered - polling…';
-    const dispatchedAt = new Date().toISOString();
-    pollForCompletionHD(user, repo, token, dispatchedAt);
-    _hdRefreshCooldown = true;
-    setTimeout(() => { _hdRefreshCooldown = false; }, 10 * 60 * 1000);
-  } else {
-    alert(`GitHub API error ${res.status}`);
-    if (btn) { btn.disabled = false; btn.innerHTML = '↻ Update Prices'; }
-  }
-}
-
-async function pollForCompletionHD(user, repo, token, dispatchedAt) {
-  const btn = document.getElementById('refreshBtn');
-  const apiBase = `https://api.github.com/repos/${user}/${repo}`;
-  const apiHeaders = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' };
-
-  const finish = (success) => {
-    if (success) {
-      if (btn) btn.innerHTML = '✓ Done - reloading…';
-      setTimeout(() => location.reload(), 2000);
-    } else {
-      if (btn) { btn.innerHTML = '↻ Update Prices'; btn.disabled = false; }
-    }
-  };
-
-  // Phase 1: find the run created after dispatch (~1 min timeout, 5s polling)
-  let findAttempts = 0;
-  const findRun = async () => {
-    if (++findAttempts > 12) { finish(false); return; }
-    try {
-      const r = await fetch(`${apiBase}/actions/workflows/scrape.yml/runs?per_page=10`, { headers: apiHeaders });
-      const data = await r.json();
-      const run = data.workflow_runs?.find(r => r.created_at >= dispatchedAt);
-      if (run) { setTimeout(() => waitForRun(run.id), 5000); return; }
-    } catch (_) {}
-    setTimeout(findRun, 5000);
-  };
-
-  // Phase 2: poll the specific run by ID until completion (~7.5 min max)
-  const waitForRun = async (runId) => {
-    let waitAttempts = 0;
-    const poll = async () => {
-      if (++waitAttempts > 90) { finish(false); return; }
-      try {
-        const r = await fetch(`${apiBase}/actions/runs/${runId}`, { headers: apiHeaders });
-        const run = await r.json();
-        if (run?.status === 'completed') {
-          finish(run.conclusion === 'success');
-          return;
-        }
-      } catch (_) {}
-      setTimeout(poll, 5000);
-    };
-    poll();
-  };
-
-  setTimeout(findRun, 8000);
-}
+// Scrape triggers live ONLY on the main page. This page used to carry a full
+// dispatch + poll implementation behind the strip's Retry button; the button is
+// gone (header.js renders it on index only), so the code went with it rather
+// than sitting here as a second way to start an 18-minute job.
 
 // ── Init ───────────────────────────────────────────────────────────────────────
 
@@ -1964,8 +1851,9 @@ async function pollForCompletionHD(user, repo, token, dispatchedAt) {
     const card = e.target.closest('.bws-card');
     if (!card) return;
     const item = _data?.items.find(i => i.list_item === card.dataset.item);
-    // packPrices: the card quotes the pack price, so the chart must too.
-    if (item) openPriceHistoryModal(item, { packPrices: true });
+    // No packPrices override: the chart's own per-kg decision and the card's
+    // rateFor above are the same call, so they already agree.
+    if (item) openPriceHistoryModal(item);
   });
   // The card is a div now, so Enter/Space have to be wired by hand.
   bwsGrid?.addEventListener('keydown', (e) => {
@@ -2010,10 +1898,6 @@ async function pollForCompletionHD(user, repo, token, dispatchedAt) {
   document.getElementById('scrapeStripDismiss')?.addEventListener('click', () => {
     _progressDismissed = true;
     renderScrapeStrip(_data);
-  });
-  document.getElementById('scrapeStripRetry')?.addEventListener('click', () => {
-    _progressDismissed = false;
-    triggerRefreshHD(); // the header's Update Prices button was removed; trigger directly
   });
 
   renderScrapeStrip(_data);
