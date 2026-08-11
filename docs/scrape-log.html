@@ -153,6 +153,39 @@
     @media (max-width: 480px) { .sl-tab { font-size: 11.5px; padding: 8px 4px; } .sl-tab .cnt { display: none; } }
 
     /* ── Store gap tab ───────────────────────────────────────────────────── */
+    /* ── Basket index ── */
+    .cpi-verdict { font-size: 22px; font-weight: 800; letter-spacing: -0.4px; margin: 4px 0 12px; }
+    .cpi-verdict .up { color: var(--coles); }
+    .cpi-verdict .down { color: var(--green); }
+    .cpi-verdict .flat { color: var(--text-mid); }
+    .cpi-method { font-size: 12px; color: var(--text-mid); margin-top: 12px; line-height: 1.55; }
+    .cpi-movers { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .cpi-col h3 {
+      font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+      margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border);
+    }
+    .cpi-col.up h3 { color: var(--coles); }
+    .cpi-col.down h3 { color: var(--green); }
+    /* Fixed tracks, not content-sized: the name column is the only one allowed
+       to vary, so every price pair and every delta lines up down the column. */
+    .cpi-row {
+      display: grid; grid-template-columns: minmax(0, 1fr) 122px 66px;
+      align-items: baseline; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border);
+      font-size: 12.5px;
+    }
+    .cpi-row:last-child { border-bottom: 0; }
+    .cpi-row .nm { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cpi-row .pr { color: var(--text-mid); font-variant-numeric: tabular-nums; font-size: 12px; }
+    .cpi-row .dl { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .cpi-row .dl.up { color: var(--coles); }
+    .cpi-row .dl.down { color: var(--green); }
+    .cpi-row .tc { font-size: 10.5px; color: var(--text-soft); }
+    @media (max-width: 640px) {
+      .cpi-movers { grid-template-columns: 1fr; gap: 18px; }
+      .cpi-verdict { font-size: 18px; }
+      .cpi-row { grid-template-columns: minmax(0, 1fr) 62px; row-gap: 2px; }
+      .cpi-row .pr { grid-column: 1 / -1; }
+    }
     .sg-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; }
     .sg-tile { border: 1px solid var(--border); border-radius: 11px; padding: 11px 13px; background: var(--bg); }
     .sg-tile .l { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-soft); }
@@ -322,6 +355,7 @@
   <div class="sl-tabs" role="tablist">
     <button class="sl-tab active" data-tab="changes" role="tab">Price changes <span class="cnt" id="slCntChg"></span></button>
     <button class="sl-tab" data-tab="gap" role="tab">Store gap <span class="cnt" id="slCntGap"></span></button>
+    <button class="sl-tab" data-tab="cpi" role="tab">Basket index</button>
     <button class="sl-tab" data-tab="runs" role="tab">Runs</button>
     <button class="sl-tab" data-tab="diag" role="tab">Diagnostics</button>
   </div>
@@ -343,6 +377,32 @@
         Every product priced at <strong>both</strong> stores on every date above, biggest gap first.
       </p>
       <div class="sg-items" id="sgItems"></div>
+    </div>
+  </div>
+
+  <!-- Your own inflation, from your own prices. Hidden wholesale when the data
+       cannot carry it (see personalCpi) rather than drawing a two-point line. -->
+  <div data-panel="cpi" hidden>
+    <div class="sl-card" id="cpiCard">
+      <div class="sl-card-head">
+        <h2>Your basket index</h2>
+        <span class="sl-card-sub" id="cpiSub"></span>
+      </div>
+      <div class="cpi-verdict" id="cpiVerdict"></div>
+      <div class="sg-tiles" id="cpiTiles"></div>
+      <div class="sl-chart-wrap">
+        <div class="sl-chart-tip" id="cpiTip"></div>
+        <div id="cpiChart"></div>
+      </div>
+      <p class="cpi-method" id="cpiMethod"></p>
+    </div>
+    <div class="sl-card" id="cpiMoversCard">
+      <div class="sl-card-head"><h2>What moved it</h2></div>
+      <p class="cpi-method" style="margin:2px 0 12px">
+        Ranked by how much each one shifts <em>your</em> basket: the price change times how
+        often you buy it. A 30c rise on something weekly outweighs $3 on something yearly.
+      </p>
+      <div class="cpi-movers" id="cpiMovers"></div>
     </div>
   </div>
 
@@ -433,7 +493,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=118"></script>
+<script src="utils.js?v=119"></script>
 <script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
@@ -780,6 +840,135 @@ function renderTrendChart(log) {
   svg.addEventListener('mouseleave', () => tip.classList.remove('on'));
   svg.addEventListener('touchstart', e => move(e.touches[0].clientX), { passive: true });
   svg.addEventListener('touchmove', e => move(e.touches[0].clientX), { passive: true });
+}
+
+// ── Basket index ────────────────────────────────────────────────────────────
+// The maths is personalCpi() in utils.js, with its reasoning; this only draws.
+// The tab hides itself entirely when personalCpi returns null - the honest
+// outcome when the history cannot carry a trend, and better than a chart with
+// two dots on it.
+// "May 26" reads as the 26th of May. Never abbreviate the year on a chart whose
+// x-axis is months.
+const CPI_MONTH_LABEL = (m) => {
+  const [y, mo] = m.split('-');
+  return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+mo - 1] + ' ' + y;
+};
+
+function renderCpi(items) {
+  const tabBtn = document.querySelector('.sl-tab[data-tab="cpi"]');
+  let excl = {};
+  try { excl = JSON.parse(localStorage.getItem('pw_exclusions_v1') || '{}'); } catch {}
+  const cpi = personalCpi(items, { exclusions: excl });
+  if (!cpi) {
+    if (tabBtn) tabBtn.style.display = 'none';
+    return;
+  }
+  if (tabBtn) tabBtn.style.display = '';
+
+  const pts = cpi.points;
+  const pct = cpi.changePct;
+  const dir = Math.abs(pct) < 0.5 ? 'flat' : pct > 0 ? 'up' : 'down';
+  const word = dir === 'up' ? 'dearer' : 'cheaper';
+  $('cpiVerdict').innerHTML = dir === 'flat'
+    ? `Your basket is <span class="flat">about the same</span> as in ${CPI_MONTH_LABEL(cpi.base)}`
+    : `Your basket is <span class="${dir}">${Math.abs(pct).toFixed(1)}% ${word}</span> than in ${CPI_MONTH_LABEL(cpi.base)}`;
+  $('cpiSub').textContent = `${CPI_MONTH_LABEL(cpi.base)} to ${CPI_MONTH_LABEL(cpi.latest)}`;
+
+  const monthOn = pts.length > 1
+    ? (pts[pts.length - 1].index / pts[pts.length - 2].index - 1) * 100 : 0;
+  $('cpiTiles').innerHTML = `
+    <div class="sg-tile"><div class="l">Index now</div>
+      <div class="n">${pts[pts.length - 1].index.toFixed(1)}</div>
+      <div class="s">${CPI_MONTH_LABEL(cpi.base)} = 100</div></div>
+    <div class="sg-tile"><div class="l">This month</div>
+      <div class="n">${monthOn >= 0 ? '+' : ''}${monthOn.toFixed(1)}%</div>
+      <div class="s">vs ${CPI_MONTH_LABEL(pts[pts.length - 2].month)}</div></div>
+    <div class="sg-tile"><div class="l">Products</div>
+      <div class="n">${cpi.itemsInWindow}</div>
+      <div class="s">priced in every month</div></div>`;
+
+  // Y range hugs the data but ALWAYS contains 100, so the base line stays on
+  // screen: without it a series that only ever falls would float with no anchor
+  // and a 2% drop would look like a collapse.
+  const vals = pts.map(p => p.index).concat([100]);
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  const pad = Math.max((hi - lo) * 0.25, 1.5);
+  lo -= pad; hi += pad;
+  const W = 900, H = 132, padL = 34, padR = 10, padT = 10, padB = 20;
+  const n = pts.length;
+  const x = i => padL + (n === 1 ? 0 : i * (W - padL - padR) / (n - 1));
+  const y = v => padT + (hi - v) * (H - padT - padB) / (hi - lo);
+  const path = pts.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(p.index).toFixed(1)}`).join(' ');
+  const area = `M${x(0).toFixed(1)},${y(lo).toFixed(1)} `
+    + pts.map((p, i) => `L${x(i).toFixed(1)},${y(p.index).toFixed(1)}`).join(' ')
+    + ` L${x(n - 1).toFixed(1)},${y(lo).toFixed(1)} Z`;
+  const dots = pts.map((p, i) =>
+    `<circle cx="${x(i).toFixed(1)}" cy="${y(p.index).toFixed(1)}" r="3.5" fill="var(--accent)"/>`).join('');
+  const labels = pts.map((p, i) =>
+    `<text x="${x(i).toFixed(1)}" y="${H - 6}" text-anchor="${i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'}"
+           font-size="9.5" fill="var(--text-soft)">${CPI_MONTH_LABEL(p.month)}</text>`).join('');
+  const ticks = [hi - pad / 2, 100, lo + pad / 2].map(v =>
+    `<line x1="${padL}" y1="${y(v)}" x2="${W - padR}" y2="${y(v)}"
+           stroke="var(--border)" stroke-width="1" ${Math.abs(v - 100) < 0.01 ? 'stroke-dasharray="4 3"' : ''}/>` +
+    `<text x="${padL - 6}" y="${y(v) + 3.5}" text-anchor="end" font-size="9.5" fill="var(--text-soft)">${v.toFixed(0)}</text>`
+  ).join('');
+
+  $('cpiChart').innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img"
+         aria-label="Basket price index from ${cpi.base} to ${cpi.latest}, ${cpi.base} = 100">
+      ${ticks}
+      <path d="${area}" fill="rgba(var(--accent-rgb),0.10)" stroke="none"/>
+      <path d="${path}" fill="none" stroke="var(--accent)" stroke-width="2.5"
+            stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+      ${dots}${labels}
+    </svg>`;
+
+  const svg = $('cpiChart').querySelector('svg');
+  const tip = $('cpiTip');
+  const wrap = svg.closest('.sl-chart-wrap');
+  const move = (clientX) => {
+    const box = svg.getBoundingClientRect();
+    const vx = (clientX - box.left) * W / box.width;
+    let best = 0, bestD = Infinity;
+    for (let i = 0; i < n; i++) { const d = Math.abs(x(i) - vx); if (d < bestD) { bestD = d; best = i; } }
+    const p = pts[best];
+    tip.innerHTML = `<b>${CPI_MONTH_LABEL(p.month)}</b><br>${p.index.toFixed(1)}`
+      + ` &middot; ${p.n} products`;
+    tip.classList.add('on');
+    const wb = wrap.getBoundingClientRect();
+    const px = box.left - wb.left + x(best) * box.width / W;
+    tip.style.left = Math.max(0, Math.min(px - tip.offsetWidth / 2, wb.width - tip.offsetWidth)) + 'px';
+    tip.style.top = '0px';
+  };
+  svg.addEventListener('mousemove', e => move(e.clientX));
+  svg.addEventListener('mouseleave', () => tip.classList.remove('on'));
+  svg.addEventListener('touchstart', e => move(e.touches[0].clientX), { passive: true });
+  svg.addEventListener('touchmove', e => move(e.touches[0].clientX), { passive: true });
+
+  // Say plainly where the series starts and why it does not go further back.
+  // Nobody should have to guess whether a 4-month chart means 4 months of data
+  // or a bug.
+  $('cpiMethod').innerHTML =
+    `Each month is compared only against products priced in <em>both</em> months, and the `
+    + `comparisons are chained together - so the line tracks prices, not which products `
+    + `happened to be recorded. Weighted by how often you buy each one. `
+    + `${cpi.monthsAvailable} months hold prices, but the series starts at `
+    + `${CPI_MONTH_LABEL(cpi.base)}: earlier months are receipt prices covering too little `
+    + `of the basket to compare honestly against daily two-store scrapes.`;
+
+  const row = (m, cls) => `
+    <div class="cpi-row">
+      <span class="nm" title="${escapeHtml(m.item.list_item)}">${escapeHtml(shortName(m.item.list_item))}</span>
+      <span class="pr">${fmt(m.from)} &rarr; ${fmt(m.to)} <span class="tc">&middot; ${m.item.trip_count}x</span></span>
+      <span class="dl ${cls}">${m.diff > 0 ? '+' : '-'}${fmt(Math.abs(m.diff)).slice(1)}</span>
+    </div>`;
+  const col = (title, list, cls, empty) => `
+    <div class="cpi-col ${cls}"><h3>${title}</h3>
+      ${list.length ? list.map(m => row(m, cls)).join('') : `<div class="cpi-row"><span class="nm" style="color:var(--text-soft);font-weight:500">${empty}</span></div>`}
+    </div>`;
+  $('cpiMovers').innerHTML =
+    col('Dearer', cpi.up, 'up', 'Nothing went up') +
+    col('Cheaper', cpi.down, 'down', 'Nothing came down');
 }
 
 // ── Price change archive (uncapped, from price_changes.json) ─────────────────
@@ -1532,6 +1721,11 @@ async function load() {
   renderChronicMisses(log);
   renderWishlist();
   renderChangeArchive(changes);
+  // Its own try: a fault in the index must not take the rest of the page down
+  // with it - this tab is the newest thing here and the least load-bearing.
+  try { renderCpi(items); }
+  catch (e) { console.error('basket index failed', e);
+              document.querySelector('.sl-tab[data-tab="cpi"]')?.style.setProperty('display', 'none'); }
 
   if (!log.length) {
     runsEl.innerHTML = '<div class="sl-empty-state">No scrape runs logged yet.</div>';
