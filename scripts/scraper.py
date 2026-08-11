@@ -207,6 +207,44 @@ def _append_scrape_log(trigger: str, scraped: int, ww_missed: list, coles_missed
         log.pop()
     if partial:
         entry["partial"] = True
+
+    # ONE ROW PER PIPELINE. The archived sweep is a phase of the run above it,
+    # not a run of its own, so it folds into that row instead of appending a
+    # second one that reads like a 36-item scrape that took two minutes.
+    # Straight addition is safe here only because the overlap was removed at
+    # source (see the scrape_archived branch): this phase now scrapes strictly
+    # what the main phase did not.
+    head = _pipeline_head() if (trigger == "scrape_archived" and not partial) else None
+    if head and log and log[-1] is not None and log[-1].get("date") == head.get("date"):
+        tgt = log[-1]
+        tgt["scraped"] = int(tgt.get("scraped") or 0) + scraped
+        tgt["ww_missed"] = sorted((tgt.get("ww_missed") or []) + ww_missed,
+                                  key=lambda e: e.get("item", ""))
+        tgt["coles_missed"] = sorted((tgt.get("coles_missed") or []) + coles_missed,
+                                     key=lambda e: e.get("item", ""))
+        if ww_attempted is not None:
+            tgt["ww_attempted"] = int(tgt.get("ww_attempted") or 0) + ww_attempted
+        if coles_attempted is not None:
+            tgt["coles_attempted"] = int(tgt.get("coles_attempted") or 0) + coles_attempted
+        if archived is not None:
+            tgt["archived"] = int(tgt.get("archived") or 0) + archived
+        if duration_s is not None:
+            tgt["duration_s"] = round(float(tgt.get("duration_s") or 0) + duration_s, 1)
+        # Per-store seconds accumulate across phases too, or the "which store is
+        # slow" reading would silently exclude the sweep.
+        if any(_STORE_CALLS.values()):
+            st = tgt.setdefault("store_time", {"ww_s": 0, "ww_calls": 0, "coles_s": 0, "coles_calls": 0})
+            st["ww_s"] = round(st.get("ww_s", 0) + _STORE_TIME["ww"], 1)
+            st["ww_calls"] = st.get("ww_calls", 0) + _STORE_CALLS["ww"]
+            st["coles_s"] = round(st.get("coles_s", 0) + _STORE_TIME["coles"], 1)
+            st["coles_calls"] = st.get("coles_calls", 0) + _STORE_CALLS["coles"]
+        # `date` stays the pipeline's START. duration_s already says how long the
+        # whole thing took, and moving the date would make the row sort as if the
+        # run happened when its last phase finished.
+        with open(path, "w") as f:
+            json.dump(log[-SCRAPE_LOG_MAX:], f, separators=(",", ":"))
+        return
+
     log.append(entry)
     log = log[-SCRAPE_LOG_MAX:]
     with open(path, "w") as f:
@@ -1259,22 +1297,39 @@ def _build_output(items: list, not_found: list, trigger: str, progress: dict | N
 _PROG_OFFSET = 0   # items an earlier phase of this pipeline already covered
 _PROG_EXTRA  = 0   # items a LATER phase will still cover after this one
 
-def _pipeline_offset() -> int:
-    """The main run's item total, IF the last logged run was a recent full one.
+def _pipeline_head() -> dict | None:
+    """The main run's log entry, IF this process is the second phase of the same
+    pipeline that just wrote it.
 
-    Used by the scrape_archived phase to continue the bar instead of restarting
-    it. Anything unexpected (no log, stale entry, retry/archived trigger, or a
-    log written before `total` existed) returns 0 - which is exactly the old
-    per-phase behaviour, so this can only ever degrade to the status quo."""
+    ONE definition of "same pipeline", used by three things that must agree: the
+    progress bar's offset, whether the archived sweep re-scrapes what the main
+    run already did, and whether its results merge into the main row or start a
+    new one. When they disagreed the bar restarted at 0% and the log grew a
+    second row - the two symptoms are the same question answered twice.
+
+    Anything unexpected (no log, stale entry, retry/archived trigger, or a log
+    written before `total` existed) returns None, i.e. treat this as a standalone
+    archived run - which is exactly the old per-phase behaviour."""
     try:
         with open(os.path.join(DATA_DIR, "scrape_log.json")) as f:
             last = (json.load(f) or [])[-1]
         if last.get("trigger") not in ("scheduled", "manual"):
-            return 0
+            return None
+        if last.get("partial"):
+            return None
         age = datetime.now(timezone.utc) - datetime.fromisoformat(last["date"])
         if age.total_seconds() > 3 * 3600:
-            return 0
-        return int(last.get("total") or 0)
+            return None
+        return last
+    except Exception:
+        return None
+
+
+def _pipeline_offset() -> int:
+    """Items the main phase already covered, for the archived phase's bar."""
+    head = _pipeline_head()
+    try:
+        return int((head or {}).get("total") or 0)
     except Exception:
         return 0
 
@@ -2097,7 +2152,36 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             print(f"Single-item refresh: {single_item}" + (f" [WW URL]" if ww_url else "") + (f" [Coles URL]" if coles_url else ""))
     elif trigger == "scrape_archived":
         shopping_list = sorted(archived_set)
+        # A MANUAL full run scrapes archived items too (should_skip_item exempts
+        # `manual`), so as the second phase of that pipeline this sweep was
+        # re-fetching 36 products whose prices had just been read - 72 redundant
+        # store requests against the rate limiter this scraper already fights,
+        # and the reason the two phases' item counts could not simply be added
+        # into one log row. Drop anything the main phase covered; on a SCHEDULED
+        # run it skipped stale-gated archived items, so those still get done.
+        _head = _pipeline_head()
+        if _head:
+            try:
+                _cut = datetime.fromisoformat(_head["date"]) - timedelta(hours=3)
+                with open(os.path.join(DATA_DIR, "latest.json")) as _f:
+                    _prev = {i["list_item"]: i for i in (json.load(_f).get("items") or [])}
+                _before = len(shopping_list)
+                shopping_list = [
+                    n for n in shopping_list
+                    if not (_prev.get(n, {}).get("last_scraped")
+                            and datetime.fromisoformat(_prev[n]["last_scraped"]) >= _cut)
+                ]
+                if _before != len(shopping_list):
+                    print(f"Archived sweep: {_before - len(shopping_list)} of {_before} already "
+                          f"covered by this pipeline's main run - scraping {len(shopping_list)}.")
+            except Exception as _e:
+                print(f"  [warn] archived overlap check failed, scraping all: {_e}")
         print(f"Archived-only scrape: {len(shopping_list)} items")
+        if not shopping_list:
+            # Everything was already done moments ago. Nothing to scrape, nothing
+            # to log - the main row already accounts for these items.
+            print("Nothing left for the archived sweep; the main run covered it all.")
+            return
     elif trigger == "retry_misses":
         # Re-scrape ONLY what the most recent logged run failed to match, at
         # either store. Dispatched by the ↻ next to the latest run's miss count
@@ -2354,7 +2438,13 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             if trigger == "scrape_archived":
                 _PROG_OFFSET = _pipeline_offset()
             elif not single_item and trigger != "retry_misses":
-                _PROG_EXTRA = len(archived_set)
+                # Only the archived items THIS run is not already doing. A manual
+                # run scrapes the archived list itself, so advertising all 36 as
+                # a coming second phase left the bar stranded at ~89% - it can
+                # never reach the tail it just absorbed. On a scheduled run the
+                # stale-gated ones really are still to come, and still count.
+                _covered = set(to_scrape) | {i["list_item"] for i in fresh_items}
+                _PROG_EXTRA = len([n for n in archived_set if n not in _covered])
             if skipped:
                 print(f"Skipping {skipped} recently-scraped items. Scraping {total_to_scrape} items.")
 

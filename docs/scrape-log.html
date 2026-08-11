@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=153" />
+  <link rel="stylesheet" href="style.css?v=154" />
   <style>
     .sl-main { max-width: 960px; margin: 0 auto; padding: 20px 24px 60px; }
 
@@ -629,6 +629,14 @@ function attempted(run, store) {
 // meaningless as a health signal - 40% there is a good result, 40% on a full run
 // is a rate-ban. Kept out of the hero, the gauges and the trend chart; still
 // listed under Runs and still counted for chronic misses (a re-miss is a miss).
+// Runs that deliberately cover only PART of the list. Their match rates are not
+// comparable to a full sweep's, so the health hero and the trend chart must not
+// read them as one - a 36-item archived row showed as the site's health.
+// The pipeline's own archived phase no longer appears here at all (it merges
+// into the run it belongs to, see _append_scrape_log), but standalone
+// scrape_archived runs still exist and the 30-entry log still holds old ones.
+const isPartialScopeRun = (run) =>
+  ['retry_misses', 'scrape_archived'].includes((run && run.trigger) || '');
 const isRetryRun = (run) => (run && run.trigger) === 'retry_misses';
 const triggerLabel = (run) => String((run && run.trigger) || 'unknown').replace(/_/g, ' ');
 
@@ -1630,7 +1638,7 @@ async function load() {
   // reads the last full run. A retry_misses run attempts only known failures -
   // its rate is not comparable and would read as a collapse. It still appears in
   // the Runs list, which is where you go to see how the retry itself did.
-  const fullLog = log.filter(r => !isRetryRun(r));
+  const fullLog = log.filter(r => !isPartialScopeRun(r));
   const lastRun = fullLog[fullLog.length - 1];
   const lastRunWwPct = lastRun
     ? Math.round((attempted(lastRun, 'ww') - normaliseMissed(lastRun.ww_missed).length) / (attempted(lastRun, 'ww') || 1) * 100)

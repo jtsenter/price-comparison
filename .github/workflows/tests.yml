@@ -67,6 +67,7 @@ jobs:
           python multibuy_selfcheck.py
           python alias_purge_selfcheck.py
           python removed_items_selfcheck.py
+          python pipeline_row_selfcheck.py
           python pinned_fallback_selfcheck.py
           python scrape_mode_selfcheck.py
           python scrape_speed_selfcheck.py
