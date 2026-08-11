@@ -247,10 +247,19 @@
       '</div>'
     : '';
 
+  /* Hot Deals' own "N deals · of M with enough history" line, in the same flex
+     slot SEARCH uses on index - the two pages never both need it. Empty until
+     hot-deals.html's renderDeals() fills it in; on mobile the whole header-inner
+     is hidden for this page (see style.css), so the count stays in the page
+     body there instead - this slot is desktop-only real estate. */
+  var PAGE_STAT = page === 'hot-deals'
+    ? '<span class="header-page-stat" id="hdHeaderStat"></span>'
+    : '';
+
   host.innerHTML =
     '<div class="header-inner">' +
       '<div class="header-left">' + HOME + BRAND + VIEWER_BADGE + '</div>' +
-      SEARCH +
+      SEARCH + PAGE_STAT +
       /* Options (⚙) sits LEFT of the Hot/Basket pair, not after it: it is chrome,
          and the two nav icons plus the page's primary action are the things you
          reach for. Set here so every page inherits the same order. */

@@ -481,10 +481,17 @@ function getDealQuality(item, exclusions) {
     ? `Cheaper than ${Math.round(pricePercentile * 100)}% of the past year`
     : `↓ ${Math.round(dropPct * 100)}% below usual`;
 
+  // Same guard the Buy/Wait panel uses (bwsComparable, below): min(ww, coles)
+  // is only a price when both listings are the same amount of food. Woolworths
+  // salmon at $38/kg "beaten" by a $10 Coles portion restates to $50/kg - dearer,
+  // not cheaper. Carried through so dealPassesTune can refuse it before the ATL
+  // trophy or the sliders get a chance to wave it through.
+  const comparable = bwsComparable(item);
+
   return {
     qualifies, store, price: currentBest, otherPrice,
     typical, lo, hi, spread, dropPct, saveAmount, isAllTimeLow,
-    notAboveRecent, savingPct, reason,
+    notAboveRecent, savingPct, reason, comparable,
     pricePercentile, monthsSinceChange,
   };
 }
@@ -1857,6 +1864,13 @@ function getHotDealItems(items, opts) {
 // tune: { drop, diff (whole percents), atl, mode: 'and'|'or' }.
 function dealPassesTune(deal, tune) {
   if (deal.typical == null || deal.spread < DEAL_MIN_SPREAD || !deal.notAboveRecent) return false;
+  // A "deal" that only exists because the two stores are selling different
+  // amounts of the product is not a deal - see bwsComparable. Gated here, not
+  // just in the Buy/Wait panel, so the table and the 🔥 badges stop calling
+  // Salmon Fillets ($38/kg WW vs a $10 Coles portion, i.e. $50/kg) a saving.
+  // Ahead of the staleness gate and the ATL hatch: neither should get a chance
+  // to wave a size mismatch through.
+  if (deal.comparable === false) return false;
   // Staleness gate, applied BEFORE anything else can wave an item through -
   // including the cheapest-ever escape hatch. A price frozen for longer than the
   // cutoff is not news at any threshold; it is the same row every week. Measured

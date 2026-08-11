@@ -120,6 +120,18 @@ nav a.active { background: var(--bg); color: var(--text); font-weight: 600; }
 .header-search .search-clear { right: 10px; }
 .header-div { width: 1px; height: 24px; background: var(--border); flex-shrink: 0; margin: 0 2px; }
 
+/* Hot Deals' count, in the header's own empty middle (no search box on this
+   page to fill it). flex:1 so it claims the same space SEARCH would, left-
+   aligned like search's contents rather than centred - matches how the rest of
+   the header reads left-to-right. Empty span collapses to nothing until JS
+   fills it, so pages without it lose no width. */
+.header-page-stat {
+  flex: 1; min-width: 0; display: flex; align-items: center;
+  font-size: 13px; font-weight: 600; color: var(--text-soft);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.header-page-stat b { color: var(--text); font-weight: 800; }
+
 /* Header action buttons match the 38px search-box height (they were ~28px, so
    the top bar looked ragged). MUST NOT set `display` - .btn is already
    inline-flex/centred, and forcing display here re-showed every button the

@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=149" />
+  <link rel="stylesheet" href="style.css?v=150" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -41,6 +41,12 @@
       gap: 6px;
       white-space: nowrap;
     }
+    /* The title + count also live in the top header now (#hdHeaderStat,
+       desktop-only real estate - see style.css). This row would just be a
+       second copy of the same line, so it drops out above 700px. On mobile the
+       header hides itself entirely for this page (style.css), so this row is
+       the ONLY place the count is shown there - it stays. */
+    @media (min-width: 701px) { .deals-hero-title { display: none; } }
     .deals-hero-stats {
       display: flex;
       gap: 10px;
@@ -70,7 +76,12 @@
       display: block; width: 100%; margin-top: 10px; padding: 12px 16px;
       background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
     }
-    .hd-crit-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    /* Row 1: "A deal must be [ALL of these]", with the two yes/no overrides on
+       the SAME line, pushed to the right - they used to be a whole second row
+       under their own border. margin-left:auto on the group does the pushing;
+       flex-wrap lets it drop under the mode chip if the panel gets narrow
+       rather than clipping or forcing a scrollbar. */
+    .hd-crit-head { display: flex; align-items: center; gap: 10px 18px; margin-bottom: 8px; flex-wrap: wrap; }
     .hd-block-t {
       font-size: 12px; font-weight: 800; color: var(--text-mid);
       text-transform: uppercase; letter-spacing: .05em;
@@ -84,10 +95,31 @@
     }
     .hd-mode:hover { background: color-mix(in srgb, var(--ww) 18%, transparent); }
     .hd-mode.or-on { color: #c95000; background: #FFF7ED; border-color: #F5C9A0; }
-    /* Three criteria side by side. Stacked, they made a tall narrow column with
-       a lot of empty width beside it; across, the panel is barely two rows deep
-       and the width is actually used. Label on top, slider + value beneath. */
-    .hd-crits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 20px; }
+    .hd-overrides-inline {
+      display: flex; align-items: center; gap: 8px 18px; flex-wrap: wrap; margin-left: auto;
+    }
+    .hd-chk {
+      display: inline-flex; align-items: center; gap: 8px; font-size: 13px;
+      font-weight: 600; color: var(--text-mid); cursor: pointer; white-space: nowrap;
+    }
+    .hd-chk input { accent-color: var(--ww); cursor: pointer; width: 15px; height: 15px; }
+    /* Deal count. Duplicated into the header on desktop (#hdHeaderStat, see
+       style.css) so this copy only matters on mobile now - kept simple rather
+       than deleted, since the mobile layout still needs somewhere to put it. */
+    .hero-count { font-size: 13px; font-weight: 600; color: var(--text-soft); margin-left: 10px; }
+    .hero-count b { color: var(--text); font-weight: 800; }
+
+    /* Row 2: the three sliders and the Show filters share one row instead of
+       stacking - the sliders don't use the panel's full width on their own,
+       and the Show controls don't need a whole row either. Each side wraps
+       to its own line first if the panel is too narrow for both. */
+    .hd-row2 {
+      display: flex; align-items: flex-start; gap: 10px 28px; flex-wrap: wrap;
+      margin-top: 9px; padding-top: 9px; border-top: 1px solid var(--border);
+    }
+    .hd-crits {
+      flex: 2 1 360px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px 20px;
+    }
     .hd-crit {
       display: grid; grid-template-columns: 1fr 48px; align-items: center;
       gap: 4px 10px; padding: 2px 0;
@@ -100,23 +132,20 @@
     .hd-ic { display: inline-block; width: 16px; }
     .hd-crit input[type="range"] { width: 100%; accent-color: var(--ww); cursor: pointer; }
     .hd-crit strong { font-size: 14px; font-weight: 800; color: var(--text); text-align: right; font-variant-numeric: tabular-nums; }
-    /* The two overrides, side by side on one line. */
-    .hd-overrides {
-      display: flex; gap: 22px; flex-wrap: wrap;
-      margin-top: 9px; padding-top: 9px; border-top: 1px solid var(--border);
-    }
-    .hd-chk {
-      display: inline-flex; align-items: center; gap: 8px; font-size: 13px;
-      font-weight: 600; color: var(--text-mid); cursor: pointer;
-    }
-    .hd-chk input { accent-color: var(--ww); cursor: pointer; width: 15px; height: 15px; }
-    /* Deal count, inline in the page title so it never takes a line of its own. */
-    .hero-count { font-size: 13px; font-weight: 600; color: var(--text-soft); margin-left: 10px; }
-    .hero-count b { color: var(--text); font-weight: 800; }
     .hd-tune-show {
-      display: flex; align-items: center; gap: 12px; width: 100%;
-      border-top: 1px solid var(--border); padding-top: 10px; margin-top: 10px;
+      flex: 1 1 260px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      /* Alignment with the sliders' first row, not the panel edge - the
+         sliders' labels sit ~19px above their tracks, so a plain baseline
+         align looked low against them. */
+      padding-top: 19px;
     }
+    /* Pushes Reset to the end of whatever line it's on. In the old full-width
+       row that meant the far right of the panel; sharing a row with the
+       sliders now, this box is narrower and Reset often doesn't fit the store
+       filter + Watchlist on one line - margin-left:auto (not a flex spacer)
+       lets it drop to its own line and sit left there, rather than leaving a
+       stranded item pinned to a phantom right edge. */
+    .hd-tune-show #hdTuneReset { margin-left: auto; }
     .store-filter-row { display: flex; gap: 8px; flex-wrap: wrap; }
 
     /* ── Buy / Wait / Stock up ──────────────────────────────────
@@ -200,10 +229,15 @@
       .hd-crit { grid-template-columns: 1fr auto; row-gap: 4px; padding: 6px 0; }
       .hd-crit label { white-space: normal; }
       .hd-crit input[type="range"] { grid-column: 1 / -1; }
-      .hd-overrides { gap: 10px; flex-direction: column; }
+      /* The overrides drop to their own full-width line under the mode chip,
+         rather than staying pinned right (margin-left:auto would just leave
+         them squeezed into whatever width was left). */
+      .hd-overrides-inline { flex-basis: 100%; margin-left: 0; gap: 8px; flex-direction: column; align-items: flex-start; }
       .hero-count { margin-left: 0; width: 100%; }
-      .hd-tune-show { flex-wrap: wrap; gap: 8px; padding-top: 8px; }
-      .hd-tune-show #hdTuneReset { margin-left: auto; }
+      /* Sliders and Show stack instead of sharing a row - side by side, a
+         phone-width slider is too narrow to drag accurately. */
+      .hd-row2 { flex-direction: column; gap: 10px; }
+      .hd-tune-show { flex-wrap: wrap; gap: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
       /* Store filter: three equal buttons filling the row (logo chips + names) */
       .store-filter-row { display: grid; grid-template-columns: 1fr 1fr 1fr; width: 100%; gap: 8px; }
       .store-filter-btn { justify-content: center; }
@@ -452,7 +486,7 @@
 <body>
 
 <header data-page="hot-deals"></header>
-<script src="header.js?v=22"></script>
+<script src="header.js?v=23"></script>
 
 <div class="deals-hero">
   <div class="deals-hero-title">🔥 Hot Deals<span class="hero-count" id="heroStats"></span></div>
@@ -464,47 +498,51 @@
       <span class="hd-block-t">A deal must be</span>
       <button type="button" class="hd-mode" id="hdModeBtn"
               title="Whether an item has to satisfy every condition or just one">ALL of these</button>
-    </div>
-    <div class="hd-crits">
-    <div class="hd-crit" title="How far below its usual (median historical) price an item must be">
-      <label for="hdDropSlider"><span class="hd-ic">↓</span> below its usual price</label>
-      <input type="range" id="hdDropSlider" min="0" max="50" step="1">
-      <strong id="hdDropVal">20%</strong>
-    </div>
-    <div class="hd-crit" title="How much cheaper the best store must be than the other store">
-      <label for="hdDiffSlider"><span class="hd-ic">⇄</span> cheaper than the other store</label>
-      <input type="range" id="hdDiffSlider" min="0" max="50" step="1">
-      <strong id="hdDiffVal">10%</strong>
-    </div>
-    <div class="hd-crit" title="Where today's price sits against everything this item has actually sold for. 90% means cheaper than nine out of ten prices ever recorded for it.">
-      <label for="hdRankSlider"><span class="hd-ic">📊</span> cheaper than its own past</label>
-      <input type="range" id="hdRankSlider" min="0" max="95" step="5">
-      <strong id="hdRankVal">75%</strong>
-    </div>
-    </div>
-
-    <!-- The two overrides are yes/no questions, so they are checkboxes. The
-         staleness one had a slider for a number nobody needs to tune; it is
-         fixed at HD_STALE_MONTHS and the box just turns it on or off. -->
-    <div class="hd-overrides">
-      <label class="hd-chk" title="A genuine new low - strictly below every price previously recorded - is worth seeing even when it misses the sliders">
-        <input type="checkbox" id="hdAtlChk"> <span>🏆 always show cheapest-ever prices</span>
-      </label>
-      <label class="hd-chk" title="A price that has not moved in months is not news - it is the same row every week. Measured from the last CHANGE, so an item that swings every couple of months still qualifies.">
-        <input type="checkbox" id="hdStaleChk"> <span>⏳ hide prices frozen 3+ months</span>
-      </label>
-    </div>
-
-    <div class="hd-tune-show">
-      <span class="hd-tune-title">Show</span>
-      <div id="storeFilter" class="store-filter-row">
-        <button class="store-filter-btn active" data-store="all">All Stores</button>
-        <button class="store-filter-btn" data-store="woolworths"><span class="store-chip ww sm">W</span> WW</button>
-        <button class="store-filter-btn" data-store="coles"><span class="store-chip coles sm">C</span> Coles</button>
+      <!-- The two overrides are yes/no questions, so they are checkboxes -
+           on the same line as the mode chip rather than a row of their own.
+           The staleness one had a slider for a number nobody needs to tune;
+           it is fixed at HD_STALE_MONTHS and the box just turns it on or off. -->
+      <div class="hd-overrides-inline">
+        <label class="hd-chk" title="A genuine new low - strictly below every price previously recorded - is worth seeing even when it misses the sliders">
+          <input type="checkbox" id="hdAtlChk"> <span>🏆 always show cheapest-ever prices</span>
+        </label>
+        <label class="hd-chk" title="A price that has not moved in months is not news - it is the same row every week. Measured from the last CHANGE, so an item that swings every couple of months still qualifies.">
+          <input type="checkbox" id="hdStaleChk"> <span>⏳ hide prices frozen 3+ months</span>
+        </label>
       </div>
-      <button class="priority-pill watchlist-pill" id="watchlistFilterBtn">👁 Watchlist</button>
-      <span class="hd-show-spacer" style="flex:1"></span>
-      <button id="hdTuneReset" class="btn btn-ghost" style="font-size:12px;padding:5px 12px">↺ Reset</button>
+    </div>
+
+    <!-- Sliders and the Show filters share a row - neither used the panel's
+         full width stacked on its own. -->
+    <div class="hd-row2">
+      <div class="hd-crits">
+      <div class="hd-crit" title="How far below its usual (median historical) price an item must be">
+        <label for="hdDropSlider"><span class="hd-ic">↓</span> below its usual price</label>
+        <input type="range" id="hdDropSlider" min="0" max="50" step="1">
+        <strong id="hdDropVal">20%</strong>
+      </div>
+      <div class="hd-crit" title="How much cheaper the best store must be than the other store">
+        <label for="hdDiffSlider"><span class="hd-ic">⇄</span> cheaper than the other store</label>
+        <input type="range" id="hdDiffSlider" min="0" max="50" step="1">
+        <strong id="hdDiffVal">10%</strong>
+      </div>
+      <div class="hd-crit" title="Where today's price sits against everything this item has actually sold for. 90% means cheaper than nine out of ten prices ever recorded for it.">
+        <label for="hdRankSlider"><span class="hd-ic">📊</span> cheaper than its own past</label>
+        <input type="range" id="hdRankSlider" min="0" max="95" step="5">
+        <strong id="hdRankVal">75%</strong>
+      </div>
+      </div>
+
+      <div class="hd-tune-show">
+        <span class="hd-tune-title">Show</span>
+        <div id="storeFilter" class="store-filter-row">
+          <button class="store-filter-btn active" data-store="all">All Stores</button>
+          <button class="store-filter-btn" data-store="woolworths"><span class="store-chip ww sm">W</span> WW</button>
+          <button class="store-filter-btn" data-store="coles"><span class="store-chip coles sm">C</span> Coles</button>
+        </div>
+        <button class="priority-pill watchlist-pill" id="watchlistFilterBtn">👁 Watchlist</button>
+        <button id="hdTuneReset" class="btn btn-ghost" style="font-size:12px;padding:5px 12px">↺ Reset</button>
+      </div>
     </div>
   </div>
 </div>
@@ -606,7 +644,7 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=119"></script>
+<script src="utils.js?v=120"></script>
 <script src="history-modal.js?v=3"></script>
 <script>
 if ('serviceWorker' in navigator) {
@@ -1127,17 +1165,21 @@ function renderDeals() {
   // same group row (matching the main page's group→basket handoff).
 
   // Hero stats - counts describe what's SHOWN, so they follow the store /
-  // watchlist / category filters.
+  // watchlist / category filters. Written into TWO places: #heroStats in the
+  // page body (mobile - the header hides itself there) and #hdHeaderStat in
+  // the top header (desktop - see the display:none on .deals-hero-title above
+  // 700px). Same string either way; only the surrounding chrome differs.
+  const allTimeLowCount = filtered.filter(({ deal }) => deal.isAllTimeLow).length;
+  const showingAll = filtered.length === allDeals.length;
+  const heroHtml =
+    `<b>${showingAll ? allDeals.length : `${filtered.length} / ${allDeals.length}`}</b> deal`
+    + `${(showingAll ? allDeals.length : filtered.length) === 1 ? '' : 's'}`
+    + (allTimeLowCount ? ` &middot; <b>${allTimeLowCount}</b> cheapest-ever 🏆` : '')
+    + ` &middot; of ${scoreableCount} with enough history`;
   const heroEl = document.getElementById('heroStats');
-  if (heroEl) {
-    const allTimeLowCount = filtered.filter(({ deal }) => deal.isAllTimeLow).length;
-    const showingAll = filtered.length === allDeals.length;
-    heroEl.innerHTML =
-      `<b>${showingAll ? allDeals.length : `${filtered.length} / ${allDeals.length}`}</b> deal`
-      + `${(showingAll ? allDeals.length : filtered.length) === 1 ? '' : 's'}`
-      + (allTimeLowCount ? ` &middot; <b>${allTimeLowCount}</b> cheapest-ever 🏆` : '')
-      + ` &middot; of ${scoreableCount} with enough history`;
-  }
+  if (heroEl) heroEl.innerHTML = heroHtml;
+  const headerStatEl = document.getElementById('hdHeaderStat');
+  if (headerStatEl) headerStatEl.innerHTML = `🔥 Hot Deals &middot; ${heroHtml}`;
 
   // Update sort headers
   const thead = document.getElementById('dealsHead');

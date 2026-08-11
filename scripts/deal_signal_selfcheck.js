@@ -32,8 +32,11 @@ global.loadExclusions = () => ({});
 eval([
   extractConst('DEAL_MIN_SPREAD'), extractConst('DEAL_MIN_DROP'),
   extractConst('HD_STALE_MONTHS'), extractConst('DEAL_TUNE_DEFAULTS'),
+  extractConst('BWS_SIZE_TOL'),
   extract('_median'), extract('exclPriceSet'), extract('mbUnitPrice'),
-  extract('promoUnitPrice'), extract('getDealQuality'), extract('dealPassesTune'),
+  extract('promoUnitPrice'), extract('clientPer100'), extract('per100Pair'),
+  extract('sameQtyCost'), extract('bwsComparable'),
+  extract('getDealQuality'), extract('dealPassesTune'),
 ].join('\n'));
 
 const TODAY = new Date().toISOString().slice(0, 10);
@@ -114,7 +117,29 @@ const D = globalThis.DEAL_TUNE_DEFAULTS;
 assert(D.stale > 0, 'default staleness gate must be on');
 assert(D.rank > 0, 'default percentile floor must be on');
 
-// 8. Real data: the badge must be rare. If a change ever makes it common again,
+// 8. The salmon trap. Woolworths sells a $38/kg fillet, Coles a $10 portion;
+//    min(38, 10) reads as "cheapest ever, save $24" and it is a lie - restated
+//    at the same quantity Coles is $50/kg, i.e. dearer. This is the table and
+//    the 🔥 badge, not just the Buy/Wait panel: dealPassesTune must refuse it
+//    even though it would otherwise pass every slider AND the ATL hatch.
+const salmon = {
+  list_item: 'Salmon Fillets', category: 'Meat & Seafood',
+  woolworths: { price: 38, name: 'Salmon Fillets', unit_price: 38, unit: '1KG' },
+  coles:      { price: 10, name: 'Salmon Portion Skin On 200g' },
+  price_history: [], coles_price_history: [],
+  ww_price_history: [[120, 34], [90, 36], [60, 34], [30, 34], [10, 36], [0, 38]]
+    .map(([d, p]) => ({ date: daysAgo(d), price: p })),
+};
+const dSalmon = getDealQuality(salmon, {});
+assert.strictEqual(dSalmon.comparable, false, 'a $10 portion against a $38 kilo is not comparable');
+assert.strictEqual(dealPassesTune(dSalmon, { ...D, drop: 0, diff: 0, rank: 0, atl: true }), false,
+  'a size mismatch must be refused even at the loosest tune and with ATL on');
+// Same product, matched sizes: the guard must not fire, or it would silently
+// empty the table instead of cleaning it.
+const salmonOk = { ...salmon, coles: { price: 34, name: 'Salmon Fillets', unit_price: 34, unit: '1KG' } };
+assert.strictEqual(getDealQuality(salmonOk, {}).comparable, true, 'like-for-like pairs must stay eligible');
+
+// 9. Real data: the badge must be rare. If a change ever makes it common again,
 //    this fails loudly rather than quietly restoring the wallpaper.
 const items = JSON.parse(fs.readFileSync(
   path.join(__dirname, '..', 'docs', 'data', 'latest.json'), 'utf8')).items;
@@ -128,6 +153,9 @@ assert(naiveAtl > atl * 3,
 const passing = scored.filter(d => dealPassesTune(d, D)).length;
 assert(passing > 3 && passing < 60,
   `${passing} deals at default tune - should be a usable page, not 1 and not 60`);
+const mismatched = scored.filter(d => d.comparable === false).length;
+assert(scored.filter(d => d.comparable === false && dealPassesTune(d, D)).length === 0,
+  'a size-mismatched item must never pass the tune, on real data or otherwise');
 
-console.log(`deal_signal_selfcheck: 8/8 OK  (cheapest-ever ${atl}/${scored.length}, `
-  + `was ${naiveAtl}; ${passing} deals at defaults)`);
+console.log(`deal_signal_selfcheck: 9/9 OK  (cheapest-ever ${atl}/${scored.length}, `
+  + `was ${naiveAtl}; ${passing} deals at defaults; ${mismatched} size-mismatched pairs excluded)`);

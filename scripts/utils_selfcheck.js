@@ -84,6 +84,8 @@ eval([
   extract('buildPriceBar'),    // moved here from app.js; hot-deals draws the same bar
   extract('getTrendSeries'),
   extract('_median'),
+  extractConst('BWS_SIZE_TOL'),  // getDealQuality's comparable flag closes over it
+  extract('bwsComparable'),      // same size-mismatch guard the Hot Deals table now uses
   extract('getDealQuality'),
   extract('calcTrendPosition'),
   extract('variantGroupItemNames'),
