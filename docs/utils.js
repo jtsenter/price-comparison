@@ -1905,3 +1905,181 @@ function loadDealTune() {
   } catch {}
   return { ...DEAL_TUNE_DEFAULTS };
 }
+
+// ── Buy / Wait / Stock up ───────────────────────────────────────────────────
+// The table below answers "what is cheap". It does not answer "what should I do
+// about it", which is the only question anyone actually arrives with. These
+// cards do, and there are deliberately few: a verdict you get five of is a
+// verdict, a verdict you get forty of is another list.
+//
+// Every card is backed by this item's OWN recorded prices. Nothing here is a
+// forecast. Promo-cycle prediction was scoped for this panel and cut on the
+// evidence: the daily history only begins 2026-06-15, and on the real file
+// exactly 4 of 290 items yield a repeating dip pattern - two of those at
+// periods of 198 and 163 days, i.e. noise that happened to pass a consistency
+// test. Predicting "back on special in 2 weeks" from that would be invention.
+// "Last this cheap 6 weeks ago" carries the same decision and is measured.
+// Revisit once there are ~9 months of daily prices (≈ 2027-03).
+const BWS_MAX_CARDS   = 5;      // a cap, not a quota - a quiet week shows fewer
+const BWS_MAX_WAIT    = 2;      // this page is called Hot Deals; don't fill it with "no"
+const BWS_MIN_HISTORY = 5;      // distinct recorded dates before we will judge at all
+const BWS_STOCK_RANK  = 0.9;    // "stock up" = cheaper than 90% of its own past
+const BWS_WAIT_RANK   = 0.25;   // "wait" = dearer than 75% of its own past
+const BWS_WAIT_GAP    = 0.10;   // ...and at least this far above a price seen recently
+const BWS_WAIT_DAYS   = 120;    // how far back "recently" reaches for a wait
+const BWS_MIN_STAKE   = 0.5;    // dollars per unit - below this it is not advice, it is noise
+const BWS_SIZE_TOL    = 0.15;   // how far the rival may move when restated at the same quantity
+const BWS_MIN_RATIO   = 0.4;    // a price move bigger than this is a different product, not a special
+// Things that keep. Fruit & Veg and Dairy & Eggs are deliberately absent:
+// telling someone to stock up on lettuce is how a panel like this loses trust.
+// Meat is in because it freezes, and it is a third of the spend here.
+const BWS_KEEPS = new Set(['Pantry', 'Household', 'Frozen', 'Drinks & Alcohol',
+                           'Baby & Care', 'Sweets', 'Meat & Seafood']);
+
+// One price per date - the cheapest seen that day across both stores, matching
+// getDealQuality's `currentBest = min(ww, coles)`. Comparing today's best offer
+// against a series that sometimes holds the dearer store's price would invent
+// drops that never happened.
+function bwsSeries(item, exclusions) {
+  const excluded = exclPriceSet(exclusions && exclusions[item.list_item]);
+  const by = new Map();
+  for (const h of [...(item.price_history || []), ...(item.ww_price_history || []),
+                   ...(item.coles_price_history || [])]) {
+    const date = String(h.date || '').slice(0, 10), price = Number(h.price);
+    if (!date || !(price > 0) || excluded.has(price.toFixed(2))) continue;
+    if (!by.has(date) || price < by.get(date)) by.set(date, price);
+  }
+  return [...by.entries()].sort((a, b) => a[0].localeCompare(b[0]))
+                          .map(([date, price]) => ({ date, price }));
+}
+
+// min(ww, coles) is only a price if the two listings are the same amount of
+// food. sameQtyCost restates the rival at the Woolworths pack quantity; when
+// that moves it by more than BWS_SIZE_TOL the two are different sizes, and the
+// cheaper pack price is a smaller portion rather than a saving. On the live file
+// this catches 42 of the 144 pairs that carry a rate on both sides - including
+// salmon at $38/kg "beaten" by a $10 portion that restates to $50/kg.
+//
+// ponytail: silent when either side has no per-100 rate (146 of 290 items), so a
+// mismatch between two unsized listings still gets through - BWS_MIN_RATIO is
+// the second net under it. Closing that properly means sizes on every listing,
+// i.e. a scraper change, not a client one.
+function bwsComparable(item) {
+  const ww = item.woolworths, co = item.coles;
+  if (!ww || !co || ww.price == null || co.price == null) return true;  // one store: nothing to mix up
+  const p = per100Pair(ww, co);
+  const q = sameQtyCost(ww.price, co.price, p.ww.value, p.coles.value);
+  if (!q || !q.normalised) return true;
+  return Math.abs(q.co - co.price) <= co.price * BWS_SIZE_TOL;
+}
+
+function bwsAgo(days) {
+  if (days == null) return '';
+  if (days < 14) return `${days} day${days === 1 ? '' : 's'} ago`;
+  if (days < 70) return `${Math.round(days / 7)} weeks ago`;
+  return `${Math.round(days / 30.44)} months ago`;
+}
+
+// One item -> at most one card, or null. `today` is injectable so the self-check
+// can pin a date instead of racing the clock.
+function bwsVerdict(item, deal, series, tune, today) {
+  if (deal.typical == null || !(deal.price > 0)) return null;
+  const past = series.filter(p => !p.date || p.date < today);
+  if (past.length < BWS_MIN_HISTORY) return null;
+  const cur = deal.price;
+  if (!bwsComparable(item)) return null;
+  const keeps = BWS_KEEPS.has(normalizeCategory(item.category));
+
+  // When was it last at or below today's price? null = never, i.e. today is the
+  // cheapest this item has ever been recorded at.
+  let lastAsCheap = null;
+  for (let i = past.length - 1; i >= 0; i--) {
+    if (past[i].price <= cur + 0.005) { lastAsCheap = past[i].date; break; }
+  }
+  const daysSince = lastAsCheap
+    ? Math.round((Date.parse(today) - Date.parse(lastAsCheap)) / 86400000) : null;
+  const rankPct = Math.round((deal.pricePercentile || 0) * 100);
+
+  // A drop this steep is not a special, it is the listing changing underneath
+  // us (a 900g bag replaced by a per-kg line, a fillet by a portion). Half price
+  // still passes; four-fifths off does not, because groceries do not do that.
+  const plausible = cur >= deal.typical * BWS_MIN_RATIO;
+
+  // STOCK UP - near its own floor, and it will still be good when you get to it.
+  if (plausible && deal.pricePercentile >= BWS_STOCK_RANK && deal.saveAmount >= BWS_MIN_STAKE && keeps) {
+    return {
+      verdict: 'stock', order: 0, price: cur, store: deal.store,
+      stake: deal.saveAmount,
+      headline: lastAsCheap ? `Cheapest in ${bwsAgo(daysSince).replace(' ago', '')}` : 'Cheapest ever recorded',
+      why: `${fmt(cur)} now vs ${fmt(deal.typical)} usual. Keeps, so buy for the month.`,
+    };
+  }
+  // BUY - passes the filters you set for this page, and the saving is real money.
+  if (plausible && dealPassesTune(deal, tune) && deal.saveAmount >= BWS_MIN_STAKE) {
+    return {
+      verdict: 'buy', order: 1, price: cur, store: deal.store,
+      stake: deal.saveAmount,
+      headline: `${fmt(deal.saveAmount)} below its usual ${fmt(deal.typical)}`,
+      why: lastAsCheap ? `Last this cheap ${bwsAgo(daysSince)}.`
+                       : 'Never been recorded cheaper.',
+    };
+  }
+  // WAIT - dear against its own record, and it was demonstrably cheaper within
+  // living memory. Without that second half this is just "expensive item", which
+  // is not advice.
+  const cutoff = new Date(Date.parse(today) - BWS_WAIT_DAYS * 86400000).toISOString().slice(0, 10);
+  // Same plausibility floor, applied to the price we would be telling them to
+  // hold out FOR: grapes recorded at $5.50 before the listing became a $18.91
+  // per-kg line are not a price that is coming back.
+  const recent = past.filter(p => p.date >= cutoff && p.price >= cur * BWS_MIN_RATIO);
+  const best = recent.length ? recent.reduce((a, b) => (b.price < a.price ? b : a)) : null;
+  if (deal.pricePercentile <= BWS_WAIT_RANK && best
+      && cur >= best.price * (1 + BWS_WAIT_GAP) && cur - best.price >= BWS_MIN_STAKE) {
+    const ago = Math.round((Date.parse(today) - Date.parse(best.date)) / 86400000);
+    return {
+      verdict: 'wait', order: 2, price: cur, store: deal.store,
+      stake: cur - best.price,
+      headline: `Was ${fmt(best.price)} ${bwsAgo(ago)}`,
+      why: `${fmt(cur)} today is dearer than ${100 - rankPct}% of its recorded prices.`,
+    };
+  }
+  return null;
+}
+
+// Rank by what it is worth to YOU: dollars per unit x how often you buy it. A
+// 50c saving on the thing bought weekly beats $3 off something bought once, and
+// sorting on discount depth alone gets that exactly backwards. trip_count is
+// capped so one 37-trip staple cannot own every slot.
+function buyWaitCards(items, opts) {
+  opts = opts || {};
+  const exclusions  = opts.exclusions  || {};
+  const archivedSet = opts.archivedSet || new Set();
+  const priorities  = opts.priorities  || {};
+  const tune        = opts.tune || loadDealTune();
+  const today       = opts.today || new Date().toISOString().slice(0, 10);
+
+  const cards = [];
+  for (const item of items || []) {
+    if (item.archived || item._isGroup) continue;   // group rows price in $/kg; mixing units in a decision panel misleads
+    if (priorities[item.list_item] === 'archive' || archivedSet.has(item.list_item)) continue;
+    const deal = getDealQuality(item, exclusions);
+    const card = bwsVerdict(item, deal, bwsSeries(item, exclusions), tune, today);
+    if (!card) continue;
+    card.item = item;
+    card.score = card.stake * (1 + Math.min(item.trip_count || 0, 12));
+    cards.push(card);
+  }
+  cards.sort((a, b) => b.score - a.score);
+
+  // Select on score alone, then order the survivors so the two "do something"
+  // verdicts lead. Waits are capped rather than scored down: one genuinely
+  // overpriced staple is worth knowing, five is a different page.
+  const picked = [];
+  let waits = 0;
+  for (const c of cards) {
+    if (picked.length >= BWS_MAX_CARDS) break;
+    if (c.verdict === 'wait' && ++waits > BWS_MAX_WAIT) continue;
+    picked.push(c);
+  }
+  return picked.sort((a, b) => a.order - b.order || b.score - a.score);
+}

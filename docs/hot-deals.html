@@ -118,6 +118,73 @@
       border-top: 1px solid var(--border); padding-top: 10px; margin-top: 10px;
     }
     .store-filter-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    /* ── Buy / Wait / Stock up ──────────────────────────────────
+       Every card is the SAME four-row grid, and the grid rows are fixed rather
+       than content-sized, so the verdict chips, the names, the headlines and
+       the fine print each sit on one shared baseline right across the row. Let
+       any of these rows auto-size and a two-line product name shunts that one
+       card's text out of line with its neighbours. */
+    .bws {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);
+      padding: 14px 16px 16px; margin: 14px 24px 0;
+    }
+    .bws-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 11px; }
+    .bws-title { font-size: 15px; font-weight: 800; letter-spacing: -0.2px; }
+    .bws-sub { font-size: 12px; color: var(--text-soft); font-weight: 600; }
+    .bws-grid {
+      display: grid; gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+    }
+    .bws-card {
+      display: grid; grid-template-rows: 22px 36px 20px auto;
+      gap: 4px; padding: 11px 12px 12px;
+      border: 1px solid var(--border); border-left: 4px solid var(--border-strong);
+      border-radius: var(--radius); background: var(--bg);
+      text-align: left; font: inherit; cursor: pointer; width: 100%;
+    }
+    .bws-card:hover { background: var(--card); box-shadow: var(--shadow-sm); }
+    .bws-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .bws-top { display: flex; align-items: center; gap: 8px; }
+    .bws-tag {
+      font-size: 10.5px; font-weight: 900; letter-spacing: 0.6px;
+      padding: 3px 7px; border-radius: 5px; white-space: nowrap;
+    }
+    .bws-price {
+      margin-left: auto; display: flex; align-items: center; gap: 5px;
+      font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums;
+    }
+    .bws-name {
+      font-size: 13px; font-weight: 700; line-height: 1.35; color: var(--text);
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .bws-head-line {
+      font-size: 12.5px; font-weight: 700; line-height: 20px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .bws-why { font-size: 11.5px; color: var(--text-mid); line-height: 1.4; }
+    /* Colour carries the verdict, so it must survive being the only cue. */
+    .bws-card.stock { border-left-color: var(--green); }
+    .bws-card.stock .bws-tag { background: var(--green-light); color: #047857; }
+    .bws-card.stock .bws-head-line { color: #047857; }
+    .bws-card.buy { border-left-color: var(--ww); }
+    .bws-card.buy .bws-tag { background: var(--ww-light); color: var(--ww); }
+    .bws-card.buy .bws-head-line { color: var(--ww); }
+    .bws-card.wait { border-left-color: #D97706; }
+    .bws-card.wait .bws-tag { background: #FEF3C7; color: #B45309; }
+    .bws-card.wait .bws-head-line { color: #B45309; }
+
+    @media (max-width: 700px) {
+      .bws { margin: 12px 14px 0; padding: 12px 13px 13px; }
+      .bws-grid { grid-template-columns: 1fr; }
+      /* One column: names can breathe, so the fixed rows stop earning their
+         keep and only cause clipping. */
+      .bws-card { grid-template-rows: auto auto auto auto; }
+      .bws-name { -webkit-line-clamp: 3; }
+      .bws-head-line { white-space: normal; line-height: 1.35; }
+    }
     @media (max-width: 700px) {
       /* Hero: centered title, two equal stat tiles */
       .deals-hero { padding: 12px 14px; gap: 10px; }
@@ -442,6 +509,19 @@
   </div>
 </div>
 
+<!-- Buy / Wait / Stock up. Deliberately OUTSIDE the filter card: the table below
+     answers "what is cheap", this answers "what should I do", and it reads the
+     whole list rather than the filtered view (the sub-line says so). Hidden
+     entirely when there is nothing worth saying - an empty advice panel is
+     worse than no panel. -->
+<div id="bwsPanel" class="bws" style="display:none">
+  <div class="bws-head">
+    <span class="bws-title">⭐ What to do this week</span>
+    <span class="bws-sub">from everything you buy, not just the filters below</span>
+  </div>
+  <div class="bws-grid" id="bwsGrid"></div>
+</div>
+
 <!-- Category filter tabs + the table's Columns chooser (it configures the table,
      so it sits with the table, not up in the filters) -->
 <div class="hd-tabs-row">
@@ -526,7 +606,7 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=117"></script>
+<script src="utils.js?v=118"></script>
 <script src="history-modal.js?v=3"></script>
 <script>
 if ('serviceWorker' in navigator) {
@@ -960,6 +1040,45 @@ function initHdResize() {
 
 // ── Render ─────────────────────────────────────────────────────────────────────
 
+// Buy / Wait / Stock up. Reads _data.items directly, not the filtered deal pool:
+// a "wait" is by definition NOT a hot deal, so anything sourced from the table's
+// rows could never produce one. Per-kg group rows are skipped inside
+// buyWaitCards - their prices are $/kg, and "save $2.40" meaning per kilo on a
+// card sitting beside pack prices is the kind of detail nobody re-reads.
+const BWS_TAG = { stock: 'STOCK UP', buy: 'BUY', wait: 'WAIT' };
+// Scoring all 290 items costs ~13ms of renderDeals' ~44ms, and renderDeals runs
+// on every `input` event while a slider is being dragged. The panel ignores the
+// category and store filters, so most of those re-renders cannot change it -
+// hence the key. Anything that CAN change the cards is in it.
+let _bwsKey = null;
+function renderBwsPanel(priorities, exclusions, tune) {
+  const panel = document.getElementById('bwsPanel');
+  const grid = document.getElementById('bwsGrid');
+  if (!panel || !grid) return;
+  const key = JSON.stringify(tune) + '|' + (_data.last_updated || '') + '|' + _data.items.length
+            + '|' + _archivedSet.size + '|' + JSON.stringify(exclusions) + '|' + JSON.stringify(priorities);
+  if (key === _bwsKey) return;
+  _bwsKey = key;
+  const cards = buyWaitCards(_data.items, {
+    exclusions, priorities, archivedSet: _archivedSet, tune,
+  });
+  panel.style.display = cards.length ? '' : 'none';
+  grid.innerHTML = cards.map(c => {
+    const chip = c.store === 'coles'
+      ? '<span class="store-chip coles sm">C</span>' : '<span class="store-chip ww sm">W</span>';
+    return `<button type="button" class="bws-card ${c.verdict}" data-item="${escAttr(c.item.list_item)}"
+                    title="Open the price history for ${escAttr(shortName(c.item.list_item))}">
+      <span class="bws-top">
+        <span class="bws-tag">${BWS_TAG[c.verdict]}</span>
+        <span class="bws-price">${chip}${fmt(c.price)}</span>
+      </span>
+      <span class="bws-name">${esc(shortName(c.item.list_item))}</span>
+      <span class="bws-head-line">${esc(c.headline)}</span>
+      <span class="bws-why">${esc(c.why)}</span>
+    </button>`;
+  }).join('');
+}
+
 function renderDeals() {
   if (!_data) return;
 
@@ -990,6 +1109,7 @@ function renderDeals() {
   });
 
   buildCategoryTabs(allDeals.map(d => d.item));
+  renderBwsPanel(priorities, exclusions, tune);
 
   // Live count beside Reset: drag a slider and see the effect without going and
   // counting the table. Deliberately "of N scoreable", not "of 290" - items with
@@ -1687,6 +1807,16 @@ async function pollForCompletionHD(user, repo, token, dispatchedAt) {
   document.getElementById('dealsBody')?.addEventListener('click', (e) => {
     const wb = e.target.closest('.item-watch-btn');
     if (wb) { e.stopPropagation(); toggleWatchlistHD(wb.dataset.item); return; }
+  });
+
+  // A card makes a claim about this item's own price record, so the one thing
+  // worth clicking through to is that record. Opens the same history chart the
+  // table rows use, rather than inventing a second way to show the same data.
+  document.getElementById('bwsGrid')?.addEventListener('click', (e) => {
+    const card = e.target.closest('.bws-card');
+    if (!card) return;
+    const item = _data?.items.find(i => i.list_item === card.dataset.item);
+    if (item) openPriceHistoryModal(item);
   });
 
   // Mobile deal cards - watch toggle, and tap-anywhere-else to add/remove from
