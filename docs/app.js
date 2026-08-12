@@ -3673,10 +3673,14 @@ function renderCards(items) {
     }
 
     // Winner tint follows the qty-aware comparison, so the coloured side is
-    // always the side showing the lower number above it.
+    // always the side showing the lower number above it. Only when BOTH stores
+    // actually have a price - one store's price cannot "win" against a store
+    // that was never priced, but the scraper's cheaper_store falls back to
+    // whichever single store IS priced, so this used to tint (and checkmark)
+    // single-store items as if they'd beaten a competitor.
     const mbCheaper = mbCheaperStore(item);
-    const wwClass   = mbCheaper === 'woolworths' ? 'winner-ww' : '';
-    const coClass   = mbCheaper === 'coles'      ? 'winner-coles' : '';
+    const wwClass   = (ww && co && mbCheaper === 'woolworths') ? 'winner-ww' : '';
+    const coClass   = (ww && co && mbCheaper === 'coles')      ? 'winner-coles' : '';
     // Verdict + any multi-buy tag share one always-present row (see cardVerdictHTML).
     const mbTag = multiBuyBadge(ww) + multiBuyBadge(co);
     const savingHtml = `<div class="card-saving">${cardVerdictHTML(item)}${mbTag}</div>`;
@@ -4186,8 +4190,10 @@ function groupCardHTML(group, overrides) {
   const wwHtml = `<div class="card-store-price-row"><span class="store-chip ww sm">W</span><span class="card-store-price">${priceHtml(group._wwPerKg, wwUrl)}</span></div><div class="card-store-unit"></div>`;
   const coHtml = `<div class="card-store-price-row"><span class="store-chip coles sm">C</span><span class="card-store-price">${priceHtml(group._coPerKg, coUrl)}</span></div><div class="card-store-unit"></div>`;
 
-  const wwClass = cheaper === 'woolworths' ? 'winner-ww' : '';
-  const coClass = cheaper === 'coles'      ? 'winner-coles' : '';
+  // Both sides need a $/kg figure before either can "win" - see the per-item
+  // card's identical guard a few lines up in renderCards().
+  const wwClass = (wwBest && coBest && cheaper === 'woolworths') ? 'winner-ww' : '';
+  const coClass = (wwBest && coBest && cheaper === 'coles')      ? 'winner-coles' : '';
 
   // Same always-present verdict row as the per-item card, off the same
   // rowStoreTotal() the table sums - so a tie shows "=" and holds its line
@@ -4252,8 +4258,11 @@ function appendGroupRowDesktop(tbody, group, overrides) {
   const wwUrl = wwBest ? (overrides[wwBest.name]?.wwUrl || wwBest.result?.url || null) : null;
   const coUrl = coBest ? (overrides[coBest.name]?.colesUrl || coBest.result?.url || null) : null;
 
-  const wwClass = cheaper === 'woolworths' ? 'cell-ww' : '';
-  const coClass = cheaper === 'coles' ? 'cell-coles' : '';
+  // Both sides need a $/kg figure before either can "win" - the badge column a
+  // few lines down already applies this exact guard (N/A when either is
+  // missing); the price cells' tint+checkmark just hadn't matched it.
+  const wwClass = (wwBest && coBest && cheaper === 'woolworths') ? 'cell-ww' : '';
+  const coClass = (wwBest && coBest && cheaper === 'coles') ? 'cell-coles' : '';
 
   // % cheaper by $/kg
   let pctHtml = '';
@@ -4401,7 +4410,10 @@ function appendGroupRowDesktop(tbody, group, overrides) {
 function appendGroupCardMobile(container, group, overrides) {
   const isExpanded = _expandedGroups.has(group._groupKey);
   const cheaper = group.cheaper_store;
-  const wwWin = cheaper === 'woolworths', coWin = cheaper === 'coles';
+  // Both sides need a $/kg figure before either can "win" against the other -
+  // same guard as the desktop table/card group rows.
+  const bothPriced = group._wwPerKg != null && group._coPerKg != null;
+  const wwWin = bothPriced && cheaper === 'woolworths', coWin = bothPriced && cheaper === 'coles';
   const borderCls = wwWin ? ' cheaper-ww' : coWin ? ' cheaper-coles' : '';
 
   // Same layout as a normal mobile card in BOTH views: compact = the same
@@ -5327,8 +5339,10 @@ function renderMobileCards(items, data) {
     const prioHtml = prioLabels[priority]
       ? `<span class="mc-priority ${priority}">${prioLabels[priority]}</span>` : '';
 
-    const wwCheaper = cheaper === 'woolworths';
-    const coCheaper = cheaper === 'coles';
+    // Both stores need a price before either can "win" - see the desktop
+    // table's identical guard for why this matters for single-store items.
+    const wwCheaper = !!(ww && co) && cheaper === 'woolworths';
+    const coCheaper = !!(ww && co) && cheaper === 'coles';
     const saving    = savingAmount(item);
     const borderCls = wwCheaper ? ' cheaper-ww' : coCheaper ? ' cheaper-coles' : '';
 
@@ -5994,8 +6008,13 @@ function _renderPageInner(data) {
       ? `<button class="item-unarchive-btn" data-item="${safeKey}" title="Unarchive this item">↩ Unarchive</button>`
       : '';
 
-    const wwClass  = cheaper === 'woolworths' ? 'cell-ww' : '';
-    const coClass  = cheaper === 'coles'      ? 'cell-coles' : '';
+    // Both stores need a price before either can "win" - matches the badge
+    // column's own N/A guard a few lines up (`!ww || !co`). Without this a
+    // single-store item's cheaper_store (the scraper reports the one store it
+    // DOES have, not null) tinted that price green and stamped a checkmark on
+    // it, which read as "cheaper than Coles" when Coles was never priced.
+    const wwClass  = (ww && co && cheaper === 'woolworths') ? 'cell-ww' : '';
+    const coClass  = (ww && co && cheaper === 'coles')      ? 'cell-coles' : '';
 
     // Priority cell (uses analysis data as fallback). 'archive' is a real option
     // here - an archived item's dropdown must show "Archived" selected (it used
