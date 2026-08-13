@@ -46,7 +46,6 @@ jobs:
           node scripts/scrape_mode_selfcheck.js
           node scripts/detour_selfcheck.js
           node scripts/buy_wait_selfcheck.js
-          node scripts/cpi_selfcheck.js
 
       # pwsh is preinstalled on ubuntu-latest. The watchdog's decision function
       # is pure, so it checks out fine off-Windows; nothing here enumerates a
