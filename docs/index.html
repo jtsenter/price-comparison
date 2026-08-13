@@ -271,6 +271,19 @@
           <button type="button" data-metric="piece" role="radio" aria-checked="false">Per piece</button>
         </div>
         <div class="form-note" id="catEditMetricNote"></div>
+        <!-- Only meaningful under "Per piece"; catEditApplyMetric shows/hides it.
+             Quoting per ~one pack is what makes the number readable: 3c a wipe
+             says nothing, $2.86 per 100 does. -->
+        <div class="cat-quote-row" id="catEditQuoteRow" hidden>
+          <label for="catEditQuote">Show price per</label>
+          <div class="seg" id="catEditQuote" role="radiogroup" aria-label="Show price per">
+            <button type="button" data-quote="1"   role="radio" aria-checked="false">1</button>
+            <button type="button" data-quote="10"  role="radio" aria-checked="false">10</button>
+            <button type="button" data-quote="50"  role="radio" aria-checked="false">50</button>
+            <button type="button" data-quote="100" role="radio" aria-checked="false">100</button>
+          </div>
+          <span class="form-note" id="catEditQuoteNote"></span>
+        </div>
       </div>
     </div>
     <div id="catEditBody"></div>

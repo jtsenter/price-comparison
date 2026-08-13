@@ -639,7 +639,7 @@ function thirdEntriesFor(itemName) {
 // metric (dollars per nappy), not a raw pack price - thirdBeatsUnit compares
 // unit-to-unit instead of thirdBeats' raw-shelf comparison. Plain items default
 // to false, unchanged from before this parameter existed.
-function thirdChipHTML(key, entries, ww, co, compareUnit) {
+function thirdChipHTML(key, entries, ww, co, compareUnit, group) {
   if (!entries.length) return '';
   const beat = compareUnit
     ? thirdBeatsUnit(entries, ww?.price, co?.price)    // utils.js
@@ -654,9 +654,16 @@ function thirdChipHTML(key, entries, ww, co, compareUnit) {
   // metric formatter, or the chip rounds 2.9c and 3.2c to the same "$0.03" and
   // silently claims a tie the panel below it disagrees with.
   const beatText = beatPrice == null ? ''
-    : (compareUnit ? fmt(beatPrice * PER_PIECE_QUOTE) + '/100' : fmt(beatPrice));
+    : (compareUnit ? fmtUnitMetric(metricShown(group, beatPrice)) : fmt(beatPrice));
+  // The shop's COLOURED LETTER, not its name. "＋12 · Chemist Warehouse $2.86"
+  // wrapped onto a second line and stretched the whole product column; the badge
+  // says the same thing in one character, and the full name is still in the
+  // tooltip and on the panel heading below.
+  const badge = beat && meta
+    ? `<span class="third-chip-b" style="${thirdChipStyle(beat.store)}">${esc(meta.letter)}</span>`
+    : '';
   const label = beat && meta && beatPrice != null
-    ? `＋${entries.length} · ${esc(meta.label)} ${beatText}`
+    ? `${badge}${beatText} <span class="third-chip-n">＋${entries.length}</span>`
     : `＋${entries.length}`;
   // data-third-beats lets the click handler resolve the same default this render
   // used, without re-deriving prices from a different scale than the one the
@@ -754,7 +761,7 @@ function thirdPanelRowHTML(key, entries, ww, co, colspan) {
 // wrong one - no weighed category has third-store data yet.
 function groupThirdChipHTML(group) {
   const s = groupThirdScale(group);
-  return thirdChipHTML(group.list_item, groupThirdEntries(group), s.ww, s.co, s.perUnit);
+  return thirdChipHTML(group.list_item, groupThirdEntries(group), s.ww, s.co, s.perUnit, group);
 }
 
 // Third-store rows built to the SAME shape as a Woolworths/Coles variant row -
@@ -778,7 +785,16 @@ function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg) {
     if (!byStore.has(e.store)) byStore.set(e.store, []);
     byStore.get(e.store).push(e);
   }
-  return [...byStore.entries()].map(([storeKey, list]) => {
+  // Cheapest SHOP first, ranked on its own best product - so when ALDI has the
+  // best price in the category you see ALDI at the top, not wherever it happened
+  // to sit in the file. A shop with nothing priced sorts last rather than first.
+  const shopBest = (list) => Math.min(...list.map(e => {
+    const m = thirdGroupMetric(group, e);
+    return m == null ? Infinity : m;
+  }));
+  return [...byStore.entries()]
+    .sort((a, b) => shopBest(a[1]) - shopBest(b[1]))
+    .map(([storeKey, list]) => {
     const meta = THIRD_STORES[storeKey] || { letter: '?', label: storeKey };
     const rowHtml = ({ e, m }) => {
         const img = resolveImgUrl(e.image) || fallbackImg;
@@ -815,7 +831,7 @@ function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg) {
     const more = rest.length
       ? `<details class="vg-more"><summary class="vg-more-sum">${rest.length} more at ${esc(meta.label)}</summary>${rest.map(rowHtml).join('')}</details>`
       : '';
-    return `<div class="vg-store-h"><span class="store-chip third sm">${esc(meta.letter)}</span> ${esc(meta.label)}</div>${head}${more}`;
+    return `<div class="vg-store-h"><span class="store-chip third sm" style="${thirdChipStyle(storeKey)}">${esc(meta.letter)}</span> ${esc(meta.label)}</div>${head}${more}`;
   }).join('');
 }
 
@@ -4809,6 +4825,7 @@ function openCategoryEditModal(groupKey, opts) {
     </div>`;
 
   catEditApplyMetric(catMetricOf(cat));
+  catEditApplyQuote(pieceQuoteOf(cat));
   bindCategoryEditBody();
   document.body.style.overflow = 'hidden';
   $('categoryEditModal').classList.add('open');
@@ -4831,6 +4848,31 @@ function catEditApplyMetric(metric) {
   const note = $('catEditMetricNote');
   if (note) note.textContent = CAT_METRICS[m].note;
   $('catEditBody')?.classList.toggle('show-pcs', m === 'piece');
+  // The quote size only means anything per-piece; hidden elsewhere rather than
+  // disabled, so the dialog does not offer a choice that changes nothing.
+  const qr = $('catEditQuoteRow');
+  if (qr) qr.hidden = m !== 'piece';
+}
+
+// Reflect the chosen quote size. Separate from the metric so picking one does
+// not disturb the other.
+function catEditApplyQuote(quote) {
+  const q = PIECE_QUOTES.includes(Number(quote)) ? Number(quote) : PER_PIECE_QUOTE;
+  const seg = $('catEditQuote');
+  if (seg) {
+    seg.dataset.quote = String(q);
+    seg.querySelectorAll('button').forEach(b => {
+      const on = Number(b.dataset.quote) === q;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-checked', on ? 'true' : 'false');
+    });
+  }
+  const n = $('catEditQuoteNote');
+  if (n) {
+    n.textContent = q === 1
+      ? 'Shown as the price of one piece.'
+      : `Shown as the price of ${q} pieces - pick roughly one pack, so the figure is a number you actually pay.`;
+  }
 }
 
 // Bind the add/remove + drag-reorder handlers to the (persistent) modal body ONCE.
@@ -4899,6 +4941,10 @@ function bindCategoryEditBody() {
   });
 
   // Comparison metric.
+  $('catEditQuote')?.addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-quote]');
+    if (b) catEditApplyQuote(b.dataset.quote);
+  });
   $('catEditMetric')?.addEventListener('click', (e) => {
     const b = e.target.closest('button[data-metric]');
     if (b) catEditApplyMetric(b.dataset.metric);
@@ -5077,8 +5123,12 @@ function saveCategoryEdit() {
   // override-first. Written explicitly (not omitted when false) so that turning a
   // seeded flag OFF is a real, storable choice.
   const metric = CAT_METRICS[$('catEditMetric')?.dataset.metric] || CAT_METRICS.kg;
+  // Stored even when it matches the seed, same reasoning as sticker/perPack:
+  // an omitted value is indistinguishable from "never chose", so a deliberate
+  // change back to the seeded default would not stick.
+  const quote = Number($('catEditQuote')?.dataset.quote) || PER_PIECE_QUOTE;
   saveVariantGroupOverride(key, { label: label || undefined, add, remove, ww_order: wwItems, coles_order: coItems,
-                                  sticker: metric.sticker, perPack: metric.perPack });
+                                  sticker: metric.sticker, perPack: metric.perPack, quote });
   savePerKgExclusions(excl);
   saveOverrides(ov);
   // Reflect the third-store edit locally straight away, so the panel updates on

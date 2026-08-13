@@ -111,6 +111,8 @@ eval([
   extractConst('UNIT_METRIC_3DP_BELOW'),
   extract('fmtUnitMetric'),    // comparison-metric precision (cents matter here)
   extractConst('PER_PIECE_QUOTE') + '\nglobal.PER_PIECE_QUOTE = PER_PIECE_QUOTE;',
+  extractConst('PIECE_QUOTES') + '\nglobal.PIECE_QUOTES = PIECE_QUOTES;',
+  extract('pieceQuoteOf'), extract('pieceQuoteSuffix'),
   extract('metricShown'),      // per-piece categories are QUOTED per 100 pieces
   extract('groupStoreTotal'),  // ...but costed per ONE, which is the whole trap
   // Used directly by the test body, not just by another extracted function, so
@@ -386,7 +388,7 @@ check('median empty -> null', _median([]), null);
 
 // ── metricShown (per-piece categories are QUOTED per 100, costed per 1) ─────
 {
-  const wipes  = { _perPack: true };            // baby wipes, nappies, tablets
+  const wipes  = { _perPack: true, _quote: 100 };   // baby wipes, tablets, bags
   const weighed = { _perPack: false };          // chicken, salmon - $/kg
   const sticker = { _sticker: true };           // deodorant - pack price
 
@@ -415,7 +417,43 @@ check('median empty -> null', _median([]), null);
   // still has to be per ONE piece, because the Total column and the basket
   // multiply it by the quantity bought. If scaling ever leaks into the stored
   // _wwPerKg, every basket total silently becomes 100x too big.
-  const g = { list_item: '__group_baby_wipes', _perPack: true,
+  // ── the quote size is PER CATEGORY ───────────────────────────────────────
+  // Quoting is meant to read as "about one pack". Wipes and tablets come in
+  // 60-640 so 100 is natural; nappies come in 26-60, where a per-100 price
+  // would name a pack nobody sells - hence 50 there.
+  const nappies = { _perPack: true, _quote: 50 };
+  check('a nappy per 50', fmtUnitMetric(metricShown(nappies, 13.99 / 40)), '$17.49');
+  check('the same nappy per 100 would invent a pack size',
+        fmtUnitMetric(metricShown(wipes, 13.99 / 40)), '$34.98');
+  check('quote 1 is plain per-piece', metricShown({ _perPack: true, _quote: 1 }, 0.35), 0.35);
+  check('suffix follows the quote', pieceQuoteSuffix(50), ' /50');
+  check('suffix for 1 is "each"',   pieceQuoteSuffix(1),  ' each');
+  check('an unknown quote falls back, never renders NaN',
+        pieceQuoteOf({ _quote: 7 }), PER_PIECE_QUOTE);
+  check('a perPack category naming no quote gets the default',
+        pieceQuoteOf({ _perPack: true }), PER_PIECE_QUOTE);
+  check('seed value is read when there is no built _quote',
+        pieceQuoteOf({ quote: 50 }), 50);
+
+  // The four seeded per-piece categories must carry the quotes agreed for them;
+  // a silent revert to per-piece is exactly the unreadable state this fixes.
+  // DEFAULT_VARIANT_GROUPS is stubbed with a 2-entry fixture at the top of this
+  // file, so read the REAL seed array out of utils.js under its own name rather
+  // than replacing the fixture other tests depend on.
+  // eslint-disable-next-line no-eval
+  const REAL_SEEDS = eval('(' + src.match(/const DEFAULT_VARIANT_GROUPS\s*=\s*(\[[\s\S]*?\n\]);/)[1] + ')');
+  const seedQuote = (k) => {
+    const g = REAL_SEEDS.find(x => x.key === k);
+    assert(g, `seed category ${k} is missing`);
+    check(`${k} is per-piece`, !!g.perPack, true);
+    return pieceQuoteOf(g);
+  };
+  check('baby_wipes quote',          seedQuote('baby_wipes'), 100);
+  check('dishwashing_tablets quote', seedQuote('dishwashing_tablets'), 100);
+  check('garbage_bags_xl quote',     seedQuote('garbage_bags_xl'), 100);
+  check('nappies_size6 quote',       seedQuote('nappies_size6'), 50);
+
+  const g = { list_item: '__group_baby_wipes', _perPack: true, _quote: 100,
               _wwPerKg: 2.29 / 80, _coPerKg: 40.00 / 360 };
   // groupUnits() reads localStorage for the planned quantity; pin it at 1 so the
   // real groupStoreTotal still runs and the assertion is about the PRICE it

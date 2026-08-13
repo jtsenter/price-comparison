@@ -162,17 +162,35 @@ function fmtUnitMetric(n) {
 // is a real difference you can act on. Woolworths and Coles print exactly this
 // on the same shelves ("$10.93 / 100EA"), so quoting per 100 also makes our
 // number checkable against the store's own label.
-const PER_PIECE_QUOTE = 100;
+//
+// It is per CATEGORY, not global, because the right quote is "about one pack".
+// Wipes and dishwasher tablets come in 60-640, so 100 reads naturally. Nappies
+// come in 26-60, and quoting a 100-nappy price invents a pack nobody sells -
+// 50 is the honest unit there. Editable per category (Compare prices by ->
+// Per piece), which is why the seeds below carry `quote`.
+const PIECE_QUOTES = [1, 10, 50, 100];
+const PER_PIECE_QUOTE = 100;      // fallback when a perPack category names none
 
-// A metric value as DISPLAYED. Per-piece categories are shown per 100 pieces;
-// everything else shows what it stores.
+// Pieces this category quotes its per-piece price for. 1 = plain "each".
+function pieceQuoteOf(g) {
+  const q = Number(g && (g._quote ?? g.quote));
+  return PIECE_QUOTES.includes(q) ? q : PER_PIECE_QUOTE;
+}
+
+// The suffix that belongs next to a quoted per-piece figure.
+function pieceQuoteSuffix(q) {
+  return q === 1 ? ' each' : ' /' + q;
+}
+
+// A metric value as DISPLAYED. Per-piece categories are shown per `quote`
+// pieces; everything else shows what it stores.
 // DISPLAY ONLY, and that is the whole point: _wwPerKg/_coPerKg stay per ONE
 // piece because groupStoreTotal() and the Total column multiply them by the
 // quantity actually bought. Scaling the stored value would multiply every
-// basket total and saving by 100.
+// basket total and saving by the quote.
 function metricShown(group, v) {
   if (v == null || isNaN(Number(v))) return null;
-  return (group && group._perPack) ? Number(v) * PER_PIECE_QUOTE : Number(v);
+  return (group && group._perPack) ? Number(v) * pieceQuoteOf(group) : Number(v);
 }
 
 // Price the SAME QUANTITY at both stores. Comparing pack prices across stores
@@ -1000,7 +1018,7 @@ const DEFAULT_VARIANT_GROUPS = [
   // Compared per BAG. Rolls run 10 to 100 bags, and the bag SIZE (56L, 76L)
   // varies independently of the count, so neither pack price nor litres ranks
   // these usefully - price per bag is the number you actually compare.
-  { key: 'garbage_bags_xl', label: 'Garbage bags (extra large)', category: 'Household', perPack: true, items: [
+  { key: 'garbage_bags_xl', label: 'Garbage bags (extra large)', category: 'Household', perPack: true, quote: 100, items: [
     'Armada Evergreen Garbage Bags Extra Large 20pk',
     'Multix Extra Wide 56L Garbage Bags 100pk',
     'Armada Garbage Bags 20pk',
@@ -1012,7 +1030,7 @@ const DEFAULT_VARIANT_GROUPS = [
   // pack price ranks the big boxes as "expensive" when they are usually the
   // cheapest wash. Same reasoning as nappies. NOT sticker - unlike nappies the
   // pack price is still worth showing beside the per-tablet rate.
-  { key: 'dishwashing_tablets', label: 'Dishwashing tablets', category: 'Household', perPack: true, items: [
+  { key: 'dishwashing_tablets', label: 'Dishwashing tablets', category: 'Household', perPack: true, quote: 100, items: [
     // WW 184248 - the originally-tracked product, and the one the receipts are
     // for. It is a 100 pack; an earlier version of this category pointed the
     // tracked name at 183866 (a 30 pack) instead, which both dropped this
@@ -1027,7 +1045,7 @@ const DEFAULT_VARIANT_GROUPS = [
     'Coles Ultra Dishwasher Tablets 100pk',
     'Optix Titanium Pro Dishwashing Tablets 80pk',
   ]},
-  { key: 'nappies_size6', label: 'Nappies size 6', category: 'Baby & Care', sticker: true, perPack: true, items: [
+  { key: 'nappies_size6', label: 'Nappies size 6', category: 'Baby & Care', sticker: true, perPack: true, quote: 50, items: [
     "Little One's Ultra Dry Nappies Size 6 40pk",
     'Millie Moon Luxury Nappies Size 6 30pk',
     'Coles Nappies Unisex Junior Size 6 40pk',
@@ -1039,7 +1057,7 @@ const DEFAULT_VARIANT_GROUPS = [
   // buy than a $27.99 240-pack). perPack makes the metric cents-per-wipe, which
   // is also the metric the Chemist Warehouse / ALDI entries carry via `packs`,
   // so the supermarket rows and the "also sold at" column compare like for like.
-  { key: 'baby_wipes', label: 'Baby wipes', category: 'Baby & Care', sticker: true, perPack: true, items: [
+  { key: 'baby_wipes', label: 'Baby wipes', category: 'Baby & Care', sticker: true, perPack: true, quote: 100, items: [
     'WaterWipes Baby & Newborn Sensitive Wipes 60pk',
     'WaterWipes Baby & Newborn Sensitive Wipes 180pk',
     'WaterWipes Baby & Newborn Sensitive Wipes 360pk',
@@ -1246,6 +1264,7 @@ function allVariantGroupSeeds(ov) {
       category: ov[k].category || 'Pantry',
       sticker: !!ov[k].sticker,
       perPack: !!ov[k].perPack,
+      quote: ov[k].quote,
       items: [],
     }));
   return [...DEFAULT_VARIANT_GROUPS, ...created];
@@ -1272,6 +1291,10 @@ function loadVariantGroups() {
       // not DEFAULT_VARIANT_GROUPS directly, so a seed-only field is invisible
       // downstream unless it is re-exported here too.
       perPack: o.perPack != null ? !!o.perPack : !!g.perPack,
+      // Same override-first rule as the two flags above, and for the same
+      // reason: the quote size is editable, so a seed-only read would silently
+      // discard the user's choice. See pieceQuoteOf() for the valid values.
+      quote: o.quote != null ? Number(o.quote) : g.quote,
       items: computePerKgItems(g.items, o),
       // Per-store ordered member lists (display order hints; membership comes from
       // `items` + price qualification in resolveStoreLists). Null until the user saves.
@@ -1306,12 +1329,23 @@ function nameWithSize(displayName, key) {
 // table width for nothing. Each entry carries a one-letter chip like W and C.
 // The letter C is reused for Chemist Warehouse - the third column and its own
 // indigo colour keep it apart from the red Coles C.
+// `bg`/`fg` are each shop's own sign colours, so a chip is recognisable at a
+// glance instead of every outside store wearing the same grey. Chemist Warehouse
+// is the odd one out: its identity is a yellow ground, which needs dark text -
+// hence fg rather than assuming white everywhere. Note CW and Coles share the
+// letter C; the colour is now what actually tells them apart.
 const THIRD_STORES = {
-  chemist_warehouse: { letter: 'C', label: 'Chemist Warehouse' },
-  priceline:         { letter: 'P', label: 'Priceline' },
-  big_w:             { letter: 'B', label: 'Big W' },
-  aldi:              { letter: 'A', label: 'ALDI' },
+  chemist_warehouse: { letter: 'C', label: 'Chemist Warehouse', bg: '#FFD400', fg: '#00285A' },
+  priceline:         { letter: 'P', label: 'Priceline',         bg: '#E5006D', fg: '#ffffff' },
+  big_w:             { letter: 'B', label: 'Big W',             bg: '#0072CE', fg: '#ffffff' },
+  aldi:              { letter: 'A', label: 'ALDI',              bg: '#00317F', fg: '#ffffff' },
 };
+
+// Inline style for a store chip, or '' for a store we have no colours for.
+function thirdChipStyle(storeKey) {
+  const m = THIRD_STORES[storeKey];
+  return m && m.bg ? `background:${m.bg};color:${m.fg || '#fff'}` : '';
+}
 
 // Which third store a pasted product URL belongs to, or null if it is not one
 // we know. Matched on the HOSTNAME only - a path or query can contain anything
@@ -1625,11 +1659,12 @@ function buildVariantGroups(byName) {
       _groupLabel: g.label,
       _sticker: !!g.sticker,
       _perPack: !!g.perPack,
+      _quote: pieceQuoteOf(g),
       _unitSuffix: g.sticker ? '' : '/kg',
       // What to PRINT after the metric. Kept apart from _unitSuffix on purpose:
       // that one is also read as "is this category weighed?" (the basket shows kg
       // quantities when it is truthy), and a per-pack category is not weighed.
-      _metricSuffix: g.perPack ? ' /100' : (g.sticker ? '' : '/kg'),
+      _metricSuffix: g.perPack ? pieceQuoteSuffix(pieceQuoteOf(g)) : (g.sticker ? '' : '/kg'),
       _members: members,
       _wwList: stores.ww,
       _coList: stores.coles,
@@ -1831,7 +1866,12 @@ function buildDealGroups(items) {
       _isGroup: true,
       _groupLabel: g.label,
       _sticker: !!g.sticker,
-      _metricSuffix: g.perPack ? ' /100' : (g.sticker ? '' : '/kg'),
+      // Carried for the same reason perPack had to be re-exported above: anything
+      // reading these groups (metricShown, pieceQuoteOf) sees only what this
+      // shape hands it, so a field left off here is silently absent downstream.
+      _perPack: !!g.perPack,
+      _quote: pieceQuoteOf(g),
+      _metricSuffix: g.perPack ? pieceQuoteSuffix(pieceQuoteOf(g)) : (g.sticker ? '' : '/kg'),
       _memberNames: members.map(m => m.list_item), // for the basket handoff (re-collapsed there)
       category: g.category || GROUP_DEFAULT_CATEGORY,
       trip_count: null,

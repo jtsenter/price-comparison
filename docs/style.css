@@ -525,6 +525,24 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
 .vg-panel-store { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; }
 .vg-store-h { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px; margin-bottom: 6px; }
 
+/* "Show price per" row in the category editor, under Compare prices by. */
+.cat-quote-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.cat-quote-row > label { font-size: 12px; font-weight: 600; white-space: nowrap; }
+.cat-quote-row .seg { flex: none; }
+.cat-quote-row .seg button { min-width: 40px; }
+.cat-quote-row .form-note { margin: 0; flex: 1 1 180px; min-width: 0; }
+
+/* Shop badge inside the row's outside-stores chip. Carries the shop's own
+   colours (see THIRD_STORES), so one character replaces a name that used to
+   wrap the product column onto a second line. */
+.third-chip-b {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 14px; height: 14px; border-radius: 4px;
+  font-size: 9px; font-weight: 800; line-height: 1;
+  margin-right: 4px; vertical-align: middle; flex: none;
+}
+.third-chip-n { opacity: .65; font-weight: 600; margin-left: 3px; }
+
 /* "N more at <shop>" fold in a category's outside-stores column. Native
    <details>, so the arrow, keyboard operation and screen-reader state are the
    browser's job, not ours. */
