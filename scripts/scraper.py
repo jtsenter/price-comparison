@@ -2059,6 +2059,41 @@ async def _scrape_single_item(
     return result, False, _validation_entry
 
 
+def _pinned_additions(url_overrides: dict, shopping_set: set, removed: set,
+                      quick_skipped: set = frozenset()) -> list[str]:
+    """Pinned items that are not already on this run's list, in file order.
+
+    Three exclusions, and each one has cost a real bug:
+      * already listed  - would scrape the item twice
+      * removed_items   - a pin must not resurrect a deleted product
+      * quick_skipped   - this block runs AFTER the quick filter and selects on
+                          "not currently listed", so without it every settled
+                          item the filter just dropped came straight back. Being
+                          dropped is precisely what made it eligible.
+    `quick_skipped` is empty on a full run, so full runs keep every pin.
+    """
+    return [
+        n for n, v in (url_overrides or {}).items()
+        if n and n != "undefined" and n not in shopping_set
+        and n not in removed
+        and n not in quick_skipped
+        and ((v or {}).get("ww_url") or (v or {}).get("coles_url"))
+    ]
+
+
+def _refresh_targets(single_item: str) -> list[str]:
+    """The item names a targeted refresh should scrape, one per entry.
+
+    A category's refresh button sends its whole member list in ONE dispatch,
+    pipe-separated, to avoid queueing a workflow run per member. Splitting it is
+    the ONLY correct reading: the raw string is not a product name, and handing
+    it to a store search asks Woolworths for the literal "A|B|C" - which is what
+    used to happen. WW answered HTTP 400 and every member of the category came
+    back unpriced, silently, because the run still "succeeded".
+    """
+    return [n.strip() for n in str(single_item or "").split("|") if n.strip()]
+
+
 def _quick_skip_set(existing_items: list[dict], months: int = QUICK_STALE_MONTHS) -> set[str]:
     """Names a QUICK run should not bother re-checking.
 
@@ -2143,7 +2178,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         # checkout + pip install again, so a category refresh took ~10 minutes
         # and looked like nothing was happening. Explicit ww_url/coles_url only
         # make sense for a single product, so they are ignored for a list.
-        shopping_list = [n.strip() for n in single_item.split("|") if n.strip()]
+        shopping_list = _refresh_targets(single_item)
         if len(shopping_list) > 1:
             ww_url = coles_url = ""
             print(f"Category refresh: {len(shopping_list)} items - {', '.join(shopping_list[:4])}"
@@ -2251,6 +2286,9 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         # QUICK run: drop the settled prices. Full runs (and the weekly scheduled
         # one) still sweep everything, so a price that starts moving again after
         # a long freeze is picked back up within the week.
+        # Kept in scope past the `if` because the pinned-items block below has to
+        # honour it too - see the comment there.
+        _quick_skipped: set[str] = set()
         if scrape_mode == "quick":
             # Read latest.json here rather than reusing `existing` - that name is
             # only bound much later, inside the single-item branch, so touching it
@@ -2261,28 +2299,37 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                     _prev_items = json.load(_pf).get("items", [])
             except Exception:
                 pass                       # no history yet = scrape everything
-            _skip = _quick_skip_set(_prev_items)
-            if _skip:
+            _quick_skipped = _quick_skip_set(_prev_items)
+            if _quick_skipped:
                 _before = len(shopping_list)
-                shopping_list = [n for n in shopping_list if n not in _skip]
+                shopping_list = [n for n in shopping_list if n not in _quick_skipped]
+                # Report what was actually DROPPED, not len(skip set). The set is
+                # every settled item in the catalogue; only some are on this run's
+                # list, so printing its size read as "49 skipped" on a run that
+                # dropped 18 - which made a quick run that saved nothing look
+                # like it was working.
                 print(f"Quick scrape: {len(shopping_list)} of {_before} items "
-                      f"({len(_skip)} skipped - price unchanged for {QUICK_STALE_MONTHS}+ months)")
+                      f"({_before - len(shopping_list)} dropped - price unchanged "
+                      f"for {QUICK_STALE_MONTHS}+ months)")
 
         # Items pinned via url_overrides.json but not in the Excel get added here
         # so they are actively re-scraped each run (fresh prices).  The universal
         # carry-forward below handles the fallback if the scrape fails.
+        #
+        # This block runs AFTER the quick filter and adds by "not currently in the
+        # list", so it used to hand back every settled item the quick filter had
+        # just removed - removal is exactly what made them eligible. With 132 of
+        # ~180 products pinned, a quick run went 181 -> 163 -> 295 and took the
+        # full 16 minutes while reporting that it had skipped 49. `_quick_skipped`
+        # is empty on a full run, so full runs are unaffected.
         overrides_path = os.path.join(DATA_DIR, "url_overrides.json")
         if os.path.exists(overrides_path):
             try:
                 with open(overrides_path) as _f:
                     _url_ov = json.load(_f)
                 shopping_set = set(shopping_list)
-                manually_added = [
-                    n for n, v in _url_ov.items()
-                    if n and n != "undefined" and n not in shopping_set
-                    and n not in removed_set          # a pin must not resurrect a deleted item
-                    and (v.get("ww_url") or v.get("coles_url"))
-                ]
+                manually_added = _pinned_additions(
+                    _url_ov, shopping_set, removed_set, _quick_skipped)
                 if manually_added:
                     shopping_list = shopping_list + manually_added
                     print(f"  + {len(manually_added)} manually-pinned item(s) from url_overrides.json")
@@ -2308,7 +2355,7 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
     items_output = []
     not_found = []
     new_validation_entries: list = []
-    single_item_ve = None
+    single_item_ves = []          # validation entries, one per refreshed name
 
     # Load existing pending_validation as a dict keyed by item name for O(1) dedup
     existing_pv: dict = {e["item"]: e for e in existing_data.get("pending_validation", [])}
@@ -2372,15 +2419,24 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                 except Exception as e:
                     print(f"  Coles warm-up navigation failed (continuing): {e}")
 
-            result, is_nf, _ve = await _scrape_single_item(
-                single_item, purchase_history, ww_page, coles_page,
-                ww_url, coles_url, existing_data,
-            )
-            if result:
-                items_output.append(result)
-            else:
-                not_found.append(single_item)
-            single_item_ve = _ve
+            # Scrape each NAME, never the raw dispatch string. `shopping_list` is
+            # _refresh_targets(single_item) - one entry for a plain single-item
+            # refresh, several for a category refresh. Passing `single_item`
+            # itself here is the bug this loop replaces: a 6-member category
+            # searched for "A|B|C|D|E|F" as one product, got HTTP 400 from WW,
+            # and reported success with nothing priced. single_item is
+            # deliberately not referenced below, so that cannot come back.
+            for _name in shopping_list:
+                result, is_nf, _ve = await _scrape_single_item(
+                    _name, purchase_history, ww_page, coles_page,
+                    ww_url, coles_url, existing_data,
+                )
+                if result:
+                    items_output.append(result)
+                else:
+                    not_found.append(_name)
+                if _ve:
+                    single_item_ves.append(_ve)
 
         else:
             # Full scrape: determine which items need re-scraping
@@ -2716,16 +2772,23 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
 
         # Merge single-item validation entry into existing pending_validation
         merged_pv = existing.get("pending_validation", [])
-        if single_item_ve:
-            # Replace any existing entry for this item, then append
-            merged_pv = [e for e in merged_pv if e.get("item") != single_item]
-            merged_pv.append(single_item_ve)
+        if single_item_ves:
+            # Replace any existing entry for each refreshed item, then append.
+            # Keyed on the entries' own item names, not on `single_item` - that
+            # is the pipe-joined dispatch string for a category refresh and
+            # matches no real item, so every stale entry survived.
+            _ve_names = {e.get("item") for e in single_item_ves}
+            merged_pv = [e for e in merged_pv if e.get("item") not in _ve_names]
+            merged_pv.extend(single_item_ves)
         output = _build_output(
             all_items, existing.get("not_found_items", []), trigger,
             pending_validation=merged_pv if merged_pv else None,
             approved_prices=existing.get("approved_prices") or None,
         )
-        print(f"Patched '{single_item}' into existing data ({len(all_items)} total items).")
+        _patched = ", ".join(i["list_item"] for i in items_output[:4]) or "nothing"
+        print(f"Patched {len(items_output)} of {len(shopping_list)} refreshed item(s) "
+              f"into existing data ({len(all_items)} total): {_patched}"
+              + (" ..." if len(items_output) > 4 else ""))
     else:
         # Remove stale approvals: if a re-scraped item's price moved >5% from its approved
         # price, clear that store's approval so it can be re-flagged and re-approved.

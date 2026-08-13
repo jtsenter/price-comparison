@@ -16,6 +16,7 @@ Run: python scripts/removed_items_selfcheck.py
 import json
 import os
 import re
+import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -48,10 +49,20 @@ def _run():
     n += 2
 
     # ── gate 2: url_overrides manual adds ────────────────────────────────────
-    m = re.search(r"manually_added\s*=\s*\[(.*?)\]", src, re.S)
-    assert m, "manually_added block not found - url_overrides gate cannot be verified"
-    assert "removed_set" in m.group(1), "gate 2 missing: a pinned URL can still resurrect a deleted item"
-    n += 2
+    # This used to grep the inline `manually_added = [...]` comprehension. That
+    # selection now lives in _pinned_additions(), so exercise the function: a
+    # behavioural check survives refactoring and proves more than the text did.
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from scraper import _pinned_additions
+    _ov = {"Deleted": {"ww_url": "u"}, "Kept": {"ww_url": "u"}}
+    assert _pinned_additions(_ov, set(), {"Deleted"}) == ["Kept"], \
+        "gate 2 missing: a pinned URL can still resurrect a deleted item"
+    assert _pinned_additions(_ov, set(), {"Deleted", "Kept"}) == [], \
+        "gate 2 missing: removed_set must win over every pin"
+    # The call site must still be passing the tombstone set in.
+    assert re.search(r"_pinned_additions\(\s*\n?\s*_url_ov,\s*shopping_set,\s*removed_set", src), \
+        "gate 2 missing: scrape() does not pass removed_set to _pinned_additions"
+    n += 3
 
     # ── gate 3: carry-forward from latest.json ───────────────────────────────
     assert re.search(r"for\s+_rm\s+in\s+removed_set:\s*\n\s*existing_map\.pop\(_rm,\s*None\)", src), \
