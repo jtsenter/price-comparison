@@ -32,7 +32,13 @@ function extract(name) {
 }
 
 // eslint-disable-next-line no-eval
-eval([extract('loadUnitOverrides'), extract('groupUnits'), extract('groupStoreTotal')].join('\n'));
+// groupStoreTotal now costs a row at the price it DISPLAYS, so it needs the
+// display helpers too - a per-piece category is quoted per `quote` pieces.
+const PIECE_QUOTES_SRC = utils.match(/const PIECE_QUOTES\s*=\s*[^;]+;/)[0];
+const PER_PIECE_QUOTE_SRC = utils.match(/const PER_PIECE_QUOTE\s*=\s*[^;]+;/)[0];
+eval([PIECE_QUOTES_SRC, PER_PIECE_QUOTE_SRC,
+      extract('pieceQuoteOf'), extract('metricShown'),
+      extract('loadUnitOverrides'), extract('groupUnits'), extract('groupStoreTotal')].join('\n'));
 
 let n = 0;
 const check = (label, fn) => { fn(); n++; process.stdout.write(`  ok  ${label}\n`); };

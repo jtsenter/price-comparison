@@ -566,10 +566,35 @@ function getUnits(itemName) {
 // their Units value means KILOGRAMS, not a pack count. Unit-based groups
 // (Nutella, potato bags, yoghurt tubs...) count discrete packs like normal items.
 function isKgQty(itemName) {
-  if (typeof itemName !== 'string') return false;
+  return qtyKind(itemName) === 'kg';
+}
+
+// How a row counts quantity: 'kg' (weighed), 'pieces' (a per-piece category,
+// counted in the pieces it QUOTES - 100 wipes, not 1), or 'packs'.
+//
+// perPack is tested FIRST and beats sticker. Every per-piece category is also a
+// sticker one, so the sticker test below was claiming them as pack-counted rows
+// and they measured in kilos: dishwashing tablets and garbage bags showed
+// "1.0 kg" in the Units box. A row whose price reads "/100" counts pieces.
+function qtyKind(itemName) {
+  if (typeof itemName !== 'string') return 'packs';
   const k = itemName.startsWith('__group_') ? itemName.slice(8) : null;
+  if (k && perPackQuotes().has(k)) return 'pieces';
   const packGroup = k && (UNIT_BASED_GROUPS.has(k) || stickerGroups().has(k)); // bought as packs
-  return !packGroup && (_perkgSet.has(itemName) || itemName.startsWith('__group_'));
+  if (!packGroup && (_perkgSet.has(itemName) || itemName.startsWith('__group_'))) return 'kg';
+  return 'packs';
+}
+
+// Pieces one unit of quantity buys, for the Units label and the basket.
+function qtyPiecesForName(itemName) {
+  const k = typeof itemName === 'string' && itemName.startsWith('__group_') ? itemName.slice(8) : null;
+  return (k && perPackQuotes().get(k)) || 1;
+}
+
+// The Units control's text for any row, in one place so the table, the card and
+// the basket cannot label the same quantity differently.
+function unitsLabel(itemName, units) {
+  return qtyLabel(units, qtyKind(itemName), qtyPiecesForName(itemName));
 }
 
 // ── Category normalisation ────────────────────────────────────────────────────
@@ -807,8 +832,12 @@ function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg) {
         // Same slot split as a W/C row: grey pack price only where the metric
         // isn't already the pack price (a sticker category would print it twice).
         const pack = group._sticker ? '' : (e.price != null ? fmt(e.price) : '');
+        // bestMetric here is already the cheapest across ALL columns, so this
+        // row wins outright - same tag the W/C columns use, so the category has
+        // exactly one "CHEAPEST" no matter which shop it lands in.
         const isWin = m != null && bestMetric != null && m <= bestMetric + 0.0001;
-        return `<div class="vg-pv${isWin ? ' win' : ''}">
+        return `<div class="vg-pv${isWin ? ' win vg-top' : ''}">
+            ${isWin ? '<span class="vg-top-tag">CHEAPEST</span>' : ''}
             ${imgHtml}
             ${nameHtml}
             <span class="vg-pv-pack">${pack}</span>
@@ -829,7 +858,7 @@ function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg) {
     const head = sorted.slice(0, THIRD_ROWS_PER_STORE).map(rowHtml).join('');
     const rest = sorted.slice(THIRD_ROWS_PER_STORE);
     const more = rest.length
-      ? `<details class="vg-more"><summary class="vg-more-sum">${rest.length} more at ${esc(meta.label)}</summary>${rest.map(rowHtml).join('')}</details>`
+      ? `<details class="vg-more"><summary class="vg-more-sum"><span class="vg-more-ic"></span>${rest.length} more at ${esc(meta.label)}</summary>${rest.map(rowHtml).join('')}</details>`
       : '';
     return `<div class="vg-store-h"><span class="store-chip third sm" style="${thirdChipStyle(storeKey)}">${esc(meta.letter)}</span> ${esc(meta.label)}</div>${head}${more}`;
   }).join('');
@@ -1258,7 +1287,7 @@ function getColValue(col, item) {
     case 'saving':       { const s = savingAmount(item); return s > 0 ? fmt(s * getUnits(item.list_item)) : '-'; }
     case 'trips':        return String(item.trip_count || 0);
     // Kg rows filter as "1.0kg" (their real meaning), pack rows as plain counts.
-    case 'units':        { const u = getUnits(item.list_item); return isKgQty(item.list_item) ? u.toFixed(1) + 'kg' : String(u); }
+    case 'units':        { const u = getUnits(item.list_item); return unitsLabel(item.list_item, u); }
     case 'category':     return getCategory(item);
     case 'last_scraped': return item.last_scraped
       ? new Date(item.last_scraped).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -3815,7 +3844,7 @@ function cardFooterHTML(itemName, hasBar) {
   return `<div class="card-footer">
       <span class="units-ctrl card-units">
         <button class="units-dec" data-item="${safe}" aria-label="Decrease quantity">−</button>
-        <span class="units-val">${isKgQty(itemName) ? u.toFixed(1) + ' kg' : u}</span>
+        <span class="units-val">${unitsLabel(itemName, u)}</span>
         <button class="units-inc" data-item="${safe}" aria-label="Increase quantity">+</button>
       </span>
       ${hasBar ? `<button class="price-bar-manage card-hist" data-manage-item="${safe}" title="Price history" aria-label="View price history">${HIST_CLOCK_SVG}</button>` : ''}
@@ -3902,11 +3931,15 @@ function groupTrendCellHTML(group, historyBtn = true) {
   // against, so a price below the bar really does sort ahead of one sitting on it.
   const prices = groupPastPrices(group);
   if (prices.length < 2) return '';
-  const hist = prices.map(p => ({ price: p }));
+  // Shown in the SAME units as the price column, the total and the basket. The
+  // bar itself is relative so the scale never mattered to it, but its min/max
+  // labels are real money and were printing the hidden per-ONE-piece figure -
+  // "$0.03  $0.12" beside a price reading "$3.17 /100".
+  const hist = prices.map(p => ({ price: metricShown(group, p) }));
   // History button opens the group's own merged history (see buildGroupHistoryItem),
   // not one member's - a group can mix a WW-only and a Coles-only product, so
   // picking a single member's history hides whichever store that member doesn't sell at.
-  return buildPriceBar(`__group_${group._groupKey}`, hist, best.perkg, 1, historyBtn);
+  return buildPriceBar(`__group_${group._groupKey}`, hist, metricShown(group, best.perkg), 1, historyBtn);
 }
 
 // Synthesizes a "price history" item for a per-kg group: for each store, at every
@@ -3936,8 +3969,12 @@ function buildGroupHistoryItem(group) {
       // same reasoning as groupTrendCellHTML just above: a 30-pack and a 40-pack
       // read the same $ scale here otherwise, and the cheapest-per-date pick
       // would favour whichever pack happens to be bigger rather than cheaper.
+      // qtyPiecesPer, not 1: the series has to be in the SAME units the row,
+      // the total and the basket use, or the history chart contradicts them.
+      // It also rescues the precision - at per-ONE-piece the .toFixed(2) below
+      // flattened every wipe in the category to "$0.03".
       const ratio = group._perPack
-        ? (packCountOf(m.list_item) > 0 ? 1 / packCountOf(m.list_item) : null)
+        ? (packCountOf(m.list_item) > 0 ? qtyPiecesPer(group) / packCountOf(m.list_item) : null)
         : (group._sticker ? 1 : perKgRatio(isWw ? m.woolworths : m.coles));
       if (ratio == null) return [];
       const ex = exclSetsFor(m.list_item)[isWw ? 'ww' : 'co'];
@@ -3977,6 +4014,11 @@ function buildGroupHistoryItem(group) {
     _isGroupHistory: true,
     _groupKey: group._groupKey,
     _sticker: !!group._sticker,
+    // What the plotted numbers MEAN. A per-piece category's history is per
+    // `quote` pieces, so the modal has to say so - "$10.93" with no unit is
+    // indistinguishable from a pack price.
+    _unitLabel: group._perPack ? `per ${qtyPiecesPer(group)} pcs`
+              : (group._sticker ? null : '$/kg'),
     // date → winning source, for the modal's per-point exclusion buttons
     _wwMeta: new Map(wwSeries.map(e => [e.date, e])),
     _coMeta: new Map(coSeries.map(e => [e.date, e])),
@@ -4105,7 +4147,7 @@ function dedupePerKgVariants(variants, storeKey, overrides, memberByName) {
   return [...byLook.values()].sort((a, b) => a.pk - b.pk);
 }
 
-function groupStoreVariantsHTML(group, store, overrides) {
+function groupStoreVariantsHTML(group, store, overrides, globalBest) {
   const storeKey = store === 'woolworths' ? 'ww' : 'coles';
   // This store's ordered member list (independent of the other store).
   const order = (storeKey === 'ww' ? group._wwList : group._coList) || [];
@@ -4159,8 +4201,13 @@ function groupStoreVariantsHTML(group, store, overrides) {
       ? `<a class="vg-pv-name" href="${escAttr(url)}" target="_blank" rel="noopener">${esc(name)}</a>`
       : `<span class="vg-pv-name">${esc(name)}</span>`;
     const isWin = v.pk === cheapestPk;
+    // Best at THIS store vs best ANYWHERE are different claims. Every column
+    // marking its own winner green left three green rows and no way to see that
+    // ALDI beat both supermarkets - so the overall winner gets its own tag.
+    const isTop = globalBest != null && v.pk <= globalBest + 0.0001;
     const inBasket = _selectedItems.has(v.name);
-    return `<div class="vg-pv${isWin ? ' win' : ''}">
+    return `<div class="vg-pv${isWin ? ' win' : ''}${isTop ? ' vg-top' : ''}">
+        ${isTop ? '<span class="vg-top-tag">CHEAPEST</span>' : ''}
         ${imgHtml}
         ${nameHtml}
         <span class="vg-pv-pack">${pack}</span>
@@ -4319,7 +4366,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
   const unitsCell = `<td class="units-cell">
     <div class="units-ctrl">
       <button class="units-dec" data-item="${group.list_item}">−</button>
-      <span class="units-val">${isKgQty(group.list_item) ? units.toFixed(1) + ' kg' : units}</span>
+      <span class="units-val">${unitsLabel(group.list_item, units)}</span>
       <button class="units-inc" data-item="${group.list_item}">+</button>
     </div></td>`;
 
@@ -4331,8 +4378,10 @@ function appendGroupRowDesktop(tbody, group, overrides) {
       <option value="rare"${gp === 'rare' ? ' selected' : ''}>Rare</option>
     </select></td>`;
 
-  const wwTotal = group._wwPerKg != null ? group._wwPerKg * units : null;
-  const coTotal = group._coPerKg != null ? group._coPerKg * units : null;
+  // Via groupStoreTotal so the table and the basket cost a category through
+  // ONE function - and so a per-piece row totals at the price it displays.
+  const wwTotal = groupStoreTotal(group, 'ww');
+  const coTotal = groupStoreTotal(group, 'coles');
   // Two independent per-store totals (matches normal rows); cheaper side tinted.
   const gCell = (v, isWin, cls) =>
     `<td class="total-cell ${isWin ? cls : ''}" style="font-size:13px;font-weight:600;white-space:nowrap">${
@@ -4341,7 +4390,9 @@ function appendGroupRowDesktop(tbody, group, overrides) {
   const gCoWin = wwTotal != null && coTotal != null && coTotal < wwTotal - 0.005;
   let savingContent = '<span class="no-data">-</span>';
   if (group._wwPerKg != null && group._coPerKg != null) {
-    const sav = Math.abs(group._wwPerKg - group._coPerKg) * units;
+    // Saving is the gap between the two TOTALS, so it can never disagree with
+    // the two numbers printed either side of it.
+    const sav = Math.abs(wwTotal - coTotal);
     savingContent = sav > 0 ? `<span class="saving-cell">${fmt(sav)}</span>` : '<span class="no-data">$0.00</span>';
   }
 
@@ -4429,11 +4480,11 @@ function appendGroupRowDesktop(tbody, group, overrides) {
       <div class="vg-panel-cols${showThird ? ' third-cols' : (gThirdEntries.length ? ' third-rail-cols' : '')}">
         <div class="vg-panel-store">
           <div class="vg-store-h"><span class="store-chip ww sm">W</span> Woolworths</div>
-          ${groupStoreVariantsHTML(group, 'woolworths', overrides)}
+          ${groupStoreVariantsHTML(group, 'woolworths', overrides, gBestMetric)}
         </div>
         <div class="vg-panel-store">
           <div class="vg-store-h"><span class="store-chip coles sm">C</span> Coles</div>
-          ${groupStoreVariantsHTML(group, 'coles', overrides)}
+          ${groupStoreVariantsHTML(group, 'coles', overrides, gBestMetric)}
         </div>
         ${thirdCol}
       </div>
@@ -4575,11 +4626,11 @@ function appendGroupCardMobile(container, group, overrides) {
     html += `<div class="vgm-body">
       <div class="vgm-store-sec">
         <div class="vg-store-h"><span class="store-chip ww sm">W</span> Woolworths</div>
-        ${groupStoreVariantsHTML(group, 'woolworths', overrides)}
+        ${groupStoreVariantsHTML(group, 'woolworths', overrides, mBest)}
       </div>
       <div class="vgm-store-sec">
         <div class="vg-store-h"><span class="store-chip coles sm">C</span> Coles</div>
-        ${groupStoreVariantsHTML(group, 'coles', overrides)}
+        ${groupStoreVariantsHTML(group, 'coles', overrides, mBest)}
       </div>
       ${thirdSec}
     </div>`;
@@ -4858,21 +4909,8 @@ function catEditApplyMetric(metric) {
 // not disturb the other.
 function catEditApplyQuote(quote) {
   const q = PIECE_QUOTES.includes(Number(quote)) ? Number(quote) : PER_PIECE_QUOTE;
-  const seg = $('catEditQuote');
-  if (seg) {
-    seg.dataset.quote = String(q);
-    seg.querySelectorAll('button').forEach(b => {
-      const on = Number(b.dataset.quote) === q;
-      b.classList.toggle('on', on);
-      b.setAttribute('aria-checked', on ? 'true' : 'false');
-    });
-  }
-  const n = $('catEditQuoteNote');
-  if (n) {
-    n.textContent = q === 1
-      ? 'Shown as the price of one piece.'
-      : `Shown as the price of ${q} pieces - pick roughly one pack, so the figure is a number you actually pay.`;
-  }
+  const sel = $('catEditQuote');
+  if (sel) { sel.value = String(q); sel.dataset.quote = String(q); }
 }
 
 // Bind the add/remove + drag-reorder handlers to the (persistent) modal body ONCE.
@@ -4941,10 +4979,7 @@ function bindCategoryEditBody() {
   });
 
   // Comparison metric.
-  $('catEditQuote')?.addEventListener('click', (e) => {
-    const b = e.target.closest('button[data-quote]');
-    if (b) catEditApplyQuote(b.dataset.quote);
-  });
+  $('catEditQuote')?.addEventListener('change', (e) => catEditApplyQuote(e.target.value));
   $('catEditMetric')?.addEventListener('click', (e) => {
     const b = e.target.closest('button[data-metric]');
     if (b) catEditApplyMetric(b.dataset.metric);

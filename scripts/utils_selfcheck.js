@@ -114,7 +114,8 @@ eval([
   extractConst('PIECE_QUOTES') + '\nglobal.PIECE_QUOTES = PIECE_QUOTES;',
   extract('pieceQuoteOf'), extract('pieceQuoteSuffix'),
   extract('metricShown'),      // per-piece categories are QUOTED per 100 pieces
-  extract('groupStoreTotal'),  // ...but costed per ONE, which is the whole trap
+  extract('groupStoreTotal'),  // costed at the price the row DISPLAYS
+  extract('qtyLabel'),         // and the Units box names what it counts
   // Used directly by the test body, not just by another extracted function, so
   // it needs the same global re-export as KNOWN_BAD_NAPPIES_REMOVE above.
   extractConst('CHEAPER_SORT_LABEL') + '\nglobal.CHEAPER_SORT_LABEL = CHEAPER_SORT_LABEL;',
@@ -413,10 +414,11 @@ check('median empty -> null', _median([]), null);
   check('no group at all',      metricShown(null, 3.5), 3.5);
   check('null stays null',      metricShown(wipes, null), null);
 
-  // THE TRAP, and the reason this is a display-only helper: the stored value
-  // still has to be per ONE piece, because the Total column and the basket
-  // multiply it by the quantity bought. If scaling ever leaks into the stored
-  // _wwPerKg, every basket total silently becomes 100x too big.
+  // The stored value stays per ONE piece; the row COSTS at the price it shows.
+  // So one unit of quantity is 100 wipes and costs $2.86, matching the "/100"
+  // figure printed beside it. Costing the hidden per-piece number instead put
+  // "$0.03" in the Total column next to a price reading "$2.86 /100" - the same
+  // rate quoted two different ways in one row.
   // ── the quote size is PER CATEGORY ───────────────────────────────────────
   // Quoting is meant to read as "about one pack". Wipes and tablets come in
   // 60-640 so 100 is natural; nappies come in 26-60, where a per-100 price
@@ -459,10 +461,18 @@ check('median empty -> null', _median([]), null);
   // real groupStoreTotal still runs and the assertion is about the PRICE it
   // multiplies, which is the thing that must not be the per-100 figure.
   global.groupUnits = () => 1;
-  const total = groupStoreTotal(g, 'ww');
-  check('one wipe costs about 3c, not $2.86', total.toFixed(4), (2.29 / 80).toFixed(4));
-  check('the DISPLAYED figure is 100x the costed one',
-        (metricShown(g, g._wwPerKg) / g._wwPerKg).toFixed(0), String(PER_PIECE_QUOTE));
+  check('one unit of quantity is 100 wipes and costs the shown price',
+        fmtUnitMetric(groupStoreTotal(g, 'ww')), fmtUnitMetric(metricShown(g, g._wwPerKg)));
+  check('...which is ALDI\'s per-100 figure', fmtUnitMetric(groupStoreTotal(g, 'ww')), '$2.86');
+  // A weighed category must be untouched by all of this: $/kg x kg, as before.
+  const meat = { list_item: '__group_chicken', _wwPerKg: 12, _coPerKg: 11 };
+  check('a weighed row still costs $/kg x kg', groupStoreTotal(meat, 'ww'), 12);
+  // And the Units label has to name what is being counted.
+  check('a per-piece row counts PIECES', qtyLabel(1, 'pieces', 100), '100 pcs');
+  check('...and scales with the quantity', qtyLabel(1.2, 'pieces', 100), '120 pcs');
+  check('a nappy row counts its own quote', qtyLabel(1, 'pieces', 50), '50 pcs');
+  check('a weighed row still says kg', qtyLabel(1, 'kg', 1), '1.0 kg');
+  check('a pack row is a plain count', qtyLabel(3, 'packs', 1), '3');
 
   // The row's CHIP and the panel under it price the same entry by two different
   // routes - thirdUnitPrice for the chip, thirdGroupMetric for the panel. They

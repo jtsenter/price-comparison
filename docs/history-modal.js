@@ -362,7 +362,11 @@ function openPriceHistoryModal(item, opts) {
   // mix WW-only and Coles-only products (e.g. "Lamb Mince"), so a single member's history
   // can legitimately show nothing for the store the group's headline price came from.
   const titleName = kgR.groupLabel ? `${kgR.groupLabel} - ${stripWW(item.list_item)}` : stripWW(item.list_item);
-  document.getElementById('priceHistoryTitle').textContent = `Price History - ${titleName}${kgR.perKg ? ' ($/kg)' : ''}`;
+  // A group's history carries its own unit label (per 100 pcs, $/kg, or none for
+  // a pack-price category); fall back to the $/kg flag for a member's history.
+  const unitLbl = item._unitLabel || (kgR.perKg ? '$/kg' : '');
+  document.getElementById('priceHistoryTitle').textContent =
+    `Price History - ${titleName}${unitLbl ? ` (${unitLbl})` : ''}`;
 
   // Simplified view: no per-row exclude/"different item" editing, no Save/Reset -
   // just the read-only chart + list. Always on for a group's merged history (points

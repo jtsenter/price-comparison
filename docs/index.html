@@ -272,17 +272,16 @@
         </div>
         <div class="form-note" id="catEditMetricNote"></div>
         <!-- Only meaningful under "Per piece"; catEditApplyMetric shows/hides it.
-             Quoting per ~one pack is what makes the number readable: 3c a wipe
-             says nothing, $2.86 per 100 does. -->
+             A select rather than four buttons, and the explanation lives in the
+             tooltip - the expanded form pushed the product columns off screen. -->
         <div class="cat-quote-row" id="catEditQuoteRow" hidden>
-          <label for="catEditQuote">Show price per</label>
-          <div class="seg" id="catEditQuote" role="radiogroup" aria-label="Show price per">
-            <button type="button" data-quote="1"   role="radio" aria-checked="false">1</button>
-            <button type="button" data-quote="10"  role="radio" aria-checked="false">10</button>
-            <button type="button" data-quote="50"  role="radio" aria-checked="false">50</button>
-            <button type="button" data-quote="100" role="radio" aria-checked="false">100</button>
-          </div>
-          <span class="form-note" id="catEditQuoteNote"></span>
+          <select id="catEditQuote" aria-label="Show price per"
+                  title="How many pieces the price is quoted for. Pick roughly one pack, so the figure is a number you actually pay: 3c a wipe says nothing, $2.86 per 100 does.">
+            <option value="1">per 1</option>
+            <option value="10">per 10</option>
+            <option value="50">per 50</option>
+            <option value="100">per 100</option>
+          </select>
         </div>
       </div>
     </div>

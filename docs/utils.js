@@ -1087,6 +1087,14 @@ const DEFAULT_VARIANT_GROUPS = [
 function stickerGroups() {
   return new Set(loadVariantGroups().filter(g => g.sticker).map(g => g.key));
 }
+// key -> pieces quoted, for every per-piece category. Derived live for exactly
+// the reason stickerGroups() is: `perPack` and `quote` are both editable, so a
+// snapshot would let the Units column count one thing while the price column
+// quotes another. Callers that hold only a group KEY (the units model, the
+// basket) need this to know a row's quantity is measured in pieces.
+function perPackQuotes() {
+  return new Map(loadVariantGroups().filter(g => g.perPack).map(g => [g.key, pieceQuoteOf(g)]));
+}
 // Comparison metric for a group's store-side result: pack price for sticker
 // groups, $/kg otherwise. Threading this (instead of clientPerKg) through the
 // group builders makes the whole per-kg pipeline - sort, trend, history, hot
@@ -1163,9 +1171,31 @@ function groupUnits(groupKey) {
 // costed at $10/kg counts as $10 for 1kg even though you can't buy half a bag.
 // Otherwise a store offering a great $/kg only in bulk would LOSE the comparison
 // purely for selling a big pack - the opposite of the answer we want.
+// A per-piece category costs at the price it SHOWS, exactly like a weighed one.
+// metricShown() is the whole point: the row says "$3.17 /100", so one unit of
+// quantity IS 100 wipes and costs $3.17. Multiplying the hidden per-ONE-piece
+// figure instead made the Total column read $0.03 while the price beside it
+// read $3.17 - the same number quoted two ways in one row.
+// For every other kind of category metricShown() returns the value unchanged,
+// so weighed and pack rows behave exactly as before.
 function groupStoreTotal(group, store) {
   const pk = store === 'ww' ? group._wwPerKg : group._coPerKg;
-  return pk == null ? null : pk * groupUnits(group.list_item);
+  return pk == null ? null : metricShown(group, pk) * groupUnits(group.list_item);
+}
+
+// How many real pieces one unit of quantity is, for a per-piece category. 1 for
+// everything else, so callers can multiply unconditionally.
+function qtyPiecesPer(group) {
+  return group && group._perPack ? pieceQuoteOf(group) : 1;
+}
+
+// The Units control's label. A weighed row counts kilos, a per-piece row counts
+// PIECES (100, 120, 140...) rather than an abstract "1.2 x100" nobody can shop
+// from, and everything else counts packs.
+function qtyLabel(units, kind, piecesPer) {
+  if (kind === 'kg')     return units.toFixed(1) + ' kg';
+  if (kind === 'pieces') return Math.round(units * (piecesPer || 1)) + ' pcs';
+  return String(units);
 }
 
 // ── Per-kg override model (pure helpers; unit-tested in scripts/perkg_selfcheck.js) ──
