@@ -653,7 +653,8 @@ function thirdChipHTML(key, entries, ww, co, compareUnit) {
   // Match the FORMAT to the scale picked just above: a per-unit winner needs the
   // metric formatter, or the chip rounds 2.9c and 3.2c to the same "$0.03" and
   // silently claims a tie the panel below it disagrees with.
-  const beatText = beatPrice == null ? '' : (compareUnit ? fmtUnitMetric(beatPrice) : fmt(beatPrice));
+  const beatText = beatPrice == null ? ''
+    : (compareUnit ? fmt(beatPrice * PER_PIECE_QUOTE) + '/100' : fmt(beatPrice));
   const label = beat && meta && beatPrice != null
     ? `＋${entries.length} · ${esc(meta.label)} ${beatText}`
     : `＋${entries.length}`;
@@ -766,6 +767,10 @@ function groupThirdChipHTML(group) {
 //     price of one deodorant.
 // A third store has no photo of its own, so it borrows the category's, the same
 // way the desktop panel does, rather than leaving a hole.
+// How many products to show per outside store before folding the rest away.
+// Two is enough to see a shop's best price and whether its runner-up is close.
+const THIRD_ROWS_PER_STORE = 2;
+
 function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg) {
   const suffix = group._metricSuffix ?? (group._sticker ? '' : '/kg');
   const byStore = new Map();
@@ -775,10 +780,7 @@ function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg) {
   }
   return [...byStore.entries()].map(([storeKey, list]) => {
     const meta = THIRD_STORES[storeKey] || { letter: '?', label: storeKey };
-    const rows = list
-      .map(e => ({ e, m: thirdGroupMetric(group, e) }))
-      .sort((a, b) => (a.m ?? Infinity) - (b.m ?? Infinity))
-      .map(({ e, m }) => {
+    const rowHtml = ({ e, m }) => {
         const img = resolveImgUrl(e.image) || fallbackImg;
         const imgHtml = img
           ? `<img class="vg-pv-img" src="${escAttr(img)}" alt="" loading="lazy" />`
@@ -794,10 +796,26 @@ function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg) {
             ${imgHtml}
             ${nameHtml}
             <span class="vg-pv-pack">${pack}</span>
-            <span class="vg-pv-kg">${m != null ? fmtUnitMetric(m) + suffix : fmt(e.price)}</span>
+            <span class="vg-pv-kg">${m != null ? fmtUnitMetric(metricShown(group, m)) + suffix : fmt(e.price)}</span>
           </div>`;
-      }).join('');
-    return `<div class="vg-store-h"><span class="store-chip third sm">${esc(meta.letter)}</span> ${esc(meta.label)}</div>${rows}`;
+    };
+    // Cheapest first, then show only the best few. Four stores x every size they
+    // stock made this column three times the height of the Woolworths one, and
+    // the 5th-dearest option at a shop you are not going to is not a decision
+    // you are making. The rest stay one click away.
+    // <details> rather than a button + handler: native disclosure is keyboard-
+    // and screen-reader-operable for free, and the panel's rows are not inside
+    // a tr[data-item], so nothing here collides with the row click that opens
+    // and closes this very panel.
+    const sorted = list
+      .map(e => ({ e, m: thirdGroupMetric(group, e) }))
+      .sort((a, b) => (a.m ?? Infinity) - (b.m ?? Infinity));
+    const head = sorted.slice(0, THIRD_ROWS_PER_STORE).map(rowHtml).join('');
+    const rest = sorted.slice(THIRD_ROWS_PER_STORE);
+    const more = rest.length
+      ? `<details class="vg-more"><summary class="vg-more-sum">${rest.length} more at ${esc(meta.label)}</summary>${rest.map(rowHtml).join('')}</details>`
+      : '';
+    return `<div class="vg-store-h"><span class="store-chip third sm">${esc(meta.letter)}</span> ${esc(meta.label)}</div>${head}${more}`;
   }).join('');
 }
 
@@ -4130,7 +4148,7 @@ function groupStoreVariantsHTML(group, store, overrides) {
         ${imgHtml}
         ${nameHtml}
         <span class="vg-pv-pack">${pack}</span>
-        <span class="vg-pv-kg">${fmtUnitMetric(v.pk)}${group._metricSuffix ?? (group._sticker ? '' : '/kg')}</span>
+        <span class="vg-pv-kg">${fmtUnitMetric(metricShown(group, v.pk))}${group._metricSuffix ?? (group._sticker ? '' : '/kg')}</span>
         <button class="vg-pv-basket${inBasket ? ' selected' : ''}" data-item="${safeKey}" title="${inBasket ? 'Remove from basket' : 'Add to basket'}" aria-label="${inBasket ? 'Remove from basket' : 'Add to basket'}">${inBasket ? '✓' : '＋'}</button>
       </div>`;
   }).join('');
@@ -4185,8 +4203,8 @@ function groupCardHTML(group, overrides) {
   const priceHtml = (perkg, url) => perkg == null
     ? '<span class="no-data">-</span>'
     : (url
-      ? `<a href="${url}" target="_blank" rel="noopener" class="price-link">${fmtUnitMetric(perkg)}${suf}</a>`
-      : `${fmtUnitMetric(perkg)}${suf}`);
+      ? `<a href="${url}" target="_blank" rel="noopener" class="price-link">${fmtUnitMetric(metricShown(group, perkg))}${suf}</a>`
+      : `${fmtUnitMetric(metricShown(group, perkg))}${suf}`);
 
   // The empty unit line is deliberate: a group's headline IS $/kg so there is no
   // second measure to show, but the element reserves the same line a normal
@@ -4316,8 +4334,8 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     trend:        `<td class="trend-cell">${groupTrendCellHTML(group)}</td>`,
     priority:     priorityCell,
     units:        unitsCell,
-    ww:           `<td class="price-cell ${wwClass}">${perKgCellHTML(group._wwPerKg, wwUrl, group._metricSuffix ?? group._unitSuffix)}</td>`,
-    coles:        `<td class="price-cell ${coClass}">${perKgCellHTML(group._coPerKg, coUrl, group._metricSuffix ?? group._unitSuffix)}</td>`,
+    ww:           `<td class="price-cell ${wwClass}">${perKgCellHTML(metricShown(group, group._wwPerKg), wwUrl, group._metricSuffix ?? group._unitSuffix)}</td>`,
+    coles:        `<td class="price-cell ${coClass}">${perKgCellHTML(metricShown(group, group._coPerKg), coUrl, group._metricSuffix ?? group._unitSuffix)}</td>`,
     cheaper:      `<td class="cheaper-cell">${badgeHtml}</td>`,
     pct:          `<td class="pct-cell">${pctHtml}</td>`,
     saving:       `<td><div class="saving-row">${savingContent}</div></td>`,
@@ -4426,8 +4444,8 @@ function appendGroupCardMobile(container, group, overrides) {
   // chevron sitting at the end of the prices row. The 🔥 uses the same
   // isHotDeal() as every other item; the 👁 watches the whole CATEGORY (the
   // group key), not individual member products.
-  const wwKg = group._wwPerKg != null ? fmtUnitMetric(group._wwPerKg) : '-';
-  const coKg = group._coPerKg != null ? fmtUnitMetric(group._coPerKg) : '-';
+  const wwKg = group._wwPerKg != null ? fmtUnitMetric(metricShown(group, group._wwPerKg)) : '-';
+  const coKg = group._coPerKg != null ? fmtUnitMetric(metricShown(group, group._coPerKg)) : '-';
   // The suffix is the category's own metric, NOT always "/kg" - this card had
   // it hardcoded, so every per-piece and sticker category read as a weight on
   // mobile ("$0.35/kg" for a nappy, "$4.90/kg" for a deodorant). Desktop has

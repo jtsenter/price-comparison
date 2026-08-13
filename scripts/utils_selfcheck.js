@@ -110,6 +110,9 @@ eval([
   extractConst('THIRD_STORES') + '\nglobal.THIRD_STORES = THIRD_STORES;',
   extractConst('UNIT_METRIC_3DP_BELOW'),
   extract('fmtUnitMetric'),    // comparison-metric precision (cents matter here)
+  extractConst('PER_PIECE_QUOTE') + '\nglobal.PER_PIECE_QUOTE = PER_PIECE_QUOTE;',
+  extract('metricShown'),      // per-piece categories are QUOTED per 100 pieces
+  extract('groupStoreTotal'),  // ...but costed per ONE, which is the whole trap
   // Used directly by the test body, not just by another extracted function, so
   // it needs the same global re-export as KNOWN_BAD_NAPPIES_REMOVE above.
   extractConst('CHEAPER_SORT_LABEL') + '\nglobal.CHEAPER_SORT_LABEL = CHEAPER_SORT_LABEL;',
@@ -260,7 +263,9 @@ check('median empty -> null', _median([]), null);
   // unit price: from the name, or per piece when sold by the piece
   check('$/100g from the name', thirdUnitPrice(pl(5.50, 'Rexona Sport 52g')).value, 10.5769);
   check('label follows the unit', thirdUnitPrice(pl(5.50, 'Rexona Sport 52mL')).label, '100ml');
-  check('packs -> per piece', thirdUnitPrice(cw(15.99, 'Huggies Size 6', 44)).value, 0.363);
+  // 5dp, not 3: this figure is displayed x100, so a tenth of a cent here is a
+  // visible 10c on screen. See thirdUnitPrice's own comment.
+  check('packs -> per piece', thirdUnitPrice(cw(15.99, 'Huggies Size 6', 44)).value, 0.36341);
   check('packs label', thirdUnitPrice(cw(15.99, 'Huggies Size 6', 44)).label, 'each');
   check('no size, no packs -> null', thirdUnitPrice(pl(5.50, 'Mystery item')), null);
   check('no price -> null', thirdUnitPrice({ store: 'priceline', name: 'x 52g' }), null);
@@ -301,8 +306,12 @@ check('median empty -> null', _median([]), null);
         thirdBeatsUnit(cwFortyPack, 0.29, 0.29), null);
   check('genuinely cheaper per-unit DOES beat',
         thirdBeatsUnit(cwFortyPack, 0.40, 0.40)?.name, 'Huggies Essentials 40pk');
+  // 13.99/40 is exactly 0.34975. This used to be written as 0.3498, which was a
+  // tie only because thirdUnitPrice rounded to 3dp (0.350); at full precision
+  // that rival was a hair DEARER and the entry won. The exact value is the
+  // honest tie, and it keeps testing what the name says.
   check('ties do not win (unit price, same as thirdBeats)',
-        thirdBeatsUnit(cwFortyPack, 0.3498, 0.50), null);
+        thirdBeatsUnit(cwFortyPack, 0.34975, 0.50), null);
   check('an entry with no derivable unit price is ignored, not treated as free',
         thirdBeatsUnit([{ store: 'priceline', name: 'no size or packs', price: 3 }], 0.29, 0.29), null);
   check('no rival prices -> quiet', thirdBeatsUnit(cwFortyPack, null, null), null);
@@ -373,6 +382,60 @@ check('median empty -> null', _median([]), null);
   check('just under threshold',   fmtUnitMetric(0.1999), '$0.200');
   check('a $/kg figure is untouched', fmtUnitMetric(24.5), '$24.50');
   check('null -> dash',      fmtUnitMetric(null), '-');
+}
+
+// ── metricShown (per-piece categories are QUOTED per 100, costed per 1) ─────
+{
+  const wipes  = { _perPack: true };            // baby wipes, nappies, tablets
+  const weighed = { _perPack: false };          // chicken, salmon - $/kg
+  const sticker = { _sticker: true };           // deodorant - pack price
+
+  // The readability fix: cents-per-wipe becomes dollars-per-100. Fed through
+  // groupMetric(), the REAL path a W/C row takes - checking raw division here
+  // is what let a rounding bug ship: groupMetric quantised to 3dp, so the app
+  // showed $10.90 while this assertion passed on the unrounded $10.93.
+  // The expected values are the stores' own printed "/100EA" labels.
+  const perPack = { perPack: true };
+  const shown = (price, name) =>
+    fmtUnitMetric(metricShown(wipes, groupMetric(perPack, { price, name }, name)));
+  check('ALDI wipes per 100',  shown(2.29, 'Mamia Water Wipes 80pk'),   '$2.86');
+  check('WW 540pk per 100 matches the WW shelf label',
+        shown(59.00, 'WaterWipes 540pk'),                               '$10.93');
+  check('Coles 360pk per 100 matches the Coles shelf label',
+        shown(40.00, 'WaterWipes 360pk'),                               '$11.11');
+  check('WW 180pk half price',  shown(10.75, 'WaterWipes 180pk'),       '$5.97');
+  check('a nappy per 100',      shown(13.99, 'Huggies 40pk'),           '$34.98');
+  // Non-per-piece categories must be left exactly alone.
+  check('$/kg is not scaled',   metricShown(weighed, 24.5), 24.5);
+  check('a sticker price is not scaled', metricShown(sticker, 4.9), 4.9);
+  check('no group at all',      metricShown(null, 3.5), 3.5);
+  check('null stays null',      metricShown(wipes, null), null);
+
+  // THE TRAP, and the reason this is a display-only helper: the stored value
+  // still has to be per ONE piece, because the Total column and the basket
+  // multiply it by the quantity bought. If scaling ever leaks into the stored
+  // _wwPerKg, every basket total silently becomes 100x too big.
+  const g = { list_item: '__group_baby_wipes', _perPack: true,
+              _wwPerKg: 2.29 / 80, _coPerKg: 40.00 / 360 };
+  // groupUnits() reads localStorage for the planned quantity; pin it at 1 so the
+  // real groupStoreTotal still runs and the assertion is about the PRICE it
+  // multiplies, which is the thing that must not be the per-100 figure.
+  global.groupUnits = () => 1;
+  const total = groupStoreTotal(g, 'ww');
+  check('one wipe costs about 3c, not $2.86', total.toFixed(4), (2.29 / 80).toFixed(4));
+  check('the DISPLAYED figure is 100x the costed one',
+        (metricShown(g, g._wwPerKg) / g._wwPerKg).toFixed(0), String(PER_PIECE_QUOTE));
+
+  // The row's CHIP and the panel under it price the same entry by two different
+  // routes - thirdUnitPrice for the chip, thirdGroupMetric for the panel. They
+  // must agree to the cent once shown per 100, or one row states two prices for
+  // one product (ALDI read "$2.90" on the chip and "$2.86" in the panel).
+  const aldi = { store: 'aldi', name: 'Mamia Baby Water Wipes 80 Pack', price: 2.29, packs: 80 };
+  check('chip and panel agree on the same entry',
+        fmtUnitMetric(metricShown(g, thirdUnitPrice(aldi).value)),
+        fmtUnitMetric(metricShown(g, thirdGroupMetric(g, aldi))));
+  check('...and that figure is ALDI\'s real per-100 price',
+        fmtUnitMetric(metricShown(g, thirdUnitPrice(aldi).value)), '$2.86');
 }
 
 // ── groupThirdScale / groupThirdBeat (picking the right comparison scale) ────
@@ -679,7 +742,10 @@ check('groupMetric null result', groupMetric({ sticker: true }, null), null);
 // stops "$14.40 for 30" outranking "$11.50 for 40" - $0.48 each vs $0.29 each.
 {
   const g = { sticker: true, perPack: true };
-  check('perPack count from the item key',    groupMetric(g, { price: 11.50, name: 'Store name has none' }, 'Little One\'s Nappies 40pk'), 0.287);
+  // 11.50/40 is exactly 0.2875. It used to read back 0.287 because groupMetric
+  // rounded per-piece values to 3dp; that half-cent is 5c once the row is shown
+  // per 100, so the rounding is now 5dp and the exact value survives.
+  check('perPack count from the item key',    groupMetric(g, { price: 11.50, name: 'Store name has none' }, 'Little One\'s Nappies 40pk'), 0.2875);
   check('perPack falls back to store name',   groupMetric(g, { price: 14.40, name: 'Huggies 30 pack' }, 'no count here'), 0.48);
   check('perPack key wins over store name',   groupMetric(g, { price: 20.00, name: 'Wrong 10pk' }, 'Right 40pk'), 0.5);
   check('perPack: a 40-pack now ranks BELOW a dearer 30-pack per-piece',

@@ -156,6 +156,25 @@ function fmtUnitMetric(n) {
   return '$' + v.toFixed(Math.abs(v) < UNIT_METRIC_3DP_BELOW ? 3 : 2);
 }
 
+// How many pieces a per-piece category QUOTES its price for.
+// A wipe at $0.029 and a wipe at $0.032 are both "about three cents" to read,
+// and neither moves the needle against a $400 shop - but $2.90 vs $3.20 per 100
+// is a real difference you can act on. Woolworths and Coles print exactly this
+// on the same shelves ("$10.93 / 100EA"), so quoting per 100 also makes our
+// number checkable against the store's own label.
+const PER_PIECE_QUOTE = 100;
+
+// A metric value as DISPLAYED. Per-piece categories are shown per 100 pieces;
+// everything else shows what it stores.
+// DISPLAY ONLY, and that is the whole point: _wwPerKg/_coPerKg stay per ONE
+// piece because groupStoreTotal() and the Total column multiply them by the
+// quantity actually bought. Scaling the stored value would multiply every
+// basket total and saving by 100.
+function metricShown(group, v) {
+  if (v == null || isNaN(Number(v))) return null;
+  return (group && group._perPack) ? Number(v) * PER_PIECE_QUOTE : Number(v);
+}
+
 // Price the SAME QUANTITY at both stores. Comparing pack prices across stores
 // silently compares different amounts of food: Woolworths sells salmon as a
 // $34 fillet pack and Coles as a $10 portion, so a pack-price comparison says
@@ -1070,7 +1089,13 @@ function groupMetric(g, res, itemName) {
   // control; the scraped store name is the fallback.
   if (g && g.perPack) {
     const n = packCountOf(itemName) || packCountOf(res.name);
-    return n > 0 ? +(res.price / n).toFixed(3) : null;
+    // 5 decimals, not 3. This is a per-PIECE figure that gets displayed x100
+    // (see PER_PIECE_QUOTE), so rounding it to a tenth of a cent here lands as
+    // 10c granularity on screen: $59.00/540 came out as $10.90 per 100 where
+    // Woolworths' own shelf label says $10.93. Third-store rows never rounded,
+    // so the two halves of the same column also disagreed. 5dp is far below
+    // anything displayed and still clips binary-float noise.
+    return n > 0 ? +(res.price / n).toFixed(5) : null;
   }
   if (g && g.sticker) return res.price;
   const p = clientPer100(res); // $/kg = $/100g × 10 (same as app.js clientPerKg)
@@ -1319,7 +1344,11 @@ function thirdStoreFromUrl(url) {
 function thirdUnitPrice(entry) {
   if (!entry || entry.price == null) return null;
   if (entry.packs > 0) {
-    return { value: +(entry.price / entry.packs).toFixed(3), label: 'each' };
+    // 5dp for the same reason groupMetric uses it: this per-piece figure is
+    // displayed x100, so 3dp showed ALDI's $2.86 as "$2.90" on the chip while
+    // the panel underneath - which goes through thirdGroupMetric, unrounded -
+    // said $2.86. Two numbers for one price, on the same row.
+    return { value: +(entry.price / entry.packs).toFixed(5), label: 'each' };
   }
   const p = clientPer100({ price: entry.price, name: entry.name || '' });
   return p.value == null ? null : { value: p.value, label: p.label };
@@ -1600,7 +1629,7 @@ function buildVariantGroups(byName) {
       // What to PRINT after the metric. Kept apart from _unitSuffix on purpose:
       // that one is also read as "is this category weighed?" (the basket shows kg
       // quantities when it is truthy), and a per-pack category is not weighed.
-      _metricSuffix: g.perPack ? ' each' : (g.sticker ? '' : '/kg'),
+      _metricSuffix: g.perPack ? ' /100' : (g.sticker ? '' : '/kg'),
       _members: members,
       _wwList: stores.ww,
       _coList: stores.coles,
@@ -1802,7 +1831,7 @@ function buildDealGroups(items) {
       _isGroup: true,
       _groupLabel: g.label,
       _sticker: !!g.sticker,
-      _metricSuffix: g.perPack ? ' each' : (g.sticker ? '' : '/kg'),
+      _metricSuffix: g.perPack ? ' /100' : (g.sticker ? '' : '/kg'),
       _memberNames: members.map(m => m.list_item), // for the basket handoff (re-collapsed there)
       category: g.category || GROUP_DEFAULT_CATEGORY,
       trip_count: null,
