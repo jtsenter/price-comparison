@@ -2280,7 +2280,13 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
             [n for n in purchase_history.keys() if n not in archived_set],
             key=_priority_key,
         )
-        archived_list = sorted(n for n in archived_set if n in purchase_history)
+        # A QUICK run is "check what I actually shop for, now". Archived products
+        # are the ones explicitly set aside, so sweeping all 34-36 of them was
+        # spending a fifth of the run on the one group nobody is waiting for.
+        # Full and scheduled runs still cover them, so nothing goes stale for
+        # longer than a week.
+        archived_list = ([] if scrape_mode == "quick"
+                         else sorted(n for n in archived_set if n in purchase_history))
         shopping_list = active + archived_list
 
         # QUICK run: drop the settled prices. Full runs (and the weekly scheduled
@@ -2290,6 +2296,12 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
         # honour it too - see the comment there.
         _quick_skipped: set[str] = set()
         if scrape_mode == "quick":
+            # Archived items ride in this set as well as being left out of the
+            # list above, because the url_overrides block below adds any pinned
+            # item that is "not currently on the list" - and dropping them is
+            # exactly what makes them eligible. Same trap the settled-price
+            # filter hit, so it reuses the same guard.
+            _quick_skipped |= archived_set
             # Read latest.json here rather than reusing `existing` - that name is
             # only bound much later, inside the single-item branch, so touching it
             # from up here is a NameError waiting for the first quick run.

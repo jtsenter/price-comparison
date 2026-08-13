@@ -103,6 +103,21 @@ assert _with < _without, (
 assert _pa(_ov_real, _names, set()) == _pa(_ov_real, _names, set(), set()), \
     "an empty skip set must leave a full run's pin list identical"
 
+# ── A quick run leaves ARCHIVED products alone ──────────────────────────────
+# Archived is the pile you deliberately set aside, so sweeping all ~35 of them
+# spent a fifth of a "quick" run on the one group nobody is waiting for. Two
+# guards are needed, not one: the list has to exclude them AND they have to ride
+# in the skip set, because the url_overrides block adds any pinned item that is
+# "not currently on the list" - being dropped is what makes it eligible.
+_src = open(os.path.join(here, "scraper.py"), encoding="utf-8").read()
+assert 'archived_list = ([] if scrape_mode == "quick"' in _src, \
+    "a quick run must not build the archived list"
+assert "_quick_skipped |= archived_set" in _src, \
+    "a pinned archived item can still sneak back into a quick run"
+# ...and a FULL run must still sweep them, or nothing ever refreshes archived.
+assert "else sorted(n for n in archived_set if n in purchase_history))" in _src, \
+    "a full run must still scrape archived items"
+
 # ── Category refresh: the dispatch string must be SPLIT into real names ─────
 # Regression guard for a bug that failed SILENTLY. A category's refresh button
 # sends every member in one pipe-separated dispatch; the scrape branch used to

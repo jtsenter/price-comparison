@@ -576,7 +576,12 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
 /* A shop heading needs air above it, or it sits flush against the last product
    of the shop before and the coloured chip reads as part of that row. */
 .vg-store-h { margin-top: 14px; }
-.vg-store-h:first-child { margin-top: 0; }
+/* :first-of-type, NOT :first-child - the outside-stores column puts its close
+   button before the first heading, so :first-child never matched there and that
+   column's first product sat 14px below the Woolworths and Coles ones beside
+   it. This is what knocked the three columns out of vertical alignment. */
+.vg-panel-store > .vg-store-h:first-of-type,
+.third-open-col > .vg-store-h:first-of-type { margin-top: 0; }
 .vg-pv { display: flex; align-items: center; gap: 9px; padding: 6px 8px; border-radius: 7px; font-size: 13px; }
 .vg-pv + .vg-pv { border-top: 1px solid color-mix(in srgb, var(--border) 55%, transparent); }
 .vg-pv.win { background: color-mix(in srgb, var(--accent) 12%, transparent); font-weight: 700; }
@@ -3162,11 +3167,9 @@ td.priority-cell { text-align: center; }
 /* Cheapest across EVERY column, not just cheapest at its own shop. Each column
    marking its own best left three green rows and no way to see which one
    actually won - this is the tie-breaker the category was missing. */
-.vg-pv.vg-top { position: relative; outline: 2px solid #15803d; outline-offset: -2px; border-radius: 7px; }
-.vg-top-tag {
-  position: absolute; top: -7px; left: 8px; z-index: 1;
-  background: #15803d; color: #fff;
-  font-size: 8px; font-weight: 800; letter-spacing: .04em;
-  padding: 1px 5px; border-radius: 999px; line-height: 1.5;
-  pointer-events: none;
-}
+/* outline, not border: it is drawn OUTSIDE the box and takes no layout space,
+   so a framed row keeps exactly the height and baseline of the unframed rows
+   beside it. A border here shifted the winning row by 2px and knocked the three
+   columns out of alignment with each other. No frame at all when two shops tie:
+   a box around one of two identical prices claims a winner that does not exist. */
+.vg-pv.vg-top { outline: 2px solid #15803d; outline-offset: -1px; border-radius: 7px; }

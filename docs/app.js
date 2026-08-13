@@ -803,7 +803,7 @@ function groupThirdChipHTML(group) {
 // Two is enough to see a shop's best price and whether its runner-up is close.
 const THIRD_ROWS_PER_STORE = 2;
 
-function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg) {
+function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg, bestTied) {
   const suffix = group._metricSuffix ?? (group._sticker ? '' : '/kg');
   const byStore = new Map();
   for (const e of entries) {
@@ -836,8 +836,7 @@ function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg) {
         // row wins outright - same tag the W/C columns use, so the category has
         // exactly one "CHEAPEST" no matter which shop it lands in.
         const isWin = m != null && bestMetric != null && m <= bestMetric + 0.0001;
-        return `<div class="vg-pv${isWin ? ' win vg-top' : ''}">
-            ${isWin ? '<span class="vg-top-tag">CHEAPEST</span>' : ''}
+        return `<div class="vg-pv${isWin ? (bestTied ? ' win' : ' win vg-top') : ''}">
             ${imgHtml}
             ${nameHtml}
             <span class="vg-pv-pack">${pack}</span>
@@ -4147,7 +4146,7 @@ function dedupePerKgVariants(variants, storeKey, overrides, memberByName) {
   return [...byLook.values()].sort((a, b) => a.pk - b.pk);
 }
 
-function groupStoreVariantsHTML(group, store, overrides, globalBest) {
+function groupStoreVariantsHTML(group, store, overrides, globalBest, globalTied) {
   const storeKey = store === 'woolworths' ? 'ww' : 'coles';
   // This store's ordered member list (independent of the other store).
   const order = (storeKey === 'ww' ? group._wwList : group._coList) || [];
@@ -4204,10 +4203,9 @@ function groupStoreVariantsHTML(group, store, overrides, globalBest) {
     // Best at THIS store vs best ANYWHERE are different claims. Every column
     // marking its own winner green left three green rows and no way to see that
     // ALDI beat both supermarkets - so the overall winner gets its own tag.
-    const isTop = globalBest != null && v.pk <= globalBest + 0.0001;
+    const isTop = globalBest != null && !globalTied && v.pk <= globalBest + 0.0001;
     const inBasket = _selectedItems.has(v.name);
     return `<div class="vg-pv${isWin ? ' win' : ''}${isTop ? ' vg-top' : ''}">
-        ${isTop ? '<span class="vg-top-tag">CHEAPEST</span>' : ''}
         ${imgHtml}
         ${nameHtml}
         <span class="vg-pv-pack">${pack}</span>
@@ -4457,6 +4455,11 @@ function appendGroupRowDesktop(tbody, group, overrides) {
   const gThirdMetrics = gThirdEntries.map(e => thirdGroupMetric(group, e)).filter(v => v != null);
   const gBestMetric = [...gMetricPrices, ...gThirdMetrics].length
     ? Math.min(...gMetricPrices, ...gThirdMetrics) : null;
+  // Two shops genuinely level on the metric. A frame says "this one wins", so
+  // when nothing wins outright we fall back to the plain green on each - a box
+  // around one of two identical prices is just wrong.
+  const gBestTied = gBestMetric != null &&
+    [...gMetricPrices, ...gThirdMetrics].filter(v => v <= gBestMetric + 0.0001).length > 1;
   // Collapsed, the outside stores are a narrow rail on the RIGHT rather than a
   // third of the panel's width: two supermarket columns stay full-size, which is
   // what you actually compare, and the rail costs ~28px to say "there is more
@@ -4465,7 +4468,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     : showThird
     ? `<div class="vg-panel-store third-open-col">
         <button class="third-fold" data-third="${escAttr(group.list_item)}"${gBeat ? ' data-third-beats="1"' : ''} title="Hide other stores" aria-label="Hide other stores"><span class="third-fold-ic">✕</span></button>
-        ${groupThirdRowsHTML(group, gThirdEntries, gBestMetric, imgSrc)}
+        ${groupThirdRowsHTML(group, gThirdEntries, gBestMetric, imgSrc, gBestTied)}
       </div>`
     : `<button class="third-rail${gBeat ? ' beats' : ''}" data-third="${escAttr(group.list_item)}"${gBeat ? ' data-third-beats="1"' : ''}
          title="Show ${gThirdEntries.length} other store${gThirdEntries.length > 1 ? 's' : ''}">
@@ -4480,11 +4483,11 @@ function appendGroupRowDesktop(tbody, group, overrides) {
       <div class="vg-panel-cols${showThird ? ' third-cols' : (gThirdEntries.length ? ' third-rail-cols' : '')}">
         <div class="vg-panel-store">
           <div class="vg-store-h"><span class="store-chip ww sm">W</span> Woolworths</div>
-          ${groupStoreVariantsHTML(group, 'woolworths', overrides, gBestMetric)}
+          ${groupStoreVariantsHTML(group, 'woolworths', overrides, gBestMetric, gBestTied)}
         </div>
         <div class="vg-panel-store">
           <div class="vg-store-h"><span class="store-chip coles sm">C</span> Coles</div>
-          ${groupStoreVariantsHTML(group, 'coles', overrides, gBestMetric)}
+          ${groupStoreVariantsHTML(group, 'coles', overrides, gBestMetric, gBestTied)}
         </div>
         ${thirdCol}
       </div>
@@ -4614,6 +4617,8 @@ function appendGroupCardMobile(container, group, overrides) {
     const mThirdMetrics = mThirdEntries.map(e => thirdGroupMetric(group, e)).filter(v => v != null);
     const mBest = [...mMetricPrices, ...mThirdMetrics].length
       ? Math.min(...mMetricPrices, ...mThirdMetrics) : null;
+    const mBestTied = mBest != null &&
+      [...mMetricPrices, ...mThirdMetrics].filter(v => v <= mBest + 0.0001).length > 1;
     const thirdSec = !mThirdEntries.length ? '' : `
       <div class="vgm-store-sec vgm-third-sec${mOpen ? ' open' : ''}">
         <button class="vgm-third-h${mBeat ? ' beats' : ''}" data-third="${escAttr(group.list_item)}"${mBeat ? ' data-third-beats="1"' : ''} aria-expanded="${mOpen}">
@@ -4621,16 +4626,16 @@ function appendGroupCardMobile(container, group, overrides) {
           ${mOpen ? '' : '<span class="vgm-third-toggle">Show ▼</span>'}
         </button>
         ${mOpen ? `<button class="third-fold" data-third="${escAttr(group.list_item)}"${mBeat ? ' data-third-beats="1"' : ''} title="Hide other stores" aria-label="Hide other stores"><span class="third-fold-ic">✕</span></button>` : ''}
-        ${mOpen ? groupThirdRowsHTML(group, mThirdEntries, mBest, imgSrc) : ''}
+        ${mOpen ? groupThirdRowsHTML(group, mThirdEntries, mBest, imgSrc, mBestTied) : ''}
       </div>`;
     html += `<div class="vgm-body">
       <div class="vgm-store-sec">
         <div class="vg-store-h"><span class="store-chip ww sm">W</span> Woolworths</div>
-        ${groupStoreVariantsHTML(group, 'woolworths', overrides, mBest)}
+        ${groupStoreVariantsHTML(group, 'woolworths', overrides, mBest, mBestTied)}
       </div>
       <div class="vgm-store-sec">
         <div class="vg-store-h"><span class="store-chip coles sm">C</span> Coles</div>
-        ${groupStoreVariantsHTML(group, 'coles', overrides, mBest)}
+        ${groupStoreVariantsHTML(group, 'coles', overrides, mBest, mBestTied)}
       </div>
       ${thirdSec}
     </div>`;
