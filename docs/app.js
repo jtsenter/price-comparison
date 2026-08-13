@@ -650,8 +650,12 @@ function thirdChipHTML(key, entries, ww, co, compareUnit) {
   // price normally, but the per-unit price (what actually won) when compareUnit
   // is set, or "Chemist Warehouse $13.99" would misreport a per-nappy verdict.
   const beatPrice = beat && compareUnit ? thirdUnitPrice(beat)?.value : beat?.price;
+  // Match the FORMAT to the scale picked just above: a per-unit winner needs the
+  // metric formatter, or the chip rounds 2.9c and 3.2c to the same "$0.03" and
+  // silently claims a tie the panel below it disagrees with.
+  const beatText = beatPrice == null ? '' : (compareUnit ? fmtUnitMetric(beatPrice) : fmt(beatPrice));
   const label = beat && meta && beatPrice != null
-    ? `＋${entries.length} · ${esc(meta.label)} ${fmt(beatPrice)}`
+    ? `＋${entries.length} · ${esc(meta.label)} ${beatText}`
     : `＋${entries.length}`;
   // data-third-beats lets the click handler resolve the same default this render
   // used, without re-deriving prices from a different scale than the one the
@@ -790,7 +794,7 @@ function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg) {
             ${imgHtml}
             ${nameHtml}
             <span class="vg-pv-pack">${pack}</span>
-            <span class="vg-pv-kg">${m != null ? '$' + m.toFixed(2) + suffix : fmt(e.price)}</span>
+            <span class="vg-pv-kg">${m != null ? fmtUnitMetric(m) + suffix : fmt(e.price)}</span>
           </div>`;
       }).join('');
     return `<div class="vg-store-h"><span class="store-chip third sm">${esc(meta.letter)}</span> ${esc(meta.label)}</div>${rows}`;
@@ -3838,7 +3842,7 @@ function multiBuyTag(res, units) {
 function perKgCellHTML(perkg, url, suffix = '/kg') {
   if (perkg == null) return '<span class="no-data">-</span>';
   const suf = suffix ? `<span class="perkg-suffix">${suffix}</span>` : '';
-  const head = `$${perkg.toFixed(2)}${suf}`;
+  const head = `${fmtUnitMetric(perkg)}${suf}`;
   const linked = url ? `<a href="${url}" target="_blank" rel="noopener" class="price-link">${head}</a>` : head;
   return `<div class="price-main">${linked}</div>`;
 }
@@ -4126,7 +4130,7 @@ function groupStoreVariantsHTML(group, store, overrides) {
         ${imgHtml}
         ${nameHtml}
         <span class="vg-pv-pack">${pack}</span>
-        <span class="vg-pv-kg">$${v.pk.toFixed(2)}${group._metricSuffix ?? (group._sticker ? '' : '/kg')}</span>
+        <span class="vg-pv-kg">${fmtUnitMetric(v.pk)}${group._metricSuffix ?? (group._sticker ? '' : '/kg')}</span>
         <button class="vg-pv-basket${inBasket ? ' selected' : ''}" data-item="${safeKey}" title="${inBasket ? 'Remove from basket' : 'Add to basket'}" aria-label="${inBasket ? 'Remove from basket' : 'Add to basket'}">${inBasket ? '✓' : '＋'}</button>
       </div>`;
   }).join('');
@@ -4181,8 +4185,8 @@ function groupCardHTML(group, overrides) {
   const priceHtml = (perkg, url) => perkg == null
     ? '<span class="no-data">-</span>'
     : (url
-      ? `<a href="${url}" target="_blank" rel="noopener" class="price-link">$${perkg.toFixed(2)}${suf}</a>`
-      : `$${perkg.toFixed(2)}${suf}`);
+      ? `<a href="${url}" target="_blank" rel="noopener" class="price-link">${fmtUnitMetric(perkg)}${suf}</a>`
+      : `${fmtUnitMetric(perkg)}${suf}`);
 
   // The empty unit line is deliberate: a group's headline IS $/kg so there is no
   // second measure to show, but the element reserves the same line a normal
@@ -4422,8 +4426,14 @@ function appendGroupCardMobile(container, group, overrides) {
   // chevron sitting at the end of the prices row. The 🔥 uses the same
   // isHotDeal() as every other item; the 👁 watches the whole CATEGORY (the
   // group key), not individual member products.
-  const wwKg = group._wwPerKg != null ? `$${group._wwPerKg.toFixed(2)}` : '-';
-  const coKg = group._coPerKg != null ? `$${group._coPerKg.toFixed(2)}` : '-';
+  const wwKg = group._wwPerKg != null ? fmtUnitMetric(group._wwPerKg) : '-';
+  const coKg = group._coPerKg != null ? fmtUnitMetric(group._coPerKg) : '-';
+  // The suffix is the category's own metric, NOT always "/kg" - this card had
+  // it hardcoded, so every per-piece and sticker category read as a weight on
+  // mobile ("$0.35/kg" for a nappy, "$4.90/kg" for a deodorant). Desktop has
+  // always used _metricSuffix here; this is the same expression.
+  const mSuf = group._metricSuffix ?? (group._sticker ? '' : '/kg');
+  const mSufHtml = mSuf ? `<span class="vgm-kg-suffix">${esc(mSuf)}</span>` : '';
   // Cheapest variant across both stores (a REAL product) for the quick add-to-basket.
   const cheapestVar = [group._wwBest, group._coBest].filter(Boolean).sort((a, b) => a.perkg - b.perkg)[0];
   const hotDeal = isHotDeal(group, loadExclusions());
@@ -4495,11 +4505,11 @@ function appendGroupCardMobile(container, group, overrides) {
     <div class="mc-prices">
       <div class="mc-store-col">
         <div class="mc-store-label ww-col"><span class="store-chip sm ww">W</span> Woolworths</div>
-        <div class="mc-price${wwWin ? ' cheaper' : ''}">${wwKg}<span class="vgm-kg-suffix">/kg</span></div>
+        <div class="mc-price${wwWin ? ' cheaper' : ''}">${wwKg}${mSufHtml}</div>
       </div>
       <div class="mc-store-col">
         <div class="mc-store-label coles-col"><span class="store-chip sm coles">C</span> Coles</div>
-        <div class="mc-price${coWin ? ' cheaper-c' : ''}">${coKg}<span class="vgm-kg-suffix">/kg</span></div>
+        <div class="mc-price${coWin ? ' cheaper-c' : ''}">${coKg}${mSufHtml}</div>
       </div>
       <button class="vgm-chevron-btn" aria-expanded="${isExpanded}" aria-label="${isExpanded ? 'Hide store options' : 'Show store options'}" title="${isExpanded ? 'Hide store options' : 'Show store options'}">${isExpanded ? '▾' : '▸'}</button>
     </div>`;

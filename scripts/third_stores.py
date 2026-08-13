@@ -95,6 +95,10 @@ PARSERS = {
     "chemist_warehouse": (parse_cw_price, parse_jsonld_price, parse_meta_price),
     "big_w":             (parse_jsonld_price, parse_meta_price),
     "priceline":         (parse_jsonld_price, parse_meta_price),
+    # ALDI serves a normal server-rendered page with a JSON-LD Product block and
+    # answers a plain fetch (200, no challenge) - checked live 2026-08-13. No new
+    # parser needed, it reuses the same one Big W and Priceline use.
+    "aldi":              (parse_jsonld_price, parse_meta_price),
 }
 
 

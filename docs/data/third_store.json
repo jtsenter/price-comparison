@@ -9,7 +9,7 @@
     "Entry fields:",
     "  store   'chemist_warehouse' | 'priceline'  (see THIRD_STORES in utils.js)",
     "  name    product name AS SOLD there - the size in it drives the unit price,",
-    "          same as everywhere else in this app",
+    "  store   'chemist_warehouse' | 'priceline' | 'big_w' | 'aldi'  (see THIRD_STORES in utils.js)",
     "  url     product page",
     "  price   shelf price in AUD",
     "  packs   OPTIONAL, count for items sold by the piece (nappies): unit price",
@@ -108,6 +108,109 @@
       "packs": 100,
       "note": "price not filled in - bigw.com.au returns 403 to automation, so it must be read by hand",
       "status": "unreachable 2026-08-13"
+    }
+  ],
+  "__group_baby_wipes": [
+    {
+      "store": "chemist_warehouse",
+      "name": "Goat Baby Wipes Water Wipes 240",
+      "url": "https://www.chemistwarehouse.com.au/buy/132153/goat-baby-wipes-water-wipes-240",
+      "price": 7.49,
+      "packs": 240,
+      "checked": "2026-08-13"
+    },
+    {
+      "store": "chemist_warehouse",
+      "name": "Curash Simply Water Wipes 8x80 Pack",
+      "url": "https://www.chemistwarehouse.com.au/buy/130839/curash-simply-water-wipes-8x80-pack",
+      "price": 29.99,
+      "packs": 640,
+      "checked": "2026-08-13"
+    },
+    {
+      "store": "chemist_warehouse",
+      "name": "Babylove Water Wipes (80 X 3) 240 Pack",
+      "url": "https://www.chemistwarehouse.com.au/buy/106093/babylove-water-wipes-80-x-3-240-pack",
+      "price": 12.99,
+      "packs": 240,
+      "checked": "2026-08-13"
+    },
+    {
+      "store": "chemist_warehouse",
+      "name": "Curash Simply Water Wipes 6 x 80 Pack",
+      "url": "https://www.chemistwarehouse.com.au/buy/87324/curash-simply-water-wipes-6-x-80-pack",
+      "price": 25.99,
+      "packs": 480,
+      "checked": "2026-08-13"
+    },
+    {
+      "store": "chemist_warehouse",
+      "name": "WaterWipes Baby & Newborn Sensitive Wipes 240 Pack",
+      "url": "https://www.chemistwarehouse.com.au/buy/113626/waterwipes-biodegradable-baby-wipes-4x-60-pack",
+      "price": 27.99,
+      "packs": 240,
+      "checked": "2026-08-13"
+    },
+    {
+      "store": "chemist_warehouse",
+      "name": "WaterWipes Baby & Newborn Sensitive Wipes 360 Pack",
+      "url": "https://www.chemistwarehouse.com.au/buy/152895/waterwipes-biodegradable-wipes-6-x-60-pack",
+      "price": 35.99,
+      "packs": 360,
+      "checked": "2026-08-13"
+    },
+    {
+      "store": "aldi",
+      "name": "Mamia Baby Water Wipes 80 Pack",
+      "url": "https://www.aldi.com.au/product/mamia-baby-water-wipes-80-pack-000000000000418168",
+      "price": 2.29,
+      "packs": 80,
+      "checked": "2026-08-13"
+    },
+    {
+      "store": "big_w",
+      "name": "WaterWipes Baby & Newborn Sensitive Wipes 180 Pack",
+      "url": "https://www.bigw.com.au/product/waterwipes-baby-newborn-sensitive-wipes-180-pack/p/698624",
+      "price": 21.5,
+      "packs": 180,
+      "note": "price read by hand - headless fetch is 403",
+      "checked": "2026-08-13"
+    },
+    {
+      "store": "big_w",
+      "name": "WaterWipes Baby & Newborn Sensitive Wipes 540 Pack",
+      "url": "https://www.bigw.com.au/product/waterwipes-baby-newborn-sensitive-wipes-540-pack-/p/129717",
+      "price": 47.2,
+      "packs": 540,
+      "note": "price read by hand - headless fetch is 403",
+      "checked": "2026-08-13"
+    },
+    {
+      "store": "big_w",
+      "name": "WaterWipes Baby & Newborn Sensitive Wipes Mixed Multipack 444 Pack",
+      "url": "https://www.bigw.com.au/product/waterwipes-baby-newborn-sensitive-wipes-mixed-multipack-444-pack/p/906758",
+      "price": 48.0,
+      "packs": 444,
+      "note": "price read by hand - headless fetch is 403",
+      "checked": "2026-08-13"
+    },
+    {
+      "store": "priceline",
+      "name": "WaterWipes Baby & Toddler Textured Sensitive 60 Wipes",
+      "url": "https://www.priceline.com.au/product/96421/waterwipes-baby-toddler-textured-sensitive-60-wipes",
+      "price": null,
+      "packs": 60,
+      "status": "unreachable 2026-08-13",
+      "checked": "2026-08-13"
+    },
+    {
+      "store": "priceline",
+      "name": "WaterWipes Newborn & Baby Sensitive 180 Wipes",
+      "url": "https://www.priceline.com.au/product/41498/waterwipes-newborn-baby-sensitive-180-wipes",
+      "price": null,
+      "packs": 180,
+      "status": "unreachable 2026-08-13",
+      "checked": "2026-08-13"
     }
   ]
 }

@@ -46,7 +46,14 @@ eval([
 
 globalThis.loadDealTune = () => ({ ...globalThis.DEAL_TUNE_DEFAULTS });
 const TUNE = globalThis.DEAL_TUNE_DEFAULTS;
-const TODAY = '2026-08-11';
+// Must be the REAL today, not a frozen date. getDealQuality() reads the wall
+// clock internally (`new Date().toISOString().slice(0,10)`) and takes no `today`
+// argument, so a hardcoded date here silently drifts out of agreement with it:
+// once the real date passed the frozen one, the synthetic "today's price" row
+// below counted as PAST history, which moved pricePercentile from 1.0 to 0.83,
+// under BWS_STOCK_RANK, and case 1 started failing on a green tree. Deriving
+// every date in this file from the real today keeps the two in step for good.
+const TODAY = new Date().toISOString().slice(0, 10);
 const ago = (n) => new Date(Date.parse(TODAY) - n * 86400000).toISOString().slice(0, 10);
 
 // A history of [daysAgo, price] pairs plus today's shelf price, written the way

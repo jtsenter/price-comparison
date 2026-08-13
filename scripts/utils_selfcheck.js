@@ -107,6 +107,9 @@ eval([
   extract('thirdGroupMetric'), // the price a third-store row SHOWS in the bold slot
   extract('qtySortValue'),     // Qty column: units and kg in ONE numeric order
   extract('thirdStoreFromUrl'), // which outside shop a pasted product link is
+  extractConst('THIRD_STORES') + '\nglobal.THIRD_STORES = THIRD_STORES;',
+  extractConst('UNIT_METRIC_3DP_BELOW'),
+  extract('fmtUnitMetric'),    // comparison-metric precision (cents matter here)
   // Used directly by the test body, not just by another extracted function, so
   // it needs the same global re-export as KNOWN_BAD_NAPPIES_REMOVE above.
   extractConst('CHEAPER_SORT_LABEL') + '\nglobal.CHEAPER_SORT_LABEL = CHEAPER_SORT_LABEL;',
@@ -340,6 +343,36 @@ check('median empty -> null', _median([]), null);
   check('null -> null',         thirdStoreFromUrl(null), null);
   check('uppercase host still matches',
         thirdStoreFromUrl('https://WWW.BigW.COM.AU/product/x'), 'big_w');
+  check('aldi',
+        thirdStoreFromUrl('https://www.aldi.com.au/product/mamia-baby-water-wipes-80-pack-000000000000418168'),
+        'aldi');
+  // A store is only usable end to end if utils.js can ROUTE the link AND
+  // THIRD_STORES can label the result. Adding one without the other renders a
+  // blank chip, so assert the pair rather than the router alone.
+  check('every routable host has a THIRD_STORES label',
+        ['https://www.chemistwarehouse.com.au/buy/1/x',
+         'https://www.bigw.com.au/product/x/p/1',
+         'https://www.priceline.com.au/product/1/x',
+         'https://www.aldi.com.au/product/x'
+        ].every(u => !!THIRD_STORES[thirdStoreFromUrl(u)]?.label), true);
+}
+
+// ── fmtUnitMetric (a per-piece metric must not round away the comparison) ────
+{
+  // The bug this exists to stop: at two decimals the three cheapest baby wipes
+  // on the site all printed "$0.03", so the category could not show a winner.
+  check('ALDI wipes',        fmtUnitMetric(2.29 / 80),  '$0.029');
+  check('CW Goat wipes',     fmtUnitMetric(7.49 / 240), '$0.031');
+  check("WW Little One's",   fmtUnitMetric(1.90 / 60),  '$0.032');
+  check('three cheapest wipes stay distinguishable',
+        new Set([2.29 / 80, 7.49 / 240, 1.90 / 60].map(fmtUnitMetric)).size, 3);
+  check('Coles 360pk',       fmtUnitMetric(40.00 / 360), '$0.111');
+  // Above the threshold nothing changes - nappies and $/kg keep two decimals.
+  check('nappy stays 2dp',   fmtUnitMetric(13.99 / 40), '$0.35');
+  check('threshold is exclusive', fmtUnitMetric(0.20),  '$0.20');
+  check('just under threshold',   fmtUnitMetric(0.1999), '$0.200');
+  check('a $/kg figure is untouched', fmtUnitMetric(24.5), '$24.50');
+  check('null -> dash',      fmtUnitMetric(null), '-');
 }
 
 // ── groupThirdScale / groupThirdBeat (picking the right comparison scale) ────

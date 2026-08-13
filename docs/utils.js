@@ -139,6 +139,23 @@ function fmt(n) {
   return '$' + Number(n).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
+// A COMPARISON metric ($/kg, or $/piece for a perPack category), not a shelf
+// price. Two decimals is right for money but destroys a per-piece category
+// whose whole point is small differences: baby wipes run 2.9c to 14.2c each, so
+// at 2dp ALDI's $0.0286, Goat's $0.0312 and Little One's $0.0317 all print as
+// "$0.03" - three different winners rendered identically. Below 20c the third
+// decimal is the only digit carrying the comparison, so it is shown.
+// ponytail: a flat threshold, not a significant-figures rule. A category whose
+// members straddle $0.20 would show mixed precision in one column; none does
+// today (nappies are 29-48c, wipes are all under 15c). If one ever does, switch
+// this to decide once per group from the group's own min value.
+const UNIT_METRIC_3DP_BELOW = 0.20;
+function fmtUnitMetric(n) {
+  if (n == null || isNaN(Number(n))) return '-';
+  const v = Number(n);
+  return '$' + v.toFixed(Math.abs(v) < UNIT_METRIC_3DP_BELOW ? 3 : 2);
+}
+
 // Price the SAME QUANTITY at both stores. Comparing pack prices across stores
 // silently compares different amounts of food: Woolworths sells salmon as a
 // $34 fillet pack and Coles as a $10 portion, so a pack-price comparison says
@@ -998,6 +1015,19 @@ const DEFAULT_VARIANT_GROUPS = [
     'Rascals Premium Nappies Size 6 30pk',
     'Huggies Ultra Dry Nappies Boys Size 6 30pk',
   ]},
+  // Wipes are bought by the piece, never by weight, and the pack sizes run 60 to
+  // 640 - so pack price is meaningless for ranking (a $59 540-pack is a BETTER
+  // buy than a $27.99 240-pack). perPack makes the metric cents-per-wipe, which
+  // is also the metric the Chemist Warehouse / ALDI entries carry via `packs`,
+  // so the supermarket rows and the "also sold at" column compare like for like.
+  { key: 'baby_wipes', label: 'Baby wipes', category: 'Baby & Care', sticker: true, perPack: true, items: [
+    'WaterWipes Baby & Newborn Sensitive Wipes 60pk',
+    'WaterWipes Baby & Newborn Sensitive Wipes 180pk',
+    'WaterWipes Baby & Newborn Sensitive Wipes 360pk',
+    'WaterWipes Baby & Newborn Sensitive Wipes 540pk',
+    "Little One's Water Baby Wipes Fragrance Free 60pk",
+    'Huggies PURE 99% Purified Water Baby Wipes 72pk',
+  ]},
   // Single member, both stores already pinned on that ONE item (unlike nappies,
   // this was never split into separate single-store products) - a sticker group
   // of one exists purely so it inherits the per-kg filter, the click-anywhere
@@ -1255,6 +1285,7 @@ const THIRD_STORES = {
   chemist_warehouse: { letter: 'C', label: 'Chemist Warehouse' },
   priceline:         { letter: 'P', label: 'Priceline' },
   big_w:             { letter: 'B', label: 'Big W' },
+  aldi:              { letter: 'A', label: 'ALDI' },
 };
 
 // Which third store a pasted product URL belongs to, or null if it is not one
@@ -1274,6 +1305,7 @@ function thirdStoreFromUrl(url) {
     'chemistwarehouse.com.au': 'chemist_warehouse',
     'bigw.com.au':             'big_w',
     'priceline.com.au':        'priceline',
+    'aldi.com.au':             'aldi',
   };
   for (const [domain, store] of Object.entries(HOSTS)) {
     if (host === domain || host.endsWith('.' + domain)) return store;
