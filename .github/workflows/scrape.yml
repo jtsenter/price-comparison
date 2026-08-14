@@ -24,11 +24,11 @@ on:
         required: false
         default: ''
       scrape_mode:
-        description: 'quick = only items whose price moves; full = everything'
+        description: 'new = only never-priced items; quick = only items whose price moves; full = everything'
         required: false
         default: 'full'
         type: choice
-        options: ['full', 'quick']
+        options: ['full', 'quick', 'new']
 
 concurrency:
   # QUEUE, don't cancel. With cancel-in-progress:true a second trigger killed the

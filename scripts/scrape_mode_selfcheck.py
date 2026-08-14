@@ -103,6 +103,34 @@ assert _with < _without, (
 assert _pa(_ov_real, _names, set()) == _pa(_ov_real, _names, set(), set()), \
     "an empty skip set must leave a full run's pin list identical"
 
+# ── NEW mode: only products that have never resolved to a price ─────────────
+# Adding a product used to mean either waiting out a ~17-minute sweep or firing
+# one workflow_dispatch per product, which queued N runs on the single runner and
+# paid the browser-startup cost N times. A "new" run does the whole batch in one
+# pass, and is self-limiting: an item leaves the set the moment it gets a price.
+_priced = scraper._priced_names
+assert _priced([{"list_item": "W only", "woolworths": {"price": 3.0}, "coles": None}]) == {"W only"}, \
+    "a single-store pin IS priced - requiring both stores would re-scrape it forever"
+assert _priced([{"list_item": "C only", "woolworths": None, "coles": {"price": 4.0}}]) == {"C only"}, \
+    "a Coles-only pin is priced too"
+assert _priced([{"list_item": "Neither", "woolworths": None, "coles": None}]) == set(), \
+    "an item with no price at either store is what a new run is FOR"
+assert _priced([{"list_item": "Missing keys"}]) == set(), \
+    "an item with no store keys at all must not count as priced"
+assert _priced([{"list_item": "Free", "woolworths": {"price": 0}}]) == {"Free"}, \
+    "price 0 is a scraped value, not a missing one - truthiness would rescrape it"
+assert _priced([{"woolworths": {"price": 1.0}}]) == set(), "a nameless row is skipped, not crashed on"
+assert _priced([]) == set() and _priced(None) == set(), "no data means nothing is priced yet"
+
+_src_new = open(os.path.join(here, "scraper.py"), encoding="utf-8").read()
+assert 'if scrape_mode == "new":' in _src_new, "scrape() has no new-items branch"
+assert '"quick", "full", "new"' in _src_new, "argv rejects the new mode, so it silently becomes full"
+# Same trap quick mode hit: the url_overrides block re-adds any pinned item that
+# is "not currently on the list", and being filtered out is what makes it
+# eligible. Without this the new run would scrape the whole pinned catalogue.
+assert "_quick_skipped |= _priced" in _src_new, \
+    "a priced pinned item can sneak back into a new run"
+
 # ── A quick run leaves ARCHIVED products alone ──────────────────────────────
 # Archived is the pile you deliberately set aside, so sweeping all ~35 of them
 # spent a fifth of a "quick" run on the one group nobody is waiting for. Two

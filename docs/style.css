@@ -785,12 +785,16 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 .cat-third-warn { color: #c95000; font-weight: 600; }
 
 /* Category name + comparison metric sit side by side above the columns. */
-/* Stacked, not side by side: the name is free text that can run long, so it
-   gets a full-width row of its own and the fixed-size metric control sits under
-   it rather than squeezing it into a third of the dialog. */
-.cat-edit-top { display: flex; flex-direction: column; gap: 14px; align-items: stretch; }
+/* One row: name, metric, quote. A category name is a few words - giving it the
+   full dialog width just pushed the product columns further down the screen,
+   which is what the dialog is actually for. The name flexes to fill whatever the
+   fixed-width metric control leaves, capped so it never sprawls.
+   flex-start, not -end: the metric group carries an explanatory note under it,
+   so bottom-aligning would drag the name input down past the segmented control
+   it is supposed to sit beside. Aligning the tops lines the labels up instead. */
+.cat-edit-top { display: flex; flex-direction: row; flex-wrap: wrap; gap: 12px 24px; align-items: flex-start; }
 .cat-edit-top .form-group { margin-bottom: 0; }
-.cat-name-group { width: 100%; }
+.cat-name-group { flex: 1 1 240px; min-width: 0; max-width: 400px; }
 .cat-name-group input { width: 100%; }
 /* The metric column must not resize when the metric changes. Its note is a
    different length per option ("Compared on the shelf price of the pack." vs the

@@ -2094,6 +2094,28 @@ def _refresh_targets(single_item: str) -> list[str]:
     return [n.strip() for n in str(single_item or "").split("|") if n.strip()]
 
 
+def _priced_names(existing_items: list[dict]) -> set[str]:
+    """Names that already have a price at EITHER store in latest.json.
+
+    The complement of this set is what a NEW run scrapes. Deliberately "either",
+    not "both": a single-store pin only ever gets one price, and requiring both
+    would put it back on every new run forever.
+
+    A price of 0 counts as priced - it is a scraped value, not a missing one, and
+    `if w is not None` says that where a truthiness test would not.
+    """
+    out: set[str] = set()
+    for it in existing_items or []:
+        name = it.get("list_item")
+        if not name:
+            continue
+        ww = (it.get("woolworths") or {}).get("price")
+        co = (it.get("coles") or {}).get("price")
+        if ww is not None or co is not None:
+            out.add(name)
+    return out
+
+
 def _quick_skip_set(existing_items: list[dict], months: int = QUICK_STALE_MONTHS) -> set[str]:
     """Names a QUICK run should not bother re-checking.
 
@@ -2323,6 +2345,33 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                 print(f"Quick scrape: {len(shopping_list)} of {_before} items "
                       f"({_before - len(shopping_list)} dropped - price unchanged "
                       f"for {QUICK_STALE_MONTHS}+ months)")
+
+        # NEW run: only products that have never resolved to a price. Adding a
+        # product used to mean waiting out a full sweep (~17 min) or firing one
+        # workflow_dispatch per product, which queued N runs on the one runner
+        # and paid the browser-startup cost N times. This does the whole batch in
+        # a single run that is usually seconds long.
+        #
+        # Self-limiting by construction: an item drops off the list the moment it
+        # gets a price, so this can never grow into a full scrape. The handful of
+        # genuinely unfindable products are the standing cost, and they are also
+        # exactly the ones worth retrying when a listing reappears.
+        if scrape_mode == "new":
+            _prev_items = []
+            try:
+                with open(os.path.join(DATA_DIR, "latest.json")) as _pf:
+                    _prev_items = json.load(_pf).get("items", [])
+            except Exception:
+                pass                       # no latest.json yet = everything is new
+            _priced = _priced_names(_prev_items)
+            _before = len(shopping_list)
+            shopping_list = [n for n in shopping_list if n not in _priced]
+            # Rides in the skip set as well, because the url_overrides block below
+            # adds any pinned item "not currently on the list" - being filtered out
+            # is precisely what makes it eligible. Same trap quick mode hit.
+            _quick_skipped |= _priced
+            print(f"New-items scrape: {len(shopping_list)} of {_before} items "
+                  f"({len(_priced)} already priced)")
 
         # Items pinned via url_overrides.json but not in the Excel get added here
         # so they are actively re-scraped each run (fresh prices).  The universal
@@ -2913,7 +2962,7 @@ if __name__ == "__main__":
     ww_url = sys.argv[3].strip() if len(sys.argv) > 3 else ""
     coles_url = sys.argv[4].strip() if len(sys.argv) > 4 else ""
     scrape_mode = (sys.argv[5].strip().lower() if len(sys.argv) > 5 else "full") or "full"
-    if scrape_mode not in ("quick", "full"):
+    if scrape_mode not in ("quick", "full", "new"):
         scrape_mode = "full"          # unknown value = do the thorough thing
     asyncio.run(scrape(trigger, single_item=single_item, ww_url=ww_url,
                        coles_url=coles_url, scrape_mode=scrape_mode))

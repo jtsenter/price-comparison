@@ -3183,7 +3183,7 @@ let refreshCooldown = false;
 
 async function triggerRefresh(mode) {
   // `mode` is 'quick' | 'full'; omitted means "whatever the schedule says".
-  const scrapeMode = (mode === 'quick' || mode === 'full') ? mode : defaultScrapeMode().mode;
+  const scrapeMode = ['quick', 'full', 'new'].includes(mode) ? mode : defaultScrapeMode().mode;
   // Defence in depth: the button is not rendered for viewers, but this is the one
   // action that spends real compute on the self-hosted runner, so refuse outright
   // rather than relying on the UI having hidden it.
@@ -5251,8 +5251,13 @@ function saveCategoryEdit() {
   } else if (needRepo) {
     // Exact-write the touched items so a removed URL is actually deleted from the
     // repo (merge-only writes could never drop a key). New products merge in.
-    persistUrlOverridesToRepo(s, ov, [...touchedItems])
-      .catch(err => showSyncError('URL overrides', err, () => persistUrlOverridesToRepo(s, ov, [...touchedItems]).catch(() => {})));
+    // Held so the new-product scrape below can wait on it - the run reads this
+    // file, so dispatching before it lands is a race the scraper loses.
+    const overridesWritten = persistUrlOverridesToRepo(s, ov, [...touchedItems])
+      .catch(err => {
+        showSyncError('URL overrides', err, () => persistUrlOverridesToRepo(s, ov, [...touchedItems]).catch(() => {}));
+        throw err;   // a failed write must not be followed by a scrape of stale pins
+      });
     if (latestChanged) {
       persistLatestJson(_lastData, `edit: ${key} - removed ${removals.map(r => `${r.item} @ ${r.store}`).join(', ')}`)
         .catch(err => showSyncError('latest.json', err));
@@ -5261,10 +5266,25 @@ function saveCategoryEdit() {
       persistThirdStoreList(s, '__group_' + key, thirdList)
         .catch(err => showSyncError('other-store links', err));
     }
-    // New products' URLs live in url_overrides now - fetch their prices immediately.
-    newFetches.forEach(f => triggerItemRefresh(f.name, null, { wwUrl: f.wwUrl, colesUrl: f.colesUrl }));
+    // New products' URLs live in url_overrides now - fetch their prices
+    // immediately, in ONE run.
+    //
+    // This used to fire triggerItemRefresh per product, which is one
+    // workflow_dispatch each: adding a 6-member category queued six runs on the
+    // single self-hosted runner and paid the browser-startup cost six times.
+    // A "new" run scrapes every never-priced item in one pass instead, so the
+    // batch costs the same as one product.
+    //
+    // Awaited on the overrides write, not fired alongside it: the run reads
+    // url_overrides.json from the repo, so dispatching in parallel is a race the
+    // scraper loses about half the time - it starts, sees the old file, and finds
+    // nothing new to do.
     if (newFetches.length) {
-      alert(`Saved. Fetching ${newFetches.length} new product(s) - they'll appear once the next price check finishes.`);
+      const n = newFetches.length;
+      showToast(`✓ Saved. Checking ${n} new product${n > 1 ? 's' : ''}…`);
+      overridesWritten
+        .then(() => triggerRefresh('new'))
+        .catch(() => {});   // the write already reported its own failure
     } else if (removals.length) {
       showToast(`✓ Removed ${removals.length} store listing${removals.length > 1 ? 's' : ''} - the scraper will stop checking ${removals.map(r => r.store === 'ww' ? 'WW' : 'Coles').join('/')}.`);
     }

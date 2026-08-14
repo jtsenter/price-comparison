@@ -221,6 +221,8 @@
           '<button class="btn btn-primary btn-icon scrape-split-main" id="refreshBtn" title="Update prices">' + SVG_REF + '</button>' +
           '<button class="btn btn-primary scrape-split-caret" id="scrapeModeBtn" title="Choose quick or full scrape" aria-haspopup="true" aria-expanded="false">▾</button>' +
           '<div class="scrape-menu" id="scrapeMenu" style="display:none">' +
+            '<button class="scrape-menu-item" data-mode="new">' +
+              '<strong>New items only</strong><span>Just products that have never had a price - seconds, not minutes</span></button>' +
             '<button class="scrape-menu-item" data-mode="quick">' +
               '<strong>Quick scrape</strong><span>Only items whose price actually moves</span></button>' +
             '<button class="scrape-menu-item" data-mode="full">' +
