@@ -4803,6 +4803,36 @@ function openProductEditor(itemName) {
 
 // `opts` is the plain-product path above; without it this resolves a real
 // category by key exactly as before.
+// Open the SAME editor with nothing in it. This is the one route into the app
+// for a product it has never scraped: name it, paste the store links, save.
+// Everything else in the UI edits a row that already exists, which meant a new
+// product could only be added by hand-editing url_overrides.json.
+let _catEditIsNew = false;
+function openNewProductModal() {
+  const label = (prompt('Name this product or category\n\ne.g. "Cadbury Dairy Milk" or "Aero Peppermint"') || '').trim();
+  if (!label) return;
+  const key = categoryKeyFor(label);
+  if (!key) { alert('That name has no letters or numbers in it - try another.'); return; }
+  if (loadVariantGroups().some(g => g.key === key)) {
+    alert(`"${label}" already exists - open it from its own row to edit it.`);
+    return;
+  }
+  _catEditIsNew = true;
+  openCategoryEditModal(key, {
+    // A synthetic seed: no members yet, and $/kg to start because that is the
+    // right default for anything sold in varying pack sizes.
+    cat: { key, label, items: [], sticker: false, perPack: false, category: 'Pantry' },
+    stores: { ww: [], coles: [] },
+  });
+  // One empty row per supermarket, so the dialog opens ready to paste into.
+  ['ww', 'coles'].forEach(store => {
+    const list = document.querySelector(`#catEditBody .cat-col-list[data-store="${store}"]`);
+    if (list && !list.querySelector('.cat-prod')) list.insertAdjacentHTML('beforeend', catEditNewRow(store));
+  });
+  if ($('catEditTitle')) $('catEditTitle').textContent = `New — ${label}`;
+  if ($('catEditSave')) $('catEditSave').textContent = 'Create';
+}
+
 function openCategoryEditModal(groupKey, opts) {
   const cat = opts?.cat || loadVariantGroups().find(g => g.key === groupKey);
   if (!cat || !_lastData) return;
@@ -4880,7 +4910,7 @@ function openCategoryEditModal(groupKey, opts) {
     const label = store === 'ww' ? 'Woolworths' : 'Coles';
     const sorted = [...names].sort((a, b) => priceFor(a, store) - priceFor(b, store));
     const rows = sorted.map(n => makeRow(store, n, false)).join('')
-      || '<div class="cat-prod-empty">No products yet</div>';
+      || '';
     return `<div class="cat-col">
         <div class="cat-col-h"><span class="store-chip ${chip} sm">${letter}</span> ${label}</div>
         <div class="cat-col-list" data-store="${store}">${rows}</div>
@@ -4894,7 +4924,7 @@ function openCategoryEditModal(groupKey, opts) {
   const thirdCol = `<div class="cat-col cat-col-third">
         <div class="cat-col-h"><span class="store-chip third sm">＋</span> Other stores</div>
         <div class="cat-col-list" data-store="third">${
-          thirdEntries.map(thirdRow).join('') || '<div class="cat-prod-empty">No products yet</div>'
+          thirdEntries.map(thirdRow).join('')
         }</div>
         <button class="cat-add-product cat-add-third" data-store="third">+ Add other-store product</button>
       </div>`;
@@ -4930,10 +4960,12 @@ function catEditApplyMetric(metric) {
   const note = $('catEditMetricNote');
   if (note) note.textContent = CAT_METRICS[m].note;
   $('catEditBody')?.classList.toggle('show-pcs', m === 'piece');
-  // The quote size only means anything per-piece; hidden elsewhere rather than
-  // disabled, so the dialog does not offer a choice that changes nothing.
-  const qr = $('catEditQuoteRow');
-  if (qr) qr.hidden = m !== 'piece';
+  // Greyed out, not hidden, when the metric is not per-piece. Hiding it made the
+  // row reflow on every metric click and left no sign the setting existed - and
+  // the `hidden` attribute was being overridden by the row's own display:flex,
+  // so it stayed visible on a $/kg category anyway.
+  const q = $('catEditQuote');
+  if (q) q.disabled = m !== 'piece';
 }
 
 // Reflect the chosen quote size. Separate from the metric so picking one does
@@ -5011,6 +5043,7 @@ function bindCategoryEditBody() {
 
   // Comparison metric.
   $('catEditQuote')?.addEventListener('change', (e) => catEditApplyQuote(e.target.value));
+  $('newProductBtn')?.addEventListener('click', openNewProductModal);
   $('catEditMetric')?.addEventListener('click', (e) => {
     const b = e.target.closest('button[data-metric]');
     if (b) catEditApplyMetric(b.dataset.metric);
@@ -5194,7 +5227,12 @@ function saveCategoryEdit() {
   // change back to the seeded default would not stick.
   const quote = Number($('catEditQuote')?.dataset.quote) || PER_PIECE_QUOTE;
   saveVariantGroupOverride(key, { label: label || undefined, add, remove, ww_order: wwItems, coles_order: coItems,
-                                  sticker: metric.sticker, perPack: metric.perPack, quote });
+                                  sticker: metric.sticker, perPack: metric.perPack, quote,
+                                  // Only a `created` override becomes a real category -
+                                  // without it allVariantGroupSeeds() reads the entry as a
+                                  // leftover patch to a seed that does not exist, and the
+                                  // new product silently never appears.
+                                  ...(_catEditIsNew ? { created: true } : {}) });
   savePerKgExclusions(excl);
   saveOverrides(ov);
   // Reflect the third-store edit locally straight away, so the panel updates on
@@ -5322,6 +5360,7 @@ function savePlainProductEdit(name, label) {
 function closeCategoryEditModal() {
   _catEditKey = null;
   _catEditPlain = null;
+  _catEditIsNew = false;
   document.body.style.overflow = '';
   $('categoryEditModal')?.classList.remove('open');
 }

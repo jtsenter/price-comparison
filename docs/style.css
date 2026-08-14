@@ -529,10 +529,12 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
    label-less and note-less: the four-button form plus its explanation added ~90px
    of height above the product columns, which is what the dialog is actually for.
    The whole explanation is the select's tooltip. */
-.cat-quote-row { display: flex; align-items: center; margin-top: 6px; }
-.cat-quote-row select { font-size: 12px; padding: 3px 6px; border-radius: 6px; }
-/* The category name never needs the full dialog width - a name is a few words. */
-.cat-edit-top .form-group:first-child { max-width: 320px; }
+/* The quote select rides on the metric's own line. DISABLED rather than hidden
+   off "Per piece": a control that disappears makes the row jump and gives no
+   hint the setting exists at all. */
+.cat-metric-line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.cat-metric-line select { font-size: 12px; padding: 4px 7px; border-radius: 6px; }
+.cat-metric-line select:disabled { opacity: .42; cursor: not-allowed; }
 
 /* Shop badge inside the row's outside-stores chip. Carries the shop's own
    colours (see THIRD_STORES), so one character replaces a name that used to
@@ -783,15 +785,19 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 .cat-third-warn { color: #c95000; font-weight: 600; }
 
 /* Category name + comparison metric sit side by side above the columns. */
-.cat-edit-top { display: flex; gap: 22px; flex-wrap: wrap; align-items: flex-start; }
-.cat-edit-top .form-group { margin-bottom: 6px; }
-.cat-edit-top .form-group:first-child { flex: 1 1 240px; }
+/* Stacked, not side by side: the name is free text that can run long, so it
+   gets a full-width row of its own and the fixed-size metric control sits under
+   it rather than squeezing it into a third of the dialog. */
+.cat-edit-top { display: flex; flex-direction: column; gap: 14px; align-items: stretch; }
+.cat-edit-top .form-group { margin-bottom: 0; }
+.cat-name-group { width: 100%; }
+.cat-name-group input { width: 100%; }
 /* The metric column must not resize when the metric changes. Its note is a
    different length per option ("Compared on the shelf price of the pack." vs the
    much longer per-piece one), and on a flex row that re-widened the column and
    shoved the name field sideways on every click. Fixed width + room for two
    lines, so the wording wraps instead of moving the layout. */
-.cat-edit-top .form-group:nth-child(2) { flex: 0 0 auto; width: 300px; }
+/* (the old 300px cap on the metric group is gone - the column stack sizes it) */
 /* Reserve BOTH lines always, so the shorter notes don't let the columns below
    jump up by a line when you switch metric. */
 #catEditMetricNote { width: 300px; min-height: 2.9em; }

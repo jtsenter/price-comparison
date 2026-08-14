@@ -1065,6 +1065,22 @@ const DEFAULT_VARIANT_GROUPS = [
     "Little One's Water Baby Wipes Fragrance Free 60pk",
     'Huggies PURE 99% Purified Water Baby Wipes 72pk',
   ]},
+  // Chocolate blocks: 40g bars up to 315g blocks, so a pack price compares
+  // nothing. Weighed ($/kg), which is also how the shelf label states them.
+  { key: 'cadbury_dairy_milk', label: 'Cadbury Dairy Milk', category: 'Sweets', items: [
+    'Cadbury Dairy Milk Chocolate Block 180g',
+    'Cadbury Dairy Milk Large Chocolate Block 315g',
+    'Cadbury Dairy Milk Chocolate Bar 45g',
+    'Coles Cadbury Dairy Milk Chocolate Block 180g',
+    'Coles Cadbury Dairy Milk Chocolate Block 100g',
+    'Coles Cadbury Dairy Milk Chocolate Block 315g',
+  ]},
+  { key: 'aero_peppermint', label: 'Aero Peppermint', category: 'Sweets', items: [
+    'Aero Peppermint Milk Chocolate Block 118g',
+    'Aero Peppermint Milk Chocolate Bar 40g',
+    'Coles Aero Peppermint Milk Chocolate Bar 40g',
+    'Coles Aero Peppermint Milk Chocolate Block 118g',
+  ]},
   // Single member, both stores already pinned on that ONE item (unlike nappies,
   // this was never split into separate single-store products) - a sticker group
   // of one exists purely so it inherits the per-kg filter, the click-anywhere

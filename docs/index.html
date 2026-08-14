@@ -124,6 +124,14 @@
   <div class="tabs-row">
     <span class="filter-row-label" style="align-self:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 20h16"/><path d="M4 14h16"/><path d="M4 8h16"/></svg>Category</span>
     <div id="categoryTabs" class="category-tabs"></div>
+    <!-- The only way in to a blank editor. Everything else edits something that
+         already exists, so a product the scraper has never seen had no route
+         into the app at all. -->
+    <button class="btn btn-ghost tabs-row-cols" id="newProductBtn"
+            title="Add a product the app doesn't track yet - paste its store links">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New product
+    </button>
     <button class="btn btn-ghost btn-icon view-toggle-btn tabs-row-cols" id="viewToggleBtn" title="Switch to card view">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
     </button>
@@ -258,31 +266,33 @@
       <h2 id="catEditTitle">Edit category</h2>
       <button class="modal-close" id="catEditClose">✕</button>
     </div>
+    <!-- Name on its own full-width row: a category name is free text and can be
+         long, while the metric control below it is a fixed size. -->
     <div class="cat-edit-top">
-      <div class="form-group">
-        <label>Category name</label>
+      <div class="form-group cat-name-group">
+        <label for="catEditName">Category name</label>
         <input type="text" id="catEditName" />
       </div>
       <div class="form-group">
         <label>Compare prices by</label>
-        <div class="seg" id="catEditMetric" role="radiogroup" aria-label="Compare prices by">
-          <button type="button" data-metric="pack"  role="radio" aria-checked="false">Pack price</button>
-          <button type="button" data-metric="kg"    role="radio" aria-checked="false">Per kg / L</button>
-          <button type="button" data-metric="piece" role="radio" aria-checked="false">Per piece</button>
-        </div>
-        <div class="form-note" id="catEditMetricNote"></div>
-        <!-- Only meaningful under "Per piece"; catEditApplyMetric shows/hides it.
-             A select rather than four buttons, and the explanation lives in the
-             tooltip - the expanded form pushed the product columns off screen. -->
-        <div class="cat-quote-row" id="catEditQuoteRow" hidden>
+        <div class="cat-metric-line">
+          <div class="seg" id="catEditMetric" role="radiogroup" aria-label="Compare prices by">
+            <button type="button" data-metric="pack"  role="radio" aria-checked="false">Pack price</button>
+            <button type="button" data-metric="kg"    role="radio" aria-checked="false">Per kg / L</button>
+            <button type="button" data-metric="piece" role="radio" aria-checked="false">Per piece</button>
+          </div>
+          <!-- Sits on the metric's own line and is DISABLED, not hidden, off
+               "Per piece": a control that vanishes makes the row jump and gives
+               no clue the setting exists. catEditApplyMetric drives it. -->
           <select id="catEditQuote" aria-label="Show price per"
-                  title="How many pieces the price is quoted for. Pick roughly one pack, so the figure is a number you actually pay: 3c a wipe says nothing, $2.86 per 100 does.">
+                  title="How many pieces the price is quoted for. Only applies when comparing Per piece. Pick roughly one pack, so the figure is a number you actually pay: 3c a wipe says nothing, $2.86 per 100 does.">
             <option value="1">per 1</option>
             <option value="10">per 10</option>
             <option value="50">per 50</option>
             <option value="100">per 100</option>
           </select>
         </div>
+        <div class="form-note" id="catEditMetricNote"></div>
       </div>
     </div>
     <div id="catEditBody"></div>
