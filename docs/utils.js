@@ -1500,6 +1500,36 @@ function qtySortValue(units, isKg) {
 //   weighed  -> $/kg, while thirdUnitPrice is per 100g: off by 10x, and not
 //               fixable by scaling alone (an entry may be priced per piece
 //               instead). No verdict at all rather than a wrong one.
+// The single cheapest figure across every column the panel can HONESTLY compare,
+// plus whether more than one column is level on it.
+//
+// Woolworths and Coles are always in: a category states both on its own metric,
+// so they are the same scale by construction. Outside stores join only when that
+// metric is a pack or per-piece price - a weighed category compares $/kg while a
+// third entry's own rate is per 100g, and mixing them would frame a "winner"
+// that is really just a different unit (the same reason groupThirdScale gates
+// its verdict). So on chicken the frame picks between W and C; on baby wipes it
+// can also land on ALDI.
+//
+// `tied` exists because a frame asserts "this one wins". Two shops genuinely
+// level get plain green on each and no frame - a box around one of two identical
+// prices claims a winner that does not exist.
+function groupFrameBest(group, thirdEntries) {
+  const own = [group._wwPerKg, group._coPerKg].filter(v => v != null);
+  const comparable = !!(group._sticker || group._perPack);
+  const third = comparable
+    ? (thirdEntries || []).map(e => thirdGroupMetric(group, e)).filter(v => v != null)
+    : [];
+  const all = [...own, ...third];
+  if (!all.length) return { best: null, tied: false, includesThird: comparable };
+  const best = Math.min(...all);
+  return {
+    best,
+    tied: all.filter(v => v <= best + 0.0001).length > 1,
+    includesThird: comparable,
+  };
+}
+
 function groupThirdScale(group) {
   const usable = group._sticker || group._perPack;
   return {

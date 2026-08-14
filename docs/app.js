@@ -805,7 +805,7 @@ function groupThirdChipHTML(group) {
 // taller than the two supermarket columns beside it.
 const THIRD_ROWS_PER_STORE = 1;
 
-function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg, bestTied) {
+function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg, frame) {
   const suffix = group._metricSuffix ?? (group._sticker ? '' : '/kg');
   const byStore = new Map();
   for (const e of entries) {
@@ -838,7 +838,14 @@ function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg, bestTied) {
         // row wins outright - same tag the W/C columns use, so the category has
         // exactly one "CHEAPEST" no matter which shop it lands in.
         const isWin = m != null && bestMetric != null && m <= bestMetric + 0.0001;
-        return `<div class="vg-pv${isWin ? (bestTied ? ' win' : ' win vg-top') : ''}">
+        // The green mark and the frame answer different questions. `win` is
+        // "cheapest among the columns this panel scores together"; the frame is
+        // "cheapest full stop", and an outside store can only claim it when its
+        // rate is on the category's own scale - never on a weighed category,
+        // where its per-100g figure is a different unit (frame.includesThird).
+        const isTop = !!frame && frame.includesThird && !frame.tied
+          && frame.best != null && m != null && m <= frame.best + 0.0001;
+        return `<div class="vg-pv${isWin ? ' win' : ''}${isTop ? ' vg-top' : ''}">
             ${imgHtml}
             ${nameHtml}
             <span class="vg-pv-pack">${pack}</span>
@@ -4475,8 +4482,11 @@ function appendGroupRowDesktop(tbody, group, overrides) {
   // Two shops genuinely level on the metric. A frame says "this one wins", so
   // when nothing wins outright we fall back to the plain green on each - a box
   // around one of two identical prices is just wrong.
-  const gBestTied = gBestMetric != null &&
-    [...gMetricPrices, ...gThirdMetrics].filter(v => v <= gBestMetric + 0.0001).length > 1;
+  // The FRAME is a different question from the third column's green mark:
+  // Woolworths and Coles are always comparable with each other, even on a
+  // weighed category where an outside store's rate is not. gBestMetric stays as
+  // it was (it drives that green mark); groupFrameBest decides the outline.
+  const gFrame = groupFrameBest(group, gThirdEntries);
   // Collapsed, the outside stores are a narrow rail on the RIGHT rather than a
   // third of the panel's width: two supermarket columns stay full-size, which is
   // what you actually compare, and the rail costs ~28px to say "there is more
@@ -4485,7 +4495,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     : showThird
     ? `<div class="vg-panel-store third-open-col">
         <button class="third-fold" data-third="${escAttr(group.list_item)}"${gBeat ? ' data-third-beats="1"' : ''} title="Hide other stores" aria-label="Hide other stores"><span class="third-fold-ic">✕</span></button>
-        ${groupThirdRowsHTML(group, gThirdEntries, gBestMetric, imgSrc, gBestTied)}
+        ${groupThirdRowsHTML(group, gThirdEntries, gBestMetric, imgSrc, gFrame)}
       </div>`
     : `<button class="third-rail${gBeat ? ' beats' : ''}" data-third="${escAttr(group.list_item)}"${gBeat ? ' data-third-beats="1"' : ''}
          title="Show ${gThirdEntries.length} other store${gThirdEntries.length > 1 ? 's' : ''}">
@@ -4500,11 +4510,11 @@ function appendGroupRowDesktop(tbody, group, overrides) {
       <div class="vg-panel-cols${showThird ? ' third-cols' : (gThirdEntries.length ? ' third-rail-cols' : '')}">
         <div class="vg-panel-store">
           <div class="vg-store-h"><span class="store-chip ww sm">W</span> Woolworths</div>
-          ${groupStoreVariantsHTML(group, 'woolworths', overrides, gBestMetric, gBestTied)}
+          ${groupStoreVariantsHTML(group, 'woolworths', overrides, gFrame.best, gFrame.tied)}
         </div>
         <div class="vg-panel-store">
           <div class="vg-store-h"><span class="store-chip coles sm">C</span> Coles</div>
-          ${groupStoreVariantsHTML(group, 'coles', overrides, gBestMetric, gBestTied)}
+          ${groupStoreVariantsHTML(group, 'coles', overrides, gFrame.best, gFrame.tied)}
         </div>
         ${thirdCol}
       </div>
@@ -4634,8 +4644,7 @@ function appendGroupCardMobile(container, group, overrides) {
     const mThirdMetrics = mThirdEntries.map(e => thirdGroupMetric(group, e)).filter(v => v != null);
     const mBest = [...mMetricPrices, ...mThirdMetrics].length
       ? Math.min(...mMetricPrices, ...mThirdMetrics) : null;
-    const mBestTied = mBest != null &&
-      [...mMetricPrices, ...mThirdMetrics].filter(v => v <= mBest + 0.0001).length > 1;
+    const mFrame = groupFrameBest(group, mThirdEntries);
     const thirdSec = !mThirdEntries.length ? '' : `
       <div class="vgm-store-sec vgm-third-sec${mOpen ? ' open' : ''}">
         <button class="vgm-third-h${mBeat ? ' beats' : ''}" data-third="${escAttr(group.list_item)}"${mBeat ? ' data-third-beats="1"' : ''} aria-expanded="${mOpen}">
@@ -4643,16 +4652,16 @@ function appendGroupCardMobile(container, group, overrides) {
           ${mOpen ? '' : '<span class="vgm-third-toggle">Show ▼</span>'}
         </button>
         ${mOpen ? `<button class="third-fold" data-third="${escAttr(group.list_item)}"${mBeat ? ' data-third-beats="1"' : ''} title="Hide other stores" aria-label="Hide other stores"><span class="third-fold-ic">✕</span></button>` : ''}
-        ${mOpen ? groupThirdRowsHTML(group, mThirdEntries, mBest, imgSrc, mBestTied) : ''}
+        ${mOpen ? groupThirdRowsHTML(group, mThirdEntries, mBest, imgSrc, mFrame) : ''}
       </div>`;
     html += `<div class="vgm-body">
       <div class="vgm-store-sec">
         <div class="vg-store-h"><span class="store-chip ww sm">W</span> Woolworths</div>
-        ${groupStoreVariantsHTML(group, 'woolworths', overrides, mBest, mBestTied)}
+        ${groupStoreVariantsHTML(group, 'woolworths', overrides, mFrame.best, mFrame.tied)}
       </div>
       <div class="vgm-store-sec">
         <div class="vg-store-h"><span class="store-chip coles sm">C</span> Coles</div>
-        ${groupStoreVariantsHTML(group, 'coles', overrides, mBest, mBestTied)}
+        ${groupStoreVariantsHTML(group, 'coles', overrides, mFrame.best, mFrame.tied)}
       </div>
       ${thirdSec}
     </div>`;

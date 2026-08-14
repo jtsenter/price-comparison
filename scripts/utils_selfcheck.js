@@ -103,6 +103,7 @@ eval([
   extract('thirdOpenState'),   // default-open tri-state for the "other stores" section
   extract('thirdToggleState'),
   extract('groupThirdScale'),  // which scale a CATEGORY compares a third store on
+  extract('groupFrameBest'),   // which row gets the outright-cheapest frame
   extract('groupThirdBeat'),
   extract('thirdGroupMetric'), // the price a third-store row SHOWS in the bold slot
   extract('qtySortValue'),     // Qty column: units and kg in ONE numeric order
@@ -484,6 +485,48 @@ check('median empty -> null', _median([]), null);
         fmtUnitMetric(metricShown(g, thirdGroupMetric(g, aldi))));
   check('...and that figure is ALDI\'s real per-100 price',
         fmtUnitMetric(metricShown(g, thirdUnitPrice(aldi).value)), '$2.86');
+}
+
+// ── groupFrameBest (which row gets the outright-cheapest frame) ─────────────
+{
+  const cw = (price, packs, name) => ({ store: 'chemist_warehouse', name: name || 'x', price, packs });
+
+  // THE BUG THIS EXISTS FOR: the frame used to be derived from groupThirdScale,
+  // whose verdict is gated on sticker||perPack. A WEIGHED category - chicken,
+  // salmon, mince, i.e. most of them - therefore produced no candidates at all
+  // and no row was ever framed. Woolworths and Coles are always comparable with
+  // each other; only the OUTSIDE stores need that gate.
+  const meat = { _wwPerKg: 12, _coPerKg: 11 };
+  check('weighed: the cheaper supermarket is framed', groupFrameBest(meat, []).best, 11);
+  check('weighed: not a tie',                         groupFrameBest(meat, []).tied, false);
+  check('weighed: an outside rate is a different unit and cannot win',
+        groupFrameBest(meat, [cw(2, 1)]).best, 11);
+  check('weighed: outside stores are excluded from the frame entirely',
+        groupFrameBest(meat, [cw(2, 1)]).includesThird, false);
+
+  // Per-piece: the outside store IS on the category's own scale, so it can win.
+  const wipes = { _perPack: true, _sticker: true, _quote: 100,
+                  _wwPerKg: 1.90 / 60, _coPerKg: 6 / 60 };
+  const aldi = { store: 'aldi', name: 'Mamia 80pk', price: 2.29, packs: 80 };
+  check('per-piece: ALDI beats both supermarkets',
+        groupFrameBest(wipes, [aldi]).best.toFixed(5), (2.29 / 80).toFixed(5));
+  check('per-piece: outside stores are eligible',
+        groupFrameBest(wipes, [aldi]).includesThird, true);
+
+  // Ties never get a frame, whoever is level.
+  check('two supermarkets level -> no frame',
+        groupFrameBest({ _wwPerKg: 10, _coPerKg: 10 }, []).tied, true);
+  check('a supermarket level with an outside store -> no frame',
+        groupFrameBest({ _sticker: true, _wwPerKg: 5, _coPerKg: 9 },
+                       [cw(5, 1)]).tied, true);
+  check('a clear winner is not a tie',
+        groupFrameBest({ _sticker: true, _wwPerKg: 5, _coPerKg: 9 }, [cw(7, 1)]).tied, false);
+
+  // A single-store category still frames its one price - it IS the cheapest.
+  check('one store priced -> that row is framed',
+        groupFrameBest({ _wwPerKg: 8, _coPerKg: null }, []).best, 8);
+  check('nothing priced -> nothing framed',
+        groupFrameBest({ _wwPerKg: null, _coPerKg: null }, []).best, null);
 }
 
 // ── groupThirdScale / groupThirdBeat (picking the right comparison scale) ────
