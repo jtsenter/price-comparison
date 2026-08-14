@@ -198,7 +198,10 @@
     }
     .sl-run-head:hover { background: var(--bg); }
     .sl-run-date { font-size: 12.5px; font-weight: 600; color: var(--text); }
-    .sl-run-date .rel { font-weight: 500; color: var(--text-soft); font-size: 10.5px; display: block; }
+    /* Inline, not block: the date, "1h ago" and the "no price moves" chip are one
+       fact about one run and were stacking into three lines each. */
+    .sl-run-date { display: inline-flex; align-items: baseline; gap: 7px; }
+    .sl-run-date .rel { font-weight: 500; color: var(--text-soft); font-size: 10.5px; }
     .sl-run-trigger {
       font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
       padding: 2px 7px; border-radius: 9px; background: var(--bg); color: var(--text-mid);
@@ -1577,9 +1580,6 @@ $('slWishlistClear').addEventListener('click', () => {
   try { localStorage.removeItem('pw_search_misses_v1'); } catch {}
   renderWishlist();
 });
-// slRefreshBtn is rendered by header.js for this page - guard anyway so a header
-// change can never take the whole page's boot down with it (load() is next).
-$('slRefreshBtn')?.addEventListener('click', load);
 $('slChgDownload')?.addEventListener('click', downloadChangesXlsx);
 
 // Tabs: 30 runs + the price archive + diagnostics used to be one endless scroll.

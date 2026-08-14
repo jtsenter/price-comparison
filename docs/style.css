@@ -931,15 +931,21 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
 table { width: max-content; min-width: 100%; border-collapse: collapse; }
 
 /* ── Sticky table header ─────────────────────────────────────── */
+/* Sentence case, not ALL CAPS. Caps at 11px with letter-spacing reads as a
+   system label rather than a column of data you are meant to act on, and the
+   arrow and filter caret had to fight it for space. Darker and a shade larger
+   so the header is legible without shouting; the SORTED column goes full
+   --text and semibold, so the current sort is visible at a glance instead of
+   resting on one small arrow. */
 #tableHead th {
   background: var(--bg);
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-soft);
-  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-mid);
+  padding: 12px 14px;
   text-align: left;
+  vertical-align: middle;
   border-bottom: 1px solid var(--border);
   box-shadow: 0 1px 0 var(--border);
   white-space: nowrap;
@@ -964,13 +970,13 @@ table { width: max-content; min-width: 100%; border-collapse: collapse; }
 .sticky-header-ghost table { border-collapse: collapse; table-layout: fixed; }
 .sticky-header-ghost th {
   background: var(--bg);
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-soft);
-  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-mid);
+  padding: 12px 14px;
   text-align: left;
+  vertical-align: middle;
   white-space: nowrap;
   cursor: pointer;
   border-bottom: none;
@@ -3176,3 +3182,19 @@ td.priority-cell { text-align: center; }
    columns out of alignment with each other. No frame at all when two shops tie:
    a box around one of two identical prices claims a winner that does not exist. */
 .vg-pv.vg-top { outline: 2px solid #15803d; outline-offset: -1px; border-radius: 7px; }
+
+
+/* The column you are sorted by, in both the real header and the sticky ghost.
+   Full-strength text plus a tinted ground, so "what is this table ordered by"
+   is answerable without hunting for a 12px arrow. */
+#tableHead th.sort-active,
+.sticky-header-ghost th.sort-active {
+  color: var(--text);
+  font-weight: 700;
+  background: var(--bg-alt, rgba(127,127,127,.07));
+}
+#tableHead th .sort-arrow,
+.sticky-header-ghost th .sort-arrow { margin-left: 2px; }
+/* Breathing room before the filter caret - it was sitting against the label. */
+#tableHead th .col-filter-btn,
+.sticky-header-ghost th .col-filter-btn { margin-left: 6px; }

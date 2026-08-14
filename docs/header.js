@@ -228,7 +228,10 @@
             '<div class="scrape-menu-note" id="scrapeMenuNote"></div>' +
           '</div>' +
         '</div>' :
-    page === 'scrape-log' ? '<button class="btn btn-primary btn-icon" id="slRefreshBtn" title="Reload log">' + SVG_REF + '</button>' :
+    /* No reload button on the scrape log: the page fetches fresh JSON on load,
+       and a browser refresh does the same job with a control everyone already
+       knows. */
+    page === 'scrape-log' ? '' :
     '';
 
   /* Basket's Print button, placed to the LEFT of the nav cluster so the basket

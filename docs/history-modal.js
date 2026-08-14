@@ -415,8 +415,17 @@ function openPriceHistoryModal(item, opts) {
   const liveDate = wwScraped || coScraped || today;
   const wwAlreadyIn = wwLive == null || wwMap.has(liveDate);
   const coAlreadyIn = coLive == null || coMap.has(liveDate);
-  const alreadyInHistory = wwAlreadyIn && coAlreadyIn;
-  const liveEntry = !alreadyInHistory && (wwLive != null || coLive != null)
+  // Fill the live price into the EXISTING row for that date when there is one,
+  // per store. The old all-or-nothing test emitted a whole second row whenever
+  // either store was missing today: a category scraped at Coles but not at
+  // Woolworths today showed "14 Aug  -  $10.00" from the series and "14 Aug
+  // $3.17  $10.00" from the live price, one date twice.
+  const sameDay = scrapeEntries.find(e => e.date === liveDate);
+  if (sameDay) {
+    if (!wwAlreadyIn) sameDay.ww = wwLive;
+    if (!coAlreadyIn) sameDay.coles = coLive;
+  }
+  const liveEntry = !sameDay && !(wwAlreadyIn && coAlreadyIn) && (wwLive != null || coLive != null)
     ? [{ date: liveDate, ww: wwLive, coles: coLive, source: 'live' }]
     : [];
   // Live row: a deal running right now, shaped like a stored entry.

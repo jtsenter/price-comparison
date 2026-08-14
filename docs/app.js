@@ -1340,18 +1340,18 @@ function colHeadHtml(col) {
   switch (col) {
     case 'name':         return th('name', '', 'Product');
     case 'trend':        return th('trend', '', 'Trend');
-    case 'ww':           return th('ww', '', '<span class="store-chip ww sm">W</span> WW');
+    case 'ww':           return th('ww', '', '<span class="store-chip ww sm">W</span> Woolworths');
     case 'coles':        return th('coles', '', '<span class="store-chip coles sm">C</span> Coles');
     // 2026-07-20: all header text left-aligned (user request) - cells keep
     // their own center/right alignment, only the th labels line up left.
-    case 'cheaper':      return th('cheaper', '', 'Best');
-    case 'pct':          return th('pct', '', 'Diff');
+    case 'cheaper':      return th('cheaper', '', 'Cheaper at');
+    case 'pct':          return th('pct', '', 'Difference');
     case 'saving':       return th('saving', '', 'Savings');
-    case 'trips':        return th('trips', '', 'Buys');
+    case 'trips':        return th('trips', '', 'Times bought');
     case 'priority':     return th('priority', '', 'Priority');
     case 'units':        return th('units', '', 'Qty');
     case 'category':     return th('category', '', 'Category');
-    case 'last_scraped': return th('last_scraped', '', 'Last Scraped');
+    case 'last_scraped': return th('last_scraped', '', 'Last checked');
     case 'ww_total':     return th('ww_total', '', '<span class="store-chip ww sm">W</span> Total');
     case 'coles_total':  return th('coles_total', '', '<span class="store-chip coles sm">C</span> Total');
     default: return '';
@@ -4036,8 +4036,13 @@ function buildGroupHistoryItem(group) {
     price_history: [],
     ww_price_history: wwSeries,
     coles_price_history: coSeries,
-    woolworths: group._wwBest ? { price: group._wwPerKg, scraped_at: group._wwBest.result?.scraped_at } : null,
-    coles: group._coBest ? { price: group._coPerKg, scraped_at: group._coBest.result?.scraped_at } : null,
+    // The modal adds a "today" row from these live prices. They must be in the
+    // SAME units as the series above, which is scaled by the category's quote -
+    // otherwise today appears twice: once per single piece from here ($0.03) and
+    // once per 100 from the series ($10.00), as if the price had moved 300x
+    // overnight.
+    woolworths: group._wwBest ? { price: metricShown(group, group._wwPerKg), scraped_at: group._wwBest.result?.scraped_at } : null,
+    coles: group._coBest ? { price: metricShown(group, group._coPerKg), scraped_at: group._coBest.result?.scraped_at } : null,
   };
 }
 
@@ -6621,7 +6626,7 @@ async function addItemsToShoppingList(newItems) {
 
 const COL_LABELS = {
   name: 'Item name', priority: 'Priority', ww: 'WW price', coles: 'Coles price',
-  cheaper: 'Best store', pct: 'Diff %', saving: 'Savings', units: 'Qty', trips: 'Buys',
+  cheaper: 'Cheaper at', pct: 'Difference', saving: 'Savings', units: 'Qty', trips: 'Times bought',
   category: 'Category', last_scraped: 'Last scraped',
   ww_total: 'WW total (qty × price)', coles_total: 'Coles total (qty × price)',
 };
