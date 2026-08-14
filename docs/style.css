@@ -566,8 +566,11 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
   background: var(--accent, #2563eb); color: #fff;
   font-size: 12px; font-weight: 800; line-height: 1;
 }
+/* Literal glyphs, not CSS escapes. This pair was written through a script that
+   read "\2212" as an octal escape and emitted an invisible control character -
+   which is why the collapse badge looked like a font that had not loaded. */
 .vg-more-ic::after { content: '+'; }
-.vg-more[open] > summary .vg-more-ic::after { content: '2'; }
+.vg-more[open] > summary .vg-more-ic::after { content: '−'; }
 .vg-more[open] > summary { color: var(--muted, #6b7280); border-style: solid; }
 .vg-more[open] > summary .vg-more-ic { background: var(--muted, #6b7280); }
 .vg-more > summary:hover { background: color-mix(in srgb, var(--accent, #2563eb) 10%, transparent); }

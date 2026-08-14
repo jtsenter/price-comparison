@@ -798,6 +798,26 @@ check('groupMetric null result', groupMetric({ sticker: true }, null), null);
   check('perPack key wins over store name',   groupMetric(g, { price: 20.00, name: 'Wrong 10pk' }, 'Right 40pk'), 0.5);
   check('perPack: a 40-pack now ranks BELOW a dearer 30-pack per-piece',
         groupMetric(g, { price: 11.50 }, '40pk') < groupMetric(g, { price: 14.40 }, '30pk'), true);
+  // A multi-buy is ALWAYS counted in a category's price. The scraper writes the
+  // effective price into history, so using the shelf price here made the price
+  // column and the history chart disagree about the same product - Coles' 60pk
+  // wipes read $14.17/100 live and $10.00/100 in history.
+  const mb60 = { price: 8.50, name: 'WaterWipes 60pk', multi_buy: { qty: 2, total: 12 } };
+  check('multi-buy sets the per-piece price',
+        groupMetric(g, mb60, 'WaterWipes 60pk'), +(6 / 60).toFixed(5));
+  check('...which is the figure history already stores',
+        fmtUnitMetric(metricShown({ _perPack: true, _quote: 100 },
+                                  groupMetric(g, mb60, 'WaterWipes 60pk'))), '$10.00');
+  check('a shelf price with no offer is untouched',
+        groupMetric(g, { price: 8.50, name: 'x 60pk' }, 'x 60pk'), +(8.5 / 60).toFixed(5));
+  check('an offer DEARER than the shelf price is ignored',
+        groupMetric(g, { price: 5.00, name: 'x 10pk', multi_buy: { qty: 2, total: 12 } }, 'x 10pk'),
+        +(5 / 10).toFixed(5));
+  // The scrape result is shared with every other reader - it must not be mutated.
+  const shared = { price: 8.50, name: 'y 60pk', multi_buy: { qty: 2, total: 12 } };
+  groupMetric(g, shared, 'y 60pk');
+  check('groupMetric does not mutate the scrape result', shared.price, 8.50);
+
   check('perPack with no count anywhere -> null', groupMetric(g, { price: 11.50, name: 'x' }, 'y'), null);
   check('perPack with zero count -> null',        groupMetric(g, { price: 11.50, name: 'x 0pk' }, 'y'), null);
   check('packCountOf reads "pack" spelled out',   packCountOf('Huggies 30 pack'), 30);

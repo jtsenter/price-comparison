@@ -1108,6 +1108,16 @@ function packCountOf(name) {
 
 function groupMetric(g, res, itemName) {
   if (!res || res.price == null) return null;
+  // A multi-buy is ALWAYS counted for a category, via promoUnitPrice (which is
+  // not qty-gated, unlike mbUnitPrice). The scraper already writes the effective
+  // price into price history, so the shelf price here made the headline and the
+  // history chart state two different numbers for the same product: Coles' 60pk
+  // wipes read $14.17/100 in the price column and $10.00/100 in the history.
+  // A category is a "what does this stuff cost me here" question and you would
+  // simply take the offer, so the offer is the price. `res` is copied rather
+  // than mutated - it is the live scrape object shared with every other reader.
+  const promo = promoUnitPrice(res);
+  if (promo !== res.price) res = { ...res, price: promo };
   // perPack: the comparable number is the price of ONE piece. Nappies come in
   // 30s, 40s and 124s, so ranking on pack price is meaningless - it sorted a
   // $14.40 30-pack ($0.48 each) above an $11.50 40-pack ($0.29 each). Count is

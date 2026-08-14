@@ -800,8 +800,10 @@ function groupThirdChipHTML(group) {
 // A third store has no photo of its own, so it borrows the category's, the same
 // way the desktop panel does, rather than leaving a hole.
 // How many products to show per outside store before folding the rest away.
-// Two is enough to see a shop's best price and whether its runner-up is close.
-const THIRD_ROWS_PER_STORE = 2;
+// One: the only thing a reference shop needs to say at a glance is its best
+// price. Its runner-up is one click away and was mostly just making the column
+// taller than the two supermarket columns beside it.
+const THIRD_ROWS_PER_STORE = 1;
 
 function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg, bestTied) {
   const suffix = group._metricSuffix ?? (group._sticker ? '' : '/kg');
@@ -3889,6 +3891,16 @@ const MB_TAG_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" s
 // (the price itself switches to the effective per-unit); a muted hint below the
 // deal quantity. Icon only - the discounted number is shown by the price itself,
 // so a "$X ea" label here would just be noise. Full terms on hover.
+// A category's own tag: the offer is ALWAYS counted there (see groupMetric), so
+// it is never the muted "buy N more to unlock" state - the price beside it has
+// the offer already in it.
+function multiBuyTagAlways(res) {
+  const mb = res?.multi_buy;
+  if (!mb?.qty || mb.total == null || res.price == null) return '';
+  const eff = (mb.total / mb.qty).toFixed(2);
+  return `<span class="mb-tag on" title="Multi-buy: ${mb.qty} for $${mb.total.toFixed(2)} - $${eff} each (shelf $${res.price.toFixed(2)}). Counted in this category's price.">${MB_TAG_SVG}</span>`;
+}
+
 function multiBuyTag(res, units) {
   const mb = res?.multi_buy;
   if (!mb?.qty || mb.total == null || res.price == null) return '';
@@ -4207,7 +4219,7 @@ function groupStoreVariantsHTML(group, store, overrides, globalBest, globalTied)
     const inBasket = _selectedItems.has(v.name);
     return `<div class="vg-pv${isWin ? ' win' : ''}${isTop ? ' vg-top' : ''}">
         ${imgHtml}
-        ${nameHtml}
+        ${nameHtml}${multiBuyTagAlways(v.res)}
         <span class="vg-pv-pack">${pack}</span>
         <span class="vg-pv-kg">${fmtUnitMetric(metricShown(group, v.pk))}${group._metricSuffix ?? (group._sticker ? '' : '/kg')}</span>
         <button class="vg-pv-basket${inBasket ? ' selected' : ''}" data-item="${safeKey}" title="${inBasket ? 'Remove from basket' : 'Add to basket'}" aria-label="${inBasket ? 'Remove from basket' : 'Add to basket'}">${inBasket ? '✓' : '＋'}</button>
