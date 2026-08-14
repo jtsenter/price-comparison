@@ -114,6 +114,9 @@ eval([
   extractConst('PER_PIECE_QUOTE') + '\nglobal.PER_PIECE_QUOTE = PER_PIECE_QUOTE;',
   extractConst('PIECE_QUOTES') + '\nglobal.PIECE_QUOTES = PIECE_QUOTES;',
   extract('pieceQuoteOf'), extract('pieceQuoteSuffix'),
+  extractConst('WEIGHT_QUOTES') + '\nglobal.WEIGHT_QUOTES = WEIGHT_QUOTES;',
+  extractConst('PER_WEIGHT_QUOTE') + '\nglobal.PER_WEIGHT_QUOTE = PER_WEIGHT_QUOTE;',
+  extract('weightQuoteOf'), extract('weightQuoteSuffix'), extract('isWeighedGroup'),
   extract('metricShown'),      // per-piece categories are QUOTED per 100 pieces
   extract('groupStoreTotal'),  // costed at the price the row DISPLAYS
   extract('qtyLabel'),         // and the Units box names what it counts
@@ -420,6 +423,39 @@ check('median empty -> null', _median([]), null);
   // figure printed beside it. Costing the hidden per-piece number instead put
   // "$0.03" in the Total column next to a price reading "$2.86 /100" - the same
   // rate quoted two different ways in one row.
+  // ── weighed categories choose $/kg or $/100g ─────────────────────────────
+  // A kilo of chocolate is four blocks nobody buys at once, so "$28.25/kg" has
+  // to be divided in your head before it means anything. Meat and produce ARE
+  // bought by the kilo, so 1000 stays the default and they are untouched.
+  const choc = { _wwPerKg: 28.25, _coPerKg: 30.00, _gramQuote: 100 };
+  const weighedMeat = { _wwPerKg: 12, _coPerKg: 11 };
+  check('chocolate shows per 100g', fmtUnitMetric(metricShown(choc, 28.25)), '$2.83');
+  check('meat is untouched by default', metricShown(weighedMeat, 12), 12);
+  check('an explicit per-kg choice is also unscaled',
+        metricShown({ _wwPerKg: 12, _gramQuote: 1000 }, 12), 12);
+  check('suffix follows the weight quote', weightQuoteSuffix(100), '/100g');
+  check('...and defaults to /kg', weightQuoteSuffix(1000), '/kg');
+  check('an unknown gram quote falls back rather than rendering NaN',
+        weightQuoteOf({ _gramQuote: 250 }), PER_WEIGHT_QUOTE);
+  check('seed value is read when there is no built _gramQuote',
+        weightQuoteOf({ gramQuote: 100 }), 100);
+
+  // THE TRAP: the gram quote may only rescale a WEIGHED metric. A per-piece or
+  // pack-price category stores something that is not $/kg, so scaling it by
+  // 0.1 would silently divide those prices by ten.
+  check('a per-piece category ignores the gram quote',
+        metricShown({ _perPack: true, _quote: 100, _gramQuote: 100 }, 0.0317).toFixed(2), '3.17');
+  check('a sticker category ignores it too',
+        metricShown({ _sticker: true, _gramQuote: 100 }, 4.90), 4.90);
+  check('isWeighedGroup rejects per-piece', isWeighedGroup({ _perPack: true }), false);
+  check('isWeighedGroup rejects sticker',   isWeighedGroup({ _sticker: true }), false);
+  check('isWeighedGroup accepts a plain weighed group', isWeighedGroup({}), true);
+
+  // The Units box must be denominated in whatever the price is quoted in.
+  check('a 100g category counts grams', qtyLabel(1, 'g', 1), '100 g');
+  check('...and scales', qtyLabel(2.5, 'g', 1), '250 g');
+  check('a kilo category still says kg', qtyLabel(1, 'kg', 1), '1.0 kg');
+
   // ── the quote size is PER CATEGORY ───────────────────────────────────────
   // Quoting is meant to read as "about one pack". Wipes and tablets come in
   // 60-640 so 100 is natural; nappies come in 26-60, where a per-100 price
@@ -455,6 +491,21 @@ check('median empty -> null', _median([]), null);
   check('dishwashing_tablets quote', seedQuote('dishwashing_tablets'), 100);
   check('garbage_bags_xl quote',     seedQuote('garbage_bags_xl'), 100);
   check('nappies_size6 quote',       seedQuote('nappies_size6'), 50);
+
+  // The two chocolate categories, switched to per-100g. (Weet-Bix is a category
+  // YOU created in the editor, so it lives in the synced override rather than
+  // here - there is no seed to assert.)
+  const gramSeed = (k) => {
+    const g = REAL_SEEDS.find(x => x.key === k);
+    assert(g, `seed ${k} is missing`);
+    check(`${k} is weighed`, isWeighedGroup(g), true);
+    return weightQuoteOf(g);
+  };
+  check('cadbury_dairy_milk is quoted per 100g', gramSeed('cadbury_dairy_milk'), 100);
+  check('aero_peppermint is quoted per 100g',    gramSeed('aero_peppermint'), 100);
+  // Meat must NOT have been swept up in the change - it is genuinely bought by
+  // the kilo, and this is the assertion that catches a blanket edit.
+  check('chicken_breast still quotes per kg', weightQuoteOf(REAL_SEEDS.find(x => x.key === 'chicken_breast')), 1000);
 
   const g = { list_item: '__group_baby_wipes', _perPack: true, _quote: 100,
               _wwPerKg: 2.29 / 80, _coPerKg: 40.00 / 360 };

@@ -182,15 +182,45 @@ function pieceQuoteSuffix(q) {
   return q === 1 ? ' each' : ' /' + q;
 }
 
+// The same idea for WEIGHED categories: how much product the $/kg figure is
+// quoted for, in grams. A kilo of chocolate is four blocks nobody buys at once,
+// so "$28.25/kg" is a number you have to divide in your head before it means
+// anything; "$2.83/100g" is the block in your hand. Meat and produce genuinely
+// are bought by the kilo, so 1000 stays the default.
+// Stored in the same override slot family as `quote` - see weightQuoteOf.
+const WEIGHT_QUOTES = [1000, 100];
+const PER_WEIGHT_QUOTE = 1000;    // grams; a weighed category names none = $/kg
+
+// Grams this category quotes its weighed price for.
+function weightQuoteOf(g) {
+  const q = Number(g && (g._gramQuote ?? g.gramQuote));
+  return WEIGHT_QUOTES.includes(q) ? q : PER_WEIGHT_QUOTE;
+}
+
+function weightQuoteSuffix(q) {
+  return q === 100 ? '/100g' : '/kg';
+}
+
+// Is this group weighed (as opposed to per-piece or a flat pack price)? The
+// stored metric is $/kg only for these, so it is the only kind the gram quote
+// may rescale.
+function isWeighedGroup(g) {
+  return !!g && !g._perPack && !g._sticker && !g.perPack && !g.sticker;
+}
+
 // A metric value as DISPLAYED. Per-piece categories are shown per `quote`
-// pieces; everything else shows what it stores.
+// pieces, weighed ones per `gramQuote` grams; a flat pack price shows what it
+// stores.
 // DISPLAY ONLY, and that is the whole point: _wwPerKg/_coPerKg stay per ONE
-// piece because groupStoreTotal() and the Total column multiply them by the
-// quantity actually bought. Scaling the stored value would multiply every
+// piece / per KILO because groupStoreTotal() and the Total column multiply them
+// by the quantity actually bought. Scaling the stored value would multiply every
 // basket total and saving by the quote.
 function metricShown(group, v) {
   if (v == null || isNaN(Number(v))) return null;
-  return (group && group._perPack) ? Number(v) * pieceQuoteOf(group) : Number(v);
+  const n = Number(v);
+  if (group && group._perPack) return n * pieceQuoteOf(group);
+  if (isWeighedGroup(group)) return n * (weightQuoteOf(group) / 1000);
+  return n;
 }
 
 // Price the SAME QUANTITY at both stores. Comparing pack prices across stores
@@ -1067,7 +1097,7 @@ const DEFAULT_VARIANT_GROUPS = [
   ]},
   // Chocolate blocks: 40g bars up to 315g blocks, so a pack price compares
   // nothing. Weighed ($/kg), which is also how the shelf label states them.
-  { key: 'cadbury_dairy_milk', label: 'Cadbury Dairy Milk', category: 'Sweets', items: [
+  { key: 'cadbury_dairy_milk', label: 'Cadbury Dairy Milk', category: 'Sweets', gramQuote: 100, items: [
     'Cadbury Dairy Milk Chocolate Block 180g',
     'Cadbury Dairy Milk Large Chocolate Block 315g',
     'Cadbury Dairy Milk Chocolate Bar 45g',
@@ -1075,7 +1105,7 @@ const DEFAULT_VARIANT_GROUPS = [
     'Coles Cadbury Dairy Milk Chocolate Block 100g',
     'Coles Cadbury Dairy Milk Chocolate Block 315g',
   ]},
-  { key: 'aero_peppermint', label: 'Aero Peppermint', category: 'Sweets', items: [
+  { key: 'aero_peppermint', label: 'Aero Peppermint', category: 'Sweets', gramQuote: 100, items: [
     'Aero Peppermint Milk Chocolate Block 118g',
     'Aero Peppermint Milk Chocolate Bar 40g',
     'Coles Aero Peppermint Milk Chocolate Bar 40g',
@@ -1220,6 +1250,10 @@ function qtyPiecesPer(group) {
 // from, and everything else counts packs.
 function qtyLabel(units, kind, piecesPer) {
   if (kind === 'kg')     return units.toFixed(1) + ' kg';
+  // A category quoted per 100g counts 100g units, so its quantity has to read in
+  // grams too - "1.0 kg" beside a price of "$2.83/100g" would be the same row
+  // stating two different amounts.
+  if (kind === 'g')      return Math.round(units * 100) + ' g';
   if (kind === 'pieces') return Math.round(units * (piecesPer || 1)) + ' pcs';
   return String(units);
 }
@@ -1321,6 +1355,7 @@ function allVariantGroupSeeds(ov) {
       sticker: !!ov[k].sticker,
       perPack: !!ov[k].perPack,
       quote: ov[k].quote,
+      gramQuote: ov[k].gramQuote,
       items: [],
     }));
   return [...DEFAULT_VARIANT_GROUPS, ...created];
@@ -1351,6 +1386,7 @@ function loadVariantGroups() {
       // reason: the quote size is editable, so a seed-only read would silently
       // discard the user's choice. See pieceQuoteOf() for the valid values.
       quote: o.quote != null ? Number(o.quote) : g.quote,
+      gramQuote: o.gramQuote != null ? Number(o.gramQuote) : g.gramQuote,
       items: computePerKgItems(g.items, o),
       // Per-store ordered member lists (display order hints; membership comes from
       // `items` + price qualification in resolveStoreLists). Null until the user saves.
@@ -1746,11 +1782,13 @@ function buildVariantGroups(byName) {
       _sticker: !!g.sticker,
       _perPack: !!g.perPack,
       _quote: pieceQuoteOf(g),
+      _gramQuote: weightQuoteOf(g),
       _unitSuffix: g.sticker ? '' : '/kg',
       // What to PRINT after the metric. Kept apart from _unitSuffix on purpose:
       // that one is also read as "is this category weighed?" (the basket shows kg
       // quantities when it is truthy), and a per-pack category is not weighed.
-      _metricSuffix: g.perPack ? pieceQuoteSuffix(pieceQuoteOf(g)) : (g.sticker ? '' : '/kg'),
+      _metricSuffix: g.perPack ? pieceQuoteSuffix(pieceQuoteOf(g))
+                   : (g.sticker ? '' : weightQuoteSuffix(weightQuoteOf(g))),
       _members: members,
       _wwList: stores.ww,
       _coList: stores.coles,
@@ -1957,7 +1995,9 @@ function buildDealGroups(items) {
       // shape hands it, so a field left off here is silently absent downstream.
       _perPack: !!g.perPack,
       _quote: pieceQuoteOf(g),
-      _metricSuffix: g.perPack ? pieceQuoteSuffix(pieceQuoteOf(g)) : (g.sticker ? '' : '/kg'),
+      _gramQuote: weightQuoteOf(g),
+      _metricSuffix: g.perPack ? pieceQuoteSuffix(pieceQuoteOf(g))
+                   : (g.sticker ? '' : weightQuoteSuffix(weightQuoteOf(g))),
       _memberNames: members.map(m => m.list_item), // for the basket handoff (re-collapsed there)
       category: g.category || GROUP_DEFAULT_CATEGORY,
       trip_count: null,

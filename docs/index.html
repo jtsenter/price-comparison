@@ -291,6 +291,14 @@
             <option value="50">per 50</option>
             <option value="100">per 100</option>
           </select>
+          <!-- The weighed equivalent, same rule: pick the amount you actually
+               buy. A kilo of chocolate is four blocks, so $/100g reads better;
+               meat and produce really are bought by the kilo. -->
+          <select id="catEditGramQuote" aria-label="Weight to quote the price for"
+                  title="How much product the price is quoted for. Only applies when comparing Per kg / L. A kilo of chocolate is four blocks nobody buys at once, so per 100g is the number in your hand; meat and produce are genuinely bought by the kilo.">
+            <option value="1000">per kg</option>
+            <option value="100">per 100g</option>
+          </select>
         </div>
         <div class="form-note" id="catEditMetricNote"></div>
       </div>

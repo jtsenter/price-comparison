@@ -36,8 +36,11 @@ function extract(name) {
 // display helpers too - a per-piece category is quoted per `quote` pieces.
 const PIECE_QUOTES_SRC = utils.match(/const PIECE_QUOTES\s*=\s*[^;]+;/)[0];
 const PER_PIECE_QUOTE_SRC = utils.match(/const PER_PIECE_QUOTE\s*=\s*[^;]+;/)[0];
-eval([PIECE_QUOTES_SRC, PER_PIECE_QUOTE_SRC,
-      extract('pieceQuoteOf'), extract('metricShown'),
+const WEIGHT_QUOTES_SRC = utils.match(/const WEIGHT_QUOTES\s*=\s*[^;]+;/)[0];
+const PER_WEIGHT_QUOTE_SRC = utils.match(/const PER_WEIGHT_QUOTE\s*=\s*[^;]+;/)[0];
+eval([PIECE_QUOTES_SRC, PER_PIECE_QUOTE_SRC, WEIGHT_QUOTES_SRC, PER_WEIGHT_QUOTE_SRC,
+      extract('pieceQuoteOf'), extract('weightQuoteOf'), extract('isWeighedGroup'),
+      extract('metricShown'),
       extract('loadUnitOverrides'), extract('groupUnits'), extract('groupStoreTotal')].join('\n'));
 
 let n = 0;
@@ -68,6 +71,18 @@ check('cheaper rate wins even when only sold in a 5kg sack', () => {
   assert.strictEqual(groupStoreTotal(bulk, 'coles'), 8);
   assert.ok(groupStoreTotal(bulk, 'coles') < groupStoreTotal(bulk, 'ww'),
     'the better $/kg must produce the lower total');
+});
+
+// A category quoted per 100g must TOTAL per 100g too, or the row shows one
+// price and charges another - the exact inconsistency the per-piece quote fixed.
+check('a per-100g category totals at the price it shows', () => {
+  const choc = { list_item: '__group_choc', _wwPerKg: 28.25, _coPerKg: 30, _gramQuote: 100 };
+  assert.strictEqual(+groupStoreTotal(choc, 'ww').toFixed(2), 2.83);
+  assert.strictEqual(+groupStoreTotal(choc, 'coles').toFixed(2), 3.00);
+});
+check('a per-kg category is untouched by the new quote', () => {
+  const kilo = { list_item: '__group_kilo', _wwPerKg: 10, _coPerKg: 10, _gramQuote: 1000 };
+  assert.strictEqual(groupStoreTotal(kilo, 'ww'), 10);
 });
 
 check('quantity scales the rate linearly', () => {

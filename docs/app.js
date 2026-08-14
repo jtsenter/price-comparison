@@ -565,8 +565,12 @@ function getUnits(itemName) {
 // Kg-quantity rows: loose per-kg entries (meat/seafood cuts, _perkgSet items) -
 // their Units value means KILOGRAMS, not a pack count. Unit-based groups
 // (Nutella, potato bags, yoghurt tubs...) count discrete packs like normal items.
+// "Measured, not counted" - the question every caller here is really asking, so
+// a 100g-quoted category counts too. It steps in fractions and sorts as a
+// continuous value exactly like a kilo row; only the label differs.
 function isKgQty(itemName) {
-  return qtyKind(itemName) === 'kg';
+  const k = qtyKind(itemName);
+  return k === 'kg' || k === 'g';
 }
 
 // How a row counts quantity: 'kg' (weighed), 'pieces' (a per-piece category,
@@ -581,8 +585,22 @@ function qtyKind(itemName) {
   const k = itemName.startsWith('__group_') ? itemName.slice(8) : null;
   if (k && perPackQuotes().has(k)) return 'pieces';
   const packGroup = k && (UNIT_BASED_GROUPS.has(k) || stickerGroups().has(k)); // bought as packs
-  if (!packGroup && (_perkgSet.has(itemName) || itemName.startsWith('__group_'))) return 'kg';
+  if (!packGroup && (_perkgSet.has(itemName) || itemName.startsWith('__group_'))) {
+    // A weighed category quoted per 100g counts 100g units, not kilos - same
+    // rule as per-piece: the quantity is denominated in whatever the price is.
+    return (k && gramQuotes().get(k)) === 100 ? 'g' : 'kg';
+  }
   return 'packs';
+}
+
+// key -> grams quoted, for every weighed category that is NOT on the $/kg
+// default. Derived live for the same reason stickerGroups() and perPackQuotes()
+// are: the setting is editable, so a snapshot lets the Units column count one
+// thing while the price column quotes another.
+function gramQuotes() {
+  return new Map(loadVariantGroups()
+    .filter(g => !g.perPack && !g.sticker)
+    .map(g => [g.key, weightQuoteOf(g)]));
 }
 
 // Pieces one unit of quantity buys, for the Units label and the basket.
@@ -4938,6 +4956,7 @@ function openCategoryEditModal(groupKey, opts) {
 
   catEditApplyMetric(catMetricOf(cat));
   catEditApplyQuote(pieceQuoteOf(cat));
+  catEditApplyGramQuote(weightQuoteOf(cat));
   bindCategoryEditBody();
   document.body.style.overflow = 'hidden';
   $('categoryEditModal').classList.add('open');
@@ -4966,10 +4985,21 @@ function catEditApplyMetric(metric) {
   // so it stayed visible on a $/kg category anyway.
   const q = $('catEditQuote');
   if (q) q.disabled = m !== 'piece';
+  // Each select belongs to exactly one metric, so only one is ever live. Both
+  // stay VISIBLE and greyed rather than hiding, for the same reason as before:
+  // a control that vanishes makes the row jump and hides that the setting exists.
+  const gq = $('catEditGramQuote');
+  if (gq) gq.disabled = m !== 'kg';
 }
 
 // Reflect the chosen quote size. Separate from the metric so picking one does
 // not disturb the other.
+function catEditApplyGramQuote(grams) {
+  const g = WEIGHT_QUOTES.includes(Number(grams)) ? Number(grams) : PER_WEIGHT_QUOTE;
+  const sel = $('catEditGramQuote');
+  if (sel) { sel.value = String(g); sel.dataset.gramQuote = String(g); }
+}
+
 function catEditApplyQuote(quote) {
   const q = PIECE_QUOTES.includes(Number(quote)) ? Number(quote) : PER_PIECE_QUOTE;
   const sel = $('catEditQuote');
@@ -5043,6 +5073,7 @@ function bindCategoryEditBody() {
 
   // Comparison metric.
   $('catEditQuote')?.addEventListener('change', (e) => catEditApplyQuote(e.target.value));
+  $('catEditGramQuote')?.addEventListener('change', (e) => catEditApplyGramQuote(e.target.value));
   $('newProductBtn')?.addEventListener('click', openNewProductModal);
   $('catEditMetric')?.addEventListener('click', (e) => {
     const b = e.target.closest('button[data-metric]');
@@ -5226,8 +5257,9 @@ function saveCategoryEdit() {
   // an omitted value is indistinguishable from "never chose", so a deliberate
   // change back to the seeded default would not stick.
   const quote = Number($('catEditQuote')?.dataset.quote) || PER_PIECE_QUOTE;
+  const gramQuote = Number($('catEditGramQuote')?.dataset.gramQuote) || PER_WEIGHT_QUOTE;
   saveVariantGroupOverride(key, { label: label || undefined, add, remove, ww_order: wwItems, coles_order: coItems,
-                                  sticker: metric.sticker, perPack: metric.perPack, quote,
+                                  sticker: metric.sticker, perPack: metric.perPack, quote, gramQuote,
                                   // Only a `created` override becomes a real category -
                                   // without it allVariantGroupSeeds() reads the entry as a
                                   // leftover patch to a seed that does not exist, and the
