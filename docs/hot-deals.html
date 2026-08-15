@@ -81,6 +81,16 @@
        under their own border. margin-left:auto on the group does the pushing;
        flex-wrap lets it drop under the mode chip if the panel gets narrow
        rather than clipping or forcing a scrollbar. */
+    /* Desktop never collapses - the card has room, and hiding a panel that is
+       already visible would be a step backwards on a wide screen. */
+    .hd-tune-toggle {
+      display: none; align-items: center; gap: 7px; width: 100%;
+      background: none; border: 0; padding: 2px 0; cursor: pointer;
+      font-size: 13px; font-weight: 700; color: var(--text);
+    }
+    .hd-tune-sum { font-weight: 500; color: var(--text-mid); font-size: 12px; }
+    .hd-tune-caret { margin-left: auto; font-size: 11px; color: var(--text-mid); transition: transform .14s ease; }
+    .hd-tune:not(.collapsed) .hd-tune-caret { transform: rotate(180deg); }
     .hd-crit-head { display: flex; align-items: center; gap: 10px 18px; margin-bottom: 8px; flex-wrap: wrap; }
     .hd-block-t {
       font-size: 12px; font-weight: 800; color: var(--text-mid);
@@ -245,6 +255,11 @@
       .deals-hero-stat strong { font-size: 20px; }
       /* Tuner on a phone: label and value share a line, slider fills the next. */
       .hd-tune { padding: 11px 12px; }
+      /* Collapsed by default on a phone: only the handle shows until tapped. */
+      .hd-tune-toggle { display: flex; }
+      .hd-tune.collapsed > :not(.hd-tune-toggle) { display: none; }
+      .hd-tune.collapsed { padding-bottom: 11px; }
+
       /* ONE criterion per row. Without this the three stayed in the desktop
          grid-template-columns: repeat(3, 1fr) - roughly 100px each on a phone,
          which wrapped every label to three lines and left sliders too short to
@@ -532,7 +547,17 @@
   <!-- The dials that DEFINE a deal, out in the open. Dragging either instantly
        grows/shrinks the list below. Row 2 ("Show") holds the store + watchlist
        filters - everything that decides WHICH deals you see lives in this card. -->
-  <div class="hd-tune">
+  <div class="hd-tune collapsed" id="hdTune">
+    <!-- Mobile-only handle. The tuner is a thing you set once and then leave
+         alone, so on a phone it starts CLOSED and the prices - the reason the
+         page exists - are the first thing on screen. Desktop has the room and
+         shows it expanded as before. -->
+    <button type="button" class="hd-tune-toggle" id="hdTuneToggle" aria-expanded="false" aria-controls="hdTune">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+      <span>Filters</span>
+      <span class="hd-tune-sum" id="hdTuneSummary"></span>
+      <span class="hd-tune-caret" aria-hidden="true">▾</span>
+    </button>
     <div class="hd-crit-head">
       <span class="hd-block-t">A deal must be</span>
       <button type="button" class="hd-mode" id="hdModeBtn"
@@ -1682,6 +1707,34 @@ function initWatchlistFilter() {
 // Persisted via pw_hd_tune_v1 (loadDealTune in utils.js) - the main page reads
 // the same values for its "🔥 N deals" count so the two never disagree.
 
+// The mobile collapse. Desktop is always open: the class is only meaningful
+// under the 700px media query, but stripping it on wide screens keeps the DOM
+// honest about what is actually showing.
+function initTuneCollapse() {
+  const card = document.getElementById('hdTune');
+  const btn  = document.getElementById('hdTuneToggle');
+  if (!card || !btn) return;
+  const mobile = () => innerWidth <= 700;
+  const apply = (collapsed) => {
+    card.classList.toggle('collapsed', collapsed);
+    btn.setAttribute('aria-expanded', String(!collapsed));
+  };
+  if (!mobile()) apply(false);
+  btn.addEventListener('click', () => apply(!card.classList.contains('collapsed')));
+  // Rotating a phone into landscape can cross the breakpoint; re-open there so
+  // the card is never stuck closed with its handle hidden.
+  addEventListener('resize', () => { if (!mobile()) apply(false); });
+}
+
+// One line saying what the filters are set to, so the closed card still tells
+// you whether it is doing anything.
+function updateTuneSummary() {
+  const el = document.getElementById('hdTuneSummary');
+  if (!el) return;
+  const t = loadDealTune();
+  el.textContent = `${t.drop}% · ${t.diff}% · ${t.rank}%`;
+}
+
 function initDealTune() {
   const dropS = document.getElementById('hdDropSlider');
   const diffS = document.getElementById('hdDiffSlider');
@@ -1720,6 +1773,7 @@ function initDealTune() {
                 mode };
     localStorage.setItem('pw_hd_tune_v1', JSON.stringify(t));
     sync(t);
+    updateTuneSummary();   // the closed handle must not show stale numbers
     renderDeals();
   };
   dropS.addEventListener('input', onInput);
@@ -1730,6 +1784,7 @@ function initDealTune() {
   reset?.addEventListener('click', () => {
     localStorage.removeItem('pw_hd_tune_v1');
     sync(loadDealTune());
+    updateTuneSummary();
     renderDeals();
   });
 }
@@ -1827,6 +1882,8 @@ function renderScrapeStrip(data) {
   });
   initWatchlistFilter();
   initDealTune();
+  initTuneCollapse();
+  updateTuneSummary();
   // Basket icon is plain navigation. It used to dump every visible deal into
   // the basket on click - retired with the lock model: the basket is a normal
   // persistent cart and ONLY explicit adds put items in it. Deals get in via

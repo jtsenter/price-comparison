@@ -4983,8 +4983,7 @@ function openCategoryEditModal(groupKey, opts) {
     </div>`;
 
   catEditApplyMetric(catMetricOf(cat));
-  catEditApplyQuote(pieceQuoteOf(cat));
-  catEditApplyGramQuote(weightQuoteOf(cat));
+  catEditApplyQuotes(pieceQuoteOf(cat), weightQuoteOf(cat));
   bindCategoryEditBody();
   document.body.style.overflow = 'hidden';
   $('categoryEditModal').classList.add('open');
@@ -5011,28 +5010,62 @@ function catEditApplyMetric(metric) {
   // row reflow on every metric click and left no sign the setting existed - and
   // the `hidden` attribute was being overridden by the row's own display:flex,
   // so it stayed visible on a $/kg category anyway.
-  const q = $('catEditQuote');
-  if (q) q.disabled = m !== 'piece';
-  // Each select belongs to exactly one metric, so only one is ever live. Both
-  // stay VISIBLE and greyed rather than hiding, for the same reason as before:
-  // a control that vanishes makes the row jump and hides that the setting exists.
-  const gq = $('catEditGramQuote');
-  if (gq) gq.disabled = m !== 'kg';
+  catEditRenderQuote(m);
 }
 
 // Reflect the chosen quote size. Separate from the metric so picking one does
 // not disturb the other.
-function catEditApplyGramQuote(grams) {
-  const g = WEIGHT_QUOTES.includes(Number(grams)) ? Number(grams) : PER_WEIGHT_QUOTE;
-  const sel = $('catEditGramQuote');
-  if (sel) { sel.value = String(g); sel.dataset.gramQuote = String(g); }
+// ONE select for both quote kinds. Which set of options it shows is decided by
+// the metric; the values for BOTH live on the element's dataset, so flipping
+// Per piece -> Per kg -> Per piece never loses the piece quote you had chosen.
+// Pack price gets a disabled placeholder rather than an empty slot, so the row
+// is the same shape in all three states and nothing shifts under the cursor.
+const QUOTE_OPTIONS = {
+  piece: [[1, 'per 1'], [10, 'per 10'], [50, 'per 50'], [100, 'per 100']],
+  kg:    [[1000, 'per kg'], [100, 'per 100g']],
+  pack:  [['', 'per pack']],
+};
+const QUOTE_TITLES = {
+  piece: 'How many pieces the price is quoted for. Pick roughly one pack, so the figure is a number you actually pay: 3c a wipe says nothing, $2.86 per 100 does.',
+  kg:    'How much product the price is quoted for. A kilo of chocolate is four blocks nobody buys at once, so per 100g is the number in your hand; meat and produce are genuinely bought by the kilo.',
+  pack:  'A pack price is already the price of one pack - there is nothing to quote it per.',
+};
+
+function catEditRenderQuote(metric) {
+  const sel = $('catEditQuote');
+  if (!sel) return;
+  const m = QUOTE_OPTIONS[metric] ? metric : 'kg';
+  sel.innerHTML = QUOTE_OPTIONS[m]
+    .map(([v, label]) => `<option value="${v}">${label}</option>`).join('');
+  sel.disabled = m === 'pack';
+  sel.title = QUOTE_TITLES[m];
+  if (m === 'piece') sel.value = String(sel.dataset.quote || PER_PIECE_QUOTE);
+  else if (m === 'kg') sel.value = String(sel.dataset.gramQuote || PER_WEIGHT_QUOTE);
 }
 
-function catEditApplyQuote(quote) {
-  const q = PIECE_QUOTES.includes(Number(quote)) ? Number(quote) : PER_PIECE_QUOTE;
+// Remember the value the user just picked, against whichever metric owns it.
+function catEditQuoteChanged() {
   const sel = $('catEditQuote');
-  if (sel) { sel.value = String(q); sel.dataset.quote = String(q); }
+  const m = $('catEditMetric')?.dataset.metric;
+  if (!sel || sel.disabled) return;
+  if (m === 'piece') {
+    const q = Number(sel.value);
+    sel.dataset.quote = String(PIECE_QUOTES.includes(q) ? q : PER_PIECE_QUOTE);
+  } else if (m === 'kg') {
+    const g = Number(sel.value);
+    sel.dataset.gramQuote = String(WEIGHT_QUOTES.includes(g) ? g : PER_WEIGHT_QUOTE);
+  }
 }
+
+// Seed both stored values when the dialog opens.
+function catEditApplyQuotes(quote, grams) {
+  const sel = $('catEditQuote');
+  if (!sel) return;
+  sel.dataset.quote = String(PIECE_QUOTES.includes(Number(quote)) ? Number(quote) : PER_PIECE_QUOTE);
+  sel.dataset.gramQuote = String(WEIGHT_QUOTES.includes(Number(grams)) ? Number(grams) : PER_WEIGHT_QUOTE);
+}
+
+
 
 // Bind the add/remove + drag-reorder handlers to the (persistent) modal body ONCE.
 // Previously these lived inside openCategoryEditModal, so each reopen stacked another
@@ -5100,8 +5133,7 @@ function bindCategoryEditBody() {
   });
 
   // Comparison metric.
-  $('catEditQuote')?.addEventListener('change', (e) => catEditApplyQuote(e.target.value));
-  $('catEditGramQuote')?.addEventListener('change', (e) => catEditApplyGramQuote(e.target.value));
+  $('catEditQuote')?.addEventListener('change', catEditQuoteChanged);
   $('catEditMetric')?.addEventListener('click', (e) => {
     const b = e.target.closest('button[data-metric]');
     if (b) catEditApplyMetric(b.dataset.metric);
@@ -5284,7 +5316,7 @@ function saveCategoryEdit() {
   // an omitted value is indistinguishable from "never chose", so a deliberate
   // change back to the seeded default would not stick.
   const quote = Number($('catEditQuote')?.dataset.quote) || PER_PIECE_QUOTE;
-  const gramQuote = Number($('catEditGramQuote')?.dataset.gramQuote) || PER_WEIGHT_QUOTE;
+  const gramQuote = Number($('catEditQuote')?.dataset.gramQuote) || PER_WEIGHT_QUOTE;
   saveVariantGroupOverride(key, { label: label || undefined, add, remove, ww_order: wwItems, coles_order: coItems,
                                   sticker: metric.sticker, perPack: metric.perPack, quote, gramQuote,
                                   // Only a `created` override becomes a real category -
@@ -5533,6 +5565,11 @@ function renderMobileCards(items, data) {
   watchChip.title = 'Watchlist';
   watchChip.setAttribute('aria-label', 'Watchlist filter');
   watchChip.onclick = () => $('watchlistPill')?.click();
+  // Everything before this divider sorts; everything after it filters.
+  const sep = document.createElement('span');
+  sep.className = 'mc-filter-sep';
+  sep.setAttribute('aria-hidden', 'true');
+  chipsWrap.appendChild(sep);
   chipsWrap.appendChild(watchChip);
 
   // Store filter, immediately after the eye: off -> W -> C -> off. One button

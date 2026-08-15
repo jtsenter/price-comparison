@@ -792,10 +792,23 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
    flex-start, not -end: the metric group carries an explanatory note under it,
    so bottom-aligning would drag the name input down past the segmented control
    it is supposed to sit beside. Aligning the tops lines the labels up instead. */
-.cat-edit-top { display: flex; flex-direction: row; flex-wrap: wrap; gap: 12px 24px; align-items: flex-start; }
+/* Name takes two thirds of the row, the metric group the last third and hugs
+   the RIGHT edge. The name is the free-text field and the one you actually
+   type in, so it gets the room; the metric control is a fixed-size cluster and
+   only needs enough to sit in. */
+.cat-edit-top { display: flex; flex-direction: row; flex-wrap: wrap; gap: 12px 20px; align-items: flex-start; }
 .cat-edit-top .form-group { margin-bottom: 0; }
-.cat-name-group { flex: 1 1 240px; min-width: 0; max-width: 400px; }
+/* The metric cluster is a fixed-size thing (three segments plus a select), so it
+   takes its natural width and the name absorbs ALL the rest - which lands the
+   name at roughly two thirds without hard-coding a ratio that would break the
+   moment a segment label changed. */
+.cat-name-group { flex: 1 1 320px; min-width: 0; }
 .cat-name-group input { width: 100%; }
+.cat-metric-group { flex: 0 0 auto; max-width: 100%; display: flex; flex-direction: column; align-items: flex-end; }
+/* The note sits under the controls it explains and matches their right edge, so
+   the whole cluster reads as one right-aligned block. One line at this width -
+   it used to wrap to two and shove the product columns down. */
+.cat-metric-group .form-note { text-align: right; white-space: nowrap; margin-top: 5px; }
 /* The metric column must not resize when the metric changes. Its note is a
    different length per option ("Compared on the shelf price of the pack." vs the
    much longer per-piece one), and on a flex row that re-widened the column and
@@ -2803,9 +2816,23 @@ td.priority-cell { text-align: center; }
   .mc-sort-chip.active {
     background: var(--ww); color: #fff; border-color: var(--ww);
   }
-  /* Watchlist chip: icon-only, amber when the filter is on */
-  .mc-watch-chip { padding: 5px 10px; }
-  .mc-watch-chip.active { background: #D97706; border-color: #D97706; }
+  /* The last two chips are FILTERS, not sorts - they change which rows exist,
+     not their order. Green is the sort colour, so they light AMBER, and a
+     divider marks where sorting ends and filtering begins. Both are icon-width
+     so the five chips plus the view toggle fit a 360px phone without the row
+     scrolling or wrapping. */
+  .mc-watch-chip, .mc-store-chip { padding: 5px 9px; }
+  .mc-filter-sep {
+    flex-shrink: 0; align-self: center;
+    width: 1px; height: 16px; margin: 0 1px;
+    background: var(--border-strong);
+  }
+  .mc-watch-chip.active,
+  .mc-store-chip.active {
+    background: #D97706; border-color: #D97706; color: #fff;
+  }
+  /* Give the sort chips back a little room now that two filters share the row. */
+  .mc-sort-chip { padding: 5px 11px; }
 
   /* View toggle (detailed ⇄ compact) - icon only, tinted so it stays visible */
   #mcViewToggle {

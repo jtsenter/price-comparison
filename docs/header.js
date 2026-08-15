@@ -84,6 +84,7 @@
     // style.css, and this file runs on every page.
     '.basket-badge{position:absolute;top:-4px;right:-4px;display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--ww,#00843D);color:#fff;font-size:10px;font-weight:700;line-height:1;border:2px solid var(--card,#fff)}' +
     '.pw-viewer-badge{display:inline-flex;align-items:center;height:20px;padding:0 8px;margin-left:8px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--bg,#F0F4F8);color:var(--text-soft,#94A3B8);border:1px solid var(--border,#E2E8F0);cursor:default;flex-shrink:0}' +
+    '@media(max-width:700px){.pw-viewer-badge{display:none}}' +
     /* Any control that writes to the repo can carry data-owner-only and vanish
        for visitors, without each page needing its own viewer-mode wiring. */
     '.pw-viewer [data-owner-only]{display:none!important}' +
@@ -147,6 +148,10 @@
 
   /* Tells a visitor WHY the owner-only controls aren't there, so "the buttons are
      missing" doesn't come back as a bug report. */
+  /* Desktop only. On a phone the header is already search + settings across
+     ~360px, and a badge nobody can act on was taking room from both. The
+     owner-only controls are simply absent there; the explanation is worth a
+     line on a wide screen and worth nothing on a narrow one. */
   var VIEWER_BADGE = viewer
     ? '<span class="pw-viewer-badge" title="Read-only demo. Your filters, categories and priorities are saved in this browser only - they are never sent anywhere.">Demo</span>'
     : '';

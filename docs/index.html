@@ -278,7 +278,7 @@
         <label for="catEditName">Category name</label>
         <input type="text" id="catEditName" />
       </div>
-      <div class="form-group">
+      <div class="form-group cat-metric-group">
         <label>Compare prices by</label>
         <div class="cat-metric-line">
           <div class="seg" id="catEditMetric" role="radiogroup" aria-label="Compare prices by">
@@ -286,24 +286,15 @@
             <button type="button" data-metric="kg"    role="radio" aria-checked="false">Per kg / L</button>
             <button type="button" data-metric="piece" role="radio" aria-checked="false">Per piece</button>
           </div>
-          <!-- Sits on the metric's own line and is DISABLED, not hidden, off
-               "Per piece": a control that vanishes makes the row jump and gives
-               no clue the setting exists. catEditApplyMetric drives it. -->
-          <select id="catEditQuote" aria-label="Show price per"
-                  title="How many pieces the price is quoted for. Only applies when comparing Per piece. Pick roughly one pack, so the figure is a number you actually pay: 3c a wipe says nothing, $2.86 per 100 does.">
-            <option value="1">per 1</option>
-            <option value="10">per 10</option>
-            <option value="50">per 50</option>
-            <option value="100">per 100</option>
-          </select>
-          <!-- The weighed equivalent, same rule: pick the amount you actually
-               buy. A kilo of chocolate is four blocks, so $/100g reads better;
-               meat and produce really are bought by the kilo. -->
-          <select id="catEditGramQuote" aria-label="Weight to quote the price for"
-                  title="How much product the price is quoted for. Only applies when comparing Per kg / L. A kilo of chocolate is four blocks nobody buys at once, so per 100g is the number in your hand; meat and produce are genuinely bought by the kilo.">
-            <option value="1000">per kg</option>
-            <option value="100">per 100g</option>
-          </select>
+          <!-- ONE select, not two. Its options are rebuilt for the chosen metric
+               (see catEditRenderQuote): pieces under Per piece, weights under Per
+               kg/L, and disabled under Pack price - which has no quote to pick.
+               Two selects side by side meant one was always dead weight leaving a
+               hole in the row; swapping the contents of a single fixed-width
+               control keeps the line identical in every state, so nothing jumps.
+               Both values are held on the element's dataset so switching metric
+               back and forth never loses the other one. -->
+          <select id="catEditQuote" aria-label="Quote the price per"></select>
         </div>
         <div class="form-note" id="catEditMetricNote"></div>
       </div>
