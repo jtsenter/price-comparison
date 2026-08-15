@@ -292,10 +292,36 @@
       /* Sliders and Show stack instead of sharing a row - side by side, a
          phone-width slider is too narrow to drag accurately. */
       .hd-row2 { flex-direction: column; gap: 10px; }
-      .hd-tune-show { flex-wrap: wrap; gap: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
-      /* Store filter: three equal buttons filling the row (logo chips + names) */
-      .store-filter-row { display: grid; grid-template-columns: 1fr 1fr 1fr; width: 100%; gap: 8px; }
-      .store-filter-btn { justify-content: center; }
+      /* .hd-row2 is column-direction here, so the MAIN axis is vertical - the
+         desktop rule's `flex: 1 1 260px` (meant as a horizontal basis) was
+         still active and got reinterpreted as a forced 260px HEIGHT, same class
+         of bug the .hd-crits comment above already documents for the sliders.
+         That's what the ~60px dead gaps under Show/Reset actually were: real
+         content in a box padded out to 260px tall. Reset the basis so the box
+         sizes to its content again. */
+      .hd-tune-show { flex: 0 0 auto; flex-wrap: wrap; gap: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+      /* Show label, store toggle and Reset now fit one line (the toggle below
+         is a fixed-width pill instead of a 100%-wide 3-column grid, which used
+         to force it - and only it - onto its own row every time). Wraps only if
+         something doesn't fit (e.g. the Watchlist pill, when it's showing). */
+      .hd-tune-show #hdTuneReset { flex-shrink: 0; }
+      /* Store filter: a single connected toggle instead of three separate
+         pill buttons - same control, reads as "pick one of three" rather than
+         three independent buttons, and is compact enough to share the line. */
+      .store-filter-row {
+        display: flex; flex: 1 1 140px; min-width: 0; gap: 2px;
+        background: var(--bg); border: 1px solid var(--border);
+        border-radius: 20px; padding: 3px;
+      }
+      .store-filter-btn {
+        flex: 1; justify-content: center; min-width: 0;
+        border: none; background: none; border-radius: 17px;
+        padding: 5px 4px; font-size: 11.5px;
+      }
+      .store-filter-btn.active {
+        background: var(--card); box-shadow: 0 1px 3px rgba(0,0,0,.14);
+        font-weight: 700; color: var(--text);
+      }
     }
 
     /* ── Category tabs + Columns, one row ── */
