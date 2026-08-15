@@ -2930,21 +2930,6 @@ td.priority-cell { text-align: center; }
 #tableBody tr.vg-group-row.vg-group-open td.check-cell,
 #tableBody tr.vg-group-row.vg-group-open td.item-name { background: color-mix(in srgb, var(--accent) 7%, var(--card)); }
 
-/* ── 4 · Pull-to-refresh indicator ────────────────────────────────────── */
-#pullRefreshIndicator {
-  display: flex; align-items: center; justify-content: center;
-  gap: 8px; height: 0; overflow: hidden; transition: height 0.2s;
-  font-size: 13px; font-weight: 600; color: var(--text-soft);
-}
-#pullRefreshIndicator.pulling   { height: 48px; }
-#pullRefreshIndicator.triggered { height: 48px; color: var(--ww); }
-.ptr-spinner {
-  width: 16px; height: 16px; border-radius: 50%;
-  border: 2px solid var(--border); border-top-color: var(--ww);
-  animation: ptr-spin 0.7s linear infinite; flex-shrink: 0;
-}
-@keyframes ptr-spin { to { transform: rotate(360deg); } }
-
 /* ── 5 · Sticky "who's cheaper" chip ──────────────────────────────────── */
 #cheaperChip {
   display: none; position: fixed; top: 60px; left: 0; right: 0; z-index: 89;

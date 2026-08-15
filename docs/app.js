@@ -7091,47 +7091,6 @@ function renderCfdValues(search, resetScroll = true) {
 //    theme switcher are owned by header.js so they work identically on every
 //    page; density is index-only because it styles the main table) ───────────
 
-// ── Pull-to-refresh ───────────────────────────────────────────────────────────
-
-function initPullToRefresh() {
-  const indicator = document.getElementById('pullRefreshIndicator');
-  if (!indicator) return;
-  let startY = 0, currentY = 0;
-  const THRESHOLD = 70;
-
-  document.addEventListener('touchstart', (e) => {
-    startY = currentY = e.touches[0].clientY;
-  }, { passive: true });
-
-  document.addEventListener('touchmove', (e) => {
-    currentY = e.touches[0].clientY;
-    if (window.scrollY > 5) { indicator.classList.remove('pulling'); return; }
-    const dy = currentY - startY;
-    if (dy <= 10) { indicator.classList.remove('pulling'); return; }
-    indicator.classList.add('pulling');
-    indicator.innerHTML = dy >= THRESHOLD
-      ? '<div class="ptr-spinner"></div>&nbsp;Release to refresh'
-      : '<div class="ptr-spinner"></div>&nbsp;Pull down to refresh';
-  }, { passive: true });
-
-  document.addEventListener('touchend', () => {
-    const dy = currentY - startY;
-    const wasTriggered = window.scrollY <= 5 && dy >= THRESHOLD;
-    indicator.classList.remove('pulling');
-    indicator.innerHTML = '';
-    if (wasTriggered) {
-      indicator.classList.add('triggered');
-      indicator.innerHTML = '<div class="ptr-spinner"></div>&nbsp;Refreshing…';
-      // Reload the published data only - do NOT trigger a scrape. Scrapes are a
-      // desktop action (need a token; run for many minutes); pull-down's job on a
-      // phone is just "show me the latest numbers the scraper already produced".
-      loadData().then((fresh) => { if (fresh) renderPage(fresh); });
-      setTimeout(() => { indicator.classList.remove('triggered'); indicator.innerHTML = ''; }, 2000);
-    }
-    startY = currentY = 0;
-  }, { passive: true });
-}
-
 // ── Boot ─────────────────────────────────────────────────────────────────────
 
 async function boot() {
@@ -7159,7 +7118,6 @@ async function boot() {
   initColumnChooser();
   initColFilterDropdown();
   updateImportBadge();
-  initPullToRefresh();
 
   const refreshBtn = $('refreshBtn');
   if (refreshBtn) refreshBtn.addEventListener('click', triggerRefresh);
