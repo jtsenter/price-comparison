@@ -3208,3 +3208,24 @@ td.priority-cell { text-align: center; }
 /* Breathing room before the filter caret - it was sitting against the label. */
 #tableHead th .col-filter-btn,
 .sticky-header-ghost th .col-filter-btn { margin-left: 6px; }
+
+/* ── Cheaper-at-store filter (three states: off / W / C) ──────────────────
+   Answers "I'm standing in this shop - what is actually cheaper HERE?", so it
+   lives beside the other row filters rather than with the sort controls: it
+   changes WHICH rows exist, not their order. */
+.store-filter-pill.active {
+  border-color: var(--green);
+  color: var(--green);
+  font-weight: 700;
+}
+.store-filter-pill .store-chip { margin-right: 4px; vertical-align: middle; }
+/* The phone chip is icon-width until it has a state to show. */
+.mc-store-chip { min-width: 40px; display: inline-flex; align-items: center; justify-content: center; }
+.mc-store-chip .store-chip { margin: 0; }
+.mc-store-off { font-size: 11px; font-weight: 800; letter-spacing: .02em; }
+
+@media (max-width: 700px) {
+  /* New product is a desktop job: it needs pasted store URLs and a wide
+     three-column dialog, neither of which a phone does well. */
+  #newProductBtn { display: none; }
+}

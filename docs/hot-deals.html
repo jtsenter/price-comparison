@@ -245,9 +245,30 @@
       .deals-hero-stat strong { font-size: 20px; }
       /* Tuner on a phone: label and value share a line, slider fills the next. */
       .hd-tune { padding: 11px 12px; }
-      .hd-crit { grid-template-columns: 1fr auto; row-gap: 4px; padding: 6px 0; }
-      .hd-crit label { white-space: normal; }
-      .hd-crit input[type="range"] { grid-column: 1 / -1; }
+      /* ONE criterion per row. Without this the three stayed in the desktop
+         grid-template-columns: repeat(3, 1fr) - roughly 100px each on a phone,
+         which wrapped every label to three lines and left sliders too short to
+         drag. Restyling .hd-crit alone never fixed it: the squeeze came from the
+         parent track, not the child. */
+      /* flex-basis must be reset too, not just the columns. .hd-row2 becomes a
+         COLUMN flex container here, which turns the desktop `flex: 2 1 360px`
+         into a 360px forced HEIGHT - the three auto rows then stretched to fill
+         it and each criterion stood 118px tall for ~50px of content. */
+      .hd-crits { grid-template-columns: 1fr; gap: 2px; flex: 0 0 auto; }
+      .hd-crit {
+        grid-template-columns: 1fr auto; align-items: center;
+        row-gap: 6px; padding: 9px 0;
+      }
+      .hd-crit + .hd-crit { border-top: 1px solid var(--border); }
+      /* Label and value share the top line, slider spans the full width below -
+         the value belongs beside the thing it names, not under it.
+         Rows are PINNED explicitly. Column-only placement is not enough: the
+         slider spans 1/-1 so it claims a whole row, and auto-placement then
+         pushed the value (DOM order: label, input, strong) onto a THIRD row
+         under the slider, making each criterion 118px tall. */
+      .hd-crit label  { grid-row: 1; grid-column: 1; white-space: normal; font-size: 13.5px; }
+      .hd-crit strong { grid-row: 1; grid-column: 2; font-size: 15px; }
+      .hd-crit input[type="range"] { grid-row: 2; grid-column: 1 / -1; height: 26px; }
       /* The overrides drop to their own full-width line under the mode chip,
          rather than staying pinned right (margin-left:auto would just leave
          them squeezed into whatever width was left). */

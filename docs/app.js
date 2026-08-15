@@ -911,6 +911,19 @@ let _activePriority = 'weekly';
 
 let _searchQuery = '';
 let _perkgSet = new Set();   // items compared by $/kg (synced via user_settings.json)
+// Store filter: null | 'woolworths' | 'coles'. "I'm in this store - what is
+// actually cheaper HERE?" Cycles off -> W -> C -> off from one button.
+// Session-only on purpose: it answers a question about where you are standing
+// right now, so it must not silently survive into next week's planning.
+let _storeFilter = null;
+// off -> W -> C -> off. One function so the phone chip and the desktop pill can
+// never disagree about the order or forget to re-render.
+const STORE_FILTER_CYCLE = [null, 'woolworths', 'coles'];
+function cycleStoreFilter() {
+  const i = STORE_FILTER_CYCLE.indexOf(_storeFilter);
+  _storeFilter = STORE_FILTER_CYCLE[(i + 1) % STORE_FILTER_CYCLE.length];
+  if (_lastData) renderPage(_lastData);
+}
 let _perkgFilter = 'all';  // per-kg group visibility: 'all' | 'only' | 'hidden' (⚙ /kg button cycles)
 
 // DEFAULT_VARIANT_GROUPS (the per-kg category seed) lives in utils.js so the
@@ -2404,6 +2417,12 @@ function initPriorityFilter() {
   }
 
   $('watchlistPill')?.addEventListener('click', toggleWatchlistFilter);
+  // Page-level controls, bound HERE and not in bindCategoryEditBody(): that
+  // runs only when the category editor is first opened, so New product sat dead
+  // until you happened to edit some category - and the store filter would have
+  // shipped with the same bug.
+  $('storeFilterPill')?.addEventListener('click', cycleStoreFilter);
+  $('newProductBtn')?.addEventListener('click', openNewProductModal);
 
   // Other pages link here as index.html#watchlist - activate the watchlist
   // filter on arrival, then drop the hash so a plain refresh doesn't
@@ -3512,6 +3531,15 @@ let _totalColDefaulted = false;
 // listing options that select nothing.
 function applyFilters(items, skipCol = null) {
   let filtered = items.filter(item => {
+    // "I'm standing in this store - what's worth buying HERE?" Only rows where
+    // that store is genuinely the cheaper one. Equal-priced rows are excluded
+    // deliberately: they are not a reason to pick one store over the other, and
+    // including them would pad the list with items you may as well buy anywhere.
+    // Sits ahead of every other test so it applies in the archive and watchlist
+    // views too - it is a question about the row, not about which tab you're on.
+    // rowCheaperStore is THE verdict the Best column shows - reusing it means
+    // the filter can never disagree with the badge on the row it kept.
+    if (_storeFilter && rowCheaperStore(item) !== _storeFilter) return false;
     // Per-kg group visibility (⚙ /kg button): isolate the groups, or hide them entirely
     if (_perkgFilter === 'only') return !!item._isGroup;
     if (_perkgFilter === 'hidden' && item._isGroup) return false;
@@ -5074,7 +5102,6 @@ function bindCategoryEditBody() {
   // Comparison metric.
   $('catEditQuote')?.addEventListener('change', (e) => catEditApplyQuote(e.target.value));
   $('catEditGramQuote')?.addEventListener('change', (e) => catEditApplyGramQuote(e.target.value));
-  $('newProductBtn')?.addEventListener('click', openNewProductModal);
   $('catEditMetric')?.addEventListener('click', (e) => {
     const b = e.target.closest('button[data-metric]');
     if (b) catEditApplyMetric(b.dataset.metric);
@@ -5507,6 +5534,24 @@ function renderMobileCards(items, data) {
   watchChip.setAttribute('aria-label', 'Watchlist filter');
   watchChip.onclick = () => $('watchlistPill')?.click();
   chipsWrap.appendChild(watchChip);
+
+  // Store filter, immediately after the eye: off -> W -> C -> off. One button
+  // rather than three, because on a phone this is a thing you tap while walking
+  // round a shop, and it only ever has one answer at a time.
+  const storeChip = document.createElement('button');
+  storeChip.className = 'mc-sort-chip mc-store-chip' + (_storeFilter ? ' active' : '');
+  storeChip.innerHTML = _storeFilter === 'woolworths'
+    ? '<span class="store-chip ww sm">W</span>'
+    : _storeFilter === 'coles'
+    ? '<span class="store-chip coles sm">C</span>'
+    : '<span class="mc-store-off">W/C</span>';
+  storeChip.title = _storeFilter
+    ? `Showing only items cheaper at ${_storeFilter === 'woolworths' ? 'Woolworths' : 'Coles'} - tap to change`
+    : 'Show only items cheaper at one store';
+  storeChip.setAttribute('aria-label', 'Cheaper-store filter');
+  storeChip.onclick = () => { cycleStoreFilter(); };
+  chipsWrap.appendChild(storeChip);
+
   toolbar.appendChild(chipsWrap);
 
   // View toggle - single icon-only button; glyph shows the layout you'll switch TO
@@ -5732,6 +5777,20 @@ function _renderPageInner(data) {
 
   // Keep the mobile header filter icons (🔥 / 👁) in sync with current state
   $('watchlistPill')?.classList.toggle('active', _activePriority === 'watchlist');
+  // Desktop store filter: label carries the state, so the pill says what it is
+  // doing rather than relying on a colour alone.
+  const sfPill = $('storeFilterPill');
+  if (sfPill) {
+    sfPill.classList.toggle('active', !!_storeFilter);
+    sfPill.innerHTML = _storeFilter === 'woolworths'
+      ? '<span class="store-chip ww sm">W</span> Cheaper at WW'
+      : _storeFilter === 'coles'
+      ? '<span class="store-chip coles sm">C</span> Cheaper at Coles'
+      : 'W/C';
+    sfPill.title = _storeFilter
+      ? `Showing only items cheaper at ${_storeFilter === 'woolworths' ? 'Woolworths' : 'Coles'} - click to change`
+      : 'Show only items that are cheaper at one store';
+  }
 
   // Always compute banner stats client-side so savings are units-weighted
   const s = computeBannerStats(data.items);
