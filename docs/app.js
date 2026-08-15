@@ -1328,9 +1328,10 @@ function getColValue(col, item) {
     // Kg rows filter as "1.0kg" (their real meaning), pack rows as plain counts.
     case 'units':        { const u = getUnits(item.list_item); return unitsLabel(item.list_item, u); }
     case 'category':     return getCategory(item);
-    case 'last_scraped': return item.last_scraped
-      ? new Date(item.last_scraped).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
-      : '-';
+    case 'last_scraped': {
+      const ts = item._isGroup ? groupLastScraped(item) : item.last_scraped;
+      return ts ? new Date(ts).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }) : '-';
+    }
     case 'ww_total':
     case 'coles_total': {
       const v = rowStoreTotal(item, col === 'ww_total' ? 'ww' : 'coles');
@@ -1389,7 +1390,7 @@ function colHeadHtml(col) {
     case 'priority':     return th('priority', '', 'Priority');
     case 'units':        return th('units', '', 'Qty');
     case 'category':     return th('category', '', 'Category');
-    case 'last_scraped': return th('last_scraped', '', 'Last checked');
+    case 'last_scraped': return th('last_scraped', '', 'Last scraped');
     case 'ww_total':     return th('ww_total', '', '<span class="store-chip ww sm">W</span> Total');
     case 'coles_total':  return th('coles_total', '', '<span class="store-chip coles sm">C</span> Total');
     default: return '';
@@ -2262,6 +2263,17 @@ async function doDiffItemAdd(newName, ctx) {
     last_scraped: null, category: '',
   };
   if (_lastData?.items) _lastData.items.push(stub);
+
+  // Frequency, written EXPLICITLY at creation. Left unset, getPriority() falls
+  // through to its trip-count guess, and a brand-new product has 0 trips - so it
+  // came out 'rare' and the default Weekly filter hid it. The product you just
+  // added was invisible in the very view you added it from, which is what "I can
+  // never add products" actually was. Categories already default to weekly (see
+  // getPriority's __group_ branch); this is the plain-product equivalent.
+  // Only when unset, so re-adding a product you had deliberately filed as
+  // monthly/rare doesn't quietly promote it back to weekly.
+  const prios = loadPriorities();
+  if (!prios[newName]) { prios[newName] = 'weekly'; savePriorities(prios); }
 
   // Step 3b: write to shopping_list.xlsx (no scrape triggered here)
   if (s.user && s.repo && s.token) {
@@ -3642,7 +3654,9 @@ function sortItems(items) {
       }
       case 'trend': return trendPositionOf(item); // 0.0=best deal, 1.0=expensive, 999=no history (sorts last)
       case 'category':     return getCategory(item).toLowerCase();
-      case 'last_scraped': return item.last_scraped || '';
+      // Groups sort by the same freshest-member date their cell prints, so the
+      // column can never sort differently from what it shows.
+      case 'last_scraped': return (item._isGroup ? groupLastScraped(item) : item.last_scraped) || '';
       // Each total column sorts by ITS OWN store's line cost (matches its cell).
       case 'ww_total':     return rowStoreTotal(item, 'ww') ?? NaN;
       case 'coles_total':  return rowStoreTotal(item, 'coles') ?? NaN;
@@ -4464,6 +4478,15 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     savingContent = sav > 0 ? `<span class="saving-cell">${fmt(sav)}</span>` : '<span class="no-data">$0.00</span>';
   }
 
+  // A group has no last_scraped of its own - it isn't a row the scraper ever
+  // writes. Its members are, so the group reports the FRESHEST member: the group
+  // is as current as the most recently checked thing in it. This cell used to be
+  // blank, which read as "never scraped" rather than "not applicable".
+  const gScrapedTs = groupLastScraped(group);
+  const gScrapedCell = gScrapedTs
+    ? new Date(gScrapedTs).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
+    : '-';
+
   const tds = {
     name:         nameCell,
     trend:        `<td class="trend-cell">${groupTrendCellHTML(group)}</td>`,
@@ -4476,7 +4499,7 @@ function appendGroupRowDesktop(tbody, group, overrides) {
     saving:       `<td><div class="saving-row">${savingContent}</div></td>`,
     trips:        `<td class="trips-cell"></td>`,
     category:     `<td style="font-size:12px;color:var(--text-mid)">${getCategory(group)}</td>`,
-    last_scraped: `<td></td>`,
+    last_scraped: `<td style="font-size:11px;color:var(--text-soft);white-space:nowrap">${gScrapedCell}</td>`,
     ww_total:     gCell(wwTotal, gWwWin, 'cell-ww'),
     coles_total:  gCell(coTotal, gCoWin, 'cell-coles'),
   };

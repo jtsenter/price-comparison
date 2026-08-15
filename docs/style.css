@@ -804,20 +804,33 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
    moment a segment label changed. */
 .cat-name-group { flex: 1 1 320px; min-width: 0; }
 .cat-name-group input { width: 100%; }
-.cat-metric-group { flex: 0 0 auto; max-width: 100%; display: flex; flex-direction: column; align-items: flex-end; }
-/* The note sits under the controls it explains and matches their right edge, so
-   the whole cluster reads as one right-aligned block. One line at this width -
-   it used to wrap to two and shove the product columns down. */
-.cat-metric-group .form-note { text-align: right; white-space: nowrap; margin-top: 5px; }
+/* Left-aligned, like every other field in this dialog. It was align-items:
+   flex-end, which right-aligned the "Compare prices by" label and the note
+   against the segment group's right edge - so the label floated away from the
+   Pack price button it belongs to, and the note grew leftwards. */
+.cat-metric-group { flex: 0 0 auto; max-width: 100%; display: flex; flex-direction: column; align-items: flex-start; }
+/* The note starts at the same left edge as the Pack price segment and WRAPS.
+   nowrap + right-align meant the longer notes (the per-piece one especially)
+   ran off the left of the dialog with no way to read them - a fixed 300px box
+   forbidden from wrapping has to overflow somewhere. Two lines are already
+   reserved below, so wrapping costs no layout jump. */
+.cat-metric-group .form-note { text-align: left; margin-top: 5px; }
 /* The metric column must not resize when the metric changes. Its note is a
    different length per option ("Compared on the shelf price of the pack." vs the
    much longer per-piece one), and on a flex row that re-widened the column and
    shoved the name field sideways on every click. Fixed width + room for two
    lines, so the wording wraps instead of moving the layout. */
 /* (the old 300px cap on the metric group is gone - the column stack sizes it) */
-/* Reserve BOTH lines always, so the shorter notes don't let the columns below
-   jump up by a line when you switch metric. */
-#catEditMetricNote { width: 300px; min-height: 2.9em; }
+/* Wide enough that ALL THREE notes fit on ONE line (the longest is the per-piece
+   one at 66 chars), so a single reserved line is enough and switching metric
+   still can't move the layout. The old 300px forced a wrap, which is why two
+   lines had to be reserved permanently - that reservation was most of the dead
+   space under the category name, since this column then stood 36px taller than
+   the name field beside it.
+   The 4px offset lines the note's text up with the "Pack price" LABEL rather
+   than the segment group's border, which sits 4px further left (3px padding +
+   1px border) - the two read as misaligned otherwise. */
+#catEditMetricNote { width: 400px; max-width: 100%; min-height: 1.45em; padding-left: 4px; }
 
 .seg { display: inline-flex; background: var(--bg); border: 1px solid var(--border); border-radius: 9px; padding: 3px; }
 .seg button {

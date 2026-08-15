@@ -1239,6 +1239,20 @@ function groupStoreTotal(group, store) {
   return pk == null ? null : metricShown(group, pk) * groupUnits(group.list_item);
 }
 
+// When a category row was last scraped: the FRESHEST of its members. A group is
+// not a row the scraper writes, so it has no last_scraped of its own - but it is
+// exactly as current as the most recently checked product inside it. Returns an
+// ISO string (so it sorts and formats like a normal item's last_scraped), or ''
+// when no member has ever been scraped.
+function groupLastScraped(group) {
+  let best = '';
+  for (const m of (group?._members || [])) {
+    const ts = m?.last_scraped || '';
+    if (ts > best) best = ts;   // ISO-8601 sorts lexicographically
+  }
+  return best;
+}
+
 // How many real pieces one unit of quantity is, for a per-piece category. 1 for
 // everything else, so callers can multiply unconditionally.
 function qtyPiecesPer(group) {

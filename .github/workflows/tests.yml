@@ -70,6 +70,7 @@ jobs:
           python pinned_fallback_selfcheck.py
           python scrape_mode_selfcheck.py
           python scrape_speed_selfcheck.py
+          python history_compact_selfcheck.py
           # Opens the workbook the node xlsx_selfcheck step just wrote, using
           # Python's own zipfile/XML - an independent parser, so a bug in our
           # hand-rolled ZIP can't hide behind a matching bug in our reader.

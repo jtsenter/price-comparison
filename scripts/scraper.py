@@ -328,6 +328,56 @@ def _should_add_history_entry(history: list, new_price: float, today: str) -> bo
         return True   # date parsing failed - add to be safe
 
 
+def _compact_history(history: list) -> list:
+    """Collapse a price history to the recording rule, however entries got there.
+
+    Keeps the first entry, every price CHANGE, and an unchanged "still valid"
+    confirmation only once it is >=7 days after the last kept entry - the same
+    rule _should_add_history_entry applies on append, but enforced over the whole
+    array instead of decided from one comparison.
+
+    That difference is the point. The append guard reads the history from the
+    latest.json snapshot taken at scraper boot, so it is only as correct as that
+    snapshot: two runs overlapping (a manual dispatch landing while a scheduled
+    run is mid-flight, an aborted run's partial progress push) each boot from a
+    different snapshot and can both append for the same day. That is how 598
+    same-price entries <7 days apart and 23 same-date duplicates accumulated
+    while the guard itself was working correctly in isolation.
+
+    As an invariant this is self-healing: whatever raced, the array written back
+    satisfies the rule, so bad entries are cleaned on the next scrape of that
+    item rather than surviving forever. Dropped points are by definition equal in
+    price to the kept entry beside them, so no price the item actually sold at is
+    ever lost.
+    ponytail: single O(n) pass, no windowing - histories are tens of entries.
+    """
+    out: list = []
+    for e in _dedup_hist(history):
+        if not out:
+            out.append(e)
+            continue
+        last = out[-1]
+        # Anything unparseable is KEPT, never silently dropped - this function
+        # deletes data, so every ambiguous case has to fail towards keeping it.
+        try:
+            changed = round(float(last.get("price")), 2) != round(float(e.get("price")), 2)
+        except (TypeError, ValueError):
+            out.append(e)
+            continue
+        if changed:
+            out.append(e)
+            continue
+        try:
+            gap = (date.fromisoformat(e.get("date", "")[:10])
+                   - date.fromisoformat(last.get("date", "")[:10])).days
+        except ValueError:
+            out.append(e)
+            continue
+        if gap >= 7:
+            out.append(e)
+    return out
+
+
 def _miss_reason(match: dict | None, results: list) -> str | None:
     """Classify why a store fetch/match failed for the scrape log.
     None = matched. "no_results" = search/fetch returned nothing - points at a
@@ -1890,9 +1940,14 @@ async def _scrape_single_item(
     _vco = "low" if co_conf == "carried" else co_conf
     pair_meta = validate_pair(item, ww_match, coles_match, _vww, _vco)
 
-    # Deduplicate by date before use - guards against external writes introducing duplicates
-    existing_ww_hist = _dedup_hist(existing_item.get("ww_price_history",    []) or [])
-    existing_co_hist = _dedup_hist(existing_item.get("coles_price_history", []) or [])
+    # Compact (not just dedupe) before use. Deduping alone only removed same-date
+    # collisions; it left the run of unchanged daily entries that overlapping runs
+    # had appended. Compacting here means the append guard below is deciding
+    # against a history that already satisfies the rule, so guard and stored array
+    # can't drift apart - and appending one entry that passed the guard keeps the
+    # array compliant, so there is nothing to re-compact on the way out.
+    existing_ww_hist = _compact_history(existing_item.get("ww_price_history",    []) or [])
+    existing_co_hist = _compact_history(existing_item.get("coles_price_history", []) or [])
     today_str = date.today().isoformat()
     ww_add = _should_add_history_entry(existing_ww_hist,  ww_price,    today_str) if ww_price    else False
     co_add = _should_add_history_entry(existing_co_hist,  coles_price, today_str) if coles_price else False

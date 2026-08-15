@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=154" />
+  <link rel="stylesheet" href="style.css?v=155" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -157,6 +157,9 @@
        stranded item pinned to a phantom right edge. */
     .hd-tune-show #hdTuneReset { margin-left: auto; }
     .store-filter-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    /* "All Stores" on a wide screen, "All" in the narrow mobile segment where
+       the three options split one row between them. */
+    .sf-narrow { display: none; }
 
     /* ── Buy / Wait / Stock up ──────────────────────────────────
        Every card is the SAME four-row grid, and the grid rows are fixed rather
@@ -290,8 +293,16 @@
       .hd-overrides-inline { flex-basis: 100%; margin-left: 0; gap: 8px; flex-direction: column; align-items: flex-start; }
       .hero-count { margin-left: 0; width: 100%; }
       /* Sliders and Show stack instead of sharing a row - side by side, a
-         phone-width slider is too narrow to drag accurately. */
-      .hd-row2 { flex-direction: column; gap: 10px; }
+         phone-width slider is too narrow to drag accurately.
+         align-items MUST be restated. The desktop rule sets flex-start, which is
+         a vertical top-align while this is a row; flipping to column silently
+         reinterprets it as "shrink each child to its content width", so the
+         sliders and the Show block stopped 88px and 52px short of the panel's
+         right edge. That unexplained right-hand gap is the "empty column"; it
+         also made every slider 88px shorter than the space available. Third
+         instance of a desktop flex property changing meaning under this
+         direction flip - see the two notes above. */
+      .hd-row2 { flex-direction: column; gap: 10px; align-items: stretch; }
       /* .hd-row2 is column-direction here, so the MAIN axis is vertical - the
          desktop rule's `flex: 1 1 260px` (meant as a horizontal basis) was
          still active and got reinterpreted as a forced 260px HEIGHT, same class
@@ -322,6 +333,8 @@
         background: var(--card); box-shadow: 0 1px 3px rgba(0,0,0,.14);
         font-weight: 700; color: var(--text);
       }
+      .sf-wide   { display: none; }
+      .sf-narrow { display: inline; }
     }
 
     /* ── Category tabs + Columns, one row ── */
@@ -623,7 +636,7 @@
       <div class="hd-tune-show">
         <span class="hd-tune-title">Show</span>
         <div id="storeFilter" class="store-filter-row">
-          <button class="store-filter-btn active" data-store="all">All Stores</button>
+          <button class="store-filter-btn active" data-store="all"><span class="sf-wide">All Stores</span><span class="sf-narrow">All</span></button>
           <button class="store-filter-btn" data-store="woolworths"><span class="store-chip ww sm">W</span> WW</button>
           <button class="store-filter-btn" data-store="coles"><span class="store-chip coles sm">C</span> Coles</button>
         </div>
@@ -731,7 +744,7 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=123"></script>
+<script src="utils.js?v=124"></script>
 <script src="history-modal.js?v=5"></script>
 <script>
 if ('serviceWorker' in navigator) {
@@ -1186,11 +1199,14 @@ function renderBwsPanel(priorities, exclusions, tune) {
   const panel = document.getElementById('bwsPanel');
   const grid = document.getElementById('bwsGrid');
   if (!panel || !grid) return;
+  // _storeFilter is part of the key: without it the memo below short-circuits and
+  // the panel keeps showing the store you just filtered OUT.
   const key = JSON.stringify(tune) + '|' + (_data.last_updated || '') + '|' + _data.items.length
-            + '|' + _archivedSet.size + '|' + JSON.stringify(exclusions) + '|' + JSON.stringify(priorities);
+            + '|' + _archivedSet.size + '|' + JSON.stringify(exclusions) + '|' + JSON.stringify(priorities)
+            + '|' + _storeFilter;
   if (key === _bwsKey) return;
   _bwsKey = key;
-  const cards = buyWaitCards(_data.items, {
+  const allCards = buyWaitCards(_data.items, {
     exclusions, priorities, archivedSet: _archivedSet, tune,
     // Per kilo wherever the item HAS a meaningful kilo rate - that is the
     // number that actually compares two products. histKgRatios is the same
@@ -1202,6 +1218,18 @@ function renderBwsPanel(priorities, exclusions, tune) {
       return (kg.perKg && r > 0) ? { scale: r, unit: '/kg' } : { scale: 1, unit: '' };
     },
   });
+  // The store filter applies here too. Advice to buy something at Coles is not
+  // useful while you're filtered to "only what's cheaper at Woolworths" - it was
+  // the one part of the page the filter didn't reach.
+  const cards = _storeFilter === 'all'
+    ? allCards
+    : allCards.filter(c => c.store === _storeFilter);
+  // The sub-line claims this panel ignores the filters below; that stops being
+  // true once a store filter is on, so say what it's actually showing.
+  const sub = panel.querySelector('.bws-sub');
+  if (sub) sub.textContent = _storeFilter === 'all'
+    ? 'from everything you buy, not just the filters below'
+    : `only what's cheaper at ${_storeFilter === 'coles' ? 'Coles' : 'Woolworths'}`;
   panel.style.display = cards.length ? '' : 'none';
   const inBasket = new Set(hdBasket().items);
   // A div, not a button: it now CONTAINS a button (add to basket), and a button
