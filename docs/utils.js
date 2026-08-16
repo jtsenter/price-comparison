@@ -693,6 +693,94 @@ function isViewerMode() {
   } catch { return true; }   // storage blocked → assume viewer, the safe side
 }
 
+/* ── Custom lists ────────────────────────────────────────────────────────────
+   User-made product lists, ADDITIVE to the weekly/monthly/rare frequency map -
+   pw_priorities_v1 is untouched and still the single source of frequency.
+
+   Shape (pw_lists_v1 in the browser, mirrored to user_settings.json .lists):
+     { "<key>": { label, exclusiveGroup: string|null, items: [productName, …] } }
+
+   exclusiveGroup is the whole model in one field:
+     null      -> a free TAG. A product may be in any number of these.
+     "<name>"  -> a member of a mutually-exclusive SET. Putting a product into
+                  one member removes it from its siblings, so it is always in
+                  exactly one - the same guarantee Weekly/Monthly/Rare gives.
+
+   Weekly/Monthly/Rare/Archived are deliberately NOT stored here. They are the
+   built-in exclusive set and keep living in pw_priorities_v1; listsUi() below
+   presents them alongside these so the system reads as one thing. Storing them
+   twice would create a second source of truth for frequency, which is exactly
+   the bug class this project keeps hitting.
+   Membership is a plain array, not the add/remove diff perkgCats uses: a
+   category's baseline comes from fuzzy name matching and so needs to record
+   removals, whereas a list is only ever what was explicitly ticked. */
+const LISTS_KEY = 'pw_lists_v1';
+
+function loadLists() {
+  try {
+    const o = JSON.parse(localStorage.getItem(LISTS_KEY) || '{}');
+    return (o && typeof o === 'object' && !Array.isArray(o)) ? o : {};
+  } catch { return {}; }
+}
+
+function saveLists(obj) {
+  localStorage.setItem(LISTS_KEY, JSON.stringify(obj || {}));
+  // app.js owns the debounced publish; other pages just write locally.
+  if (typeof scheduleUserSettingsSync === 'function') scheduleUserSettingsSync();
+}
+
+// Stable key from a label. Suffixed on collision so two lists can share a
+// display name without one silently overwriting the other's membership.
+function listKeyFor(label, existing) {
+  const base = String(label || '').toLowerCase().trim()
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'list';
+  if (!existing || !existing[base]) return base;
+  for (let n = 2; ; n++) if (!existing[`${base}-${n}`]) return `${base}-${n}`;
+}
+
+// Every list key holding this product, custom lists only.
+function listsForItem(name) {
+  const all = loadLists();
+  return Object.keys(all).filter(k => (all[k].items || []).includes(name));
+}
+
+// Set or clear membership. For a member of an exclusive set, adding also pulls
+// the product out of its siblings - that invariant is enforced HERE, in the one
+// writer, rather than at each of the three call sites that can change it.
+function setListMembership(name, key, on) {
+  const all = loadLists();
+  const list = all[key];
+  if (!list) return all;
+  list.items = list.items || [];
+  if (on) {
+    if (list.exclusiveGroup) {
+      for (const [k, l] of Object.entries(all)) {
+        if (k !== key && l.exclusiveGroup === list.exclusiveGroup) {
+          l.items = (l.items || []).filter(n => n !== name);
+        }
+      }
+    }
+    if (!list.items.includes(name)) list.items.push(name);
+  } else {
+    list.items = list.items.filter(n => n !== name);
+  }
+  saveLists(all);
+  return all;
+}
+
+// Drop a product from every list - called when it is deleted for good, so a
+// tombstoned name can't linger as a phantom member.
+function purgeItemFromLists(name) {
+  const all = loadLists();
+  let touched = false;
+  for (const l of Object.values(all)) {
+    const before = (l.items || []).length;
+    l.items = (l.items || []).filter(n => n !== name);
+    if (l.items.length !== before) touched = true;
+  }
+  if (touched) saveLists(all);
+}
+
 // GitHub connection settings. Lives here (not app.js) because scrape-log needs
 // it too - it dispatches the "retry the misses" run. validate.html keeps its own
 // copy: it is the one page that doesn't load utils.js.

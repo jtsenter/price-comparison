@@ -485,7 +485,10 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
 .vg-group-row:hover > td { background: color-mix(in srgb, var(--accent) 5%, transparent); }
 .vg-group-row.vg-group-open > td { background: color-mix(in srgb, var(--accent) 7%, transparent); }
 .vg-group-title { display: flex; align-items: center; gap: 7px; color: var(--text); }
-.vg-group-label { font-weight: 700; font-size: 14px; }
+/* Same weight and size as a normal product name (.item-title-row is 500). A
+   category is a row like any other in this table, not a heading over the rows
+   below it - the chevron and the member count already say it expands. */
+.vg-group-label { font-weight: 500; font-size: 14px; }
 .vg-group-sub { display: block; font-size: 11px; color: var(--text-soft); margin-top: 1px; }
 .perkg-suffix { font-size: 11px; font-weight: 600; color: var(--text-soft); }
 
@@ -1823,6 +1826,20 @@ th.sort-active { color: var(--text); }
   border-radius: 1px;
   flex-shrink: 0;
 }
+/* Custom lists sit in the filter row beside the frequency pills. Tinted purple
+   so a hand-made list is visibly a different KIND of filter from the built-in
+   frequencies, without inventing a second row for them. */
+.list-pills { display: contents; }
+.priority-pill.list-pill { border-color: #D8C9E4; color: #6B4C82; }
+.priority-pill.list-pill:hover { background: #F5F0F8; color: #55396A; }
+.priority-pill.list-pill.active { background: #6B4C82; border-color: #6B4C82; color: #fff; }
+/* Section heading inside the bulk-bar chip menu (frequency vs. My lists). */
+.bt-dropdown-sep {
+  padding: 7px 14px 3px; font-size: 10.5px; font-weight: 800;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--text-soft);
+  pointer-events: none;
+}
+
 /* Mobile frequency dropdown - hidden on desktop (pills are used instead) */
 .freq-select { display: none; }
 

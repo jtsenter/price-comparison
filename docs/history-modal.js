@@ -373,7 +373,12 @@ function openPriceHistoryModal(item, opts) {
   // come from whichever member was cheapest that day, so there's no single item's
   // exclusion list to edit); on mobile it's a deliberate simplification the narrow
   // screen doesn't have room for.
-  const simplified = !_hmCfg.editable || !!item._isGroupHistory || innerWidth <= 700;
+  // `editable` is now the OWNER check (index.html sets it from isViewerMode), so
+  // it is the one thing both button paths below must consult. `simplified` can't
+  // serve that role for group history - it is unconditionally true there, which
+  // is exactly why the group ✕ buttons ended up with no permission check at all.
+  const canEditHistory = !!_hmCfg.editable;
+  const simplified = !canEditHistory || !!item._isGroupHistory || innerWidth <= 700;
   document.querySelectorAll('.price-history-edit-actions').forEach(el => el.style.display = simplified ? 'none' : '');
   const closeOnlyBtn = document.getElementById('priceHistoryClose2');
   if (closeOnlyBtn) closeOnlyBtn.textContent = simplified ? 'Close' : 'Cancel';
@@ -506,10 +511,14 @@ function openPriceHistoryModal(item, opts) {
       if (!meta) return '';
       return `<button class="price-excl-x grp-excl" data-store="${store}" data-src="${escAttr(meta.src)}" data-raw="${meta.raw.toFixed(2)}" title="Exclude - this point came from ${escAttr(stripWW(meta.src))}">✕</button>`;
     };
-    const wwEditBtns = item._isGroupHistory ? (innerWidth > 700 ? grpBtn('ww') : '') : simplified ? '' : `
+    // canEditHistory gates BOTH branches now. The group branch used to test
+    // innerWidth alone, so a visitor on a desktop got working ✕ buttons on every
+    // category's history - the one delete control in the app that no permission
+    // check covered.
+    const wwEditBtns = item._isGroupHistory ? ((canEditHistory && innerWidth > 700) ? grpBtn('ww') : '') : simplified ? '' : `
            <button class="price-excl-x" data-store="ww" data-price="${Number(entry.ww).toFixed(2)}" title="${wwExcluded ? 'Re-include' : 'Exclude'}">✕</button>
            <button class="price-fork-btn" data-store="ww" data-price="${Number(entry.ww).toFixed(2)}" title="Different item">${forkSvg}</button>`;
-    const coEditBtns = item._isGroupHistory ? (innerWidth > 700 ? grpBtn('coles') : '') : simplified ? '' : `
+    const coEditBtns = item._isGroupHistory ? ((canEditHistory && innerWidth > 700) ? grpBtn('coles') : '') : simplified ? '' : `
            <button class="price-excl-x" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="${coExcluded ? 'Re-include' : 'Exclude'}">✕</button>
            <button class="price-fork-btn" data-store="coles" data-price="${Number(entry.coles).toFixed(2)}" title="Different item">${forkSvg}</button>`;
     // "?" = the price shown is a multi-buy rate; the ticket price was higher.

@@ -22,12 +22,12 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=155" />
+  <link rel="stylesheet" href="style.css?v=156" />
 </head>
 <body>
 
 <header data-page="index"></header>
-<script src="header.js?v=24"></script>
+<script src="header.js?v=25"></script>
 
 <!-- Bulk action bar -->
 <div id="bulkToolbar" class="bulk-toolbar" style="display:none">
@@ -37,7 +37,11 @@
     <button class="bt-deselect">Deselect all ✕</button>
     <div class="bt-divider"></div>
     <button class="bt-chip bt-cat">📁 Category <span class="arrow">▾</span></button>
-    <button class="bt-chip bt-pri">⭐ Priority <span class="arrow">▾</span></button>
+    <!-- Frequency + custom lists in one menu: under the list model Weekly /
+         Monthly / Rare IS an exclusive list, so a second chip would be both
+         redundant and width this toolbar doesn't have. "Lists" is also shorter
+         than "Priority", so the row got narrower rather than wider. -->
+    <button class="bt-chip bt-pri" title="Set frequency, or add the selected products to one of your lists">🏷 Lists <span class="arrow">▾</span></button>
   </div>
   <div class="bt-right">
     <button class="bt-chip bt-archive">🗄 Archive</button>
@@ -120,6 +124,10 @@
       <button class="priority-pill store-filter-pill" id="storeFilterPill"
               title="Show only items that are cheaper at one store">W/C</button>
       <span class="filter-separator"></span>
+      <!-- Custom lists land here, rendered by renderListPills(). Kept in the same
+           row as the frequency pills because they select the same thing: which
+           products the table shows. -->
+      <span id="listPills" class="list-pills"></span>
       <button class="priority-pill" id="perkgDevBtn" type="button" title="Cycle: show everything / only $/kg groups / hide $/kg groups"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16.5c0 1.5 1.5 3 3.5 3s3.5-1.5 3.5-3L19.5 9z"/><path d="M1 16.5c0 1.5 1.5 3 3.5 3s3.5-1.5 3.5-3L4.5 9z"/><path d="M12 3v18"/><path d="M3 7h18"/><path d="M19.5 9 12 5 4.5 9"/></svg> <span class="perkg-lbl">$/kg</span></button>
     </div>
   </div>
@@ -414,9 +422,9 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=124"></script>
-<script src="history-modal.js?v=5"></script>
-<script src="app.js?v=195"></script>
+<script src="utils.js?v=125"></script>
+<script src="history-modal.js?v=6"></script>
+<script src="app.js?v=196"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">

@@ -314,6 +314,16 @@ async function persistUserSettingsToRepo() {
     // which is a large part of why "adding a product" looked like it never
     // worked. Keyed by category, not by item, so it needs no REMOVED_ITEMS pass.
     perkgCats: loadVariantGroupOverrides(),
+    // Custom lists. Keyed by list, not by item, so no REMOVED_ITEMS pass is
+    // needed on the map itself - but a tombstoned product could still sit in a
+    // membership array, so those are filtered.
+    lists: (() => {
+      const out = {};
+      for (const [k, l] of Object.entries(loadLists())) {
+        out[k] = { ...l, items: (l.items || []).filter(n => !REMOVED_ITEMS.has(n)) };
+      }
+      return out;
+    })(),
   };
   try {
     await githubPutJson(s, 'docs/data/user_settings.json', payload, 'chore: sync user settings (priorities + quantities)');
@@ -353,6 +363,13 @@ async function initUserSettings() {
         if (remote.perkgCats && typeof remote.perkgCats === 'object') {
           localStorage.setItem('pw_perkg_cats_v1',
             JSON.stringify(merge(loadVariantGroupOverrides(), remote.perkgCats)));
+        }
+        // Lists merge per LIST, same precedence as priorities. Per-list and not
+        // per-member for the same reason perkgCats is: the stored unit is a whole
+        // list, so half-merging one would resurrect a product the other device
+        // deliberately unticked.
+        if (remote.lists && typeof remote.lists === 'object') {
+          localStorage.setItem(LISTS_KEY, JSON.stringify(merge(loadLists(), remote.lists)));
         }
         // Price-history exclusions (incl. per-kg group-history point removals):
         // union per item so a device never silently drops the other's exclusions.
@@ -907,7 +924,32 @@ function groupThirdEntries(group) {
 
 // ── Filter state ─────────────────────────────────────────────────────────────
 
+// 'weekly' | 'monthly' | 'rare' | 'archive' | 'all' | 'watchlist' | 'list:<key>'
+// A custom list rides in the SAME slot as the frequency pills rather than adding
+// a second filter dimension. That is deliberate: a list is a hand-picked set, so
+// intersecting it with "Weekly" would hide products you explicitly put in it and
+// read as the list being wrong. Selecting one shows exactly its members, the way
+// the watchlist filter already behaves.
 let _activePriority = 'weekly';
+
+const LIST_FILTER_PREFIX = 'list:';
+function activeListKey() {
+  return _activePriority.startsWith(LIST_FILTER_PREFIX)
+    ? _activePriority.slice(LIST_FILTER_PREFIX.length) : null;
+}
+// Is this row in the selected list? A category row has no name of its own that a
+// list can hold, so it counts as in the list when ANY of its members is - filing
+// "Chicken Breast Large Pack" into a list should not make the Chicken Breast
+// category row vanish from that list's view.
+function itemInActiveList(item) {
+  const key = activeListKey();
+  if (!key) return true;
+  const l = loadLists()[key];
+  if (!l) return false;
+  const members = new Set(l.items || []);
+  if (item._isGroup) return (item._members || []).some(m => members.has(m.list_item));
+  return members.has(item.list_item);
+}
 
 let _searchQuery = '';
 let _perkgSet = new Set();   // items compared by $/kg (synced via user_settings.json)
@@ -1091,6 +1133,10 @@ async function deleteItemsForever(names) {
     localStorage.setItem('pw_units_v1', JSON.stringify(u));
     const w = loadWatchlistLocal(); names.forEach(n => w.delete(n)); saveWatchlistLocal(w);
     const q = basketQtyMap(); names.forEach(n => { delete q[n]; _selectedItems.delete(n); }); writeBasket(q);
+    // Custom lists too, or a deleted product lingers as a phantom member and its
+    // list keeps counting it.
+    names.forEach(n => purgeItemFromLists(n));
+    renderListPills();
   } catch {}
   names.forEach(n => _checkedItems.delete(n));
 
@@ -2386,12 +2432,72 @@ function initSearch() {
   if (wrap) wrap._ready = true;
 }
 
+// Custom-list pills, rebuilt whenever the lists change. Delegation would be
+// tidier, but the frequency pills bind individually and a mixed model is worse
+// than one repeated line - so these bind the same way and get rebuilt wholesale.
+function renderListPills() {
+  const host = $('listPills');
+  if (!host) return;
+  const all = loadLists();
+  const keys = Object.keys(all).sort((a, b) => (all[a].label || a).localeCompare(all[b].label || b));
+  host.innerHTML = '';
+  if (!keys.length) return;
+  const sep = document.createElement('span');
+  sep.className = 'filter-separator';
+  host.appendChild(sep);
+  for (const k of keys) {
+    const btn = document.createElement('button');
+    btn.className = 'priority-pill list-pill' + (_activePriority === LIST_FILTER_PREFIX + k ? ' active' : '');
+    btn.dataset.priority = LIST_FILTER_PREFIX + k;
+    btn.textContent = all[k].label || k;
+    btn.title = all[k].exclusiveGroup
+      ? `List "${all[k].label || k}" - one at a time within "${all[k].exclusiveGroup}"`
+      : `List "${all[k].label || k}" - a tag, products can be in several`;
+    btn.addEventListener('click', () => applyPriorityFilter(btn.dataset.priority, btn));
+    host.appendChild(btn);
+  }
+  // Mobile hides the pill row entirely, so the same choices have to exist in the
+  // frequency dropdown or lists would be desktop-only.
+  const fs = $('freqSelect');
+  if (fs) {
+    fs.querySelector('optgroup[data-lists]')?.remove();
+    const og = document.createElement('optgroup');
+    og.label = 'My lists';
+    og.setAttribute('data-lists', '1');
+    for (const k of keys) {
+      const o = document.createElement('option');
+      o.value = LIST_FILTER_PREFIX + k;
+      o.textContent = all[k].label || k;
+      og.appendChild(o);
+    }
+    fs.appendChild(og);
+    if (_activePriority.startsWith(LIST_FILTER_PREFIX)) fs.value = _activePriority;
+  }
+}
+
+// One place that applies a filter choice, so the frequency pills, the list pills
+// and the mobile dropdown can't drift in what "selected" means.
+function applyPriorityFilter(p, btn) {
+  if (p) {
+    _activePriority = p;
+    const container = $('priorityFilter');
+    container?.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
+    btn?.classList.add('active');
+    const fs = $('freqSelect');
+    if (fs && ['all', 'weekly', 'monthly', 'rare', 'archive'].includes(p)) fs.value = p;
+    else if (fs && p.startsWith(LIST_FILTER_PREFIX)) fs.value = p;
+  }
+  if (_lastData) renderPage(_lastData);
+}
+
 function initPriorityFilter() {
   const container = $('priorityFilter');
   if (!container) return;
+  renderListPills();
 
   container.querySelectorAll('.priority-pill').forEach(btn => {
     if (btn.id === 'watchlistPill') return; // has its own toggle handler below
+    if (btn.classList.contains('list-pill')) return; // bound in renderListPills
     btn.addEventListener('click', () => {
       const p = btn.dataset.priority;
       if (p) {
@@ -2556,7 +2662,16 @@ function initBulkBar() {
     const cur = new Set(current || []); // value(s) the current selection already has
     const drop = document.createElement('div');
     drop.className = 'bt-dropdown';
-    items.forEach(({ label, value }) => {
+    items.forEach(({ label, value, disabled }) => {
+      // Section heading, not an option - the menu now mixes frequency with
+      // custom lists and needs to say where one ends and the other begins.
+      if (disabled) {
+        const h = document.createElement('div');
+        h.className = 'bt-dropdown-sep';
+        h.textContent = label;
+        drop.appendChild(h);
+        return;
+      }
       const el = document.createElement('button');
       el.className = 'bt-dropdown-item' + (cur.has(value) ? ' is-current' : '');
       // ✓ marks the option(s) the selected rows already sit in (all of them, on
@@ -2594,17 +2709,48 @@ function initBulkBar() {
     }, e.currentTarget._current);
   });
 
+  // Frequency AND custom lists share ONE chip. The toolbar is already at its
+  // width budget, so a separate "Add to list" control was not affordable - and
+  // under this model it would be redundant anyway: Weekly/Monthly/Rare IS an
+  // exclusive list, so the two belong in the same menu rather than two menus
+  // that do the same kind of thing.
   bar.querySelector('.bt-pri')?.addEventListener('click', (e) => {
-    openChipDropdown(e.currentTarget, [
+    const lists = loadLists();
+    const listOpts = Object.keys(lists)
+      .sort((a, b) => (lists[a].label || a).localeCompare(lists[b].label || b))
+      .map(k => {
+        // Tick state reflects the SELECTION: ✓ only when every checked product is
+        // already in the list, so the menu says what clicking will change.
+        const items = new Set(lists[k].items || []);
+        const names = [..._checkedItems];
+        const all = names.length && names.every(n => items.has(n));
+        return { label: `${all ? '✓' : '＋'} ${lists[k].label || k}`, value: LIST_FILTER_PREFIX + k, _allIn: all };
+      });
+    const opts = [
       { label: '⭐ Weekly',  value: 'weekly'  },
       { label: '📅 Monthly', value: 'monthly' },
       { label: '🔵 Rare',    value: 'rare'    },
-    ], (p) => {
-      const pr = loadPriorities();
-      _checkedItems.forEach(name => { pr[name] = p; });
-      savePriorities(pr);
+      ...(listOpts.length ? [{ label: '— My lists —', value: '', disabled: true }] : []),
+      ...listOpts,
+    ];
+    openChipDropdown(e.currentTarget, opts, (p) => {
+      if (!p) return;
+      if (p.startsWith(LIST_FILTER_PREFIX)) {
+        const key = p.slice(LIST_FILTER_PREFIX.length);
+        const chosen = listOpts.find(o => o.value === p);
+        // Already all in -> the useful action is to take them OUT again, so the
+        // one menu entry toggles rather than being a dead no-op.
+        const on = !(chosen && chosen._allIn);
+        _checkedItems.forEach(name => setListMembership(name, key, on));
+        renderListPills();
+        showToast(`${on ? 'Added to' : 'Removed from'} "${loadLists()[key]?.label || key}"`);
+      } else {
+        const pr = loadPriorities();
+        _checkedItems.forEach(name => { pr[name] = p; });
+        savePriorities(pr);
+        scheduleArchiveSync();
+      }
       if (_lastData) renderPage(_lastData);
-      scheduleArchiveSync();
     }, e.currentTarget._current);
   });
 
@@ -2785,6 +2931,8 @@ function computeBannerStats(items) {
     if (perkgMembers.has(item.list_item)) return false;
     if (_activePriority === 'watchlist') {
       if (!isWatchedItem(item.list_item)) return false;
+    } else if (activeListKey()) {
+      if (!itemInActiveList(item)) return false;
     } else {
       const p = getPriority(item.list_item);
       if (p === 'archive' || item.archived) {
@@ -3557,6 +3705,8 @@ function applyFilters(items, skipCol = null) {
     if (_perkgFilter === 'hidden' && item._isGroup) return false;
     // Watchlist filter: show only watchlisted items; bypass archive/priority checks
     if (_activePriority === 'watchlist') return isWatchedItem(item.list_item);
+    // A custom list is likewise its own view - membership is the whole filter.
+    if (activeListKey()) return itemInActiveList(item);
     const p = getPriority(item.list_item);
     // Archived items (by priority or item.archived flag): only visible in archive view.
     // In archive view, show ONLY those items and nothing else.
@@ -7149,7 +7299,13 @@ async function boot() {
       return g ? buildGroupHistoryItem(withGroupCounts(g)) : null;
     },
     onSaved: () => { if (_lastData) renderPage(_lastData); },
-    editable: true,
+    // Removing a price point is a destructive edit to shared data, so it is
+    // OWNER-ONLY like every other one. This was `true` unconditionally: a
+    // visitor's exclusions never reached the repo (no token, so the settings
+    // sync no-ops), but they silently rewrote the trend bars and $/kg ranges in
+    // that visitor's own browser, permanently and with no way back - the app
+    // showed them numbers it had quietly let them corrupt.
+    editable: !isViewerMode(),
   });
   initStickyHeader();
   initUploadModal();

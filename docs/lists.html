@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>My Lists - PriceWatch</title>
+  <meta name="theme-color" content="#00843D" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <script>
+  (function () {
+    try {
+      var t = localStorage.getItem('pw_theme') || 'light';
+      var dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+      if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+    } catch (e) {}
+  })();
+  </script>
+  <link rel="stylesheet" href="style.css?v=156" />
+  <style>
+    .lists-wrap { max-width: 900px; margin: 0 auto; padding: 22px 20px 80px; }
+    .lists-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; flex-wrap: wrap; }
+    .lists-head h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.2px; }
+    .lists-sub { font-size: 13px; color: var(--text-soft); margin-bottom: 18px; max-width: 68ch; }
+
+    .lists-section-t {
+      font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+      color: var(--text-soft); margin: 22px 0 8px;
+    }
+    .lists-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); overflow: hidden;
+    }
+    .lrow {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; border-bottom: 1px solid var(--border);
+    }
+    .lrow:last-child { border-bottom: none; }
+    .lrow-name { font-weight: 600; font-size: 14px; flex: 1; min-width: 0; }
+    .lrow-count {
+      font-size: 12px; color: var(--text-soft); font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .lbadge {
+      font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+      border-radius: 5px; padding: 2px 7px; white-space: nowrap;
+    }
+    .lbadge.excl { background: var(--ww-light); color: var(--ww); }
+    .lbadge.tag  { background: #EFE8F3; color: #6B4C82; }
+    .lrow-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .lbtn {
+      font: inherit; font-size: 12px; font-weight: 600; cursor: pointer;
+      background: var(--card); color: var(--text-mid);
+      border: 1px solid var(--border-strong); border-radius: 7px; padding: 5px 10px;
+    }
+    .lbtn:hover { background: var(--bg); color: var(--text); }
+    .lbtn.danger:hover { border-color: var(--coles); color: var(--coles); }
+    .lbtn.primary { background: var(--ww); border-color: var(--ww); color: #fff; }
+    .lbtn.primary:hover { background: #006B31; }
+    .lrow-builtin .lrow-name { color: var(--text-mid); }
+
+    .lists-empty { padding: 22px 14px; text-align: center; color: var(--text-soft); font-size: 13px; }
+
+    /* Member editor */
+    .members-head { display: flex; align-items: center; gap: 10px; margin: 22px 0 8px; flex-wrap: wrap; }
+    .members-head h2 { font-size: 16px; font-weight: 700; }
+    .members-tools { display: flex; gap: 8px; align-items: center; margin-left: auto; flex-wrap: wrap; }
+    #memberSearch {
+      font: inherit; font-size: 13px; padding: 7px 11px; border-radius: 8px;
+      border: 1px solid var(--border-strong); background: var(--card); color: var(--text);
+      min-width: 180px;
+    }
+    .member-list { max-height: 460px; overflow-y: auto; }
+    .mrow {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 14px; border-bottom: 1px solid var(--border); font-size: 13.5px;
+    }
+    .mrow:last-child { border-bottom: none; }
+    .mrow input { width: 16px; height: 16px; accent-color: var(--ww); cursor: pointer; flex-shrink: 0; }
+    .mrow label { flex: 1; min-width: 0; cursor: pointer; }
+    .mrow .mrow-in { font-size: 11px; color: var(--text-soft); white-space: nowrap; }
+
+    /* Create dialog */
+    .lform { display: grid; gap: 14px; }
+    .lform label.f { font-size: 12px; font-weight: 700; color: var(--text-mid); display: block; margin-bottom: 5px; }
+    .lform input[type=text] {
+      font: inherit; font-size: 14px; padding: 9px 11px; width: 100%;
+      border: 1px solid var(--border-strong); border-radius: 8px;
+      background: var(--card); color: var(--text); box-sizing: border-box;
+    }
+    .ovl-opt {
+      display: flex; gap: 10px; align-items: flex-start; padding: 11px 12px;
+      border: 1px solid var(--border); border-radius: 10px; cursor: pointer;
+    }
+    .ovl-opt + .ovl-opt { margin-top: 8px; }
+    .ovl-opt:hover { background: var(--bg); }
+    .ovl-opt input { margin-top: 2px; accent-color: var(--ww); flex-shrink: 0; }
+    .ovl-opt b { display: block; font-size: 13.5px; }
+    .ovl-opt span { font-size: 12px; color: var(--text-soft); }
+    #exclGroupWrap { margin-top: 10px; }
+    .form-note { font-size: 11.5px; color: var(--text-soft); margin-top: 5px; }
+
+    /* Owner-only: a visitor can look, but lists are shared data they can't publish. */
+    .pw-viewer .owner-only { display: none !important; }
+    .viewer-note {
+      display: none; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 11px 14px; font-size: 12.5px; color: var(--text-mid);
+      margin-bottom: 16px;
+    }
+    .pw-viewer .viewer-note { display: block; }
+  </style>
+</head>
+<body>
+
+<header data-page="lists"></header>
+<script src="header.js?v=25"></script>
+
+<div class="lists-wrap">
+  <div class="lists-head"><h1>My Lists</h1></div>
+  <p class="lists-sub">
+    Lists group products however you shop. An <strong>exclusive</strong> set makes a product pick
+    exactly one member - Weekly / Monthly / Rare works that way already. A <strong>tag</strong> lets a
+    product sit in as many lists as you like.
+  </p>
+
+  <div class="viewer-note">
+    You're viewing the read-only demo, so lists can't be created or changed here. What you see is the
+    owner's set-up.
+  </div>
+
+  <div class="lists-section-t">Frequency &middot; built in</div>
+  <div class="lists-card" id="builtinCard"></div>
+
+  <div class="lists-section-t" style="display:flex;align-items:center;gap:10px">
+    <span>Your lists</span>
+    <button class="lbtn primary owner-only" id="newListBtn" style="margin-left:auto">+ Create new list</button>
+  </div>
+  <div class="lists-card" id="customCard"></div>
+
+  <div id="memberEditor" style="display:none">
+    <div class="members-head">
+      <h2 id="memberTitle">Products</h2>
+      <div class="members-tools">
+        <input type="search" id="memberSearch" placeholder="Search products…" autocomplete="off" />
+        <button class="lbtn" id="memberOnlyIn">Show ticked only</button>
+        <button class="lbtn" id="memberClose">Done</button>
+      </div>
+    </div>
+    <div class="lists-card"><div class="member-list" id="memberList"></div></div>
+  </div>
+</div>
+
+<!-- Create / rename dialog -->
+<div class="modal-overlay" id="listModal">
+  <div class="modal">
+    <button class="modal-close" id="listModalClose">✕</button>
+    <h2 id="listModalTitle">Create a list</h2>
+    <div class="lform">
+      <div>
+        <label class="f" for="listName">List name</label>
+        <input type="text" id="listName" placeholder="e.g. BBQ night" />
+      </div>
+      <div id="overlapWrap">
+        <label class="f">Can a product be in this and another list at the same time?</label>
+        <label class="ovl-opt">
+          <input type="radio" name="ovl" value="tag" checked />
+          <span><b>Yes - a tag</b><span>A product can be in any number of tags. Good for "BBQ night", "Camping".</span></span>
+        </label>
+        <label class="ovl-opt">
+          <input type="radio" name="ovl" value="excl" />
+          <span><b>No - one at a time</b><span>Joins a set where each product picks exactly one member, like Weekly / Monthly / Rare.</span></span>
+        </label>
+        <div id="exclGroupWrap" style="display:none">
+          <label class="f" for="exclGroup">Which set?</label>
+          <input type="text" id="exclGroup" list="exclGroups" placeholder="e.g. stock level" />
+          <datalist id="exclGroups"></datalist>
+          <div class="form-note">Lists sharing a set name are mutually exclusive. A new name starts a new set.</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="listCancel">Cancel</button>
+      <button class="btn btn-primary" id="listSave">Create</button>
+    </div>
+  </div>
+</div>
+
+<script src="name_map.js?v=55"></script>
+<script src="utils.js?v=125"></script>
+<script>
+/* ── Manage Lists ────────────────────────────────────────────────────────────
+   Reads the same pw_lists_v1 the main page filters on (loadLists/saveLists live
+   in utils.js so both pages share one writer, including the exclusive-set
+   invariant in setListMembership).
+
+   The built-in frequency set is rendered from pw_priorities_v1 and is READ-ONLY
+   here on purpose: it stays the single source of frequency, and this page exists
+   to explain the whole system in one place, not to become a second way to edit
+   half of it. Change frequency where you always have - the table's Priority
+   control. */
+const BUILTIN = [
+  ['weekly',  'Weekly'],
+  ['monthly', 'Monthly'],
+  ['rare',    'Rare'],
+  ['archive', 'Archived'],
+];
+
+let _items = [];          // every product name the app knows about
+let _editingKey = null;   // list whose membership is open
+let _onlyTicked = false;
+let _modalMode = 'create';
+let _renameKey = null;
+
+const $ = (id) => document.getElementById(id);
+const viewer = () => isViewerMode();
+
+async function loadItems() {
+  try {
+    const r = await fetch(`data/latest.json?t=${Date.now()}`);
+    if (!r.ok) return;
+    const d = await r.json();
+    _items = (d.items || [])
+      .map(i => i.list_item)
+      .filter(n => !(typeof REMOVED_ITEMS !== 'undefined' && REMOVED_ITEMS.has(n)))
+      .sort((a, b) => shortName(a).localeCompare(shortName(b)));
+  } catch {}
+}
+
+function priorityCounts() {
+  let pr = {};
+  try { pr = JSON.parse(localStorage.getItem('pw_priorities_v1') || '{}'); } catch {}
+  const c = { weekly: 0, monthly: 0, rare: 0, archive: 0 };
+  for (const name of _items) {
+    // Same default the table applies to a product with no explicit frequency.
+    const p = pr[name] || 'weekly';
+    if (c[p] != null) c[p]++;
+  }
+  return c;
+}
+
+function renderBuiltins() {
+  const counts = priorityCounts();
+  $('builtinCard').innerHTML = BUILTIN.map(([k, label]) => `
+    <div class="lrow lrow-builtin">
+      <span class="lrow-name">${esc(label)}</span>
+      <span class="lbadge excl">Exclusive</span>
+      <span class="lrow-count">${counts[k] || 0}</span>
+      <span class="lrow-actions"><span class="lrow-count" style="opacity:.65">built in</span></span>
+    </div>`).join('');
+}
+
+function renderCustom() {
+  const all = loadLists();
+  const keys = Object.keys(all).sort((a, b) =>
+    (all[a].label || a).localeCompare(all[b].label || b));
+  const card = $('customCard');
+  if (!keys.length) {
+    card.innerHTML = `<div class="lists-empty">No lists yet. ${
+      viewer() ? '' : 'Use <strong>+ Create new list</strong> to make one.'}</div>`;
+    return;
+  }
+  card.innerHTML = keys.map(k => {
+    const l = all[k];
+    const n = (l.items || []).length;
+    const badge = l.exclusiveGroup
+      ? `<span class="lbadge excl" title="One at a time, within the &quot;${escAttr(l.exclusiveGroup)}&quot; set">Exclusive</span>`
+      : `<span class="lbadge tag">Tag</span>`;
+    return `
+      <div class="lrow" data-key="${escAttr(k)}">
+        <span class="lrow-name">${esc(l.label || k)}</span>
+        ${badge}
+        <span class="lrow-count">${n} item${n === 1 ? '' : 's'}</span>
+        <span class="lrow-actions">
+          <button class="lbtn" data-act="edit">Edit products</button>
+          <button class="lbtn owner-only" data-act="rename">Rename</button>
+          <button class="lbtn danger owner-only" data-act="delete">Delete</button>
+        </span>
+      </div>`;
+  }).join('');
+}
+
+function renderMembers() {
+  if (!_editingKey) { $('memberEditor').style.display = 'none'; return; }
+  const all = loadLists();
+  const list = all[_editingKey];
+  if (!list) { _editingKey = null; $('memberEditor').style.display = 'none'; return; }
+  $('memberEditor').style.display = '';
+  $('memberTitle').textContent = `Products in "${list.label || _editingKey}"`;
+  const q = ($('memberSearch').value || '').toLowerCase().trim();
+  const inList = new Set(list.items || []);
+  const rows = _items.filter(n => {
+    if (_onlyTicked && !inList.has(n)) return false;
+    return !q || shortName(n).toLowerCase().includes(q) || n.toLowerCase().includes(q);
+  });
+  // Where else this product already sits, so an exclusive move is not a surprise.
+  const others = (n) => Object.entries(all)
+    .filter(([k, l]) => k !== _editingKey && (l.items || []).includes(n))
+    .map(([, l]) => l.label).join(', ');
+  $('memberList').innerHTML = rows.length ? rows.map(n => {
+    const o = others(n);
+    return `<div class="mrow">
+      <input type="checkbox" id="m_${escAttr(n)}" data-item="${escAttr(n)}"
+             ${inList.has(n) ? 'checked' : ''} ${viewer() ? 'disabled' : ''}>
+      <label for="m_${escAttr(n)}">${esc(shortName(n))}</label>
+      ${o ? `<span class="mrow-in">in ${esc(o)}</span>` : ''}
+    </div>`;
+  }).join('') : `<div class="lists-empty">No products match.</div>`;
+}
+
+function renderAll() { renderBuiltins(); renderCustom(); renderMembers(); }
+
+/* ── Create / rename dialog ── */
+function openListModal(mode, key) {
+  _modalMode = mode; _renameKey = key || null;
+  const all = loadLists();
+  $('listModalTitle').textContent = mode === 'rename' ? 'Rename list' : 'Create a list';
+  $('listSave').textContent = mode === 'rename' ? 'Save' : 'Create';
+  $('listName').value = mode === 'rename' ? (all[key]?.label || '') : '';
+  // Overlap is fixed once products are filed against it - changing it later would
+  // silently have to evict members from siblings, so rename edits the name only.
+  $('overlapWrap').style.display = mode === 'rename' ? 'none' : '';
+  const groups = [...new Set(Object.values(all).map(l => l.exclusiveGroup).filter(Boolean))];
+  $('exclGroups').innerHTML = groups.map(g => `<option value="${escAttr(g)}">`).join('');
+  $('listModal').classList.add('show');
+  setTimeout(() => $('listName').focus(), 30);
+}
+function closeListModal() { $('listModal').classList.remove('show'); }
+
+function saveFromModal() {
+  const label = $('listName').value.trim();
+  if (!label) { alert('Give the list a name.'); return; }
+  const all = loadLists();
+  if (_modalMode === 'rename') {
+    if (all[_renameKey]) { all[_renameKey].label = label; saveLists(all); }
+  } else {
+    const excl = document.querySelector('input[name=ovl]:checked')?.value === 'excl';
+    const grp = $('exclGroup').value.trim();
+    if (excl && !grp) { alert('Name the set this list belongs to (e.g. "stock level").'); return; }
+    const key = listKeyFor(label, all);
+    all[key] = { label, exclusiveGroup: excl ? grp : null, items: [] };
+    saveLists(all);
+    _editingKey = key;    // straight into picking its products
+  }
+  closeListModal();
+  renderAll();
+}
+
+/* ── Wiring ── */
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadItems();
+  renderAll();
+
+  $('newListBtn').addEventListener('click', () => openListModal('create'));
+  $('listModalClose').addEventListener('click', closeListModal);
+  $('listCancel').addEventListener('click', closeListModal);
+  $('listSave').addEventListener('click', saveFromModal);
+  $('listName').addEventListener('keydown', e => { if (e.key === 'Enter') saveFromModal(); });
+  document.querySelectorAll('input[name=ovl]').forEach(r =>
+    r.addEventListener('change', () => {
+      $('exclGroupWrap').style.display =
+        document.querySelector('input[name=ovl]:checked').value === 'excl' ? '' : 'none';
+    }));
+
+  $('customCard').addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-act]');
+    if (!btn) return;
+    const key = btn.closest('.lrow')?.dataset.key;
+    if (!key) return;
+    const all = loadLists();
+    if (btn.dataset.act === 'edit') {
+      _editingKey = key; _onlyTicked = false; $('memberSearch').value = '';
+      renderMembers();
+      $('memberEditor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (btn.dataset.act === 'rename') {
+      openListModal('rename', key);
+    } else if (btn.dataset.act === 'delete') {
+      const l = all[key];
+      const n = (l.items || []).length;
+      // Deleting a list is safe by construction - membership is the only thing
+      // stored on it. Say so, so it doesn't read like deleting the products.
+      if (!confirm(`Delete the list "${l.label || key}"?\n\n${
+        n ? `Its ${n} product${n === 1 ? '' : 's'} stay in your list - they just stop being tagged.`
+          : 'It has no products in it.'}`)) return;
+      delete all[key];
+      saveLists(all);
+      if (_editingKey === key) _editingKey = null;
+      renderAll();
+    }
+  });
+
+  $('memberList').addEventListener('change', (e) => {
+    const cb = e.target.closest('input[type=checkbox][data-item]');
+    if (!cb || !_editingKey) return;
+    setListMembership(cb.dataset.item, _editingKey, cb.checked);
+    renderCustom();
+    renderMembers();   // re-render: an exclusive tick changes other lists' rows
+  });
+  $('memberSearch').addEventListener('input', renderMembers);
+  $('memberOnlyIn').addEventListener('click', () => {
+    _onlyTicked = !_onlyTicked;
+    $('memberOnlyIn').textContent = _onlyTicked ? 'Show all' : 'Show ticked only';
+    renderMembers();
+  });
+  $('memberClose').addEventListener('click', () => { _editingKey = null; renderMembers(); });
+});
+</script>
+</body>
+</html>
