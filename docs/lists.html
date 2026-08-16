@@ -15,12 +15,14 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=156" />
+  <link rel="stylesheet" href="style.css?v=157" />
   <style>
     .lists-wrap { max-width: 900px; margin: 0 auto; padding: 22px 20px 80px; }
     .lists-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; flex-wrap: wrap; }
     .lists-head h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.2px; }
-    .lists-sub { font-size: 13px; color: var(--text-soft); margin-bottom: 18px; max-width: 68ch; }
+    /* No max-width: the 900px page already sets the measure, and a 68ch cap on
+       top of it broke this two-sentence intro onto a third line for no reason. */
+    .lists-sub { font-size: 13px; color: var(--text-soft); margin-bottom: 18px; }
 
     .lists-section-t {
       font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
@@ -320,10 +322,13 @@ function openListModal(mode, key) {
   $('overlapWrap').style.display = mode === 'rename' ? 'none' : '';
   const groups = [...new Set(Object.values(all).map(l => l.exclusiveGroup).filter(Boolean))];
   $('exclGroups').innerHTML = groups.map(g => `<option value="${escAttr(g)}">`).join('');
-  $('listModal').classList.add('show');
+  // '.open', not '.show' - style.css gates .modal-overlay on .open, so the
+  // dialog was being "opened" into a class nothing styled and the button looked
+  // dead. Same class every other modal in the app uses.
+  $('listModal').classList.add('open');
   setTimeout(() => $('listName').focus(), 30);
 }
-function closeListModal() { $('listModal').classList.remove('show'); }
+function closeListModal() { $('listModal').classList.remove('open'); }
 
 function saveFromModal() {
   const label = $('listName').value.trim();
