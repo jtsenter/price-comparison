@@ -2450,9 +2450,7 @@ function renderListPills() {
     btn.className = 'priority-pill list-pill' + (_activePriority === LIST_FILTER_PREFIX + k ? ' active' : '');
     btn.dataset.priority = LIST_FILTER_PREFIX + k;
     btn.textContent = all[k].label || k;
-    btn.title = all[k].exclusiveGroup
-      ? `List "${all[k].label || k}" - one at a time within "${all[k].exclusiveGroup}"`
-      : `List "${all[k].label || k}" - a tag, products can be in several`;
+    btn.title = `Show only the products in "${all[k].label || k}"`;
     btn.addEventListener('click', () => applyPriorityFilter(btn.dataset.priority, btn));
     host.appendChild(btn);
   }

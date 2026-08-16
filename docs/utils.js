@@ -693,24 +693,27 @@ function isViewerMode() {
   } catch { return true; }   // storage blocked → assume viewer, the safe side
 }
 
-/* ── Custom lists ────────────────────────────────────────────────────────────
-   User-made product lists, ADDITIVE to the weekly/monthly/rare frequency map -
-   pw_priorities_v1 is untouched and still the single source of frequency.
+/* ── My lists ────────────────────────────────────────────────────────────────
+   There are exactly TWO kinds of grouping in this app, and they are different
+   things rather than two flavours of one thing:
+
+     FREQUENCY  Weekly / Monthly / Rare / Archived. Built in, fixed, and
+                single-select - a product has exactly one. Lives in
+                pw_priorities_v1 and is NOT duplicated here; two stores for
+                frequency would be a second source of truth for it.
+     MY LISTS   Anything you make yourself. Always OVERLAPPING - a product can
+                sit in as many as you like, and being in one never affects any
+                other.
+
+   So a list needs no mode, no set to join and no question at creation: the only
+   thing that varies between two of your lists is the name and the members.
+   (An earlier version let a custom list opt into mutually-exclusive behaviour.
+   That made every list carry a concept only the built-in four actually use, and
+   asked a question at creation that has one sensible answer.)
 
    Shape (pw_lists_v1 in the browser, mirrored to user_settings.json .lists):
-     { "<key>": { label, exclusiveGroup: string|null, items: [productName, …] } }
+     { "<key>": { label, items: [productName, …] } }
 
-   exclusiveGroup is the whole model in one field:
-     null      -> a free TAG. A product may be in any number of these.
-     "<name>"  -> a member of a mutually-exclusive SET. Putting a product into
-                  one member removes it from its siblings, so it is always in
-                  exactly one - the same guarantee Weekly/Monthly/Rare gives.
-
-   Weekly/Monthly/Rare/Archived are deliberately NOT stored here. They are the
-   built-in exclusive set and keep living in pw_priorities_v1; listsUi() below
-   presents them alongside these so the system reads as one thing. Storing them
-   twice would create a second source of truth for frequency, which is exactly
-   the bug class this project keeps hitting.
    Membership is a plain array, not the add/remove diff perkgCats uses: a
    category's baseline comes from fuzzy name matching and so needs to record
    removals, whereas a list is only ever what was explicitly ticked. */
@@ -744,22 +747,15 @@ function listsForItem(name) {
   return Object.keys(all).filter(k => (all[k].items || []).includes(name));
 }
 
-// Set or clear membership. For a member of an exclusive set, adding also pulls
-// the product out of its siblings - that invariant is enforced HERE, in the one
-// writer, rather than at each of the three call sites that can change it.
+// Set or clear membership. Lists overlap freely, so this touches ONLY the list
+// named - no sibling ever changes as a side effect. Still the single writer, so
+// the three call sites (Manage page, bulk bar, delete purge) can't diverge.
 function setListMembership(name, key, on) {
   const all = loadLists();
   const list = all[key];
   if (!list) return all;
   list.items = list.items || [];
   if (on) {
-    if (list.exclusiveGroup) {
-      for (const [k, l] of Object.entries(all)) {
-        if (k !== key && l.exclusiveGroup === list.exclusiveGroup) {
-          l.items = (l.items || []).filter(n => n !== name);
-        }
-      }
-    }
     if (!list.items.includes(name)) list.items.push(name);
   } else {
     list.items = list.items.filter(n => n !== name);
