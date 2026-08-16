@@ -4051,9 +4051,26 @@ function buildGroupHistoryItem(group) {
       // the total and the basket use, or the history chart contradicts them.
       // It also rescues the precision - at per-ONE-piece the .toFixed(2) below
       // flattened every wipe in the category to "$0.03".
-      const ratio = group._perPack
-        ? (packCountOf(m.list_item) > 0 ? qtyPiecesPer(group) / packCountOf(m.list_item) : null)
-        : (group._sticker ? 1 : perKgRatio(isWw ? m.woolworths : m.coles));
+      // A WEIGHED group must be scaled to its gram quote here for exactly the
+      // reason the per-piece branch is scaled to its piece quote - see the
+      // "today" row below, which goes through metricShown() and therefore IS
+      // quoted per gramQuote. Leaving the series at raw $/kg made a /100g
+      // category (Aero Peppermint, Cadbury Dairy Milk) show today at $4.24 and
+      // every earlier date at $42.40: the same price reading as a 10x overnight
+      // jump. The per-piece half of this bug was already found and fixed; the
+      // weighed half was missed because $/kg is the default and most categories
+      // never override it.
+      let ratio;
+      if (group._perPack) {
+        ratio = packCountOf(m.list_item) > 0 ? qtyPiecesPer(group) / packCountOf(m.list_item) : null;
+      } else if (group._sticker) {
+        ratio = 1;   // sticker groups compare raw pack prices - nothing to convert
+      } else {
+        const kgR = perKgRatio(isWw ? m.woolworths : m.coles);
+        // Guarded, not inlined: `null * 0.1` is 0, which would sail past the
+        // `ratio == null` check below and plot every point at $0.00.
+        ratio = kgR == null ? null : kgR * (weightQuoteOf(group) / 1000);
+      }
       if (ratio == null) return [];
       const ex = exclSetsFor(m.list_item)[isWw ? 'ww' : 'co'];
       const raw = isWw ? [...(m.price_history || []), ...(m.ww_price_history || [])]
@@ -4095,8 +4112,12 @@ function buildGroupHistoryItem(group) {
     // What the plotted numbers MEAN. A per-piece category's history is per
     // `quote` pieces, so the modal has to say so - "$10.93" with no unit is
     // indistinguishable from a pack price.
+    // Reads the category's own gram quote instead of asserting "$/kg". The
+    // modal titled a /100g category "($/kg)" while plotting /100g numbers, so
+    // the one label that was supposed to say what the numbers mean was the
+    // thing telling you they meant something else.
     _unitLabel: group._perPack ? `per ${qtyPiecesPer(group)} pcs`
-              : (group._sticker ? null : '$/kg'),
+              : (group._sticker ? null : '$' + weightQuoteSuffix(weightQuoteOf(group))),
     // date → winning source, for the modal's per-point exclusion buttons
     _wwMeta: new Map(wwSeries.map(e => [e.date, e])),
     _coMeta: new Map(coSeries.map(e => [e.date, e])),
