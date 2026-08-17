@@ -262,6 +262,14 @@
     .sl-chg-col h3 { font-size: 12px; font-weight: 700; margin: 0 0 8px; }
     .sl-chg-col.ww h3 { color: var(--ww); }
     .sl-chg-col.coles h3 { color: var(--coles); }
+    .sl-chg-col.third h3 { color: var(--third, #4338CA); }
+    /* Which outside shop a line belongs to. Sized to sit on the text baseline of
+       the product name beside it rather than stretching the row. */
+    .chg-store {
+      flex: 0 0 auto; width: 14px; height: 14px; border-radius: 4px; margin-right: 6px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 800; color: #fff; background: var(--third, #4338CA);
+    }
     .sl-chg-list { list-style: none; margin: 0; padding: 0; max-height: 340px; overflow-y: auto; }
     .sl-chg-list li { font-size: 12px; padding: 4px 0; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
     .sl-chg-list li:last-child { border-bottom: none; }
@@ -296,8 +304,13 @@
     .sl-chg-chip.quiet { font-weight: 600; color: var(--text-soft); background: transparent; }
     .sl-chg-run-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
     .sl-chg-run-body { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .sl-chg-run-body.has-third { grid-template-columns: 1fr 1fr 1fr; }
     .sl-chg-col { min-width: 0; } /* grid item too - else it won't shrink below its list's content width */
-    @media (max-width: 640px) { .sl-chg-run-body { grid-template-columns: 1fr; } }
+    /* .has-third listed explicitly: it is a more specific selector, so a bare
+       .sl-chg-run-body rule in here would lose to it and the three columns would
+       stay side by side on a phone. */
+    @media (max-width: 900px) { .sl-chg-run-body.has-third { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px) { .sl-chg-run-body, .sl-chg-run-body.has-third { grid-template-columns: 1fr; } }
     .chg-up   { color: var(--coles); }  /* dearer - red family */
     .chg-down { color: var(--ww); }     /* cheaper - green family */
     .chg-arrow { font-size: 10px; }
@@ -440,7 +453,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=128"></script>
+<script src="utils.js?v=129"></script>
 <script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
@@ -840,8 +853,13 @@ function paintChangeChart(days) {
   // ▲/▼ glyphs carry it without borrowing the store palette.
   const series = [...days].reverse().map(([d, b]) => ({
     d, ww: b.ww.up + b.ww.down, co: b.coles.up + b.coles.down,
+    third: b.third ? b.third.up + b.third.down : 0,
   }));
-  const max = Math.max(...series.map(s => Math.max(s.ww, s.co)), 1);
+  // The outside-shops line joins only once there is one, in the indigo those
+  // shops already wear in the price table's third column - never green or red,
+  // which mean Woolworths and Coles on every page of this app.
+  const hasThird = series.some(s => s.third > 0);
+  const max = Math.max(...series.map(s => Math.max(s.ww, s.co, s.third)), 1);
   const W = 900, H = 140, padL = 30, padR = 8, padT = 10, padB = 16;
   const plotH = H - padT - padB;
   const n = series.length;
@@ -858,6 +876,7 @@ function paintChangeChart(days) {
       isNaN(label) ? s.d : label.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short' }),
       'Woolworths ' + s.ww + ' change' + (s.ww === 1 ? '' : 's'),
       'Coles ' + s.co + ' change' + (s.co === 1 ? '' : 's'),
+      ...(hasThird ? ['Other stores ' + s.third + ' change' + (s.third === 1 ? '' : 's')] : []),
     ].join(String.fromCharCode(10));
     return `<g><title>${escapeHtml(title)}</title>` +
       `<rect x="${(x(i) - 6).toFixed(1)}" y="${padT}" width="12" height="${plotH.toFixed(1)}" fill="transparent"/></g>`;
@@ -886,13 +905,15 @@ function paintChangeChart(days) {
         ${grid}
         <path d="${path('ww')}" fill="none" stroke="var(--ww,#00843D)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
         <path d="${path('co')}" fill="none" stroke="var(--coles,#CC0000)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
-        ${dots('ww', 'var(--ww,#00843D)')}${dots('co', 'var(--coles,#CC0000)')}
+        ${hasThird ? `<path d="${path('third')}" fill="none" stroke="var(--third,#4338CA)" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>` : ''}
+        ${dots('ww', 'var(--ww,#00843D)')}${dots('co', 'var(--coles,#CC0000)')}${hasThird ? dots('third', 'var(--third,#4338CA)') : ''}
         ${hover}
       </svg>
       <div class="sl-chg-chart-axis"><span>${endLabel(first)}</span><span>${endLabel(last)}</span></div>
       <div class="sl-chart-legend">
         <span><i style="background:var(--ww,#00843D)"></i> Woolworths</span>
         <span><i style="background:var(--coles,#CC0000)"></i> Coles</span>
+        ${hasThird ? '<span><i style="background:var(--third,#4338CA)"></i> Other stores</span>' : ''}
       </div>
     </div>`;
 }
@@ -1183,21 +1204,27 @@ function fmtDay(d) {
 function paintChangeSummary(q) {
   const host = $('slChgSummary');
   if (!host) return;
-  const byDay = new Map();   // 'YYYY-MM-DD' -> {ww:{up,down}, coles:{up,down}}
+  // 'YYYY-MM-DD' -> {ww:{up,down}, coles:{up,down}, third:{up,down}}
+  // `third` is every shop that is neither Woolworths nor Coles, pooled into one
+  // bucket: they are alternatives to the weekly shop rather than a third weekly
+  // shop, and one column per retailer would cost the table its width for rows
+  // that are mostly empty. The per-shop breakdown lives in the run detail below.
+  const byDay = new Map();
   for (const run of _changeArchive) {
     const day = localDay(run.date);
     if (!day) continue;
-    if (!byDay.has(day)) byDay.set(day, { ww: { up: 0, down: 0 }, coles: { up: 0, down: 0 } });
+    if (!byDay.has(day)) byDay.set(day, { ww: { up: 0, down: 0 }, coles: { up: 0, down: 0 }, third: { up: 0, down: 0 } });
     const bucket = byDay.get(day);
-    for (const [key, list] of [['ww', run.ww], ['coles', run.coles]]) {
+    for (const [key, list] of [['ww', run.ww], ['coles', run.coles], ['third', run.third]]) {
       for (const c of (list || [])) {
         if (q && !String(c.item).toLowerCase().includes(q)) continue;
         if (+c.new > +c.old) bucket[key].up++; else if (+c.new < +c.old) bucket[key].down++;
       }
     }
   }
+  const dayTotal = b => b.ww.up + b.ww.down + b.coles.up + b.coles.down + b.third.up + b.third.down;
   const days = [...byDay.entries()]
-    .filter(([, b]) => b.ww.up + b.ww.down + b.coles.up + b.coles.down > 0)
+    .filter(([, b]) => dayTotal(b) > 0)
     .sort((a, b) => b[0].localeCompare(a[0]));   // newest first
   if (!days.length) { host.innerHTML = ''; paintChangeChart([]); return; }
 
@@ -1261,8 +1288,14 @@ function paintChangeSummary(q) {
         (b.up ? `<span class="chg-up">▲${b.up}</span>` : '') +
       `</span>`;
   };
-  const tot = { ww: { up: 0, down: 0 }, coles: { up: 0, down: 0 } };
-  days.forEach(([, b]) => { tot.ww.up += b.ww.up; tot.ww.down += b.ww.down; tot.coles.up += b.coles.up; tot.coles.down += b.coles.down; });
+  const tot = { ww: { up: 0, down: 0 }, coles: { up: 0, down: 0 }, third: { up: 0, down: 0 } };
+  days.forEach(([, b]) => {
+    for (const k of ['ww', 'coles', 'third']) { tot[k].up += b[k].up; tot[k].down += b[k].down; }
+  });
+  // The outside-shop column only exists once there is something in it. A column
+  // of dashes on a page that has never priced a third store is noise, and the
+  // archive predates third-store logging entirely, so most rows would be blank.
+  const anyThird = tot.third.up + tot.third.down > 0;
 
   // Price movement over time. Bars, not a line: these are counts per day, and a
   // line would imply a continuous value between scrape days. Rises stack above
@@ -1277,6 +1310,8 @@ function paintChangeSummary(q) {
           <th>Day</th>
           <th><span class="store-chip ww sm">W</span> Woolworths</th>
           <th><span class="store-chip coles sm">C</span> Coles</th>
+          ${anyThird ? `<th title="Every shop that is neither Woolworths nor Coles - ${escapeHtml(thirdStoreNames())}">
+            <span class="store-chip third sm">＋</span> Other stores</th>` : ''}
           <th>Total</th>
           <th title="Distinct products covered that day, counted once even when the day had several scrapes (×N marks those)">Products</th>
           <th title="How many of those were archived items">Archived</th>
@@ -1287,7 +1322,8 @@ function paintChangeSummary(q) {
           <td class="sl-sum-dow">${weekdayLabel(d)}</td>
           <td>${cell(b.ww)}</td>
           <td>${cell(b.coles)}</td>
-          <td><strong>${b.ww.up + b.ww.down + b.coles.up + b.coles.down}</strong></td>
+          ${anyThird ? `<td>${cell(b.third)}</td>` : ''}
+          <td><strong>${dayTotal(b)}</strong></td>
           ${effortCells(d)}
         </tr>`).join('')}</tbody>
         ${days.length > 1 ? `<tfoot><tr>
@@ -1295,7 +1331,8 @@ function paintChangeSummary(q) {
           <td></td>
           <td>${cell(tot.ww)}</td>
           <td>${cell(tot.coles)}</td>
-          <td><strong>${tot.ww.up + tot.ww.down + tot.coles.up + tot.coles.down}</strong></td>
+          ${anyThird ? `<td>${cell(tot.third)}</td>` : ''}
+          <td><strong>${dayTotal(tot)}</strong></td>
           <td colspan="3" class="sl-sum-rate">${(() => {
             // Seconds per product, across every timed run - the number that
             // answers "how long would 1000 products take?".
@@ -1315,7 +1352,15 @@ function paintChangeArchive(q) {
   const fmtP = v => '$' + (+v).toFixed(2);
   const chgLine = c => {
     const up = c.new > c.old;
-    return `<li><span class="chg-name" title="${escapeHtml(c.item)}">${escapeHtml(shortName(c.item))}</span>` +
+    // Outside-shop moves are pooled in one column, so each line has to say WHICH
+    // shop - a bare "$5.00 → $4.50" under "Other stores" names no retailer at
+    // all. The Woolworths and Coles columns need no such badge: the heading is
+    // the shop.
+    const meta = c.store ? THIRD_STORES[c.store] : null;
+    const badge = meta
+      ? `<span class="chg-store" style="${thirdChipStyle(c.store)}" title="${escapeHtml(meta.label)}">${escapeHtml(meta.letter)}</span>`
+      : '';
+    return `<li>${badge}<span class="chg-name" title="${escapeHtml((meta ? meta.label + ' - ' : '') + c.item)}">${escapeHtml(shortName(c.item))}</span>` +
       `<span class="chg-prices">${fmtP(c.old)} → <b class="${up ? 'chg-up' : 'chg-down'}">${fmtP(c.new)}</b> ` +
       `<span class="chg-arrow">${up ? '▲' : '▼'}</span></span></li>`;
   };
@@ -1329,10 +1374,10 @@ function paintChangeArchive(q) {
   // actually match are useful, so zero-match runs drop out then.
   const runs = [..._changeArchive].reverse().map(run => {
     const f = arr => (arr || []).filter(c => !q || String(c.item).toLowerCase().includes(q));
-    const ww = f(run.ww), coles = f(run.coles);
-    const quiet = !(run.ww || []).length && !(run.coles || []).length;
-    return { date: run.date, trigger: run.trigger, ww, coles, quiet };
-  }).filter(r => q ? (r.ww.length || r.coles.length) : true);
+    const ww = f(run.ww), coles = f(run.coles), third = f(run.third);
+    const quiet = !(run.ww || []).length && !(run.coles || []).length && !(run.third || []).length;
+    return { date: run.date, trigger: run.trigger, ww, coles, third, quiet };
+  }).filter(r => q ? (r.ww.length || r.coles.length || r.third.length) : true);
 
   const host = $('slChangeRuns');
   if (!_changeArchive.length) {
@@ -1346,11 +1391,12 @@ function paintChangeArchive(q) {
         <span class="sl-run-date">${fmtDate(r.date)}<span class="rel">${timeAgo(r.date)}</span></span>
         <!-- Plain words, not "Δ N": the delta glyph is the same upward triangle
              as the ▲ that means "this price went up" a few pixels below it. -->
-        <span class="sl-chg-chip${r.quiet ? ' quiet' : ''}">${r.quiet ? 'no price moves' : (r.ww.length + r.coles.length) + ' changed'}</span>
+        <span class="sl-chg-chip${r.quiet ? ' quiet' : ''}">${r.quiet ? 'no price moves' : (r.ww.length + r.coles.length + r.third.length) + ' changed'}</span>
       </div>
-      ${r.quiet ? '' : `<div class="sl-chg-run-body">
+      ${r.quiet ? '' : `<div class="sl-chg-run-body${r.third.length ? ' has-third' : ''}">
         ${col('Woolworths', 'ww', r.ww)}
         ${col('Coles', 'coles', r.coles)}
+        ${r.third.length ? col('Other stores', 'third', r.third) : ''}
       </div>`}
     </div>`).join('');
 }
@@ -1364,7 +1410,7 @@ function changeRowsForExport() {
   const rows = [];
   for (const run of _changeArchive) {
     const when = new Date(run.date);
-    for (const [store, list] of [['Woolworths', run.ww], ['Coles', run.coles]]) {
+    for (const [store, list] of [['Woolworths', run.ww], ['Coles', run.coles], [null, run.third]]) {
       for (const c of (list || [])) {
         rows.push([
           { t: 'd', v: when },
@@ -1372,7 +1418,10 @@ function changeRowsForExport() {
           shortName(c.item),
           { t: 'money', v: +c.old },
           { t: 'money', v: +c.new },
-          store,
+          // Outside-shop rows name their OWN retailer - a "Store" column reading
+          // "Other stores" for five different shops would make the export
+          // useless for exactly the comparison it exists to support.
+          store || THIRD_STORES[c.store]?.label || c.store || 'Other store',
         ]);
       }
     }
@@ -1508,7 +1557,8 @@ async function load() {
   // is the number worth glancing at. All-time still lives in the table's footer.
   {
     const lastRun = (changes || [])[(changes || []).length - 1];
-    const lastCount = lastRun ? (lastRun.ww || []).length + (lastRun.coles || []).length : 0;
+    const lastCount = lastRun
+      ? (lastRun.ww || []).length + (lastRun.coles || []).length + (lastRun.third || []).length : 0;
     const el = $('slCntChg');
     el.textContent = lastCount;
     el.title = `${lastCount} price change${lastCount === 1 ? '' : 's'} in the most recent scrape`;
@@ -1516,6 +1566,7 @@ async function load() {
   renderTrendChart(fullLog);
   $('slInfoNotes').innerHTML = `
     <li>Only full scrapes (scheduled or manual "Update Prices") are logged here - single-item refreshes from the ✎ Edit dialog aren't.</li>
+    <li><strong>Other stores</strong> pools every shop that is neither Woolworths nor Coles (${escapeHtml(thirdStoreNames())}); each line names its own. They are refreshed as the last leg of the same scrape, so their moves are filed against that run. A shop the refresh couldn't reach logs no change at all rather than a false "held" - "unreachable" is recorded on the price itself, in the ＋ column of the main table.</li>
     <li>The <strong>↻</strong> beside the newest run's miss count re-scrapes <em>only</em> the products that run missed - a few dozen requests instead of a full ~210-product sweep. It's logged as a <strong>retry misses</strong> run, and because it only ever attempts known failures its match rate is left out of the summary above and the chart.</li>
     <li>A missed item's price isn't blank on the main site - the last known price carries forward, so a chronic miss can look fine there while quietly going stale. This page is the place to catch that.</li>
     <li><strong>no results</strong> = the search/page fetch returned nothing this run (usually the store blocking the runner, or its page layout changing). <strong>no match</strong> = we got candidates back but none matched the product name closely enough.</li>

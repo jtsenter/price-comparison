@@ -18,7 +18,7 @@ Parsing is per-store, pure, and self-checked (third_stores_selfcheck.py):
   big_w / priceline - JSON-LD Product offers, then itemprop/og meta fallback
 """
 import asyncio, json, os, re, sys
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 
 DATA_DIR   = os.path.join(os.path.dirname(__file__), "..", "docs", "data")
 THIRD_PATH = os.path.join(DATA_DIR, "third_store.json")
@@ -107,6 +107,66 @@ PARSERS = {
 }
 
 
+SAME_RUN_HOURS = 2   # see _record_third_changes
+
+
+def _belongs_to_run(iso: str, now=None) -> bool:
+    """Was this price_changes entry written by the scrape leg of the run we are
+    finishing? Timestamp proximity is the only signal available - the entry
+    carries no run id. Anything unparseable is a NO, so a malformed date can
+    never cause someone else's run to be edited."""
+    try:
+        when = datetime.fromisoformat(str(iso))
+    except (TypeError, ValueError):
+        return False
+    if when.tzinfo is None:
+        when = when.replace(tzinfo=timezone.utc)
+    now = now or datetime.now(timezone.utc)
+    return timedelta(0) <= now - when <= timedelta(hours=SAME_RUN_HOURS)
+
+
+def _record_third_changes(changes: list, now=None) -> None:
+    """Fold outside-store price moves into price_changes.json, so the Price
+    changes tab covers every shop rather than only the two supermarkets.
+
+    Written onto the run that just finished rather than appended as a run of its
+    own: scrape.yml calls this script as the LAST LEG of the same workflow run,
+    so a separate entry would draw a second, almost-always-quiet "run" in the UI
+    that never happened.
+    ponytail: "the same run" is a 2-hour window on the newest entry, because the
+    entry carries no run id. Run this script standalone more than 2h after a
+    scrape and it files its own entry instead - the honest fallback, not a wrong
+    attribution. The upgrade path is threading a run id through scrape.yml.
+
+    Unlike the supermarket legs, a refresh that moved nothing writes NOTHING.
+    The quiet-runs-are-data argument doesn't hold here: an outside price is
+    hand-seeded and often unreachable, so "no change" mostly means "could not
+    check", which is already recorded per entry as `status`."""
+    if not changes:
+        return
+    path = os.path.join(DATA_DIR, "price_changes.json")
+    log = []
+    if os.path.exists(path):
+        try:
+            with open(path, encoding="utf-8") as f:
+                log = json.load(f)
+        except Exception:
+            log = []
+    if not isinstance(log, list):
+        log = []
+    last = log[-1] if log else None
+    if isinstance(last, dict) and "third" not in last and _belongs_to_run(last.get("date"), now):
+        last["third"] = changes
+    else:
+        log.append({
+            "date": (now or datetime.now(timezone.utc)).isoformat(),
+            "trigger": "third_stores",
+            "ww": [], "coles": [], "third": changes,
+        })
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(log, f, separators=(",", ":"))
+
+
 def parse_price_for(store: str, html: str):
     for fn in PARSERS.get(store, ()):
         p = fn(html)
@@ -130,6 +190,7 @@ async def refresh() -> int:
     from playwright.async_api import async_playwright
     today = date.today().isoformat()
     updated = failed = 0
+    changes: list = []   # {store,item,old,new} -> price_changes.json
 
     async with async_playwright() as pw:
         ctx = await pw.chromium.launch_persistent_context(PROFILE_DIR, headless=True)
@@ -152,6 +213,11 @@ async def refresh() -> int:
                 e.pop("status", None)
                 e.pop("note", None)
                 updated += 1
+                # A first-ever price is not a "change" - there is nothing it
+                # moved from, and recording one would draw a phantom drop from $0.
+                if old is not None and round(float(old), 2) != round(price, 2):
+                    changes.append({"store": store, "item": e.get("name", ""),
+                                    "old": round(float(old), 2), "new": round(price, 2)})
                 print(f"  [{store}] {e.get('name','?')[:40]}: "
                       f"{'$%.2f' % old if old else 'no price'} -> ${price:.2f}")
             else:
@@ -165,7 +231,9 @@ async def refresh() -> int:
     with open(THIRD_PATH, "w", encoding="utf-8", newline="\n") as f:
         json.dump(doc, f, indent=2, ensure_ascii=False)
         f.write("\n")
-    print(f"third_stores: {updated} updated, {failed} unreachable of {len(entries)}")
+    _record_third_changes(changes)
+    print(f"third_stores: {updated} updated, {failed} unreachable of {len(entries)}"
+          f", {len(changes)} price change(s) logged")
     return 0
 
 
