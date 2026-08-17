@@ -1529,7 +1529,16 @@ const THIRD_STORES = {
   priceline:         { letter: 'P', label: 'Priceline',         bg: '#E5006D', fg: '#ffffff' },
   big_w:             { letter: 'B', label: 'Big W',             bg: '#0072CE', fg: '#ffffff' },
   aldi:              { letter: 'A', label: 'ALDI',              bg: '#00317F', fg: '#ffffff' },
+  kmart:             { letter: 'K', label: 'Kmart',             bg: '#E4002B', fg: '#ffffff' },
 };
+
+// The supported-shops list, in prose. Spelled FROM THIRD_STORES because the six
+// places that name them had already drifted: ALDI was added as a real store and
+// every one of them still said "Chemist Warehouse, Big W or Priceline", so a
+// pasted ALDI link looked unsupported right up until it saved fine.
+function thirdStoreNames(sep = ', ') {
+  return Object.values(THIRD_STORES).map(m => m.label).join(sep);
+}
 
 // Inline style for a store chip, or '' for a store we have no colours for.
 function thirdChipStyle(storeKey) {
@@ -1555,6 +1564,7 @@ function thirdStoreFromUrl(url) {
     'bigw.com.au':             'big_w',
     'priceline.com.au':        'priceline',
     'aldi.com.au':             'aldi',
+    'kmart.com.au':            'kmart',
   };
   for (const [domain, store] of Object.entries(HOSTS)) {
     if (host === domain || host.endsWith('.' + domain)) return store;

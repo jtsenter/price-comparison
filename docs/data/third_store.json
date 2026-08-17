@@ -9,7 +9,7 @@
     "Entry fields:",
     "  store   'chemist_warehouse' | 'priceline'  (see THIRD_STORES in utils.js)",
     "  name    product name AS SOLD there - the size in it drives the unit price,",
-    "  store   'chemist_warehouse' | 'priceline' | 'big_w' | 'aldi'  (see THIRD_STORES in utils.js)",
+    "  store   'chemist_warehouse' | 'priceline' | 'big_w' | 'aldi' | 'kmart'  (see THIRD_STORES in utils.js)",
     "  url     product page",
     "  price   shelf price in AUD",
     "  packs   OPTIONAL, count for items sold by the piece (nappies): unit price",
@@ -212,6 +212,29 @@
       "url": "https://www.priceline.com.au/product/41498/waterwipes-newborn-baby-sensitive-180-wipes",
       "price": 13.96,
       "packs": 180,
+      "checked": "2026-08-17"
+    }
+  ],
+  "__group_peppermint_chewing_gum": [
+    {
+      "store": "chemist_warehouse",
+      "name": "Extra Bottle Peppermint Gum 64g",
+      "url": "https://www.chemistwarehouse.com.au/buy/80149/extra-bottle-peppermint-gum-64g",
+      "price": 4.49,
+      "checked": "2026-08-17"
+    },
+    {
+      "store": "big_w",
+      "name": "Extra Peppermint Sugar Free Chewing Gum Bottle 64g",
+      "url": "https://www.bigw.com.au/product/extra-peppermint-sugar-free-chewing-gum-bottle-64g/p/781976?store=367",
+      "price": 5.0,
+      "checked": "2026-08-17"
+    },
+    {
+      "store": "kmart",
+      "name": "46 Piece Wrigley's Extra Peppermint Sugarfree Chewing Gum 64g",
+      "url": "https://www.kmart.com.au/product/46-piece-wrigley's-extra-peppermint-sugarfree-chewing-gum-64g-43253067/?sku=43253067",
+      "price": 5.0,
       "checked": "2026-08-17"
     }
   ]

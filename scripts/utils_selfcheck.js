@@ -365,6 +365,11 @@ check('median empty -> null', _median([]), null);
   check('aldi',
         thirdStoreFromUrl('https://www.aldi.com.au/product/mamia-baby-water-wipes-80-pack-000000000000418168'),
         'aldi');
+  // Kmart product slugs contain an apostrophe ("wrigley's"), which URL parsing
+  // must not choke on - the host is all that decides the store.
+  check('kmart',
+        thirdStoreFromUrl("https://www.kmart.com.au/product/46-piece-wrigley's-extra-gum-64g-43253067/?sku=43253067"),
+        'kmart');
   // A store is only usable end to end if utils.js can ROUTE the link AND
   // THIRD_STORES can label the result. Adding one without the other renders a
   // blank chip, so assert the pair rather than the router alone.
@@ -372,8 +377,13 @@ check('median empty -> null', _median([]), null);
         ['https://www.chemistwarehouse.com.au/buy/1/x',
          'https://www.bigw.com.au/product/x/p/1',
          'https://www.priceline.com.au/product/1/x',
-         'https://www.aldi.com.au/product/x'
+         'https://www.aldi.com.au/product/x',
+         'https://www.kmart.com.au/product/x-1'
         ].every(u => !!THIRD_STORES[thirdStoreFromUrl(u)]?.label), true);
+  // Two shops sharing a chip letter is fine (C is Coles-red vs CW-yellow), but
+  // two sharing a letter AND having no colour to tell them apart is not.
+  check('every third store has a chip colour',
+        Object.values(THIRD_STORES).every(m => !!m.bg && !!m.letter), true);
 }
 
 // ── fmtUnitMetric (a per-piece metric must not round away the comparison) ────

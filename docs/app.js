@@ -1790,7 +1790,7 @@ function updateThirdUrlNote() {
     note.classList.add('form-note-ok');
     note.classList.remove('form-note-bad');
   } else {
-    note.textContent = 'Not a store I can price. Supported: Chemist Warehouse, Big W, Priceline.';
+    note.textContent = `Not a store I can price. Supported: ${thirdStoreNames()}.`;
     note.classList.add('form-note-bad');
     note.classList.remove('form-note-ok');
   }
@@ -1894,7 +1894,7 @@ function initEditModal() {
     const newThirdUrl = _normaliseUrl($('editThirdUrl')?.value || '') || '';
     const thirdStoreKey = newThirdUrl ? thirdStoreFromUrl(newThirdUrl) : null;
     if (newThirdUrl && !thirdStoreKey) {
-      alert('That "Other store" link is not a shop I can price.\n\nSupported: Chemist Warehouse, Big W, Priceline.');
+      alert(`That "Other store" link is not a shop I can price.\n\nSupported: ${thirdStoreNames()}.`);
       return;
     }
     const prevThird = (thirdEntriesFor(_editingItem.list_item)[0]
@@ -2545,6 +2545,10 @@ function initPriorityFilter() {
   // shipped with the same bug.
   $('storeFilterPill')?.addEventListener('click', cycleStoreFilter);
   $('newProductBtn')?.addEventListener('click', openNewProductModal);
+  // The edit form's "which shops can I paste?" hint, spelled from THIRD_STORES
+  // rather than typed into the HTML - see thirdStoreNames().
+  const thirdHint = $('editThirdStores');
+  if (thirdHint) thirdHint.textContent = thirdStoreNames();
 
   // Other pages link here as index.html#watchlist - activate the watchlist
   // filter on arrival, then drop the hash so a plain refresh doesn't
@@ -4995,7 +4999,7 @@ function catEditNewRow(store) {
   // from the pasted link's hostname, so asking twice would just be a way to
   // disagree with the URL. The resolved name is echoed back in .cat-third-tag.
   const ph = store === 'third'
-    ? 'Chemist Warehouse / Big W / Priceline URL'
+    ? `${thirdStoreNames(' / ')} URL`
     : `${label} product URL`;
   return `<div class="cat-prod" data-store="${store}" draggable="true">
         <span class="cat-item-handle">⠿</span>
@@ -5143,7 +5147,7 @@ function openCategoryEditModal(groupKey, opts) {
         <input type="checkbox" class="cat-incl" checked title="Include in the comparison" />
         <div class="cat-prod-main">
           <input type="text" class="cat-name" value="${escAttr(e.name || '')}" placeholder="Product name" />
-          <input type="text" class="cat-url" value="${escAttr(e.url || '')}" placeholder="Chemist Warehouse / Big W / Priceline URL" />
+          <input type="text" class="cat-url" value="${escAttr(e.url || '')}" placeholder="${escAttr(thirdStoreNames(' / ') + ' URL')}" />
           <span class="cat-third-tag">${meta ? esc(meta.label) : ''}${
             e.status ? ` · <span class="cat-third-warn">${esc(e.status)}</span>` : ''}</span>
         </div>

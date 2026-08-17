@@ -99,6 +99,11 @@ PARSERS = {
     # answers a plain fetch (200, no challenge) - checked live 2026-08-13. No new
     # parser needed, it reuses the same one Big W and Priceline use.
     "aldi":              (parse_jsonld_price, parse_meta_price),
+    # Kmart carries a JSON-LD Product whose offers are an AggregateOffer
+    # (lowPrice/highPrice over the click-and-collect and delivery offers), which
+    # parse_jsonld_price already reads - checked live 2026-08-17. Like Big W it
+    # answers 403 to a plain fetch and needs the runner's real browser.
+    "kmart":             (parse_jsonld_price, parse_meta_price),
 }
 
 

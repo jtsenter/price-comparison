@@ -56,7 +56,13 @@ check("garbage rejected", _plausible("challenge"), None)
 
 # Router: store-specific parser order, unknown store is quiet.
 check("router CW", parse_price_for("chemist_warehouse", CW), 10.19)
-check("router unknown store", parse_price_for("kmart", CW), None)
+check("router unknown store", parse_price_for("iga", CW), None)
+# Kmart quotes an AggregateOffer, not a bare price - the shape its live page
+# actually serves, so the router must resolve it through parse_jsonld_price.
+check("router kmart reads AggregateOffer",
+      parse_price_for("kmart", '<script type="application/ld+json">'
+                      '{"@type":"Product","offers":{"@type":"AggregateOffer",'
+                      '"lowPrice":5,"highPrice":5}}</script>'), 5.0)
 check("router bigw uses jsonld",
       parse_price_for("big_w", '<script type="application/ld+json">'
                       '{"@type":"Product","offers":{"price":16}}</script>'), 16.0)
