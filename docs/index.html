@@ -22,12 +22,12 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=158" />
+  <link rel="stylesheet" href="style.css?v=161" />
 </head>
 <body>
 
 <header data-page="index"></header>
-<script src="header.js?v=25"></script>
+<script src="header.js?v=26"></script>
 
 <!-- Bulk action bar -->
 <div id="bulkToolbar" class="bulk-toolbar" style="display:none">
@@ -44,7 +44,10 @@
     <button class="bt-chip bt-pri" title="Set frequency, or add the selected products to one of your lists">🏷 Lists <span class="arrow">▾</span></button>
   </div>
   <div class="bt-right">
-    <button class="bt-chip bt-archive">🗄 Archive</button>
+    <!-- Archive/Unarchive moved INTO the 🏷 Lists menu (it is the 'archive'
+         frequency, so it belongs beside Weekly/Monthly/Rare). Kept in the DOM,
+         hidden, so its handler stays the single implementation the menu calls. -->
+    <button class="bt-chip bt-archive" hidden style="display:none">🗄 Archive</button>
     <!-- Owner-only: hidden entirely in viewer/demo mode (see updateBulkBar) -->
     <button class="bt-chip bt-delete" title="Permanently delete the selected products - removes them from prices and history, and stops future scrapes bringing them back">🗑 Delete forever</button>
     <div class="bt-basket-seg">
@@ -422,9 +425,9 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=126"></script>
+<script src="utils.js?v=127"></script>
 <script src="history-modal.js?v=6"></script>
-<script src="app.js?v=197"></script>
+<script src="app.js?v=198"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">

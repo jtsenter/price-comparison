@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>⚠️ Validate Prices - PriceWatch</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="stylesheet" href="style.css?v=158" />
+  <link rel="stylesheet" href="style.css?v=161" />
   <style>
     /* ── Validate page overrides ── */
     .validate-hero {
@@ -269,13 +269,13 @@
 <body>
 
 <header data-page="validate"></header>
-<script src="header.js?v=25"></script>
+<script src="header.js?v=26"></script>
 <!-- The price history the flagged price should be judged against. This page
      asks "is this new price real?" and the answer is in the item's own
      record, so the record has to be one click away. Reuses the shared modal
      rather than growing a second chart here. -->
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=126"></script>
+<script src="utils.js?v=127"></script>
 <script src="history-modal.js?v=6"></script>
 
 <div class="notif-dropdown" id="notifDropdown" style="display:none">
@@ -1176,11 +1176,24 @@ function buildValidateList() {
   listEl.innerHTML = '';
   if (recheckAllBtn) recheckAllBtn.style.display = '';
   if (pending.length === 0) {
+    // Record that THIS version of latest.json had nothing to validate, so the
+    // main page's pill can tell "stale copy in my hand" from "really pending".
+    // Without it the pill kept advertising a count that opened onto this empty
+    // page: a scrape rewrites latest.json every few items, adding then clearing
+    // pending_validation, and the two pages fetch it independently.
+    try {
+      const stamp = _latestData?.last_updated || '';
+      const prev = localStorage.getItem(PV_EMPTY_AT_KEY) || '';
+      if (stamp && stamp > prev) localStorage.setItem(PV_EMPTY_AT_KEY, stamp);
+    } catch {}
     listEl.style.display = 'none';
     if (confirmAllBtn) confirmAllBtn.style.display = 'none';
     emptyEl.style.display = 'block';
     return;
   }
+  // Something IS pending at this version - drop any stale "was empty" stamp so
+  // the pill isn't suppressed by an older observation.
+  try { localStorage.removeItem(PV_EMPTY_AT_KEY); } catch {}
   emptyEl.style.display = 'none';
   if (confirmAllBtn) confirmAllBtn.style.display = '';
   listEl.style.display = 'flex';

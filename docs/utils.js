@@ -1915,7 +1915,25 @@ function buildVariantGroups(byName) {
 // localStorage (pw_pv_resolved_v1); here we subtract them. Self-pruning: once the
 // fresh data no longer lists a resolved name (Pages caught up), we drop it from
 // the set, so a genuinely re-flagged item later isn't wrongly suppressed.
-function pendingValidationCount(pending) {
+// Set by validate.html whenever it loads and finds NOTHING to validate, stamped
+// with the latest.json it saw. See pendingValidationCount for why.
+const PV_EMPTY_AT_KEY = 'pw_pv_empty_at_v1';
+
+function pendingValidationCount(pending, lastUpdated) {
+  // A scrape rewrites latest.json many times (a progress push every 5 items),
+  // and pending_validation is added and then cleared across those pushes. The
+  // main page and validate.html each fetch the file separately, so they can land
+  // on different versions of it - which is how the pill offered "3 to validate"
+  // and the page it opened was empty.
+  // If validate.html has already proved there was nothing pending at a version
+  // AT LEAST as new as the one being counted here, believe it: the copy in hand
+  // is stale, not the empty page.
+  if (lastUpdated) {
+    try {
+      const seen = localStorage.getItem(PV_EMPTY_AT_KEY) || '';
+      if (seen && seen >= lastUpdated) return 0;   // ISO-8601 sorts lexicographically
+    } catch {}
+  }
   const names = new Set((pending || []).map(e => e && e.item).filter(Boolean));
   let resolved;
   try { resolved = JSON.parse(localStorage.getItem('pw_pv_resolved_v1') || '[]'); } catch { resolved = []; }

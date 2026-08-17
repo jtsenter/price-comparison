@@ -59,7 +59,10 @@
     '.col-chooser-wrap{position:relative}' +
     '.col-chooser-dropdown{position:absolute;top:calc(100% + 6px);right:0;background:var(--card,#fff);border:1px solid var(--border,#E2E8F0);border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:300;min-width:210px;padding:8px 0}' +
     '.more-dropdown{min-width:180px;padding:6px 0}' +
-    '.more-dropdown-item{display:flex;align-items:center;gap:8px;width:100%;padding:8px 16px;font-size:13px;font-weight:500;color:var(--text,#1A1F2E);background:none;border:none;cursor:pointer;text-align:left;text-decoration:none;transition:background .1s}' +
+    /* font-family:inherit is load-bearing - this menu mixes <button> and <a>
+       items, and a <button> does not inherit it, so without this the two link
+       items rendered in a different typeface from the rest. */
+    '.more-dropdown-item{display:flex;align-items:center;gap:8px;width:100%;padding:8px 16px;font-family:inherit;font-size:13px;font-weight:500;color:var(--text,#1A1F2E);background:none;border:none;cursor:pointer;text-align:left;text-decoration:none;transition:background .1s}' +
     '.more-dropdown-item:hover{background:var(--bg,#F0F4F8)}' +
     '.more-dropdown-item svg{flex-shrink:0;color:var(--text-mid,#475569)}' +
     /* One line, never wrapped onto two, and desktop-only where asked. */

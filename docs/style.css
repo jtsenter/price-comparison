@@ -1826,13 +1826,15 @@ th.sort-active { color: var(--text); }
   border-radius: 1px;
   flex-shrink: 0;
 }
-/* Custom lists sit in the filter row beside the frequency pills. Tinted purple
-   so a hand-made list is visibly a different KIND of filter from the built-in
-   frequencies, without inventing a second row for them. */
+/* Custom lists sit in the filter row beside the frequency pills. They now share
+   the row's ACTIVE colour (var(--accent)) instead of a purple of their own: in
+   a row where every other selected pill is green, one dark purple pill read as
+   a different sort of control rather than another filter, and it was the only
+   thing in the row that didn't match. The gentle purple tint survives on the
+   resting border, which is enough to mark them as yours without shouting. */
 .list-pills { display: contents; }
-.priority-pill.list-pill { border-color: #D8C9E4; color: #6B4C82; }
-.priority-pill.list-pill:hover { background: #F5F0F8; color: #55396A; }
-.priority-pill.list-pill.active { background: #6B4C82; border-color: #6B4C82; color: #fff; }
+.priority-pill.list-pill { border-color: #D8C9E4; }
+.priority-pill.list-pill:hover { background: #F5F0F8; color: var(--text); }
 /* Section heading inside the bulk-bar chip menu (frequency vs. My lists). */
 .bt-dropdown-sep {
   padding: 7px 14px 3px; font-size: 10.5px; font-weight: 800;
@@ -2352,6 +2354,23 @@ td.priority-cell { text-align: center; }
 .priority-pill[data-priority="monthly"].active  { background: #2563EB; border-color: #2563EB; }
 .priority-pill[data-priority="rare"].active     { background: #475569; border-color: #475569; }
 .priority-pill[data-priority="archive"].active  { background: #94A3B8; border-color: #94A3B8; }
+/* The per-pill colours above are what actually paints an active filter - the
+   generic `.priority-pill.active` rule higher up is outranked here and never
+   lands. So any pill WITHOUT an entry in this block has no "on" appearance at
+   all: the watchlist pill has been indistinguishable from its off state, and a
+   list pill would have been too once its own colour was removed.
+   Tinted rather than filled, so an active list reads as on without the solid
+   dark block that made a single list pill dominate the whole row.
+   Scoped through #priorityFilter deliberately: the plain class selectors were
+   losing to something later in this stylesheet (only font-weight was landing),
+   and an id keeps these winning without reaching for !important. */
+#priorityFilter .priority-pill.watchlist-pill.active {
+  background: #E0F2FE; border-color: #38BDF8; color: #075985; font-weight: 700;
+}
+#priorityFilter .priority-pill.watchlist-pill.active svg { color: #0284C7; }
+#priorityFilter .priority-pill.list-pill.active {
+  background: #F1E9F7; border-color: #A97FC4; color: #5B3B73; font-weight: 700;
+}
 
 /* ── Scrape progress strip (full-width row below header) ─────── */
 .scrape-strip {
@@ -2410,6 +2429,12 @@ td.priority-cell { text-align: center; }
   gap: 8px;
   width: 100%;
   padding: 8px 16px;
+  /* This menu mixes <button> items (Import, Auto-update Setup, Hard refresh)
+     with <a> items (My Lists, Scrape Log). A <button> does NOT inherit
+     font-family, so with only size and weight set here the buttons fell back to
+     the browser's default UI font while the links used the page font - two
+     typefaces in one menu. */
+  font-family: inherit;
   font-size: 13px;
   font-weight: 500;
   color: var(--text);

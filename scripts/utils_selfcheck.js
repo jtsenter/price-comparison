@@ -127,6 +127,9 @@ eval([
   extract('settingsKeyFor'),   // the key a member's settings actually live under
   extract('buildDealGroups'),
   extract('perKgEquivBundle'),
+  // The key must come from utils.js too - pendingValidationCount reads it, and a
+  // copy pasted here would let the two drift apart silently.
+  extractConst('PV_EMPTY_AT_KEY'),
   extract('pendingValidationCount'),
   extract('multiBuyCost'),
   extract('multiBuyNudge'),
@@ -935,6 +938,25 @@ check('groupMetric null result', groupMetric({ sticker: true }, null), null);
   check('pruned when fresh data drops it', pendingValidationCount([{ item: 'A' }, { item: 'C' }]), 2);
   check('resolved set self-pruned', JSON.parse(_lsStore.pw_pv_resolved_v1), []);
   check('empty pending -> 0', pendingValidationCount(undefined), 0);
+
+  // Stale-copy suppression. A scrape rewrites latest.json repeatedly, adding then
+  // clearing pending_validation, so the main page and validate.html can hold
+  // different versions - which is how the pill offered a count and opened onto an
+  // empty page. validate.html stamps the version at which it saw nothing.
+  const V1 = '2026-08-15T10:00:00Z', V2 = '2026-08-15T11:00:00Z';
+  _lsStore = { pw_pv_empty_at_v1: V2 };
+  check('older copy than a proven-empty one is suppressed',
+    pendingValidationCount(pending, V1), 0);
+  check('same version as proven-empty is suppressed',
+    pendingValidationCount(pending, V2), 0);
+  // A NEWER scrape genuinely flagged things - the old observation must not hide it.
+  check('newer copy than the proven-empty stamp still counts',
+    pendingValidationCount(pending, '2026-08-15T12:00:00Z'), 3);
+  // The stamp must never suppress when the caller has no version to compare.
+  check('no version passed -> stamp ignored, counts normally',
+    pendingValidationCount(pending), 3);
+  _lsStore = {};
+  check('no stamp -> counts normally', pendingValidationCount(pending, V1), 3);
 }
 
 // ── multiBuyCost / multiBuyNudge ────────────────────────────────────────────

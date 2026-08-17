@@ -1163,8 +1163,10 @@ function updateBulkBar() {
   const inArchive = _activePriority === 'archive';
   const archBtn = bar.querySelector('.bt-archive');
   if (archBtn) archBtn.innerHTML = inArchive ? '📤 Unarchive' : '🗄 Archive';
+  // The Lists chip stays visible in the Archived view now that Unarchive lives
+  // inside its menu - hiding it there would make unarchiving unreachable.
   const priChip = bar.querySelector('.bt-pri');
-  if (priChip) priChip.style.display = inArchive ? 'none' : '';
+  if (priChip) priChip.style.display = '';
   // Permanent delete is owner-only: it writes to the repo, so a viewer could
   // never complete it. Hide rather than disable - a dead button on the demo copy
   // invites clicks that can only fail.
@@ -2473,18 +2475,34 @@ function renderListPills() {
   }
 }
 
+// The four pills that are a plain frequency view. Exactly one is always on, so
+// these do NOT toggle off - there is no "no frequency" state to fall back to.
+const FREQ_FILTERS = ['all', 'weekly', 'monthly', 'rare'];
+// The frequency view to come back to when a toggleable filter is switched off.
+// Seeded with the app's default so the very first "off" click has somewhere to go.
+let _prevFreqFilter = 'weekly';
+
 // One place that applies a filter choice, so the frequency pills, the list pills
 // and the mobile dropdown can't drift in what "selected" means.
 function applyPriorityFilter(p, btn) {
-  if (p) {
-    _activePriority = p;
-    const container = $('priorityFilter');
-    container?.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
-    btn?.classList.add('active');
-    const fs = $('freqSelect');
-    if (fs && ['all', 'weekly', 'monthly', 'rare', 'archive'].includes(p)) fs.value = p;
-    else if (fs && p.startsWith(LIST_FILTER_PREFIX)) fs.value = p;
+  if (!p) { if (_lastData) renderPage(_lastData); return; }
+  // Clicking the pill that is ALREADY on turns it off again - for Archived and
+  // for a list, which were one-way doors: once on, the only way out was picking
+  // some other filter. Off returns to the frequency view you came from rather
+  // than a hardcoded "All", so turning Archived off while you were on Monthly
+  // puts you back on Monthly.
+  if (p === _activePriority && !FREQ_FILTERS.includes(p)) {
+    p = FREQ_FILTERS.includes(_prevFreqFilter) ? _prevFreqFilter : 'weekly';
+    btn = null;   // the pill to light up is the frequency one, not the one clicked
   }
+  if (FREQ_FILTERS.includes(p)) _prevFreqFilter = p;
+  _activePriority = p;
+  const container = $('priorityFilter');
+  container?.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
+  // Quoted attribute selector, so a "list:birthdays" value needs no escaping.
+  (btn || container?.querySelector(`.priority-pill[data-priority="${p}"]`))?.classList.add('active');
+  const fs = $('freqSelect');
+  if (fs && ([...FREQ_FILTERS, 'archive'].includes(p) || p.startsWith(LIST_FILTER_PREFIX))) fs.value = p;
   if (_lastData) renderPage(_lastData);
 }
 
@@ -2496,19 +2514,9 @@ function initPriorityFilter() {
   container.querySelectorAll('.priority-pill').forEach(btn => {
     if (btn.id === 'watchlistPill') return; // has its own toggle handler below
     if (btn.classList.contains('list-pill')) return; // bound in renderListPills
-    btn.addEventListener('click', () => {
-      const p = btn.dataset.priority;
-      if (p) {
-        _activePriority = p;
-        container.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        // Keep the mobile frequency dropdown in sync with the active frequency.
-        const fs = $('freqSelect');
-        if (fs && ['all', 'weekly', 'monthly', 'rare', 'archive'].includes(_activePriority)) fs.value = _activePriority;
-        // Search is intentionally preserved across priority/category tab switches
-      }
-      if (_lastData) renderPage(_lastData);
-    });
+    // Same single entry point the list pills use, so Archived toggles off the
+    // way they do. (Search is intentionally preserved across filter switches.)
+    btn.addEventListener('click', () => applyPriorityFilter(btn.dataset.priority, btn));
   });
 
   // Mobile frequency dropdown - drives the same logic by clicking the hidden pill.
@@ -2523,13 +2531,11 @@ function initPriorityFilter() {
   // Watchlist filter - a pill in the filter row (it IS a filter); the mobile
   // sort-toolbar eye chip clicks this same pill. Toggles on/off; turning it
   // off lands back on "All".
+  // Routed through applyPriorityFilter so all three toggleable filters (watchlist,
+  // archived, lists) turn off the same way and return to the same remembered
+  // frequency view - this used to land on "All" regardless of where you started.
   function toggleWatchlistFilter() {
-    const on = _activePriority !== 'watchlist';
-    _activePriority = on ? 'watchlist' : 'all';
-    container.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
-    if (on) $('watchlistPill')?.classList.add('active');
-    else container.querySelector('[data-priority="all"]')?.classList.add('active');
-    if (_lastData) renderPage(_lastData);
+    applyPriorityFilter('watchlist', $('watchlistPill'));
   }
 
   $('watchlistPill')?.addEventListener('click', toggleWatchlistFilter);
@@ -2724,15 +2730,20 @@ function initBulkBar() {
         const all = names.length && names.every(n => items.has(n));
         return { label: `${all ? '✓' : '＋'} ${lists[k].label || k}`, value: LIST_FILTER_PREFIX + k, _allIn: all };
       });
+    const inArchiveView = _activePriority === 'archive';
     const opts = [
       { label: '⭐ Weekly',  value: 'weekly'  },
       { label: '📅 Monthly', value: 'monthly' },
       { label: '🔵 Rare',    value: 'rare'    },
+      // Archiving is a frequency, so it reads as the fourth option here rather
+      // than a separate chip competing for room in an already-full toolbar.
+      { label: inArchiveView ? '📤 Unarchive' : '🗄 Archive', value: '__archive' },
       ...(listOpts.length ? [{ label: '— My lists —', value: '', disabled: true }] : []),
       ...listOpts,
     ];
     openChipDropdown(e.currentTarget, opts, (p) => {
       if (!p) return;
+      if (p === '__archive') { bar._applyBulkArchive?.(); return; }
       if (p.startsWith(LIST_FILTER_PREFIX)) {
         const key = p.slice(LIST_FILTER_PREFIX.length);
         const chosen = listOpts.find(o => o.value === p);
@@ -2802,7 +2813,10 @@ function initBulkBar() {
     deleteItemsForever(checkedRealNames(true).filter(n => !String(n).startsWith('__group_')));
   });
 
-  bar.querySelector('.bt-archive')?.addEventListener('click', () => {
+  // Archiving lives in the Lists menu now (it IS a frequency value - 'archive' -
+  // so it belongs with Weekly/Monthly/Rare rather than as its own chip). Kept as
+  // a named function because the menu and the legacy chip both call it.
+  function applyBulkArchive() {
     const pr = loadPriorities();
     const unarchiving = _activePriority === 'archive';
     _checkedItems.forEach(name => {
@@ -2823,7 +2837,9 @@ function initBulkBar() {
     updateBulkBar();
     if (_lastData) renderPage(_lastData);
     scheduleArchiveSync();
-  });
+  }
+  bar.querySelector('.bt-archive')?.addEventListener('click', applyBulkArchive);
+  bar._applyBulkArchive = applyBulkArchive;   // the Lists menu calls it too
 }
 
 // ── Multi-buy + quantity aware money (main page) ─────────────────────────────
@@ -6676,7 +6692,7 @@ function _renderPageInner(data) {
   _stickyNeedsSync = true;
   onStickyScroll(); // update immediately if already scrolled past thead
 
-  updateValidateNavBadge(pendingValidationCount(data?.pending_validation));
+  updateValidateNavBadge(pendingValidationCount(data?.pending_validation, data?.last_updated));
 }
 
 // ── Validate nav badge ────────────────────────────────────────────────────────
