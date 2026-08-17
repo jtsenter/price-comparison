@@ -136,4 +136,50 @@ check('the basket delegates to it too', () => {
     'basket must build category rows with the shared builder');
 });
 
+// ── The price column's own footer ───────────────────────────────────────────
+// A second, separate sum: the W/Coles PRICE columns show a rate, and their
+// footer adds up the rates on screen. It used to add the RAW stored value
+// instead, which is per KILO / per ONE PIECE - so a $/100g category rendered
+// "$5.00/100g" in the row and "$50.00" in the footer beneath it, and a per-piece
+// category under-counted by the same factor. $/kg categories were unaffected,
+// which is why it went unseen until a 100g category existed.
+{
+  const app = fs.readFileSync(path.join(__dirname, '..', 'docs', 'app.js'), 'utf8');
+  const at = app.indexOf('function shownStorePrice(');
+  assert(at !== -1, 'shownStorePrice not found in app.js');
+  let depth = 0, src = '';
+  for (let j = app.indexOf('{', at); j < app.length; j++) {
+    if (app[j] === '{') depth++;
+    else if (app[j] === '}' && --depth === 0) { src = app.slice(at, j + 1); break; }
+  }
+  // Only the category branch is under test; the plain-item branch is multi-buy's.
+  global.mbEffUnit = (res) => (res ? res.price : null);
+  global.getUnits = () => 1;
+  eval(src);
+
+  check('the price column footer sums the rate the row displays', () => {
+    const gum = { _isGroup: true, list_item: '__group_gum', _wwPerKg: 50, _coPerKg: 50, _gramQuote: 100 };
+    assert.strictEqual(shownStorePrice(gum, 'ww'), 5);      // $5.00/100g, not $50/kg
+    assert.strictEqual(shownStorePrice(gum, 'coles'), 5);
+  });
+  check('it agrees with the Total column at qty 1', () => {
+    const gum = { _isGroup: true, list_item: '__group_gum', _wwPerKg: 50, _coPerKg: 50, _gramQuote: 100 };
+    assert.strictEqual(shownStorePrice(gum, 'ww'), groupStoreTotal(gum, 'ww'));
+  });
+  check('a per-piece category is quoted per `quote` pieces here too', () => {
+    // Wipes: 2.9c each, quoted per 100 wipes -> the footer must say $2.86.
+    const wipes = { _isGroup: true, list_item: '__group_wipes', _perPack: true, _quote: 100,
+                    _wwPerKg: 0.0286, _coPerKg: 0.0312 };
+    assert.strictEqual(+shownStorePrice(wipes, 'ww').toFixed(2), 2.86);
+  });
+  check('a $/kg category is unchanged', () => {
+    const beef = { _isGroup: true, list_item: '__group_beef', _wwPerKg: 24.5, _coPerKg: 26 };
+    assert.strictEqual(shownStorePrice(beef, 'ww'), 24.5);
+  });
+  check('an unpriced side stays null, so it is skipped not counted as zero', () => {
+    const half = { _isGroup: true, list_item: '__group_half', _wwPerKg: null, _coPerKg: 8, _gramQuote: 100 };
+    assert.strictEqual(shownStorePrice(half, 'ww'), null);
+  });
+}
+
 console.log(`\ntotals parity: ${n} checks passed`);

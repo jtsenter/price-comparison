@@ -2921,7 +2921,13 @@ function rowStoreTotal(item, store) {
 // by qty - the column footers sum the numbers actually on screen, and the Qty
 // column's effect already lives in the Total column.
 function shownStorePrice(item, store) {
-  if (item._isGroup) return store === 'ww' ? item._wwPerKg : item._coPerKg;
+  // metricShown(), not the raw _wwPerKg/_coPerKg: those are stored per KILO (or
+  // per ONE piece), and a category that quotes anything else renders the scaled
+  // figure. Summing the raw value made the price-column footer disagree with the
+  // column above it by the quote factor - a $/100g category showed "$5.00/100g"
+  // in the row and "$50.00" in the footer, and a per-piece category under-counts
+  // the same way. Identical for $/kg categories, which is why it hid this long.
+  if (item._isGroup) return metricShown(item, store === 'ww' ? item._wwPerKg : item._coPerKg);
   const res = store === 'ww' ? item.woolworths : item.coles;
   return mbEffUnit(res, getUnits(item.list_item));
 }
