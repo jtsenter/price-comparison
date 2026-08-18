@@ -384,11 +384,26 @@ function getTrendSeries(item, units = 1) {
 }
 
 
+// The clock/"History" button that opens the price-history modal. One definition,
+// because it is rendered from three places now and was copy-pasted between two.
+function priceHistoryBtnHTML(itemName) {
+  const safe = String(itemName).replace(/"/g, '&quot;');
+  return `<button class="price-bar-manage" data-manage-item="${safe}" aria-label="View price history"><svg class="pbm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg><span class="pbm-txt">History</span></button>`;
+}
+
 // `historyBtn` renders the clock/"History" button that opens the price-history
 // modal. Pages that do not host that modal pass false rather than shipping a
 // button that does nothing when clicked.
+//
+// A product with fewer than two recorded prices has no TREND - there is no range
+// to place a marker in, and inventing one would be a lie. But it still has a
+// history worth opening, and a newly added product (one scrape old) is exactly
+// when you want to look. The button used to live only inside the bar, so those
+// products got an empty cell and no way in at all. Now the bar is what's
+// conditional; the way in is not.
 function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1, historyBtn = true) {
-  if (!priceHistory?.length || currentPrice == null) return '';
+  const btnOnly = () => (historyBtn ? priceHistoryBtnHTML(itemName) : '');
+  if (!priceHistory?.length || currentPrice == null) return btnOnly();
 
   // exclPriceSet (utils.js) handles both "ww:X.XX"/"coles:X.XX" and legacy bare keys.
   // For trend bars (mixed WW+Coles series) a price excluded at either store is dropped.
@@ -398,7 +413,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1, history
   const prices = priceHistory
     .map(p => p.price)
     .filter((p, i) => p > 0 && !excluded.has(Number(priceHistory[i].price).toFixed(2)));
-  if (prices.length < 2) return '';
+  if (prices.length < 2) return btnOnly();
 
   const minP = Math.min(...prices);
   const maxP = Math.max(...prices);
@@ -420,7 +435,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1, history
       ${flatTrack}
       <div class="price-bar-labels price-bar-labels-flat"><span class="price-bar-always">${fmt(minP)}</span></div>
     </div>
-    ${historyBtn ? `<button class="price-bar-manage" data-manage-item="${safeItemName}" aria-label="View price history"><svg class="pbm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg><span class="pbm-txt">History</span></button>` : ''}`;
+    ${btnOnly()}`;
   }
 
   const rawPos = ((currentPrice - minP) / (maxP - minP)) * 100;
@@ -449,7 +464,7 @@ function buildPriceBar(itemName, priceHistory, currentPrice, factor = 1, history
         <span>${fmt(maxP)}</span>
       </div>
     </div>
-    ${historyBtn ? `<button class="price-bar-manage" data-manage-item="${safeItemName}" aria-label="View price history"><svg class="pbm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg><span class="pbm-txt">History</span></button>` : ''}`;
+    ${btnOnly()}`;
 }
 
 // ── Trend Position Calculation ──────────────────────────────────────────────

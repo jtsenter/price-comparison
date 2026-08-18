@@ -2962,6 +2962,15 @@ function computeBannerStats(items) {
   }
   const baseFiltered = pool.filter(item => {
     if (perkgMembers.has(item.list_item)) return false;
+    // The ⚙ /kg and W/C buttons narrow the TABLE, so they have to narrow these
+    // totals too - this predicate is a hand-copy of applyFilters() and had simply
+    // never gained them. With "$/kg only" on, the table drew 33 category rows
+    // while this still summed 165 items, so the price-column footers ($1,002.77)
+    // and the Total footer beside them ($357.84) were adding up different sets of
+    // rows. Same drift applyValueFilters() was extracted to stop, one level up.
+    if (_storeFilter && rowCheaperStore(item) !== _storeFilter) return false;
+    if (_perkgFilter === 'only' && !item._isGroup) return false;
+    if (_perkgFilter === 'hidden' && item._isGroup) return false;
     if (_activePriority === 'watchlist') {
       if (!isWatchedItem(item.list_item)) return false;
     } else if (activeListKey()) {
@@ -4213,7 +4222,11 @@ function groupTrendCellHTML(group, historyBtn = true) {
   // Whatever minimum the bar draws is now exactly the minimum the sort measures
   // against, so a price below the bar really does sort ahead of one sitting on it.
   const prices = groupPastPrices(group);
-  if (prices.length < 2) return '';
+  // Under two points there is no range to draw, but buildPriceBar still hands
+  // back the History button - so a brand-new category (Tahini Neri, one scrape
+  // old and a category of one) keeps a way into its history instead of showing a
+  // blank Trend cell. Returning '' here short-circuited that.
+  if (prices.length < 2) return buildPriceBar(`__group_${group._groupKey}`, [], null, 1, historyBtn);
   // Shown in the SAME units as the price column, the total and the basket. The
   // bar itself is relative so the scale never mattered to it, but its min/max
   // labels are real money and were printing the hidden per-ONE-piece figure -
@@ -6485,7 +6498,12 @@ function _renderPageInner(data) {
     // Price bar uses cheaper store's price as reference (or fallback)
     const currentRef = cheaper === 'woolworths' ? ww?.price : (cheaper === 'coles' ? co?.price : (co?.price ?? ww?.price));
     const _trendSeriesPage = getTrendSeries(item, getUnits(item.list_item));
-    const bar = _trendSeriesPage.past.length ? buildPriceBar(item.list_item, _trendSeriesPage.past.map(p => ({price: p})), _trendSeriesPage.current) : '';
+    // No `past.length` guard: buildPriceBar decides for itself whether it can
+    // draw a trend, and now returns the History button alone when it can't. The
+    // guard here meant a product scraped for the first time yesterday got a
+    // completely empty Trend cell - no bar (fair, one price is not a trend) and
+    // no way into its history either (not fair, that's where you'd go to look).
+    const bar = buildPriceBar(item.list_item, _trendSeriesPage.past.map(p => ({price: p})), _trendSeriesPage.current);
 
     // % Cheaper - compares the EFFECTIVE per-unit prices at the current qty, so a
     // multi-buy changes the gap (and which store it favours) instead of freezing

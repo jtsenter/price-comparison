@@ -81,6 +81,7 @@ eval([
   extract('exclPriceSet'),
   extract('promoUnitPrice'),   // history + hot-deal detection price through this
   extract('mbUnitPrice'),      // getTrendSeries prices the current point through this
+  extract('priceHistoryBtnHTML'), // buildPriceBar's History button, one definition
   extract('buildPriceBar'),    // moved here from app.js; hot-deals draws the same bar
   extract('getTrendSeries'),
   extract('_median'),
@@ -1054,8 +1055,19 @@ check('groupMetric null result', groupMetric({ sticker: true }, null), null);
   assert.ok(/price-bar-manage/.test(buildPriceBar('X', hist, 5)), 'History button on by default');
   assert.ok(!/price-bar-manage/.test(buildPriceBar('X', hist, 5, 1, false)), 'History button suppressible');
   n += 2;
-  // Too little history to place anything -> no bar at all.
-  check('single history point -> no bar', buildPriceBar('X', [{ price: 4 }], 4), '');
+  // Too little history to place a marker -> NO BAR, but the way into the history
+  // survives. A product scraped for the first time yesterday used to get a wholly
+  // empty Trend cell: no bar (fair - one price is not a trend) and no History
+  // button either (not fair - that is exactly where you would go to look).
+  const sparse = buildPriceBar('X', [{ price: 4 }], 4);
+  check('single history point -> no bar drawn', /price-bar-outer/.test(sparse), false);
+  check('...but the History button is still there', /price-bar-manage/.test(sparse), true);
+  check('no history at all -> still a way in', /price-bar-manage/.test(buildPriceBar('X', [], 4)), true);
+  check('unpriced item -> still a way in', /price-bar-manage/.test(buildPriceBar('X', [{ price: 4 }], null)), true);
+  check('...and pages without the modal still opt out',
+        buildPriceBar('X', [{ price: 4 }], 4, 1, false), '');
+  check('the item name is escaped into the sparse button too',
+        /data-manage-item="a&quot;b"/.test(buildPriceBar('a"b', [], 4)), true);
 }
 
 // ── A deal you haven't qualified for is not a price you can pay ─────────────

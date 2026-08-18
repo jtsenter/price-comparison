@@ -132,7 +132,11 @@ All tunable values are defined near the top of `scraper.py`:
   (including ones that just worked), recovering after a few minutes' rest. Entries are
   visited round-robin across shops to spread the load. If you're testing by hand, expect
   403s and wait it out rather than concluding the site is blocked.
-  Priceline genuinely is unreachable (Cloudflare JS challenge), and that one is real.
+  **All five outside shops are reachable** with this config — Chemist Warehouse,
+  ALDI, Big W, Kmart and Priceline. Priceline was written off as a "Cloudflare JS
+  challenge" too; that was also just the UA. Before recording any shop as blocked,
+  re-test it under the CURRENT launch config — every "unscrapable" verdict in this
+  project's history has turned out to be the client config, not the site.
 - **Scrape-log rates are per-store**: single-store-pinned items deliberately skip the
   other store ("a single-store pin means a single store") and are recorded as neither
   attempted nor missed there — `ww_attempted`/`coles_attempted` in scrape_log.json are
