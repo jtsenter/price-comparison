@@ -126,10 +126,13 @@
            "I'm in this store, what's actually cheaper here?" -->
       <button class="priority-pill store-filter-pill" id="storeFilterPill"
               title="Show only items that are cheaper at one store">W/C</button>
-      <span class="filter-separator"></span>
       <!-- Custom lists land here, rendered by renderListPills(). Kept in the same
            row as the frequency pills because they select the same thing: which
-           products the table shows. -->
+           products the table shows.
+           NO static separator before this: renderListPills() draws its own, and
+           only when there is at least one list. A hardcoded one here meant two
+           dividers side by side whenever a list existed, and a dangling one after
+           W/C when none did. The dynamic one is the correct owner. -->
       <span id="listPills" class="list-pills"></span>
       <button class="priority-pill" id="perkgDevBtn" type="button" title="Cycle: show everything / only $/kg groups / hide $/kg groups"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16.5c0 1.5 1.5 3 3.5 3s3.5-1.5 3.5-3L19.5 9z"/><path d="M1 16.5c0 1.5 1.5 3 3.5 3s3.5-1.5 3.5-3L4.5 9z"/><path d="M12 3v18"/><path d="M3 7h18"/><path d="M19.5 9 12 5 4.5 9"/></svg> <span class="perkg-lbl">$/kg</span></button>
     </div>
@@ -427,7 +430,7 @@
 <script src="name_map.js?v=55"></script>
 <script src="utils.js?v=132"></script>
 <script src="history-modal.js?v=6"></script>
-<script src="app.js?v=204"></script>
+<script src="app.js?v=206"></script>
 <!-- Bottom tab bar (mobile) -->
 <nav id="bottomTabBar">
   <a href="index.html" class="btb-tab active">

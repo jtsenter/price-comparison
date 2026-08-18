@@ -1156,6 +1156,11 @@ function updateBulkBar() {
   bar.style.display = count > 0 ? 'flex' : 'none';
   const pill = bar.querySelector('.bt-count-pill');
   if (pill) pill.textContent = count;
+  // Every selection change lands here - a row tick, a bulk action, Deselect all -
+  // so it is the one place that can keep the header's "select all" box honest
+  // without a full re-render. Ticking two rows while scrolled down otherwise left
+  // the pinned header showing an empty box until something happened to re-clone it.
+  syncCheckAllState();
   // In the Archived view the archive button is a no-op (they're already
   // archived) - flip it to "Unarchive". Also hide the Priority chip there: it
   // only offers weekly/monthly/rare, which would silently unarchive anyway, so
@@ -3137,6 +3142,26 @@ function initStickyHeader() {
   _stickyGhost = ghost;
   _stickyGhostTable = ghostTable;
 
+  // The ghost is a cloneNode() of the real thead, so its "select all" box is a
+  // COPY: cloneNode carries no event listeners, and the clone's id is stripped
+  // (see syncStickyNow), so nothing was listening to it and updateBulkBar never
+  // synced it either. Clicking it while the header was stuck ticked a checkbox
+  // that nothing read - no rows selected - and left the real one untouched, so
+  // scrolling back up showed it unticked and clicking THERE worked.
+  //
+  // Delegated on the ghost CONTAINER, which outlives every re-clone, and
+  // forwarded to the real control so the sticky header drives the exact same
+  // code path rather than a second copy of the logic.
+  ghost.addEventListener('change', (e) => {
+    const cb = e.target.closest('input[type="checkbox"]');
+    if (!cb) return;
+    const real = $('checkAll');
+    if (!real) return;
+    real.checked = cb.checked;
+    real.indeterminate = false;
+    real.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+
   window.addEventListener('scroll', onStickyScroll, { passive: true });
   window.addEventListener('resize', () => {
     _stickyNeedsSync = true;
@@ -3174,6 +3199,32 @@ function pinGhostFrozenCols() {
     c.style.transform = `translateX(${intended - c.offsetLeft}px)`;
     intended += c.getBoundingClientRect().width;
   });
+}
+
+// Put the real "select all" box into the right one of its three states for the
+// rows currently on screen, then mirror it onto the sticky header's copy.
+function syncCheckAllState() {
+  const allChecks = document.querySelectorAll('.row-check');
+  const checkAll = $('checkAll');
+  if (checkAll && allChecks.length) {
+    const numChecked = [...allChecks].filter(c => c.checked).length;
+    checkAll.checked = numChecked === allChecks.length;
+    checkAll.indeterminate = numChecked > 0 && numChecked < allChecks.length;
+  }
+  syncGhostCheckAll();
+}
+
+// Mirror the real "select all" box onto the ghost's copy. `checked` and
+// `indeterminate` are IDL PROPERTIES, not attributes, so cloneNode does not carry
+// them - without this the sticky header showed an empty box over a fully selected
+// table (and vice versa) whenever it re-synced.
+function syncGhostCheckAll() {
+  if (!_stickyGhostTable) return;
+  const real = $('checkAll');
+  const ghost = _stickyGhostTable.querySelector('th.check-cell input[type="checkbox"]');
+  if (!real || !ghost) return;
+  ghost.checked = real.checked;
+  ghost.indeterminate = real.indeterminate;
 }
 
 function syncStickyNow() {
@@ -3214,6 +3265,7 @@ function syncStickyNow() {
 
   _stickyGhostTable.style.marginLeft = `-${tableWrap.scrollLeft}px`;
   pinGhostFrozenCols();
+  syncGhostCheckAll();
 
   // Attach sort + update sort arrow state
   updateSortHeaders(cloned);
@@ -6742,14 +6794,9 @@ function _renderPageInner(data) {
   // Not-found items are now shown in the main table - hide the old separate section
   $('notFoundSection').style.display = 'none';
 
-  // Sync check-all indeterminate state
-  const allChecks = document.querySelectorAll('.row-check');
-  const checkAll = $('checkAll');
-  if (checkAll && allChecks.length) {
-    const numChecked = [...allChecks].filter(c => c.checked).length;
-    checkAll.checked = numChecked === allChecks.length;
-    checkAll.indeterminate = numChecked > 0 && numChecked < allChecks.length;
-  }
+  // Sync check-all tri-state (updateBulkBar does it too, but a re-render can
+  // change which rows exist without the selection itself changing).
+  syncCheckAllState();
   updateBulkBar();
 
   // Signal sticky header to re-sync next scroll
