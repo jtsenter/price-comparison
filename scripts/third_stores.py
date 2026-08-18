@@ -138,12 +138,13 @@ def _record_third_changes(changes: list, now=None) -> None:
     scrape and it files its own entry instead - the honest fallback, not a wrong
     attribution. The upgrade path is threading a run id through scrape.yml.
 
-    Unlike the supermarket legs, a refresh that moved nothing writes NOTHING.
-    The quiet-runs-are-data argument doesn't hold here: an outside price is
-    hand-seeded and often unreachable, so "no change" mostly means "could not
-    check", which is already recorded per entry as `status`."""
-    if not changes:
-        return
+    A refresh that moved nothing still writes `third: []` onto its run. That
+    empty list is what lets the scrape log tell "we checked outside shops and
+    nothing moved" (0) apart from "this day predates outside-shop logging"
+    (a dash) - without it every quiet day read as untracked. It does NOT claim
+    the prices held: a shop the refresh could not reach records that per entry
+    in third_store.json as `status: unreachable <date>`, which is where that
+    question is answered."""
     path = os.path.join(DATA_DIR, "price_changes.json")
     log = []
     if os.path.exists(path):

@@ -259,6 +259,18 @@
     .sl-miss-list li:last-child { border-bottom: none; }
     /* Per-run price changes (Δ) */
     .sl-chg-chip { font-size: 11px; font-weight: 700; color: var(--text-mid); background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 2px 8px; white-space: nowrap; }
+    /* "3 scrapes" - says the day's card merges several runs, so the collapse is
+       stated rather than assumed. Recessive: it is provenance, not a headline. */
+    .sl-chg-runs {
+      font-size: 10.5px; font-weight: 600; color: var(--text-soft);
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1px 7px; white-space: nowrap;
+    }
+    .chg-steps {
+      font-size: 9.5px; font-weight: 700; color: var(--text-soft);
+      border: 1px solid var(--border); border-radius: 6px;
+      padding: 0 3px; margin-right: 5px;
+    }
     .sl-chg-col h3 { font-size: 12px; font-weight: 700; margin: 0 0 8px; }
     .sl-chg-col.ww h3 { color: var(--ww); }
     .sl-chg-col.coles h3 { color: var(--coles); }
@@ -453,7 +465,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=130"></script>
+<script src="utils.js?v=131"></script>
 <script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
@@ -1201,6 +1213,31 @@ function fmtDay(d) {
   return isNaN(dt) ? d : dt.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
+// A day's NET price moves for one store, merged across every run that day.
+//
+// Same product moving twice collapses to its net move: the first run's old price
+// -> the last run's new price. Both legs would double-count the day (12.50 ->
+// 13.00 -> 13.90 is one 12.50 -> 13.90 move, not two), and a price that went up
+// and came back down is not a change at all by day's end - those drop out.
+// `times` keeps that collapse visible rather than silent.
+//
+// Module-level, not local to the run list, because the per-day TABLE, the CHART
+// and the run cards must all count the same thing. They didn't: the table summed
+// raw per-run moves while the cards merged, so 4 Aug read 62 Woolworths moves
+// above a card listing 61. One function, one answer.
+function mergeDayStore(runs, key) {
+  const byItem = new Map();
+  for (const run of runs) {
+    for (const c of (run[key] || [])) {
+      const id = (c.store ? c.store + '::' : '') + c.item;
+      const seen = byItem.get(id);
+      if (seen) { seen.new = c.new; seen.times++; }
+      else byItem.set(id, { ...c, times: 1 });
+    }
+  }
+  return [...byItem.values()].filter(c => +c.new !== +c.old);
+}
+
 function paintChangeSummary(q) {
   const host = $('slChgSummary');
   if (!host) return;
@@ -1209,18 +1246,25 @@ function paintChangeSummary(q) {
   // bucket: they are alternatives to the weekly shop rather than a third weekly
   // shop, and one column per retailer would cost the table its width for rows
   // that are mostly empty. The per-shop breakdown lives in the run detail below.
-  const byDay = new Map();
+  // Counted from each day's MERGED moves (mergeDayStore), not run by run, so this
+  // table, the chart under it and the day cards below all report one number.
+  const runsByDay = new Map();
   for (const run of _changeArchive) {
     const day = localDay(run.date);
     if (!day) continue;
-    if (!byDay.has(day)) byDay.set(day, { ww: { up: 0, down: 0 }, coles: { up: 0, down: 0 }, third: { up: 0, down: 0 } });
-    const bucket = byDay.get(day);
-    for (const [key, list] of [['ww', run.ww], ['coles', run.coles], ['third', run.third]]) {
-      for (const c of (list || [])) {
+    if (!runsByDay.has(day)) runsByDay.set(day, []);
+    runsByDay.get(day).push(run);
+  }
+  const byDay = new Map();
+  for (const [day, runs] of runsByDay) {
+    const bucket = { ww: { up: 0, down: 0 }, coles: { up: 0, down: 0 }, third: { up: 0, down: 0 } };
+    for (const key of ['ww', 'coles', 'third']) {
+      for (const c of mergeDayStore(runs, key)) {
         if (q && !String(c.item).toLowerCase().includes(q)) continue;
         if (+c.new > +c.old) bucket[key].up++; else if (+c.new < +c.old) bucket[key].down++;
       }
     }
+    byDay.set(day, bucket);
   }
   const dayTotal = b => b.ww.up + b.ww.down + b.coles.up + b.coles.down + b.third.up + b.third.down;
   const days = [...byDay.entries()]
@@ -1292,10 +1336,23 @@ function paintChangeSummary(q) {
   days.forEach(([, b]) => {
     for (const k of ['ww', 'coles', 'third']) { tot[k].up += b[k].up; tot[k].down += b[k].down; }
   });
-  // The outside-shop column only exists once there is something in it. A column
-  // of dashes on a page that has never priced a third store is noise, and the
-  // archive predates third-store logging entirely, so most rows would be blank.
-  const anyThird = tot.third.up + tot.third.down > 0;
+  // The outside-shop column is ALWAYS shown. It was gated on "has any third-store
+  // move ever been recorded", which is true only after one of those shops changes
+  // a price - so the column that had just been built was invisible, and looked
+  // exactly like it had never been built. A dash is a fact ("nothing recorded"),
+  // an absent column is a lie by omission.
+  //
+  // But a dash has to mean the right thing. Runs from before outside-shop logging
+  // existed carry no `third` key at all, and printing "0" against those would
+  // claim we checked and found nothing. `thirdSince` is the first day any run
+  // carries the key - before it, the cell reads "-" (not tracked); from it, a
+  // real count. Self-maintaining: no date is hardcoded.
+  const thirdSince = _changeArchive
+    .filter(r => Array.isArray(r.third))
+    .map(r => localDay(r.date))
+    .filter(Boolean)
+    .sort()[0] || null;
+  const thirdTracked = d => thirdSince != null && d >= thirdSince;
 
   // Price movement over time. Bars, not a line: these are counts per day, and a
   // line would imply a continuous value between scrape days. Rises stack above
@@ -1310,8 +1367,8 @@ function paintChangeSummary(q) {
           <th>Day</th>
           <th><span class="store-chip ww sm">W</span> Woolworths</th>
           <th><span class="store-chip coles sm">C</span> Coles</th>
-          ${anyThird ? `<th title="Every shop that is neither Woolworths nor Coles - ${escapeHtml(thirdStoreNames())}">
-            <span class="store-chip third sm">＋</span> Other stores</th>` : ''}
+          <th title="Every shop that is neither Woolworths nor Coles - ${escapeHtml(thirdStoreNames())}. A dash means that day predates outside-shop logging, not that nothing moved.">
+            <span class="store-chip third sm">＋</span> Other stores</th>
           <th>Total</th>
           <th title="Distinct products covered that day, counted once even when the day had several scrapes (×N marks those)">Products</th>
           <th title="How many of those were archived items">Archived</th>
@@ -1322,7 +1379,7 @@ function paintChangeSummary(q) {
           <td class="sl-sum-dow">${weekdayLabel(d)}</td>
           <td>${cell(b.ww)}</td>
           <td>${cell(b.coles)}</td>
-          ${anyThird ? `<td>${cell(b.third)}</td>` : ''}
+          <td>${thirdTracked(d) ? cell(b.third) : '<span class="sl-sum-zero" title="Outside shops were not being logged on this day">-</span>'}</td>
           <td><strong>${dayTotal(b)}</strong></td>
           ${effortCells(d)}
         </tr>`).join('')}</tbody>
@@ -1331,7 +1388,7 @@ function paintChangeSummary(q) {
           <td></td>
           <td>${cell(tot.ww)}</td>
           <td>${cell(tot.coles)}</td>
-          ${anyThird ? `<td>${cell(tot.third)}</td>` : ''}
+          <td>${thirdSince ? cell(tot.third) : '<span class="sl-sum-zero">-</span>'}</td>
           <td><strong>${dayTotal(tot)}</strong></td>
           <td colspan="3" class="sl-sum-rate">${(() => {
             // Seconds per product, across every timed run - the number that
@@ -1360,38 +1417,72 @@ function paintChangeArchive(q) {
     const badge = meta
       ? `<span class="chg-store" style="${thirdChipStyle(c.store)}" title="${escapeHtml(meta.label)}">${escapeHtml(meta.letter)}</span>`
       : '';
+    // A product that moved more than once in the day shows its NET move; the
+    // marker is what stops that collapse from being invisible.
+    const steps = c.times > 1
+      ? `<span class="chg-steps" title="Moved ${c.times} times that day - this is the net change from the first price to the last">×${c.times}</span>`
+      : '';
     return `<li>${badge}<span class="chg-name" title="${escapeHtml((meta ? meta.label + ' - ' : '') + c.item)}">${escapeHtml(shortName(c.item))}</span>` +
-      `<span class="chg-prices">${fmtP(c.old)} → <b class="${up ? 'chg-up' : 'chg-down'}">${fmtP(c.new)}</b> ` +
+      `<span class="chg-prices">${steps}${fmtP(c.old)} → <b class="${up ? 'chg-up' : 'chg-down'}">${fmtP(c.new)}</b> ` +
       `<span class="chg-arrow">${up ? '▲' : '▼'}</span></span></li>`;
   };
   const col = (label, cls, list) =>
     `<div class="sl-chg-col ${cls}"><h3>${label} (${list.length})</h3>` +
     (list.length ? `<ul class="sl-chg-list">${list.map(chgLine).join('')}</ul>`
                  : '<p class="sl-miss-empty">no changes</p>') + '</div>';
-  // Newest first. Runs that moved NOTHING are kept and shown as "no changes" - a
-  // quiet run is itself a data point (a flat stretch must be distinguishable from
-  // a stretch that never ran). While filtering by product, though, only runs that
-  // actually match are useful, so zero-match runs drop out then.
-  const runs = [..._changeArchive].reverse().map(run => {
-    const f = arr => (arr || []).filter(c => !q || String(c.item).toLowerCase().includes(q));
-    const ww = f(run.ww), coles = f(run.coles), third = f(run.third);
-    const quiet = !(run.ww || []).length && !(run.coles || []).length && !(run.third || []).length;
-    return { date: run.date, trigger: run.trigger, ww, coles, third, quiet };
-  }).filter(r => q ? (r.ww.length || r.coles.length || r.third.length) : true);
+  // ONE CARD PER DAY, not per run. A single "Update Prices" click is really two
+  // runs (the main sweep, then the archived sweep a minute or two later), and a
+  // retry or a validation write adds more - 17 Aug logged SEVEN runs, six of them
+  // empty. As separate cards that reads as seven scrapes when it was a couple of
+  // clicks. Grouped by calendar day, it reads as what actually happened.
+  //
+  // The FILE stays one entry per run, deliberately: it is the permanent archive,
+  // it timestamps each move to the minute, and merging is a display choice that
+  // can be changed later - collapsing the stored data could not be undone. The
+  // Excel export keeps the raw per-run rows for the same reason.
+  const dayRuns = new Map();   // 'YYYY-MM-DD' -> runs that day, oldest first
+  for (const run of _changeArchive) {
+    const day = localDay(run.date);
+    if (!day) continue;
+    if (!dayRuns.has(day)) dayRuns.set(day, []);
+    dayRuns.get(day).push(run);
+  }
+
+  const days = [...dayRuns.entries()].sort((a, b) => b[0].localeCompare(a[0])).map(([day, runs]) => {
+    const f = arr => arr.filter(c => !q || String(c.item).toLowerCase().includes(q));
+    const ww = f(mergeDayStore(runs, 'ww'));
+    const coles = f(mergeDayStore(runs, 'coles'));
+    const third = f(mergeDayStore(runs, 'third'));
+    return {
+      day, runs: runs.length,
+      // The newest run's timestamp - "3 hours ago" should mean the last scrape,
+      // not the first one of the day.
+      date: runs[runs.length - 1].date,
+      ww, coles, third,
+      // Quiet = the day moved nothing on net, INCLUDING a day whose only moves
+      // cancelled out. Both are "nothing changed today", which is the honest read.
+      quiet: !mergeDayStore(runs, 'ww').length && !mergeDayStore(runs, 'coles').length && !mergeDayStore(runs, 'third').length,
+    };
+  }).filter(d => q ? (d.ww.length || d.coles.length || d.third.length) : true);
 
   const host = $('slChangeRuns');
   if (!_changeArchive.length) {
     host.innerHTML = '<p class="sl-empty-state">No price changes recorded yet. Every scrape adds any price moves here and keeps them indefinitely.</p>';
     return;
   }
-  if (!runs.length) { host.innerHTML = '<p class="sl-empty-state">No price changes match.</p>'; return; }
-  host.innerHTML = runs.map(r => `
+  if (!days.length) { host.innerHTML = '<p class="sl-empty-state">No price changes match.</p>'; return; }
+  const dayHeading = d => {
+    const dt = new Date(d + 'T00:00:00');
+    return isNaN(dt) ? d : dt.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  };
+  host.innerHTML = days.map(r => `
     <div class="sl-chg-run${r.quiet ? ' quiet' : ''}">
       <div class="sl-chg-run-head">
-        <span class="sl-run-date">${fmtDate(r.date)}<span class="rel">${timeAgo(r.date)}</span></span>
+        <span class="sl-run-date">${dayHeading(r.day)}<span class="rel">${timeAgo(r.date)}</span></span>
         <!-- Plain words, not "Δ N": the delta glyph is the same upward triangle
              as the ▲ that means "this price went up" a few pixels below it. -->
         <span class="sl-chg-chip${r.quiet ? ' quiet' : ''}">${r.quiet ? 'no price moves' : (r.ww.length + r.coles.length + r.third.length) + ' changed'}</span>
+        ${r.runs > 1 ? `<span class="sl-chg-runs" title="${r.runs} scrapes ran that day - a full sweep and its archived pass count as two. Their moves are combined here; the export keeps them separate.">${r.runs} scrapes</span>` : ''}
       </div>
       ${r.quiet ? '' : `<div class="sl-chg-run-body${r.third.length ? ' has-third' : ''}">
         ${col('Woolworths', 'ww', r.ww)}
@@ -1556,17 +1647,24 @@ async function load() {
   // total only ever grows and told you nothing actionable; "5 changed last run"
   // is the number worth glancing at. All-time still lives in the table's footer.
   {
-    const lastRun = (changes || [])[(changes || []).length - 1];
-    const lastCount = lastRun
-      ? (lastRun.ww || []).length + (lastRun.coles || []).length + (lastRun.third || []).length : 0;
+    // The most recent DAY, not the most recent run - the list below is grouped by
+    // day now, and a badge counting only the last of a day's several runs read
+    // "0 changed" on a day that had moved twenty prices an hour earlier.
+    const all = changes || [];
+    const lastDay = all.length ? localDay(all[all.length - 1].date) : null;
+    const todays = all.filter(r => localDay(r.date) === lastDay);
+    const lastCount = todays.reduce((n, r) =>
+      n + (r.ww || []).length + (r.coles || []).length + (r.third || []).length, 0);
     const el = $('slCntChg');
     el.textContent = lastCount;
-    el.title = `${lastCount} price change${lastCount === 1 ? '' : 's'} in the most recent scrape`;
+    el.title = `${lastCount} price change${lastCount === 1 ? '' : 's'} on the most recent scrape day`
+      + (todays.length > 1 ? ` (${todays.length} scrapes)` : '');
   }
   renderTrendChart(fullLog);
   $('slInfoNotes').innerHTML = `
     <li>Only full scrapes (scheduled or manual "Update Prices") are logged here - single-item refreshes from the ✎ Edit dialog aren't.</li>
-    <li><strong>Other stores</strong> pools every shop that is neither Woolworths nor Coles (${escapeHtml(thirdStoreNames())}); each line names its own. They are refreshed as the last leg of the same scrape, so their moves are filed against that run. A shop the refresh couldn't reach logs no change at all rather than a false "held" - "unreachable" is recorded on the price itself, in the ＋ column of the main table.</li>
+    <li>Price changes are grouped <strong>by day, not by run</strong>. One "Update Prices" click is really several runs - the main sweep, then the archived pass a minute or two later, plus any retry - so a day's card combines them and says how many it merged. A product that moved more than once that day shows its <strong>net</strong> move (first price → last) marked <strong>×N</strong>, and one that went up and came back down isn't counted, because by day's end it didn't change. The stored archive still holds every run separately, and the Excel export gives you those raw per-run rows with their timestamps.</li>
+    <li><strong>Other stores</strong> pools every shop that is neither Woolworths nor Coles (${escapeHtml(thirdStoreNames())}); each line names its own. They are refreshed as the last leg of the same scrape, so their moves are filed against that run. A shop the refresh couldn't reach logs no change at all rather than a false "held" - "unreachable" is recorded on the price itself, in the ＋ column of the main table. A <strong>dash</strong> in that column means the day is older than outside-shop logging; a <strong>0</strong> means the shops were checked and nothing moved.</li>
     <li>The <strong>↻</strong> beside the newest run's miss count re-scrapes <em>only</em> the products that run missed - a few dozen requests instead of a full ~210-product sweep. It's logged as a <strong>retry misses</strong> run, and because it only ever attempts known failures its match rate is left out of the summary above and the chart.</li>
     <li>A missed item's price isn't blank on the main site - the last known price carries forward, so a chronic miss can look fine there while quietly going stale. This page is the place to catch that.</li>
     <li><strong>no results</strong> = the search/page fetch returned nothing this run (usually the store blocking the runner, or its page layout changing). <strong>no match</strong> = we got candidates back but none matched the product name closely enough.</li>

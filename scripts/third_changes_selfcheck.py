@@ -74,7 +74,16 @@ check("a naive (tz-less) timestamp is read as UTC, not rejected",
 check("no file yet -> creates one with a single entry", len(run(None)), 1)
 check("corrupt file is replaced, not crashed on", len(run("not a list")), 1)
 check("empty log -> its own entry", len(run([])), 1)
-check("nothing changed -> nothing written at all", run(None, changes=[]), None)
+
+# A quiet refresh still records that it RAN. The scrape log needs `third: []` to
+# tell "checked, nothing moved" (0) apart from "this day predates outside-shop
+# logging" (a dash); with nothing written, every quiet day read as untracked.
+out = run(None, changes=[])
+check("a quiet refresh still records that it ran", len(out), 1)
+check("...as an empty third list, not a missing key", out[-1]["third"], [])
+check("a quiet refresh attaches to the run in flight, same as a busy one",
+      "third" in run([{"date": iso(minutes=4), "trigger": "manual", "ww": [], "coles": []}],
+                     changes=[])[0], True)
 
 # ── shape the UI depends on ──────────────────────────────────────────────────
 e = run(None)[-1]
