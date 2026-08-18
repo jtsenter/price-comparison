@@ -1295,7 +1295,23 @@ function groupMetric(g, res, itemName) {
   // simply take the offer, so the offer is the price. `res` is copied rather
   // than mutated - it is the live scrape object shared with every other reader.
   const promo = promoUnitPrice(res);
-  if (promo !== res.price) res = { ...res, price: promo };
+  if (promo !== res.price) {
+    // The CUP price has to move with it. clientPer100() prefers the size in the
+    // product NAME, but falls back to the store's own unit_price when the name
+    // carries no size - and that fallback never reads `price`, so overriding
+    // price alone silently dropped the promo for exactly those products.
+    // Woolworths scrapes the Aero bar as "Aero Peppermint Milk Chocolate Bar"
+    // with no "40g" in it, so its 2-for-$5 kept reading as the full $7.50/100g
+    // while the identical fix worked fine on baby wipes, whose names do carry a
+    // size. Scaling by the same ratio keeps the two strategies agreeing whichever
+    // one happens to win.
+    const k = res.price > 0 ? promo / res.price : 1;
+    res = {
+      ...res,
+      price: promo,
+      unit_price: res.unit_price != null ? +(res.unit_price * k).toFixed(4) : res.unit_price,
+    };
+  }
   // perPack: the comparable number is the price of ONE piece. Nappies come in
   // 30s, 40s and 124s, so ranking on pack price is meaningless - it sorted a
   // $14.40 30-pack ($0.48 each) above an $11.50 40-pack ($0.29 each). Count is

@@ -926,6 +926,44 @@ check('groupMetric null result', groupMetric({ sticker: true }, null), null);
   groupMetric(g, shared, 'y 60pk');
   check('groupMetric does not mutate the scrape result', shared.price, 8.50);
 
+  // ── THE WEIGHED branch, where the promo used to be dropped ────────────────
+  // Everything above is perPack, which divides `price` directly. A weighed
+  // category goes through clientPer100(), which prefers the size in the product
+  // NAME and falls back to the store's cup price when the name has none - and
+  // that fallback reads unit_price, not price. Overriding price alone therefore
+  // discounted nothing for exactly those products: Woolworths scrapes the Aero
+  // bar as "Aero Peppermint Milk Chocolate Bar" with no "40g" in it, so its
+  // 2-for-$5 kept reading as the full $7.50/100g on screen.
+  const weighed = {};   // not sticker, not perPack
+  const noSize = { price: 3.00, name: 'Aero Peppermint Milk Chocolate Bar',
+                   unit_price: 7.50, unit: '100G', multi_buy: { qty: 2, total: 5 } };
+  check('weighed + promo + NO size in the name -> promo still applies',
+        groupMetric(weighed, noSize, 'Aero Peppermint Milk Chocolate Bar 40g'), 62.5);
+  // Same product, same offer, but the name carries the size: the other strategy
+  // wins and must land on the identical number.
+  const withSize = { price: 3.00, name: 'Aero Peppermint Milk Chocolate Bar 40g',
+                     unit_price: 7.50, unit: '100G', multi_buy: { qty: 2, total: 5 } };
+  check('...and agrees with the size-in-name strategy',
+        groupMetric(weighed, withSize, 'x'), groupMetric(weighed, noSize, 'x'));
+  // The real Coles row from the report: $7.50 118g block, 2 for $10 -> $5.00 each.
+  check('Coles 118g block at 2-for-$10 reads $4.24/100g, not $6.36',
+        +metricShown({ _gramQuote: 100 },
+          groupMetric(weighed, { price: 7.50, name: 'Peppermint Milk Chocolate Block',
+                                 unit_price: 6.36, unit: '100g',
+                                 multi_buy: { qty: 2, total: 10 } }, 'x')).toFixed(2), 4.24);
+  check('no offer -> the cup price is passed through untouched',
+        groupMetric(weighed, { price: 5.00, name: 'no size here', unit_price: 4.24, unit: '100g' }, 'x'),
+        42.4);
+  check('an offer dearer than the shelf leaves the cup price alone',
+        groupMetric(weighed, { price: 5.00, name: 'no size', unit_price: 4.24, unit: '100g',
+                               multi_buy: { qty: 2, total: 20 } }, 'x'), 42.4);
+  check('a missing cup price does not become NaN',
+        groupMetric(weighed, { price: 3.00, name: 'no size', multi_buy: { qty: 2, total: 5 } }, 'x'), null);
+  const sharedW = { price: 3.00, name: 'no size', unit_price: 7.50, unit: '100G',
+                    multi_buy: { qty: 2, total: 5 } };
+  groupMetric(weighed, sharedW, 'x');
+  check('the weighed path does not mutate unit_price either', sharedW.unit_price, 7.50);
+
   check('perPack with no count anywhere -> null', groupMetric(g, { price: 11.50, name: 'x' }, 'y'), null);
   check('perPack with zero count -> null',        groupMetric(g, { price: 11.50, name: 'x 0pk' }, 'y'), null);
   check('packCountOf reads "pack" spelled out',   packCountOf('Huggies 30 pack'), 30);
