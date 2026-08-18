@@ -80,4 +80,35 @@ for (const d of [new Date(2026, 7, 10), new Date(2026, 7, 12)]) {
   assert(defaultScrapeMode(d).reason.length > 10, 'reason text must be usable in the menu');
 }
 
-console.log('scrape_mode_selfcheck.js: 8/8 OK');
+// 9. The refresh button's hover text (app.js half) - names WHICH scrape a plain
+// click is about to run, not just why. Pulled from app.js the same way the rest
+// of this file pulls from utils.js: defaultScrapeMode is already in scope above.
+const appSrc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'app.js'), 'utf8');
+function exApp(n) {
+  const at = appSrc.indexOf('function ' + n + '(');
+  assert(at !== -1, 'missing ' + n + ' in app.js');
+  let i = appSrc.indexOf('{', at), d = 0;
+  for (let j = i; j < appSrc.length; j++) {
+    if (appSrc[j] === '{') d++; else if (appSrc[j] === '}' && --d === 0) return appSrc.slice(at, j + 1);
+  }
+}
+// const/let bindings made inside eval() never escape it, even as direct eval -
+// only var does. Rewritten to globalThis. so SCRAPE_MODE_DESC is still reachable
+// after this eval call ends, same trick exc() uses above for utils.js consts.
+const modeDescSrc = appSrc.match(/const SCRAPE_MODE_DESC\s*=\s*\{[^}]+\};/)[0]
+  .replace(/^const\s+/, 'globalThis.');
+// eslint-disable-next-line no-eval
+eval([modeDescSrc, exApp('refreshTooltipText')].join('\n'));
+
+store = {};
+const wedFull = refreshTooltipText(new Date(2026, 7, 12));
+assert(/^Full scrape/.test(wedFull), 'Wednesday with none done -> tooltip must say Full: ' + wedFull);
+assert(wedFull.includes(SCRAPE_MODE_DESC.full), 'must name what a full scrape covers');
+
+const monQuick = refreshTooltipText(new Date(2026, 7, 10));
+assert(/^Quick scrape/.test(monQuick), 'Monday -> tooltip must say Quick: ' + monQuick);
+assert(monQuick.includes(SCRAPE_MODE_DESC.quick), 'must name what a quick scrape covers');
+assert(monQuick.includes(defaultScrapeMode(new Date(2026, 7, 10)).reason),
+  'must also carry the WHY, not just the WHAT');
+
+console.log('scrape_mode_selfcheck.js: 11/11 OK');
