@@ -1689,20 +1689,39 @@ async def _scrape_single_item(
                             _retry_q = _slug_q if _slug_q.lower() != item.lower() else (
                                 _slug_stripped if _slug_stripped.lower() != item.lower() else ""
                             )
+                            _sc_hit2 = None
                             if _retry_q:
                                 print(f"  WW: retrying with slug query: {_retry_q!r}")
                                 _slug_res = await search_with_retry(search_woolworths, ww_page, _retry_q)
                                 _sc_hit2 = next((r for r in _slug_res if _sc in r.get('url', '')), None)
-                                if _sc_hit2:
-                                    print(f"  WW: slug search found stockcode {_sc}")
-                                    ww_results = [_sc_hit2]
-                                    _skip_picker_ww = True
-                                elif _slug_res:
-                                    # Pinned stockcode not found - don't substitute a different product.
-                                    # Clear results so carry-forward preserves the last known price.
-                                    print(f"  WW: pinned stockcode {_sc} not in results - carrying forward")
-                                    ww_results = []
-                                    _skip_picker_ww = True
+                            if _sc_hit2:
+                                print(f"  WW: slug search found stockcode {_sc}")
+                                ww_results = [_sc_hit2]
+                                _skip_picker_ww = True
+                            else:
+                                # Pinned stockcode not found - NEVER substitute a different
+                                # product. Clear results so carry-forward keeps the last
+                                # known price. This guard used to sit under `elif _slug_res`,
+                                # so it only fired when the slug retry returned SOMETHING -
+                                # if the retry came back empty, or no retry query could be
+                                # derived at all, the original name-search results survived
+                                # and the matcher picked the best NAME match. That is how a
+                                # pinned 25g Bamba bag (out of stock, so absent from every
+                                # search) became "Osem Bamba Peanut Snack 25g x 10" at
+                                # $46.90 - a 10-pack carton, matched at HIGH confidence
+                                # because the names differ by three characters.
+                                # Mirrors the Coles half, which has always been unconditional.
+                                print(f"  WW: pinned stockcode {_sc} not in results - carrying forward")
+                                ww_results = []
+                                _skip_picker_ww = True
+                    else:
+                        # The pin isn't a /productdetails/<id>/<slug> URL, so there is
+                        # no stockcode to verify the search hits against. Same rule:
+                        # a pin names ONE product, and an unverifiable pin must not
+                        # licence the matcher to pick whatever it likes.
+                        print(f"  WW: pinned URL has no stockcode to verify - carrying forward")
+                        ww_results = []
+                        _skip_picker_ww = True
                 return ww_results, _skip_picker_ww, False
 
             async def _fetch_pinned_co():

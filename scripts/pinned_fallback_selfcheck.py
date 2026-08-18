@@ -77,6 +77,52 @@ check(
     "_pinned_slug in r.get('url', '')" in block,
 )
 
+# ── The Woolworths half, which had the same intent but leaked ────────────────
+# Coles has been unconditional since the Lilydale/RSPCA bugs above. WW put the
+# same guard under `elif _slug_res:`, so it only fired when the slug RETRY came
+# back with something. If that retry returned nothing - or no retry query could
+# be derived at all - the original name-search results survived and the matcher
+# picked the closest NAME. A pinned 25g Bamba bag was out of stock (so absent
+# from every search) and became "Osem Bamba Peanut Snack 25g x 10", a 10-pack
+# carton at $46.90, matched at HIGH confidence off a three-character difference.
+ww_start = SRC.find("WW pinned URL failed")
+check("pinned-WW fallback block exists", ww_start != -1)
+# Sliced to the coroutine's own `return`, not a fixed byte count - a comment
+# added inside the block used to push the guards past a hardcoded window and
+# fail the check for the wrong reason.
+_ww_end = SRC.find("return ww_results, _skip_picker_ww", ww_start)
+check("pinned-WW block terminates at its return", _ww_end != -1)
+ww_block = SRC[ww_start:_ww_end] if (ww_start != -1 and _ww_end != -1) else ""
+
+check(
+    "the WW guard is unconditional, not gated on the retry returning results",
+    "elif _slug_res:" not in ww_block,
+    "that gate is exactly what let the carton through",
+)
+check(
+    "an unfound stockcode clears the results",
+    re.search(r"else:.*?ww_results = \[\]", ww_block, re.S) is not None,
+    "no pinned match must mean no price, not a different product's price",
+)
+check(
+    "a pin with no parseable stockcode also clears rather than guessing",
+    "no stockcode to verify" in ww_block and ww_block.count("ww_results = []") >= 2,
+)
+# The stockcode hit must still win when the pinned product IS findable.
+check(
+    "a found stockcode still wins",
+    "matched by stockcode" in ww_block and "ww_results = [_sc_hit]" in ww_block,
+)
+check(
+    "the slug retry still wins when it finds the stockcode",
+    "slug search found stockcode" in ww_block and "ww_results = [_sc_hit2]" in ww_block,
+)
+# Both stores must reach the same verdict, so neither can regress alone.
+check(
+    "both stores clear results when the pin cannot be confirmed",
+    "coles_results = []" in block and "ww_results = []" in ww_block,
+)
+
 print()
 if failures:
     print(f"pinned_fallback_selfcheck: {len(failures)} FAILED")
