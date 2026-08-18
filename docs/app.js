@@ -6290,20 +6290,12 @@ function _renderPageInner(data) {
   const coverageText = missingCount > 0
     ? `${pricedBoth}/${totalNonArchived} priced · ${missingCount} missing`
     : `${totalNonArchived} items`;
-  // Deal count uses the SAME canonical function the Hot Deals page uses, with the
-  // same inputs, so this number always equals the rows shown there (no drift).
-  const hotTune = loadDealTune(); // same sliders the Hot Deals page uses
-  const hotCount = getHotDealItems(data.items, {
-    exclusions: _renderExclusions,
-    archivedSet: _repoArchivedSet,
-    priorities: _uiPriorities,
-    minDropPct: hotTune.drop,
-    minStoreDiffPct: hotTune.diff,
-    minRankPct: hotTune.rank,
-    maxStaleMonths: hotTune.stale,
-    mode: hotTune.mode,
-  }).length;
-  $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>${hotCount > 0 ? `<a href="hot-deals.html" class="hot-deals-link">🔥 ${hotCount} deal${hotCount !== 1 ? 's' : ''}</a>` : ''}`;
+  // The "🔥 N deals" link that used to sit here is gone by request. Hot Deals has
+  // its own 🔥 in the header nav, so the count was a second entry point to the
+  // same page on a line whose job is describing the DATA (how fresh, how
+  // complete). Removing it also drops a getHotDealItems() pass over every item on
+  // every render - it was the most expensive thing on this line by a wide margin.
+  $('lastUpdated').innerHTML = `<span>Updated ${formatDate(data.last_updated)}</span><span>${coverageText}</span>`;
   $('banner').style.display = 'block';
   const _sw = $('searchWrap');
   if (_sw) _sw.style.display = '';
