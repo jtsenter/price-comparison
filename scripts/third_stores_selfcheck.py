@@ -5,7 +5,7 @@
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 from third_stores import (parse_cw_price, parse_jsonld_price, parse_meta_price,
-                          parse_price_for, _plausible)
+                          parse_price_for, _plausible, _round_robin_by_store)
 
 n = 0
 def check(label, got, want):
@@ -66,5 +66,35 @@ check("router kmart reads AggregateOffer",
 check("router bigw uses jsonld",
       parse_price_for("big_w", '<script type="application/ld+json">'
                       '{"@type":"Product","offers":{"price":16}}</script>'), 16.0)
+
+# ── request spreading ────────────────────────────────────────────────────────
+# Big W 403s under a burst (measured: a dozen rapid requests and every Big W URL
+# 403d, including ones that had answered 200 minutes before; they recovered on
+# their own). Interleaving the shops keeps consecutive requests off one host.
+# The risk in reordering is losing or duplicating an entry, so that is what these
+# pin - the spreading itself is a best-effort, the completeness is not.
+def _mk(store, i):
+    return {"store": store, "url": f"https://{store}/{i}"}
+
+_src = [_mk("big_w", 1), _mk("big_w", 2), _mk("big_w", 3),
+        _mk("chemist_warehouse", 1), _mk("chemist_warehouse", 2), _mk("kmart", 1)]
+_out = _round_robin_by_store(_src)
+check("every entry survives the reorder", len(_out), len(_src))
+check("no entry is duplicated or invented",
+      sorted(e["url"] for e in _out), sorted(e["url"] for e in _src))
+check("a shop's own entries keep their file order",
+      [e["url"] for e in _out if e["store"] == "big_w"],
+      ["https://big_w/1", "https://big_w/2", "https://big_w/3"])
+check("consecutive same-host requests are reduced, not increased",
+      sum(1 for a, b in zip(_out, _out[1:]) if a["store"] == b["store"]) <=
+      sum(1 for a, b in zip(_src, _src[1:]) if a["store"] == b["store"]), True)
+check("the first three requests hit three different shops",
+      len({e["store"] for e in _out[:3]}), 3)
+check("an empty list is fine", _round_robin_by_store([]), [])
+check("one shop only degrades to file order",
+      [e["url"] for e in _round_robin_by_store([_mk("kmart", 1), _mk("kmart", 2)])],
+      ["https://kmart/1", "https://kmart/2"])
+check("a missing store key does not drop the entry",
+      len(_round_robin_by_store([{"url": "u"}, _mk("kmart", 1)])), 2)
 
 print(f"third_stores_selfcheck: all {n} cases passed")

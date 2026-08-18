@@ -121,6 +121,18 @@ All tunable values are defined near the top of `scraper.py`:
   profile under the service account's `%LOCALAPPDATA%\pricewatch-pw-profile`, so Coles
   bot-check (Incapsula) trust cookies survive across runs. No user-agent override: a
   hardcoded UA that lags the real Chrome build is itself a bot fingerprint.
+- **Outside shops (`third_stores.py`) need the SAME launch config as `scraper.py`** —
+  real Chrome (`channel="chrome"`) plus `--disable-blink-features=AutomationControlled`.
+  It shipped as a bare bundled-Chromium launch and Big W + Kmart 403'd for months while
+  WW/Coles sailed through in the same run. The blocker was the `HeadlessChrome` token in
+  the default UA; `_undetectable_ua()` DERIVES the installed Chrome's own UA and strips
+  it. Derive, never pin — a hardcoded `Chrome/141` against a real Chrome 151 was still
+  403'd, which is the same rule as the bullet above, not an exception to it.
+  Big W also **rate-limits bursts**: a dozen rapid requests and every Big W URL 403s
+  (including ones that just worked), recovering after a few minutes' rest. Entries are
+  visited round-robin across shops to spread the load. If you're testing by hand, expect
+  403s and wait it out rather than concluding the site is blocked.
+  Priceline genuinely is unreachable (Cloudflare JS challenge), and that one is real.
 - **Scrape-log rates are per-store**: single-store-pinned items deliberately skip the
   other store ("a single-store pin means a single store") and are recorded as neither
   attempted nor missed there — `ww_attempted`/`coles_attempted` in scrape_log.json are

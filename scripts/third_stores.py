@@ -178,6 +178,58 @@ def parse_price_for(store: str, html: str):
 
 # ── the refresh run ──────────────────────────────────────────────────────────
 
+async def _undetectable_ua(pw) -> str | None:
+    """The installed Chrome's OWN user-agent with the headless marker removed.
+
+    Headless Chrome advertises "HeadlessChrome/<version>", and Big W and Kmart
+    both 403 on it - that string alone was the entire block. Measured, not
+    guessed: with it, both answer 403; with it replaced by "Chrome", both answer
+    200 and parse a price.
+
+    DERIVED at runtime, never hardcoded, and that distinction is the whole point.
+    A pinned UA lags the real Chrome build and becomes its own bot signal - which
+    is exactly how this was mis-diagnosed: a hardcoded "Chrome/141" against a real
+    Chrome 151 still got 403 from Big W, and only the derived string worked. Same
+    rule CLAUDE.md states for scraper.py; this satisfies it rather than breaking it.
+
+    Returns None if anything goes wrong, and the caller then launches with no
+    override - i.e. exactly today's behaviour, never worse.
+    """
+    browser = None
+    try:
+        browser = await pw.chromium.launch(headless=True, channel="chrome")
+        page = await browser.new_page()
+        ua = await page.evaluate("navigator.userAgent")
+        return ua.replace("HeadlessChrome", "Chrome") if ua else None
+    except Exception as ex:
+        print(f"third_stores: could not derive a user-agent ({type(ex).__name__}); "
+              f"continuing without one")
+        return None
+    finally:
+        if browser:
+            try:
+                await browser.close()
+            except Exception:
+                pass
+
+
+def _round_robin_by_store(entries: list) -> list:
+    """Same entries, reordered so consecutive ones prefer DIFFERENT shops.
+
+    Pure and order-stable within a shop, so it is trivially checkable: every
+    entry appears exactly once and each shop's own sequence is unchanged.
+    """
+    buckets: dict = {}
+    for e in entries:
+        buckets.setdefault(e.get("store", "?"), []).append(e)
+    out = []
+    while any(buckets.values()):
+        for key in list(buckets):
+            if buckets[key]:
+                out.append(buckets[key].pop(0))
+    return out
+
+
 async def refresh() -> int:
     with open(THIRD_PATH, encoding="utf-8") as f:
         doc = json.load(f)
@@ -194,8 +246,29 @@ async def refresh() -> int:
     changes: list = []   # {store,item,old,new} -> price_changes.json
 
     async with async_playwright() as pw:
-        ctx = await pw.chromium.launch_persistent_context(PROFILE_DIR, headless=True)
+        # Matched to scraper.py's launch, which is the config that gets past Coles'
+        # Incapsula: REAL Chrome (channel="chrome"), not bundled Chromium, plus the
+        # flag that hides the automation marker. This script had none of it - it was
+        # a bare bundled-Chromium launch, which is why Big W and Kmart 403'd while
+        # Woolworths and Coles sailed through in the very same workflow run.
+        ua = await _undetectable_ua(pw)
+        ctx = await pw.chromium.launch_persistent_context(
+            PROFILE_DIR, headless=True, channel="chrome",
+            **({"user_agent": ua} if ua else {}),
+            args=["--no-sandbox", "--disable-blink-features=AutomationControlled",
+                  "--disable-dev-shm-usage"],
+        )
         page = await ctx.new_page()
+        # Entries are visited SHOP BY SHOP interleaved rather than in file order, so
+        # consecutive requests rarely hit the same host. Big W starts 403ing under a
+        # burst - proven by accident while testing: after a dozen rapid requests
+        # every Big W URL 403'd, including ones that had answered 200 minutes
+        # earlier, and they recovered once left alone. The per-page 2.5s settle
+        # below already paces things; spreading the hosts is the other half.
+        # ponytail: a round-robin, not a real per-host rate limiter. Fine at 23
+        # entries across 5 shops; if one shop ever dominates the list, give it a
+        # proper per-host delay instead.
+        entries = _round_robin_by_store(entries)
         for e in entries:
             store = e.get("store", "?")
             try:
