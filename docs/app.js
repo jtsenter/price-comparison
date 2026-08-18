@@ -3490,6 +3490,19 @@ async function triggerRefresh(mode) {
 // State is carried by colour + a tick, nothing else.
 const SVG_REFRESH_ICO = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>';
 const SVG_CHECK_ICO   = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+// Same short descriptions the ▾ menu items use (header.js), duplicated rather
+// than shared: header.js builds its HTML before utils.js has loaded, so it
+// cannot read a constant defined there, and this pair of phrases is small
+// enough that keeping them in sync by eye is cheaper than restructuring
+// script load order for it.
+const SCRAPE_MODE_DESC = { full: 'everything, including the never-movers', quick: 'only items whose price actually moves' };
+// What the plain click is ABOUT to do, so it doesn't have to be discovered by
+// clicking. defaultScrapeMode() already carries the WHY (used by the ▾ menu's
+// note); this just also names the WHAT.
+function refreshTooltipText(now) {
+  const d = defaultScrapeMode(now);
+  return `${d.mode === 'full' ? 'Full' : 'Quick'} scrape - ${SCRAPE_MODE_DESC[d.mode]}. ${d.reason}`;
+}
 // state: 'idle' | 'working' (dispatching or scrape running) | 'done' | 'error'
 function setRefreshState(state) {
   const btn = $('refreshBtn');
@@ -3512,9 +3525,18 @@ function setRefreshState(state) {
     btn.innerHTML = SVG_REFRESH_ICO;
   } else {
     btn.disabled = false;
-    btn.title = 'Update prices';
+    btn.title = refreshTooltipText();
     btn.innerHTML = SVG_REFRESH_ICO;
   }
+}
+// Refresh just the idle tooltip's WORDING (e.g. Wednesday has rolled around
+// since the page was opened) without touching disabled/icon/classes - called
+// from every render, so it must never fight a working/done/error state that a
+// renderPage() mid-dispatch could otherwise stomp back to idle.
+function syncRefreshIdleTooltip() {
+  const btn = $('refreshBtn');
+  if (!btn || btn.classList.contains('is-working') || btn.classList.contains('is-done') || btn.classList.contains('is-error')) return;
+  btn.title = refreshTooltipText();
 }
 
 async function pollForCompletion(s, dispatchedAt) {
@@ -6183,6 +6205,7 @@ function _renderPageInner(data) {
       strip.style.display = 'none';
     }
   }
+  syncRefreshIdleTooltip();
 
   const _uiPriorities = loadPriorities();
   const _renderExclusions = loadExclusions();
