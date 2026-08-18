@@ -156,6 +156,19 @@
       font-weight: 800;
       color: var(--text);
     }
+    /* "/kg" rides the big number at a smaller weight, so the figure still reads
+       as one price rather than two. */
+    .price-rate-unit {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-mid);
+      margin-left: 1px;
+    }
+    .price-rate-note {
+      font-size: 11.5px;
+      color: var(--text-soft);
+      margin: -4px 0 8px;
+    }
     .price-arrow {
       font-size: 13px;
       color: var(--text-soft);
@@ -275,7 +288,7 @@
      record, so the record has to be one click away. Reuses the shared modal
      rather than growing a second chart here. -->
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=129"></script>
+<script src="utils.js?v=130"></script>
 <script src="history-modal.js?v=6"></script>
 
 <div class="notif-dropdown" id="notifDropdown" style="display:none">
@@ -971,7 +984,7 @@ async function confirmAll() {
 
 // ── Render ────────────────────────────────────────────────────────────────────
 
-function buildStoreCol(entry, store, suspicious, newPrice, prevPrice, url) {
+function buildStoreCol(entry, store, suspicious, newPrice, prevPrice, url, res) {
   const isWw = store === 'ww';
   const labelCls  = isWw ? 'ww-label' : 'co-label';
   const chipCls   = isWw ? 'ww' : 'coles';
@@ -987,6 +1000,24 @@ function buildStoreCol(entry, store, suspicious, newPrice, prevPrice, url) {
     : '';
 
   const notSuspClass = suspicious ? '' : ' not-suspicious';
+
+  // A by-weight product's flagged figure is a per-KG RATE, not a shelf price, and
+  // it was printed bare - "$13.90" for loose mushrooms sitting next to Coles'
+  // "$4.00" 200g punnet, which reads as a wild mismatch when the two numbers
+  // simply measure different things. The rate is the RIGHT thing to review here
+  // (the history being compared against is per kg), so it stays - labelled, with
+  // the portion price you'd actually pay spelled out underneath.
+  const isRate = typeof isRatePriced === 'function' && isRatePriced(res);
+  const rateSuffix = isRate ? `<span class="price-rate-unit">/${(res.unit || 'kg').toLowerCase().replace(/^1/, '')}</span>` : '';
+  // The portion SIZE isn't stored, but it is exactly recoverable: pack_price is
+  // price x (grams/1000), so the ratio gives the grams back. Derived rather than
+  // regexed out of the name, because the scraped name has no size in it at all
+  // for these ("Mushrooms Cups Loose") - the size lives in WW's PackageSize field,
+  // which never reaches latest.json.
+  const portionG = isRate && res.price > 0 ? Math.round((res.pack_price / res.price) * 1000) : null;
+  const rateNote = isRate
+    ? `<div class="price-rate-note">sold by weight - ${fmtPrice(res.pack_price)}${portionG ? ` per ${portionG}g` : ''}</div>`
+    : '';
 
   // Confirm/Reject only for suspicious stores; the secondary row (fix link /
   // not sold here) is always available - wrong links and store removals aren't
@@ -1014,9 +1045,10 @@ function buildStoreCol(entry, store, suspicious, newPrice, prevPrice, url) {
         ${storeName}${suspicious ? '' : ' <span style="font-weight:400;font-size:11px;opacity:.7">(unchanged)</span>'}
       </div>
       <div class="price-comparison-row">
-        <span class="price-new">${fmtPrice(newPrice)}</span>
+        <span class="price-new">${fmtPrice(newPrice)}${rateSuffix}</span>
         ${prevPrice != null ? `<span class="price-arrow">←</span><span class="price-prev">${fmtPrice(prevPrice)}</span>${pctStr}` : ''}
       </div>
+      ${rateNote}
       ${urlHtml}
       ${actionsHtml}
       ${secondaryHtml}
@@ -1068,8 +1100,8 @@ function renderEntry(entry) {
       }</div>
     </div>
     <div class="validate-stores">
-      ${buildStoreCol(entry, 'ww',    entry.ww_suspicious,    entry.ww_price,    entry.ww_prev_price,    entry.ww_url)}
-      ${buildStoreCol(entry, 'coles', entry.coles_suspicious, entry.coles_price, entry.coles_prev_price, entry.coles_url)}
+      ${buildStoreCol(entry, 'ww',    entry.ww_suspicious,    entry.ww_price,    entry.ww_prev_price,    entry.ww_url,    _itemData?.woolworths)}
+      ${buildStoreCol(entry, 'coles', entry.coles_suspicious, entry.coles_price, entry.coles_prev_price, entry.coles_url, _itemData?.coles)}
     </div>`;
 
   card.querySelector('.validate-hist-btn')?.addEventListener('click', () => {

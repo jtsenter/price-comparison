@@ -77,7 +77,15 @@
     "__group_lotus_biscoff": "weekly",
     "__group_red_onions": "weekly",
     "Continental Classics Cup A Soup Chicken With Lots Of Noodles": "monthly",
-    "__group_baby_wipes": "monthly"
+    "__group_baby_wipes": "monthly",
+    "Woolworths Mushrooms Cups Punnet 200g": "weekly",
+    "Woolworths Mushrooms Cups Punnet 500g": "weekly",
+    "Woolworths White Cup Sliced Mushroom Punnet 200g": "weekly",
+    "Woolworths Mushroom Sliced 500g": "weekly",
+    "Coles Mushrooms Cup 200g": "weekly",
+    "Coles Cup Mushrooms 500g": "weekly",
+    "Coles Sliced Mushrooms 200g": "weekly",
+    "Coles Mushrooms Sliced 500g": "weekly"
   },
   "units": {
     "Truss Tomatoes": 4,
@@ -519,6 +527,27 @@
       "quote": 100,
       "gramQuote": 1000,
       "created": true
+    },
+    "mushrooms": {
+      "v": 2,
+      "created": true,
+      "label": "Mushrooms",
+      "category": "Fruit & Veg",
+      "sticker": false,
+      "perPack": false,
+      "add": [
+        "Mushrooms Cups Loose",
+        "Mushrooms Flat Large Loose",
+        "Woolworths Mushrooms Cups Punnet 200g",
+        "Woolworths Mushrooms Cups Punnet 500g",
+        "Woolworths White Cup Sliced Mushroom Punnet 200g",
+        "Woolworths Mushroom Sliced 500g",
+        "Coles Mushrooms Cup 200g",
+        "Coles Cup Mushrooms 500g",
+        "Coles Sliced Mushrooms 200g",
+        "Coles Mushrooms Sliced 500g"
+      ],
+      "remove": []
     }
   },
   "lists": {

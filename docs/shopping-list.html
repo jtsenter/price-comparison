@@ -707,7 +707,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=129"></script>
+<script src="utils.js?v=130"></script>
 <script>
 // fmt() lives in utils.js (loaded above).
 // Short display name (same map the rest of the site uses); falls back to the
@@ -901,8 +901,9 @@ async function boot() {
   // store doesn't price it.
   const effPrice = (i, store) => {
     if (i._isGroup) return store === 'ww' ? i._wwPerKg : i._coPerKg;
-    const p = store === 'ww' ? i.woolworths?.price : i.coles?.price;
-    return p == null ? null : p;
+    // shelfPrice: same reason as lineCost below - `price` is a per-kg rate for a
+    // by-weight row, and this is the figure printed beside it.
+    return shelfPrice(store === 'ww' ? i.woolworths : i.coles);
   };
   // Effective price of an item at `store`. In SINGLE mode, items the store
   // doesn't sell fall back to the other store's price (you have no choice for
@@ -926,7 +927,11 @@ async function boot() {
   // column, which is why the two pages' store totals agree to the cent.
   function lineCost(i, store) {
     if (i._isGroup) return groupStoreTotal(i, store);            // utils.js
-    const p = store === 'ww' ? i.woolworths?.price : i.coles?.price;
+    // shelfPrice (utils.js), not .price: a WW by-weight row stores a per-KG RATE
+    // there, so a loose-mushroom line billed at $13.90 instead of the $2.78 the
+    // portion actually costs. Mirrors mbLineCost() on the main page - these two
+    // must agree to the cent or the basket total contradicts the table's.
+    const p = shelfPrice(store === 'ww' ? i.woolworths : i.coles);
     if (p == null) return null;
     return multiBuyCost(unitsOf(i, store), p, mbOf(i, store));   // utils.js
   }

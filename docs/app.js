@@ -2856,7 +2856,16 @@ function initBulkBar() {
 // promo lives in res.multi_buy {qty,total}. multiBuyCost is in utils.js.
 function mbLineCost(res, units) {
   if (res?.price == null) return null;
-  return multiBuyCost(units, res.price, res.multi_buy);
+  // shelfPrice(): for a WW by-weight item `price` is a per-KG RATE, not what one
+  // unit costs. This function is the single source of every money figure on the
+  // page - Best, Savings, Total, the sort keys and the basket line - so reading
+  // the rate here priced ONE portion of loose mushrooms at $13.90 instead of
+  // $2.78, and handed the "cheaper" verdict to Coles at $4.00. The scraper had
+  // it right in latest.json (cheaper_store: woolworths, saving 1.22 = 4.00-2.78);
+  // the client recomputed it wrong and overrode it.
+  // A multi-buy is priced off the pack and never coexists with a by-weight item,
+  // so multiBuyCost still gets the same number it always did for those.
+  return multiBuyCost(units, shelfPrice(res), res.multi_buy);
 }
 // Which store is cheaper for this item at its CURRENT qty. Falls back to the
 // scraper's sticker-based call when a store is missing (no contest to re-decide).
@@ -6512,7 +6521,11 @@ function _renderPageInner(data) {
       // effective per-unit (green) - so a "cheaper" mark is self-explanatory
       // instead of $3.30 vs $3.30 with a mystery winner.
       const wwActive = !!(ww.multi_buy?.qty && ww.multi_buy.total != null && units >= ww.multi_buy.qty);
-      const wwShown = wwActive ? multiBuyCost(units, ww.price, ww.multi_buy) / units : ww.price;
+      // shelfPrice, not ww.price: a by-weight item stores a $/kg RATE there. The
+      // multi-buy branch keeps ww.price because a promo is priced off the pack,
+      // and the two never coexist (WW multi-buys are on packaged goods, never on
+      // loose produce).
+      const wwShown = wwActive ? multiBuyCost(units, ww.price, ww.multi_buy) / units : shelfPrice(ww);
       const wwInner = wwUrl
         ? `<a href="${wwUrl}" target="_blank" rel="noopener" class="price-link">${fmt(wwShown)}</a>`
         : fmt(wwShown);
@@ -6533,7 +6546,7 @@ function _renderPageInner(data) {
     let coCellContent;
     if (co) {
       const coActive = !!(co.multi_buy?.qty && co.multi_buy.total != null && units >= co.multi_buy.qty);
-      const coShown = coActive ? multiBuyCost(units, co.price, co.multi_buy) / units : co.price;
+      const coShown = coActive ? multiBuyCost(units, co.price, co.multi_buy) / units : shelfPrice(co);
       const coInner = coUrl
         ? `<a href="${coUrl}" target="_blank" rel="noopener" class="price-link">${fmt(coShown)}</a>`
         : fmt(coShown);

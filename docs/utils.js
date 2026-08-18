@@ -106,6 +106,39 @@ function per100Pair(ww, co) {
   return { ww: w, coles: c };
 }
 
+// ── What a price COLUMN should show ─────────────────────────────────────────
+// `price` does not always mean "what you pay". For a Woolworths by-weight item
+// (Unit=KG sold as "per 200g") the scraper deliberately keeps `price` as the
+// per-KG rate, so the price history and the $/kg comparison stay in $/kg and
+// don't cliff the day a portion price appears - and puts the portion shelf price
+// in `pack_price` (see _ww_pack_price in scraper.py).
+//
+// That is the right storage choice, but it left `price` meaning two different
+// things, and only ONE render path in the whole app knew: the per-kg category
+// panel. Everywhere else printed a $/kg rate bare, in a column of pack prices,
+// next to a Coles pack price - so loose mushrooms read "$13.90" against Coles
+// "$4.00" while the Savings column beside it (correctly computed from the $2.78
+// portion) said Woolworths was $1.22 CHEAPER. The number was never wrong, it was
+// unlabelled and incomparable.
+//
+// So: every path that shows a price to be READ AS MONEY goes through here, and
+// every path that does MATHS (per-100, history, $/kg, trend) keeps using `price`.
+// Those are genuinely different questions and this is the one place that answers
+// the first one.
+function shelfPrice(res) {
+  if (!res) return null;
+  return res.pack_price ?? res.price ?? null;
+}
+
+// Is this result's `price` a per-kg RATE rather than a shelf price? Only true
+// for the by-weight case above, where pack_price carries the real shelf figure.
+// Callers that must show the rate itself (price validation reviews the $/kg
+// series, so showing the portion price there would compare it against a per-kg
+// history) use this to LABEL it instead of silently printing a bare number.
+function isRatePriced(res) {
+  return !!(res && res.pack_price != null && res.pack_price !== res.price);
+}
+
 // ── Per-kg single source of truth ────────────────────────────────────────────
 // Every per-kg number in the UI (current price, history modal, trend bar) is
 // derived through these so the values can never diverge. They lived in app.js
