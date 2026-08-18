@@ -2208,8 +2208,6 @@ td.priority-cell { text-align: center; }
   cursor: pointer; transition: background 0.1s, border-color 0.1s;
 }
 .card-btn:hover { background: var(--bg-alt); border-color: var(--text-mid); color: var(--text); }
-.hot-deals-link { color: #e05a00; font-weight: 600; text-decoration: none; }
-.hot-deals-link:hover { text-decoration: underline; }
 .view-toggle-btn.view-active { background: var(--bg-alt); border-color: var(--text-mid); }
 
 /* ── Row checkbox ────────────────────────────────────────────── */
