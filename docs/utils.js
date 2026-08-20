@@ -391,6 +391,32 @@ function priceHistoryBtnHTML(itemName) {
   return `<button class="price-bar-manage" data-manage-item="${safe}" aria-label="View price history"><svg class="pbm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg><span class="pbm-txt">History</span></button>`;
 }
 
+// ── Category trend range ────────────────────────────────────────────────────
+// What a CATEGORY's trend bar measures today's price against.
+//
+//   'best' - only the CHEAPEST member at each store on each date, so one scrape
+//            contributes at most TWO points (one per store)
+//   'all'  - every price every member has ever had (the original behaviour)
+//
+// Why the choice exists: a category holding both a $12.00 and a $30.90 pack drew
+// its range from the $30.90 one, so a member nobody buys set the ceiling on its
+// own. A $19 pack then read as a bargain against a price the user would never
+// have paid. 'best' measures against what the category ACTUALLY cost you - which
+// is also precisely the series its own history chart already plots (see
+// buildGroupHistoryItem), so the bar and the chart stop contradicting each other.
+//
+// Two states, so a plain string compare - no list to keep in sync, and nothing
+// for the self-checks' eval() sandbox to trip over.
+function loadTrendRangeMode() {
+  try { return localStorage.getItem('pw_trend_range_v1') === 'all' ? 'all' : 'best'; }
+  catch { return 'best'; }
+}
+
+function saveTrendRangeMode(mode) {
+  try { localStorage.setItem('pw_trend_range_v1', mode === 'all' ? 'all' : 'best'); }
+  catch {}
+}
+
 // `historyBtn` renders the clock/"History" button that opens the price-history
 // modal. Pages that do not host that modal pass false rather than shipping a
 // button that does nothing when clicked.

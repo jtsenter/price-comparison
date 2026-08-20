@@ -4273,7 +4273,11 @@ function groupTrendCellHTML(group, historyBtn = true) {
   // bar vanished altogether. groupPastPrices puts perPack first, like groupMetric.
   // Whatever minimum the bar draws is now exactly the minimum the sort measures
   // against, so a price below the bar really does sort ahead of one sitting on it.
-  const prices = groupPastPrices(group);
+  // 'best' measures against the cheapest option at each store on each date;
+  // 'all' against every member's every price. Its series is already in display
+  // units, so it skips the metricShown() pass below - see groupBestPastShown.
+  const bestOnly = loadTrendRangeMode() === 'best';
+  const prices = bestOnly ? groupBestPastShown(group) : groupPastPrices(group);
   // Under two points there is no range to draw, but buildPriceBar still hands
   // back the History button - so a brand-new category (Tahini Neri, one scrape
   // old and a category of one) keeps a way into its history instead of showing a
@@ -4283,7 +4287,7 @@ function groupTrendCellHTML(group, historyBtn = true) {
   // bar itself is relative so the scale never mattered to it, but its min/max
   // labels are real money and were printing the hidden per-ONE-piece figure -
   // "$0.03  $0.12" beside a price reading "$3.17 /100".
-  const hist = prices.map(p => ({ price: metricShown(group, p) }));
+  const hist = prices.map(p => ({ price: bestOnly ? p : metricShown(group, p) }));
   // History button opens the group's own merged history (see buildGroupHistoryItem),
   // not one member's - a group can mix a WW-only and a Coles-only product, so
   // picking a single member's history hides whichever store that member doesn't sell at.
@@ -4447,6 +4451,38 @@ function groupPastPrices(group) {
   return group._members.flatMap(m => memberPerKgPrices(m, ...memberStoreFlags(group, m), true));
 }
 
+// The same past, reduced to what the category actually COST: the cheapest member
+// at each store on each date, i.e. at most two points per scrape. See
+// loadTrendRangeMode() in utils.js for why the flat "every member's every price"
+// range was misleading.
+//
+// Built from buildGroupHistoryItem rather than a second reduction of its own -
+// that function already does the hard parts (per-store, forward-filled so an
+// unscraped-but-cheaper member still wins its date, per-point and per-member
+// exclusions honoured) and this way the bar cannot drift from the history chart
+// the clock button opens, because they are the same numbers.
+//
+// NOTE the units: these come back ALREADY scaled for display, the same scaling
+// metricShown() applies, for all three group shapes - so callers must NOT put
+// them through metricShown a second time. groupPastPrices() is the opposite
+// (raw $/kg or per ONE piece) and does need it. group_history_units_selfcheck.js
+// pins that difference; getting it wrong is the 10x phantom-jump bug again.
+//
+// ponytail: memoized on the per-render group OBJECT, so the entry dies with the
+// render and there is nothing to invalidate. Ceiling: no reuse ACROSS renders -
+// if that ever shows up in a profile, key a Map on _groupKey + last_updated.
+const _groupBestSeriesCache = new WeakMap();
+function groupBestPastShown(group) {
+  let out = _groupBestSeriesCache.get(group);
+  if (!out) {
+    const h = buildGroupHistoryItem(group);
+    out = [...h.ww_price_history, ...h.coles_price_history]
+      .map(e => e.price).filter(p => p > 0);
+    _groupBestSeriesCache.set(group, out);
+  }
+  return out;
+}
+
 function groupTrendPosition(group) {
   const cands = [group._wwBest, group._coBest].filter(Boolean);
   if (!cands.length) return 999;
@@ -4458,15 +4494,21 @@ function groupTrendPosition(group) {
   // never go below 0 anyway). Eleven of 26 groups therefore tied on 0 and the
   // A-Z tiebreak stacked every category at the top of a trend sort, which is
   // exactly the "per-kg items come first" report.
-  const past = groupPastPrices(group);
-  if (past.length < 2) return 999;
+  // Same series the BAR draws (see groupTrendCellHTML) so the sort keeps
+  // agreeing with the picture. `cur` has to be restated in whichever units that
+  // series uses: the normalised position is scale-invariant, but the flat-range
+  // epsilons below are absolute money and would compare $/kg against $/100g.
+  const bestOnly = loadTrendRangeMode() === 'best';
+  const past = bestOnly ? groupBestPastShown(group) : groupPastPrices(group);
+  const cur = bestOnly ? metricShown(group, best.perkg) : best.perkg;
+  if (past.length < 2 || cur == null) return 999;
   const lo = Math.min(...past), hi = Math.max(...past);
   if (lo === hi) {
-    if (best.perkg < lo - 0.005) return -1;
-    if (best.perkg > lo + 0.005) return 2;
+    if (cur < lo - 0.005) return -1;
+    if (cur > lo + 0.005) return 2;
     return 0.5;
   }
-  return (best.perkg - lo) / (hi - lo);
+  return (cur - lo) / (hi - lo);
 }
 
 // Trend position for any row: groups use their $/kg series, normal items use the shared
@@ -7398,9 +7440,27 @@ function renderCfdValues(search, resetScroll = true) {
   });
 }
 
-// ── Options menu (row density only - the dropdown itself, its toggle and the
-//    theme switcher are owned by header.js so they work identically on every
-//    page; density is index-only because it styles the main table) ───────────
+// ── Options menu (the dropdown itself, its toggle and the theme switcher are
+//    owned by header.js so they work identically on every page; the category
+//    trend range is wired HERE because only this page draws category rows) ───
+
+function initTrendRangeToggle() {
+  const seg = $('trendRangeSeg');
+  if (!seg) return;
+  const sync = () => seg.querySelectorAll('.opt-seg-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.trendRange === loadTrendRangeMode()));
+  sync();
+  seg.addEventListener('click', (e) => {
+    const b = e.target.closest('.opt-seg-btn');
+    if (!b || b.dataset.trendRange === loadTrendRangeMode()) return;
+    saveTrendRangeMode(b.dataset.trendRange);
+    sync();
+    // Full re-render, not just the bars: the trend SORT reads the same series,
+    // so a table sorted by trend has to reorder too or the picture and the
+    // order disagree.
+    if (_lastData) renderPage(_lastData);
+  });
+}
 
 // ── Boot ─────────────────────────────────────────────────────────────────────
 
@@ -7434,6 +7494,7 @@ async function boot() {
   initBulkBar();
   initColumnChooser();
   initColFilterDropdown();
+  initTrendRangeToggle();
   updateImportBadge();
 
   const refreshBtn = $('refreshBtn');

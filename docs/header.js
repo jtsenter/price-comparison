@@ -199,6 +199,17 @@
             '<button class="opt-seg-btn" data-theme-opt="dark">Dark</button>' +
             '<button class="opt-seg-btn" data-theme-opt="auto">Auto</button>' +
           '</div></div>' +
+        /* Category trend range. Rendered here (the dropdown is header-owned) but
+           WIRED in app.js, like row density was: it only changes the main
+           table's category rows, and app.js is the only page that draws them.
+           Not viewer-gated - it is a display preference, not an edit. */
+        (page === 'index'
+          ? '<div class="options-group"><div class="options-group-label">Category trend</div>' +
+              '<div class="options-seg" id="trendRangeSeg">' +
+                '<button class="opt-seg-btn" data-trend-range="best" title="Range spans only the cheapest option at each store on each date - at most two points per scrape">Cheapest</button>' +
+                '<button class="opt-seg-btn" data-trend-range="all" title="Range spans every price every product in the category has ever had">Every product</button>' +
+              '</div></div>'
+          : '') +
         (page === 'index' && !viewer
           ? '<div class="options-divider"></div>' +
             '<button class="more-dropdown-item" id="importBtn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Items</button>' +

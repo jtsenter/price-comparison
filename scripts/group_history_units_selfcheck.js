@@ -37,25 +37,47 @@ function extract(src, name, where) {
 }
 
 // Real implementations of the scaling rules under test.
-const realUtils = ['weightQuoteOf', 'weightQuoteSuffix', 'isWeighedGroup', 'pieceQuoteOf', 'metricShown']
+const realUtils = ['weightQuoteOf', 'weightQuoteSuffix', 'isWeighedGroup', 'pieceQuoteOf',
+                   'metricShown', 'loadTrendRangeMode']
   .map(n => extract(utilsSrc, n, 'utils.js')).join('\n');
-const realBuild = extract(appSrc, 'buildGroupHistoryItem', 'app.js');
+const realBuild = ['buildGroupHistoryItem', 'memberRawHistory', 'memberPerKgPrices',
+                   'memberStoreFlags', 'groupPastPrices', 'groupBestPastShown',
+                   'groupTrendPosition']
+  .map(n => extract(appSrc, n, 'app.js')).join('\n');
+
+// Taken from the source, not restated here: a stubbed cache would keep
+// groupBestPastShown working in this harness after the real declaration was
+// deleted, i.e. the check would pass for code that throws in the browser.
+const cacheDecl = (appSrc.match(/const _groupBestSeriesCache\s*=\s*[^;]+;/) || [])[0];
+assert(cacheDecl, '_groupBestSeriesCache declaration not found in app.js');
 
 // Stubs for everything buildGroupHistoryItem touches that isn't the scaling rule.
 const stubs = `
   const WEIGHT_QUOTES = [1000, 100];
   const PER_WEIGHT_QUOTE = 1000;
+  const PIECE_QUOTES = [1, 10, 50, 100];
   const PER_PIECE_QUOTE = 1;
+  const _prefs = {};
+  const localStorage = {
+    getItem: k => (k in _prefs ? _prefs[k] : null),
+    setItem: (k, v) => { _prefs[k] = String(v); },
+  };
   function loadPerKgExclusions() { return new Set(); }
   function exclSetsFor() { return { ww: new Set(), co: new Set() }; }
   function packCountOf(n) { return (String(n).match(/(\\d+)\\s*pk/i) || [])[1] * 1 || 0; }
   function qtyPiecesPer(g) { return g && g._perPack ? pieceQuoteOf(g) : 1; }
   // price -> $/kg, i.e. exactly what clientPerKg/price gives for a real product.
   function perKgRatio(res) { return res && res.price && res._perKg ? res._perKg / res.price : null; }
+  // Only reached with histOnly=false, which nothing under test uses.
+  function clientPerKg() { return null; }
 `;
 
-const sandbox = new Function(`${stubs}\n${realUtils}\n${realBuild}\nreturn { buildGroupHistoryItem, metricShown, weightQuoteOf, weightQuoteSuffix };`)();
-const { buildGroupHistoryItem, metricShown } = sandbox;
+const sandbox = new Function(`${stubs}\n${cacheDecl}\n${realUtils}\n${realBuild}
+  return { buildGroupHistoryItem, metricShown, weightQuoteOf, weightQuoteSuffix,
+           groupPastPrices, groupBestPastShown, groupTrendPosition,
+           setTrendMode: m => localStorage.setItem('pw_trend_range_v1', m) };`)();
+const { buildGroupHistoryItem, metricShown, groupPastPrices, groupBestPastShown,
+        groupTrendPosition, setTrendMode } = sandbox;
 
 // One member: a 118g block at $5.00 -> $42.37/kg.
 function member(name, wwPrice, wwPerKg, coPrice, coPerKg, hist) {
@@ -130,6 +152,117 @@ console.log('group history units:');
     Math.abs(h.ww_price_history[0].price - 5.0) < 0.001,
     `got ${h.ww_price_history[0].price}, expected 5.00`);
   check('sticker category has no unit label', h._unitLabel === null, `got ${h._unitLabel}`);
+}
+
+// ── Trend range: 'best' (cheapest per store per date) vs 'all' ──────────────
+// The reported case, with its real numbers. A per-100-tablet category holding a
+// 60pk that works out to $12.00/100 and a 100pk at $30.90/100 drew its bar from
+// $12.00 to $30.90 - so a $19 pack sat mid-range and read as decent value,
+// against a ceiling set by the one product the user never buys.
+function tabletMember(name, wwHist) {
+  return {
+    list_item: name,
+    woolworths: { price: wwHist[wwHist.length - 1][1] },
+    coles: null,
+    price_history: [],
+    ww_price_history: wwHist.map(([date, price]) => ({ date, price })),
+    coles_price_history: [],
+  };
+}
+
+function tabletGroup() {
+  const cheap = tabletMember('Shine Tablets 60 pk', [['2026-08-01', 7.20], ['2026-08-08', 7.20]]);
+  const dear  = tabletMember('Finish Tablets 100 pk', [['2026-08-01', 30.90], ['2026-08-08', 30.90]]);
+  return {
+    _groupKey: 'dishwashing_tablets', _groupLabel: 'Dishwashing tablets',
+    _members: [cheap, dear], _perPack: true, _sticker: false, _quote: 100,
+    // per ONE piece: $7.20 / 60
+    _wwPerKg: 0.12, _coPerKg: null,
+    _wwBest: { perkg: 0.12, result: {} }, _coBest: null,
+  };
+}
+
+{
+  const g = tabletGroup();
+
+  setTrendMode('all');
+  const all = groupPastPrices(g).map(p => metricShown(g, p));
+  check("'all' range still spans every member - $12.00 to $30.90",
+    Math.abs(Math.min(...all) - 12) < 0.01 && Math.abs(Math.max(...all) - 30.9) < 0.01,
+    `got ${Math.min(...all).toFixed(2)}..${Math.max(...all).toFixed(2)}`);
+
+  setTrendMode('best');
+  const best = groupBestPastShown(g);
+  check("'best' range excludes the member nobody buys - no $30.90 ceiling",
+    Math.abs(Math.max(...best) - 12) < 0.01,
+    `got max ${Math.max(...best).toFixed(2)}, expected 12.00`);
+  check("'best' keeps at most one point per store per date",
+    best.length <= 2 * new Set(g._members.flatMap(m => m.ww_price_history.map(e => e.date))).size,
+    `got ${best.length} points across 2 dates`);
+  check("'best' is in the SAME units as metricShown('all') - per 100, not per 1",
+    Math.abs(Math.min(...best) - Math.min(...all)) < 0.01,
+    `best min ${Math.min(...best)} vs all min ${Math.min(...all)} - a 100x gap means metricShown was applied twice or not at all`);
+}
+
+// The weighed shape has its own scaling path (gramQuote, not pieceQuote), and it
+// is the one that produced the original 10x phantom jump - so it gets the same
+// same-units assertion rather than trusting the per-piece one to cover it.
+{
+  const g = groupFor(100, { _wwBest: { perkg: 42.4, result: {} }, _coBest: null, _coPerKg: null });
+  setTrendMode('all');
+  const all = groupPastPrices(g).map(p => metricShown(g, p));
+  setTrendMode('best');
+  const best = groupBestPastShown(g);
+  check('weighed /100g category: both modes agree on scale',
+    all.length && best.length && Math.abs(Math.min(...best) - Math.min(...all)) < 0.02,
+    `best ${Math.min(...best)} vs all ${Math.min(...all)}`);
+}
+
+// The bar and the trend SORT read the same series, so a category sitting at its
+// own low must sort ahead of one sitting mid-range - in EITHER mode. This is
+// what breaks if `cur` is left in $/kg while the series is in $/100g: the
+// position stays right (a ratio cancels the scale) but the flat-range epsilons
+// below do not, so a flat category is graded against the wrong absolute number.
+{
+  const flat = tabletGroup();
+  flat._members = [tabletMember('Shine Tablets 60 pk', [['2026-08-01', 7.20], ['2026-08-08', 7.20]])];
+  for (const mode of ['best', 'all']) {
+    setTrendMode(mode);
+    check(`trend sort (${mode}): a category exactly at its flat all-time price grades 0.5`,
+      Math.abs(groupTrendPosition(flat) - 0.5) < 1e-9,
+      `got ${groupTrendPosition(flat)}`);
+  }
+  // Now the same category, but today it is CHEAPER than it has ever been.
+  const low = tabletGroup();
+  low._members = [tabletMember('Shine Tablets 60 pk', [['2026-08-01', 7.20], ['2026-08-08', 7.20]])];
+  low._wwBest = { perkg: 0.10, result: {} };
+  low._wwPerKg = 0.10;
+  for (const mode of ['best', 'all']) {
+    setTrendMode(mode);
+    check(`trend sort (${mode}): below its own flat low sorts ahead of everything`,
+      groupTrendPosition(low) === -1, `got ${groupTrendPosition(low)}`);
+  }
+}
+setTrendMode('best');
+
+// The two CALL SITES, checked on the source. The sandbox above proves
+// groupBestPastShown returns display units; it cannot prove the bar remembers
+// that, and "put it through metricShown as well" is the same 10x mistake this
+// file already exists to catch - just one function further out.
+{
+  const cell = extract(appSrc, 'groupTrendCellHTML', 'app.js');
+  const pos  = extract(appSrc, 'groupTrendPosition', 'app.js');
+  for (const [label, src] of [['bar', cell], ['sort', pos]]) {
+    check(`trend ${label} honours the range setting`, src.includes('loadTrendRangeMode()'));
+    check(`trend ${label} reads the cheapest-per-store series`, src.includes('groupBestPastShown('));
+  }
+  // Both must switch on the SAME flag, or the bar and the order it sorts in can
+  // show different pasts - the failure mode the "ONE series" comment in
+  // groupTrendCellHTML was written for.
+  check('bar and sort scale metricShown only on the non-best path',
+    /bestOnly \? p : metricShown\(group, p\)/.test(cell)
+    && /bestOnly \? metricShown\(group, best\.perkg\) : best\.perkg/.test(pos),
+    'the best-mode series is already display-scaled - scaling it again is a 10x/100x jump');
 }
 
 console.log('\nAll group-history unit self-checks passed.');
