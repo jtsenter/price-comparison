@@ -2446,37 +2446,55 @@ function renderListPills() {
   const host = $('listPills');
   if (!host) return;
   const all = loadLists();
-  const keys = Object.keys(all).sort((a, b) => (all[a].label || a).localeCompare(all[b].label || b));
+  // Lists hidden on the Lists page keep their products but give up their pill -
+  // filtered HERE rather than at the source so every other list surface (the
+  // bulk "Add to list" menu, the Lists page itself) still sees all of them.
+  const keys = Object.keys(all).filter(k => listShownOnMain(all[k]))
+    .sort((a, b) => (all[a].label || a).localeCompare(all[b].label || b));
   host.innerHTML = '';
-  if (!keys.length) return;
-  const sep = document.createElement('span');
-  sep.className = 'filter-separator';
-  host.appendChild(sep);
-  for (const k of keys) {
-    const btn = document.createElement('button');
-    btn.className = 'priority-pill list-pill' + (_activePriority === LIST_FILTER_PREFIX + k ? ' active' : '');
-    btn.dataset.priority = LIST_FILTER_PREFIX + k;
-    btn.textContent = all[k].label || k;
-    btn.title = `Show only the products in "${all[k].label || k}"`;
-    btn.addEventListener('click', () => applyPriorityFilter(btn.dataset.priority, btn));
-    host.appendChild(btn);
+  if (keys.length) {
+    const sep = document.createElement('span');
+    sep.className = 'filter-separator';
+    host.appendChild(sep);
+    for (const k of keys) {
+      const btn = document.createElement('button');
+      btn.className = 'priority-pill list-pill' + (_activePriority === LIST_FILTER_PREFIX + k ? ' active' : '');
+      btn.dataset.priority = LIST_FILTER_PREFIX + k;
+      btn.textContent = all[k].label || k;
+      btn.title = `Show only the products in "${all[k].label || k}"`;
+      btn.addEventListener('click', () => applyPriorityFilter(btn.dataset.priority, btn));
+      host.appendChild(btn);
+    }
   }
   // Mobile hides the pill row entirely, so the same choices have to exist in the
   // frequency dropdown or lists would be desktop-only.
+  //
+  // Runs even with NO visible lists - this used to sit behind an early return on
+  // `keys.length`, so the last list's option outlived its pill (deleting your
+  // only list left it selectable in the dropdown). Hiding every list makes that
+  // a one-click state instead of a rare one, so the stale optgroup has to go.
   const fs = $('freqSelect');
   if (fs) {
     fs.querySelector('optgroup[data-lists]')?.remove();
-    const og = document.createElement('optgroup');
-    og.label = 'My lists';
-    og.setAttribute('data-lists', '1');
-    for (const k of keys) {
-      const o = document.createElement('option');
-      o.value = LIST_FILTER_PREFIX + k;
-      o.textContent = all[k].label || k;
-      og.appendChild(o);
+    if (keys.length) {
+      const og = document.createElement('optgroup');
+      og.label = 'My lists';
+      og.setAttribute('data-lists', '1');
+      for (const k of keys) {
+        const o = document.createElement('option');
+        o.value = LIST_FILTER_PREFIX + k;
+        o.textContent = all[k].label || k;
+        og.appendChild(o);
+      }
+      fs.appendChild(og);
     }
-    fs.appendChild(og);
-    if (_activePriority.startsWith(LIST_FILTER_PREFIX)) fs.value = _activePriority;
+    // Only re-assert a list selection that still EXISTS as an option. Setting
+    // .value to a removed option silently blanks the <select>, which reads as
+    // "no filter" while the table is still filtered.
+    if (_activePriority.startsWith(LIST_FILTER_PREFIX)
+        && fs.querySelector(`option[value="${CSS.escape(_activePriority)}"]`)) {
+      fs.value = _activePriority;
+    }
   }
 }
 

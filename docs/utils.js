@@ -815,6 +815,31 @@ function listKeyFor(label, existing) {
   for (let n = 2; ; n++) if (!existing[`${base}-${n}`]) return `${base}-${n}`;
 }
 
+// Does this list get a filter pill on the main screen?
+//
+// Hiding is DISPLAY ONLY, and deliberately narrow: the list keeps every product,
+// still appears on the Lists page, and still shows up in the bulk "Add to list"
+// menu - it just stops taking up room in the filter row. A list you file things
+// into once a year shouldn't cost a permanent pill.
+//
+// Absent flag = shown, so every list made before this existed stays visible and
+// nothing needs migrating.
+function listShownOnMain(l) {
+  return !(l && l.hidden);
+}
+
+// Single writer for the flag. Clears the key rather than storing `false` so the
+// stored shape keeps matching listShownOnMain's "absent means shown" rule - a
+// lingering `hidden:false` would work but reads as if it meant something.
+function setListHidden(key, hidden) {
+  const all = loadLists();
+  if (!all[key]) return all;
+  if (hidden) all[key].hidden = true;
+  else delete all[key].hidden;
+  saveLists(all);
+  return all;
+}
+
 // Every list key holding this product, custom lists only.
 function listsForItem(name) {
   const all = loadLists();
