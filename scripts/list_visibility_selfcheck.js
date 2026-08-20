@@ -145,8 +145,26 @@ check('setting the flag on a list that does not exist creates nothing', () => {
 // ── The Lists page control ──────────────────────────────────────────────────
 check('the Lists page offers the toggle and labels it by what it will do', () => {
   assert.ok(/data-act="vis"/.test(listsSrc), 'no visibility button on the row');
-  assert.ok(/Hide filter/.test(listsSrc) && /Show filter/.test(listsSrc),
-    'the button must name the action, not the current state');
+  assert.ok(/Hide the .* filter from the main screen/.test(listsSrc)
+         && /Show the .* filter on the main screen/.test(listsSrc),
+    'the label must name the action, not the current state');
+});
+check('the icon-only toggle is still readable without sight of it', () => {
+  // An eye that only swaps its glyph says nothing to a screen reader, and a
+  // title alone is not an accessible name on a button with no text.
+  assert.ok(/aria-label="\$\{escAttr\(label\)\}"/.test(listsSrc), 'no aria-label on the eye');
+  assert.ok(/aria-pressed="\$\{shown\}"/.test(listsSrc), 'toggle state must reach assistive tech');
+  assert.ok(/EYE_OFF\b/.test(listsSrc) && /\$\{shown \? EYE : EYE_OFF\}/.test(listsSrc),
+    'the icon must reflect the state, not stay fixed');
+});
+check('toggling keeps keyboard focus on the row it was pressed on', () => {
+  // renderCustom() replaces the card, so without this a keyboard user is
+  // dumped back to <body> after every single toggle.
+  assert.ok(/\.lvis`\)\?\.focus\(\)/.test(listsSrc), 'focus is not restored after the re-render');
+});
+check('the frequency card holds the eye column open so the two line up', () => {
+  assert.ok(/lvis-spacer/.test(listsSrc),
+    'built-in rows need the same leading column or the names step sideways between cards');
 });
 check('the toggle is not owner-gated', () => {
   // Walk back to the button's own opening tag rather than matching a fixed

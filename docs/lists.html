@@ -15,7 +15,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=162" />
+  <link rel="stylesheet" href="style.css?v=163" />
   <style>
     .lists-wrap { max-width: 900px; margin: 0 auto; padding: 22px 20px 80px; }
     .lists-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; flex-wrap: wrap; }
@@ -43,6 +43,39 @@
       white-space: nowrap;
     }
     .lrow-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+    /* Main-screen visibility. Leads the row rather than joining the action
+       cluster: it is a PROPERTY of the list ("does this reach the main
+       screen"), not a third thing to do to it, and dressing it as a fourth
+       text button put a harmless toggle beside Delete at the same weight. */
+    .lvis {
+      flex-shrink: 0; display: grid; place-items: center;
+      width: 28px; height: 28px; padding: 0; margin-left: -4px;
+      background: none; border: none; border-radius: 7px;
+      /* --text-mid, matching the .lbtn siblings, not the --text-soft used for
+         counts: this is a control, and against the dark card --text-soft only
+         just clears the 3:1 an icon control needs. */
+      color: var(--text-mid); cursor: pointer;
+    }
+    .lvis:hover { background: var(--bg); color: var(--text); }
+    .lvis:focus-visible { outline: 2px solid var(--ww); outline-offset: 1px; }
+    .lvis svg { display: block; }
+    /* Off: the whole row recedes, so one glance down the card says which lists
+       reach the main screen - no badge to read on each one. */
+    .lrow-off .lrow-name, .lrow-off .lrow-count { opacity: .45; }
+    .lvis-spacer { flex-shrink: 0; width: 28px; margin-left: -4px; }
+    /* Thumb-sized where there's a thumb. The row is 54px tall, so this grows the
+       target without moving anything. */
+    @media (pointer: coarse) { .lvis { width: 40px; height: 40px; margin-left: -8px; } }
+
+    /* Narrow screens: the actions drop to their own line. Three buttons plus the
+       eye left the NAME at zero width on a 375px phone in owner mode - the row
+       was all controls and no clue which list they acted on. Indented to the
+       name's column so the eye still reads as leading the whole row. */
+    @media (max-width: 560px) {
+      .lrow { flex-wrap: wrap; row-gap: 9px; }
+      .lrow-actions { flex-basis: 100%; margin-left: 38px; }
+    }
     .lbtn {
       font: inherit; font-size: 12px; font-weight: 600; cursor: pointer;
       background: var(--card); color: var(--text-mid);
@@ -106,8 +139,8 @@
     <strong>Frequency</strong> is built in and fixed: every product is Weekly, Monthly, Rare or
     Archived, and only ever one of them. <strong>My lists</strong> are yours to make, and they
     overlap freely - a product can be in as many as you like. Each one also gets a filter button on
-    the main screen; <strong>Hide filter</strong> takes that button away without touching the list
-    itself, for the ones you file into but rarely filter by.
+    the main screen; the <strong>eye</strong> turns that button off without touching the list itself,
+    for the ones you file into but rarely filter by.
   </p>
 
   <div class="viewer-note">
@@ -215,11 +248,21 @@ function renderBuiltins() {
   const counts = priorityCounts();
   $('builtinCard').innerHTML = BUILTIN.map(([k, label]) => `
     <div class="lrow lrow-builtin">
+      <!-- Holds the eye column open so the two cards' names line up. No eye
+           itself: the frequency four are always on the main screen, and a
+           greyed-out one here would look like a control that had stopped
+           working rather than one that was never offered. -->
+      <span class="lvis-spacer" aria-hidden="true"></span>
       <span class="lrow-name">${esc(label)}</span>
       <span class="lrow-count">${counts[k] || 0} product${counts[k] === 1 ? '' : 's'}</span>
       <span class="lrow-actions"><span class="lrow-count" style="opacity:.65">built in</span></span>
     </div>`).join('');
 }
+
+/* Same 24-box, stroke-2 outline set the header and the rest of the app use, so
+   this button doesn't read as a different family of icon. */
+const EYE = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYE_OFF = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
 
 function renderCustom() {
   const all = loadLists();
@@ -237,16 +280,19 @@ function renderCustom() {
     const l = all[k];
     const n = (l.items || []).length;
     const shown = listShownOnMain(l);
+    // aria-pressed, not just a swapped icon: the state has to reach a screen
+    // reader too, and the label names the ACTION so it reads the same way the
+    // tooltip does.
+    const label = shown
+      ? `Hide the "${l.label || k}" filter from the main screen`
+      : `Show the "${l.label || k}" filter on the main screen`;
     return `
-      <div class="lrow" data-key="${escAttr(k)}">
-        <span class="lrow-name">${esc(l.label || k)}${
-          shown ? '' : ' <span class="lrow-count">(hidden)</span>'}</span>
+      <div class="lrow${shown ? '' : ' lrow-off'}" data-key="${escAttr(k)}">
+        <button class="lvis" data-act="vis" aria-pressed="${shown}"
+                title="${escAttr(label)}" aria-label="${escAttr(label)}">${shown ? EYE : EYE_OFF}</button>
+        <span class="lrow-name">${esc(l.label || k)}</span>
         <span class="lrow-count">${n} item${n === 1 ? '' : 's'}</span>
         <span class="lrow-actions">
-          <button class="lbtn" data-act="vis" title="${
-            shown ? 'Stop showing this list as a filter on the main screen'
-                  : 'Show this list as a filter on the main screen'
-          }">${shown ? 'Hide filter' : 'Show filter'}</button>
           <button class="lbtn" data-act="edit">Edit products</button>
           <button class="lbtn owner-only" data-act="rename">Rename</button>
           <button class="lbtn danger owner-only" data-act="delete">Delete</button>
@@ -342,6 +388,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       // the theme and trend-range switches.
       setListHidden(key, listShownOnMain(all[key]));
       renderCustom();
+      // renderCustom replaces the whole card, so the button that was just
+      // pressed no longer exists and focus would fall back to <body> - leaving a
+      // keyboard user at the top of the page after every toggle.
+      $('customCard').querySelector(`.lrow[data-key="${CSS.escape(key)}"] .lvis`)?.focus();
     } else if (btn.dataset.act === 'edit') {
       _editingKey = key; _onlyTicked = false; $('memberSearch').value = '';
       renderMembers();
