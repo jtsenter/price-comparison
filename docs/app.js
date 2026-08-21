@@ -2389,6 +2389,36 @@ function nameMatchesSearch(name, terms) {
   return terms.every(t => n.includes(t));
 }
 
+// Every name a row can legitimately be found by, lowercased into one haystack.
+//
+// The search used to test `override || list_item`. For a CATEGORY row list_item
+// is the internal `__group_<key>` SLUG, never the label on screen - and the slug
+// is a snapshot of the label taken when the category was created, so it matched
+// only by luck. "Barramundi Fish" was minted as barramundi_fish and does find
+// "fish"; "Basa Fish Fillets" was minted as basa_fillets and vanishes the moment
+// you type the "s" of "fis", even though the row reads Fish. Renaming a category
+// never rewrites its slug, so renaming Salmon to "Salmon fish" left it
+// unfindable by the one word you can actually read on it.
+//
+// The SORT has read the displayed label since the A-Z fix ("so A-Z order matches
+// what the eye reads"); search was simply never brought along. Both now go
+// through here.
+//
+// Members are in the haystack too, because a category IS its products: the
+// Salmon row really does contain the Tassal packs, and typing "tassal" used to
+// hide the only row holding them.
+//
+// A rename ADDS a name rather than replacing one - the raw and store names stay
+// searchable. An override is another handle on a product, not a denial of the
+// name the store prints on it.
+function searchHaystack(item, ovr) {
+  const namesOf = n => [n, ovr[n]?.displayName, window.PW_NAME_MAP?.[n], stripWW(n)];
+  const parts = (item._isGroup || item._groupLabel)
+    ? [item._groupLabel, ...(item._members || []).flatMap(m => namesOf(m.list_item))]
+    : namesOf(item.list_item);
+  return parts.filter(Boolean).join(' ').toLowerCase();
+}
+
 // Record searches that match NOTHING in the current list - the cheapest useful
 // analytics: each one is a candidate to add to shopping_list.xlsx. Kept in
 // localStorage (no backend); the Scrape Log page surfaces them. Debounced by the
@@ -2398,8 +2428,15 @@ function maybeLogNoResults(q) {
   if (q.length < 3 || !_lastData?.items) return;
   const terms = searchTerms(q);
   const ovr = loadOverrides();
-  const anyMatch = _lastData.items.some(i =>
-    !i.archived && nameMatchesSearch(ovr[i.list_item]?.displayName || i.list_item, terms));
+  // Category LABELS count as a match, not just raw products. A category name
+  // exists nowhere in the item list - "Barramundi Fish" is a label over five
+  // products none of which say "fish" - so searching it would have been filed as
+  // a product the user doesn't track, while the row sat on screen matching it.
+  // Same haystack the filter uses, so what the page shows and what this records
+  // cannot disagree.
+  const anyMatch = _lastData.items.some(i => !i.archived && nameMatchesSearch(searchHaystack(i, ovr), terms))
+    || buildVariantGroups(new Map(_lastData.items.map(i => [i.list_item, i])))
+         .some(g => nameMatchesSearch(searchHaystack(g, ovr), terms));
   if (anyMatch) return;
   try {
     const key = 'pw_search_misses_v1';
@@ -3889,8 +3926,7 @@ function applyValueFilters(list, skipCol = null) {
   if (_searchQuery) {
     const terms = searchTerms(_searchQuery);
     const ovr = loadOverrides();
-    filtered = filtered.filter(i =>
-      nameMatchesSearch(ovr[i.list_item]?.displayName || i.list_item, terms));
+    filtered = filtered.filter(i => nameMatchesSearch(searchHaystack(i, ovr), terms));
   }
   return filtered;
 }
