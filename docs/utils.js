@@ -802,8 +802,59 @@ function loadLists() {
 
 function saveLists(obj) {
   localStorage.setItem(LISTS_KEY, JSON.stringify(obj || {}));
-  // app.js owns the debounced publish; other pages just write locally.
-  if (typeof scheduleUserSettingsSync === 'function') scheduleUserSettingsSync();
+  // index.html owns the FULL settings publish. Every other page publishes just
+  // the lists key, and it MUST publish something: "other pages just write
+  // locally" was silently lossy, because index.html's boot merge is repo-wins
+  // for the owner and replaces each list WHOLE. Anything done on the Lists page
+  // - a rename, a membership tick, hiding a filter - was reverted by the repo's
+  // older copy the next time the main page loaded. ("Why does Birthdays keep
+  // coming back?")
+  if (typeof scheduleUserSettingsSync === 'function') { scheduleUserSettingsSync(); return; }
+  scheduleListsPublish();
+}
+
+// ── Lists publish, for pages that don't load app.js ─────────────────────────
+// A read-modify-write of ONLY user_settings.json's `lists` key. Deliberately
+// NOT the whole payload app.js sends: this page holds no _perkgSet, no
+// priorities and no unit overrides in memory, so publishing a full settings
+// object from here would write them out empty and wipe them for every device.
+let _listsPublishTimer = null;
+
+// Short debounce, because the very next thing you do after hiding a filter is
+// navigate to the main screen to look at it. app.js can afford 1500ms - it stays
+// on its page - but here a long timer plus a click on "Home" loses the write,
+// which is the same bug wearing a different hat.
+function scheduleListsPublish() {
+  clearTimeout(_listsPublishTimer);
+  _listsPublishTimer = setTimeout(publishListsToRepo, 600);
+}
+
+async function publishListsToRepo() {
+  clearTimeout(_listsPublishTimer);
+  _listsPublishTimer = null;
+  const s = loadSettings();
+  // No token = a viewer or an unconfigured device: stays local, exactly as
+  // before. Viewers' merge is local-wins, so nothing of theirs is lost either.
+  if (!s.token) return;
+  const out = {};
+  // Same tombstone filter app.js applies - a deleted product must not ride back
+  // into the repo inside a membership array.
+  for (const [k, l] of Object.entries(loadLists())) {
+    out[k] = { ...l, items: (l.items || []).filter(n => !REMOVED_ITEMS.has(n)) };
+  }
+  try {
+    const remote = await githubGetJson(s, 'docs/data/user_settings.json');
+    remote.lists = out;
+    await githubPutJson(s, 'docs/data/user_settings.json', remote, 'chore: sync lists');
+  } catch (e) {
+    console.warn('Lists sync failed - the change is saved on this device only:', e.message);
+  }
+}
+
+// Navigating away kills the debounce timer, so flush anything still pending.
+// pagehide (not unload) so it also fires on mobile tab-switching and bfcache.
+if (typeof window !== 'undefined') {
+  window.addEventListener('pagehide', () => { if (_listsPublishTimer) publishListsToRepo(); });
 }
 
 // Stable key from a label. Suffixed on collision so two lists can share a
@@ -815,29 +866,52 @@ function listKeyFor(label, existing) {
   for (let n = 2; ; n++) if (!existing[`${base}-${n}`]) return `${base}-${n}`;
 }
 
-// Does this list get a filter pill on the main screen?
-//
+// ── Which lists get a filter pill on the main screen ────────────────────────
 // Hiding is DISPLAY ONLY, and deliberately narrow: the list keeps every product,
 // still appears on the Lists page, and still shows up in the bulk "Add to list"
 // menu - it just stops taking up room in the filter row. A list you file things
 // into once a year shouldn't cost a permanent pill.
 //
-// Absent flag = shown, so every list made before this existed stays visible and
-// nothing needs migrating.
-function listShownOnMain(l) {
-  return !(l && l.hidden);
+// Stored in its OWN key, per device, NOT inside the list object. The first cut
+// put a `hidden` flag on the list itself, which meant it rode along in the
+// user_settings.json `lists` map - and that map merges repo-wins per WHOLE list
+// on the main page's boot. The repo's copy had no flag, so it replaced the local
+// object outright and the pill came straight back on the next load. ("Why does
+// Birthdays keep appearing after refresh?")
+//
+// Keeping it out of the synced map fixes that by construction rather than by
+// timing: there is no publish to race, and no Pages-CDN lag window where the
+// deployed file is still the old one. It also matches the other two view
+// preferences - theme and the category-trend range - which screen you want
+// cluttered is a property of the screen, not of the shared list.
+const LIST_HIDDEN_KEY = 'pw_list_hidden_v1';
+
+function loadHiddenLists() {
+  try {
+    const a = JSON.parse(localStorage.getItem(LIST_HIDDEN_KEY) || '[]');
+    return new Set(Array.isArray(a) ? a : []);
+  } catch { return new Set(); }
 }
 
-// Single writer for the flag. Clears the key rather than storing `false` so the
-// stored shape keeps matching listShownOnMain's "absent means shown" rule - a
-// lingering `hidden:false` would work but reads as if it meant something.
+// Takes the list KEY, not the list object - the flag no longer lives on the
+// object, and passing one would silently always answer "shown".
+function listShownOnMain(key) {
+  return !loadHiddenLists().has(key);
+}
+
+// Single writer. Drops the key rather than storing `false`, so "absent means
+// shown" stays the only rule and the set never accumulates dead entries.
 function setListHidden(key, hidden) {
-  const all = loadLists();
-  if (!all[key]) return all;
-  if (hidden) all[key].hidden = true;
-  else delete all[key].hidden;
-  saveLists(all);
-  return all;
+  if (!key) return;
+  const set = loadHiddenLists();
+  if (hidden) set.add(key); else set.delete(key);
+  try { localStorage.setItem(LIST_HIDDEN_KEY, JSON.stringify([...set])); } catch {}
+}
+
+// A deleted list must not leave its key sitting in the hidden set, where a new
+// list that happened to reuse the slug would be born invisible.
+function forgetListVisibility(key) {
+  setListHidden(key, false);
 }
 
 // Every list key holding this product, custom lists only.

@@ -193,7 +193,7 @@
 </div>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=136"></script>
+<script src="utils.js?v=137"></script>
 <script>
 /* ── Manage Lists ────────────────────────────────────────────────────────────
    Reads the same pw_lists_v1 the main page filters on (loadLists/saveLists and
@@ -279,7 +279,7 @@ function renderCustom() {
   card.innerHTML = keys.map(k => {
     const l = all[k];
     const n = (l.items || []).length;
-    const shown = listShownOnMain(l);
+    const shown = listShownOnMain(k);
     // aria-pressed, not just a swapped icon: the state has to reach a screen
     // reader too, and the label names the ACTION so it reads the same way the
     // tooltip does.
@@ -386,7 +386,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Not owner-only: this hides a filter chip on your own screen, changes no
       // product data, and is one click to undo - the same class of preference as
       // the theme and trend-range switches.
-      setListHidden(key, listShownOnMain(all[key]));
+      setListHidden(key, listShownOnMain(key));
       renderCustom();
       // renderCustom replaces the whole card, so the button that was just
       // pressed no longer exists and focus would fall back to <body> - leaving a
@@ -408,6 +408,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           : 'It has no products in it.'}`)) return;
       delete all[key];
       saveLists(all);
+      // The visibility flag is keyed by slug and lives outside the list map, so
+      // it would outlive the list - and listKeyFor reuses a freed slug, so the
+      // next list of the same name would be born with no pill and no clue why.
+      forgetListVisibility(key);
       if (_editingKey === key) _editingKey = null;
       renderAll();
     }

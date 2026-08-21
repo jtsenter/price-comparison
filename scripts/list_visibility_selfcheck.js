@@ -1,10 +1,18 @@
-// A list hidden on the Lists page gives up its main-screen filter pill and
-// nothing else.
+// A list hidden on the Lists page gives up its main-screen filter pill, keeps
+// everything else, and STAYS hidden across a reload.
 //
-// The narrowness IS the feature, so it is what this pins down: hiding must not
-// touch membership, must not remove the list, and must leave every OTHER list
-// surface (the bulk "Add to list" menu, the Lists page itself) showing it. A
-// "hide" that quietly stopped a product counting as filed would be a data loss
+// That last clause is the one that was broken. The flag first shipped as a
+// `hidden` property ON the list object, which put it inside the user_settings
+// `lists` map - and the main page merges that map repo-wins, per WHOLE list, on
+// boot. The repo's copy carried no flag, so it replaced the local object
+// outright and the pill was back on the next load. ("Why does Birthdays keep
+// appearing after refresh?") Visibility now lives in its own per-device key, so
+// there is no publish to race and no Pages-CDN lag window to lose it in.
+//
+// The narrowness is the other half of the feature, so it is pinned too: hiding
+// must not touch membership, must not remove the list, and must leave every
+// other list surface (the bulk "Add to list" menu, the Lists page itself)
+// showing it. A "hide" that quietly unfiled a product would be data loss
 // wearing a display-preference costume.
 //
 // Also guards the stale-option trap: the pill row and the mobile <select> are
@@ -38,17 +46,29 @@ global.localStorage = {
   setItem: (k, v) => { store[k] = String(v); },
 };
 
-// `const` declared inside eval() does not escape it, so the key is read out of
-// the source for the seed helper to use directly rather than relied on as a
-// binding. (Same trap SCRAPE_MODE_DESC hit in scrape_mode_selfcheck.)
+// `const` declared inside eval() does not escape it, so both keys are read out
+// of the source for the fixtures to use directly rather than relied on as
+// bindings. (Same trap SCRAPE_MODE_DESC hit in scrape_mode_selfcheck.)
 const LISTS_KEY_SRC = utilsSrc.match(/const LISTS_KEY\s*=\s*'([^']+)'/);
 assert(LISTS_KEY_SRC, 'LISTS_KEY not found in utils.js');
 const LISTS_KEY = LISTS_KEY_SRC[1];
-eval([LISTS_KEY_SRC[0] + ';',
+
+const HIDDEN_KEY_SRC = utilsSrc.match(/const LIST_HIDDEN_KEY\s*=\s*'([^']+)'/);
+assert(HIDDEN_KEY_SRC, 'LIST_HIDDEN_KEY not found in utils.js');
+const LIST_HIDDEN_KEY = HIDDEN_KEY_SRC[1];
+assert.notStrictEqual(LIST_HIDDEN_KEY, LISTS_KEY,
+  'visibility must not share the synced lists key - that sharing IS the bug');
+
+// saveLists reaches for a publisher that only exists on pages loading app.js.
+global.scheduleListsPublish = () => {};
+
+eval([LISTS_KEY_SRC[0] + ';', HIDDEN_KEY_SRC[0] + ';',
       extract(utilsSrc, 'loadLists', 'utils.js'),
       extract(utilsSrc, 'saveLists', 'utils.js'),
+      extract(utilsSrc, 'loadHiddenLists', 'utils.js'),
       extract(utilsSrc, 'listShownOnMain', 'utils.js'),
       extract(utilsSrc, 'setListHidden', 'utils.js'),
+      extract(utilsSrc, 'forgetListVisibility', 'utils.js'),
       extract(utilsSrc, 'setListMembership', 'utils.js'),
       extract(utilsSrc, 'listsForItem', 'utils.js')].join('\n'));
 
@@ -59,24 +79,33 @@ console.log('list visibility:');
 
 const seed = () => {
   store[LISTS_KEY] = JSON.stringify({
-    bbq:   { label: 'BBQ',   items: ['Beef Sausages 1kg', 'Bread Rolls 6pk'] },
-    baby:  { label: 'Baby',  items: ['Nappies Size 6'] },
+    bbq:  { label: 'BBQ',  items: ['Beef Sausages 1kg', 'Bread Rolls 6pk'] },
+    baby: { label: 'Baby', items: ['Nappies Size 6'] },
   });
+  store[LIST_HIDDEN_KEY] = '[]';
 };
 
 // ── The default: nothing to migrate ─────────────────────────────────────────
 seed();
-check('a list with no flag is shown - lists made before this existed stay visible', () => {
-  assert.strictEqual(listShownOnMain(loadLists().bbq), true);
+check('a list nobody has hidden is shown', () => {
+  assert.strictEqual(listShownOnMain('bbq'), true);
 });
-check('a missing list is not treated as shown', () => {
-  assert.strictEqual(listShownOnMain(undefined), true, 'no list at all is a caller bug, not a hidden list');
+check('an unknown key is shown, not hidden', () => {
+  assert.strictEqual(listShownOnMain('never-seen'), true);
+  assert.strictEqual(listShownOnMain(undefined), true);
+});
+check('a corrupt or missing hidden-set reads as "nothing hidden"', () => {
+  store[LIST_HIDDEN_KEY] = '{not json';
+  assert.strictEqual(listShownOnMain('bbq'), true);
+  store[LIST_HIDDEN_KEY] = '{"bbq":true}';   // wrong shape, not an array
+  assert.strictEqual(listShownOnMain('bbq'), true);
+  seed();
 });
 
 // ── Hiding is display-only ──────────────────────────────────────────────────
 setListHidden('bbq', true);
-check('hiding sets the flag', () => {
-  assert.strictEqual(listShownOnMain(loadLists().bbq), false);
+check('hiding takes the pill away', () => {
+  assert.strictEqual(listShownOnMain('bbq'), false);
 });
 check('hiding keeps the list itself', () => {
   assert.ok(loadLists().bbq, 'the list must still exist');
@@ -89,38 +118,92 @@ check('a product in a hidden list still counts as filed there', () => {
   assert.deepStrictEqual(listsForItem('Beef Sausages 1kg'), ['bbq']);
 });
 check('hiding one list leaves its siblings alone', () => {
-  assert.strictEqual(listShownOnMain(loadLists().baby), true);
+  assert.strictEqual(listShownOnMain('baby'), true);
 });
 check('a hidden list still accepts new products', () => {
   setListMembership('Charcoal 4kg', 'bbq', true);
   assert.ok(loadLists().bbq.items.includes('Charcoal 4kg'));
-  assert.strictEqual(listShownOnMain(loadLists().bbq), false, 'and stays hidden');
+  assert.strictEqual(listShownOnMain('bbq'), false, 'and stays hidden');
+});
+
+// ── THE regression: it has to survive the sync ──────────────────────────────
+check('visibility never writes into the map that syncs to the repo', () => {
+  seed();
+  const before = store[LISTS_KEY];
+  setListHidden('bbq', true);
+  setListHidden('no-such-list', true);
+  assert.strictEqual(store[LISTS_KEY], before,
+    'anything stored on the list object rides into user_settings.json and gets merged away');
+});
+check('the flag survives the repo-wins merge that used to wipe it', () => {
+  seed();
+  setListHidden('bbq', true);
+  // The main page's owner branch, verbatim: merge(mine, theirs) = {...mine, ...theirs},
+  // per WHOLE list. The repo has never heard of the flag.
+  const remote = { bbq: { label: 'BBQ', items: ['Beef Sausages 1kg'] } };
+  store[LISTS_KEY] = JSON.stringify({ ...loadLists(), ...remote });
+  assert.strictEqual(listShownOnMain('bbq'), false,
+    'hiding must not depend on the repo having heard about it');
 });
 
 // ── Unhiding, and the stored shape ──────────────────────────────────────────
-setListHidden('bbq', false);
 check('unhiding restores the pill', () => {
-  assert.strictEqual(listShownOnMain(loadLists().bbq), true);
+  seed();
+  setListHidden('bbq', true);
+  setListHidden('bbq', false);
+  assert.strictEqual(listShownOnMain('bbq'), true);
 });
-check("unhiding CLEARS the key rather than storing false", () => {
-  assert.ok(!('hidden' in loadLists().bbq),
-    'absent means shown; a lingering hidden:false reads as if it meant something');
+check('unhiding DROPS the key rather than storing false', () => {
+  assert.deepStrictEqual(JSON.parse(store[LIST_HIDDEN_KEY]), [],
+    'absent means shown; the set must not accumulate dead entries');
 });
 check('toggling is idempotent - hide, hide, show lands on shown', () => {
   setListHidden('bbq', true); setListHidden('bbq', true); setListHidden('bbq', false);
-  assert.strictEqual(listShownOnMain(loadLists().bbq), true);
+  assert.strictEqual(listShownOnMain('bbq'), true);
 });
-check('setting the flag on a list that does not exist creates nothing', () => {
-  const before = Object.keys(loadLists()).sort();
-  setListHidden('no-such-list', true);
-  assert.deepStrictEqual(Object.keys(loadLists()).sort(), before);
+check('deleting a list forgets its visibility, so a reused slug is not born hidden', () => {
+  setListHidden('bbq', true);
+  forgetListVisibility('bbq');
+  assert.strictEqual(listShownOnMain('bbq'), true);
+  seed();
+});
+
+// ── The Lists page must publish, or the edit is lost the same way ───────────
+check('saveLists publishes from pages that do not load app.js', () => {
+  // "other pages just write locally" was silently lossy: index.html's boot merge
+  // is repo-wins per whole list, so a rename or a membership tick made on the
+  // Lists page was reverted by the repo's older copy on the next visit.
+  const save = extract(utilsSrc, 'saveLists', 'utils.js');
+  assert.ok(/scheduleUserSettingsSync\(\); return;/.test(save),
+    'index.html still owns the full settings publish');
+  assert.ok(/scheduleListsPublish\(\)/.test(save),
+    'every other page must publish the lists key itself');
+});
+check('the standalone publish touches ONLY the lists key', () => {
+  const pub = extract(utilsSrc, 'publishListsToRepo', 'utils.js');
+  assert.ok(/githubGetJson\(s, 'docs\/data\/user_settings\.json'\)/.test(pub),
+    'must read-modify-write, not overwrite the file');
+  assert.ok(/remote\.lists = /.test(pub), 'must replace only .lists');
+  assert.ok(/if \(!s\.token\) return;/.test(pub),
+    'a viewer has no token and must stay local, exactly as before');
+  assert.ok(/REMOVED_ITEMS\.has\(n\)/.test(pub),
+    'a tombstoned product must not ride back into the repo inside a membership array');
+});
+check('a pending publish is flushed when the page goes away', () => {
+  // The very next thing you do after hiding a filter is navigate to the main
+  // screen; navigation kills the debounce timer.
+  assert.ok(/addEventListener\('pagehide'/.test(utilsSrc), 'no pagehide flush');
+  assert.ok(/_listsPublishTimer\) publishListsToRepo\(\)/.test(utilsSrc),
+    'the flush must only fire when a write is actually pending');
 });
 
 // ── The two renderings of the same key set ──────────────────────────────────
 {
   const pills = extract(appSrc, 'renderListPills', 'app.js');
-  check('the pill row filters on visibility', () => {
-    assert.ok(/listShownOnMain\(all\[k\]\)/.test(pills));
+  check('the pill row filters on visibility, by KEY', () => {
+    assert.ok(/listShownOnMain\(k\)/.test(pills));
+    assert.ok(!/listShownOnMain\(all\[k\]\)/.test(pills),
+      'passing the list object would silently always answer "shown"');
   });
   check('the mobile dropdown is built from the SAME filtered keys', () => {
     // Both loops read `keys`; a second, unfiltered source here is how the two
@@ -177,8 +260,12 @@ check('the toggle is not owner-gated', () => {
     'hiding a filter chip changes no product data and is one click to undo');
 });
 check('the toggle flips relative to the CURRENT state, not a hardcoded true', () => {
-  assert.ok(/setListHidden\(key, listShownOnMain\(all\[key\]\)\)/.test(listsSrc),
+  assert.ok(/setListHidden\(key, listShownOnMain\(key\)\)/.test(listsSrc),
     'a hardcoded value makes the button one-way');
+});
+check('deleting a list clears its visibility flag on the page too', () => {
+  assert.ok(/forgetListVisibility\(key\)/.test(listsSrc),
+    'the flag outlives the list otherwise, and listKeyFor reuses freed slugs');
 });
 
 console.log(`\nlist_visibility_selfcheck: all ${n} assertions passed.`);

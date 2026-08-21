@@ -2486,7 +2486,7 @@ function renderListPills() {
   // Lists hidden on the Lists page keep their products but give up their pill -
   // filtered HERE rather than at the source so every other list surface (the
   // bulk "Add to list" menu, the Lists page itself) still sees all of them.
-  const keys = Object.keys(all).filter(k => listShownOnMain(all[k]))
+  const keys = Object.keys(all).filter(k => listShownOnMain(k))
     .sort((a, b) => (all[a].label || a).localeCompare(all[b].label || b));
   host.innerHTML = '';
   if (keys.length) {
