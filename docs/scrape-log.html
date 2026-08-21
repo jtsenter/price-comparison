@@ -465,7 +465,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=135"></script>
+<script src="utils.js?v=136"></script>
 <script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
@@ -1404,6 +1404,28 @@ function paintChangeSummary(q) {
     </div>`;
 }
 
+// Reading order for a day's change list: shop first, so one retailer's moves sit
+// together, then the product name. mergeDayStore preserves SCRAPE order, which is
+// arbitrary - the same eight products came out in a different sequence every day,
+// and the pooled "Other stores" column interleaved retailers at random.
+//
+// By store LABEL rather than the THIRD_STORES declaration order: the badges then
+// read A, B, C, K, P down the column, which looks sorted to the eye. Declaration
+// order renders C, P, B, A, K and reads as no order at all.
+//
+// By shortName, not the raw item, because shortName is what the row DISPLAYS -
+// sorting on a string the reader can't see is indistinguishable from not sorting.
+// numeric collation so "180 Pack" precedes "540 Pack" rather than sorting as text.
+// Self-contained on purpose: one `function`, no const helpers alongside it, so
+// the self-check can lift it out of this file whole. (A `const` arrow declared
+// beside it would not survive the harness's eval, which is how that check would
+// end up silently testing a stub instead of this code.)
+function byStoreThenName(a, b) {
+  const label = c => (c.store && THIRD_STORES[c.store]?.label) || '';
+  return label(a).localeCompare(label(b))
+    || shortName(a.item).localeCompare(shortName(b.item), 'en', { numeric: true, sensitivity: 'base' });
+}
+
 function paintChangeArchive(q) {
   paintChangeSummary(q);
   const fmtP = v => '$' + (+v).toFixed(2);
@@ -1450,9 +1472,12 @@ function paintChangeArchive(q) {
 
   const days = [...dayRuns.entries()].sort((a, b) => b[0].localeCompare(a[0])).map(([day, runs]) => {
     const f = arr => arr.filter(c => !q || String(c.item).toLowerCase().includes(q));
-    const ww = f(mergeDayStore(runs, 'ww'));
-    const coles = f(mergeDayStore(runs, 'coles'));
-    const third = f(mergeDayStore(runs, 'third'));
+    // All three columns get the same comparator. The Woolworths and Coles lists
+    // carry no store, so it falls through to plain alphabetical - leaving those
+    // two in scrape order beside a sorted third column would read as a bug.
+    const ww = f(mergeDayStore(runs, 'ww')).sort(byStoreThenName);
+    const coles = f(mergeDayStore(runs, 'coles')).sort(byStoreThenName);
+    const third = f(mergeDayStore(runs, 'third')).sort(byStoreThenName);
     return {
       day, runs: runs.length,
       // The newest run's timestamp - "3 hours ago" should mean the last scrape,

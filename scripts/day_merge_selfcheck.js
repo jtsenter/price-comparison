@@ -141,4 +141,91 @@ check('against the live archive: no day loses or invents a product', () => {
   process.stdout.write(`      (${byDay.size} days, ${log.length} runs; ${multi} days merge >1 run)\n`);
 });
 
+// ── Reading order ───────────────────────────────────────────────────────────
+// mergeDayStore preserves SCRAPE order, which is arbitrary: the pooled "Other
+// stores" column interleaved Chemist Warehouse and Big W lines at random, and
+// the same eight products came out in a different sequence every day.
+eval(ex('byStoreThenName'));
+// byStoreThenName leans on two page globals; the real ones, so a renamed store
+// or a changed display name is caught here rather than on screen.
+const THIRD_STORES_SRC = src.match(/const THIRD_STORES = \{[\s\S]*?\n\};/);
+assert.ok(THIRD_STORES_SRC || /THIRD_STORES/.test(src), 'THIRD_STORES must be reachable');
+global.THIRD_STORES = {
+  chemist_warehouse: { letter: 'C', label: 'Chemist Warehouse' },
+  priceline:         { letter: 'P', label: 'Priceline' },
+  big_w:             { letter: 'B', label: 'Big W' },
+  aldi:              { letter: 'A', label: 'ALDI' },
+  kmart:             { letter: 'K', label: 'Kmart' },
+};
+global.shortName = s => String(s);
+
+const order = list => [...list].sort(byStoreThenName)
+  .map(c => (c.store ? THIRD_STORES[c.store].letter + ' ' : '') + c.item);
+
+check('outside-shop moves group by shop before anything else', () => {
+  // The reported list, in the order the file actually stored it.
+  const got = order([
+    { store: 'chemist_warehouse', item: 'Huggies Essentials Nappies Size 6 (16+kg) 40 Pack' },
+    { store: 'big_w',             item: 'WaterWipes Baby & Newborn Sensitive Wipes 180 Pack' },
+    { store: 'chemist_warehouse', item: 'Bunjie Nappies Jumbo Size 6 Junior 46 Pack' },
+    { store: 'big_w',             item: 'WaterWipes Baby & Newborn Sensitive Wipes 540 Pack' },
+    { store: 'chemist_warehouse', item: 'Huggies Ultra Dry Nappies Boys Size 6 (16kg+) 60 Pack' },
+    { store: 'big_w',             item: 'Extra Peppermint Sugar Free Chewing Gum Bottle 64g' },
+    { store: 'chemist_warehouse', item: 'Ecostore Dish Washer Tablets Fragrance Free 30 Pack' },
+    { store: 'chemist_warehouse', item: 'Babylove Water Wipes (80 X 3) 240 Pack' },
+  ]);
+  assert.deepStrictEqual(got.map(s => s[0]), ['B','B','B','C','C','C','C','C'],
+    'all of one shop must sit together');
+  assert.deepStrictEqual(got, [
+    'B Extra Peppermint Sugar Free Chewing Gum Bottle 64g',
+    'B WaterWipes Baby & Newborn Sensitive Wipes 180 Pack',
+    'B WaterWipes Baby & Newborn Sensitive Wipes 540 Pack',
+    'C Babylove Water Wipes (80 X 3) 240 Pack',
+    'C Bunjie Nappies Jumbo Size 6 Junior 46 Pack',
+    'C Ecostore Dish Washer Tablets Fragrance Free 30 Pack',
+    'C Huggies Essentials Nappies Size 6 (16+kg) 40 Pack',
+    'C Huggies Ultra Dry Nappies Boys Size 6 (16kg+) 60 Pack',
+  ]);
+});
+
+check('shops order by LABEL, so the badges read alphabetically down the column', () => {
+  const got = order(['kmart', 'chemist_warehouse', 'aldi', 'priceline', 'big_w']
+    .map(store => ({ store, item: 'X' })));
+  // Declaration order would give C, P, B, A, K - which reads as no order at all.
+  assert.deepStrictEqual(got.map(s => s[0]), ['A', 'B', 'C', 'K', 'P']);
+});
+
+check('a storeless list (Woolworths, Coles) falls through to plain alphabetical', () => {
+  const got = order([{ item: 'Zucchini' }, { item: 'Apples' }, { item: 'Milk 2L' }]);
+  assert.deepStrictEqual(got, ['Apples', 'Milk 2L', 'Zucchini']);
+});
+
+check('pack sizes collate numerically, not as text', () => {
+  // Plain string order puts "1000 Pack" before "540 Pack" and "60" before "8".
+  const got = order([{ item: 'Wipes 60 Pack' }, { item: 'Wipes 540 Pack' },
+                     { item: 'Wipes 8 Pack' }, { item: 'Wipes 1000 Pack' }]);
+  assert.deepStrictEqual(got,
+    ['Wipes 8 Pack', 'Wipes 60 Pack', 'Wipes 540 Pack', 'Wipes 1000 Pack']);
+});
+
+check('case does not split otherwise-adjacent products', () => {
+  const got = order([{ item: 'apple sauce' }, { item: 'Apple Juice' }, { item: 'Banana' }]);
+  assert.deepStrictEqual(got, ['Apple Juice', 'apple sauce', 'Banana']);
+});
+
+check('sorting is applied to all three columns, not just the pooled one', () => {
+  for (const key of ['ww', 'coles', 'third']) {
+    assert.ok(new RegExp(`mergeDayStore\\(runs, '${key}'\\)\\)\\.sort\\(byStoreThenName\\)`).test(src),
+      `${key} column is left in scrape order beside sorted siblings`);
+  }
+});
+
+check('the comparator never reorders equal rows into a different day', () => {
+  // Guards against sorting the shared array in place: `days` is rebuilt per
+  // paint, but sorting a list still referenced by _changeArchive would mutate
+  // the archive itself.
+  assert.ok(!/_changeArchive[^\n]*\.sort\(/.test(src),
+    'the stored archive must never be sorted in place - the export reads it chronologically');
+});
+
 console.log(`\nday_merge_selfcheck: ${n} checks passed`);
