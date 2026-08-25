@@ -1432,12 +1432,15 @@ function colHeadHtml(col) {
   switch (col) {
     case 'name':         return th('name', '', 'Product');
     case 'trend':        return th('trend', '', 'Trend');
-    case 'ww':           return th('ww', '', '<span class="store-chip ww sm">W</span> Woolworths');
-    case 'coles':        return th('coles', '', '<span class="store-chip coles sm">C</span> Coles');
+    // Chip only, no store name spelled out - the header row was too wide.
+    // title carries the name that used to be inline text, same as every other
+    // store chip in the app (row cells, the ➕ other-stores column).
+    case 'ww':           return th('ww', '', '<span class="store-chip ww sm" title="Woolworths">W</span>');
+    case 'coles':        return th('coles', '', '<span class="store-chip coles sm" title="Coles">C</span>');
     // 2026-07-20: all header text left-aligned (user request) - cells keep
     // their own center/right alignment, only the th labels line up left.
-    case 'cheaper':      return th('cheaper', '', 'Cheaper at');
-    case 'pct':          return th('pct', '', 'Difference');
+    case 'cheaper':      return th('cheaper', '', 'Cheaper');
+    case 'pct':          return th('pct', '', 'Diff');
     case 'saving':       return th('saving', '', 'Savings');
     case 'trips':        return th('trips', '', 'Times bought');
     case 'priority':     return th('priority', '', 'Priority');
