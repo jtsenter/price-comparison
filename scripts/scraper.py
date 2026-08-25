@@ -520,6 +520,35 @@ def _ww_multi_buy(p: dict) -> dict | None:
     return None
 
 
+def _prune_resolved_pending_validation(existing_pv: dict, new_validation_entries: list,
+                                        freshly_scraped: set) -> list:
+    """Carry old pending_validation entries forward, replace any the CURRENT run
+    re-flagged, and drop an old entry ONLY when its item was genuinely
+    re-scraped this run and came back clean.
+
+    `freshly_scraped` must be items that actually went through _scrape_single_item
+    THIS run - never a carried-forward item, a placeholder stub, or an item this
+    run's shopping list didn't even include. Passing the post-carry-forward
+    items_output here (as this used to) meant "in items_output" quietly stopped
+    meaning "scraped this run" and started meaning "scraped this run OR merely
+    preserved from last time" - so an archived-only sweep, which carries forward
+    the ENTIRE non-archived catalog untouched, wiped every pending flag in it on
+    its very next commit. Confirmed in this repo's own history: a manual run
+    flagged Cavendish Bananas (pending_validation: 1), and the scrape_archived
+    job that runs after every full sweep committed right behind it with
+    pending_validation: 0 - despite never having looked at bananas.
+
+    A flag must survive until a run that ACTUALLY re-examines that exact item
+    either re-flags it or lets it go; being merely present in the output is not
+    an opinion about it.
+    """
+    merged = {**existing_pv, **{e["item"]: e for e in new_validation_entries}}
+    new_entry_names = {e["item"] for e in new_validation_entries}
+    for name in freshly_scraped - new_entry_names:
+        merged.pop(name, None)
+    return list(merged.values())
+
+
 def _parse_ww_products(product_list: list) -> list[dict]:
     results = []
     for p in product_list:
@@ -2990,14 +3019,14 @@ async def scrape(trigger: str = "scheduled", single_item: str = "", ww_url: str 
                     "coles_price_history": [],
                 })
 
-        # Merge by item name: new entries replace old ones for the same item (last scrape wins)
-        merged_pv_dict = {**existing_pv, **{e["item"]: e for e in new_validation_entries}}
-        # Remove items that were scraped cleanly this run (no new validation entry)
-        scraped_this_run = {i["list_item"] for i in items_output}
-        new_entry_names = {e["item"] for e in new_validation_entries}
-        for name in scraped_this_run - new_entry_names:
-            merged_pv_dict.pop(name, None)
-        merged_pv = list(merged_pv_dict.values())
+        # Merge by item name (new entries replace old ones for the same item),
+        # and let a genuinely-clean RE-scrape resolve a stale flag - but only for
+        # items this run actually looked at. `scraped_names` (above, captured
+        # before carry-forward/placeholders touched items_output) is that set;
+        # items_output itself is not, by the time we get here. See
+        # _prune_resolved_pending_validation's docstring for why that distinction
+        # is load-bearing.
+        merged_pv = _prune_resolved_pending_validation(existing_pv, new_validation_entries, scraped_names)
         # A full run is NOT the end of the pipeline: the archived sweep follows.
         # Keep the bar held at the hand-off point instead of clearing it, so the
         # UI shows one continuous "X of grand-total" instead of done-then-restart.
