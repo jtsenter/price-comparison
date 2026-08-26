@@ -189,6 +189,31 @@ function fmtUnitMetric(n) {
   return '$' + v.toFixed(Math.abs(v) < UNIT_METRIC_3DP_BELOW ? 3 : 2);
 }
 
+// The SAME value fmtUnitMetric would print, as a number.
+//
+// A category metric is reached by different arithmetic in different places, and
+// binary floating point makes those routes disagree in the last bit. Nappies:
+// one 40-pack at $11.50, quoted per 50.
+//
+//   history series:  11.50 * (50/40)      = 14.375                -> "$14.38"
+//   live row:        (11.50/40) * 50      = 14.374999999999998    -> "$14.37"
+//
+// Same price, same category, two numbers - the row said $14.37, its own history
+// said $14.38, and a $0.01 "price change" appeared out of nothing. Worse, the
+// trend then compared 14.374999999999998 against a flat 14.38 series, decided
+// `cur < lo - 0.005` by two femtocents, and drew the marker BELOW an all-time
+// low that it was in fact exactly sitting on.
+//
+// toPrecision(12) sweeps up the binary dust before the cent is decided - twelve
+// significant digits is far past any real price, so nothing legitimate moves.
+// Rounding at the SAME precision fmtUnitMetric prints keeps sub-20c metrics
+// (baby wipes at 2.9c) from being flattened to two decimals.
+function metricRound(n) {
+  if (n == null || isNaN(Number(n))) return null;
+  const clean = +Number(n).toPrecision(12);
+  return +clean.toFixed(Math.abs(clean) < UNIT_METRIC_3DP_BELOW ? 3 : 2);
+}
+
 // How many pieces a per-piece category QUOTES its price for.
 // A wipe at $0.029 and a wipe at $0.032 are both "about three cents" to read,
 // and neither moves the needle against a $400 shop - but $2.90 vs $3.20 per 100
@@ -248,12 +273,16 @@ function isWeighedGroup(g) {
 // piece / per KILO because groupStoreTotal() and the Total column multiply them
 // by the quantity actually bought. Scaling the stored value would multiply every
 // basket total and saving by the quote.
+// Quantized through metricRound: this is the number the row PRINTS, so it must
+// be the number every other path compares against. Returning the raw product of
+// the scaling was how the price cell, the history series and the trend marker
+// ended up holding three slightly different values for one price.
 function metricShown(group, v) {
   if (v == null || isNaN(Number(v))) return null;
   const n = Number(v);
-  if (group && group._perPack) return n * pieceQuoteOf(group);
-  if (isWeighedGroup(group)) return n * (weightQuoteOf(group) / 1000);
-  return n;
+  if (group && group._perPack) return metricRound(n * pieceQuoteOf(group));
+  if (isWeighedGroup(group)) return metricRound(n * (weightQuoteOf(group) / 1000));
+  return metricRound(n);
 }
 
 // Price the SAME QUANTITY at both stores. Comparing pack prices across stores

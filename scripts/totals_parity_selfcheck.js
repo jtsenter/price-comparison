@@ -38,9 +38,11 @@ const PIECE_QUOTES_SRC = utils.match(/const PIECE_QUOTES\s*=\s*[^;]+;/)[0];
 const PER_PIECE_QUOTE_SRC = utils.match(/const PER_PIECE_QUOTE\s*=\s*[^;]+;/)[0];
 const WEIGHT_QUOTES_SRC = utils.match(/const WEIGHT_QUOTES\s*=\s*[^;]+;/)[0];
 const PER_WEIGHT_QUOTE_SRC = utils.match(/const PER_WEIGHT_QUOTE\s*=\s*[^;]+;/)[0];
-eval([PIECE_QUOTES_SRC, PER_PIECE_QUOTE_SRC, WEIGHT_QUOTES_SRC, PER_WEIGHT_QUOTE_SRC,
+// metricShown rounds through metricRound, which reads this threshold.
+const UNIT_3DP_SRC = utils.match(/const UNIT_METRIC_3DP_BELOW\s*=\s*[^;]+;/)[0];
+eval([PIECE_QUOTES_SRC, PER_PIECE_QUOTE_SRC, WEIGHT_QUOTES_SRC, PER_WEIGHT_QUOTE_SRC, UNIT_3DP_SRC,
       extract('pieceQuoteOf'), extract('weightQuoteOf'), extract('isWeighedGroup'),
-      extract('metricShown'),
+      extract('metricRound'), extract('metricShown'),
       extract('loadUnitOverrides'), extract('groupUnits'), extract('groupStoreTotal')].join('\n'));
 
 let n = 0;

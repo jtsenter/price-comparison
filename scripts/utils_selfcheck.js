@@ -118,6 +118,7 @@ eval([
   extractConst('WEIGHT_QUOTES') + '\nglobal.WEIGHT_QUOTES = WEIGHT_QUOTES;',
   extractConst('PER_WEIGHT_QUOTE') + '\nglobal.PER_WEIGHT_QUOTE = PER_WEIGHT_QUOTE;',
   extract('weightQuoteOf'), extract('weightQuoteSuffix'), extract('isWeighedGroup'),
+  extract('metricRound'),      // metricShown rounds through it, so it must come along
   extract('metricShown'),      // per-piece categories are QUOTED per 100 pieces
   extract('groupStoreTotal'),  // costed at the price the row DISPLAYS
   extract('qtyLabel'),         // and the Units box names what it counts

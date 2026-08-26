@@ -38,7 +38,7 @@ function extract(src, name, where) {
 
 // Real implementations of the scaling rules under test.
 const realUtils = ['weightQuoteOf', 'weightQuoteSuffix', 'isWeighedGroup', 'pieceQuoteOf',
-                   'metricShown', 'loadTrendRangeMode']
+                   'metricRound', 'metricShown', 'loadTrendRangeMode']
   .map(n => extract(utilsSrc, n, 'utils.js')).join('\n');
 const realBuild = ['buildGroupHistoryItem', 'memberRawHistory', 'memberPerKgPrices',
                    'memberStoreFlags', 'groupPastPrices', 'groupBestPastShown',
@@ -57,6 +57,7 @@ const stubs = `
   const PER_WEIGHT_QUOTE = 1000;
   const PIECE_QUOTES = [1, 10, 50, 100];
   const PER_PIECE_QUOTE = 1;
+  const UNIT_METRIC_3DP_BELOW = 0.20;
   const _prefs = {};
   const localStorage = {
     getItem: k => (k in _prefs ? _prefs[k] : null),
@@ -259,10 +260,87 @@ setTrendMode('best');
   // Both must switch on the SAME flag, or the bar and the order it sorts in can
   // show different pasts - the failure mode the "ONE series" comment in
   // groupTrendCellHTML was written for.
-  check('bar and sort scale metricShown only on the non-best path',
-    /bestOnly \? p : metricShown\(group, p\)/.test(cell)
-    && /bestOnly \? metricShown\(group, best\.perkg\) : best\.perkg/.test(pos),
+  check('the bar scales metricShown only on the non-best path',
+    /bestOnly \? p : metricShown\(group, p\)/.test(cell),
     'the best-mode series is already display-scaled - scaling it again is a 10x/100x jump');
+  // `cur` is ALWAYS metricShown now, in both modes. The flat-range epsilons in
+  // groupTrendPosition are absolute money, so a raw `cur` measured against a
+  // display-scaled series compared two different units - and, once metricShown
+  // started rounding, a raw `cur` also lost to its own rounded series by a float
+  // hair, drawing a category BELOW the all-time low it was sitting exactly on.
+  check('the sort measures current price in the same display space as the series',
+    /const cur = metricShown\(group, best\.perkg\);/.test(pos),
+    'both modes must grade against metricShown, not a raw per-kg/per-piece figure');
+  check('the non-best sort series is display-scaled to match',
+    /groupPastPrices\(group\)\.map\(p => metricShown\(group, p\)\)/.test(pos));
+}
+
+// ── One price, one number, whichever route reaches it ───────────────────────
+// Nappies, reported: a 40-pack at $11.50 quoted per 50. The two routes to that
+// figure disagree in the last bit of a double -
+//
+//   history series:  11.50 * (50/40)  = 14.375              -> "$14.38"
+//   live row:        (11.50/40) * 50  = 14.374999999999998  -> "$14.37"
+//
+// so the row said $14.37 while its own history said $14.38, a one-cent "price
+// change" appeared out of nothing, and the trend graded 14.374999999999998
+// against a flat 14.38 series, decided `cur < lo - 0.005` by two femtocents,
+// and drew the marker BELOW a low it was sitting exactly on.
+{
+  const nappy = (name, pack, price, dates) => ({
+    list_item: `${name} ${pack}pk`,
+    woolworths: { price },
+    coles: null,
+    price_history: [],
+    ww_price_history: dates.map(d => ({ date: d, price })),
+    coles_price_history: [],
+  });
+  const g = {
+    _groupKey: 'nappies_size6', _groupLabel: 'Diapers size 6',
+    _members: [nappy("Little One's Ultra Dry Nappies Size 6", 40, 11.5,
+                     ['2026-08-05', '2026-08-12', '2026-08-19', '2026-08-26'])],
+    _sticker: true, _perPack: true, _quote: 50,
+    _wwPerKg: 11.5 / 40, _coPerKg: null,
+    _wwBest: { perkg: 11.5 / 40, result: {} }, _coBest: null,
+  };
+
+  check('the two float routes to one price agree',
+    metricShown(g, 11.5 / 40) === +(11.5 * (50 / 40)).toFixed(2),
+    `live ${metricShown(g, 11.5 / 40)} vs history ${+(11.5 * (50 / 40)).toFixed(2)}`);
+  check('and that agreed value is $14.38, not $14.37',
+    metricShown(g, 11.5 / 40) === 14.38, `got ${metricShown(g, 11.5 / 40)}`);
+
+  const h = buildGroupHistoryItem(g);
+  check('the row and its own history hold the identical number',
+    h.woolworths.price === h.ww_price_history[0].price,
+    `row ${h.woolworths.price} vs history ${h.ww_price_history[0].price}`);
+
+  setTrendMode('best');
+  check('a flat category sitting exactly on its all-time price grades 0.5, not below it',
+    groupTrendPosition(g) === 0.5, `got ${groupTrendPosition(g)}`);
+
+  setTrendMode('all');
+  const floor = Math.min(...groupPastPrices(g).map(p => metricShown(g, p)));
+  check("the 'all' range floor is the real price, not a truncation of it",
+    floor === 14.38,
+    `got ${floor} - rounding per-ONE-piece (0.2875 -> 0.287) put the floor at $14.35`);
+  setTrendMode('best');
+}
+
+// The rounding must not flatten the sub-20c metrics fmtUnitMetric shows at 3dp:
+// baby wipes run 2.9c to 14.2c each and three different winners printed as
+// "$0.03" is the bug UNIT_METRIC_3DP_BELOW exists to prevent.
+{
+  const wipes = {
+    _groupKey: 'w', _groupLabel: 'W', _members: [],
+    _sticker: true, _perPack: true, _quote: 1,
+    _wwPerKg: 0.0286, _coPerKg: 0.0312,
+  };
+  check('a sub-20c metric keeps its third decimal',
+    metricShown(wipes, 0.0286) === 0.029 && metricShown(wipes, 0.0312) === 0.031,
+    `got ${metricShown(wipes, 0.0286)} and ${metricShown(wipes, 0.0312)}`);
+  check('two different sub-20c metrics stay different',
+    metricShown(wipes, 0.0286) !== metricShown(wipes, 0.0312));
 }
 
 console.log('\nAll group-history unit self-checks passed.');

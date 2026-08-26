@@ -4409,7 +4409,11 @@ function buildGroupHistoryItem(group) {
       const byDate = new Map();
       for (const e of raw) {
         if (!(e.price > 0) || ex.has(Number(e.price).toFixed(2))) continue;
-        byDate.set(e.date, { price: +(e.price * ratio).toFixed(2), src: m.list_item, raw: Number(e.price) }); // later entries for the same date win
+        // metricRound, not a bare toFixed(2): the "today" row below comes from
+        // metricShown, and the two must land on the same number for the same
+        // price or the newest point reads as a one-cent move that never
+        // happened. It also keeps sub-20c metrics at three decimals.
+        byDate.set(e.date, { price: metricRound(e.price * ratio), src: m.list_item, raw: Number(e.price) }); // later entries for the same date win
       }
       return [...byDate.entries()].map(([date, v]) => ({ date, ...v })).sort((a, b) => a.date.localeCompare(b.date));
     });
@@ -4493,9 +4497,16 @@ function groupPastPrices(group) {
       const n = packCountOf(m.list_item) || packCountOf(m.woolworths?.name) || packCountOf(m.coles?.name);
       if (!(n > 0)) return [];
       const { ww: wwEx, co: coEx } = exclSetsFor(m.list_item);
+      // NOT rounded here. These are per-ONE-piece figures that metricShown will
+      // multiply back up by the category's quote, so a third decimal at this
+      // scale is a coarse grid, not a fine one: a 40-pack at $11.50 is
+      // $0.2875/piece, and toFixed(3) shaved that to $0.287 - which came out as
+      // a $14.35 floor on a bar whose real low was $14.38, making the category
+      // look permanently below its own cheapest price. Round once, at the end,
+      // where the number is displayed.
       const take = (arr, use, ex) => (!use ? [] : (arr || [])
         .filter(e => e.price > 0 && !ex.has(Number(e.price).toFixed(2)))
-        .map(e => +(e.price / n).toFixed(3)));
+        .map(e => e.price / n));
       return [
         ...take(m.price_history,       useWw, wwEx),
         ...take(m.ww_price_history,    useWw, wwEx),
@@ -4551,13 +4562,17 @@ function groupTrendPosition(group) {
   // never go below 0 anyway). Eleven of 26 groups therefore tied on 0 and the
   // A-Z tiebreak stacked every category at the top of a trend sort, which is
   // exactly the "per-kg items come first" report.
-  // Same series the BAR draws (see groupTrendCellHTML) so the sort keeps
-  // agreeing with the picture. `cur` has to be restated in whichever units that
-  // series uses: the normalised position is scale-invariant, but the flat-range
-  // epsilons below are absolute money and would compare $/kg against $/100g.
+  // Same series the BAR draws (see groupTrendCellHTML), in the same DISPLAY
+  // units, so the sort keeps agreeing with the picture. Both modes go through
+  // metricShown now: the normalised position is scale-invariant, but the
+  // flat-range epsilons below are absolute money, so mixing a raw $/kg `cur`
+  // with a /100g series graded a flat category against the wrong number - and
+  // an unrounded `cur` lost to its own rounded series by a float hair, which is
+  // how a category sitting exactly ON its all-time low was drawn beneath it.
   const bestOnly = loadTrendRangeMode() === 'best';
-  const past = bestOnly ? groupBestPastShown(group) : groupPastPrices(group);
-  const cur = bestOnly ? metricShown(group, best.perkg) : best.perkg;
+  const past = bestOnly ? groupBestPastShown(group)
+                        : groupPastPrices(group).map(p => metricShown(group, p));
+  const cur = metricShown(group, best.perkg);
   if (past.length < 2 || cur == null) return 999;
   const lo = Math.min(...past), hi = Math.max(...past);
   if (lo === hi) {
