@@ -83,6 +83,7 @@ eval([
   extract('mbUnitPrice'),      // getTrendSeries prices the current point through this
   extract('priceHistoryBtnHTML'), // buildPriceBar's History button, one definition
   extract('buildPriceBar'),    // moved here from app.js; hot-deals draws the same bar
+  extract('localDayOf'),       // getTrendSeries drops the observation day's own entries
   extract('getTrendSeries'),
   extract('_median'),
   extractConst('BWS_SIZE_TOL'),  // getDealQuality's comparable flag closes over it
@@ -203,6 +204,64 @@ check('median empty -> null', _median([]), null);
   const withExcl = getTrendSeries(item);
   check('getTrendSeries excludes the $2 history point', withExcl.prices.includes(2), false);
   _exclStub = {};
+}
+
+// ── `past` is PRIOR DAYS ONLY, so a new record can still be seen as one ──────
+// The scrape that sets `current` also writes it into history (and confirming a
+// flagged price on the validate page writes it at once), so history contains
+// today. Measured against a minimum that already includes current, "cheaper
+// than anything before" can only ever tie - and which marker a row got came
+// down to whether the bookkeeping had caught up. Reported side by side in Hot
+// Deals: Cook Chicken Roasting Portions ($12, every prior day $14-$18, written
+// to history by the confirm) drew the plain "at its low" marker, while Dreamy
+// Choc Chip Cookies - the same kind of new low, not yet journalled - drew the
+// off-range one.
+{
+  const day = (n) => {
+    const d = new Date(); d.setDate(d.getDate() - n);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  };
+  const mk = (todayEntry) => ({
+    list_item: 'Roasting',
+    last_scraped: new Date().toISOString(),
+    price_history: [],
+    ww_price_history: [
+      { date: day(14), price: 16 }, { date: day(7), price: 14 },
+      ...(todayEntry ? [{ date: day(0), price: 12 }] : []),
+    ],
+    coles_price_history: [],
+    woolworths: { price: 12 }, coles: null,
+  });
+  _exclStub = {};
+
+  const journalled = getTrendSeries(mk(true));
+  check('a new low already written to history is still BELOW the prior minimum',
+    journalled.current < Math.min(...journalled.past), true);
+  check('  ...and the prior minimum is the older price, not today',
+    Math.min(...journalled.past), 14);
+  check('the sort agrees - below every prior day scores under 0',
+    calcTrendPosition(mk(true)) < 0, true);
+
+  const notYet = getTrendSeries(mk(false));
+  check('an identical low NOT yet written scores the same', notYet.past.join(), journalled.past.join());
+  check('  ...so the two rows can no longer disagree',
+    calcTrendPosition(mk(true)), calcTrendPosition(mk(false)));
+
+  // Matching a PRIOR low must stay distinguishable from beating it.
+  const matching = {
+    list_item: 'Matcher', last_scraped: new Date().toISOString(), price_history: [],
+    ww_price_history: [{ date: day(14), price: 7.5 }, { date: day(1), price: 3.75 },
+                       { date: day(0), price: 5 }],
+    coles_price_history: [], woolworths: { price: 3.75 }, coles: null,
+  };
+  const m = getTrendSeries(matching);
+  check('equalling a prior low sits exactly ON the minimum, not below it',
+    m.current === Math.min(...m.past), true);
+  check('  ...which is position 0, the trophy, not the off-range marker',
+    calcTrendPosition(matching), 0);
+
+  // The full `prices` series (used for ranking, not the bar) keeps everything.
+  check('the sort/ranking series still includes today', getTrendSeries(mk(true)).prices.includes(12), true);
 }
 
 // ── getDealQuality (exclusion must actually disqualify a fake deal) ──────────

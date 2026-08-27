@@ -363,6 +363,14 @@ function mbUnitPrice(res, units = 1) {
   return res.price;
 }
 
+// A history entry's calendar day, in the reader's own timezone, as the
+// 'YYYY-MM-DD' the history entries themselves use.
+function localDayOf(when) {
+  const d = new Date(when ?? Date.now());
+  if (isNaN(d)) return null;
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 // ── Unified trend data source ──────────────────────────────────────────────
 // Single series for both slider and sort: includes price_history + current prices.
 // `units` is the quantity the shopper is actually buying - it decides whether a
@@ -384,9 +392,33 @@ function getTrendSeries(item, units = 1) {
   // the time this actually runs (renders always happen after page scripts
   // finish loading), even though this file is included first.
   const excluded = exclPriceSet(loadExclusions()[item.list_item]);
-  const histPrices = hist
-    .map(h => Number(h.price))
-    .filter(p => p > 0 && !excluded.has(p.toFixed(2)));
+  const keep = arr => arr.map(h => Number(h.price)).filter(p => p > 0 && !excluded.has(p.toFixed(2)));
+  const histPrices = keep(hist);
+
+  // PRIOR DAYS ONLY for the bar. The scrape that produced `current` also writes
+  // it into history - and confirming a flagged price on the validate page writes
+  // it immediately - so `hist` already contains today's own observation.
+  // Measuring current against a minimum that includes current can only ever TIE,
+  // so "cheaper than anything before" became unreachable the moment a price was
+  // journalled, and which marker you got came down to whether the bookkeeping
+  // had caught up yet:
+  //
+  //   Cook Chicken Roasting Portions  $12, a genuine new low (every prior day
+  //                                   14-18), written to history by the confirm
+  //                                   -> drew the plain "at its low" marker
+  //   Dreamy Choc Chip Cookies        $2.50, the same kind of new low, Coles
+  //                                   history not yet caught up
+  //                                   -> drew the off-range one
+  //
+  // Two rows in the same list, both genuinely cheapest-ever, rendered
+  // differently by an invisible bookkeeping detail. Dropping the observation
+  // day's own entries makes the two states mean something durable -
+  //   below every PRIOR day       = a new record
+  //   equal to the cheapest prior = matching its record
+  // - and it settles by itself: tomorrow, today's entry IS a prior day, so a
+  // record that stops falling becomes "matching" with nothing to reset.
+  const obsDay = localDayOf(item.last_scraped);
+  const pastPrices = keep(obsDay ? hist.filter(h => h.date !== obsDay) : hist);
   // Current price = what you'd actually pay per unit RIGHT NOW, so a live
   // multi-buy counts. Using the sticker here meant a promo that beat the
   // all-time low still plotted mid-range: the price column showed the green
@@ -407,7 +439,7 @@ function getTrendSeries(item, units = 1) {
   // become unreachable. Keeping them separate is what makes it fire again.
   return {
     prices,
-    past: histPrices.filter(p => typeof p === 'number' && p > 0),
+    past: pastPrices,
     current: isFinite(current) ? current : null,
   };
 }
