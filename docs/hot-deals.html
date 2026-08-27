@@ -744,7 +744,7 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=140"></script>
+<script src="utils.js?v=141"></script>
 <script src="history-modal.js?v=6"></script>
 <script>
 if ('serviceWorker' in navigator) {
@@ -1386,9 +1386,12 @@ function renderDeals() {
     const displayName = isGroup ? item._groupLabel
       : (ov.displayName || (window.PW_NAME_MAP && PW_NAME_MAP[item.list_item]) || stripWW(item.list_item));
     const cat = getCategory(item);
-    // For group rows every price is already $/kg; suffix it and drop the
-    // per-100g subline (which would be a second, redundant unit conversion).
-    const kgSuffix = (isGroup && !item._sticker) ? '/kg' : '';
+    // Group prices arrive already in the category's own quoted units (see
+    // buildDealGroups), so the label has to be the category's own suffix - a
+    // hardcoded '/kg' put "/kg" under a /100g category's numbers. _metricSuffix
+    // is '' for sticker groups, which is what the old !_sticker guard did.
+    // The per-100g subline stays dropped: it would be a second conversion.
+    const kgSuffix = isGroup ? (item._metricSuffix ?? '/kg') : '';
 
     const imgSrc = resolveImgUrl(co?.image_url) || resolveImgUrl(ww?.image_url) || '';
     const imgHtml = imgSrc
@@ -1627,7 +1630,8 @@ function renderDealsMobile(sorted, exclusions, overrides) {
     const name = isGroup ? item._groupLabel : (ov.displayName || (window.PW_NAME_MAP && window.PW_NAME_MAP[item.list_item]) || stripWW(item.list_item));
     const cat = getCategory(item);
     const isW = deal.store === 'woolworths';
-    const kgSuffix = (isGroup && !item._sticker) ? '/kg' : '';
+    // Card view - same rule as the table above.
+    const kgSuffix = isGroup ? (item._metricSuffix ?? '/kg') : '';
 
     const imgSrc = resolveImgUrl(co?.image_url) || resolveImgUrl(ww?.image_url) || '';
     const imgHtml = imgSrc

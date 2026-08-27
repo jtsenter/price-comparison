@@ -2469,8 +2469,28 @@ function buildDealGroups(items) {
   let ov = {};
   try { ov = JSON.parse(localStorage.getItem('pw_perkg_cats_v1') || '{}'); } catch {}
 
-  // Comparison metric: $/kg for per-kg groups, pack price for sticker groups.
-  const perKg = (g, res, itemName) => groupMetric(g, res, itemName);
+  // Comparison metric, IN THE UNITS THE CATEGORY QUOTES - not raw $/kg.
+  //
+  // groupMetric returns the stored metric (per KILO, or per ONE piece). The main
+  // page renders that through metricShown, so a /100g category reads "$5.00
+  // /100g" there while Hot Deals showed the same gum as "$50.00/kg": same
+  // product, same day, two pages, a 10x difference and the wrong unit on the
+  // one that hardcoded "/kg".
+  //
+  // Scaling HERE rather than at each render point keeps everything downstream in
+  // one space - prices, the converted history, the deal maths, the trend bar's
+  // min/max labels and the "save $X" line. It is safe for the maths because the
+  // quote is a single positive factor applied to every number alike: ratios,
+  // percentages and drop rankings are unchanged, and a difference of two scaled
+  // prices is the scaled difference.
+  const shapeOf = (g) => ({
+    _sticker: !!g.sticker, _perPack: !!g.perPack,
+    _quote: pieceQuoteOf(g), _gramQuote: weightQuoteOf(g),
+  });
+  // metricShown keys off the UNDERSCORED fields, and these seeds carry the bare
+  // ones (perPack/gramQuote) - passing a seed straight in silently skips the
+  // per-piece branch and returns the figure unscaled.
+  const perKg = (g, res, itemName) => metricShown(shapeOf(g), groupMetric(g, res, itemName));
   // A store's pack-price history converted to the metric via that store's own
   // current ratio (metric ÷ pack price). For sticker groups metric = price, so
   // ratio = 1 (raw prices). Null ratio (no size) => drop rather than mislabel.

@@ -914,6 +914,39 @@ check('median empty -> null', _median([]), null);
   check('groups with no priced members are skipped', groups.some(g => g.list_item === '__group_lamb_mince'), false);
 }
 
+// ── Hot Deals must quote a category in the SAME units the main page does ─────
+// buildDealGroups fed Hot Deals the STORED metric (per kilo) while the main page
+// renders that same figure through metricShown. A /100g category therefore read
+// "$5.00 /100g" on one page and "$50.00/kg" on the other - same gum, same day,
+// 10x apart and the wrong unit, because the Hot Deals row hardcoded "/kg".
+{
+  const grams = (label) => [
+    { list_item: 'Gum A 60g', woolworths: { price: 3.00, name: 'Gum A 60g', url: 'u' }, coles: null,
+      price_history: [], ww_price_history: [{ date: '2026-01-01', price: 6.00 }], coles_price_history: [] },
+  ];
+  // Seed a category quoted per 100g, exactly like the real "Peppermint chewing gum".
+  _lsStore['pw_perkg_cats_v1'] = JSON.stringify({
+    gumtest: { v: 2, created: true, label: 'Gum test', category: 'Sweets',
+               sticker: false, perPack: false, gramQuote: 100, add: ['Gum A 60g'], remove: [] },
+  });
+  const g = buildDealGroups(grams()).find(x => x.list_item === '__group_gumtest');
+  check('a /100g category builds a deal group', !!g, true);
+  // $3.00 for 60g = $50.00/kg = $5.00/100g. The page must be handed $5.00.
+  check('the price is quoted per 100g, not per kg', g.woolworths.price, 5.00);
+  check('and its label says so', g._metricSuffix, '/100g');
+  check('the converted history follows the same units', g.ww_price_history.map(p => p.price), [10.00]);
+
+  // A default $/kg category must be untouched by the scaling.
+  _lsStore['pw_perkg_cats_v1'] = JSON.stringify({
+    kgtest: { v: 2, created: true, label: 'Kg test', category: 'Meat & Seafood',
+              sticker: false, perPack: false, add: ['Gum A 60g'], remove: [] },
+  });
+  const k = buildDealGroups(grams()).find(x => x.list_item === '__group_kgtest');
+  check('a $/kg category is still quoted per kg', k.woolworths.price, 50.00);
+  check('and still labelled /kg', k._metricSuffix, '/kg');
+  _lsStore = {};
+}
+
 // ── perKgEquivBundle (equivalent-quantity bundling for unit-based groups) ────
 {
   // 1kg @ $4.20/kg vs 2kg @ $4.20/kg: 2 × WW 1kg matches 1 × Coles 2kg, equal.
