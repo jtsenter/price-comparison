@@ -37,10 +37,14 @@ function extract(src, name, where) {
 }
 
 // Real implementations of the scaling rules under test.
+// buildGroupHistoryItem + exclSetsFor moved to utils.js so hot-deals.html can
+// build a category's history too - its History button on a category row was
+// dead without them.
 const realUtils = ['weightQuoteOf', 'weightQuoteSuffix', 'isWeighedGroup', 'pieceQuoteOf',
-                   'metricRound', 'metricShown', 'loadTrendRangeMode']
+                   'metricRound', 'metricShown', 'loadTrendRangeMode',
+                   'exclSetsFor', 'buildGroupHistoryItem']
   .map(n => extract(utilsSrc, n, 'utils.js')).join('\n');
-const realBuild = ['buildGroupHistoryItem', 'memberRawHistory', 'memberPerKgPrices',
+const realBuild = ['memberRawHistory', 'memberPerKgPrices',
                    'memberStoreFlags', 'groupPastPrices', 'groupBestPastShown',
                    'groupTrendPosition']
   .map(n => extract(appSrc, n, 'app.js')).join('\n');
@@ -64,7 +68,9 @@ const stubs = `
     setItem: (k, v) => { _prefs[k] = String(v); },
   };
   function loadPerKgExclusions() { return new Set(); }
-  function exclSetsFor() { return { ww: new Set(), co: new Set() }; }
+  // exclSetsFor is the REAL one now (it moved to utils.js with
+  // buildGroupHistoryItem); it only needs the page-supplied store behind it.
+  function loadExclusions() { return {}; }
   function packCountOf(n) { return (String(n).match(/(\\d+)\\s*pk/i) || [])[1] * 1 || 0; }
   function qtyPiecesPer(g) { return g && g._perPack ? pieceQuoteOf(g) : 1; }
   // price -> $/kg, i.e. exactly what clientPerKg/price gives for a real product.
@@ -341,6 +347,34 @@ setTrendMode('best');
     `got ${metricShown(wipes, 0.0286)} and ${metricShown(wipes, 0.0312)}`);
   check('two different sub-20c metrics stay different',
     metricShown(wipes, 0.0286) !== metricShown(wipes, 0.0312));
+}
+
+// ── Every page that renders a category History button must resolve it ───────
+// The modal does not know how to turn "__group_maggi_2_minute_noodles_chicken"
+// back into a group - it asks the host page via cfg.buildGroup and, given no
+// resolver, returns null and opens NOTHING. No error, no feedback: hot-deals
+// rendered the button on category rows and the click was simply dead, while
+// every plain product on the same page worked.
+{
+  const hd = fs.readFileSync(path.join(__dirname, '..', 'docs', 'hot-deals.html'), 'utf8');
+  const modalSrc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'history-modal.js'), 'utf8');
+
+  check('the modal still delegates group resolution to the host page',
+    /_hmCfg\.buildGroup \? _hmCfg\.buildGroup\(itemName\) : null/.test(modalSrc),
+    'if this changes, the reasoning below no longer applies');
+
+  for (const [page, src] of [['hot-deals.html', hd], ['app.js', appSrc]]) {
+    // A page that can emit a "__group_" manage button must be able to build one.
+    const emits = /__group_/.test(src);
+    if (!emits) continue;
+    check(`${page} supplies buildGroup for its category History buttons`,
+      /buildGroup:/.test(src),
+      'renders a category row but cannot resolve its own group key - the button is dead');
+  }
+
+  check('hot-deals builds the group from the shared utils.js builder',
+    /buildGroupHistoryItem\(g\)/.test(hd) && /buildVariantGroups\(byName\)/.test(hd),
+    're-implementing the builder here is how two copies drift apart');
 }
 
 console.log('\nAll group-history unit self-checks passed.');

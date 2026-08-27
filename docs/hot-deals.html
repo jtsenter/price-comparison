@@ -744,7 +744,7 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=138"></script>
+<script src="utils.js?v=139"></script>
 <script src="history-modal.js?v=6"></script>
 <script>
 if ('serviceWorker' in navigator) {
@@ -1931,6 +1931,16 @@ function renderScrapeStrip(data) {
   // it opens in the same simplified layout the mobile view already uses.
   initHistoryModal({
     getItems: () => _data?.items || [],
+    // Without this a CATEGORY row's History button was simply dead: the modal
+    // hands a "__group_..." key back to the page to resolve, and with no
+    // resolver it returned null and opened nothing - no error, no feedback.
+    // Every plain product worked, so only category rows (Maggi 2 Minute
+    // Noodles Chicken) looked broken.
+    buildGroup: (key) => {
+      const byName = new Map((_data?.items || []).map(i => [i.list_item, i]));
+      const g = buildVariantGroups(byName).find(x => x._groupKey === key.replace('__group_', ''));
+      return g ? buildGroupHistoryItem(g) : null;
+    },
     editable: false,
     delegate: true,   // hot-deals has no per-row click routing of its own
   });

@@ -2061,6 +2061,148 @@ function loadPerKgExclusions() {
   try { return new Set(JSON.parse(localStorage.getItem('pw_perkg_excl_v1') || '[]')); } catch { return new Set(); }
 }
 
+// ── Shared category-history builders ────────────────────────────────────────
+// These live HERE, not in app.js, because hot-deals.html needs them too: its
+// History button on a CATEGORY row silently did nothing, because the modal
+// asks its host page to build the group and that page had no builder to give
+// it. A second copy would have been the wrong answer - this file already owns
+// buildVariantGroups, so the grouping logic was half here already.
+// loadExclusions() is supplied by whichever page is loaded (app.js and
+// hot-deals.html each declare an identical one); it is only ever called at
+// runtime, long after both scripts have parsed.
+
+// A member's exclusions split into per-store price sets ("12.34" strings).
+// Supports "ww:X"/"coles:X" and the legacy bare-number format (treated as WW).
+function exclSetsFor(itemName) {
+  const ww = new Set(), co = new Set();
+  for (const k of (loadExclusions()[itemName] || [])) {
+    if (typeof k === 'number') { ww.add(k.toFixed(2)); continue; }
+    const s = String(k);
+    if (s.startsWith('coles:'))  co.add(Number(s.slice(6)).toFixed(2));
+    else if (s.startsWith('ww:')) ww.add(Number(s.slice(3)).toFixed(2));
+    else ww.add(Number(s).toFixed(2));
+  }
+  return { ww, co };
+}
+
+// Synthesizes a "price history" item for a per-kg group: for each store, at every
+// date ANY member's price changed, take the CHEAPEST $/kg across ALL members -
+// each member FORWARD-FILLED to its most recent known price as of that date, not
+// just members with an explicit entry that day. Members are scraped on independent
+// schedules (a fresh full run doesn't necessarily touch every member, and a
+// member's own history only gets a new row when its price changes or 7+ days have
+// passed - see scraper.py's ww_add/co_add), so a plain per-date union of raw
+// entries let a pricier member "win" a date simply because it was the only one
+// re-scraped that day, while the true cheapest member's last-known (unchanged)
+// price was silently ignored. Forward-filling means every date's minimum reflects
+// what the cheapest member ACTUALLY cost then, matching the live headline number
+// (group._wwPerKg/_coPerKg) once the dates catch up to today.
+function buildGroupHistoryItem(group) {
+  // Members the user excluded from this category's $/kg at a store must not
+  // feed its history either (a "different item" was polluting the series).
+  const perkgExcl = loadPerKgExclusions();
+  const buildStoreSeries = (isWw) => {
+    // One sorted, deduped (date -> price) series per member. Each point keeps
+    // its SOURCE (member name + raw pack price) so the modal can offer
+    // per-point exclusion that writes back to the right member.
+    const memberSeries = group._members.map(m => {
+      if (perkgExcl.has(`${group._groupKey}::${m.list_item}::${isWw ? 'ww' : 'coles'}`)) return [];
+      // Sticker groups compare raw pack prices: ratio 1 (no $/kg conversion).
+      // A per-pack sticker group (nappies) instead needs 1/count, per member -
+      // same reasoning as groupTrendCellHTML just above: a 30-pack and a 40-pack
+      // read the same $ scale here otherwise, and the cheapest-per-date pick
+      // would favour whichever pack happens to be bigger rather than cheaper.
+      // qtyPiecesPer, not 1: the series has to be in the SAME units the row,
+      // the total and the basket use, or the history chart contradicts them.
+      // It also rescues the precision - at per-ONE-piece the .toFixed(2) below
+      // flattened every wipe in the category to "$0.03".
+      // A WEIGHED group must be scaled to its gram quote here for exactly the
+      // reason the per-piece branch is scaled to its piece quote - see the
+      // "today" row below, which goes through metricShown() and therefore IS
+      // quoted per gramQuote. Leaving the series at raw $/kg made a /100g
+      // category (Aero Peppermint, Cadbury Dairy Milk) show today at $4.24 and
+      // every earlier date at $42.40: the same price reading as a 10x overnight
+      // jump. The per-piece half of this bug was already found and fixed; the
+      // weighed half was missed because $/kg is the default and most categories
+      // never override it.
+      let ratio;
+      if (group._perPack) {
+        ratio = packCountOf(m.list_item) > 0 ? qtyPiecesPer(group) / packCountOf(m.list_item) : null;
+      } else if (group._sticker) {
+        ratio = 1;   // sticker groups compare raw pack prices - nothing to convert
+      } else {
+        const kgR = perKgRatio(isWw ? m.woolworths : m.coles);
+        // Guarded, not inlined: `null * 0.1` is 0, which would sail past the
+        // `ratio == null` check below and plot every point at $0.00.
+        ratio = kgR == null ? null : kgR * (weightQuoteOf(group) / 1000);
+      }
+      if (ratio == null) return [];
+      const ex = exclSetsFor(m.list_item)[isWw ? 'ww' : 'co'];
+      const raw = isWw ? [...(m.price_history || []), ...(m.ww_price_history || [])]
+                        : (m.coles_price_history || []);
+      const byDate = new Map();
+      for (const e of raw) {
+        if (!(e.price > 0) || ex.has(Number(e.price).toFixed(2))) continue;
+        // metricRound, not a bare toFixed(2): the "today" row below comes from
+        // metricShown, and the two must land on the same number for the same
+        // price or the newest point reads as a one-cent move that never
+        // happened. It also keeps sub-20c metrics at three decimals.
+        byDate.set(e.date, { price: metricRound(e.price * ratio), src: m.list_item, raw: Number(e.price) }); // later entries for the same date win
+      }
+      return [...byDate.entries()].map(([date, v]) => ({ date, ...v })).sort((a, b) => a.date.localeCompare(b.date));
+    });
+
+    const allDates = [...new Set(memberSeries.flat().map(p => p.date))].sort();
+    const cursor = memberSeries.map(() => 0);
+    const lastKnown = memberSeries.map(() => null);
+    const out = [];
+    for (const date of allDates) {
+      memberSeries.forEach((series, i) => {
+        while (cursor[i] < series.length && series[cursor[i]].date <= date) {
+          lastKnown[i] = series[cursor[i]];
+          cursor[i]++;
+        }
+      });
+      const known = lastKnown.filter(p => p != null);
+      if (known.length) {
+        const best = known.reduce((a, b) => (a.price <= b.price ? a : b));
+        out.push({ date, price: best.price, src: best.src, raw: best.raw });
+      }
+    }
+    return out;
+  };
+  const wwSeries = buildStoreSeries(true);
+  const coSeries = buildStoreSeries(false);
+  return {
+    list_item: group._groupLabel,
+    _isGroupHistory: true,
+    _groupKey: group._groupKey,
+    _sticker: !!group._sticker,
+    // What the plotted numbers MEAN. A per-piece category's history is per
+    // `quote` pieces, so the modal has to say so - "$10.93" with no unit is
+    // indistinguishable from a pack price.
+    // Reads the category's own gram quote instead of asserting "$/kg". The
+    // modal titled a /100g category "($/kg)" while plotting /100g numbers, so
+    // the one label that was supposed to say what the numbers mean was the
+    // thing telling you they meant something else.
+    _unitLabel: group._perPack ? `per ${qtyPiecesPer(group)} pcs`
+              : (group._sticker ? null : '$' + weightQuoteSuffix(weightQuoteOf(group))),
+    // date → winning source, for the modal's per-point exclusion buttons
+    _wwMeta: new Map(wwSeries.map(e => [e.date, e])),
+    _coMeta: new Map(coSeries.map(e => [e.date, e])),
+    price_history: [],
+    ww_price_history: wwSeries,
+    coles_price_history: coSeries,
+    // The modal adds a "today" row from these live prices. They must be in the
+    // SAME units as the series above, which is scaled by the category's quote -
+    // otherwise today appears twice: once per single piece from here ($0.03) and
+    // once per 100 from the series ($10.00), as if the price had moved 300x
+    // overnight.
+    woolworths: group._wwBest ? { price: metricShown(group, group._wwPerKg), scraped_at: group._wwBest.result?.scraped_at } : null,
+    coles: group._coBest ? { price: metricShown(group, group._coPerKg), scraped_at: group._coBest.result?.scraped_at } : null,
+  };
+}
+
 // Build the live category rows from current member data. A group has no storage
 // of its own - its price, winner and trend are all derived here, every render.
 // Display-only per-store member COUNTS are not set here: they need the main
