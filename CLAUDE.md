@@ -173,11 +173,17 @@ powershell -ExecutionPolicy Bypass -File "C:\actions-runner\install-service.ps1"
 
 Verify online status: https://github.com/jtsenter/price-comparison/settings/actions/runners
 
-## Commit Rules — CRITICAL
-- Never push more than once per task unless explicitly told to
-- Accumulate all changes locally, push ONE commit at the end
-- If a task has multiple fixes, apply all before committing
-- Never do "one commit per fix" unless user explicitly requests it
+## Commit Rules
+- Batch by default: accumulate a task's changes locally and push ONE commit at
+  the end. Don't do "one commit per fix" — a task with five fixes is one commit.
+- **But never withhold a fix to protect the batch.** If something needs fixing,
+  fix it and push it, even if that means a second push. Finding a real problem
+  while verifying is normal; leaving it broken to keep a tidy history is not.
+  (2026-08-29: this section previously said "never push more than once per task"
+  and was marked CRITICAL, so a CI blind spot found during verification nearly
+  went unreported rather than fixed.)
+- Prefer one commit per logical change when a task genuinely contains two
+  unrelated ones — a feature and an unrelated CI fix don't belong in one message.
 
 ## Known gaps / work in progress
 
