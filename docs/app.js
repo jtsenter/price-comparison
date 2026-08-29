@@ -707,8 +707,17 @@ function thirdChipHTML(key, entries, ww, co, compareUnit, group) {
   // wrapped onto a second line and stretched the whole product column; the badge
   // says the same thing in one character, and the full name is still in the
   // tooltip and on the panel heading below.
+  // A shop's own letter ONLY while this product is sold at exactly one outside
+  // shop. Sold at several, the chip is a summary of all of them, and stamping
+  // the winner's letter on it claims the whole column belongs to that shop -
+  // the generic ＋ is what the panel below and the main table's own header
+  // already use for "outside shops, plural". The winner is still named in the
+  // tooltip and leads the panel when it opens.
+  const oneShop = new Set(entries.map(e => e.store)).size === 1;
   const badge = beat && meta
-    ? `<span class="third-chip-b" style="${thirdChipStyle(beat.store)}">${esc(meta.letter)}</span>`
+    ? (oneShop
+        ? `<span class="third-chip-b" style="${thirdChipStyle(beat.store)}">${esc(meta.letter)}</span>`
+        : '<span class="third-chip-b third-chip-many">＋</span>')
     : '';
   const label = beat && meta && beatPrice != null
     ? `${badge}${beatText} <span class="third-chip-n">＋${entries.length}</span>`

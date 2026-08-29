@@ -193,20 +193,31 @@ function buildPriceHistChart(item, excludedPrices) {
   // Hot Deals card would send you to. These keep their own `history` array
   // (third_stores.py), which is newer than the supermarket ones, so most items
   // will show a short line or a single point until it accumulates.
-  const thirdEntries = (_hmCfg.getThird ? _hmCfg.getThird(item) : []) || [];
-  const thBest = thirdEntries.filter(e => e && e.price > 0)
-    .sort((a, b) => a.price - b.price)[0] || null;
-  const thMeta = thBest && typeof THIRD_STORES !== 'undefined' ? THIRD_STORES[thBest.store] : null;
+  const thirdEntries = (_hmCfg.getThird ? _hmCfg.getThird(item) : []).filter(e => e && e.price > 0);
+  const thBest = [...thirdEntries].sort((a, b) => a.price - b.price)[0] || null;
+  // One shop -> that shop's name and colours. SEVERAL -> the line is the best
+  // outside price on each date, whichever shop had it, so it must not be
+  // labelled with any one of them. Same ＋ the main table's column header uses.
+  const thShops = new Set(thirdEntries.map(e => e.store));
+  const thMeta = thBest && thShops.size === 1 && typeof THIRD_STORES !== 'undefined'
+    ? THIRD_STORES[thBest.store] : null;
+  const thLabel = thMeta ? thMeta.label : 'Other stores';
   const thMap = new Map();
-  if (thBest) {
-    for (const h of (Array.isArray(thBest.history) ? thBest.history : [])) {
-      if (h && h.date && h.price > 0) thMap.set(h.date, h.price * (kgR.ww || 1));
+  for (const e of thirdEntries) {
+    const pts = Array.isArray(e.history) ? [...e.history] : [];
+    // The current price counts as its own point, the same courtesy the two
+    // supermarkets get above - otherwise a shop with no history yet contributes
+    // nothing and the line looks broken rather than new.
+    const d = (e.checked || '').slice(0, 10) || liveDate;
+    if (!pts.some(h => h && h.date === d)) pts.push({ date: d, price: e.price });
+    for (const h of pts) {
+      if (!h || !h.date || !(h.price > 0)) continue;
+      const v = h.price * (kgR.ww || 1);
+      // Cheapest wins the date: with two shops the line answers "what was the
+      // best price outside the supermarkets", which is the only reading that
+      // makes a single line honest.
+      if (!thMap.has(h.date) || v < thMap.get(h.date)) thMap.set(h.date, v);
     }
-    // The current price counts as today's point, the same courtesy the two
-    // supermarkets get above - otherwise a shop with no history yet draws
-    // nothing at all and the line looks broken rather than new.
-    const thDate = (thBest.checked || '').slice(0, 10) || liveDate;
-    if (!thMap.has(thDate)) thMap.set(thDate, thBest.price * (kgR.ww || 1));
   }
 
   const allDates = [...new Set([...wwFullMap.keys(), ...coMap.keys(), ...thMap.keys()])].sort();
@@ -300,7 +311,7 @@ function buildPriceHistChart(item, excludedPrices) {
     // shop the price is from, and the chart has no chip to carry that.
     + (thBest ? '<span style="display:flex;align-items:center;gap:6px;">'
         + '<span style="width:20px;height:3px;background:#4338CA;display:inline-block;border-radius:2px;"></span>'
-        + (thMeta ? thMeta.label : 'Other store') + '</span>' : '');
+        + thLabel + '</span>' : '');
   wrap.parentNode.insertBefore(chartLegend, wrap);
   wrap.style.display = 'block';
 
@@ -314,7 +325,7 @@ function buildPriceHistChart(item, excludedPrices) {
           borderWidth: 2.5 },
         // Dashed: an outside shop is a different kind of price - one you make a
         // separate trip for - and the dash says so without relying on colour.
-        ...(thBest ? [{ ...makeDataset(thMeta ? thMeta.label : 'Other store', thData, thIsActual, '#4338CA'),
+        ...(thBest ? [{ ...makeDataset(thLabel, thData, thIsActual, '#4338CA'),
                         borderWidth: 2, borderDash: [5, 3] }] : []),
       ],
     },
@@ -452,16 +463,23 @@ function openPriceHistoryModal(item, opts) {
   const coMap = new Map((item.coles_price_history || []).map(e => [e.date, e.price]));
   // The same outside-shop entry the chart plots - cheapest shop carrying it -
   // so the table and the third line can never quote different numbers.
-  const thirdRows = (_hmCfg.getThird ? _hmCfg.getThird(item) : []) || [];
-  const thPick = thirdRows.filter(e => e && e.price > 0).sort((a, b) => a.price - b.price)[0] || null;
-  const thInfo = thPick && typeof THIRD_STORES !== 'undefined' ? THIRD_STORES[thPick.store] : null;
+  const thirdRows = (_hmCfg.getThird ? _hmCfg.getThird(item) : []).filter(e => e && e.price > 0);
+  const thPick = [...thirdRows].sort((a, b) => a.price - b.price)[0] || null;
+  // Same rule as the chart: one shop is named, several are summarised as ＋,
+  // because the column then holds the cheapest outside price per date rather
+  // than any single shop's series.
+  const thTblShops = new Set(thirdRows.map(e => e.store));
+  const thInfo = thPick && thTblShops.size === 1 && typeof THIRD_STORES !== 'undefined'
+    ? THIRD_STORES[thPick.store] : null;
   const thTblMap = new Map();
-  if (thPick) {
-    for (const h of (Array.isArray(thPick.history) ? thPick.history : [])) {
-      if (h && h.date && h.price > 0) thTblMap.set(h.date, h.price);
+  for (const e of thirdRows) {
+    const pts = Array.isArray(e.history) ? [...e.history] : [];
+    const d = (e.checked || '').slice(0, 10);
+    if (d && !pts.some(h => h && h.date === d)) pts.push({ date: d, price: e.price });
+    for (const h of pts) {
+      if (!h || !h.date || !(h.price > 0)) continue;
+      if (!thTblMap.has(h.date) || h.price < thTblMap.get(h.date)) thTblMap.set(h.date, h.price);
     }
-    const d = (thPick.checked || '').slice(0, 10);
-    if (d && !thTblMap.has(d)) thTblMap.set(d, thPick.price);
   }
   // Days when a multi-buy beat the ticket price. The stored `price` IS the promo
   // rate (a real price the item sold at, so it counts toward the range and the
@@ -552,9 +570,10 @@ function openPriceHistoryModal(item, opts) {
     <span class="price-history-date" style="color:var(--text-soft)">Date</span>
     <span class="price-history-store-col"><span class="store-chip sm ww">W</span></span>
     <span class="price-history-store-col"><span class="store-chip sm coles">C</span></span>`
-    + (thPick ? `<span class="price-history-store-col"><span class="store-chip sm third" style="${
-        thirdChipStyle(thPick.store)}" title="${escAttr(thInfo ? thInfo.label : 'Other store')}">${
-        esc(thInfo ? thInfo.letter : '+')}</span></span>` : '');
+    + (thPick ? `<span class="price-history-store-col"><span class="store-chip sm third"${
+        thInfo ? ` style="${thirdChipStyle(thPick.store)}"` : ''} title="${
+        escAttr(thInfo ? thInfo.label : 'Cheapest outside the supermarkets, across '
+          + thTblShops.size + ' shops')}">${thInfo ? esc(thInfo.letter) : '＋'}</span></span>` : '');
   listEl.appendChild(hdr);
 
   displayEntries.forEach((entry, idx) => {

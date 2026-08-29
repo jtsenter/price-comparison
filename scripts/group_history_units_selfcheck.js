@@ -378,3 +378,32 @@ setTrendMode('best');
 }
 
 console.log('\nAll group-history unit self-checks passed.');
+
+// ── One outside shop is named; several are summarised as ＋ ─────────────────
+// A per-product badge that shows one shop's coloured letter is a claim that the
+// product is sold THERE. That is true while there is exactly one outside shop,
+// and false the moment there are two - the chip, the history column and the
+// chart line are then summaries of all of them (cheapest per date), so they
+// carry the generic ＋ the "other stores" column already uses. The winning shop
+// is still named in the tooltip, and still leads the panel when it opens.
+{
+  const modal = fs.readFileSync(path.join(__dirname, '..', 'docs', 'history-modal.js'), 'utf8');
+
+  check('the row chip counts DISTINCT shops, not entries',
+    /new Set\(entries\.map\(e => e\.store\)\)\.size === 1/.test(appSrc),
+    'two entries at the same shop are still one shop');
+  check('the row chip drops the shop letter when there are several',
+    /third-chip-many/.test(appSrc) && /oneShop\s*\?/.test(appSrc));
+
+  check('the history column names a shop only when there is exactly one',
+    /thTblShops\.size === 1/.test(modal));
+  check('the chart line names a shop only when there is exactly one',
+    /thShops\.size === 1/.test(modal));
+  check('with several shops the series is the CHEAPEST per date',
+    /if \(!thMap\.has\(h\.date\) \|\| v < thMap\.get\(h\.date\)\)/.test(modal)
+    && /if \(!thTblMap\.has\(h\.date\) \|\| h\.price < thTblMap\.get\(h\.date\)\)/.test(modal),
+    'a single line labelled "other stores" is only honest if it is the best of them');
+  check('every shop contributes its dates, not just the cheapest one',
+    /for \(const e of thirdEntries\)/.test(modal) && /for \(const e of thirdRows\)/.test(modal),
+    'a price checked on a day only one shop was visited must still get a row');
+}
