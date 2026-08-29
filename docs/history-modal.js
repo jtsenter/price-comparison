@@ -450,14 +450,28 @@ function openPriceHistoryModal(item, opts) {
   // Merge per-scrape WW and Coles by date (always scraped together)
   const wwMap = new Map((item.ww_price_history    || []).map(e => [e.date, e.price]));
   const coMap = new Map((item.coles_price_history || []).map(e => [e.date, e.price]));
+  // The same outside-shop entry the chart plots - cheapest shop carrying it -
+  // so the table and the third line can never quote different numbers.
+  const thirdRows = (_hmCfg.getThird ? _hmCfg.getThird(item) : []) || [];
+  const thPick = thirdRows.filter(e => e && e.price > 0).sort((a, b) => a.price - b.price)[0] || null;
+  const thInfo = thPick && typeof THIRD_STORES !== 'undefined' ? THIRD_STORES[thPick.store] : null;
+  const thTblMap = new Map();
+  if (thPick) {
+    for (const h of (Array.isArray(thPick.history) ? thPick.history : [])) {
+      if (h && h.date && h.price > 0) thTblMap.set(h.date, h.price);
+    }
+    const d = (thPick.checked || '').slice(0, 10);
+    if (d && !thTblMap.has(d)) thTblMap.set(d, thPick.price);
+  }
   // Days when a multi-buy beat the ticket price. The stored `price` IS the promo
   // rate (a real price the item sold at, so it counts toward the range and the
   // trend); `shelf` is what the ticket said, surfaced in the row's "?".
   const wwMb = new Map((item.ww_price_history    || []).filter(e => e.mb).map(e => [e.date, e]));
   const coMb = new Map((item.coles_price_history || []).filter(e => e.mb).map(e => [e.date, e]));
-  const scrapeDates = new Set([...wwMap.keys(), ...coMap.keys()]);
+  const scrapeDates = new Set([...wwMap.keys(), ...coMap.keys(), ...thTblMap.keys()]);
   const scrapeEntries = [...scrapeDates].map(d => ({
-    date: d, ww: wwMap.get(d) ?? null, coles: coMap.get(d) ?? null, source: 'scrape',
+    date: d, ww: wwMap.get(d) ?? null, coles: coMap.get(d) ?? null,
+    third: thTblMap.get(d) ?? null, source: 'scrape',
   }));
 
   // If the current live price isn't already the top history entry, inject it so it's always visible
@@ -507,8 +521,10 @@ function openPriceHistoryModal(item, opts) {
     if (group.length === 1) { dedupedEntries.push(group[0]); return; }
     const wwPrices = [...new Set(group.map(e => e.ww).filter(p => p != null))];
     const coPrices = [...new Set(group.map(e => e.coles).filter(p => p != null))];
+    const thPrices = [...new Set(group.map(e => e.third).filter(p => p != null))];
     if (wwPrices.length <= 1 && coPrices.length <= 1) {
-      dedupedEntries.push({ date, ww: wwPrices[0] ?? null, coles: coPrices[0] ?? null, source: group.map(e => e.source).join(',') });
+      dedupedEntries.push({ date, ww: wwPrices[0] ?? null, coles: coPrices[0] ?? null,
+        third: thPrices[0] ?? null, source: group.map(e => e.source).join(',') });
     } else {
       group.forEach(e => dedupedEntries.push(e));
     }
@@ -516,6 +532,9 @@ function openPriceHistoryModal(item, opts) {
 
   const listEl = document.getElementById('priceHistoryList');
   listEl.innerHTML = '';
+  // Four columns only when there IS an outside shop - an empty fourth column on
+  // every other product would cost the date and price columns width for nothing.
+  listEl.classList.toggle('has-third', !!thPick);
 
   if (!allEntries.length) {
     listEl.innerHTML = '<div style="padding:16px;color:var(--text-soft);font-size:13px;">No price history available.</div>';
@@ -532,7 +551,10 @@ function openPriceHistoryModal(item, opts) {
   hdr.innerHTML = `
     <span class="price-history-date" style="color:var(--text-soft)">Date</span>
     <span class="price-history-store-col"><span class="store-chip sm ww">W</span></span>
-    <span class="price-history-store-col"><span class="store-chip sm coles">C</span></span>`;
+    <span class="price-history-store-col"><span class="store-chip sm coles">C</span></span>`
+    + (thPick ? `<span class="price-history-store-col"><span class="store-chip sm third" style="${
+        thirdChipStyle(thPick.store)}" title="${escAttr(thInfo ? thInfo.label : 'Other store')}">${
+        esc(thInfo ? thInfo.letter : '+')}</span></span>` : '');
   listEl.appendChild(hdr);
 
   displayEntries.forEach((entry, idx) => {
@@ -593,10 +615,21 @@ function openPriceHistoryModal(item, opts) {
          </span>`
       : `<span style="color:var(--text-soft)">-</span>`;
 
+    // No exclude/fork controls on the outside-shop cell: those write into
+    // pw_exclusions_v1, which is keyed per store for ww/coles only. An outside
+    // price is read-only here rather than offering a button that would silently
+    // do nothing.
+    const thHtml = !thPick ? '' : (entry.third != null
+      ? `<span class="price-history-store-cell">
+           <span class="price-history-price" style="color:#4338CA">${fmt(entry.third)}</span>
+         </span>`
+      : `<span style="color:var(--text-soft)">-</span>`);
+
     row.innerHTML = `
       <span class="price-history-date${idx === 0 ? ' ph-latest-date' : ''}">${entry.date || 'Unknown date'}</span>
       ${wwHtml}
-      ${coHtml}`;
+      ${coHtml}
+      ${thHtml}`;
 
     // Group-history exclusion: applied IMMEDIATELY to the source member (no
     // Save step - a merged min-of-members series has no single pending list),

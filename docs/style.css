@@ -1700,6 +1700,12 @@ tr:hover .item-refresh-btn { opacity: 1; pointer-events: auto; }
   font-size: 13px;
 }
 .price-history-row:last-child { border-bottom: none; }
+/* A fourth column ONLY when the product is sold outside the supermarkets, set
+   by .has-third on the list. The date column keeps a fixed share so the price
+   columns shrink instead of it - dates are one width, prices are short. */
+.price-history-list.has-third .price-history-row {
+  grid-template-columns: 1.1fr 1fr 1fr 1fr;
+}
 .price-history-date { color: var(--text-soft); font-size: 12px; }
 .price-history-date.ph-latest-date { font-weight: 700; color: var(--text); }
 .price-history-store-cell {
