@@ -189,11 +189,16 @@ const items = JSON.parse(fs.readFileSync(
 const live = buyWaitCards(items, { tune: TUNE });
 assert(live.length <= globalThis.BWS_MAX_CARDS, 'live panel over cap');
 const counts = live.reduce((m, c) => (m[c.verdict] = (m[c.verdict] || 0) + 1, m), {});
-// Every live card must name a real dollar figure - an empty headline is a bug
-// that only shows up on real data (missing typical, NaN prices).
+// Every live card must carry ONE short, complete note - an empty or NaN headline
+// is a bug that only shows up on real data (missing typical, NaN prices). The
+// second `why` sentence was retired: the percentage and the struck-through
+// "was" already state the money, so a card that restates it in words is the
+// clutter that made the panel skippable.
 for (const c of live) {
-  assert(c.headline && !/NaN|undefined/.test(c.headline + c.why),
-    `broken card copy: ${c.item.list_item} - "${c.headline}" / "${c.why}"`);
+  assert(c.headline && !/NaN|undefined/.test(c.headline),
+    `broken card copy: ${c.item.list_item} - "${c.headline}"`);
+  assert(c.why === undefined, `cards must carry no second sentence, got "${c.why}"`);
+  assert(c.headline.length <= 34, `note too long to stay on one line: "${c.headline}"`);
   assert(c.stake >= globalThis.BWS_MIN_STAKE, `${c.item.list_item} slipped under the stake floor`);
 }
 
@@ -201,7 +206,7 @@ console.log(`buy_wait_selfcheck: 12/12 OK  (live panel: ${live.length} cards `
   + `${JSON.stringify(counts)})`);
 for (const c of live) {
   console.log(`   [${c.verdict.toUpperCase().padEnd(5)}] ${c.item.list_item.slice(0, 38).padEnd(40)}`
-    + ` ${c.headline} | ${c.why}`);
+    + ` ${c.headline}`);
 }
 
 // ── Outside-shop cards ──────────────────────────────────────────────────────

@@ -5,7 +5,8 @@
 import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 from third_stores import (parse_cw_price, parse_jsonld_price, parse_meta_price,
-                          parse_price_for, _plausible, _round_robin_by_store)
+                          parse_price_for, _plausible, _round_robin_by_store,
+                          _append_third_history, THIRD_HISTORY_HEARTBEAT_DAYS)
 
 n = 0
 def check(label, got, want):
@@ -98,3 +99,52 @@ check("a missing store key does not drop the entry",
       len(_round_robin_by_store([{"url": "u"}, _mk("kmart", 1)])), 2)
 
 print(f"third_stores_selfcheck: all {n} cases passed")
+
+# ── Outside-shop price history ──────────────────────────────────────────────
+# These shops used to store one number and the day it was read, so the
+# price-history chart could draw Woolworths and Coles but had nothing for
+# Chemist Warehouse or Priceline, and the deal engine - which judges a price
+# against its own past - could never see them at all. Now they keep a series,
+# on the same append rule the supermarket histories use.
+
+_e = {"store": "priceline", "price": 2.75}
+_append_third_history(_e, 2.75, "2026-08-29")
+check("a first price starts the series", _e["history"], [{"date": "2026-08-29", "price": 2.75}])
+
+# A move is always worth a point.
+_append_third_history(_e, 2.50, "2026-08-30")
+check("a price move appends", [h["price"] for h in _e["history"]], [2.75, 2.50])
+
+# An unchanged price the next day is NOT a new point - that is what the weekly
+# heartbeat is for, and a point per run would bury real moves in noise.
+_append_third_history(_e, 2.50, "2026-08-31")
+check("an unchanged price the next day does not append", len(_e["history"]), 2)
+
+# ...but after a week of no movement, record one so a flat price reads as
+# observed rather than as a gap in the data.
+_append_third_history(_e, 2.50, "2026-09-06")
+check("a flat price still gets a weekly heartbeat", len(_e["history"]), 3)
+check("the heartbeat carries the same price", _e["history"][-1]["price"], 2.50)
+
+# Two runs on one day (the archived sweep and a manual refresh both call this)
+# must not stack two points on the same date - that draws a vertical line.
+_append_third_history(_e, 2.40, "2026-09-06")
+check("a same-day re-run overwrites rather than stacks", len(_e["history"]), 3)
+check("...and the later read wins", _e["history"][-1]["price"], 2.40)
+
+# Junk in the stored file must not crash the run or survive into the series.
+_bad = {"history": [{"date": None, "price": 1}, {"price": 2}, "nonsense",
+                    {"date": "2026-08-01", "price": 3.00}]}
+_append_third_history(_bad, 3.50, "2026-08-29")
+check("malformed history rows are dropped, valid ones kept",
+      [h["price"] for h in _bad["history"]], [3.00, 3.50])
+
+# An entry that has never carried a history key is the normal case on the first
+# run after this shipped; it must not throw.
+_fresh = {"store": "big_w", "price": 9.20}
+_append_third_history(_fresh, 9.20, "2026-08-29")
+check("an entry with no history key is seeded, not skipped", len(_fresh["history"]), 1)
+
+check("the heartbeat is a week", THIRD_HISTORY_HEARTBEAT_DAYS, 7)
+
+print(f"third_stores_selfcheck: all {n} cases passed (incl. outside-shop history)")

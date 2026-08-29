@@ -183,10 +183,12 @@
        bottom of every card so the buttons line up across the row even when one
        card's fine print runs to two lines. */
     .bws-card {
-      /* Six rows now - the discount size sits between the name and the
-         headline, where the eye lands after reading what the product is. */
-      display: grid; grid-template-rows: 22px 36px auto 20px 1fr auto;
-      gap: 4px; padding: 11px 12px 12px;
+      /* Five rows: chip line, name, the discount, one short note, the button.
+         Fixed heights on the first four so the buttons still line up across the
+         row, and no 1fr filler - the card is now exactly as tall as it needs
+         to be instead of stretching to the tallest sibling. */
+      display: grid; grid-template-rows: 20px 34px auto 15px auto;
+      gap: 3px; padding: 9px 11px 10px;
       border: 1px solid var(--border); border-left: 4px solid var(--border-strong);
       border-radius: var(--radius); background: var(--bg);
       text-align: left; font: inherit; cursor: pointer; width: 100%;
@@ -203,15 +205,14 @@
       font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums;
     }
     .bws-name {
-      font-size: 13px; font-weight: 700; line-height: 1.35; color: var(--text);
+      font-size: 12.5px; font-weight: 700; line-height: 1.3; color: var(--text);
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
       overflow: hidden;
     }
     .bws-head-line {
-      font-size: 12.5px; font-weight: 700; line-height: 20px;
+      font-size: 11px; font-weight: 700; line-height: 15px;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .bws-why { font-size: 11.5px; color: var(--text-mid); line-height: 1.4; }
     /* The one number that says how good this is. Deliberately the largest thing
        on the card - bigger than the price - because "is this worth acting on"
        is the question the panel exists to answer, and it was previously only
@@ -227,7 +228,7 @@
       text-decoration: line-through; font-variant-numeric: tabular-nums;
     }
     .bws-add {
-      margin-top: 7px; width: 100%; padding: 6px 8px;
+      margin-top: 5px; width: 100%; padding: 5px 8px;
       font: inherit; font-size: 12px; font-weight: 700; cursor: pointer;
       border: 1px solid var(--border-strong); border-radius: 7px;
       background: var(--card); color: var(--text-mid);
@@ -262,7 +263,7 @@
       .bws-grid { grid-template-columns: 1fr; }
       /* One column: names can breathe, so the fixed rows stop earning their
          keep and only cause clipping. */
-      .bws-card { grid-template-rows: auto auto auto auto auto auto; }
+      .bws-card { grid-template-rows: auto auto auto auto auto; }
       .bws-name { -webkit-line-clamp: 3; }
       .bws-head-line { white-space: normal; line-height: 1.35; }
       /* Thumb-sized on a phone. */
@@ -766,8 +767,8 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=142"></script>
-<script src="history-modal.js?v=6"></script>
+<script src="utils.js?v=143"></script>
+<script src="history-modal.js?v=7"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -1297,17 +1298,16 @@ function renderBwsPanel(priorities, exclusions, tune) {
         <span class="bws-price">${chip}${fmt(c.price * c.rate.scale)}${c.rate.unit}</span>
       </span>
       <span class="bws-name">${esc(shortName(name))}</span>
-      <!-- The size of the discount, as the biggest thing on the card. It used to
-           be buried mid-sentence, so nothing told you at a glance whether a card
-           was worth acting on - which is why the row got skipped wholesale. The
-           struck-through usual price is what the percentage is measured against,
-           so the claim can be checked without opening anything. -->
+      <!-- The size of the discount, as the biggest thing on the card, with the
+           struck-through usual price beside it so the claim can be checked
+           without opening anything. Everything else is ONE short line: the
+           card used to carry two sentences that restated this same money in
+           words, which is what made the row long and skippable. -->
       <span class="bws-off">
         <b>${c.offPct}%</b><span class="bws-off-lbl">off</span>
         <span class="bws-was">was ${fmt(c.usual * c.rate.scale)}${c.rate.unit}</span>
       </span>
       <span class="bws-head-line">${esc(c.headline)}</span>
-      <span class="bws-why">${esc(c.why)}</span>
       <button type="button" class="bws-add${has ? ' in' : ''}" data-add="${escAttr(name)}"
               title="${has ? 'Remove from basket' : 'Add to basket'}">
         ${has ? '✓ In basket' : '＋ Add to basket'}
@@ -2007,6 +2007,13 @@ function renderScrapeStrip(data) {
       const byName = new Map((_data?.items || []).map(i => [i.list_item, i]));
       const g = buildVariantGroups(byName).find(x => x._groupKey === key.replace('__group_', ''));
       return g ? buildGroupHistoryItem(g) : null;
+    },
+    getThird: (it) => {
+      const key = it?._isGroupHistory ? '__group_' + it._groupKey : it?.list_item;
+      const own = Array.isArray(_thirdStores[key]) ? _thirdStores[key] : [];
+      if (!it?._isGroupHistory) return own;
+      const members = (it._memberNames || []).flatMap(n => Array.isArray(_thirdStores[n]) ? _thirdStores[n] : []);
+      return [...own, ...members];
     },
     editable: false,
     delegate: true,   // hot-deals has no per-row click routing of its own

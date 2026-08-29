@@ -7419,6 +7419,16 @@ async function boot() {
       const g = buildVariantGroups(byName).find(x => x._groupKey === key.replace('__group_', ''));
       return g ? buildGroupHistoryItem(withGroupCounts(g)) : null;
     },
+    // Lets the chart draw an outside-shop line beside the two supermarkets.
+    // A category merges its own key with every member's, exactly as the ➕
+    // column does - the Rexona is a category of one, and a plain-name lookup
+    // would have found nothing for it.
+    getThird: (it) => {
+      if (!it?._isGroupHistory) return thirdEntriesFor(it?.list_item);
+      const byName = new Map((_lastData?.items || []).map(i => [i.list_item, i]));
+      const g = buildVariantGroups(byName).find(x => x._groupKey === it._groupKey);
+      return g ? groupThirdEntries(g) : [];
+    },
     onSaved: () => { if (_lastData) renderPage(_lastData); },
     // Removing a price point is a destructive edit to shared data, so it is
     // OWNER-ONLY like every other one. This was `true` unconditionally: a

@@ -213,6 +213,46 @@ async def _undetectable_ua(pw) -> str | None:
                 pass
 
 
+THIRD_HISTORY_HEARTBEAT_DAYS = 7   # a flat price is still worth recording weekly
+THIRD_HISTORY_MAX = 400            # ~8 years of weekly points; a cap, never reached in practice
+
+
+def _append_third_history(entry: dict, price: float, today: str) -> None:
+    """Append today's price to an outside-shop entry's own series.
+
+    Mirrors the supermarket rule in scraper.py: write a point when the price
+    MOVED, or when the last one is a week old, so a price that never changes
+    still reads as observed rather than as missing data. Same-day re-runs
+    overwrite rather than stack - the archived sweep and a manual refresh both
+    call this, and two points on one date would draw a vertical line.
+
+    ponytail: capped at THIRD_HISTORY_MAX by dropping the oldest. Outside shops
+    are checked weekly at most, so the cap is theoretical; it exists so a
+    runaway loop cannot grow the file without bound.
+    """
+    hist = entry.get("history")
+    if not isinstance(hist, list):
+        hist = []
+    hist = [h for h in hist if isinstance(h, dict) and h.get("date") and h.get("price") is not None]
+
+    if hist and hist[-1].get("date") == today:
+        hist[-1]["price"] = price          # same day, later read wins
+    else:
+        last = hist[-1] if hist else None
+        moved = last is None or round(float(last["price"]), 2) != price
+        stale = False
+        if last is not None and not moved:
+            try:
+                stale = (datetime.fromisoformat(today) - datetime.fromisoformat(last["date"])).days \
+                        >= THIRD_HISTORY_HEARTBEAT_DAYS
+            except ValueError:
+                stale = True               # unparseable date: record rather than lose the point
+        if moved or stale:
+            hist.append({"date": today, "price": price})
+
+    entry["history"] = hist[-THIRD_HISTORY_MAX:]
+
+
 def _round_robin_by_store(entries: list) -> list:
     """Same entries, reordered so consecutive ones prefer DIFFERENT shops.
 
@@ -287,6 +327,15 @@ async def refresh() -> int:
                 e.pop("status", None)
                 e.pop("note", None)
                 updated += 1
+                # Keep a SERIES, not just the latest price. Outside shops used to
+                # store a single number and the day it was read, which meant the
+                # price-history chart could plot Woolworths and Coles but had
+                # nothing to draw for Chemist Warehouse or Priceline - and the
+                # deal engine, which judges everything against its own past,
+                # could never see them at all. Same append rule the supermarket
+                # histories use: record a move, or a weekly heartbeat so a flat
+                # price still shows as observed rather than as a gap.
+                _append_third_history(e, round(price, 2), today)
                 # A first-ever price is not a "change" - there is nothing it
                 # moved from, and recording one would draw a phantom drop from $0.
                 if old is not None and round(float(old), 2) != round(price, 2):

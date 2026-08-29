@@ -12,6 +12,13 @@
 let _hmCfg = {
   getItems: () => [],
   buildGroup: null,
+  // (item) -> [{store, price, history:[{date,price}], ...}] from
+  // third_store.json. Takes the ITEM, not a name: a category's history item is
+  // titled by its LABEL, so a name-only lookup could never find the entries
+  // filed under its group key. Supplied by the host page, like buildGroup,
+  // because only the page knows where that file was loaded to. Absent = the
+  // chart draws the two supermarkets, exactly as before.
+  getThird: null,
   onSaved: () => {},
   editable: false,
   delegate: false,
@@ -181,14 +188,35 @@ function buildPriceHistChart(item, excludedPrices) {
   const wwFullMap = new Map(wwRaw.filter(e => !isExclWW(e.price)).map(e => [e.date, e.price * kgR.ww]));
   const coMap     = new Map(coRaw.filter(e => !isExclCo(e.price)).map(e => [e.date, e.price * kgR.coles]));
 
-  const allDates = [...new Set([...wwFullMap.keys(), ...coMap.keys()])].sort();
+  // ── Outside shop (Chemist Warehouse / Priceline / Big W / ALDI / Kmart) ────
+  // One line, for the CHEAPEST shop carrying this product - the same one the
+  // Hot Deals card would send you to. These keep their own `history` array
+  // (third_stores.py), which is newer than the supermarket ones, so most items
+  // will show a short line or a single point until it accumulates.
+  const thirdEntries = (_hmCfg.getThird ? _hmCfg.getThird(item) : []) || [];
+  const thBest = thirdEntries.filter(e => e && e.price > 0)
+    .sort((a, b) => a.price - b.price)[0] || null;
+  const thMeta = thBest && typeof THIRD_STORES !== 'undefined' ? THIRD_STORES[thBest.store] : null;
+  const thMap = new Map();
+  if (thBest) {
+    for (const h of (Array.isArray(thBest.history) ? thBest.history : [])) {
+      if (h && h.date && h.price > 0) thMap.set(h.date, h.price * (kgR.ww || 1));
+    }
+    // The current price counts as today's point, the same courtesy the two
+    // supermarkets get above - otherwise a shop with no history yet draws
+    // nothing at all and the line looks broken rather than new.
+    const thDate = (thBest.checked || '').slice(0, 10) || liveDate;
+    if (!thMap.has(thDate)) thMap.set(thDate, thBest.price * (kgR.ww || 1));
+  }
+
+  const allDates = [...new Set([...wwFullMap.keys(), ...coMap.keys(), ...thMap.keys()])].sort();
   if (allDates.length < 2) {
     const el = document.getElementById('priceHistChartLegend'); if (el) el.remove();
     wrap.style.display = 'none'; return;
   }
 
-  const wwData = [], coData = [], wwIsActual = [], coIsActual = [];
-  let lastWW = null, lastCo = null;
+  const wwData = [], coData = [], thData = [], wwIsActual = [], coIsActual = [], thIsActual = [];
+  let lastWW = null, lastCo = null, lastTh = null;
 
   for (const date of allDates) {
     if (wwFullMap.has(date)) {
@@ -208,9 +236,18 @@ function buildPriceHistChart(item, excludedPrices) {
     } else {
       coData.push(null); coIsActual.push(false);
     }
+
+    if (thMap.has(date)) {
+      lastTh = thMap.get(date);
+      thData.push(lastTh); thIsActual.push(true);
+    } else if (lastTh !== null) {
+      thData.push(lastTh); thIsActual.push(false);
+    } else {
+      thData.push(null); thIsActual.push(false);
+    }
   }
 
-  const allPrices = [...wwData, ...coData].filter(p => p != null);
+  const allPrices = [...wwData, ...coData, ...thData].filter(p => p != null);
   if (!allPrices.length) {
     const el = document.getElementById('priceHistChartLegend'); if (el) el.remove();
     wrap.style.display = 'none'; return;
@@ -258,7 +295,12 @@ function buildPriceHistChart(item, excludedPrices) {
     + 'Woolworths</span>'
     + '<span style="display:flex;align-items:center;gap:6px;">'
     + '<span style="width:20px;height:3px;background:#dc2626;display:inline-block;border-radius:2px;"></span>'
-    + 'Coles</span>';
+    + 'Coles</span>'
+    // Named, not "Other store": the whole point of the line is knowing WHICH
+    // shop the price is from, and the chart has no chip to carry that.
+    + (thBest ? '<span style="display:flex;align-items:center;gap:6px;">'
+        + '<span style="width:20px;height:3px;background:#4338CA;display:inline-block;border-radius:2px;"></span>'
+        + (thMeta ? thMeta.label : 'Other store') + '</span>' : '');
   wrap.parentNode.insertBefore(chartLegend, wrap);
   wrap.style.display = 'block';
 
@@ -270,6 +312,10 @@ function buildPriceHistChart(item, excludedPrices) {
         makeDataset('Woolworths', wwData, wwIsActual, '#22c55e'),
         { ...makeDataset('Coles', coDataOffset, coIsActual, '#dc2626'),
           borderWidth: 2.5 },
+        // Dashed: an outside shop is a different kind of price - one you make a
+        // separate trip for - and the dash says so without relying on colour.
+        ...(thBest ? [{ ...makeDataset(thMeta ? thMeta.label : 'Other store', thData, thIsActual, '#4338CA'),
+                        borderWidth: 2, borderDash: [5, 3] }] : []),
       ],
     },
     options: {
@@ -285,6 +331,9 @@ function buildPriceHistChart(item, excludedPrices) {
               const store = ctx.dataset.label;
               const raw = ctx.raw;
               if (raw === null) return `${store}: no data yet`;
+              // Only the Coles series is drawn with the anti-overlap offset, so
+              // only it needs undoing - subtracting it from the outside-shop
+              // line would quote a price a couple of cents below the real one.
               const display = store === 'Coles'
                 ? Math.round((raw - coOffset) * 100) / 100
                 : raw;

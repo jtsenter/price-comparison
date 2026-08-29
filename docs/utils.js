@@ -2844,8 +2844,12 @@ function bwsVerdict(item, deal, series, tune, today, rate) {
       // error, and five cards all looked equally worth reading.
       offPct: Math.round((1 - cur / deal.typical) * 100),
       usual: deal.typical,
-      headline: lastAsCheap ? `Cheapest in ${bwsAgo(daysSince).replace(' ago', '')}` : 'Cheapest ever recorded',
-      why: `${money(cur)} now vs ${money(deal.typical)} usual. Keeps, so buy for the month.`,
+      // ONE short note per card. The percentage and the struck-through "was"
+      // already state the money, so restating it ("$12.00 now vs $16.00 usual")
+      // was pure duplication - and "Keeps, so buy for the month" explained the
+      // verdict the STOCK UP tag had already given. A note earns its line only
+      // by adding what the number cannot: how long since it was this cheap.
+      headline: lastAsCheap ? `Cheapest in ${bwsAgo(daysSince).replace(' ago', '')}` : 'Cheapest ever',
     };
   }
   // BUY - passes the filters you set for this page, and the saving is real money.
@@ -2855,9 +2859,7 @@ function bwsVerdict(item, deal, series, tune, today, rate) {
       stake: deal.saveAmount,
       offPct: Math.round((1 - cur / deal.typical) * 100),
       usual: deal.typical,
-      headline: `${money(deal.saveAmount)} below its usual ${money(deal.typical)}`,
-      why: lastAsCheap ? `Last this cheap ${bwsAgo(daysSince)}.`
-                       : 'Never been recorded cheaper.',
+      headline: lastAsCheap ? `Last this cheap ${bwsAgo(daysSince)}` : 'Never been cheaper',
     };
   }
   // No WAIT verdict. It used to be the third branch here - "dear against its own
@@ -2926,8 +2928,7 @@ function thirdStoreCards(items, thirdMap, opts) {
       offPct: Math.round((save / usual) * 100),
       usual,
       url: best.url || '',
-      headline: `${fmt(save)} cheaper at ${shop}`,
-      why: `${fmt(best.price)} there vs ${fmt(usual)} at the supermarket.`,
+      headline: `${fmt(best.price)} at ${shop}`,
       item,
       score: save * (1 + Math.min(item.trip_count || 0, 12)),
     });
