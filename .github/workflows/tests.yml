@@ -6,8 +6,18 @@ name: Tests
 on:
   push:
     paths:
-      - 'docs/app.js'
-      - 'docs/utils.js'
+      # Every source file in docs/, not just app.js and utils.js. The self-checks
+      # read five of them - day_merge reads scrape-log.html, list_visibility
+      # reads lists.html, group_history_units reads BOTH history-modal.js and
+      # hot-deals.html - so a change to any of those could break a check with CI
+      # never running. It happened: the commit that added the outside-shop column
+      # to the price-history table touched only history-modal.js and style.css,
+      # and Tests sat out entirely.
+      # docs/data/** is deliberately NOT matched - the scraper commits those
+      # several times a day and none of them can affect a self-check.
+      - 'docs/*.js'
+      - 'docs/*.html'
+      - 'docs/*.css'
       - 'scripts/**'
       - 'requirements.txt'
       - '.github/workflows/tests.yml'
