@@ -183,7 +183,9 @@
        bottom of every card so the buttons line up across the row even when one
        card's fine print runs to two lines. */
     .bws-card {
-      display: grid; grid-template-rows: 22px 36px 20px 1fr auto;
+      /* Six rows now - the discount size sits between the name and the
+         headline, where the eye lands after reading what the product is. */
+      display: grid; grid-template-rows: 22px 36px auto 20px 1fr auto;
       gap: 4px; padding: 11px 12px 12px;
       border: 1px solid var(--border); border-left: 4px solid var(--border-strong);
       border-radius: var(--radius); background: var(--bg);
@@ -210,6 +212,20 @@
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .bws-why { font-size: 11.5px; color: var(--text-mid); line-height: 1.4; }
+    /* The one number that says how good this is. Deliberately the largest thing
+       on the card - bigger than the price - because "is this worth acting on"
+       is the question the panel exists to answer, and it was previously only
+       answerable by reading a sentence. */
+    .bws-off { display: flex; align-items: baseline; gap: 5px; flex-wrap: wrap; }
+    .bws-off b {
+      font-size: 26px; font-weight: 900; line-height: 1;
+      font-variant-numeric: tabular-nums; letter-spacing: -0.5px;
+    }
+    .bws-off-lbl { font-size: 12px; font-weight: 800; letter-spacing: .3px; }
+    .bws-was {
+      margin-left: auto; font-size: 11.5px; color: var(--text-soft);
+      text-decoration: line-through; font-variant-numeric: tabular-nums;
+    }
     .bws-add {
       margin-top: 7px; width: 100%; padding: 6px 8px;
       font: inherit; font-size: 12px; font-weight: 700; cursor: pointer;
@@ -231,16 +247,22 @@
     .bws-card.buy { border-left-color: var(--ww); }
     .bws-card.buy .bws-tag { background: var(--ww-light); color: var(--ww); }
     .bws-card.buy .bws-head-line { color: var(--ww); }
-    .bws-card.wait { border-left-color: #D97706; }
-    .bws-card.wait .bws-tag { background: #FEF3C7; color: #B45309; }
-    .bws-card.wait .bws-head-line { color: #B45309; }
+    .bws-card.stock .bws-off b, .bws-card.stock .bws-off-lbl { color: #047857; }
+    .bws-card.buy   .bws-off b, .bws-card.buy   .bws-off-lbl { color: var(--ww); }
+    /* Outside shops get their own band - indigo, the colour the ➕ column already
+       uses for them - so a card that sends you somewhere else never reads as a
+       supermarket deal at a glance. */
+    .bws-card.else { border-left-color: var(--third, #4338CA); }
+    .bws-card.else .bws-tag { background: #E0E7FF; color: #3730A3; }
+    .bws-card.else .bws-head-line { color: #3730A3; }
+    .bws-card.else .bws-off b, .bws-card.else .bws-off-lbl { color: #3730A3; }
 
     @media (max-width: 700px) {
       .bws { margin: 12px 14px 0; padding: 12px 13px 13px; }
       .bws-grid { grid-template-columns: 1fr; }
       /* One column: names can breathe, so the fixed rows stop earning their
          keep and only cause clipping. */
-      .bws-card { grid-template-rows: auto auto auto auto auto; }
+      .bws-card { grid-template-rows: auto auto auto auto auto auto; }
       .bws-name { -webkit-line-clamp: 3; }
       .bws-head-line { white-space: normal; line-height: 1.35; }
       /* Thumb-sized on a phone. */
@@ -744,7 +766,7 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=141"></script>
+<script src="utils.js?v=142"></script>
 <script src="history-modal.js?v=6"></script>
 <script>
 if ('serviceWorker' in navigator) {
@@ -857,6 +879,7 @@ let _watchlistOnly = false;
 let _watchlistHD = new Set();
 let _data = null;
 let _archivedSet = new Set();
+let _thirdStores = {};   // list_item -> [{store,name,url,price,checked}] from third_store.json
 let _progressDismissed = false;
 let _progressLastDone = null;
 let _progressLastChangeTime = null;
@@ -1189,7 +1212,7 @@ function initHdResize() {
 // rows could never produce one. Per-kg group rows are skipped inside
 // buyWaitCards - their prices are $/kg, and "save $2.40" meaning per kilo on a
 // card sitting beside pack prices is the kind of detail nobody re-reads.
-const BWS_TAG = { stock: 'STOCK UP', buy: 'BUY', wait: 'WAIT' };
+const BWS_TAG = { stock: 'STOCK UP', buy: 'BUY', else: 'ELSEWHERE' };   // no 'wait' - the panel only tells you what to GO for
 // Scoring all 290 items costs ~13ms of renderDeals' ~44ms, and renderDeals runs
 // on every `input` event while a slider is being dragged. The panel ignores the
 // category and store filters, so most of those re-renders cannot change it -
@@ -1206,7 +1229,7 @@ function renderBwsPanel(priorities, exclusions, tune) {
             + '|' + _storeFilter;
   if (key === _bwsKey) return;
   _bwsKey = key;
-  const allCards = buyWaitCards(_data.items, {
+  let allCards = buyWaitCards(_data.items, {
     exclusions, priorities, archivedSet: _archivedSet, tune,
     // Per kilo wherever the item HAS a meaningful kilo rate - that is the
     // number that actually compares two products. histKgRatios is the same
@@ -1218,6 +1241,22 @@ function renderBwsPanel(priorities, exclusions, tune) {
       return (kg.perKg && r > 0) ? { scale: r, unit: '/kg' } : { scale: 1, unit: '' };
     },
   });
+  // Outside-shop calls get ONE reserved slot rather than competing on score.
+  //
+  // Score is saving x how often you buy it, which is right for supermarket
+  // deals - 50c off the weekly milk beats $3 off an annual jar. But it buries
+  // the outside shops by construction: Rexona at 44% off is the deepest
+  // discount on the page and scored 6.5 against a stock-up's 52, purely because
+  // it is bought twice a year. A shop you make a separate trip to is worth
+  // knowing about precisely when it is unusual, not when it is frequent.
+  //
+  // Exactly one, and only the best one, so the panel can never turn into a list
+  // of errands - and it still has to clear the same 15%-and-50c bar to exist.
+  const elseCards = thirdStoreCards(_data.items, _thirdStores, { archivedSet: _archivedSet, priorities })
+    .sort((a, b) => b.score - a.score);
+  const bestElse = elseCards[0];
+  allCards = [...(bestElse ? [bestElse] : []), ...allCards.slice(0, BWS_MAX_CARDS - (bestElse ? 1 : 0))]
+    .sort((a, b) => a.order - b.order || b.score - a.score);
   // The store filter applies here too. Advice to buy something at Coles is not
   // useful while you're filtered to "only what's cheaper at Woolworths" - it was
   // the one part of the page the filter didn't reach.
@@ -1240,7 +1279,13 @@ function renderBwsPanel(priorities, exclusions, tune) {
     const name = c.item.list_item;
     // No chip on a tie. Snickers is $8 at both stores and was flying a red
     // Coles chip, which reads as "Coles is cheaper" when nobody is.
-    const chip = c.tied ? ''
+    // An outside-shop card carries that shop's own chip and colours - falling
+    // through to the W/C branch would have stamped a Woolworths chip on a
+    // Priceline price.
+    const tmeta = c.verdict === 'else' ? (THIRD_STORES[c.store] || null) : null;
+    const chip = tmeta
+      ? `<span class="store-chip third sm" style="${thirdChipStyle(c.store)}" title="${escAttr(tmeta.label)}">${esc(tmeta.letter)}</span>`
+      : c.tied ? ''
       : c.store === 'coles'
       ? '<span class="store-chip coles sm">C</span>' : '<span class="store-chip ww sm">W</span>';
     const has = inBasket.has(name);
@@ -1252,6 +1297,15 @@ function renderBwsPanel(priorities, exclusions, tune) {
         <span class="bws-price">${chip}${fmt(c.price * c.rate.scale)}${c.rate.unit}</span>
       </span>
       <span class="bws-name">${esc(shortName(name))}</span>
+      <!-- The size of the discount, as the biggest thing on the card. It used to
+           be buried mid-sentence, so nothing told you at a glance whether a card
+           was worth acting on - which is why the row got skipped wholesale. The
+           struck-through usual price is what the percentage is measured against,
+           so the claim can be checked without opening anything. -->
+      <span class="bws-off">
+        <b>${c.offPct}%</b><span class="bws-off-lbl">off</span>
+        <span class="bws-was">was ${fmt(c.usual * c.rate.scale)}${c.rate.unit}</span>
+      </span>
       <span class="bws-head-line">${esc(c.headline)}</span>
       <span class="bws-why">${esc(c.why)}</span>
       <button type="button" class="bws-add${has ? ' in' : ''}" data-add="${escAttr(name)}"
@@ -1910,15 +1964,24 @@ function renderScrapeStrip(data) {
 
 (async () => {
   try {
-    const [dataRes, archRes] = await Promise.all([
+    const [dataRes, archRes, thirdRes] = await Promise.all([
       fetch(`data/latest.json?t=${Date.now()}`),
       fetch(`data/archived_items.json?t=${Date.now()}`).catch(() => null),
+      // Outside shops. Absent or unreadable = the feature is simply off, exactly
+      // as on the main page - it must never be the reason Hot Deals fails to load.
+      fetch(`data/third_store.json?t=${Date.now()}`).catch(() => null),
       initWatchlistHD(),
     ]);
     if (!dataRes.ok) throw new Error('not found');
     _data = await dataRes.json();
     if (archRes?.ok) {
       try { _archivedSet = new Set(await archRes.json()); } catch {}
+    }
+    if (thirdRes?.ok) {
+      try {
+        const raw = await thirdRes.json();
+        if (raw && typeof raw === 'object') { delete raw._readme; _thirdStores = raw; }
+      } catch {}
     }
   } catch {
     document.getElementById('loading').textContent = 'Could not load price data. Try refreshing.';

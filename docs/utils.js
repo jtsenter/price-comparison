@@ -2743,13 +2743,9 @@ function loadDealTune() {
 // test. Predicting "back on special in 2 weeks" from that would be invention.
 // "Last this cheap 6 weeks ago" carries the same decision and is measured.
 // Revisit once there are ~9 months of daily prices (≈ 2027-03).
-const BWS_MAX_CARDS   = 5;      // a cap, not a quota - a quiet week shows fewer
-const BWS_MAX_WAIT    = 2;      // this page is called Hot Deals; don't fill it with "no"
+const BWS_MAX_CARDS   = 3;      // a CAP, not a quota - a quiet week shows fewer, or none
 const BWS_MIN_HISTORY = 5;      // distinct recorded dates before we will judge at all
 const BWS_STOCK_RANK  = 0.9;    // "stock up" = cheaper than 90% of its own past
-const BWS_WAIT_RANK   = 0.25;   // "wait" = dearer than 75% of its own past
-const BWS_WAIT_GAP    = 0.10;   // ...and at least this far above a price seen recently
-const BWS_WAIT_DAYS   = 120;    // how far back "recently" reaches for a wait
 const BWS_MIN_STAKE   = 0.5;    // dollars per unit - below this it is not advice, it is noise
 const BWS_SIZE_TOL    = 0.15;   // how far the rival may move when restated at the same quantity
 const BWS_MIN_RATIO   = 0.4;    // a price move bigger than this is a different product, not a special
@@ -2842,6 +2838,12 @@ function bwsVerdict(item, deal, series, tune, today, rate) {
     return {
       verdict: 'stock', order: 0, price: cur, store: deal.store, tied: deal.tied, rate: { scale: _s, unit: _u },
       stake: deal.saveAmount,
+      // How much cheaper, as one number. The card used to carry the size of the
+      // discount only inside a sentence ("$2.40 below its usual $12.00"), so
+      // nothing on it announced whether this was a good deal or a rounding
+      // error, and five cards all looked equally worth reading.
+      offPct: Math.round((1 - cur / deal.typical) * 100),
+      usual: deal.typical,
       headline: lastAsCheap ? `Cheapest in ${bwsAgo(daysSince).replace(' ago', '')}` : 'Cheapest ever recorded',
       why: `${money(cur)} now vs ${money(deal.typical)} usual. Keeps, so buy for the month.`,
     };
@@ -2851,30 +2853,18 @@ function bwsVerdict(item, deal, series, tune, today, rate) {
     return {
       verdict: 'buy', order: 1, price: cur, store: deal.store, tied: deal.tied, rate: { scale: _s, unit: _u },
       stake: deal.saveAmount,
+      offPct: Math.round((1 - cur / deal.typical) * 100),
+      usual: deal.typical,
       headline: `${money(deal.saveAmount)} below its usual ${money(deal.typical)}`,
       why: lastAsCheap ? `Last this cheap ${bwsAgo(daysSince)}.`
                        : 'Never been recorded cheaper.',
     };
   }
-  // WAIT - dear against its own record, and it was demonstrably cheaper within
-  // living memory. Without that second half this is just "expensive item", which
-  // is not advice.
-  const cutoff = new Date(Date.parse(today) - BWS_WAIT_DAYS * 86400000).toISOString().slice(0, 10);
-  // Same plausibility floor, applied to the price we would be telling them to
-  // hold out FOR: grapes recorded at $5.50 before the listing became a $18.91
-  // per-kg line are not a price that is coming back.
-  const recent = past.filter(p => p.date >= cutoff && p.price >= cur * BWS_MIN_RATIO);
-  const best = recent.length ? recent.reduce((a, b) => (b.price < a.price ? b : a)) : null;
-  if (deal.pricePercentile <= BWS_WAIT_RANK && best
-      && cur >= best.price * (1 + BWS_WAIT_GAP) && cur - best.price >= BWS_MIN_STAKE) {
-    const ago = Math.round((Date.parse(today) - Date.parse(best.date)) / 86400000);
-    return {
-      verdict: 'wait', order: 2, price: cur, store: deal.store, tied: deal.tied, rate: { scale: _s, unit: _u },
-      stake: cur - best.price,
-      headline: `Was ${money(best.price)} ${bwsAgo(ago)}`,
-      why: `${money(cur)} today is dearer than ${100 - rankPct}% of its recorded prices.`,
-    };
-  }
+  // No WAIT verdict. It used to be the third branch here - "dear against its own
+  // record, and demonstrably cheaper recently" - and it was sound advice that
+  // nobody wanted: this page is opened to decide what to put in the trolley, so
+  // a card saying "don't buy this" is a slot spent telling you to do nothing.
+  // Removed rather than merely hidden, so the panel has one job.
   return null;
 }
 
@@ -2882,6 +2872,69 @@ function bwsVerdict(item, deal, series, tune, today, rate) {
 // 50c saving on the thing bought weekly beats $3 off something bought once, and
 // sorting on discount depth alone gets that exactly backwards. trip_count is
 // capped so one 37-trip staple cannot own every slot.
+// ── Outside-shop cards for the decision panel ───────────────────────────────
+// Chemist Warehouse / Priceline / Big W / ALDI / Kmart deals never reached Hot
+// Deals at all: that page's engine judges a price against its OWN recorded
+// history, and outside shops keep none - only a current price and the day it
+// was checked. So "cheapest ever" is not a question that can be asked of them.
+//
+// The question that CAN be asked is the one that matters for a shop you would
+// make a separate trip to: how far under the supermarkets is it right now.
+// Rexona Sport at $2.75 in Priceline against $4.90 at Woolworths is 44% off and
+// needs no history to establish.
+//
+// They land in the decision panel rather than the deal table because the table
+// is built on ww/coles columns and per-item history throughout, and because
+// "go to Priceline for this one" is exactly the kind of thing that panel is
+// for. A percentage gate as well as a dollar one: 15% off a $2 item is 30c, and
+// nobody detours for that.
+const BWS_ELSE_MIN_PCT = 0.15;
+
+function thirdStoreCards(items, thirdMap, opts) {
+  opts = opts || {};
+  const archivedSet = opts.archivedSet || new Set();
+  const priorities  = opts.priorities  || {};
+  const map = thirdMap || {};
+  const out = [];
+  for (const item of items || []) {
+    if (!item || item.archived || item._isGroup) continue;
+    const name = item.list_item;
+    if (priorities[name] === 'archive' || archivedSet.has(name)) continue;
+    const entries = Array.isArray(map[name]) ? map[name].filter(e => e && e.price > 0) : [];
+    if (!entries.length) continue;
+
+    // The supermarket price to beat is the CHEAPER of the two - beating only the
+    // dearer one is not a reason to go anywhere.
+    const ww = item.woolworths?.price, co = item.coles?.price;
+    const usual = Math.min(ww > 0 ? ww : Infinity, co > 0 ? co : Infinity);
+    if (!isFinite(usual)) continue;
+
+    const best = entries.reduce((a, b) => (b.price < a.price ? b : a));
+    const save = usual - best.price;
+    if (save < BWS_MIN_STAKE || save / usual < BWS_ELSE_MIN_PCT) continue;
+
+    const meta = (typeof THIRD_STORES !== 'undefined' && THIRD_STORES[best.store]) || null;
+    const shop = meta ? meta.label : (best.store || 'another shop');
+    out.push({
+      verdict: 'else',
+      // Same rank band as a plain BUY: score (saving x how often you buy it)
+      // decides which of them leads, not the fact that it is a different shop.
+      order: 1,
+      price: best.price, store: best.store, storeLabel: shop, tied: false,
+      rate: { scale: 1, unit: '' },
+      stake: save,
+      offPct: Math.round((save / usual) * 100),
+      usual,
+      url: best.url || '',
+      headline: `${fmt(save)} cheaper at ${shop}`,
+      why: `${fmt(best.price)} there vs ${fmt(usual)} at the supermarket.`,
+      item,
+      score: save * (1 + Math.min(item.trip_count || 0, 12)),
+    });
+  }
+  return out;
+}
+
 function buyWaitCards(items, opts) {
   opts = opts || {};
   const exclusions  = opts.exclusions  || {};
@@ -2906,15 +2959,9 @@ function buyWaitCards(items, opts) {
   }
   cards.sort((a, b) => b.score - a.score);
 
-  // Select on score alone, then order the survivors so the two "do something"
-  // verdicts lead. Waits are capped rather than scored down: one genuinely
-  // overpriced staple is worth knowing, five is a different page.
-  const picked = [];
-  let waits = 0;
-  for (const c of cards) {
-    if (picked.length >= BWS_MAX_CARDS) break;
-    if (c.verdict === 'wait' && ++waits > BWS_MAX_WAIT) continue;
-    picked.push(c);
-  }
-  return picked.sort((a, b) => a.order - b.order || b.score - a.score);
+  // A CAP, never a quota - and a low one. Filling the panel to a fixed five
+  // meant the fifth-best thing of the week sat at the same size and weight as
+  // the first, so the whole row read as undifferentiated noise and got skipped.
+  // Three strong calls are a decision; five is a list.
+  return cards.slice(0, BWS_MAX_CARDS).sort((a, b) => a.order - b.order || b.score - a.score);
 }

@@ -31,17 +31,17 @@ eval([
   extractConst('DEAL_MIN_SPREAD'), extractConst('DEAL_MIN_DROP'),
   extractConst('HD_STALE_MONTHS'), extractConst('DEAL_TUNE_DEFAULTS'),
   extractConst('CATEGORY_REMAP'),
-  extractConst('BWS_MAX_CARDS'), extractConst('BWS_MAX_WAIT'),
+  extractConst('BWS_MAX_CARDS'),
   extractConst('BWS_MIN_HISTORY'), extractConst('BWS_STOCK_RANK'),
-  extractConst('BWS_WAIT_RANK'), extractConst('BWS_WAIT_GAP'),
-  extractConst('BWS_WAIT_DAYS'), extractConst('BWS_MIN_STAKE'),
+  extractConst('BWS_MIN_STAKE'),
   extractConst('BWS_SIZE_TOL'), extractConst('BWS_MIN_RATIO'), extractConst('BWS_KEEPS'),
   extract('_median'), extract('exclPriceSet'), extract('mbUnitPrice'),
   extract('promoUnitPrice'), extract('fmt'), extract('normalizeCategory'),
   extract('clientPer100'), extract('per100Pair'), extract('sameQtyCost'),
   extract('getDealQuality'), extract('dealPassesTune'),
   extract('bwsSeries'), extract('bwsComparable'), extract('bwsAgo'),
-  extract('bwsVerdict'), extract('buyWaitCards'),
+  extractConst('BWS_ELSE_MIN_PCT'), extractConst('THIRD_STORES'),
+  extract('bwsVerdict'), extract('buyWaitCards'), extract('thirdStoreCards'),
 ].join('\n'));
 
 globalThis.loadDealTune = () => ({ ...globalThis.DEAL_TUNE_DEFAULTS });
@@ -84,20 +84,19 @@ const vegLow = mk('Lettuce', 'Fruit & Veg',
 const c2 = card(vegLow);
 assert(!c2 || c2.verdict !== 'stock', 'perishables must never be a stock-up');
 
-// 3. Wait: dear now, and demonstrably cheaper inside the window.
+// 3. There is no WAIT verdict any more. This panel answers "what do I go for",
+//    so a card telling you to do nothing is a slot wasted. An item that is dear
+//    against its own past - the exact case that used to produce one - must now
+//    produce no card at all rather than a hidden one.
 const dear = mk('Coffee 500g', 'Pantry',
   [[100, 12], [80, 12], [60, 9], [40, 12], [20, 12], [0, 14]], 14);
 const c3 = card(dear);
-assert(c3 && c3.verdict === 'wait', `dear vs its own past is a wait, got ${c3 && c3.verdict}`);
-assert(/\$9\.00/.test(c3.headline), `the wait must name the price to wait for, got "${c3.headline}"`);
+assert(!c3, `a dear item must yield no card, got ${c3 && c3.verdict}`);
 
-// 4. Dear, but never cheaper - there is nothing to wait FOR, so say nothing.
-//    A "wait" with no cheaper price behind it is just calling something pricey.
+// 4. Same for one that has never been cheaper: still nothing.
 const alwaysDear = mk('Saffron', 'Pantry',
   [[100, 12], [80, 12.2], [60, 12], [40, 12.1], [20, 12], [0, 13]], 13);
-const c4 = card(alwaysDear);
-assert(!c4 || c4.verdict !== 'wait',
-  'a wait needs a cheaper price inside the window, not just a high one');
+assert(!card(alwaysDear), 'nothing to act on means no card');
 
 // 5. Too little history = no verdict. Four prices is an anecdote.
 const thin = mk('New Thing', 'Pantry', [[30, 5], [20, 5], [10, 5], [0, 3]], 3);
@@ -119,18 +118,28 @@ const ranked = buyWaitCards([rare, often], { tune: TUNE, today: TODAY });
 assert.strictEqual(ranked[0].item.list_item, 'Milk-ish',
   'the thing bought 30 times must outrank the thing bought never');
 
-// 8. Caps hold: at most BWS_MAX_CARDS out, at most BWS_MAX_WAIT of them "wait".
-const manyWaits = Array.from({ length: 8 }, (_, k) =>
+// 8. The cap holds, and it is a CAP not a quota: sixteen candidates must not
+//    fill the panel past BWS_MAX_CARDS, and eight dear items must contribute
+//    nothing at all.
+const manyDear = Array.from({ length: 8 }, (_, k) =>
   mk('Dear ' + k, 'Pantry', [[100, 12], [80, 12], [60, 9], [40, 12], [20, 12], [0, 14 + k]], 14 + k));
 const manyBuys = Array.from({ length: 8 }, (_, k) =>
   mk('Low ' + k, 'Pantry', [[120, 10], [90, 11], [60, 10], [30, 11], [10, 10.5], [0, 6]], 6));
-const all = buyWaitCards([...manyWaits, ...manyBuys], { tune: TUNE, today: TODAY });
+const all = buyWaitCards([...manyDear, ...manyBuys], { tune: TUNE, today: TODAY });
 assert(all.length <= globalThis.BWS_MAX_CARDS, `${all.length} cards exceeds the cap`);
-assert(all.filter(c => c.verdict === 'wait').length <= globalThis.BWS_MAX_WAIT,
-  'too many waits on a page called Hot Deals');
-// ...and the "do something" verdicts lead.
+assert(!all.some(c => c.verdict === 'wait'), 'the wait verdict is gone, not merely capped');
+assert(all.every(c => c.verdict === 'stock' || c.verdict === 'buy'),
+  'every card must be something to act on');
+// ...and stock-ups lead the buys.
 const orders = all.map(c => c.order);
-assert.deepStrictEqual(orders, [...orders].sort((a, b) => a - b), 'waits must sort last');
+assert.deepStrictEqual(orders, [...orders].sort((a, b) => a - b), 'stock-ups must sort first');
+
+// 8b. Every card carries the size of its discount as a number, not just prose -
+//     that is the thing the panel is read for.
+for (const c of all) {
+  assert(Number.isFinite(c.offPct) && c.offPct > 0, `card has no usable offPct: ${c.offPct}`);
+  assert(c.usual > c.price, 'the struck-through "was" must be dearer than now');
+}
 
 // 9. Archived and priority-archived items never reach a card.
 assert.strictEqual(
@@ -194,3 +203,54 @@ for (const c of live) {
   console.log(`   [${c.verdict.toUpperCase().padEnd(5)}] ${c.item.list_item.slice(0, 38).padEnd(40)}`
     + ` ${c.headline} | ${c.why}`);
 }
+
+// ── Outside-shop cards ──────────────────────────────────────────────────────
+// Chemist Warehouse / Priceline / Big W / ALDI / Kmart keep NO price history -
+// only a current price and the day it was checked - so the deal engine, which
+// judges everything against its own past, could never see them and they never
+// reached Hot Deals at all. The question that needs no history is "how far under
+// the supermarkets is it right now", and that is what these cards answer.
+{
+  const dep = (ww, co, third) => ({
+    list_item: 'Rexona Sport', category: 'Personal Care', trip_count: 2,
+    woolworths: ww == null ? null : { price: ww }, coles: co == null ? null : { price: co },
+    price_history: [], ww_price_history: [], coles_price_history: [],
+    _third: third,
+  });
+  const cards = (item) => thirdStoreCards([item], { 'Rexona Sport': item._third }, {});
+
+  // The reported case: $2.75 at Priceline against $4.90 WW / $5.50 Coles.
+  const c = cards(dep(4.90, 5.50, [{ store: 'priceline', price: 2.75, url: 'u' }]))[0];
+  assert(c, 'a 44%-below-supermarket price must produce a card');
+  assert.strictEqual(c.verdict, 'else');
+  assert.strictEqual(c.offPct, 44, `expected 44% off, got ${c.offPct}`);
+  assert.strictEqual(c.usual, 4.90, 'must be measured against the CHEAPER supermarket');
+  assert(/Priceline/.test(c.headline), `the shop must be named, got "${c.headline}"`);
+
+  // Beating only the DEARER supermarket is not a reason to go anywhere.
+  assert(!cards(dep(2.80, 5.50, [{ store: 'priceline', price: 2.75, url: '' }]))[0],
+    'a 5c edge over the cheaper store is not a detour');
+
+  // Percentage gate as well as a dollar one: 15% off a cheap item is pennies.
+  assert(!cards(dep(3.00, null, [{ store: 'priceline', price: 2.70, url: '' }]))[0],
+    '30c is under BWS_MIN_STAKE and must not surface');
+
+  // An item the supermarkets do not stock has nothing to be "cheaper than".
+  assert(!cards(dep(null, null, [{ store: 'priceline', price: 1.00, url: '' }]))[0],
+    'no supermarket price means no comparison to make');
+
+  // The cheapest outside shop wins when several carry it.
+  const many = cards(dep(6.00, 6.50, [
+    { store: 'chemist_warehouse', price: 4.50, url: '' },
+    { store: 'priceline', price: 3.20, url: '' },
+  ]))[0];
+  assert.strictEqual(many.store, 'priceline', 'must pick the cheapest outside shop');
+  assert.strictEqual(many.price, 3.20);
+
+  // Archived items stay out, exactly as they do for supermarket cards.
+  const arch = thirdStoreCards([dep(4.90, 5.50, [{ store: 'priceline', price: 2.75, url: '' }])],
+    { 'Rexona Sport': [{ store: 'priceline', price: 2.75 }] },
+    { archivedSet: new Set(['Rexona Sport']) });
+  assert.strictEqual(arch.length, 0, 'archived items must not produce outside-shop cards');
+}
+console.log('buy_wait_selfcheck: outside-shop cards OK');
