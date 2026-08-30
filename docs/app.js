@@ -836,6 +836,10 @@ function groupThirdChipHTML(group) {
 // price. Its runner-up is one click away and was mostly just making the column
 // taller than the two supermarket columns beside it.
 const THIRD_ROWS_PER_STORE = 1;
+// Members shown per SUPERMARKET before the rest fold away. Same idea as the
+// line above, applied to Woolworths and Coles - it was the two columns with
+// no cap at all, and they are the ones with fourteen members in them.
+const VARIANTS_PER_STORE = 2;
 
 function groupThirdRowsHTML(group, entries, bestMetric, fallbackImg, frame) {
   const suffix = group._metricSuffix ?? (group._sticker ? '' : '/kg');
@@ -4582,9 +4586,21 @@ function groupStoreVariantsHTML(group, store, overrides, globalBest, globalTied)
         <span class="vg-pv-kg">${fmtUnitMetric(metricShown(group, v.pk))}${group._metricSuffix ?? (group._sticker ? '' : '/kg')}</span>
         <button class="vg-pv-basket${inBasket ? ' selected' : ''}" data-item="${safeKey}" title="${inBasket ? 'Remove from basket' : 'Add to basket'}" aria-label="${inBasket ? 'Remove from basket' : 'Add to basket'}">${inBasket ? '✓' : '＋'}</button>
       </div>`;
-  }).join('');
+  });
 
-  return variantRows;
+  // Two per supermarket, the rest behind a fold - the same shape the outside
+  // stores column has always had. A category like Chicken Thigh carries
+  // fourteen members, and an expanded panel that listed every one of them at
+  // both stores was a wall of near-identical rows you had to scroll past to
+  // reach the next product. The cheapest is first (the list is already sorted),
+  // so the two that show are the two that matter.
+  const head = variantRows.slice(0, VARIANTS_PER_STORE).join('');
+  const rest = variantRows.slice(VARIANTS_PER_STORE);
+  if (!rest.length) return head;
+  const label = `${rest.length} more at ${store === 'woolworths' ? 'Woolworths' : 'Coles'}`;
+  return head +
+    `<details class="vg-more"><summary class="vg-more-sum">` +
+    `<span class="vg-more-ic"></span>${label}</summary>${rest.join('')}</details>`;
 }
 
 // Group sub-label: per-store product counts (e.g. "2 Woolworths · 1 Coles").

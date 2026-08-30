@@ -259,3 +259,46 @@ for (const c of live) {
   assert.strictEqual(arch.length, 0, 'archived items must not produce outside-shop cards');
 }
 console.log('buy_wait_selfcheck: outside-shop cards OK');
+
+// ── The section carries the banner, not every card ──────────────────────────
+// STOCK UP / BUY / ELSEWHERE on each card restated what the section already
+// says - these ARE the picks - and cost a row of height apiece to do it. The
+// card keeps a coloured left edge (supermarket vs outside shop) and the store
+// chip beside the price, so nothing that lived ONLY in the tag is gone.
+{
+  const hd = fs.readFileSync(path.join(__dirname, '..', 'docs', 'hot-deals.html'), 'utf8');
+  assert(!/class="bws-tag"/.test(hd), 'per-card verdict tags must be gone');
+  assert(!/BWS_TAG\[/.test(hd), 'nothing may still look up a per-card tag label');
+  // One line on a phone. "⭐ What to do this week" wrapped to two.
+  const title = hd.match(/<span class="bws-title">([^<]*)<\/span>/);
+  assert(title, 'section title not found');
+  assert(title[1].length <= 18, `section title too long for one phone line: "${title[1]}"`);
+
+  // The tuner is a settings card; open by default it pushed the first price
+  // below the fold on desktop.
+  assert(/\.hd-tune-toggle \{\s*\n?\s*display: flex;/.test(hd)
+      || /display: flex; align-items: center; gap: 7px; width: 100%;/.test(hd),
+    'the tuner handle must show at every width, not only on a phone');
+  assert(!/@media[^{]*\{[^}]*\.hd-tune-toggle \{ display: flex; \}/.test(hd),
+    'the handle must not be re-hidden inside a media query');
+  assert(/localStorage\.setItem\(KEY, collapsed \? '0' : '1'\)/.test(hd),
+    'the open/closed choice must be remembered');
+  assert(!/if \(!mobile\(\)\) apply\(false\)/.test(hd),
+    'desktop must not force the tuner open');
+}
+
+// ── Two members per supermarket, the rest folded ────────────────────────────
+{
+  const app = fs.readFileSync(path.join(__dirname, '..', 'docs', 'app.js'), 'utf8');
+  assert(/const VARIANTS_PER_STORE = 2;/.test(app), 'the per-supermarket cap must exist');
+  assert(/variantRows\.slice\(0, VARIANTS_PER_STORE\)/.test(app)
+      && /variantRows\.slice\(VARIANTS_PER_STORE\)/.test(app),
+    'the cap must split the rows, not just count them');
+  assert(/more at \$\{store === 'woolworths' \? 'Woolworths' : 'Coles'\}/.test(app),
+    'the fold must name the store it is hiding rows for');
+  // One renderer feeds BOTH the desktop panel and the mobile card, which is why
+  // the cap lands on mobile "as well" without a second code path.
+  const uses = (app.match(/groupStoreVariantsHTML\(group, '(woolworths|coles)'/g) || []).length;
+  assert(uses >= 4, `expected the desktop panel AND the mobile card to use it, saw ${uses}`);
+}
+console.log('buy_wait_selfcheck: hot-deals chrome + per-store cap OK');

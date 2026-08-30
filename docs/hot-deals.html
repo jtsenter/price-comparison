@@ -83,14 +83,20 @@
        rather than clipping or forcing a scrollbar. */
     /* Desktop never collapses - the card has room, and hiding a panel that is
        already visible would be a step backwards on a wide screen. */
+    /* The handle is now on EVERY width, not just a phone. The tuner is a
+       settings card you touch occasionally; open by default it filled the top
+       half of the desktop page, so the table it filters started below the fold
+       and the page opened on its own controls instead of on any prices. */
     .hd-tune-toggle {
-      display: none; align-items: center; gap: 7px; width: 100%;
+      display: flex; align-items: center; gap: 7px; width: 100%;
       background: none; border: 0; padding: 2px 0; cursor: pointer;
       font-size: 13px; font-weight: 700; color: var(--text);
     }
     .hd-tune-sum { font-weight: 500; color: var(--text-mid); font-size: 12px; }
     .hd-tune-caret { margin-left: auto; font-size: 11px; color: var(--text-mid); transition: transform .14s ease; }
     .hd-tune:not(.collapsed) .hd-tune-caret { transform: rotate(180deg); }
+    .hd-tune.collapsed > :not(.hd-tune-toggle) { display: none; }
+    .hd-tune.collapsed { padding-bottom: 11px; }
     .hd-crit-head { display: flex; align-items: center; gap: 10px 18px; margin-bottom: 8px; flex-wrap: wrap; }
     .hd-block-t {
       font-size: 12px; font-weight: 800; color: var(--text-mid);
@@ -183,11 +189,11 @@
        bottom of every card so the buttons line up across the row even when one
        card's fine print runs to two lines. */
     .bws-card {
-      /* Five rows: chip line, name, the discount, one short note, the button.
+      /* Five rows: price line, name, the discount, one short note, the button.
          Fixed heights on the first four so the buttons still line up across the
-         row, and no 1fr filler - the card is now exactly as tall as it needs
-         to be instead of stretching to the tallest sibling. */
-      display: grid; grid-template-rows: 20px 34px auto 15px auto;
+         row, and no 1fr filler - the card is exactly as tall as it needs to be
+         instead of stretching to the tallest sibling. */
+      display: grid; grid-template-rows: 20px 34px auto 15px auto;   /* price, name, %off, note, button */
       gap: 3px; padding: 9px 11px 10px;
       border: 1px solid var(--border); border-left: 4px solid var(--border-strong);
       border-radius: var(--radius); background: var(--bg);
@@ -281,10 +287,6 @@
       .deals-hero-stat strong { font-size: 20px; }
       /* Tuner on a phone: label and value share a line, slider fills the next. */
       .hd-tune { padding: 11px 12px; }
-      /* Collapsed by default on a phone: only the handle shows until tapped. */
-      .hd-tune-toggle { display: flex; }
-      .hd-tune.collapsed > :not(.hd-tune-toggle) { display: none; }
-      .hd-tune.collapsed { padding-bottom: 11px; }
 
       /* ONE criterion per row. Without this the three stayed in the desktop
          grid-template-columns: repeat(3, 1fr) - roughly 100px each on a phone,
@@ -677,7 +679,7 @@
      worse than no panel. -->
 <div id="bwsPanel" class="bws" style="display:none">
   <div class="bws-head">
-    <span class="bws-title">⭐ What to do this week</span>
+    <span class="bws-title">⭐ Top picks</span>
     <span class="bws-sub">from everything you buy, not just the filters below</span>
   </div>
   <div class="bws-grid" id="bwsGrid"></div>
@@ -1213,7 +1215,7 @@ function initHdResize() {
 // rows could never produce one. Per-kg group rows are skipped inside
 // buyWaitCards - their prices are $/kg, and "save $2.40" meaning per kilo on a
 // card sitting beside pack prices is the kind of detail nobody re-reads.
-const BWS_TAG = { stock: 'STOCK UP', buy: 'BUY', else: 'ELSEWHERE' };   // no 'wait' - the panel only tells you what to GO for
+// BWS_TAG retired with the per-card tags - the section header carries it now.
 // Scoring all 290 items costs ~13ms of renderDeals' ~44ms, and renderDeals runs
 // on every `input` event while a slider is being dragged. The panel ignores the
 // category and store filters, so most of those re-renders cannot change it -
@@ -1293,8 +1295,13 @@ function renderBwsPanel(priorities, exclusions, tune) {
     return `<div class="bws-card ${c.verdict}" data-item="${escAttr(name)}"
                  role="button" tabindex="0"
                  title="Open the price history for ${escAttr(shortName(name))}">
+      <!-- No verdict tag. STOCK UP / BUY / ELSEWHERE on every card restated
+           what the whole section already says - these ARE the picks - and cost
+           a row of height each to do it. The coloured left edge still separates
+           an outside-shop card from a supermarket one, and the store chip beside
+           the price says which shop, so nothing that was only in the tag is
+           lost. -->
       <span class="bws-top">
-        <span class="bws-tag">${BWS_TAG[c.verdict]}</span>
         <span class="bws-price">${chip}${fmt(c.price * c.rate.scale)}${c.rate.unit}</span>
       </span>
       <span class="bws-name">${esc(shortName(name))}</span>
@@ -1826,16 +1833,20 @@ function initTuneCollapse() {
   const card = document.getElementById('hdTune');
   const btn  = document.getElementById('hdTuneToggle');
   if (!card || !btn) return;
-  const mobile = () => innerWidth <= 700;
+  // Collapsed by default at EVERY width now, and the choice is remembered - the
+  // card used to be forced open on desktop (and forced back open on every
+  // resize), which put the whole top of the page into filter controls and
+  // pushed the first price below the fold.
+  const KEY = 'pw_hd_tune_open';
   const apply = (collapsed) => {
     card.classList.toggle('collapsed', collapsed);
     btn.setAttribute('aria-expanded', String(!collapsed));
+    try { localStorage.setItem(KEY, collapsed ? '0' : '1'); } catch {}
   };
-  if (!mobile()) apply(false);
+  let open = false;
+  try { open = localStorage.getItem(KEY) === '1'; } catch {}
+  apply(!open);
   btn.addEventListener('click', () => apply(!card.classList.contains('collapsed')));
-  // Rotating a phone into landscape can cross the breakpoint; re-open there so
-  // the card is never stuck closed with its handle hidden.
-  addEventListener('resize', () => { if (!mobile()) apply(false); });
 }
 
 // One line saying what the filters are set to, so the closed card still tells
