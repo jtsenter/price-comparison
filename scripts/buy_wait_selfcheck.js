@@ -230,7 +230,8 @@ for (const c of live) {
   assert.strictEqual(c.verdict, 'else');
   assert.strictEqual(c.offPct, 44, `expected 44% off, got ${c.offPct}`);
   assert.strictEqual(c.usual, 4.90, 'must be measured against the CHEAPER supermarket');
-  assert(/Priceline/.test(c.headline), `the shop must be named, got "${c.headline}"`);
+  // The shop is named by the chip beside the price, not repeated in the note.
+  assert(!/Priceline/.test(c.headline), `the note must not re-name the shop, got "${c.headline}"`);
 
   // Beating only the DEARER supermarket is not a reason to go anywhere.
   assert(!cards(dep(2.80, 5.50, [{ store: 'priceline', price: 2.75, url: '' }]))[0],
@@ -331,9 +332,10 @@ console.log('buy_wait_selfcheck: hot-deals chrome + per-store cap OK');
 }
 
 // ── The outside-shop note says something the card does not already show ─────
-// It read "$2.75 at Priceline" - the price a THIRD time, after the headline
-// figure and the "44% off". Whether it is an all-time low is the thing the card
-// knows and the reader does not.
+// It read "$2.75 at Priceline", then "Cheapest ever at Priceline" - both name
+// the shop a second time, after the chip beside the price already does.
+// Whether it is an all-time low is the thing the card knows and the reader
+// does not; the shop is not.
 {
   const dep = (ww, co, third, hist) => ({
     list_item: 'Rexona Sport', category: 'Personal Care', trip_count: 2,
@@ -345,17 +347,17 @@ console.log('buy_wait_selfcheck: hot-deals chrome + per-store cap OK');
 
   const low = one(dep(4.90, 5.50, [{ store: 'priceline', price: 2.75 }],
                       [['2026-08-01', 4.90], ['2026-08-08', 5.50]]));
-  assert.strictEqual(low.headline, 'Cheapest ever at Priceline',
+  assert.strictEqual(low.headline, 'Cheapest ever',
     `below everything ever recorded, got "${low.headline}"`);
 
   // Cheaper than the supermarkets TODAY, but the product has been cheaper
-  // before - so the shop is named without the record claim.
+  // before - so no record claim, and still no shop name.
   const notLow = one(dep(4.90, 5.50, [{ store: 'priceline', price: 2.75 }],
                          [['2026-08-01', 1.50]]));
-  assert.strictEqual(notLow.headline, 'Cheapest at Priceline',
+  assert.strictEqual(notLow.headline, 'Cheapest',
     `not an all-time low, got "${notLow.headline}"`);
 
-  assert(!/\$/.test(low.headline) && !/\$/.test(notLow.headline),
-    'the note must not print the price a third time');
+  assert(!/\$|Priceline/.test(low.headline) && !/\$|Priceline/.test(notLow.headline),
+    'the note must not print the price a third time or re-name the shop');
 }
 console.log('buy_wait_selfcheck: all-time-low wording OK');

@@ -2743,7 +2743,7 @@ function loadDealTune() {
 // test. Predicting "back on special in 2 weeks" from that would be invention.
 // "Last this cheap 6 weeks ago" carries the same decision and is measured.
 // Revisit once there are ~9 months of daily prices (≈ 2027-03).
-const BWS_MAX_CARDS   = 3;      // a CAP, not a quota - a quiet week shows fewer, or none
+const BWS_MAX_CARDS   = 6;      // a CAP, not a quota - a quiet week shows fewer, or none
 const BWS_MIN_HISTORY = 5;      // distinct recorded dates before we will judge at all
 const BWS_STOCK_RANK  = 0.9;    // "stock up" = cheaper than 90% of its own past
 const BWS_MIN_STAKE   = 0.5;    // dollars per unit - below this it is not advice, it is noise
@@ -2929,10 +2929,10 @@ function thirdStoreCards(items, thirdMap, opts) {
     const shop = meta ? meta.label : (best.store || 'another shop');
     // Is this the cheapest this product has EVER been recorded at, anywhere -
     // both supermarkets and this shop's own series? The note used to read
-    // "$2.75 at Priceline", which printed the price a second time (the card
-    // already shows it, twice: as the headline figure and inside "44% off")
-    // and said nothing you could not already see. Whether it is an all-time
-    // low is the thing the card knows and the reader does not.
+    // "$2.75 at Priceline" and then "Cheapest ever at Priceline" - both name
+    // the shop a second time, after the store chip beside the price already
+    // does. Say only what the reader does not already have: whether this is
+    // a record.
     const everySeen = [
       ...(item.price_history || []), ...(item.ww_price_history || []),
       ...(item.coles_price_history || []),
@@ -2951,9 +2951,8 @@ function thirdStoreCards(items, thirdMap, opts) {
       offPct: Math.round((save / usual) * 100),
       usual,
       url: best.url || '',
-      // Names the shop either way - a coloured "P" is not a shop name - and
-      // adds the record only when the whole recorded history backs it.
-      headline: lowestEver ? `Cheapest ever at ${shop}` : `Cheapest at ${shop}`,
+      // No shop name here - the chip beside the price already carries it.
+      headline: lowestEver ? 'Cheapest ever' : 'Cheapest',
       item,
       score: save * (1 + Math.min(item.trip_count || 0, 12)),
     });
@@ -2985,9 +2984,9 @@ function buyWaitCards(items, opts) {
   }
   cards.sort((a, b) => b.score - a.score);
 
-  // A CAP, never a quota - and a low one. Filling the panel to a fixed five
-  // meant the fifth-best thing of the week sat at the same size and weight as
-  // the first, so the whole row read as undifferentiated noise and got skipped.
-  // Three strong calls are a decision; five is a list.
+  // A CAP, never a quota. Every card above already had to earn its place in
+  // bwsVerdict - there is no fill-to-N step - so the count that shows is
+  // however many real calls exist this week, zero included. The cap only
+  // stops a freak week from turning the panel into the whole deal table.
   return cards.slice(0, BWS_MAX_CARDS).sort((a, b) => a.order - b.order || b.score - a.score);
 }
