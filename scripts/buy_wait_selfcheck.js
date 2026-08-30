@@ -286,6 +286,64 @@ console.log('buy_wait_selfcheck: outside-shop cards OK');
     'the open/closed choice must be remembered');
   assert(!/if \(!mobile\(\)\) apply\(false\)/.test(hd),
     'desktop must not force the tuner open');
+
+  // The cards slid off the right edge of a phone. .bws-top is a GRID item, so it
+  // defaults to min-width:auto - "never narrower than my min-content" - and its
+  // min-content is the whole product name, because .bws-name is nowrap. That
+  // measured 337px against a 320px track, so the ellipsis could never engage and
+  // the track itself grew to 364px. Desktop hid it: minmax(215px, 1fr) gives an
+  // explicit minimum, so only mobile's bare 1fr (= minmax(auto, 1fr)) exposed it.
+  assert(/\.bws-top \{[^}]*min-width: 0/.test(hd),
+    '.bws-top needs min-width:0 or long names push the card off a phone screen');
+  // Whatever truncates must still be allowed to truncate.
+  assert(/\.bws-name \{[^}]*text-overflow: ellipsis[^}]*\}/s.test(hd),
+    'the name on the price line must ellipsis rather than wrap');
+
+  // Three cards on a phone, five everywhere else. The phone cap is CSS because
+  // the cards are already sorted best-first - hiding the tail needs no JS.
+  assert(/\.bws-card:nth-child\(n \+ 4\) \{ display: none; \}/.test(hd),
+    'a phone must show at most three cards');
+  const mobileBlock = hd.slice(hd.indexOf('@media (max-width: 700px)'));
+  assert(mobileBlock.indexOf('nth-child(n + 4)') < mobileBlock.indexOf('}\n    @media'),
+    'the three-card cap must live inside the phone media query, not apply everywhere');
+
+  // The panel must never spill onto a second row. Capping the COUNT at five does
+  // not achieve that by itself - a card has a readable floor, so how many fit is
+  // a function of the window, and five wrapped at 1009 / 885 / 760px. The
+  // breakpoints that hide the overflow are therefore arithmetic, not taste, and
+  // they are derived here from the grid's OWN minmax and gap so that changing
+  // the card width without moving them fails loudly instead of silently
+  // reintroducing the second row.
+  const min = Number(/minmax\((\d+)px, 1fr\)/.exec(hd)[1]);
+  const gap = Number(/\.bws-grid \{[^}]*gap: (\d+)px/s.exec(hd)[1]);
+  // These must be CONTAINER queries. A media query measures the viewport with
+  // the scrollbar included while the grid is laid out without it, and that
+  // off-by-one really happened: five cards over two rows in a 1211px window.
+  assert(/\.bws \{ container-type: inline-size; \}/.test(hd),
+    'the panel must be a query container for the caps below to measure the grid');
+  assert(!/@media[^{]*\{ \.bws-card:nth-child/.test(hd),
+    'a media query would measure the window, scrollbar and all - use @container');
+  // n columns need n*min + (n-1)*gap of GRID width, which is what the container
+  // reports; hide card n just below that.
+  const needs = (n) => n * min + (n - 1) * gap;
+  for (const [n, re] of [[5, /@container \(max-width: +(\d+)px\) \{ \.bws-card:nth-child\(n \+ 5\)/],
+                         [4, /@container \(max-width: +(\d+)px\) \{ \.bws-card:nth-child\(n \+ 4\)/],
+                         [3, /and \(max-width: (\d+)px\) \{\s*\n?\s*\.bws-card:nth-child\(n \+ 3\)/]]) {
+    const m = re.exec(hd);
+    assert(m, `no @container rule hides card ${n}, so it can start a second row`);
+    assert.strictEqual(Number(m[1]), needs(n) - 1,
+      `a row of ${n} needs ${needs(n)}px of grid, so card ${n} must hide below `
+      + `that (expected max-width ${needs(n) - 1}px, found ${m[1]}px)`);
+  }
+  // The two-across rule must not reach the phone, where one column means the cap
+  // is three. Its floor has to clear the widest phone grid.
+  const floor2 = Number(/@container \(min-width: (\d+)px\) and \(max-width: 664px\)/.exec(hd)[1]);
+  assert(floor2 >= 440 && floor2 < needs(3),
+    `the two-across band must start above a phone grid and below a three-across one, got ${floor2}px`);
+  // And the widest cap must agree with the JS cap - hiding a card the panel
+  // never produces is dead CSS, producing one the CSS always hides is dead JS.
+  assert.strictEqual(globalThis.BWS_MAX_CARDS, 5,
+    'the five-across row is what BWS_MAX_CARDS is sized for');
 }
 
 // ── Two members per supermarket, the rest folded ────────────────────────────

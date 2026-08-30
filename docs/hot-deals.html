@@ -185,6 +185,29 @@
       display: grid; gap: 10px;
       grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
     }
+    /* One row, always. Capping the count at five does not on its own achieve
+       that: a card has a readable floor (the 215px above), so how many FIT is a
+       function of the width, and five wrapped onto a second row at 1009px, 885px
+       and 760px. The count has to follow the width, so hide the cards that would
+       start row two.
+       CONTAINER queries, not media queries, because the question is "how wide is
+       this grid", not "how wide is the window" - and those differ by the
+       scrollbar. A media query measures the viewport INCLUDING the scrollbar
+       while the grid gets the width without it, so a media-query version of this
+       showed five cards over two rows in a 1211px window (1196px of actual
+       layout space). Asking the container removes both that off-by-one and the
+       page-margin constant it would otherwise have to carry.
+       n columns need n*215 + (n-1)*10 of grid, so hide card n just below that.
+       buy_wait_selfcheck.js recomputes these from the minmax and gap above and
+       fails if they drift apart. */
+    .bws { container-type: inline-size; }
+    @container (max-width: 1114px) { .bws-card:nth-child(n + 5) { display: none; } }
+    @container (max-width:  889px) { .bws-card:nth-child(n + 4) { display: none; } }
+    /* The two-across band. Floored at 500px so it cannot reach the phone, where
+       the grid is one column and the cap is deliberately three, not two. */
+    @container (min-width: 500px) and (max-width: 664px) {
+      .bws-card:nth-child(n + 3) { display: none; }
+    }
     /* Row 5 is the add-to-basket button; `1fr` on the "why" row pushes it to the
        bottom of every card so the buttons line up across the row even when one
        card's fine print runs to two lines. */
@@ -201,7 +224,15 @@
     }
     .bws-card:hover { background: var(--card); box-shadow: var(--shadow-sm); }
     .bws-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-    .bws-top { display: flex; align-items: center; gap: 8px; }
+    /* min-width:0 is load-bearing, not tidiness. As a grid item this defaults to
+       min-width:auto, i.e. "never narrower than my min-content" - and its
+       min-content is the WHOLE product name, because .bws-name is nowrap. The
+       ellipsis on the name can then never engage, and on mobile (where the track
+       is a bare 1fr = minmax(auto,1fr)) that auto minimum sized the track to
+       364px inside a 320px viewport, sliding every card off the right edge.
+       Desktop was immune only because minmax(215px,...) supplies an explicit
+       minimum, so this looked like a mobile-only bug. */
+    .bws-top { display: flex; align-items: center; gap: 8px; min-width: 0; }
     .bws-tag {
       font-size: 10.5px; font-weight: 900; letter-spacing: 0.6px;
       padding: 3px 7px; border-radius: 5px; white-space: nowrap;
@@ -276,6 +307,12 @@
     @media (max-width: 700px) {
       .bws { margin: 12px 14px 0; padding: 12px 13px 13px; }
       .bws-grid { grid-template-columns: 1fr; }
+      /* One column means one card per screenful of thumb, so five is a scroll
+         rather than a glance. Three is the phone's cap. Done here rather than in
+         buyWaitCards because the cards are already sorted best-first, so hiding
+         the tail needs no JS, no resize listener and no re-render - rotating the
+         phone just works. */
+      .bws-card:nth-child(n + 4) { display: none; }
       /* One column: names can breathe, so the fixed rows stop earning their
          keep and only cause clipping. */
       .bws-card { grid-template-rows: auto auto auto; }
@@ -777,7 +814,7 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=146"></script>
+<script src="utils.js?v=147"></script>
 <script src="history-modal.js?v=9"></script>
 <script>
 if ('serviceWorker' in navigator) {

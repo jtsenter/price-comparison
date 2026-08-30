@@ -2743,7 +2743,11 @@ function loadDealTune() {
 // test. Predicting "back on special in 2 weeks" from that would be invention.
 // "Last this cheap 6 weeks ago" carries the same decision and is measured.
 // Revisit once there are ~9 months of daily prices (≈ 2027-03).
-const BWS_MAX_CARDS   = 6;      // a CAP, not a quota - a quiet week shows fewer, or none
+// A CAP, not a quota - a quiet week shows fewer, or none. Five because that is
+// what fits on one row of the grid; a sixth wrapped onto a second row, which
+// reads as a list rather than a shortlist. The phone shows at most three, capped
+// in CSS (.bws-card:nth-child(n+4)) since one column makes five a scroll.
+const BWS_MAX_CARDS   = 5;
 const BWS_MIN_HISTORY = 5;      // distinct recorded dates before we will judge at all
 const BWS_STOCK_RANK  = 0.9;    // "stock up" = cheaper than 90% of its own past
 const BWS_MIN_STAKE   = 0.5;    // dollars per unit - below this it is not advice, it is noise
