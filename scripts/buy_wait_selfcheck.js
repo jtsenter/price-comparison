@@ -302,3 +302,60 @@ console.log('buy_wait_selfcheck: outside-shop cards OK');
   assert(uses >= 4, `expected the desktop panel AND the mobile card to use it, saw ${uses}`);
 }
 console.log('buy_wait_selfcheck: hot-deals chrome + per-store cap OK');
+
+// ── "Cheapest ever" means the all-time floor, not a streak ──────────────────
+// Cook Chicken dropped to $12 - lower than anything in three years of records -
+// and HELD there. lastAsCheap then found the $12 from three days ago and the
+// card read "Cheapest in 3 days", describing a record as a short streak. The
+// earlier $12 is the same ongoing low, not a previous occasion.
+{
+  // A long, boring history at 16-18 and then a drop to $12 that has HELD for
+  // three days. The length is load-bearing: pricePercentile counts today's $12
+  // and the $12 from three days ago as two separate observations, so a short
+  // series never clears BWS_STOCK_RANK no matter how deep the drop.
+  const weekly = Array.from({ length: 20 }, (_, k) => [140 - k * 7, k % 2 ? 16 : 18]);
+  const held = mk('Roasting Portions', 'Meat & Seafood',
+    [...weekly, [3, 12], [0, 12]], 12);
+  const c = card(held);
+  assert(c, 'an item at its all-time low must still produce a card');
+  assert.strictEqual(c.headline, 'Cheapest ever',
+    `a price sitting on its own floor is cheapest EVER, got "${c.headline}"`);
+
+  // The other half must not regress: genuinely cheaper before, so the streak
+  // wording is the honest one.
+  const dearer = mk('Sometime Cheaper', 'Pantry',
+    [[120, 10], [90, 6], [60, 11], [30, 11], [10, 11], [0, 8]], 8);
+  const d = card(dearer);
+  if (d) assert(/^(Cheapest in|Last this cheap)/.test(d.headline),
+    `a price above its own floor must say when, got "${d.headline}"`);
+}
+
+// ── The outside-shop note says something the card does not already show ─────
+// It read "$2.75 at Priceline" - the price a THIRD time, after the headline
+// figure and the "44% off". Whether it is an all-time low is the thing the card
+// knows and the reader does not.
+{
+  const dep = (ww, co, third, hist) => ({
+    list_item: 'Rexona Sport', category: 'Personal Care', trip_count: 2,
+    woolworths: { price: ww }, coles: co == null ? null : { price: co },
+    price_history: [], ww_price_history: (hist || []).map(([d, p]) => ({ date: d, price: p })),
+    coles_price_history: [], _third: third,
+  });
+  const one = (it) => thirdStoreCards([it], { 'Rexona Sport': it._third }, {})[0];
+
+  const low = one(dep(4.90, 5.50, [{ store: 'priceline', price: 2.75 }],
+                      [['2026-08-01', 4.90], ['2026-08-08', 5.50]]));
+  assert.strictEqual(low.headline, 'Cheapest ever at Priceline',
+    `below everything ever recorded, got "${low.headline}"`);
+
+  // Cheaper than the supermarkets TODAY, but the product has been cheaper
+  // before - so the shop is named without the record claim.
+  const notLow = one(dep(4.90, 5.50, [{ store: 'priceline', price: 2.75 }],
+                         [['2026-08-01', 1.50]]));
+  assert.strictEqual(notLow.headline, 'Cheapest at Priceline',
+    `not an all-time low, got "${notLow.headline}"`);
+
+  assert(!/\$/.test(low.headline) && !/\$/.test(notLow.headline),
+    'the note must not print the price a third time');
+}
+console.log('buy_wait_selfcheck: all-time-low wording OK');

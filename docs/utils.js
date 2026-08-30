@@ -2826,6 +2826,16 @@ function bwsVerdict(item, deal, series, tune, today, rate) {
   }
   const daysSince = lastAsCheap
     ? Math.round((Date.parse(today) - Date.parse(lastAsCheap)) / 86400000) : null;
+  // At (or under) the cheapest price ever recorded for it. This is NOT the same
+  // question as lastAsCheap, and conflating them mislabelled the best deals on
+  // the page: Cook Chicken dropped to $12 - lower than anything in three years
+  // of records - and has held there since, so lastAsCheap found the $12 from
+  // three days ago and the card read "Cheapest in 3 days". That is the same
+  // ongoing low, not an earlier occasion, and describing a record as a
+  // three-day streak sells it short. A price sitting on the all-time floor says
+  // so, however long it has been there.
+  const floor = past.reduce((lo, p) => (p.price < lo ? p.price : lo), Infinity);
+  const atAllTimeLow = cur <= floor + 0.005;
   const rankPct = Math.round((deal.pricePercentile || 0) * 100);
 
   // A drop this steep is not a special, it is the listing changing underneath
@@ -2849,7 +2859,7 @@ function bwsVerdict(item, deal, series, tune, today, rate) {
       // was pure duplication - and "Keeps, so buy for the month" explained the
       // verdict the STOCK UP tag had already given. A note earns its line only
       // by adding what the number cannot: how long since it was this cheap.
-      headline: lastAsCheap ? `Cheapest in ${bwsAgo(daysSince).replace(' ago', '')}` : 'Cheapest ever',
+      headline: atAllTimeLow ? 'Cheapest ever' : `Cheapest in ${bwsAgo(daysSince).replace(' ago', '')}`,
     };
   }
   // BUY - passes the filters you set for this page, and the saving is real money.
@@ -2859,7 +2869,7 @@ function bwsVerdict(item, deal, series, tune, today, rate) {
       stake: deal.saveAmount,
       offPct: Math.round((1 - cur / deal.typical) * 100),
       usual: deal.typical,
-      headline: lastAsCheap ? `Last this cheap ${bwsAgo(daysSince)}` : 'Never been cheaper',
+      headline: atAllTimeLow ? 'Cheapest ever' : `Last this cheap ${bwsAgo(daysSince)}`,
     };
   }
   // No WAIT verdict. It used to be the third branch here - "dear against its own
@@ -2917,6 +2927,19 @@ function thirdStoreCards(items, thirdMap, opts) {
 
     const meta = (typeof THIRD_STORES !== 'undefined' && THIRD_STORES[best.store]) || null;
     const shop = meta ? meta.label : (best.store || 'another shop');
+    // Is this the cheapest this product has EVER been recorded at, anywhere -
+    // both supermarkets and this shop's own series? The note used to read
+    // "$2.75 at Priceline", which printed the price a second time (the card
+    // already shows it, twice: as the headline figure and inside "44% off")
+    // and said nothing you could not already see. Whether it is an all-time
+    // low is the thing the card knows and the reader does not.
+    const everySeen = [
+      ...(item.price_history || []), ...(item.ww_price_history || []),
+      ...(item.coles_price_history || []),
+      ...entries.flatMap(e => Array.isArray(e.history) ? e.history : []),
+    ].map(h => Number(h && h.price)).filter(p => p > 0);
+    const lowestEver = everySeen.length
+      ? best.price <= Math.min(...everySeen) + 0.005 : false;
     out.push({
       verdict: 'else',
       // Same rank band as a plain BUY: score (saving x how often you buy it)
@@ -2928,7 +2951,9 @@ function thirdStoreCards(items, thirdMap, opts) {
       offPct: Math.round((save / usual) * 100),
       usual,
       url: best.url || '',
-      headline: `${fmt(best.price)} at ${shop}`,
+      // Names the shop either way - a coloured "P" is not a shop name - and
+      // adds the record only when the whole recorded history backs it.
+      headline: lowestEver ? `Cheapest ever at ${shop}` : `Cheapest at ${shop}`,
       item,
       score: save * (1 + Math.min(item.trip_count || 0, 12)),
     });

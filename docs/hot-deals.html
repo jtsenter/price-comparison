@@ -189,11 +189,11 @@
        bottom of every card so the buttons line up across the row even when one
        card's fine print runs to two lines. */
     .bws-card {
-      /* Five rows: price line, name, the discount, one short note, the button.
-         Fixed heights on the first four so the buttons still line up across the
-         row, and no 1fr filler - the card is exactly as tall as it needs to be
-         instead of stretching to the tallest sibling. */
-      display: grid; grid-template-rows: 20px 34px auto 15px auto;   /* price, name, %off, note, button */
+      /* THREE rows now: the price line (chip + price + name), the middle band
+         (picture beside the %-off and its note), and the button. The name moved
+         up onto the price line and the picture went beside the discount rather
+         than above it, so the card gained an image and still lost height. */
+      display: grid; grid-template-rows: 22px auto auto;
       gap: 3px; padding: 9px 11px 10px;
       border: 1px solid var(--border); border-left: 4px solid var(--border-strong);
       border-radius: var(--radius); background: var(--bg);
@@ -207,14 +207,23 @@
       padding: 3px 7px; border-radius: 5px; white-space: nowrap;
     }
     .bws-price {
-      margin-left: auto; display: flex; align-items: center; gap: 5px;
+      display: flex; align-items: center; gap: 5px; flex: none;
       font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums;
     }
+    /* Shares the price line, so it must not wrap - it truncates instead, and
+       the full name is on the row it opens. */
     .bws-name {
-      font-size: 12.5px; font-weight: 700; line-height: 1.3; color: var(--text);
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-      overflow: hidden;
+      font-size: 12.5px; font-weight: 700; color: var(--text);
+      min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
+    .bws-mid { display: flex; align-items: center; gap: 9px; min-width: 0; }
+    .bws-mid-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+    /* 40px - the same as .deal-img and .dm-img below, deliberately not bigger. */
+    .bws-img {
+      width: 40px; height: 40px; object-fit: contain; border-radius: 6px;
+      background: var(--card); border: 1px solid var(--border); flex: none;
+    }
+    .bws-img-ph { background: var(--bg); }
     .bws-head-line {
       font-size: 11px; font-weight: 700; line-height: 15px;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -269,8 +278,7 @@
       .bws-grid { grid-template-columns: 1fr; }
       /* One column: names can breathe, so the fixed rows stop earning their
          keep and only cause clipping. */
-      .bws-card { grid-template-rows: auto auto auto auto auto; }
-      .bws-name { -webkit-line-clamp: 3; }
+      .bws-card { grid-template-rows: auto auto auto; }
       .bws-head-line { white-space: normal; line-height: 1.35; }
       /* Thumb-sized on a phone. */
       .bws-add { padding: 9px 8px; font-size: 13px; }
@@ -680,7 +688,7 @@
 <div id="bwsPanel" class="bws" style="display:none">
   <div class="bws-head">
     <span class="bws-title">⭐ Top picks</span>
-    <span class="bws-sub">from everything you buy, not just the filters below</span>
+    <span class="bws-sub">everything you buy</span>
   </div>
   <div class="bws-grid" id="bwsGrid"></div>
 </div>
@@ -769,7 +777,7 @@
 <!-- Shared utilities - must load before inline script -->
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="utils.js?v=143"></script>
+<script src="utils.js?v=145"></script>
 <script src="history-modal.js?v=9"></script>
 <script>
 if ('serviceWorker' in navigator) {
@@ -1269,9 +1277,14 @@ function renderBwsPanel(priorities, exclusions, tune) {
   // The sub-line claims this panel ignores the filters below; that stops being
   // true once a store filter is on, so say what it's actually showing.
   const sub = panel.querySelector('.bws-sub');
+  // Short enough to sit BESIDE the title on a 375px phone. The old wording
+  // ("from everything you buy, not just the filters below") wrapped to a second
+  // line and stretched the whole heading block, which is what made it look like
+  // a two-line title. The correction it exists for - this panel ignores the
+  // filters below, until a store filter is on - still gets said, just tighter.
   if (sub) sub.textContent = _storeFilter === 'all'
-    ? 'from everything you buy, not just the filters below'
-    : `only what's cheaper at ${_storeFilter === 'coles' ? 'Coles' : 'Woolworths'}`;
+    ? 'everything you buy'
+    : `${_storeFilter === 'coles' ? 'Coles' : 'Woolworths'} only`;
   panel.style.display = cards.length ? '' : 'none';
   const inBasket = new Set(hdBasket().items);
   // A div, not a button: it now CONTAINS a button (add to basket), and a button
@@ -1292,6 +1305,10 @@ function renderBwsPanel(priorities, exclusions, tune) {
       : c.store === 'coles'
       ? '<span class="store-chip coles sm">C</span>' : '<span class="store-chip ww sm">W</span>';
     const has = inBasket.has(name);
+    const bImg = resolveImgUrl(c.item.coles?.image_url) || resolveImgUrl(c.item.woolworths?.image_url) || '';
+    const imgHtml = bImg
+      ? `<img class="bws-img" src="${bImg}" alt="" loading="lazy" onerror="this.style.display='none'" />`
+      : '<span class="bws-img bws-img-ph"></span>';
     return `<div class="bws-card ${c.verdict}" data-item="${escAttr(name)}"
                  role="button" tabindex="0"
                  title="Open the price history for ${escAttr(shortName(name))}">
@@ -1300,21 +1317,29 @@ function renderBwsPanel(priorities, exclusions, tune) {
            a row of height each to do it. The coloured left edge still separates
            an outside-shop card from a supermarket one, and the store chip beside
            the price says which shop, so nothing that was only in the tag is
-           lost. -->
+           lost.
+           Chip, price and NAME share one line: the name had a row to itself for
+           no reason - it is short, and the price it belongs to was directly
+           above it. -->
       <span class="bws-top">
         <span class="bws-price">${chip}${fmt(c.price * c.rate.scale)}${c.rate.unit}</span>
+        <span class="bws-name">${esc(shortName(name))}</span>
       </span>
-      <span class="bws-name">${esc(shortName(name))}</span>
-      <!-- The size of the discount, as the biggest thing on the card, with the
-           struck-through usual price beside it so the claim can be checked
-           without opening anything. Everything else is ONE short line: the
-           card used to carry two sentences that restated this same money in
-           words, which is what made the row long and skippable. -->
-      <span class="bws-off">
-        <b>${c.offPct}%</b><span class="bws-off-lbl">off</span>
-        <span class="bws-was">was ${fmt(c.usual * c.rate.scale)}${c.rate.unit}</span>
+      <!-- The picture sits beside the discount rather than above it, so it
+           costs no extra height at all - the %-off block is already two lines
+           tall. Same 40px as the deal rows further down the page, because a
+           bigger one here would claim these three cards matter more than the
+           list, which the section heading already says. -->
+      <span class="bws-mid">
+        ${imgHtml}
+        <span class="bws-mid-txt">
+          <span class="bws-off">
+            <b>${c.offPct}%</b><span class="bws-off-lbl">off</span>
+            <span class="bws-was">was ${fmt(c.usual * c.rate.scale)}${c.rate.unit}</span>
+          </span>
+          <span class="bws-head-line">${esc(c.headline)}</span>
+        </span>
       </span>
-      <span class="bws-head-line">${esc(c.headline)}</span>
       <button type="button" class="bws-add${has ? ' in' : ''}" data-add="${escAttr(name)}"
               title="${has ? 'Remove from basket' : 'Add to basket'}">
         ${has ? '✓ In basket' : '＋ Add to basket'}
