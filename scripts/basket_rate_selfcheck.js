@@ -40,6 +40,29 @@ eval(ex(utils, 'per100Pair'));
 eval(ex(utils, 'sameQtyCost'));
 eval(ex(utils, 'fmtUnitMetric'));
 eval(ex(utils, 'fmt'));
+eval(ex(utils, 'metricRound'));
+eval(ex(utils, 'metricShown'));
+eval(ex(utils, 'pieceQuoteOf'));
+eval(ex(utils, 'pieceQuoteSuffix'));
+eval(ex(utils, 'weightQuoteOf'));
+eval(ex(utils, 'weightQuoteSuffix'));
+eval(ex(utils, 'isWeighedGroup'));
+// `const` inside a direct eval is scoped to that eval, so the already-eval'd
+// functions would not see these. Bind them on globalThis, which they do reach.
+for (const name of ['PIECE_QUOTES', 'PER_PIECE_QUOTE', 'WEIGHT_QUOTES',
+                    'PER_WEIGHT_QUOTE', 'UNIT_METRIC_3DP_BELOW']) {
+  const m = new RegExp(`const ${name} = ([^;]+);`).exec(utils);
+  assert(m, `${name} not found in utils.js`);
+  globalThis[name] = eval('(' + m[1] + ')');
+}
+
+// The page's own normaliser, mirrored: metricShown's perPack branch tests the
+// RESOLVED (_perPack) shape only, and loadVariantGroups hands back the seed
+// shape, so a seed group dropped through to the weighed branch.
+const resolved = (g) => ({
+  _perPack: !!(g._perPack ?? g.perPack), _sticker: !!(g._sticker ?? g.sticker),
+  _quote: g._quote ?? g.quote, _gramQuote: g._gramQuote ?? g.gramQuote,
+});
 
 let n = 0;
 const ok = (msg) => { n++; console.log('  ok  ' + msg); };
@@ -68,20 +91,30 @@ const rows = [
      7.5, 'Zucchini 500g'),
 ];
 
-const built = rows.map(i => {
+// Mirrors buildStorePanel: a category's own quote where there is one, $/100g
+// otherwise (a weighed shape with a 100g quote).
+function quoteRow(i, group) {
   const r = per100Pair(i.woolworths, i.coles);
-  const rated = r.ww.value > 0 && r.coles.value > 0;
+  const shape = group ? resolved(group) : { _gramQuote: 100 };
+  const metricOf = (res) => clientPer100(res).value != null
+    ? +(clientPer100(res).value * 10).toFixed(2) : null;
+  const mw = (!group && r.ww.value == null) ? null : metricOf(i.woolworths);
+  const mc = (!group && r.coles.value == null) ? null : metricOf(i.coles);
+  const pair = mw != null && mc != null;
   const q = sameQtyCost(i.woolworths.price, i.coles.price, r.ww.value, r.coles.value);
+  const qw = pair ? metricShown(shape, mw) : q.ww;
+  const qc = pair ? metricShown(shape, mc) : q.co;
+  const lo = Math.min(qw, qc), hi = Math.max(qw, qc);
   return {
-    name: i.list_item,
+    name: i.list_item, quoteWw: pair ? qw : null, quoteCo: pair ? qc : null,
+    unit: !pair ? '' : shape._perPack ? pieceQuoteSuffix(pieceQuoteOf(shape))
+      : shape._sticker ? '' : weightQuoteSuffix(weightQuoteOf(shape)),
     packDiff: q.co - q.ww,
-    rateWw: rated ? r.ww.value * 10 : null,
-    rateCo: rated ? r.coles.value * 10 : null,
-    rateDiff: rated ? (r.coles.value - r.ww.value) * 10 : null,
-    // The denominator the old pack comparison implicitly used, in grams.
+    gapPct: lo > 0 ? (hi / lo - 1) * 100 : 0,
     impliedQty: r.ww.value > 0 ? i.woolworths.price / r.ww.value * 100 : null,
   };
-});
+}
+const built = rows.map(i => quoteRow(i, null));
 
 // THE BUG: the old comparison used a different denominator on every row.
 const qtys = built.map(b => Math.round(b.impliedQty));
@@ -89,48 +122,94 @@ assert(new Set(qtys).size > 1,
   'fixture must reproduce the mixed denominators, got ' + JSON.stringify(qtys));
 ok(`the pack comparison really does use different quantities per row (${qtys.join('g, ')}g)`);
 
-// Every one of these four is a weight item, so all four must now carry a rate.
-assert(built.every(b => b.rateDiff != null), 'all four rows must be rated per kg');
-ok('a weight item at both stores gets a $/kg rate');
+// Every one of these four is a weight item, so all four must carry a quote.
+assert(built.every(b => b.quoteWw != null), 'all four rows must be quoted');
+ok('a weight item at both stores gets a quoted rate');
 
-// The rate is a RATE: both sides are per the same 1000 units.
-for (const b of built) {
-  assert(b.rateWw > 0 && b.rateCo > 0, `${b.name} must have both rates`);
-}
-assert(Math.abs(built[0].rateWw - 12.00) < 0.005,
-  `WW chicken breast is $12.00/kg, got ${built[0].rateWw}`);
-assert(Math.abs(built[0].rateCo - 28.13) < 0.01,
-  `Coles chicken breast is $28.13/kg, got ${built[0].rateCo}`);
-ok('the rate is computed per kg on both sides ($12.00 vs $28.13)');
+// UNGROUPED products are quoted per 100g - the unit the main table prints under
+// every price - not per kg. A blanket $/kg is what produced "$220.00/kg" for
+// dried dill, a quantity of dill nobody has ever held.
+assert(built.every(b => b.unit === '/100g'),
+  `an ungrouped weight product is quoted per 100g, got ${built.map(b => b.unit)}`);
+assert(Math.abs(built[0].quoteWw - 1.20) < 0.005,
+  `WW chicken breast is $1.20/100g, got ${built[0].quoteWw}`);
+assert(Math.abs(built[0].quoteCo - 2.81) < 0.01,
+  `Coles chicken breast is $2.81/100g, got ${built[0].quoteCo}`);
+ok('an ungrouped product is quoted per 100g, like the main table');
 
-// Precision: the stored per_100_* fields are rounded to 2dp, which would
-// quantise $/kg to the nearest 10c and print Coles at $28.10 rather than
-// $28.13. per100Pair recomputes at 4dp, so the rate must NOT land on a 10c
-// boundary here.
-assert(Math.abs(built[0].rateCo - 28.10) > 0.02,
-  'the rate must come from per100Pair, not the 2dp-rounded stored field');
-ok('rates are recomputed rather than read from the 2dp stored per_100 fields');
-
-// THE ORDERING. By pack gap the order was chicken, basa, inglewood, zucchini.
-// Per kg, Inglewood ($20.00 vs $35.50 = $15.50/kg) overtakes Basa ($12.10/kg).
-const byPack = [...built].sort((a, b) => Math.abs(b.packDiff) - Math.abs(a.packDiff)).map(b => b.name);
-const byRate = [...built].sort((a, b) => Math.abs(b.rateDiff) - Math.abs(a.rateDiff)).map(b => b.name);
-assert.notDeepStrictEqual(byPack, byRate,
-  'the two rankings must differ - otherwise this fixture proves nothing');
-assert.strictEqual(byRate[1], 'Inglewood Farms Chicken Thigh Fillets Skin Off',
-  `per kg, Inglewood ranks 2nd at $15.50/kg; got ${byRate[1]}`);
-assert.strictEqual(byPack[1], 'Woolworths Basa Fillets Boneless With Skin Off',
-  'sanity: by pack gap Basa was 2nd');
-ok('ranking per kg reorders the list (Inglewood overtakes Basa)');
-
-// ── An item with no shared rate is kept, not dropped or mis-ranked ──────────
-// Loose produce - a per-each cucumber at both stores resolves no size.
-const loose = mk('Lebanese Cucumbers', 1.5, 'Lebanese Cucumbers', '', null, 2.0, 'Cucumber Lebanese');
+// A product IN a category takes that category's quote instead. Meat is quoted
+// per kilo, which is how meat is actually bought.
 {
-  const r = per100Pair(loose.woolworths, loose.coles);
-  const rated = r.ww.value > 0 && r.coles.value > 0;
-  assert(!rated, 'a per-each item must not fabricate a $/kg rate');
-  ok('a per-each item is left unrated rather than given an invented rate');
+  const perKg = quoteRow(rows[0], { key: 'chicken_breast', items: [], gramQuote: 1000 });
+  assert.strictEqual(perKg.unit, '/kg', 'a weighed category with a 1000g quote reads /kg');
+  assert(Math.abs(perKg.quoteWw - 12.00) < 0.005,
+    `per kg the WW figure is $12.00, got ${perKg.quoteWw}`);
+  ok('a product in a weighed category takes that category\'s own gram quote');
+
+  const per100 = quoteRow(rows[0], { key: 'x', items: [], gramQuote: 100 });
+  assert.strictEqual(per100.unit, '/100g', 'a 100g quote reads /100g');
+  assert(Math.abs(per100.quoteWw - 1.20) < 0.005, 'and rescales the figure with it');
+  ok('changing a category\'s gram quote changes the unit AND the number');
+}
+
+// A per-piece category must not be quoted in kilos. This is the branch that
+// silently broke when the seed shape was passed to metricShown unnormalised.
+{
+  const wipes = { key: 'baby_wipes', items: [], perPack: true, quote: 100, sticker: true };
+  const shape = resolved(wipes);
+  assert.strictEqual(pieceQuoteSuffix(pieceQuoteOf(shape)), ' /100',
+    'a perPack category is quoted per 100 pieces');
+  assert.strictEqual(metricShown(shape, 0.05), 5,
+    'metricShown must take the perPack branch, not the weighed one');
+  ok('a per-piece category is quoted per piece, not per kilo');
+}
+
+// THE PRECISION POINT, restated per 100g: the stored per_100_* fields are 2dp,
+// so Coles chicken is $2.81/100g here and $28.13/kg when a category asks for
+// kilos - never the $28.10 a x10 of the stored field would give.
+{
+  const perKg = quoteRow(rows[0], { key: 'k', items: [], gramQuote: 1000 });
+  assert(Math.abs(perKg.quoteCo - 28.13) < 0.01,
+    `per kg Coles is $28.13, got ${perKg.quoteCo}`);
+  assert(Math.abs(perKg.quoteCo - 28.10) > 0.02,
+    'the rate must be recomputed, not read from the 2dp stored per_100 field');
+  ok('rates are recomputed rather than read from the 2dp stored per_100 fields');
+}
+
+// THE RANKING. Units now differ per row, so the sort cannot be an absolute gap
+// in any unit - it has to be unit-free. By pack gap the order was chicken,
+// basa, inglewood, zucchini; by ratio chicken still leads (2.34x) but zucchini
+// (3.85x) outranks everything, which no absolute gap would have surfaced.
+const byPack = [...built].sort((a, b) => Math.abs(b.packDiff) - Math.abs(a.packDiff)).map(b => b.name);
+const byPct  = [...built].sort((a, b) => b.gapPct - a.gapPct).map(b => b.name);
+assert.notDeepStrictEqual(byPack, byPct,
+  'the two rankings must differ - otherwise this fixture proves nothing');
+assert.strictEqual(byPct[0], 'The Odd Bunch Zucchini Prepacked',
+  `zucchini is 3.85x apart, the widest here; got ${byPct[0]}`);
+ok('ranking is by store-to-store ratio, which reorders the list');
+
+// The ratio must be SYMMETRIC. (co-ww)/ww scores a half-price rival 50 and a
+// double-price rival 100, so the identical relationship would rank differently
+// depending only on which store happened to be cheaper.
+{
+  const mk2 = (w, c) => ({ list_item: 'x',
+    woolworths: { price: w, name: 'x 100g' }, coles: { price: c, name: 'x 100g' } });
+  const a = quoteRow(mk2(10, 20), null), b = quoteRow(mk2(20, 10), null);
+  assert(Math.abs(a.gapPct - b.gapPct) < 0.01,
+    `a 2x gap must score the same either way round, got ${a.gapPct} vs ${b.gapPct}`);
+  assert(Math.abs(a.gapPct - 100) < 0.01, `a 2x gap is 100%, got ${a.gapPct}`);
+  ok('the ranking is symmetric - which store is cheaper does not change the score');
+}
+
+// ── An item with no shared rate is kept, not dropped or mis-quoted ──────────
+// Loose produce - a per-each cucumber at both stores resolves no size.
+{
+  const loose = mk('Lebanese Cucumbers', 1.5, 'Lebanese Cucumbers', '', null, 2.0, 'Cucumber Lebanese');
+  const row = quoteRow(loose, null);
+  assert.strictEqual(row.quoteWw, null, 'a per-each item must not fabricate a rate');
+  assert.strictEqual(row.unit, '', 'and must not print a unit it does not have');
+  assert(row.gapPct > 0, 'but it must still be ranked, on its pack prices');
+  ok('a per-each item is left unquoted, kept, and still ranked');
 }
 
 // The "no lone unit price" rule: one side sized, the other not. Comparing a real
@@ -138,39 +217,71 @@ const loose = mk('Lebanese Cucumbers', 1.5, 'Lebanese Cucumbers', '', null, 2.0,
 {
   const half = mk('Woolworths Corn Sweet', 1.0, 'Woolworths Corn Sweet 500g', '', null,
                   1.2, 'Corn Cob Each');
-  const r = per100Pair(half.woolworths, half.coles);
-  assert(!(r.ww.value > 0 && r.coles.value > 0),
-    'one sized side and one unsized side must not produce a rated row');
-  ok('a row where only one store resolves a size stays unrated');
+  assert.strictEqual(quoteRow(half, null).quoteWw, null,
+    'one sized side and one unsized side must not produce a quoted row');
+  ok('a row where only one store resolves a size stays unquoted');
 }
 
 // ── The page actually wires it up ───────────────────────────────────────────
-assert(/const r = per100Pair\(i\.woolworths, i\.coles\);/.test(src),
-  'buildStorePanel must compute a rate per product');
-assert(/rateWw: +rated \? r\.ww\.value \* 10 : null/.test(src),
-  'the rate must be per 1000 units (per kg / per litre)');
-assert(/rateUnit: r\.ww\.label === '100ml' \? 'L' : 'kg'/.test(src),
-  'a millilitre item must be quoted per litre, not per kg');
-ok('buildStorePanel attaches a per-kg/per-litre rate to every product');
-
-// The sort must be grouped, never interleaved - mixing a $/kg gap with a pack
-// gap by magnitude would be the same bug wearing a different hat.
-assert(/\(p\.rateDiff == null\) - \(q2\.rateDiff == null\) \|\|/.test(src),
-  'rated and unrated rows must be grouped, not interleaved by magnitude');
-ok('rated rows are ranked separately from unrated ones');
+assert(/for \(const g of loadVariantGroups\(\)\) for \(const n of \(g\.items \|\| \[\]\)\) groupOf\.set\(n, g\);/.test(src),
+  'buildStorePanel must map products to their category');
+assert(/const shape = g \? resolved\(g\) : \{ _gramQuote: 100 \};/.test(src),
+  'an ungrouped product must default to the main table unit, $/100g');
+assert(/_perPack: !!\(g\._perPack \?\? g\.perPack\)/.test(src),
+  'the seed shape must be normalised or metricShown mis-reads perPack');
+assert(/quoteWw: pair \? metricShown\(shape, mw\) : null/.test(src),
+  'the displayed figure must go through metricShown, like the main page');
+assert(/groupMetric\(g, res, i\.list_item\)/.test(src),
+  'a grouped product must use the page-wide groupMetric, not a local rule');
+ok('the page reuses the main page\'s own quote rules (groupMetric + metricShown)');
 
 // The unit has to be ON the row. Two bare dollar figures that are secretly
-// per-kg are what made the old display unreadable in the first place.
-assert(/const per = rated \? '\/' \+ x\.rateUnit : '';/.test(src),
-  'a rated row must print its unit');
-assert(/sg-group-note/.test(src) && /no\s*\n?\s*shared \$\/kg to compare/.test(src),
-  'the unrated group must say why it is separate');
-ok('rated rows carry their unit and the unrated group explains itself');
+// per-kg are what made the display unreadable in the first place.
+assert(/\$\{x\.quoteUnit\}/.test(src), 'a quoted row must print its unit');
+ok('every quoted row carries its unit');
+
+// Rows with no size on either side can only be set pack beside pack, and the
+// packs may hold different amounts - Twinings peppermint scored 325% purely
+// because Woolworths sells a 10-bag box against Coles' 80-bag one. On a pure
+// percentage ranking those rows took the entire top of the page, which puts the
+// LEAST reliable comparisons first. They go below the quoted ones.
+assert(/\(p\.quoteWw == null\) - \(q2\.quoteWw == null\) \|\| q2\.gapPct - p\.gapPct/.test(src),
+  'unquoted rows must rank below quoted ones, not interleave by percentage');
+assert(/sg-group-note/.test(src) && /may not hold the same amount/.test(src),
+  'the pack-vs-pack group must say why it is less trustworthy');
+ok('pack-vs-pack rows rank below the quoted ones and say why');
+
+// The sort must be unit-free WITHIN a group. Any absolute gap re-introduces the
+// bug in a new unit, and the ratio has to be the symmetric one.
+assert(/q2\.gapPct - p\.gapPct/.test(src),
+  'the list must rank on the unit-free percentage');
+assert(/const lo = Math\.min\(qw, qc\), hi = Math\.max\(qw, qc\);/.test(src)
+    && /\(hi \/ lo - 1\) \* 100/.test(src),
+  'the ranking must use the symmetric ratio, not (co-ww)/ww');
+ok('the ranking is unit-free and symmetric');
 
 // A comparison metric, not money: fmtUnitMetric keeps the third decimal below
 // 20c, where 2dp would collapse genuinely different rates onto one figure.
-assert(/fmtUnitMetric\(Math\.abs\(d\)\)/.test(src) && /fmtUnitMetric\(x\.rateWw\)/.test(src),
-  'rates must print through fmtUnitMetric, not fmt');
-ok('rates print through fmtUnitMetric so sub-20c differences survive');
+assert(/fmtUnitMetric\(x\.quoteWw\)/.test(src) && /fmtUnitMetric\(x\.quoteCo\)/.test(src),
+  'quoted figures must print through fmtUnitMetric, not fmt');
+ok('quoted figures print through fmtUnitMetric so sub-20c differences survive');
+
+// ── The basket TOTAL is deliberately untouched by all of this ───────────────
+// Quoting a product per 100g instead of per kg cannot move what the basket
+// costs - the totals are money for a fixed set of products, and they are summed
+// from `state`, which still holds same-quantity pack costs. Asserted because
+// "the chart didn't move when I changed the units" is otherwise indistinguishable
+// from "the chart is stale".
+assert(/state\.set\(i\.list_item, \[q\.ww, q\.co\]\);/.test(src),
+  'the totals must still be built from same-quantity pack costs');
+assert(!/state\.set\([^)]*quote/.test(src),
+  'the quote must not leak into the basket total');
+{
+  const snapSrc = src.slice(src.indexOf('const snap = ()'), src.indexOf('const rows = []'));
+  assert(/ww \+= a; co \+= b;/.test(snapSrc),
+    'the running total must sum the same-quantity costs, untouched by the quote');
+  assert(!/quote/.test(snapSrc), 'the totals must not reference the quote at all');
+}
+ok('the basket total is summed from pack costs, so the quote cannot move it');
 
 console.log(`\nbasket_rate_selfcheck: ${n} checks passed`);

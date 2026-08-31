@@ -185,7 +185,7 @@
     .sg-item .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
     .sg-item .pr { font-variant-numeric: tabular-nums; color: var(--text-mid); font-size: 11.5px; }
     .sg-item .gp { font-variant-numeric: tabular-nums; min-width: 62px; text-align: right; }
-    /* Marks where the per-kg ranking stops and the per-pack one starts. */
+    /* Marks where the rows with a real unit stop and the pack-vs-pack ones start. */
     .sg-group-note {
       margin: 14px 0 6px; padding-top: 10px; border-top: 2px solid var(--border);
       font-size: 11.5px; color: var(--text-soft); line-height: 1.45;
@@ -377,8 +377,9 @@
                style="font-size:12px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);max-width:200px">
       </div>
       <p style="font-size:12px;color:var(--text-mid);margin:6px 0 10px">
-        Every product priced at <strong>both</strong> stores on every date above, compared
-        <strong>per kg</strong> (or per litre) so the rows rank against each other, biggest gap first.
+        Every product priced at <strong>both</strong> stores on every date above, each quoted in the
+        same unit the main page uses for it. Ranked by <strong>how far apart the two stores are</strong>,
+        as a percentage — the one measure that compares across different units.
       </p>
       <div class="sg-items" id="sgItems"></div>
     </div>
@@ -471,7 +472,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=148"></script>
+<script src="utils.js?v=149"></script>
 <script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
@@ -990,6 +991,23 @@ function buildStorePanel(items, changes) {
 
   const state = new Map();
   const meta = new Map();
+  // The unit each product is QUOTED in, decided the way the MAIN PAGE decides
+  // it. A blanket $/kg was honest arithmetic and an unreadable number for
+  // anything not bought by the kilo - dried dill came out at "$220.00/kg vs
+  // $330.00/kg", a quantity of dill nobody has ever held. So: a category's own
+  // piece/gram quote where the product is in one (meat stays $/kg, wipes go per
+  // 100), and $/100g - what the main table prints under every price - otherwise.
+  const groupOf = new Map();
+  for (const g of loadVariantGroups()) for (const n of (g.items || [])) groupOf.set(n, g);
+  // metricShown/pieceQuoteOf/weightQuoteOf read the RESOLVED (underscore) shape;
+  // loadVariantGroups hands back the seed shape. Normalise once here rather than
+  // restating the quote rules - metricShown's perPack branch tests _perPack
+  // only, so a seed-shape group would silently fall through it to the weighed
+  // branch and quote nappies in kilos.
+  const resolved = (g) => ({
+    _perPack: !!(g._perPack ?? g.perPack), _sticker: !!(g._sticker ?? g.sticker),
+    _quote: g._quote ?? g.quote, _gramQuote: g._gramQuote ?? g.gramQuote,
+  });
   for (const i of items) {
     if (String(i.list_item || '').startsWith('__group_')) continue;
     const w = (i.woolworths || {}).price, c = (i.coles || {}).price;
@@ -1024,15 +1042,33 @@ function buildStorePanel(items, changes) {
     // store resolves a size is left unrated rather than comparing a real rate
     // against a fabricated one.
     const r = per100Pair(i.woolworths, i.coles);
-    const rated = r.ww.value > 0 && r.coles.value > 0;
+    const g = groupOf.get(i.list_item);
+    // Ungrouped products are quoted per 100, so model them as a weighed group
+    // with a 100g quote and let metricShown do the same arithmetic it does for
+    // a real category. groupMetric stores $/kg, so the ungrouped metric is
+    // built the same way (per-100 x 10) and metricShown scales it back down.
+    const shape = g ? resolved(g) : { _gramQuote: 100 };
+    const metricOf = (res) => g ? groupMetric(g, res, i.list_item)
+      : (clientPer100(res).value != null ? +(clientPer100(res).value * 10).toFixed(2) : null);
+    // per100Pair's "no lone unit price" rule for the ungrouped case: one side
+    // sized and the other not means comparing a real rate with a guessed one.
+    const mw = (!g && r.ww.value == null) ? null : metricOf(i.woolworths);
+    const mc = (!g && r.coles.value == null) ? null : metricOf(i.coles);
+    const pair = mw != null && mc != null;
+    const ml = r.ww.label === '100ml';
+    const wq = weightQuoteOf(shape);
     meta.set(i.list_item, {
       normalised: q.normalised, packWw: +w, packCo: +c,
       // Undo-scale per store: WW is unscaled, Coles is restated to the WW pack
       // quantity by a constant ratio (pack sizes don't move).
       scale: [1, +c > 0 ? q.co / +c : 1],
-      rateWw:   rated ? r.ww.value * 10 : null,
-      rateCo:   rated ? r.coles.value * 10 : null,
-      rateUnit: r.ww.label === '100ml' ? 'L' : 'kg',
+      quoteWw: pair ? metricShown(shape, mw) : null,
+      quoteCo: pair ? metricShown(shape, mc) : null,
+      quoteUnit: !pair ? ''
+        : shape._perPack ? pieceQuoteSuffix(pieceQuoteOf(shape))
+        : shape._sticker ? ''
+        : ml ? (wq === 100 ? '/100ml' : '/L')
+        : weightQuoteSuffix(wq),
     });
   }
   if (state.size < 10) return null;
@@ -1042,21 +1078,32 @@ function buildStorePanel(items, changes) {
   const products = [...state.keys()].map(name => {
     const m = meta.get(name);
     const [a, b] = state.get(name);
+    // Rank on the RATIO between the two stores, which is the only figure that
+    // survives every row being quoted in its own unit: a $/kg gap, a per-100g
+    // gap and a per-100-wipes gap cannot be ordered against each other, but
+    // "one store is 134% dearer" can. Sorting the absolute gaps instead just
+    // moves the old bug - it would rank whichever product is dearest per unit,
+    // which is how $220/kg dill outranked chicken at more than twice the price.
+    // Ratio not (co-ww)/ww, because that is asymmetric: Coles at half price
+    // scores 50 while Coles at double scores 100, so the same relationship
+    // ranks differently depending on which store happens to be cheaper.
+    const qw = m.quoteWw != null ? m.quoteWw : a;
+    const qc = m.quoteCo != null ? m.quoteCo : b;
+    const lo = Math.min(qw, qc), hi = Math.max(qw, qc);
     return { name, ww: a, co: b, diff: b - a, pct: a ? (b - a) / a * 100 : 0,
              normalised: m.normalised && Math.abs(b - m.packCo) > 0.005,
              packWw: m.packWw, packCo: m.packCo,
-             rateWw: m.rateWw, rateCo: m.rateCo, rateUnit: m.rateUnit,
-             rateDiff: m.rateWw == null ? null : m.rateCo - m.rateWw };
-  // Rated rows first, ranked on the rate; unrated rows after, ranked on their
-  // pack gap. Two groups rather than one list because a $/kg gap and a per-pack
-  // gap are different quantities - interleaving them by magnitude would be the
-  // same mistake in a new form. The pack-gap sort this replaces put whichever
-  // product happened to come in the biggest pack on top.
+             quoteWw: m.quoteWw, quoteCo: m.quoteCo, quoteUnit: m.quoteUnit,
+             gapPct: lo > 0 ? (hi / lo - 1) * 100 : 0 };
+  // Quoted rows first, then the rest - on TRUST, not on units. A quoted row
+  // compares two rates for the same amount of product. An unquoted one has no
+  // size on either side, so all it can do is set one pack beside another and
+  // hope they match: Twinings peppermint scored 325% purely because Woolworths
+  // sells a 10-bag box and Coles an 80-bag one. Ranked in one list those rows
+  // take the whole top of the page, which is exactly backwards - they are the
+  // least reliable comparisons on it, not the most dramatic findings.
   }).sort((p, q2) =>
-    (p.rateDiff == null) - (q2.rateDiff == null) ||
-    (p.rateDiff == null
-      ? Math.abs(q2.diff) - Math.abs(p.diff)
-      : Math.abs(q2.rateDiff) - Math.abs(p.rateDiff)));
+    (p.quoteWw == null) - (q2.quoteWw == null) || q2.gapPct - p.gapPct);
 
   const snap = () => {
     let ww = 0, co = 0, wWin = 0, cWin = 0, same = 0;
@@ -1229,36 +1276,35 @@ function paintGapItems(q) {
   const list = p.products.filter(x => !q || String(x.name).toLowerCase().includes(q));
   $('sgItemsCount').textContent = `${list.length} product${list.length === 1 ? '' : 's'}`;
   if (!list.length) { $('sgItems').innerHTML = '<p class="sl-empty-state">No products match.</p>'; return; }
-  // Two groups: priced per kg/L, then the rest. `list` is already ordered that
-  // way, so the divider goes in at the boundary.
-  const firstUnrated = list.findIndex(x => x.rateDiff == null);
+  const firstUnquoted = list.findIndex(x => x.quoteWw == null);
   $('sgItems').innerHTML = list.map((x, idx) => {
-    const rated = x.rateDiff != null;
-    const d = rated ? x.rateDiff : x.diff;
-    const c = d > 0.005 ? 'sg-ww' : d < -0.005 ? 'sg-co' : 'sg-flat';
-    const per = rated ? '/' + x.rateUnit : '';
-    const amt = Math.abs(d) < 0.005 ? 'same'
-      : (rated ? fmtUnitMetric(Math.abs(d)) : fmt(Math.abs(d))) + per;
-    // A rated row states its own unit, so it needs no "≈": the two figures are
-    // both rates and directly comparable. The pack prices move to the tooltip,
-    // since "what a pack costs" is still the question you ask at the shelf.
-    // "≈" survives only on unrated rows, where the rival price really was
-    // restated to the Woolworths pack quantity.
-    const tip = rated
-      ? ` title="Per ${x.rateUnit}, so this row can be compared with the others. On the shelf: `
-        + `${fmt(x.packWw)} at Woolworths, ${fmt(x.packCo)} at Coles."`
+    const quoted = x.quoteWw != null;
+    // Which store is cheaper is still read off the same-quantity cost, so the
+    // colour never disagrees with the basket total above.
+    const c = x.diff > 0.005 ? 'sg-ww' : x.diff < -0.005 ? 'sg-co' : 'sg-flat';
+    const amt = x.gapPct < 0.5 ? 'same' : Math.round(x.gapPct) + '%';
+    // A quoted row states its own unit, so it needs no "≈": both figures are in
+    // that unit and directly comparable to each other. The shelf prices move to
+    // the tooltip, since "what does a pack cost" is still the question you ask
+    // standing in front of it. "≈" survives only where there is no quote and the
+    // rival price really was restated to the Woolworths pack quantity.
+    const tip = quoted
+      ? ` title="${fmtUnitMetric(x.quoteWw)}${x.quoteUnit} at Woolworths, `
+        + `${fmtUnitMetric(x.quoteCo)}${x.quoteUnit} at Coles. On the shelf: `
+        + `${fmt(x.packWw)} and ${fmt(x.packCo)}."`
       : x.normalised
       ? ` title="Same-quantity comparison. On the shelf: ${fmt(x.packWw)} at Woolworths for a pack this size, ${fmt(x.packCo)} at Coles for theirs."`
       : '';
-    const head = idx === firstUnrated && firstUnrated > 0
-      ? `<p class="sg-group-note">Sold loose or by the piece at one or both stores, so there is no
-           shared $/kg to compare. These are per pack, and rank among themselves only.</p>`
+    const head = idx === firstUnquoted && firstUnquoted > 0
+      ? `<p class="sg-group-note">Neither store lists a size for these, so they can only be
+           compared pack against pack &mdash; and the two packs may not hold the same amount.
+           Ranked among themselves, below the rows that carry a real unit.</p>`
       : '';
     return head + `<div class="sg-item">
       <span class="nm" title="${escapeHtml(x.name)}">${escapeHtml(shortName(x.name))}</span>
-      <span class="pr"${tip}>${!rated && x.normalised ? '≈ ' : ''}${
-        rated ? fmtUnitMetric(x.rateWw) : fmt(x.ww)}${per} / ${
-        rated ? fmtUnitMetric(x.rateCo) : fmt(x.co)}${per}</span>
+      <span class="pr"${tip}>${!quoted && x.normalised ? '≈ ' : ''}${
+        quoted ? fmtUnitMetric(x.quoteWw) : fmt(x.ww)}${x.quoteUnit} / ${
+        quoted ? fmtUnitMetric(x.quoteCo) : fmt(x.co)}${x.quoteUnit}</span>
       <span class="gp ${c}">${amt}</span>
     </div>`;
   }).join('');
