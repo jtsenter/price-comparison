@@ -185,6 +185,11 @@
     .sg-item .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
     .sg-item .pr { font-variant-numeric: tabular-nums; color: var(--text-mid); font-size: 11.5px; }
     .sg-item .gp { font-variant-numeric: tabular-nums; min-width: 62px; text-align: right; }
+    /* Marks where the per-kg ranking stops and the per-pack one starts. */
+    .sg-group-note {
+      margin: 14px 0 6px; padding-top: 10px; border-top: 2px solid var(--border);
+      font-size: 11.5px; color: var(--text-soft); line-height: 1.45;
+    }
 
     .sl-runs { display: flex; flex-direction: column; gap: 8px; }
     .sl-run { background: var(--card); border: 1px solid var(--border); border-radius: 11px; overflow: hidden; }
@@ -372,7 +377,8 @@
                style="font-size:12px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);max-width:200px">
       </div>
       <p style="font-size:12px;color:var(--text-mid);margin:6px 0 10px">
-        Every product priced at <strong>both</strong> stores on every date above, biggest gap first.
+        Every product priced at <strong>both</strong> stores on every date above, compared
+        <strong>per kg</strong> (or per litre) so the rows rank against each other, biggest gap first.
       </p>
       <div class="sg-items" id="sgItems"></div>
     </div>
@@ -465,7 +471,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=147"></script>
+<script src="utils.js?v=148"></script>
 <script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
@@ -1001,11 +1007,32 @@ function buildStorePanel(items, changes) {
     // $10 portion (see sameQtyCost in utils.js).
     const q = sameQtyCost(+w, +c, i.per_100_ww, i.per_100_coles);
     state.set(i.list_item, [q.ww, q.co]);
+    // A RATE, for ranking the products against each other.
+    //
+    // sameQtyCost restates the rival at the Woolworths pack quantity, which is
+    // right for the basket total but makes the per-product list incomparable
+    // with itself: that quantity is whatever the WW pack happens to be, so it
+    // differs on every row. On this archive it takes 48 distinct values from
+    // 12g (dried thyme) to 3029g (milk), so "biggest gap first" was ranking a
+    // gap measured on 12g against one measured on 3kg. Chicken breast came top
+    // on a per-KILO gap while zucchini sat below it on a per-743g one.
+    //
+    // Per kg (or per litre) puts every row on one axis. Computed with
+    // per100Pair rather than the stored per_100_* fields because those are
+    // rounded to 2dp, which would quantise $/kg to the nearest 10c - and it
+    // brings the "no lone unit price" rule with it, so a row where only one
+    // store resolves a size is left unrated rather than comparing a real rate
+    // against a fabricated one.
+    const r = per100Pair(i.woolworths, i.coles);
+    const rated = r.ww.value > 0 && r.coles.value > 0;
     meta.set(i.list_item, {
       normalised: q.normalised, packWw: +w, packCo: +c,
       // Undo-scale per store: WW is unscaled, Coles is restated to the WW pack
       // quantity by a constant ratio (pack sizes don't move).
       scale: [1, +c > 0 ? q.co / +c : 1],
+      rateWw:   rated ? r.ww.value * 10 : null,
+      rateCo:   rated ? r.coles.value * 10 : null,
+      rateUnit: r.ww.label === '100ml' ? 'L' : 'kg',
     });
   }
   if (state.size < 10) return null;
@@ -1017,8 +1044,19 @@ function buildStorePanel(items, changes) {
     const [a, b] = state.get(name);
     return { name, ww: a, co: b, diff: b - a, pct: a ? (b - a) / a * 100 : 0,
              normalised: m.normalised && Math.abs(b - m.packCo) > 0.005,
-             packWw: m.packWw, packCo: m.packCo };
-  }).sort((p, q2) => Math.abs(q2.diff) - Math.abs(p.diff));
+             packWw: m.packWw, packCo: m.packCo,
+             rateWw: m.rateWw, rateCo: m.rateCo, rateUnit: m.rateUnit,
+             rateDiff: m.rateWw == null ? null : m.rateCo - m.rateWw };
+  // Rated rows first, ranked on the rate; unrated rows after, ranked on their
+  // pack gap. Two groups rather than one list because a $/kg gap and a per-pack
+  // gap are different quantities - interleaving them by magnitude would be the
+  // same mistake in a new form. The pack-gap sort this replaces put whichever
+  // product happened to come in the biggest pack on top.
+  }).sort((p, q2) =>
+    (p.rateDiff == null) - (q2.rateDiff == null) ||
+    (p.rateDiff == null
+      ? Math.abs(q2.diff) - Math.abs(p.diff)
+      : Math.abs(q2.rateDiff) - Math.abs(p.rateDiff)));
 
   const snap = () => {
     let ww = 0, co = 0, wWin = 0, cWin = 0, same = 0;
@@ -1191,17 +1229,36 @@ function paintGapItems(q) {
   const list = p.products.filter(x => !q || String(x.name).toLowerCase().includes(q));
   $('sgItemsCount').textContent = `${list.length} product${list.length === 1 ? '' : 's'}`;
   if (!list.length) { $('sgItems').innerHTML = '<p class="sl-empty-state">No products match.</p>'; return; }
-  $('sgItems').innerHTML = list.map(x => {
-    const c = x.diff > 0.005 ? 'sg-ww' : x.diff < -0.005 ? 'sg-co' : 'sg-flat';
-    const amt = Math.abs(x.diff) < 0.005 ? 'same' : fmt(Math.abs(x.diff));
-    // "≈" marks a row whose rival price was restated to the Woolworths pack
-    // quantity; the tooltip carries the untouched shelf prices.
-    const tip = x.normalised
+  // Two groups: priced per kg/L, then the rest. `list` is already ordered that
+  // way, so the divider goes in at the boundary.
+  const firstUnrated = list.findIndex(x => x.rateDiff == null);
+  $('sgItems').innerHTML = list.map((x, idx) => {
+    const rated = x.rateDiff != null;
+    const d = rated ? x.rateDiff : x.diff;
+    const c = d > 0.005 ? 'sg-ww' : d < -0.005 ? 'sg-co' : 'sg-flat';
+    const per = rated ? '/' + x.rateUnit : '';
+    const amt = Math.abs(d) < 0.005 ? 'same'
+      : (rated ? fmtUnitMetric(Math.abs(d)) : fmt(Math.abs(d))) + per;
+    // A rated row states its own unit, so it needs no "≈": the two figures are
+    // both rates and directly comparable. The pack prices move to the tooltip,
+    // since "what a pack costs" is still the question you ask at the shelf.
+    // "≈" survives only on unrated rows, where the rival price really was
+    // restated to the Woolworths pack quantity.
+    const tip = rated
+      ? ` title="Per ${x.rateUnit}, so this row can be compared with the others. On the shelf: `
+        + `${fmt(x.packWw)} at Woolworths, ${fmt(x.packCo)} at Coles."`
+      : x.normalised
       ? ` title="Same-quantity comparison. On the shelf: ${fmt(x.packWw)} at Woolworths for a pack this size, ${fmt(x.packCo)} at Coles for theirs."`
       : '';
-    return `<div class="sg-item">
+    const head = idx === firstUnrated && firstUnrated > 0
+      ? `<p class="sg-group-note">Sold loose or by the piece at one or both stores, so there is no
+           shared $/kg to compare. These are per pack, and rank among themselves only.</p>`
+      : '';
+    return head + `<div class="sg-item">
       <span class="nm" title="${escapeHtml(x.name)}">${escapeHtml(shortName(x.name))}</span>
-      <span class="pr"${tip}>${x.normalised ? '≈ ' : ''}${fmt(x.ww)} / ${fmt(x.co)}</span>
+      <span class="pr"${tip}>${!rated && x.normalised ? '≈ ' : ''}${
+        rated ? fmtUnitMetric(x.rateWw) : fmt(x.ww)}${per} / ${
+        rated ? fmtUnitMetric(x.rateCo) : fmt(x.co)}${per}</span>
       <span class="gp ${c}">${amt}</span>
     </div>`;
   }).join('');
