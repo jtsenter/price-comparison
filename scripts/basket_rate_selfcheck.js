@@ -201,15 +201,24 @@ ok('ranking is by store-to-store ratio, which reorders the list');
   ok('the ranking is symmetric - which store is cheaper does not change the score');
 }
 
-// ── An item with no shared rate is kept, not dropped or mis-quoted ──────────
-// Loose produce - a per-each cucumber at both stores resolves no size.
+// ── Loose produce with no size on either side has no basis at all ──────────
+// The real shape of this one: Woolworths prices a cucumber per ITEM and Coles
+// prices it per KILO. There is no shared unit and no size to build one from, so
+// it cannot be in a like-for-like basket however it is displayed.
 {
-  const loose = mk('Lebanese Cucumbers', 1.5, 'Lebanese Cucumbers', '', null, 2.0, 'Cucumber Lebanese');
+  const loose = mk('Lebanese Cucumbers', 1.42, 'Lebanese Cucumbers', '1EA', 1.42,
+                   1.42, 'Lebanese Cucumbers');
   const row = quoteRow(loose, null);
   assert.strictEqual(row.quoteWw, null, 'a per-each item must not fabricate a rate');
-  assert.strictEqual(row.unit, '', 'and must not print a unit it does not have');
-  assert(row.gapPct > 0, 'but it must still be ranked, on its pack prices');
-  ok('a per-each item is left unquoted, kept, and still ranked');
+  // unit_price === price, so this is a pack price, not a per-piece breakdown.
+  const pieceRate = (res) => {
+    if (!/^\d*\s*ea\b/.test(String(res.unit || '').toLowerCase())) return null;
+    const up = Number(res.unit_price);
+    return up > 0 && up < res.price - 0.005 ? up : null;
+  };
+  assert.strictEqual(pieceRate(loose.woolworths), null,
+    'a store repeating the pack price is not publishing a per-piece rate');
+  ok('loose produce priced per item at one store and per kilo at the other has no basis');
 }
 
 // The "no lone unit price" rule: one side sized, the other not. Comparing a real
@@ -229,7 +238,7 @@ assert(/const shape = g \? resolved\(g\) : \{ _gramQuote: 100 \};/.test(src),
   'an ungrouped product must default to the main table unit, $/100g');
 assert(/_perPack: !!\(g\._perPack \?\? g\.perPack\)/.test(src),
   'the seed shape must be normalised or metricShown mis-reads perPack');
-assert(/quoteWw: pair \? metricShown\(shape, mw\) : null/.test(src),
+assert(/quoteWw: !pair \? null : byPiece \? metricRound\(mw\) : metricShown\(shape, mw\)/.test(src),
   'the displayed figure must go through metricShown, like the main page');
 assert(/groupMetric\(g, res, i\.list_item\)/.test(src),
   'a grouped product must use the page-wide groupMetric, not a local rule');
@@ -240,16 +249,56 @@ ok('the page reuses the main page\'s own quote rules (groupMetric + metricShown)
 assert(/\$\{x\.quoteUnit\}/.test(src), 'a quoted row must print its unit');
 ok('every quoted row carries its unit');
 
-// Rows with no size on either side can only be set pack beside pack, and the
-// packs may hold different amounts - Twinings peppermint scored 325% purely
-// because Woolworths sells a 10-bag box against Coles' 80-bag one. On a pure
-// percentage ranking those rows took the entire top of the page, which puts the
-// LEAST reliable comparisons first. They go below the quoted ones.
 assert(/\(p\.quoteWw == null\) - \(q2\.quoteWw == null\) \|\| q2\.gapPct - p\.gapPct/.test(src),
   'unquoted rows must rank below quoted ones, not interleave by percentage');
-assert(/sg-group-note/.test(src) && /may not hold the same amount/.test(src),
-  'the pack-vs-pack group must say why it is less trustworthy');
-ok('pack-vs-pack rows rank below the quoted ones and say why');
+ok('any residual unquoted row ranks below the quoted ones');
+
+// ── A line with no common basis is DROPPED, not guessed at ──────────────────
+// The basket is a theoretical shop, so every line in it has to be a real
+// comparison. The old fallback to raw pack prices was doing 29% of the reported
+// gap on rows that were nothing of the kind: a Woolworths 10-bag box of
+// Twinings against a Coles 80-bag one, a single toothbrush against a value
+// pack, a cut butternut against a tin of pumpkin SOUP.
+assert(/if \(!\(rw > 0 && rc > 0\)\) \{ dropped\+\+; continue; \}/.test(src),
+  'a product with no shared basis must leave the basket, not fall back to pack prices');
+assert(/const q = sameQtyCost\(\+w, \+c, rw, rc\);/.test(src),
+  'the basket cost must be built from the resolved rates, not the stored per_100 fields');
+assert(!/sameQtyCost\(\+w, \+c, i\.per_100_ww, i\.per_100_coles\)/.test(src),
+  'the un-guarded per_100 call is what allowed the pack-price fallback');
+assert(/dropped/.test(src.slice(src.indexOf("$('sgMethod')"), src.indexOf("$('sgTiles')"))),
+  'the method note must say how many products were dropped and why');
+ok('a line with no common basis leaves the basket, and the panel says so');
+
+// ── Per-PIECE goods get a basis instead of being thrown away ────────────────
+// clientPer100 only understands g/kg/ml/l, so a "1EA" product resolved no rate
+// and fell through to pack-vs-pack. Both stores do publish a per-piece figure.
+{
+  const rate = (unit, price, unitPrice) => {
+    const res = { price, unit, unit_price: unitPrice };
+    if (!/^\d*\s*ea\b/.test(String(res.unit || '').toLowerCase())) return null;
+    const up = Number(res.unit_price);
+    return up > 0 && up < res.price - 0.005 ? up : null;
+  };
+  // The real toothbrush row: a 6-pack at each store, $0.88 vs $2.25 a brush.
+  assert.strictEqual(rate('1EA', 5.30, 0.88), 0.88, 'a WW per-piece rate must resolve');
+  assert.strictEqual(rate('1ea', 13.50, 2.25), 2.25, 'a Coles per-piece rate must resolve');
+  // A store that just repeats the pack price is NOT publishing a per-piece rate.
+  assert.strictEqual(rate('1ea', 8.50, 8.50), null,
+    'unit_price equal to price is a pack price, not a per-piece breakdown');
+  // Weight units stay with clientPer100 - this must not hijack them.
+  assert.strictEqual(rate('1kg', 4.90, 4.90), null, 'a kg unit is not a piece rate');
+  ok('per-piece goods resolve a rate from the unit price both stores publish');
+
+  // And it must reach the same-quantity cost. Camomile tea: WW 20c a bag,
+  // Coles 8c - pack-against-pack called Coles $4.75 DEARER, which is the wrong
+  // store, not merely the wrong amount.
+  const byPack = sameQtyCost(2.00, 6.75, null, null);
+  const byPiece = sameQtyCost(2.00, 6.75, 0.20, 0.08);
+  assert(byPack.co > byPack.ww, 'sanity: pack-against-pack makes Coles look dearer');
+  assert(byPiece.co < byPiece.ww,
+    `per piece Coles is cheaper - the basis flips the winner, got ${byPiece.co} vs ${byPiece.ww}`);
+  ok('the per-piece basis can flip which store a line says is cheaper');
+}
 
 // The sort must be unit-free WITHIN a group. Any absolute gap re-introduces the
 // bug in a new unit, and the ratio has to be the symmetric one.
@@ -266,22 +315,22 @@ assert(/fmtUnitMetric\(x\.quoteWw\)/.test(src) && /fmtUnitMetric\(x\.quoteCo\)/.
   'quoted figures must print through fmtUnitMetric, not fmt');
 ok('quoted figures print through fmtUnitMetric so sub-20c differences survive');
 
-// ── The basket TOTAL is deliberately untouched by all of this ───────────────
-// Quoting a product per 100g instead of per kg cannot move what the basket
-// costs - the totals are money for a fixed set of products, and they are summed
-// from `state`, which still holds same-quantity pack costs. Asserted because
-// "the chart didn't move when I changed the units" is otherwise indistinguishable
-// from "the chart is stale".
+// ── The DISPLAY quote still must not move the total ─────────────────────────
+// Two different things share the word "unit" here. What a row is QUOTED in
+// (per kg vs per 100g) is presentation and must never touch the money. What a
+// row is COMPARED on (the basis above) is the money, and does. Keeping those
+// apart is why re-quoting dill per 100g left the totals alone while dropping
+// the un-matchable lines moved them.
 assert(/state\.set\(i\.list_item, \[q\.ww, q\.co\]\);/.test(src),
-  'the totals must still be built from same-quantity pack costs');
+  'the totals must be built from the same-quantity costs');
 assert(!/state\.set\([^)]*quote/.test(src),
-  'the quote must not leak into the basket total');
+  'the display quote must not leak into the basket total');
 {
   const snapSrc = src.slice(src.indexOf('const snap = ()'), src.indexOf('const rows = []'));
   assert(/ww \+= a; co \+= b;/.test(snapSrc),
-    'the running total must sum the same-quantity costs, untouched by the quote');
-  assert(!/quote/.test(snapSrc), 'the totals must not reference the quote at all');
+    'the running total must sum the same-quantity costs');
+  assert(!/quote/.test(snapSrc), 'the totals must not reference the display quote at all');
 }
-ok('the basket total is summed from pack costs, so the quote cannot move it');
+ok('the display quote cannot move the total; only the comparison basis can');
 
 console.log(`\nbasket_rate_selfcheck: ${n} checks passed`);

@@ -472,7 +472,7 @@
 </main>
 
 <script src="name_map.js?v=55"></script>
-<script src="utils.js?v=149"></script>
+<script src="utils.js?v=150"></script>
 <script src="xlsx.js?v=1"></script>
 <script>
 function $(id) { return document.getElementById(id); }
@@ -1008,6 +1008,21 @@ function buildStorePanel(items, changes) {
     _perPack: !!(g._perPack ?? g.perPack), _sticker: !!(g._sticker ?? g.sticker),
     _quote: g._quote ?? g.quote, _gramQuote: g._gramQuote ?? g.gramQuote,
   });
+  // A per-PIECE rate, for things counted rather than weighed. clientPer100 only
+  // understands g/kg/ml/l, so a product whose unit is "1EA" resolved no rate at
+  // all and fell through to a raw pack-vs-pack comparison - which is how a
+  // Woolworths 10-bag box of tea got set against a Coles 80-bag one. Both
+  // stores publish a per-piece figure for these; it is just in a unit
+  // clientPer100 was never taught. `unit_price < price` is what distinguishes a
+  // real per-piece breakdown from a store that simply repeats the pack price.
+  const pieceRate = (res) => {
+    if (!res || res.price == null) return null;
+    if (!/^\d*\s*ea\b/.test(String(res.unit || '').toLowerCase())) return null;
+    const up = Number(res.unit_price);
+    return up > 0 && up < res.price - 0.005 ? up : null;
+  };
+  // How many products the basket had to drop for having no common basis at all.
+  let dropped = 0;
   for (const i of items) {
     if (String(i.list_item || '').startsWith('__group_')) continue;
     const w = (i.woolworths || {}).price, c = (i.coles || {}).price;
@@ -1021,9 +1036,29 @@ function buildStorePanel(items, changes) {
     // miss some later moves.
     const fw = firstSeen(i.ww_price_history), fc = firstSeen(i.coles_price_history);
     if (!fw || !fc || fw > windowStart || fc > windowStart) continue;
+    // THE BASIS. Both stores must expose a rate in the SAME unit, or the two
+    // prices are not a comparison and the basket is better off without them.
+    //
+    // This used to fall back to raw pack prices whenever a rate was missing,
+    // and that fallback was quietly doing 29% of the reported gap - on rows
+    // that were not like-for-like at all: a Woolworths 10-bag box of Twinings
+    // against a Coles 80-bag one, a single toothbrush against a value pack, a
+    // cut butternut against a tin of pumpkin SOUP. A theoretical basket is only
+    // worth anything if every line in it is a real comparison, so a line
+    // without one is now dropped rather than guessed at.
+    //
+    // Weight/volume first, then per-piece. per100Pair carries the "no lone unit
+    // price" rule - one side sized and the other not is not a basis either.
+    const r100 = per100Pair(i.woolworths, i.coles);
+    const rw = r100.ww.value > 0 ? r100.ww.value : pieceRate(i.woolworths);
+    const rc = r100.ww.value > 0 ? r100.coles.value : pieceRate(i.coles);
+    const byPiece = !(r100.ww.value > 0) && rw > 0 && rc > 0;
+    if (!(rw > 0 && rc > 0)) { dropped++; continue; }
     // Same quantity at both stores, so a $34 fillet pack is not "beaten" by a
-    // $10 portion (see sameQtyCost in utils.js).
-    const q = sameQtyCost(+w, +c, i.per_100_ww, i.per_100_coles);
+    // $10 portion (see sameQtyCost in utils.js). Feeding it per-piece rates
+    // works unchanged - it only ever asks "how many rate-units is the WW pack,
+    // and what would that many cost at the rival".
+    const q = sameQtyCost(+w, +c, rw, rc);
     state.set(i.list_item, [q.ww, q.co]);
     // A RATE, for ranking the products against each other.
     //
@@ -1041,7 +1076,7 @@ function buildStorePanel(items, changes) {
     // brings the "no lone unit price" rule with it, so a row where only one
     // store resolves a size is left unrated rather than comparing a real rate
     // against a fabricated one.
-    const r = per100Pair(i.woolworths, i.coles);
+    const r = r100;
     const g = groupOf.get(i.list_item);
     // Ungrouped products are quoted per 100, so model them as a weighed group
     // with a 100g quote and let metricShown do the same arithmetic it does for
@@ -1052,8 +1087,10 @@ function buildStorePanel(items, changes) {
       : (clientPer100(res).value != null ? +(clientPer100(res).value * 10).toFixed(2) : null);
     // per100Pair's "no lone unit price" rule for the ungrouped case: one side
     // sized and the other not means comparing a real rate with a guessed one.
-    const mw = (!g && r.ww.value == null) ? null : metricOf(i.woolworths);
-    const mc = (!g && r.coles.value == null) ? null : metricOf(i.coles);
+    // A per-piece row is quoted per piece - it has no grams to be quoted per
+    // 100 of, and that is exactly why it needed its own basis.
+    const mw = byPiece ? rw : ((!g && r.ww.value == null) ? null : metricOf(i.woolworths));
+    const mc = byPiece ? rc : ((!g && r.coles.value == null) ? null : metricOf(i.coles));
     const pair = mw != null && mc != null;
     const ml = r.ww.label === '100ml';
     const wq = weightQuoteOf(shape);
@@ -1062,9 +1099,10 @@ function buildStorePanel(items, changes) {
       // Undo-scale per store: WW is unscaled, Coles is restated to the WW pack
       // quantity by a constant ratio (pack sizes don't move).
       scale: [1, +c > 0 ? q.co / +c : 1],
-      quoteWw: pair ? metricShown(shape, mw) : null,
-      quoteCo: pair ? metricShown(shape, mc) : null,
+      quoteWw: !pair ? null : byPiece ? metricRound(mw) : metricShown(shape, mw),
+      quoteCo: !pair ? null : byPiece ? metricRound(mc) : metricShown(shape, mc),
       quoteUnit: !pair ? ''
+        : byPiece ? ' each'
         : shape._perPack ? pieceQuoteSuffix(pieceQuoteOf(shape))
         : shape._sticker ? ''
         : ml ? (wq === 100 ? '/100ml' : '/L')
@@ -1132,7 +1170,8 @@ function buildStorePanel(items, changes) {
   }
   rows.reverse();   // oldest -> newest; paintStoreGap reverses again for display
 
-  return { rows, products, start: rows[0].date, latest: rows[rows.length - 1].date, size: state.size };
+  return { rows, products, start: rows[0].date, latest: rows[rows.length - 1].date,
+           size: state.size, dropped };
 }
 
 // One row a week, anchored on the WEEKLY SPECIALS SCRAPE. Australian
@@ -1222,7 +1261,13 @@ function paintStoreGap() {
   $('sgMethod').innerHTML =
     `The <strong>${p.size} products priced at both stores</strong>, replayed back through every recorded ` +
     `price move to ${fmtDay(String(p.start).slice(0, 10))}. Same products in every row, so nothing here can ` +
-    `move except prices. Items only one store sells are excluded - there is nothing to compare.`;
+    `move except prices. Every line is priced at the <strong>same quantity</strong> at both stores &mdash; ` +
+    `by weight, by volume or by the piece. Items only one store sells are excluded, and so are ` +
+    (p.dropped
+      ? `<strong>${p.dropped}</strong> where neither store publishes a size to match on (mostly loose produce
+         priced per item at one store and per kilo at the other) &mdash; setting those pack-against-pack was
+         comparing a 10-bag box of tea with an 80-bag one.`
+      : `any where neither store publishes a size to match on.`);
 
   $('sgTiles').innerHTML = `
     <div class="sg-tile"><div class="l">Cheaper today</div><div class="n ${wcls}">${winner}</div>
@@ -1296,9 +1341,9 @@ function paintGapItems(q) {
       ? ` title="Same-quantity comparison. On the shelf: ${fmt(x.packWw)} at Woolworths for a pack this size, ${fmt(x.packCo)} at Coles for theirs."`
       : '';
     const head = idx === firstUnquoted && firstUnquoted > 0
-      ? `<p class="sg-group-note">Neither store lists a size for these, so they can only be
-           compared pack against pack &mdash; and the two packs may not hold the same amount.
-           Ranked among themselves, below the rows that carry a real unit.</p>`
+      ? `<p class="sg-group-note">These are priced at the same quantity at both stores, but carry no
+           count to quote a per-piece figure from, so the pack price is shown. Ranked among themselves,
+           below the rows that carry a unit.</p>`
       : '';
     return head + `<div class="sg-item">
       <span class="nm" title="${escapeHtml(x.name)}">${escapeHtml(shortName(x.name))}</span>
