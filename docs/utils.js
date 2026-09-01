@@ -26,14 +26,14 @@ function escAttr(s) {
 // honours the line breaks (white-space: pre-line).
 const TOTALS_RULE_TIP =
   'Both store totals always cover exactly the same items, so neither store is ' +
-  'flattered by what it happens to stock.\n\n' +
+  'favored by what it happens to stock.\n\n' +
   '• Every row counts as the price shown × its Qty.\n\n' +
   '• Per-kg categories count at their RATE, not their pack price: $10/kg × 1kg ' +
   '= $10, whether that store sells it in 500g trays or one 2kg bag. A store is ' +
   'never made to look expensive just for selling in bulk.\n\n' +
   '• An item only ONE store sells still counts in BOTH totals, priced at what ' +
   "you'd really pay for it. Dropping it from the other total would make that " +
-  'store look cheaper purely for not stocking it.\n\n' +
+  'store look cheaper simply for not stocking it.\n\n' +
   'The main page and your basket apply these same three rules, so their totals match.';
 
 // Display name for a product. The stored list_item keeps its "Woolworths "
