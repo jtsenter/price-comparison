@@ -68,4 +68,26 @@ assert(/\.tabs-row-cols \{[^}]*flex-shrink: 0/.test(css),
   'the row buttons must not shrink into the strip');
 ok('the row buttons stay out of the strip rather than overlapping it');
 
+// ── New product belongs on the FILTER row, not beside the tabs ──────────────
+// It is ~138px wide, and beside the tabs that width came straight out of the
+// strip - which is what pushed the eleventh category off the end. The filter
+// row has spare width at its right; the tabs row did not. Put it back and the
+// strip goes ~50px over again.
+const html = fs.readFileSync(path.join(__dirname, '..', 'docs', 'index.html'), 'utf8');
+const tabsRow = /<div class="tabs-row">[\s\S]*?\n  <\/div>/.exec(html);
+assert(tabsRow, '.tabs-row block not found in index.html');
+assert(!/newProductBtn/.test(tabsRow[0]),
+  'New product must not sit in the tabs row - it eats the category strip width');
+const filterRow = /<div id="priorityFilter"[\s\S]*?\n  <\/div>/.exec(html);
+assert(filterRow && /id="newProductBtn"/.test(filterRow[0]),
+  'New product must live on the filter row');
+// Outside .priority-pills on purpose: that container is display:none on a
+// phone, and the button hides itself separately.
+const pills = /<div class="priority-pills">[\s\S]*?\n    <\/div>/.exec(filterRow[0]);
+assert(pills && !/newProductBtn/.test(pills[0]),
+  'New product must sit outside .priority-pills, which is display:none on a phone');
+assert(/#newProductBtn \{[^}]*margin-left: auto/.test(css),
+  'New product must be pinned to the far right of the filter row');
+ok('New product sits hard right on the filter row, clear of the category strip');
+
 console.log(`\ncategory_tabs_selfcheck: ${n} checks passed`);

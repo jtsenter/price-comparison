@@ -912,18 +912,20 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
    (moved here from the site header - it configures the table, so it sits with
    the table). The chooser keeps its header ids so app.js wiring is untouched. */
 .tabs-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-/* Wrap rather than scroll, on desktop only.
-   Nothing here overlaps - .category-tabs is a flex:1 scroller and the buttons
-   are flex-shrink:0 beside it - but the strip only gets the width the buttons
-   leave, and with 11 categories that is ~50px short at 1265px. The last chip
-   ("Other") was therefore clipped at the scroller's own edge, and since the
-   New product button starts 8px later it read as the button covering it. The
-   button has not moved since it was added; the category list outgrew the strip.
-   A horizontal scroller with no fade and no scrollbar (scrollbar-width:none
-   below) gives no hint the rest is there, so wrapping is the honest fix: every
-   category visible, at the cost of one extra ~33px line and only when it
-   actually overflows. The phone keeps the swipeable single line, where vertical
-   space is scarcer and sideways swiping is the expected gesture. */
+/* Wrap rather than scroll, on desktop only - as a backstop, not a layout.
+   Nothing here ever overlapped: .category-tabs is a flex:1 scroller and the
+   buttons are flex-shrink:0 beside it. But the strip only gets the width those
+   buttons leave, and with New product among them 11 categories ran ~50px past
+   it at 1265px, so the last chip was clipped at the scroller's own edge - which
+   read as the button covering it, since the button started 8px later.
+   New product now lives on the filter row instead, which returns ~138px here
+   and puts the strip comfortably back on one line. This rule stays as the
+   backstop: a scroller with no scrollbar (scrollbar-width:none below) and no
+   fade gives no hint that anything is off-edge, so if the category list grows
+   past the width again it must wrap into view rather than silently clip. It
+   costs a second row only when there is genuinely no room, never otherwise.
+   The phone keeps the swipeable single line, where vertical space is scarcer
+   and sideways swiping is the expected gesture. */
 .tabs-row .category-tabs {
   flex: 1; min-width: 0; margin-bottom: 0;
   flex-wrap: wrap; overflow-x: visible; row-gap: 6px;
@@ -934,9 +936,13 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
    6px 8px) - same row, mismatched box height even with align-items:center.
    Pin it to match, and tint it: it is the one CREATE action in a row of
    ghost view-toggles, so it should read as different, not just misaligned. */
+/* Hard right of the filter row. margin-left:auto rather than a spacer element,
+   so it stays pinned however many filter pills or custom lists precede it. */
 #newProductBtn {
   height: 29px;
   padding: 0 14px;
+  margin-left: auto;
+  flex-shrink: 0;
   background: var(--ww-light);
   border-color: color-mix(in srgb, var(--ww) 35%, transparent);
   color: var(--ww);
