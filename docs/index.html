@@ -22,7 +22,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=166" />
+  <link rel="stylesheet" href="style.css?v=167" />
 </head>
 <body>
 
@@ -136,6 +136,20 @@
       <span id="listPills" class="list-pills"></span>
       <button class="priority-pill" id="perkgDevBtn" type="button" title="Cycle: show everything / only $/kg groups / hide $/kg groups"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16.5c0 1.5 1.5 3 3.5 3s3.5-1.5 3.5-3L19.5 9z"/><path d="M1 16.5c0 1.5 1.5 3 3.5 3s3.5-1.5 3.5-3L4.5 9z"/><path d="M12 3v18"/><path d="M3 7h18"/><path d="M19.5 9 12 5 4.5 9"/></svg> <span class="perkg-lbl">$/kg</span></button>
     </div>
+    <!-- The only way in to a blank editor. Everything else edits something that
+         already exists, so a product the scraper has never seen had no route
+         into the app at all.
+         It lives on THIS row, hard right, rather than beside the category tabs:
+         there it ate ~138px of the tabs' width, which is what pushed the last
+         category off the end of the strip. This row has spare width at the
+         right; the tabs row did not. Outside .priority-pills on purpose - that
+         container is display:none on a phone, and this button hides itself
+         separately (see the 700px rule). -->
+    <button class="btn btn-ghost" id="newProductBtn"
+            title="Add a product the app doesn't track yet - paste its store links">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New product
+    </button>
   </div>
 
   <!-- Category filter tabs + table controls (columns chooser lives here, next to
@@ -143,14 +157,6 @@
   <div class="tabs-row">
     <span class="filter-row-label" style="align-self:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M4 20h16"/><path d="M4 14h16"/><path d="M4 8h16"/></svg>Category</span>
     <div id="categoryTabs" class="category-tabs"></div>
-    <!-- The only way in to a blank editor. Everything else edits something that
-         already exists, so a product the scraper has never seen had no route
-         into the app at all. -->
-    <button class="btn btn-ghost tabs-row-cols" id="newProductBtn"
-            title="Add a product the app doesn't track yet - paste its store links">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      New product
-    </button>
     <button class="btn btn-ghost btn-icon view-toggle-btn tabs-row-cols" id="viewToggleBtn" title="Switch to card view">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
     </button>
