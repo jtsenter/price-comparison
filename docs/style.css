@@ -912,8 +912,23 @@ a.vg-pv-name:hover { color: var(--accent); text-decoration: underline; }
    (moved here from the site header - it configures the table, so it sits with
    the table). The chooser keeps its header ids so app.js wiring is untouched. */
 .tabs-row { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
-.tabs-row .category-tabs { flex: 1; min-width: 0; margin-bottom: 0; }
-.tabs-row-cols { flex-shrink: 0; }
+/* Wrap rather than scroll, on desktop only.
+   Nothing here overlaps - .category-tabs is a flex:1 scroller and the buttons
+   are flex-shrink:0 beside it - but the strip only gets the width the buttons
+   leave, and with 11 categories that is ~50px short at 1265px. The last chip
+   ("Other") was therefore clipped at the scroller's own edge, and since the
+   New product button starts 8px later it read as the button covering it. The
+   button has not moved since it was added; the category list outgrew the strip.
+   A horizontal scroller with no fade and no scrollbar (scrollbar-width:none
+   below) gives no hint the rest is there, so wrapping is the honest fix: every
+   category visible, at the cost of one extra ~33px line and only when it
+   actually overflows. The phone keeps the swipeable single line, where vertical
+   space is scarcer and sideways swiping is the expected gesture. */
+.tabs-row .category-tabs {
+  flex: 1; min-width: 0; margin-bottom: 0;
+  flex-wrap: wrap; overflow-x: visible; row-gap: 6px;
+}
+.tabs-row-cols { flex-shrink: 0; align-self: center; }
 /* .btn's default padding (8px 16px, text height) makes New Product ~5px
    taller than its icon-only neighbours (view toggle, columns - .btn-icon's
    6px 8px) - same row, mismatched box height even with align-items:center.
@@ -2520,6 +2535,9 @@ td.priority-cell { text-align: center; }
   /* The "Category" row label is desktop-only - on a phone it just steals width
      from the scrolling category tabs. (Desktop keeps it as a section cue.) */
   .tabs-row .filter-row-label { display: none; }
+  /* Back to one swipeable line here: eleven chips wrapped would cost three rows
+     of a phone screen, and sideways is the expected gesture on this row. */
+  .tabs-row .category-tabs { flex-wrap: nowrap; overflow-x: auto; }
   /* Hot Deals has no search box, so once the nav cluster/options/trail button
      are hidden above, its header row is just an idle home+logo - the bottom
      tab bar already covers navigation. Drop the whole row; the scrape-progress

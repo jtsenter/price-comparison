@@ -62,6 +62,7 @@ jobs:
           node scripts/list_visibility_selfcheck.js
           node scripts/search_selfcheck.js
           node scripts/basket_rate_selfcheck.js
+          node scripts/category_tabs_selfcheck.js
 
       # pwsh is preinstalled on ubuntu-latest. The watchdog's decision function
       # is pure, so it checks out fine off-Windows; nothing here enumerates a
