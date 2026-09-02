@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=167" />
+  <link rel="stylesheet" href="style.css?v=168" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -208,9 +208,10 @@
     @container (min-width: 500px) and (max-width: 664px) {
       .bws-card:nth-child(n + 3) { display: none; }
     }
-    /* Row 5 is the add-to-basket button; `1fr` on the "why" row pushes it to the
-       bottom of every card so the buttons line up across the row even when one
-       card's fine print runs to two lines. */
+    /* Row 3 is the add-to-basket button, which an outside-shop card omits (it
+       cannot go in a Woolworths/Coles basket). The row is `auto`, so that card
+       simply ends after its middle band; the grid still stretches every card in
+       the row to one height, so the remaining buttons stay aligned. */
     .bws-card {
       /* THREE rows now: the price line (chip + price + name), the middle band
          (picture beside the %-off and its note), and the button. The name moved
@@ -233,10 +234,6 @@
        Desktop was immune only because minmax(215px,...) supplies an explicit
        minimum, so this looked like a mobile-only bug. */
     .bws-top { display: flex; align-items: center; gap: 8px; min-width: 0; }
-    .bws-tag {
-      font-size: 10.5px; font-weight: 900; letter-spacing: 0.6px;
-      padding: 3px 7px; border-radius: 5px; white-space: nowrap;
-    }
     .bws-price {
       display: flex; align-items: center; gap: 5px; flex: none;
       font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums;
@@ -287,22 +284,26 @@
     .bws-add.in {
       background: var(--green-light); border-color: var(--green); color: #047857;
     }
-    /* Colour carries the verdict, so it must survive being the only cue. */
-    .bws-card.stock { border-left-color: var(--green); }
-    .bws-card.stock .bws-tag { background: var(--green-light); color: #047857; }
-    .bws-card.stock .bws-head-line { color: #047857; }
-    .bws-card.buy { border-left-color: var(--ww); }
-    .bws-card.buy .bws-tag { background: var(--ww-light); color: var(--ww); }
-    .bws-card.buy .bws-head-line { color: var(--ww); }
-    .bws-card.stock .bws-off b, .bws-card.stock .bws-off-lbl { color: #047857; }
-    .bws-card.buy   .bws-off b, .bws-card.buy   .bws-off-lbl { color: var(--ww); }
+    /* Colour names the SHOP, not the verdict. It used to carry stock-up-vs-buy,
+       but both of those are greens, so every Coles win on this panel wore a
+       green edge - the same green the W chip uses - while its own chip two
+       centimetres away was red. The edge is what the eye takes first, so it was
+       the loudest thing on the card and the only wrong one.
+       One accent per card: edge, the %-off figure and the note all take the
+       store's colour together, so nothing is left green beside a red edge. */
+    .bws-card.e-ww    { border-left-color: var(--ww); }
+    .bws-card.e-co    { border-left-color: var(--coles); }
+    .bws-card.e-ww    .bws-head-line, .bws-card.e-ww .bws-off b, .bws-card.e-ww .bws-off-lbl { color: var(--ww); }
+    .bws-card.e-co    .bws-head-line, .bws-card.e-co .bws-off b, .bws-card.e-co .bws-off-lbl { color: var(--coles); }
+    /* A tie has no winner, so it gets no store colour - matching the chip, which
+       is also dropped on a tie rather than picking a store arbitrarily. */
+    .bws-card.e-tie   { border-left-color: var(--border-strong); }
+    .bws-card.e-tie   .bws-head-line, .bws-card.e-tie .bws-off b, .bws-card.e-tie .bws-off-lbl { color: var(--text-mid); }
     /* Outside shops get their own band - indigo, the colour the ➕ column already
        uses for them - so a card that sends you somewhere else never reads as a
        supermarket deal at a glance. */
-    .bws-card.else { border-left-color: var(--third, #4338CA); }
-    .bws-card.else .bws-tag { background: #E0E7FF; color: #3730A3; }
-    .bws-card.else .bws-head-line { color: #3730A3; }
-    .bws-card.else .bws-off b, .bws-card.else .bws-off-lbl { color: #3730A3; }
+    .bws-card.e-third { border-left-color: var(--third, #4338CA); }
+    .bws-card.e-third .bws-head-line, .bws-card.e-third .bws-off b, .bws-card.e-third .bws-off-lbl { color: #3730A3; }
 
     @media (max-width: 700px) {
       .bws { margin: 12px 14px 0; padding: 12px 13px 13px; }
@@ -611,10 +612,23 @@
     .dm-badge.low { background: #FEF3C7; color: #92400E; }
     .dm-badge.pct { background: #ECFDF5; color: var(--green); }
     .dm-mid { display: flex; align-items: baseline; gap: 8px; margin-top: 8px; }
-    .dm-price { font-size: 20px; font-weight: 800; color: var(--green); letter-spacing: -0.5px; text-decoration: none; }
-    .dm-vs { font-size: 12px; color: var(--text-soft); flex: 1; min-width: 0; }
-    .dm-vs s { color: var(--coles); }
-    .dm-watch { background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.35; padding: 0 2px; line-height: 1; }
+    /* The winning price wears its STORE's colour and the alternative is plain
+       text - the same rule the prices page uses (.mc-price.cheaper / .cheaper-c).
+       This card used to paint every winner green and every loser Coles-red
+       regardless of which store either was, so a Coles win showed a green price
+       beside a red C chip, and its Woolworths alternative was printed in Coles
+       red. Two of the three colours on the row were naming the wrong shop. */
+    .dm-price { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; text-decoration: none; }
+    .dm-card.ww .dm-price { color: var(--ww); }
+    .dm-card.co .dm-price { color: var(--coles); }
+    .dm-alt {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 14px; font-weight: 700; color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    /* Pushes the eye to the right edge whether or not there is an alternative to
+       show - .dm-vs used to do this with flex:1 and took the job with it. */
+    .dm-watch { margin-left: auto; background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.35; padding: 0 2px; line-height: 1; }
     .dm-watch.active { opacity: 1; }
     /* The History button overlays the right of the bar rather than stacking
        under it - as a block it doubled the card's bar height (31px -> 57px) and
@@ -1346,7 +1360,16 @@ function renderBwsPanel(priorities, exclusions, tune) {
     const imgHtml = bImg
       ? `<img class="bws-img" src="${bImg}" alt="" loading="lazy" onerror="this.style.display='none'" />`
       : '<span class="bws-img bws-img-ph"></span>';
-    return `<div class="bws-card ${c.verdict}" data-item="${escAttr(name)}"
+    // The coloured left edge names the SHOP you would buy this at, not how good
+    // the deal is. Both supermarket verdicts were greens (--green for STOCK UP,
+    // --ww for BUY), so a Coles win flew a green edge with a red C chip beside
+    // it - and the edge is the one thing on the card that is read at a glance,
+    // so it was saying "Woolworths" for a Coles price. A tie keeps the neutral
+    // edge, for the same reason it gets no chip: nobody won.
+    const edge = c.verdict === 'else' ? 'e-third'
+      : c.tied ? 'e-tie'
+      : c.store === 'coles' ? 'e-co' : 'e-ww';
+    return `<div class="bws-card ${c.verdict} ${edge}" data-item="${escAttr(name)}"
                  role="button" tabindex="0"
                  title="Open the price history for ${escAttr(shortName(name))}">
       <!-- No verdict tag. STOCK UP / BUY / ELSEWHERE on every card restated
@@ -1377,10 +1400,16 @@ function renderBwsPanel(priorities, exclusions, tune) {
           <span class="bws-head-line">${esc(c.headline)}</span>
         </span>
       </span>
-      <button type="button" class="bws-add${has ? ' in' : ''}" data-add="${escAttr(name)}"
+      <!-- No basket button on an outside-shop card. The basket is a Woolworths
+           and Coles list - it prices every line at those two stores and nowhere
+           else - so adding a Priceline or ALDI item would put a product in the
+           trolley at a price the trolley cannot honour, and the basket total
+           would quietly bill it at the supermarket price the card is beating.
+           The card still opens its price history on tap. -->
+      ${c.verdict === 'else' ? '' : `<button type="button" class="bws-add${has ? ' in' : ''}" data-add="${escAttr(name)}"
               title="${has ? 'Remove from basket' : 'Add to basket'}">
         ${has ? '✓ In basket' : '＋ Add to basket'}
-      </button>
+      </button>`}
     </div>`;
   }).join('');
 }
@@ -1762,14 +1791,25 @@ function renderDealsMobile(sorted, exclusions, overrides) {
       : '<div class="dm-img dm-img-ph"></div>';
 
     const otherPrice = deal.otherPrice;
+    // Words removed, not information. The badge already states how far under its
+    // usual price this is, so the sentence beneath it said the same thing again
+    // in dollars and then named a store the chip beside it names anyway:
+    // "Save $1.75 vs usual $4.25 · vs $3.50 at WW" is eleven words and four
+    // numbers on a phone, for one fact (this is cheap) and one number that
+    // matters (what the other store wants).
     const badge = deal.isAllTimeLow
-      ? '<span class="dm-badge low">🏆 All-time low</span>'
-      : `<span class="dm-badge pct">${Math.round(deal.dropPct * 100)}% below usual</span>`;
-    // Primary line: $ saved vs the usual price (why it's a deal). Secondary: cross-store gap.
-    const saveStr = deal.saveAmount > 0 ? `Save ${fmt(deal.saveAmount)}${kgSuffix} vs usual ${fmt(deal.typical)}${kgSuffix}` : `Usually ${fmt(deal.typical)}${kgSuffix}`;
-    const vs = (otherPrice != null)
-      ? `${saveStr} · vs <s>${fmt(otherPrice)}${kgSuffix}</s> at ${isW ? 'Coles' : 'WW'}`
-      : saveStr;
+      ? '<span class="dm-badge low" title="The cheapest price ever recorded for this product">🏆 Lowest ever</span>'
+      : `<span class="dm-badge pct" title="How far below its usual price this is">−${Math.round(deal.dropPct * 100)}%</span>`;
+    // The alternative, shown rather than described: the other store's own chip
+    // and its price. The gap between the two numbers IS the cross-store saving,
+    // so stating it in words was drawing the reader's own subtraction for them.
+    // NOT struck through - at this size a line through the digits was the
+    // difference between reading the number and guessing it, and the chip plus
+    // the plain (uncoloured) text already say whose price it is and that it did
+    // not win.
+    const alt = otherPrice != null
+      ? `<span class="dm-alt"><span class="store-chip ${isW ? 'coles' : 'ww'} sm">${isW ? 'C' : 'W'}</span>${fmt(otherPrice)}${kgSuffix}</span>`
+      : '';
 
     const _ts = getTrendSeries(item);
     const bar = buildPriceBar(item.list_item, _ts.past.map(p => ({ price: p })), _ts.current) || '';
@@ -1801,7 +1841,7 @@ function renderDealsMobile(sorted, exclusions, overrides) {
       <div class="dm-mid">
         <span class="store-chip ${isW ? 'ww' : 'coles'} sm">${isW ? 'W' : 'C'}</span>
         ${priceLink}
-        <span class="dm-vs">${vs}</span>
+        ${alt}
         <button class="item-watch-btn dm-watch${watched ? ' active' : ''}" data-item="${safe}" title="${watched ? 'Remove from watchlist' : 'Add to watchlist'}">👁</button>
       </div>
       ${bar ? `<div class="dm-bar">${bar}</div>` : ''}`;

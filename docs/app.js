@@ -5985,7 +5985,11 @@ function renderMobileCards(items, data) {
     // table's identical guard for why this matters for single-store items.
     const wwCheaper = !!(ww && co) && cheaper === 'woolworths';
     const coCheaper = !!(ww && co) && cheaper === 'coles';
-    const saving    = savingAmount(item);
+    // No "Save $X" line under the winning price. Both prices are side by side
+    // with the cheaper one in its store's colour, so the saving is the visible
+    // difference between two numbers already on the card - and it only ever
+    // appeared when a store actually won, so it read as a feature some products
+    // had and others didn't rather than as arithmetic.
     const borderCls = wwCheaper ? ' cheaper-ww' : coCheaper ? ' cheaper-coles' : '';
 
     const isSelected = _selectedItems.has(item.list_item);
@@ -6004,8 +6008,6 @@ function renderMobileCards(items, data) {
     const watchBtn = isWatchedMC
       ? `<button class="mc-watch-btn active" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Remove from watchlist">👁</button>`
       : `<button class="mc-watch-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Add to watchlist">👁</button>`;
-
-    const savingTag = saving && saving > 0 ? `<span class="mc-saving">Save ${fmt(saving)}</span>` : '';
 
     if (compact) {
       // Single-line row: fire, SHORT name, W chip + price, C chip + price (cheaper bold).
@@ -6041,14 +6043,12 @@ function renderMobileCards(items, data) {
           <div class="mc-store-label ww-col"><span class="store-chip sm ww">W</span> Woolworths</div>
           <div class="mc-price${wwCheaper ? ' cheaper' : ''}">${ww ? fmt(ww.price) : '-'}</div>
           ${wwUnit ? `<div class="mc-unit">${wwUnit}</div>` : ''}
-          ${wwCheaper && saving > 0 ? `<div class="mc-save-line">Save ${fmt(saving)}</div>` : ''}
           ${multiBuyBadge(ww)}
         </div>
         <div class="mc-store-col">
           <div class="mc-store-label coles-col"><span class="store-chip sm coles">C</span> Coles</div>
           <div class="mc-price${coCheaper ? ' cheaper-c' : ''}">${co ? fmt(co.price) : '-'}</div>
           ${coUnit ? `<div class="mc-unit">${coUnit}</div>` : ''}
-          ${coCheaper && saving > 0 ? `<div class="mc-save-line">Save ${fmt(saving)}</div>` : ''}
           ${multiBuyBadge(co)}
         </div>
       </div>`;

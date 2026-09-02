@@ -2893,11 +2893,6 @@ td.priority-cell { text-align: center; }
   .mc-price.cheaper   { color: var(--ww); }
   .mc-price.cheaper-c { color: var(--coles); }
   .mc-unit { font-size: 11px; color: #6B7280; }
-  /* "Save $X" now lives under the cheaper store's price (was a lonely badge once
-     the Weekly tag was dropped from the detailed card). */
-  .mc-save-line { font-size: 12px; font-weight: 800; color: var(--green); margin-top: 3px; }
-
-  .mc-saving { font-size: 13px; font-weight: 700; color: var(--green); }
 
   /* Toolbar: sort chips (left) + view toggle (right) */
   .mc-toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }

@@ -267,7 +267,13 @@ console.log('buy_wait_selfcheck: outside-shop cards OK');
 // card keeps a coloured left edge (supermarket vs outside shop) and the store
 // chip beside the price, so nothing that lived ONLY in the tag is gone.
 {
-  const hd = fs.readFileSync(path.join(__dirname, '..', 'docs', 'hot-deals.html'), 'utf8');
+  // Line endings normalised because assertions below match literal "\n" against
+  // this text. The repo stores LF, but core.autocrlf=true checks out CRLF on
+  // Windows, so those matches silently found nothing there - the block-boundary
+  // assertion compared an index against -1 and passed or failed on which
+  // line ending the working tree happened to hold, not on the CSS.
+  const hd = fs.readFileSync(path.join(__dirname, '..', 'docs', 'hot-deals.html'), 'utf8')
+    .replace(/\r\n/g, '\n');
   assert(!/class="bws-tag"/.test(hd), 'per-card verdict tags must be gone');
   assert(!/BWS_TAG\[/.test(hd), 'nothing may still look up a per-card tag label');
   // One line on a phone. "⭐ What to do this week" wrapped to two.
@@ -419,3 +425,81 @@ console.log('buy_wait_selfcheck: hot-deals chrome + per-store cap OK');
     'the note must not print the price a third time or re-name the shop');
 }
 console.log('buy_wait_selfcheck: all-time-low wording OK');
+
+// ── Colour names the STORE, and words give way to chips ─────────────────────
+{
+  const hd = fs.readFileSync(path.join(__dirname, '..', 'docs', 'hot-deals.html'), 'utf8')
+    .replace(/\r\n/g, '\n');
+  const app = fs.readFileSync(path.join(__dirname, '..', 'docs', 'app.js'), 'utf8')
+    .replace(/\r\n/g, '\n');
+
+  // A top-pick card's left edge is the SHOP, not the verdict. Both verdicts were
+  // greens (--green for STOCK UP, --ww for BUY), so every Coles win wore a green
+  // edge next to its own red C chip - and the edge is what the eye takes first.
+  assert(/const edge = c\.verdict === 'else' \? 'e-third'/.test(hd),
+    'the card edge must be chosen from the store, not the verdict');
+  assert(/c\.store === 'coles' \? 'e-co' : 'e-ww'/.test(hd),
+    'a Coles win must take the Coles edge');
+  assert(/\.bws-card\.e-co\s*\{ border-left-color: var\(--coles\); \}/.test(hd),
+    'the Coles edge must be the Coles colour');
+  assert(/\.bws-card\.e-ww\s*\{ border-left-color: var\(--ww\); \}/.test(hd),
+    'the Woolworths edge must be the Woolworths colour');
+  // The verdict must no longer paint anything, or a Coles card keeps a green
+  // percentage beside its red edge.
+  assert(!/\.bws-card\.(stock|buy)\b/.test(hd),
+    'no rule may still colour a card by its verdict');
+  // A tie has no winner, so it picks no store colour - same reason it gets no chip.
+  assert(/c\.tied \? 'e-tie'/.test(hd), 'a tie must not be painted as a store win');
+
+  // An outside-shop card offers no basket button: the basket prices every line
+  // at Woolworths or Coles, so a Priceline item would be billed at the very
+  // supermarket price the card exists to beat.
+  assert(/\$\{c\.verdict === 'else' \? '' : `<button type="button" class="bws-add/.test(hd),
+    'an outside-shop card must not render an add-to-basket button');
+
+  // The mobile deal card: the sentence is gone, and with it the second telling
+  // of the badge's own number. Scoped to renderDealsMobile - the DESKTOP table
+  // keeps its "Save vs usual" column, which has a header to explain itself and
+  // a whole row of width to say it in.
+  // Comments stripped: these assert on what the function RENDERS, and the
+  // comment explaining why the old sentence went quotes the old sentence.
+  // Without this, documenting the fix is what breaks the check.
+  const _dm = hd.slice(hd.indexOf('function renderDealsMobile'));
+  const dm = _dm.slice(0, _dm.indexOf('\nfunction ')).replace(/^\s*\/\/.*$/gm, '');
+  assert(dm.length > 500, 'renderDealsMobile not found - the checks below would pass vacuously');
+  assert(!/vs usual/.test(dm), 'the "Save $X vs usual $Y" sentence must be gone');
+  // Matched as markup and as a rule, not as the bare word - the CSS comment that
+  // records what .dm-vs used to do is allowed to name it.
+  assert(!/class="dm-vs"|\.dm-vs\b\s*(s\s*)?\{/.test(hd),
+    'the wordy vs-line and its styling must be gone');
+  assert(!/at \$\{isW \? 'Coles' : 'WW'\}/.test(dm),
+    'the store name must come from the chip, not be spelled out');
+  assert(/dm-badge pct[^`]*>−\$\{Math\.round\(deal\.dropPct \* 100\)\}%/.test(dm),
+    'the badge must be a bare percentage, not "N% below usual"');
+  // Struck-out digits at 12px were the thing that could not be read.
+  assert(!/<s>/.test(dm), 'the alternative price must not be struck through');
+  assert(/class="dm-alt"><span class="store-chip \$\{isW \? 'coles' : 'ww'\}/.test(dm),
+    'the alternative must be shown as the OTHER store\'s chip plus its price');
+
+  // Winner in its store's colour, alternative in plain text - the rule the
+  // prices page already uses. This card painted every winner green and every
+  // loser Coles-red whichever store each actually was.
+  assert(!/\.dm-price \{[^}]*color: var\(--green\)/.test(hd),
+    'the winning price must not be green regardless of store');
+  assert(/\.dm-card\.ww \.dm-price \{ color: var\(--ww\); \}/.test(hd)
+      && /\.dm-card\.co \.dm-price \{ color: var\(--coles\); \}/.test(hd),
+    'the winning price must wear its own store colour');
+  assert(/\.dm-alt \{[^}]*color: var\(--text\)/.test(hd),
+    'the alternative price must be plain text, like the prices page loser');
+  // The watch button lost its flex:1 spacer when .dm-vs went.
+  assert(/\.dm-watch \{ margin-left: auto/.test(hd),
+    'the watch button must still be pushed to the right edge');
+
+  // The prices page mobile card: no "Save $X" line under the winner. Both
+  // prices sit side by side with the cheaper one coloured, so the saving is the
+  // difference between two numbers already on screen.
+  assert(!/mc-save-line|mc-saving/.test(app), 'the mobile save line must be gone from the card');
+  const css = fs.readFileSync(path.join(__dirname, '..', 'docs', 'style.css'), 'utf8');
+  assert(!/mc-save-line|mc-saving/.test(css), 'its styling must go with it');
+}
+console.log('buy_wait_selfcheck: store colours + wordless deal card OK');
