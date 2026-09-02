@@ -417,11 +417,17 @@ function openPriceHistoryModal(item, opts) {
   const kgR = (opts && opts.packPrices)
     ? { perKg: false, ww: 1, coles: 1, groupLabel: null }
     : histKgRatios(item);
-  // Group members show a "GroupLabel - Product name" title so it's clear this is one
-  // variant's history within the per-kg comparison, not the whole group's - a group can
-  // mix WW-only and Coles-only products (e.g. "Lamb Mince"), so a single member's history
-  // can legitimately show nothing for the store the group's headline price came from.
-  const titleName = kgR.groupLabel ? `${kgR.groupLabel} - ${stripWW(item.list_item)}` : stripWW(item.list_item);
+  // ONE display name, the same one every other surface uses for this product -
+  // the card that was tapped, the table row, the basket line.
+  // This used to prefix a group MEMBER's history with the group's label. On the
+  // prices page that never fired (it opens the GROUP row, which has no member to
+  // disambiguate), so the two pages titled the same chart differently and Hot
+  // Deals always drew the long straw: "Porterhouse Steak" there against
+  // "Porterhouse Steak - Beef Porterhouse Steak & Butter" here. And because a
+  // group label is very often a prefix of its members' names, the long form was
+  // usually saying one thing twice - "Rexona Men 48hr Deodorant - Rexona Men
+  // 48hr Deodorant Stick Sport Defence".
+  const titleName = shortName(item.list_item);
   // A group's history carries its own unit label (per 100 pcs, $/kg, or none for
   // a pack-price category); fall back to the $/kg flag for a member's history.
   const unitLbl = item._unitLabel || (kgR.perKg ? '$/kg' : '');

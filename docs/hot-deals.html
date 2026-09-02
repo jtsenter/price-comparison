@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=168" />
+  <link rel="stylesheet" href="style.css?v=169" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -621,11 +621,24 @@
     .dm-price { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; text-decoration: none; }
     .dm-card.ww .dm-price { color: var(--ww); }
     .dm-card.co .dm-price { color: var(--coles); }
+    /* The dearer store, greyed - chip included. Plain black sat too close in
+       weight to the winner for a glance to separate them, and a full-colour
+       store logo beside it kept claiming attention for the price you are NOT
+       being told to pay. Greyscale rather than a swap to a grey chip, so the
+       W/C letter and the logo's shape survive; only the brand colour goes.
+       margin-left because the flex gap that separates the winner's own chip
+       from its price (8px) is far too tight to also serve as the boundary
+       between two different stores' prices. */
     .dm-alt {
       display: inline-flex; align-items: center; gap: 4px;
-      font-size: 14px; font-weight: 700; color: var(--text);
+      margin-left: 10px;
+      font-size: 14px; font-weight: 700; color: var(--text-soft);
       font-variant-numeric: tabular-nums;
     }
+    .dm-alt .store-chip { filter: grayscale(1); opacity: 0.55; }
+    /* The unit, on either price: never bold, never the store's colour. */
+    .dm-suf { font-weight: 500; }
+    .dm-price .dm-suf { color: var(--text); }
     /* Pushes the eye to the right edge whether or not there is an alternative to
        show - .dm-vs used to do this with flex:1 and took the job with it. */
     .dm-watch { margin-left: auto; background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.35; padding: 0 2px; line-height: 1; }
@@ -829,7 +842,7 @@
 <script src="name_map.js?v=55"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="utils.js?v=150"></script>
-<script src="history-modal.js?v=9"></script>
+<script src="history-modal.js?v=10"></script>
 <script>
 if ('serviceWorker' in navigator) {
   const hadController = !!navigator.serviceWorker.controller;
@@ -1807,8 +1820,17 @@ function renderDealsMobile(sorted, exclusions, overrides) {
     // difference between reading the number and guessing it, and the chip plus
     // the plain (uncoloured) text already say whose price it is and that it did
     // not win.
+    // The unit is not part of the number. "/kg" was inheriting the price's
+    // colour and its 800 weight, so half of "$6.90/kg" was shouting a store
+    // colour at you about a measurement. It stays plain either side.
+    const suf = kgSuffix ? `<span class="dm-suf">${kgSuffix}</span>` : '';
+    // Price and unit are wrapped together because .dm-alt is a flex container:
+    // a bare text node beside the suffix span makes them two flex items, so the
+    // 4px gap meant to separate the CHIP from the price landed between the
+    // number and its unit as well - "$9.70 /kg" against the winner's "$6.90/kg".
     const alt = otherPrice != null
-      ? `<span class="dm-alt"><span class="store-chip ${isW ? 'coles' : 'ww'} sm">${isW ? 'C' : 'W'}</span>${fmt(otherPrice)}${kgSuffix}</span>`
+      ? `<span class="dm-alt"><span class="store-chip ${isW ? 'coles' : 'ww'} sm">${isW ? 'C' : 'W'}</span>`
+        + `<span>${fmt(otherPrice)}${suf}</span></span>`
       : '';
 
     const _ts = getTrendSeries(item);
@@ -1818,8 +1840,8 @@ function renderDealsMobile(sorted, exclusions, overrides) {
     const watched = _watchlistHD.has(item.list_item);
     const storeUrl = isW ? (ov.wwUrl || ww?.url) : (ov.colesUrl || co?.url);
     const priceLink = storeUrl
-      ? `<a href="${storeUrl}" target="_blank" rel="noopener" class="price-link dm-price">${fmt(deal.price)}${kgSuffix}</a>`
-      : `<span class="dm-price">${fmt(deal.price)}${kgSuffix}</span>`;
+      ? `<a href="${storeUrl}" target="_blank" rel="noopener" class="price-link dm-price">${fmt(deal.price)}${suf}</a>`
+      : `<span class="dm-price">${fmt(deal.price)}${suf}</span>`;
 
     // Tap-to-add, like the prices page: the card toggles its deal in the basket.
     // Groups go in as the CATEGORY key - the basket prices each store's

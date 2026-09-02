@@ -2877,10 +2877,16 @@ td.priority-cell { text-align: center; }
     display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
 
-  /* Price grid */
-  .mc-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
-  /* Per-kg group card: expand chevron as a third, right-aligned prices-row column */
-  .vg-mobile-card .mc-prices { grid-template-columns: 1fr 1fr auto; align-items: center; }
+  /* Price grid.
+     The third track is the per-kg card's expand chevron, and it is 30px on EVERY
+     card - reserved even where nothing fills it. It used to be `auto`, which is
+     the chevron's width on a group card and zero on a normal one, so the two 1fr
+     tracks were 19px narrower on group cards: scrolling the list, the Coles
+     column stepped left and right depending on which kind of card went past. A
+     fixed gutter costs a normal card 30px it was not using for anything and buys
+     one straight edge down the whole list. */
+  .mc-prices { display: grid; grid-template-columns: 1fr 1fr 30px; gap: 8px; margin-top: 8px; }
+  .vg-mobile-card .mc-prices { align-items: center; }
   .mc-store-col { display: flex; flex-direction: column; gap: 2px; }
   .mc-store-label {
     font-size: 11px; font-weight: 700; text-transform: uppercase;
@@ -2889,9 +2895,13 @@ td.priority-cell { text-align: center; }
   }
   .mc-store-label.ww-col    { color: var(--ww); }
   .mc-store-label.coles-col { color: var(--coles); }
-  .mc-price        { font-size: 18px; font-weight: 700; color: var(--text); }
-  .mc-price.cheaper   { color: var(--ww); }
-  .mc-price.cheaper-c { color: var(--coles); }
+  /* Weight is the second cue after colour: the winner is bold in its store's
+     colour, the dearer store is plain black. Both were 700, so on a card where
+     the eye reads shape before hue the two prices looked equally emphatic and
+     the colour was doing all the work by itself. */
+  .mc-price        { font-size: 18px; font-weight: 500; color: var(--text); }
+  .mc-price.cheaper   { color: var(--ww);    font-weight: 800; }
+  .mc-price.cheaper-c { color: var(--coles); font-weight: 800; }
   .mc-unit { font-size: 11px; color: #6B7280; }
 
   /* Toolbar: sort chips (left) + view toggle (right) */

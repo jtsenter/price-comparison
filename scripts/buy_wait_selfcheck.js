@@ -489,8 +489,20 @@ console.log('buy_wait_selfcheck: all-time-low wording OK');
   assert(/\.dm-card\.ww \.dm-price \{ color: var\(--ww\); \}/.test(hd)
       && /\.dm-card\.co \.dm-price \{ color: var\(--coles\); \}/.test(hd),
     'the winning price must wear its own store colour');
-  assert(/\.dm-alt \{[^}]*color: var\(--text\)/.test(hd),
-    'the alternative price must be plain text, like the prices page loser');
+  // Greyed, chip included - the dearer store should not be claiming attention
+  // with a full-colour logo for the price you are not being told to pay.
+  assert(/\.dm-alt \{[^}]*color: var\(--text-soft\)/.test(hd),
+    'the alternative price must be greyed, not the same black as the winner');
+  assert(/\.dm-alt \.store-chip \{[^}]*grayscale\(1\)/.test(hd),
+    'the alternative\'s store chip must be greyed too, not just its price');
+  assert(/\.dm-alt \{[^}]*margin-left:/.test(hd),
+    'the alternative needs its own gap - the flex gap is the chip-to-price one');
+  // The unit is not part of the number: plain weight, and never a store colour.
+  assert(/\.dm-suf \{ font-weight: 500; \}/.test(hd) && /\.dm-price \.dm-suf \{ color: var\(--text\); \}/.test(hd),
+    'the /kg suffix must be unbolded and uncoloured on the winning price');
+  assert(/const suf = kgSuffix \? `<span class="dm-suf">/.test(dm)
+      && !/\$\{fmt\(deal\.price\)\}\$\{kgSuffix\}/.test(dm),
+    'the suffix must be rendered in its own span, not glued onto the price');
   // The watch button lost its flex:1 spacer when .dm-vs went.
   assert(/\.dm-watch \{ margin-left: auto/.test(hd),
     'the watch button must still be pushed to the right edge');
@@ -499,7 +511,37 @@ console.log('buy_wait_selfcheck: all-time-low wording OK');
   // prices sit side by side with the cheaper one coloured, so the saving is the
   // difference between two numbers already on screen.
   assert(!/mc-save-line|mc-saving/.test(app), 'the mobile save line must be gone from the card');
-  const css = fs.readFileSync(path.join(__dirname, '..', 'docs', 'style.css'), 'utf8');
+  const css = fs.readFileSync(path.join(__dirname, '..', 'docs', 'style.css'), 'utf8')
+    .replace(/\r\n/g, '\n');
   assert(!/mc-save-line|mc-saving/.test(css), 'its styling must go with it');
+
+  // Weight is the second cue after colour. Both prices were 700, so the pair
+  // looked equally emphatic and hue was carrying the whole distinction alone.
+  assert(/\.mc-price\s+\{[^}]*font-weight: 500/.test(css),
+    'the dearer store\'s price must not be bold');
+  assert(/\.mc-price\.cheaper\s+\{[^}]*font-weight: 800/.test(css)
+      && /\.mc-price\.cheaper-c \{[^}]*font-weight: 800/.test(css),
+    'the winning price must be the bold one, in either store');
+
+  // One straight edge down the list. The third track is the per-kg card's
+  // chevron; as `auto` it was 30px there and 0 on a normal card, so the two 1fr
+  // tracks differed by 19px between card types and the Coles column stepped
+  // sideways as the list scrolled past.
+  assert(/\.mc-prices \{[^}]*grid-template-columns: 1fr 1fr 30px/.test(css),
+    'every mobile card must reserve the same third track, not size it to content');
+  assert(!/\.vg-mobile-card \.mc-prices \{[^}]*grid-template-columns/.test(css),
+    'the per-kg card must not override the shared column template');
+
+  // One title for one product, whichever page opened the chart. The prices page
+  // opens the GROUP row and Hot Deals a member, and the member branch used to
+  // prefix the group's label - so the same chart was titled two ways, the Hot
+  // Deals one often repeating itself ("Rexona Men 48hr Deodorant - Rexona Men
+  // 48hr Deodorant Stick Sport Defence").
+  const hm = fs.readFileSync(path.join(__dirname, '..', 'docs', 'history-modal.js'), 'utf8')
+    .replace(/\r\n/g, '\n');
+  assert(/const titleName = shortName\(item\.list_item\);/.test(hm),
+    'the modal must title a product the way the rest of the app names it');
+  assert(!/kgR\.groupLabel \? `\$\{kgR\.groupLabel\} - /.test(hm),
+    'the group-label prefix must be gone from the title');
 }
 console.log('buy_wait_selfcheck: store colours + wordless deal card OK');
