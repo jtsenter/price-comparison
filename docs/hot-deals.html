@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=169" />
+  <link rel="stylesheet" href="style.css?v=170" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -233,13 +233,16 @@
        364px inside a 320px viewport, sliding every card off the right edge.
        Desktop was immune only because minmax(215px,...) supplies an explicit
        minimum, so this looked like a mobile-only bug. */
-    .bws-top { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .bws-top { display: flex; align-items: center; gap: 7px; min-width: 0; }
+    /* What you pay and what it usually costs, on one line under the note. */
+    .bws-money { display: flex; align-items: baseline; gap: 7px; min-width: 0; }
     .bws-price {
-      display: flex; align-items: center; gap: 5px; flex: none;
-      font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums;
+      flex: none;
+      font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums;
     }
-    /* Shares the price line, so it must not wrap - it truncates instead, and
-       the full name is on the row it opens. */
+    /* Still truncates rather than wraps - the header is one 22px row - but it
+       now has the whole line after the chip instead of the remainder left over
+       by the price, so it rarely needs to. */
     .bws-name {
       font-size: 12.5px; font-weight: 700; color: var(--text);
       min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -266,8 +269,11 @@
       font-variant-numeric: tabular-nums; letter-spacing: -0.5px;
     }
     .bws-off-lbl { font-size: 12px; font-weight: 800; letter-spacing: .3px; }
+    /* No margin-left:auto any more - it used to be pushed to the far end of the
+       %-off row; it now sits directly beside the price it is being compared
+       with, which is the whole reason the word "was" could go. */
     .bws-was {
-      margin-left: auto; font-size: 11.5px; color: var(--text-soft);
+      font-size: 11.5px; color: var(--text-soft);
       text-decoration: line-through; font-variant-numeric: tabular-nums;
     }
     .bws-add {
@@ -636,9 +642,20 @@
       font-variant-numeric: tabular-nums;
     }
     .dm-alt .store-chip { filter: grayscale(1); opacity: 0.55; }
-    /* The unit, on either price: never bold, never the store's colour. */
-    .dm-suf { font-weight: 500; }
+    /* The unit, on either price: never bold, never the store's colour, and the
+       same 14px on both - it inherited its parent's size, so the winner's "/kg"
+       came out at the price's 20px and the alternative's at 14px. It is the same
+       measurement either side; it should not be two different sizes. */
+    .dm-suf { font-weight: 500; font-size: 14px; }
     .dm-price .dm-suf { color: var(--text); }
+    /* Sit the alternative around the middle of the card rather than tucked up
+       against the winning price. A min-width on the price rather than a margin
+       on the alternative, so the alternative lands at the same place on every
+       card instead of wherever the price above it happened to end - the column
+       is what makes the pair scannable down the list.
+       Per-kg rows opt out (.dm-kg): "$6.90/kg" beside "$9.70/kg" is already most
+       of the row, so there is nothing to move it into. */
+    .dm-card:not(.dm-kg) .dm-price { min-width: 38%; }
     /* Pushes the eye to the right edge whether or not there is an alternative to
        show - .dm-vs used to do this with flex:1 and took the job with it. */
     .dm-watch { margin-left: auto; background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.35; padding: 0 2px; line-height: 1; }
@@ -1391,11 +1408,14 @@ function renderBwsPanel(priorities, exclusions, tune) {
            an outside-shop card from a supermarket one, and the store chip beside
            the price says which shop, so nothing that was only in the tag is
            lost.
-           Chip, price and NAME share one line: the name had a row to itself for
-           no reason - it is short, and the price it belongs to was directly
-           above it. -->
+           The header is the shop and the PRODUCT, nothing else. The price used
+           to share this line and took the width first, leaving the name the
+           remainder - which on a 215px card meant it truncated on nearly every
+           one ("Cook Chicken Roasting Portions It...", "Dreamy Choc Chip C...").
+           Money belongs with money, so the price moved down to sit between the
+           discount and the old price it beats. -->
       <span class="bws-top">
-        <span class="bws-price">${chip}${fmt(c.price * c.rate.scale)}${c.rate.unit}</span>
+        ${chip}
         <span class="bws-name">${esc(shortName(name))}</span>
       </span>
       <!-- The picture sits beside the discount rather than above it, so it
@@ -1408,9 +1428,15 @@ function renderBwsPanel(priorities, exclusions, tune) {
         <span class="bws-mid-txt">
           <span class="bws-off">
             <b>${c.offPct}%</b><span class="bws-off-lbl">off</span>
-            <span class="bws-was">was ${fmt(c.usual * c.rate.scale)}${c.rate.unit}</span>
           </span>
           <span class="bws-head-line">${esc(c.headline)}</span>
+          <!-- What you pay, then what it usually costs. "was" is deleted: it sits
+               beside the price it is being compared with and carries a line
+               through it, so the word was a third way of saying the same thing. -->
+          <span class="bws-money">
+            <span class="bws-price">${fmt(c.price * c.rate.scale)}${c.rate.unit}</span>
+            <span class="bws-was">${fmt(c.usual * c.rate.scale)}${c.rate.unit}</span>
+          </span>
         </span>
       </span>
       <!-- No basket button on an outside-shop card. The basket is a Woolworths
@@ -1849,7 +1875,10 @@ function renderDealsMobile(sorted, exclusions, overrides) {
     const basketName = item.list_item;
     const inBasket = hdBasket().items.includes(basketName);
     const card = document.createElement('div');
-    card.className = `dm-card ${isW ? 'ww' : 'co'}${inBasket ? ' dm-selected' : ''}`;
+    // dm-kg marks a row whose prices carry a unit ("$6.90/kg"). Those are the
+    // widest prices on the page, so they are the one case that cannot afford to
+    // have the alternative pushed toward the middle of the card.
+    card.className = `dm-card ${isW ? 'ww' : 'co'}${kgSuffix ? ' dm-kg' : ''}${inBasket ? ' dm-selected' : ''}`;
     card.dataset.basketName = basketName || '';
     card.setAttribute('role', 'button');
     card.setAttribute('aria-pressed', String(!!inBasket));

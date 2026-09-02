@@ -497,9 +497,25 @@ console.log('buy_wait_selfcheck: all-time-low wording OK');
     'the alternative\'s store chip must be greyed too, not just its price');
   assert(/\.dm-alt \{[^}]*margin-left:/.test(hd),
     'the alternative needs its own gap - the flex gap is the chip-to-price one');
-  // The unit is not part of the number: plain weight, and never a store colour.
-  assert(/\.dm-suf \{ font-weight: 500; \}/.test(hd) && /\.dm-price \.dm-suf \{ color: var\(--text\); \}/.test(hd),
-    'the /kg suffix must be unbolded and uncoloured on the winning price');
+  // The unit is not part of the number: plain weight, never a store colour, and
+  // ONE size on both prices. It inherited its parent's font-size, so the same
+  // "/kg" rendered at the winner's 20px and the alternative's 14px.
+  const dmSuf = /\.dm-suf \{([^}]*)\}/.exec(hd);
+  assert(dmSuf, '.dm-suf rule not found');
+  assert(/font-weight: 500/.test(dmSuf[1]), 'the /kg suffix must not be bold');
+  assert(/font-size: 14px/.test(dmSuf[1]),
+    'the suffix must be one size on both prices, not inherited from each');
+  assert(/\.dm-price \.dm-suf \{ color: var\(--text\); \}/.test(hd),
+    'the /kg suffix must not take the winning store\'s colour');
+
+  // The alternative sits at a fixed column near the middle of the card, so the
+  // pair is scannable down the list instead of landing wherever the price above
+  // it happened to end. Per-kg rows opt out - their prices are already the width
+  // of the row.
+  assert(/\.dm-card:not\(\.dm-kg\) \.dm-price \{ min-width: \d+%; \}/.test(hd),
+    'the winning price must reserve a column so the alternative lands consistently');
+  assert(/\$\{kgSuffix \? ' dm-kg' : ''\}/.test(dm),
+    'a per-kg row must be marked so it can opt out of that reserved column');
   assert(/const suf = kgSuffix \? `<span class="dm-suf">/.test(dm)
       && !/\$\{fmt\(deal\.price\)\}\$\{kgSuffix\}/.test(dm),
     'the suffix must be rendered in its own span, not glued onto the price');
@@ -543,5 +559,32 @@ console.log('buy_wait_selfcheck: all-time-low wording OK');
     'the modal must title a product the way the rest of the app names it');
   assert(!/kgR\.groupLabel \? `\$\{kgR\.groupLabel\} - /.test(hm),
     'the group-label prefix must be gone from the title');
+
+  // ── Top-pick card: header is the product, money sits together ──────────────
+  // The price used to share the header line and took its width first, so the
+  // name got the remainder and truncated on nearly every card. It now sits
+  // between the discount note and the old price it beats.
+  const bwsTop = /<span class="bws-top">([\s\S]*?)<\/span>\s*<!--/.exec(hd);
+  assert(bwsTop, '.bws-top block not found');
+  assert(!/bws-price/.test(bwsTop[1]),
+    'the price must not be in the card header - the name needs that width');
+  assert(/\$\{chip\}\s*\n\s*<span class="bws-name">/.test(bwsTop[1]),
+    'the header is the store chip and the product name, in that order');
+  // Order on the card: discount, note, price, old price.
+  const money = /<span class="bws-money">([\s\S]*?)<\/span>\s*<\/span>/.exec(hd);
+  assert(money, '.bws-money block not found');
+  assert(money.index > hd.indexOf('class="bws-head-line"'),
+    'the price must come after the discount note, not before it');
+  // First occurrence of each, not "one appears somewhere after the other" - a
+  // stray .bws-was ahead of the price satisfied that and still rendered the old
+  // price first.
+  const iNow = money[1].indexOf('bws-price'), iWas = money[1].indexOf('bws-was');
+  assert(iNow >= 0 && iWas >= 0, 'the money row must carry both prices');
+  assert(iNow < iWas, 'what you pay comes first, then the price it beats');
+  // "was" deleted - the struck-through number sits beside the price it is being
+  // compared with, so the word was a third way of saying the same thing.
+  assert(!/>was \$\{fmt|"bws-was">was /.test(hd), 'the word "was" must be gone');
+  assert(!/\.bws-was \{[^}]*margin-left: auto/.test(hd),
+    'the old price must sit beside the new one, not be pushed to the far end');
 }
 console.log('buy_wait_selfcheck: store colours + wordless deal card OK');
