@@ -490,7 +490,12 @@ main { max-width: 1600px; margin: 0 auto; padding: 20px 20px 60px; }
    below it - the chevron and the member count already say it expands. */
 .vg-group-label { font-weight: 500; font-size: 14px; }
 .vg-group-sub { display: block; font-size: 11px; color: var(--text-soft); margin-top: 1px; }
-.perkg-suffix { font-size: 11px; font-weight: 600; color: var(--text-soft); }
+/* The app-wide unit suffix. Never bold, anywhere, on any page: "/kg" is a
+   measurement, not part of the number, and at 600 beside a 700-800 price it was
+   reading as though it were. Used by the prices table, the deals table and the
+   top-pick cards; the phone deal rows have their own .dm-suf only because they
+   need it at their own size and colour, and it is unbolded there too. */
+.perkg-suffix { font-size: 11px; font-weight: 400; color: var(--text-soft); }
 
 /* Expanded panel = a SPEECH BUBBLE hanging off the group row above: indented,
    bordered, with a caret pointing up at the row. The shape itself says "this

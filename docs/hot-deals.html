@@ -20,7 +20,7 @@
     } catch (e) {}
   })();
   </script>
-  <link rel="stylesheet" href="style.css?v=170" />
+  <link rel="stylesheet" href="style.css?v=173" />
   <style>
     /* ── Hot Deals page overrides ── */
     .deals-hero {
@@ -234,8 +234,6 @@
        Desktop was immune only because minmax(215px,...) supplies an explicit
        minimum, so this looked like a mobile-only bug. */
     .bws-top { display: flex; align-items: center; gap: 7px; min-width: 0; }
-    /* What you pay and what it usually costs, on one line under the note. */
-    .bws-money { display: flex; align-items: baseline; gap: 7px; min-width: 0; }
     .bws-price {
       flex: none;
       font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums;
@@ -248,7 +246,16 @@
       min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
     .bws-mid { display: flex; align-items: center; gap: 9px; min-width: 0; }
-    .bws-mid-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+    /* Row, not column: "why it's a deal" on the left, "what it costs" on the
+       right, two lines apiece. As one stacked column it was four rows and the
+       card grew a third line for no new information. */
+    .bws-mid-txt { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; }
+    .bws-mid-l { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+    /* Right-aligned so the two figures share an edge and read as a pair. */
+    .bws-money {
+      display: flex; flex-direction: column; align-items: flex-end;
+      gap: 1px; flex: none;
+    }
     /* 40px - the same as .deal-img and .dm-img below, deliberately not bigger. */
     .bws-img {
       width: 40px; height: 40px; object-fit: contain; border-radius: 6px;
@@ -604,10 +611,14 @@
     .deals-mobile { flex-direction: column; gap: 9px; padding-top: 12px; }
     .dm-card { background: var(--card); border-radius: 12px; padding: 11px 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border-left: 3px solid var(--ww); cursor: pointer; -webkit-tap-highlight-color: transparent; }
     .dm-card.co { border-left-color: var(--coles); }
-    /* In-basket: green ring + a corner tick, matching the prices page's card selection */
-    .dm-card.dm-selected { box-shadow: 0 0 0 2px var(--ww) inset, 0 1px 4px rgba(0,0,0,0.08); }
-    .dm-basket-tick { flex: none; width: 22px; height: 22px; border-radius: 50%; background: var(--ww); color: #fff; font-size: 13px; font-weight: 800; display: none; align-items: center; justify-content: center; align-self: center; }
-    .dm-card.dm-selected .dm-basket-tick { display: inline-flex; }
+    /* In-basket, styled exactly as the prices page styles a selected card
+       (.mobile-card.mc-selected in style.css): an accent border and a wash of
+       the same green. This used to be an inset ring plus a filled tick in the
+       header row - two markers for one state, and the tick pushed the badge and
+       the name around whenever it appeared. The border replaces the store's
+       left stripe while selected, which is what the prices page does too. */
+    .dm-card.dm-selected { border: 2px solid var(--accent); background: rgba(0,132,61,0.06); }
+    :root[data-theme="dark"] .dm-card.dm-selected { background: rgba(0,132,61,0.15); }
     .dm-top { display: flex; align-items: flex-start; gap: 10px; }
     .dm-img { width: 40px; height: 40px; object-fit: contain; border-radius: 6px; background: var(--bg); border: 1px solid var(--border); flex: none; }
     .dm-img-ph { background: var(--bg); }
@@ -653,9 +664,28 @@
        on the alternative, so the alternative lands at the same place on every
        card instead of wherever the price above it happened to end - the column
        is what makes the pair scannable down the list.
-       Per-kg rows opt out (.dm-kg): "$6.90/kg" beside "$9.70/kg" is already most
-       of the row, so there is nothing to move it into. */
-    .dm-card:not(.dm-kg) .dm-price { min-width: 38%; }
+       Per-kg rows are NOT exempt. They were, on the grounds that "$9.00/kg"
+       beside "$11.00/kg" is already most of the row - but that left the phone
+       list running two columns, one for rows with a unit and one for rows
+       without, which is worse than either on its own.
+       Both numbers are measured, not chosen:
+         36% - at 38% the two widest per-kg rows (Chicken Breast, Beef Mince, a
+         114px price against 113px of room) pushed the watch button past the row.
+         375px - below a ~296px row the per-kg rows cannot hold chip + price +
+         alternative + eye at any min-width, and forcing one only makes the
+         overflow visible: flex-shrink was quietly squeezing them before. Narrow
+         phones therefore keep the ragged natural widths, which is what they had
+         before this rule existed and what always fits. */
+    @media (min-width: 375px) { .dm-price { min-width: 36%; } }
+    /* Below that, the two widest per-kg rows still cannot fit chip + price +
+       alternative + eye on one line (245px of row against 259-268px of content),
+       and they overflowed the card - the eye pushed out past its right edge.
+       That arrived with .dm-alt: the .dm-vs line it replaced was flex:1 with
+       min-width:0, so it simply wrapped its text and never pushed anything out.
+       Wrapping restores that. It is per flex LINE, so only the rows that
+       genuinely do not fit take a second one - measured at 320px, ten of twelve
+       rows stay 44px and the two that overflowed become 82px. */
+    @media (max-width: 374px) { .dm-mid { flex-wrap: wrap; } }
     /* Pushes the eye to the right edge whether or not there is an alternative to
        show - .dm-vs used to do this with flex:1 and took the job with it. */
     .dm-watch { margin-left: auto; background: none; border: none; cursor: pointer; font-size: 16px; opacity: 0.35; padding: 0 2px; line-height: 1; }
@@ -1425,16 +1455,23 @@ function renderBwsPanel(priorities, exclusions, tune) {
            list, which the section heading already says. -->
       <span class="bws-mid">
         ${imgHtml}
+        <!-- Two columns, two lines. Stacking discount, note, price and old price
+             in one column read down the card and cost it a third row of height;
+             side by side it is the same four facts in the two lines the card
+             had before - why it is a deal on the left, what it costs on the
+             right, each pair reading across. -->
         <span class="bws-mid-txt">
-          <span class="bws-off">
-            <b>${c.offPct}%</b><span class="bws-off-lbl">off</span>
+          <span class="bws-mid-l">
+            <span class="bws-off">
+              <b>${c.offPct}%</b><span class="bws-off-lbl">off</span>
+            </span>
+            <span class="bws-head-line">${esc(c.headline)}</span>
           </span>
-          <span class="bws-head-line">${esc(c.headline)}</span>
-          <!-- What you pay, then what it usually costs. "was" is deleted: it sits
-               beside the price it is being compared with and carries a line
+          <!-- What you pay, above what it usually costs. "was" is deleted: it
+               sits with the price it is being compared with and carries a line
                through it, so the word was a third way of saying the same thing. -->
           <span class="bws-money">
-            <span class="bws-price">${fmt(c.price * c.rate.scale)}${c.rate.unit}</span>
+            <span class="bws-price">${fmt(c.price * c.rate.scale)}${c.rate.unit ? `<span class="perkg-suffix">${c.rate.unit}</span>` : ''}</span>
             <span class="bws-was">${fmt(c.usual * c.rate.scale)}${c.rate.unit}</span>
           </span>
         </span>
@@ -1583,6 +1620,11 @@ function renderDeals() {
     // is '' for sticker groups, which is what the old !_sticker guard did.
     // The per-100g subline stays dropped: it would be a second conversion.
     const kgSuffix = isGroup ? (item._metricSuffix ?? '/kg') : '';
+    // A unit is not part of the number. .perkg-suffix is the app-wide span for
+    // one (it lives in style.css, so every page already has it) - the prices
+    // table has always used it, and these cells were among the last places
+    // gluing the unit onto the price and letting it inherit an 800 weight.
+    const kgSuf = kgSuffix ? `<span class="perkg-suffix">${kgSuffix}</span>` : '';
 
     const imgSrc = resolveImgUrl(co?.image_url) || resolveImgUrl(ww?.image_url) || '';
     const imgHtml = imgSrc
@@ -1614,9 +1656,9 @@ function renderDeals() {
     // back to the drop-vs-usual figure when only one store is priced.
     const storeGap = hdStoreGap(deal);
     const saveCell = storeGap > 0.005
-      ? `<div class="deal-save">${fmt(storeGap)}${kgSuffix}</div>`
+      ? `<div class="deal-save">${fmt(storeGap)}${kgSuf}</div>`
       : deal.saveAmount > 0
-        ? `<div class="deal-save">${fmt(deal.saveAmount)}${kgSuffix}</div><div class="deal-save-sub">below usual</div>`
+        ? `<div class="deal-save">${fmt(deal.saveAmount)}${kgSuf}</div><div class="deal-save-sub">below usual</div>`
         : `<span class="deal-save-sub" title="Both stores charge the same - the deal is the all-time low / drop vs usual, not a store gap">same price both stores</span>`;
 
     // WW cell
@@ -1624,7 +1666,7 @@ function renderDeals() {
     const wwP100 = clientPer100(ww);
     let wwHtml = '';
     if (ww) {
-      const priceStr = `${fmt(ww.price)}${kgSuffix}`;
+      const priceStr = `${fmt(ww.price)}${kgSuf}`;
       const link = wwUrl ? `<a href="${wwUrl}" target="_blank" rel="noopener" class="price-link">${priceStr}</a>` : priceStr;
       const fire = deal.store === 'woolworths' ? ' 🔥' : '';
       const unitStr = isGroup ? '' : (wwP100.value != null ? `$${wwP100.value.toFixed(2)}/${wwP100.label}` : fmtUnit(ww.unit_price, ww.unit));
@@ -1639,7 +1681,7 @@ function renderDeals() {
     const coP100 = clientPer100(co);
     let coHtml = '';
     if (co) {
-      const priceStr = `${fmt(co.price)}${kgSuffix}`;
+      const priceStr = `${fmt(co.price)}${kgSuf}`;
       const link = coUrl ? `<a href="${coUrl}" target="_blank" rel="noopener" class="price-link">${priceStr}</a>` : priceStr;
       const fire = deal.store === 'coles' ? ' 🔥' : '';
       const unitStr = isGroup ? '' : (coP100.value != null ? `$${coP100.value.toFixed(2)}/${coP100.label}` : fmtUnit(co.unit_price, co.unit));
@@ -1875,10 +1917,7 @@ function renderDealsMobile(sorted, exclusions, overrides) {
     const basketName = item.list_item;
     const inBasket = hdBasket().items.includes(basketName);
     const card = document.createElement('div');
-    // dm-kg marks a row whose prices carry a unit ("$6.90/kg"). Those are the
-    // widest prices on the page, so they are the one case that cannot afford to
-    // have the alternative pushed toward the middle of the card.
-    card.className = `dm-card ${isW ? 'ww' : 'co'}${kgSuffix ? ' dm-kg' : ''}${inBasket ? ' dm-selected' : ''}`;
+    card.className = `dm-card ${isW ? 'ww' : 'co'}${inBasket ? ' dm-selected' : ''}`;
     card.dataset.basketName = basketName || '';
     card.setAttribute('role', 'button');
     card.setAttribute('aria-pressed', String(!!inBasket));
@@ -1887,7 +1926,6 @@ function renderDealsMobile(sorted, exclusions, overrides) {
         ${imgHtml}
         <div class="dm-info"><div class="dm-name">${esc(name)}</div><div class="dm-cat">${esc(cat)}</div></div>
         ${badge}
-        <span class="dm-basket-tick" aria-hidden="true">✓</span>
       </div>
       <div class="dm-mid">
         <span class="store-chip ${isW ? 'ww' : 'coles'} sm">${isW ? 'W' : 'C'}</span>

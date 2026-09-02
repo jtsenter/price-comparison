@@ -508,14 +508,25 @@ console.log('buy_wait_selfcheck: all-time-low wording OK');
   assert(/\.dm-price \.dm-suf \{ color: var\(--text\); \}/.test(hd),
     'the /kg suffix must not take the winning store\'s colour');
 
-  // The alternative sits at a fixed column near the middle of the card, so the
-  // pair is scannable down the list instead of landing wherever the price above
-  // it happened to end. Per-kg rows opt out - their prices are already the width
-  // of the row.
-  assert(/\.dm-card:not\(\.dm-kg\) \.dm-price \{ min-width: \d+%; \}/.test(hd),
-    'the winning price must reserve a column so the alternative lands consistently');
-  assert(/\$\{kgSuffix \? ' dm-kg' : ''\}/.test(dm),
-    'a per-kg row must be marked so it can opt out of that reserved column');
+  // ONE column for the alternative, per-kg rows included. Exempting them left
+  // the list running two columns - one for rows with a unit and one for rows
+  // without - which is worse than either on its own. 36% is measured: at 38%
+  // the two widest per-kg rows pushed the watch button 1px past the row.
+  const minW = /@media \(min-width: (\d+)px\) \{ \.dm-price \{ min-width: (\d+)%; \} \}/.exec(hd);
+  assert(minW, 'the winning price must reserve a column for the alternative');
+  assert(Number(minW[2]) <= 36,
+    `min-width ${minW[2]}% overflows the widest per-kg row - 36% is the measured ceiling`);
+  // Gated, because below a ~296px row no min-width fits: forcing one there only
+  // exposes an overflow that flex-shrink had been hiding.
+  assert(Number(minW[1]) >= 375,
+    `the column must not apply below 375px, got ${minW[1]}px`);
+  // And below it, the row wraps rather than pushing the watch button out of the
+  // card. .dm-alt replaced a flex:1 min-width:0 line that used to wrap its own
+  // text, so without this the narrow case regressed.
+  assert(/@media \(max-width: 374px\) \{ \.dm-mid \{ flex-wrap: wrap; \} \}/.test(hd),
+    'narrow phones must wrap the price row instead of overflowing the card');
+  assert(!/dm-kg/.test(hd),
+    'the per-kg exemption is gone - one column covers every row');
   assert(/const suf = kgSuffix \? `<span class="dm-suf">/.test(dm)
       && !/\$\{fmt\(deal\.price\)\}\$\{kgSuffix\}/.test(dm),
     'the suffix must be rendered in its own span, not glued onto the price');
@@ -570,11 +581,18 @@ console.log('buy_wait_selfcheck: all-time-low wording OK');
     'the price must not be in the card header - the name needs that width');
   assert(/\$\{chip\}\s*\n\s*<span class="bws-name">/.test(bwsTop[1]),
     'the header is the store chip and the product name, in that order');
-  // Order on the card: discount, note, price, old price.
+  // Two columns, two lines: why it's a deal on the left, what it costs on the
+  // right. Stacked in one column it read down the card and cost a third row of
+  // height for no new information.
+  assert(/\.bws-mid-txt \{[^}]*display: flex;(?![^}]*flex-direction: column)/.test(hd),
+    'the middle band must lay its two halves out in a row, not stack them');
+  assert(/\.bws-mid-l \{[^}]*flex-direction: column/.test(hd)
+      && /\.bws-money \{[^}]*flex-direction: column/.test(hd),
+    'each half stacks its own two lines');
   const money = /<span class="bws-money">([\s\S]*?)<\/span>\s*<\/span>/.exec(hd);
   assert(money, '.bws-money block not found');
   assert(money.index > hd.indexOf('class="bws-head-line"'),
-    'the price must come after the discount note, not before it');
+    'the price column must follow the discount column in source order');
   // First occurrence of each, not "one appears somewhere after the other" - a
   // stray .bws-was ahead of the price satisfied that and still rendered the old
   // price first.
@@ -586,5 +604,36 @@ console.log('buy_wait_selfcheck: all-time-low wording OK');
   assert(!/>was \$\{fmt|"bws-was">was /.test(hd), 'the word "was" must be gone');
   assert(!/\.bws-was \{[^}]*margin-left: auto/.test(hd),
     'the old price must sit beside the new one, not be pushed to the far end');
+
+  // ── A unit is never bold, on any page ──────────────────────────────────────
+  // .perkg-suffix is the app-wide span for one and lives in style.css, so this
+  // one rule covers the prices table, the deals table and the top-pick cards.
+  const suffixRule = /\.perkg-suffix \{([^}]*)\}/.exec(css);
+  assert(suffixRule, '.perkg-suffix rule not found in style.css');
+  const suffixWeight = /font-weight: (\d+)/.exec(suffixRule[1]);
+  assert(suffixWeight && Number(suffixWeight[1]) < 600,
+    `the shared unit suffix must not be bold, got ${suffixWeight && suffixWeight[1]}`);
+  // The deals table and top-pick cards must USE it rather than gluing the unit
+  // onto the price, where it inherits a 700-800 weight.
+  assert(!/\$\{fmt\(ww\.price\)\}\$\{kgSuffix\}|\$\{fmt\(co\.price\)\}\$\{kgSuffix\}/.test(hd),
+    'the deals table must not glue the unit onto the price');
+  assert(!/class="deal-save">\$\{fmt\([^)]*\)\}\$\{kgSuffix\}/.test(hd),
+    'the Save cell must not glue the unit onto the amount');
+  assert(/class="bws-price">\$\{fmt\([\s\S]{0,90}?perkg-suffix/.test(hd),
+    'the top-pick price must carry its unit in a suffix span');
+
+  // ── Selection looks the same on both pages ─────────────────────────────────
+  // The prices page's treatment, duplicated: accent border plus a wash of the
+  // same green. Hot Deals used an inset ring AND a filled tick - two markers
+  // for one state, and the tick shifted the header row whenever it appeared.
+  const priceSel = /\.mobile-card\.mc-selected\s*\{([^}]*)\}/.exec(css);
+  const dealSel = /\.dm-card\.dm-selected \{([^}]*)\}/.exec(hd);
+  assert(priceSel && dealSel, 'both selection rules must exist');
+  for (const prop of ['border: 2px solid var(--accent)', 'background: rgba(0,132,61,0.06)']) {
+    assert(priceSel[1].includes(prop), `the prices page is the reference and must set ${prop}`);
+    assert(dealSel[1].includes(prop), `Hot Deals must match it and set ${prop}`);
+  }
+  assert(!/dm-basket-tick/.test(hd), 'the corner tick must be gone');
+  assert(!/box-shadow[^;]*inset/.test(dealSel[1]), 'the inset ring must be gone');
 }
 console.log('buy_wait_selfcheck: store colours + wordless deal card OK');
