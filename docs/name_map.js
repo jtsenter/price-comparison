@@ -50,7 +50,7 @@ window.PW_NAME_MAP = {
   "Lurpak Butter Spreadable": "Lurpak Spreadable",
   "Macro Grass Fed Australian Stir-Fry Beef": "Macro Stir-Fry Beef",
   "Macro Natural Sunflower Kernels": "Sunflower Kernels",
-  "Macro Organic Natural Pumpkin Kernels": "Pumpkin Kernels",
+  "Macro Organic Natural Pumpkin Kernels 250g": "Pumpkin Kernels",
   "Macro Organic Pasta Sauce Chunky Bolognese": "Macro Bolognese Sauce",
   "Mainland Extra Tasty Cheese Block": "Mainland Tasty Cheese",
   "Maltesers Milk Chocolate Party Gift Box": "Maltesers Gift Box",

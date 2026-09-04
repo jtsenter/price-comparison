@@ -86,6 +86,29 @@ def _run():
         "utils.js does not merge removed_items.json into REMOVED_ITEMS"
     n += 1
 
+    # ── every item-keyed collection in latest.json gets purged, not just items ──
+    # `items` was the only one filtered, so a deleted product kept its row in the
+    # validation queue: gone from every page except the one whose whole job is to
+    # ask you about it ("deleted but still appears in validation"). Anything in
+    # latest.json keyed by product name has to be swept by the same delete.
+    step = app[app.index("await step('latest.json'"):]
+    step = step[:step.index("await step(", 10)]
+    for field in ("pending_validation", "approved_prices"):
+        assert field in step, \
+            f"deleteItemsForever does not purge {field} - a deleted product survives there"
+    assert "d.items = d.items.filter" in step, "the items purge itself went missing"
+    n += 3
+
+    # And the live file must not currently hold a tombstoned name in either.
+    latest = json.load(open(os.path.join(ROOT, "docs", "data", "latest.json"), encoding="utf-8"))
+    dead = set(names)
+    stuck = [e.get("item") for e in (latest.get("pending_validation") or [])
+             if e.get("item") in dead]
+    assert not stuck, f"tombstoned products still queued for validation: {stuck}"
+    stuck_ap = [k for k in (latest.get("approved_prices") or {}) if k in dead]
+    assert not stuck_ap, f"tombstoned products still hold price approvals: {stuck_ap}"
+    n += 2
+
     print(f"removed_items_selfcheck: all {n} cases passed ({len(names)} tombstoned name(s))")
 
 

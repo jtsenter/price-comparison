@@ -36322,6 +36322,46 @@
       "saving_per_item": null,
       "ww_price_history": [
         {
+          "date": "2025-07-31",
+          "price": 5
+        },
+        {
+          "date": "2025-08-08",
+          "price": 5
+        },
+        {
+          "date": "2025-11-05",
+          "price": 5
+        },
+        {
+          "date": "2026-05-29",
+          "price": 5.7
+        },
+        {
+          "date": "2026-06-08",
+          "price": 5.7
+        },
+        {
+          "date": "2026-06-15",
+          "price": 5.7
+        },
+        {
+          "date": "2026-06-24",
+          "price": 5.7
+        },
+        {
+          "date": "2026-07-02",
+          "price": 5.7
+        },
+        {
+          "date": "2026-07-09",
+          "price": 5.7
+        },
+        {
+          "date": "2026-07-16",
+          "price": 5.7
+        },
+        {
           "date": "2026-08-05",
           "price": 5.7
         },
@@ -37824,24 +37864,6 @@
     "items_compared": 324,
     "items_not_found": 0
   },
-  "pending_validation": [
-    {
-      "item": "Macro Organic Natural Pumpkin Kernels",
-      "ww_price": 5.7,
-      "ww_url": "https://www.woolworths.com.au/shop/productdetails/133300/macro-organic-natural-pumpkin-kernels",
-      "ww_prev_price": 5.7,
-      "ww_suspicious": false,
-      "coles_price": 4.4,
-      "coles_url": "https://www.coles.com.au/product/coles-organic-pumpkin-kent-approx.-800g-3119043",
-      "coles_prev_price": 5.52,
-      "coles_suspicious": true,
-      "flagged_date": "2026-09-04",
-      "reason": [
-        "suspicious_drop_gt20pct",
-        "outside_historical_range"
-      ]
-    }
-  ],
   "approved_prices": {
     "Woolworths Corn Sweet": {
       "approved_date": "2026-07-24"
@@ -37850,10 +37872,6 @@
       "approved_date": "2026-07-28"
     },
     "Red Capsicum": {
-      "approved_date": "2026-07-29"
-    },
-    "Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle": {
-      "ww": 3.3,
       "approved_date": "2026-07-29"
     },
     "Woolworths Capsicum Green": {

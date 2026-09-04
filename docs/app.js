@@ -1078,6 +1078,19 @@ async function deleteItemsForever(names) {
     if (!d?.items) return;
     d.items = d.items.filter(i => !rm.has(i.list_item));
     d.not_found_items = drop(d.not_found_items);
+    // latest.json carries THREE item-keyed things, not one. Only `items` was
+    // being filtered, so a deleted product stayed in the validation queue and
+    // kept its own row on the validate page - deleted everywhere except the one
+    // page whose whole job is to ask you about it. Reported as "deleted but
+    // still appears in validation".
+    if (Array.isArray(d.pending_validation)) {
+      d.pending_validation = d.pending_validation.filter(e => !rm.has(e?.item));
+      if (!d.pending_validation.length) delete d.pending_validation;
+    }
+    // Keyed by product name, same exposure: an approval outliving its product.
+    if (d.approved_prices && typeof d.approved_prices === 'object') {
+      for (const k of Object.keys(d.approved_prices)) if (rm.has(k)) delete d.approved_prices[k];
+    }
     await persistLatestJson(d, `chore: remove ${names.length} deleted product(s)`);
   });
 

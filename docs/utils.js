@@ -2612,7 +2612,7 @@ const ITEM_CATEGORY_DEFAULTS = {
   // Fruit & Veg → correct
   'Baby Mum-Mum Organiic Rice Rusks Blueberry & Carrot':         'Baby',
   'Dolmio Extra Bolognese Tomato Pasta Sauce':                    'Pantry',
-  'Macro Organic Natural Pumpkin Kernels':                        'Pantry',
+  'Macro Organic Natural Pumpkin Kernels 250g':                   'Pantry',
   'Mutti Tomato Paste Double Concentrate':                        'Pantry',
   'Sam\'s Pantry Granola Pink Lady Apple & Cinnamon':             'Pantry',
   'Schweppes Lemon Lime Bitters Soft Drink Classic Mixers Bottle': 'Drinks & Alcohol',
