@@ -113,4 +113,36 @@ assert.strictEqual(deriveNameFromUrl(''), '');
   }
 }
 
+// ── Red lentils group: the green one must stay out ──────────────────────────
+// "McKenzie's Green Lentil Whole" is one word away from "McKenzie's Red Lentils"
+// and sits in the same brand and category, so it is the obvious thing for a
+// later edit - or anyone eyeballing the seed list - to sweep in. It is a
+// different pulse: it cooks differently and is not a substitute, so grouping it
+// would average two unrelated products into one $/kg headline.
+{
+  // Same bracket-matched extraction the block above uses - `groups` there is
+  // scoped to it, and a semicolon-bounded regex breaks on the comments.
+  const usrc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'utils.js'), 'utf8');
+  const gAt = usrc.indexOf('const DEFAULT_VARIANT_GROUPS = [');
+  let gi = usrc.indexOf('[', gAt), depth = 0, gEnd = -1;
+  for (let j = gi; j < usrc.length; j++) {
+    if (usrc[j] === '[') depth++;
+    else if (usrc[j] === ']' && --depth === 0) { gEnd = j; break; }
+  }
+  // eslint-disable-next-line no-eval
+  const seeds = eval(usrc.slice(gi, gEnd + 1));
+  const g = seeds.find(x => x.key === 'red_lentils');
+  assert(g, 'the red_lentils group must exist');
+  assert.deepStrictEqual([...g.items].sort(),
+    ['Katoomba Ingredients Red Lentils', "McKenzie's Red Lentils"].sort(),
+    'red_lentils must hold exactly the two RED lentil products');
+  assert(!g.items.some(m => /green/i.test(m)),
+    'the green lentil is a different pulse and must not be in this group');
+  // Per-kg, not sticker/perPack: both members are 1kg today, so the metric is
+  // invisible now and would silently start comparing pack prices the day one
+  // brand moves to a 500g bag.
+  assert(!g.sticker && !g.perPack,
+    'red lentils compare by $/kg, so neither pack-price flag may be set');
+}
+
 console.log('perkg_selfcheck: all assertions passed');

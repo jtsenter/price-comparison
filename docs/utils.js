@@ -1337,6 +1337,16 @@ const DEFAULT_VARIANT_GROUPS = [
     'Coles Wellness Road Black Chia Seeds 1kg',
     'Wellness Road Organic Black Chia Seeds 300g',
   ]},
+  // RED lentils only. The green whole lentil on the list is a different pulse -
+  // it cooks differently and is not a substitute - so it stays its own row even
+  // though its name is the nearest neighbour of these two.
+  // Both members are 1kg, so $/kg and the pack price are the same number today;
+  // per-kg is still the right metric, because the day either brand appears in a
+  // 500g bag the comparison keeps working without anyone noticing it had to.
+  { key: 'red_lentils', label: 'Red Lentils', category: 'Pantry', items: [
+    'Katoomba Ingredients Red Lentils',
+    "McKenzie's Red Lentils",
+  ]},
 
   // STICKER group (sticker: true): compared + displayed by PACK PRICE, not $/kg.
   // For near-same-size complementary products the user treats as interchangeable
