@@ -184,6 +184,17 @@
     .sg-item { display: flex; align-items: center; gap: 8px; padding: 5px 2px; border-bottom: 1px solid var(--border); font-size: 12px; }
     .sg-item .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
     .sg-item .pr { font-variant-numeric: tabular-nums; color: var(--text-mid); font-size: 11.5px; }
+    /* Product links. Deliberately NOT blue-and-underlined: these lists are dense
+       and every row would carry one, so the page would read as a wall of links.
+       They inherit their surrounding colour and only reveal themselves on hover
+       and on keyboard focus - which still has to be visible, hence the ring. */
+    .sl-plink { color: inherit; text-decoration: none; cursor: pointer; }
+    .sl-plink:hover { color: var(--accent); text-decoration: underline; }
+    .sl-plink:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+    /* A price link keeps the store's own colour on hover, since the whole point
+       of the pair is which store it belongs to. */
+    .sg-item .pr .sg-w:hover { color: var(--ww); }
+    .sg-item .pr .sg-c:hover { color: var(--coles); }
     .sg-item .gp { font-variant-numeric: tabular-nums; min-width: 62px; text-align: right; }
     /* Marks where the rows with a real unit stop and the pack-vs-pack ones start. */
     .sg-group-note {
@@ -836,6 +847,36 @@ let _changeArchive = [];
 let _runLog = [];
 // Names permanently deleted from PriceWatch (docs/data/removed_items.json).
 let _removedSet = new Set();
+
+// ── Product links ───────────────────────────────────────────────────────────
+// This page names products constantly - every price move, every basket line -
+// and until now none of them went anywhere, so checking "is that really what
+// Coles is charging" meant retyping the name into a store's search.
+// list_item -> { ww, coles } store URLs, and the outside-shop entries beside
+// them. Taken from latest.json, which already carries whichever URL the scrape
+// actually used, pinned or matched - so a pinned correction is followed here
+// without this page needing to know url_overrides exists.
+let _productUrls = new Map();
+let _thirdUrls = new Map();
+function indexProductUrls(items, third) {
+  _productUrls = new Map((items || []).map(i =>
+    [i.list_item, { ww: (i.woolworths || {}).url || null, coles: (i.coles || {}).url || null }]));
+  _thirdUrls = new Map(Object.entries(third || {})
+    .filter(([k, v]) => !k.startsWith('_') && Array.isArray(v)));
+}
+// `store` is 'ww' | 'coles' | an outside-shop key. Returns null when we have no
+// URL, and every caller renders plain text in that case rather than a dead link.
+function productHref(name, store) {
+  if (store === 'ww' || store === 'coles') return (_productUrls.get(name) || {})[store] || null;
+  const e = (_thirdUrls.get(name) || []).find(x => x && x.store === store);
+  return (e && e.url) || null;
+}
+// Wraps already-escaped inner HTML. rel=noopener because target=_blank without
+// it hands the store page a live handle on this one.
+function linkIf(href, innerHtml, cls, title) {
+  if (!href) return `<span class="${cls}"${title || ''}>${innerHtml}</span>`;
+  return `<a class="${cls} sl-plink" href="${escapeHtml(href)}" target="_blank" rel="noopener"${title || ''}>${innerHtml}</a>`;
+}
 function renderChangeArchive(changes) {
   _changeArchive = Array.isArray(changes) ? changes : [];
   const card = $('slChangesCard');
@@ -1129,6 +1170,7 @@ function buildStorePanel(items, changes) {
     const qc = m.quoteCo != null ? m.quoteCo : b;
     const lo = Math.min(qw, qc), hi = Math.max(qw, qc);
     return { name, ww: a, co: b, diff: b - a, pct: a ? (b - a) / a * 100 : 0,
+             wwUrl: productHref(name, 'ww'), coUrl: productHref(name, 'coles'),
              normalised: m.normalised && Math.abs(b - m.packCo) > 0.005,
              packWw: m.packWw, packCo: m.packCo,
              quoteWw: m.quoteWw, quoteCo: m.quoteCo, quoteUnit: m.quoteUnit,
@@ -1346,10 +1388,13 @@ function paintGapItems(q) {
            below the rows that carry a unit.</p>`
       : '';
     return head + `<div class="sg-item">
-      <span class="nm" title="${escapeHtml(x.name)}">${escapeHtml(shortName(x.name))}</span>
+      ${linkIf(x.diff > 0 ? x.wwUrl : x.coUrl, escapeHtml(shortName(x.name)), 'nm',
+        ` title="${escapeHtml(x.name)} - open at the cheaper store"`)}
       <span class="pr"${tip}>${!quoted && x.normalised ? '≈ ' : ''}${
-        quoted ? fmtUnitMetric(x.quoteWw) : fmt(x.ww)}${x.quoteUnit} / ${
-        quoted ? fmtUnitMetric(x.quoteCo) : fmt(x.co)}${x.quoteUnit}</span>
+        // Each figure links to the store it came from, so the row answers
+        // "is that really what they charge" without a retype.
+        linkIf(x.wwUrl, (quoted ? fmtUnitMetric(x.quoteWw) : fmt(x.ww)) + x.quoteUnit, 'sg-w')} / ${
+        linkIf(x.coUrl, (quoted ? fmtUnitMetric(x.quoteCo) : fmt(x.co)) + x.quoteUnit, 'sg-c')}</span>
       <span class="gp ${c}">${amt}</span>
     </div>`;
   }).join('');
@@ -1577,7 +1622,7 @@ function byStoreThenName(a, b) {
 function paintChangeArchive(q) {
   paintChangeSummary(q);
   const fmtP = v => '$' + (+v).toFixed(2);
-  const chgLine = c => {
+  const chgLine = (c, store) => {
     const up = c.new > c.old;
     // Outside-shop moves are pooled in one column, so each line has to say WHICH
     // shop - a bare "$5.00 → $4.50" under "Other stores" names no retailer at
@@ -1592,13 +1637,17 @@ function paintChangeArchive(q) {
     const steps = c.times > 1
       ? `<span class="chg-steps" title="Moved ${c.times} times that day - this is the net change from the first price to the last">×${c.times}</span>`
       : '';
-    return `<li>${badge}<span class="chg-name" title="${escapeHtml((meta ? meta.label + ' - ' : '') + c.item)}">${escapeHtml(shortName(c.item))}</span>` +
+    // The name links to the store whose column this is; the outside-shop
+    // column carries its own store on the row, so that wins when present.
+    const href = productHref(c.item, c.store || store);
+    const nameTitle = ` title="${escapeHtml((meta ? meta.label + ' - ' : '') + c.item)}${href ? ' - open at the store' : ''}"`;
+    return `<li>${badge}${linkIf(href, escapeHtml(shortName(c.item)), 'chg-name', nameTitle)}` +
       `<span class="chg-prices">${steps}${fmtP(c.old)} → <b class="${up ? 'chg-up' : 'chg-down'}">${fmtP(c.new)}</b> ` +
       `<span class="chg-arrow">${up ? '▲' : '▼'}</span></span></li>`;
   };
   const col = (label, cls, list) =>
     `<div class="sl-chg-col ${cls}"><h3>${label} (${list.length})</h3>` +
-    (list.length ? `<ul class="sl-chg-list">${list.map(chgLine).join('')}</ul>`
+    (list.length ? `<ul class="sl-chg-list">${list.map(c => chgLine(c, cls)).join('')}</ul>`
                  : '<p class="sl-miss-empty">no changes</p>') + '</div>';
   // ONE CARD PER DAY, not per run. A single "Update Prices" click is really two
   // runs (the main sweep, then the archived sweep a minute or two later), and a
@@ -1720,14 +1769,18 @@ async function load() {
   let latest = null;
   let changes = [];
   try {
-    const [logRes, latestRes, chgRes, rmRes] = await Promise.all([
+    const [logRes, latestRes, chgRes, rmRes, thirdRes] = await Promise.all([
       fetch(`data/scrape_log.json?t=${Date.now()}`),
       fetch(`data/latest.json?t=${Date.now()}`),
       fetch(`data/price_changes.json?t=${Date.now()}`).catch(() => null),
       fetch(`data/removed_items.json?t=${Date.now()}`).catch(() => null),
+      fetch(`data/third_store.json?t=${Date.now()}`).catch(() => null),
     ]);
     if (logRes.ok) log = await logRes.json();
     if (latestRes.ok) latest = await latestRes.json();
+    // Built before anything renders - every list on this page links through it.
+    indexProductUrls(latest && latest.items,
+      thirdRes && thirdRes.ok ? await thirdRes.json() : null);
     if (chgRes && chgRes.ok) changes = await chgRes.json();
     // Permanently deleted products must drop off the chronic-miss list: they are
     // not failing to scrape, they no longer exist.

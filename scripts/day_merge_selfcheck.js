@@ -228,4 +228,46 @@ check('the comparator never reorders equal rows into a different day', () => {
     'the stored archive must never be sorted in place - the export reads it chronologically');
 });
 
+// ── Product links go to the RIGHT store ─────────────────────────────────────
+// Every list on this page names products, and a link that opens the wrong
+// retailer is worse than no link: you would be checking a price against a shop
+// that never quoted it. The store is not a guess anywhere - the changes list
+// takes it from the column it is rendering, and a basket row links each of its
+// two figures to the store that figure came from.
+{
+  const src = fs.readFileSync(path.join(__dirname, '..', 'docs', 'scrape-log.html'), 'utf8')
+    .replace(/\r\n/g, '\n');
+
+  assert.ok(/function productHref\(name, store\)/.test(src),
+    'productHref must exist - it is the single place a product URL is resolved');
+  // URLs come from latest.json, which already holds whichever URL the scrape
+  // used, so a pinned correction is followed without this page reading pins.
+  assert.ok(/_productUrls = new Map\(\(items \|\| \[\]\)\.map/.test(src),
+    'the URL index must be built from latest.json items');
+
+  // The changes list must pass its COLUMN down, not infer the store.
+  assert.ok(/const chgLine = \(c, store\) =>/.test(src),
+    'chgLine must receive the column it is rendering');
+  assert.ok(/list\.map\(c => chgLine\(c, cls\)\)/.test(src),
+    'the column class must be handed to every row it renders');
+  assert.ok(/productHref\(c\.item, c\.store \|\| store\)/.test(src),
+    'a row links to its own outside shop when it has one, else its column');
+
+  // A basket row links each figure to its own store - never both to one.
+  assert.ok(/wwUrl: productHref\(name, 'ww'\), coUrl: productHref\(name, 'coles'\)/.test(src),
+    'basket rows must carry both store URLs');
+  const pr = /<span class="pr"\$\{tip\}>[\s\S]*?<\/span>/.exec(src);
+  assert.ok(pr, 'the basket price cell was not found');
+  assert.ok(pr[0].indexOf('x.wwUrl') < pr[0].indexOf('x.coUrl'),
+    'the Woolworths figure must link to Woolworths and the Coles figure to Coles');
+
+  // No URL must render as text, not as a dead link.
+  assert.ok(/if \(!href\) return `<span class="\$\{cls\}"/.test(src),
+    'a missing URL must fall back to plain text rather than a broken link');
+  // target=_blank without rel=noopener hands the store page a handle on this one.
+  assert.ok(!/target="_blank"(?![^>]*rel="noopener")/.test(src),
+    'every new-tab link must carry rel="noopener"');
+  n += 8;
+}
+
 console.log(`\nday_merge_selfcheck: ${n} checks passed`);
