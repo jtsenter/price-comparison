@@ -27,7 +27,7 @@ docs/
     latest.json                ← current prices (written by scraper, read by UI)
     archived_items.json        ← items excluded from normal scrapes
     url_overrides.json         ← pinned product URLs (written by UI → GitHub API)
-.github/workflows/scrape.yml   ← runs on schedule (Mon/Thu) + workflow_dispatch
+.github/workflows/scrape.yml   ← manual only (workflow_dispatch); the schedule was removed 2026-10-06 because the runner laptop sleeps
 ```
 
 ## Commands
