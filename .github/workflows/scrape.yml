@@ -1,10 +1,11 @@
 name: Scrape Prices
 
 on:
-  schedule:
-    # Mon, Wed and Thu at 11am AEST (01:00 UTC) — Wed added to catch AU supermarket
-    # specials, which typically change Wednesday.
-    - cron: '0 1 * * 1,3,4'
+  # No schedule. The runner is a laptop that is usually asleep at any fixed
+  # time, so scheduled runs queued for hours and then either ran mid-afternoon
+  # or were frozen mid-scrape when it slept again - 13 of the last 30 failed,
+  # and a stuck one blocked the Update Prices button behind it. Scrapes now
+  # start only from the button, when the laptop is known to be awake.
   workflow_dispatch:
     inputs:
       trigger:

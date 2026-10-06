@@ -816,7 +816,7 @@ async function fixLinkFromValidate(entry, store, cardEl) {
       body: JSON.stringify({ ref: 'main', inputs }),
     });
     dispatched = res.ok || res.status === 204;
-  } catch (_) { /* offline runner etc. - the pin still applies next scheduled run */ }
+  } catch (_) { /* offline runner etc. - the pin still applies on the next scrape */ }
 
   // 3. A fixed link supersedes the WHOLE flagged entry: the suspicious price
   //    came from the wrong product page, and the rescrape we just dispatched
