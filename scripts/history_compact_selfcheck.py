@@ -129,4 +129,23 @@ check("empty history stays empty", _compact_history([]), [])
 _mb = [{"date": "2026-08-13", "price": 3.75, "shelf": 5.5, "mb": {"qty": 2, "total": 7.5}}]
 check("entry fields (shelf/mb) are preserved", _compact_history(_mb), _mb)
 
+# ── A withheld price must be one the user is being asked about ─────────────
+# Sour Cream fell to $3.10 at both stores (25 Aug / 9 Sep) and was live on the
+# page for weeks, yet its history stayed at $3.30. History was decided from the
+# RAW flags, before the rules that clear them ran; "unchanged since last scrape"
+# then cleared the flag every run, so the price left the Validate queue but was
+# still withheld - forever, with nobody asked. 68 store-items were stuck.
+import inspect  # noqa: E402
+import scraper  # noqa: E402
+
+check("held: flagged and not approved", scraper._history_held(["outside_history"], 3.10, None), True)
+check("not held: no flag survived the clearing rules", scraper._history_held([], 3.10, None), False)
+check("not held: flagged but already approved", scraper._history_held(["outside_history"], 3.10, 3.10), False)
+
+_src = inspect.getsource(scraper._scrape_single_item)
+for _marker in ("FIX 1:", "FIX 3: if the flagged store", "FIX 4:", "_validation_entry = {", "_co_suppressed = True"):
+    assert "_history_held(" not in _src[:_src.index(_marker)], \
+        f"history is decided before '{_marker}' runs - it must use the cleared flags"
+print("  ok  history is decided after every rule that can clear a flag")
+
 print("\nAll history-compaction self-checks passed.")

@@ -328,6 +328,15 @@ def _should_add_history_entry(history: list, new_price: float, today: str) -> bo
         return True   # date parsing failed - add to be safe
 
 
+def _history_held(reasons: list, price, approved) -> bool:
+    """True when a scraped price must stay out of history for now: it is still
+    flagged after every clearing rule AND not already approved. That is exactly
+    the condition under which a validation entry is raised (`_ww_clear` /
+    `_co_clear`), so a held price is always one the user is being asked about -
+    never one quietly withheld with nobody told."""
+    return bool(reasons) and not _is_approved(price, approved)
+
+
 def _compact_history(history: list) -> list:
     """Collapse a price history to the recording rule, however entries got there.
 
@@ -2034,22 +2043,6 @@ async def _scrape_single_item(
                 e["mb"] = {"qty": mb["qty"], "total": mb["total"]}
         return e
 
-    # WW history: withhold if suspicious; append if price changed or ≥7 days since last entry
-    if ww_reasons:
-        new_ww_hist = existing_ww_hist
-    elif ww_add:
-        new_ww_hist = existing_ww_hist + [_hist_entry(ww_price, ww_match)]
-    else:
-        new_ww_hist = existing_ww_hist
-
-    # Coles history: same logic
-    if coles_reasons:
-        new_co_hist = existing_co_hist
-    elif co_add:
-        new_co_hist = existing_co_hist + [_hist_entry(coles_price, coles_match)]
-    else:
-        new_co_hist = existing_co_hist
-
     # week_conflict is normal repricing behaviour - never a validation trigger
 
     # FIX 1: don't flag a store whose price is identical to the previous scrape.
@@ -2108,8 +2101,10 @@ async def _scrape_single_item(
     # FIX 3: Suppress EDR/member prices - only when is_on_special is explicitly False.
     # If is_on_special=True (confirmed public sale) or None (search result, unknown),
     # allow the price through to validation instead of silently carrying forward the old price.
+    _ww_suppressed = _co_suppressed = False
     if ww_reasons and 'suspicious_drop_gt20pct' in ww_reasons and ww_match and prev_ww is not None:
         if ww_match.get('is_on_special') == False:
+            _ww_suppressed = True
             print(f"    [FIX] WW EDR/member price suppressed: keeping ${prev_ww} (not a public special)")
             ww_match = None  # carry-forward previous price
         else:
@@ -2117,10 +2112,33 @@ async def _scrape_single_item(
 
     if coles_reasons and 'suspicious_drop_gt20pct' in coles_reasons and coles_match and prev_coles is not None:
         if coles_match.get('is_on_special') == False:
+            _co_suppressed = True
             print(f"    [FIX] Coles EDR/member price suppressed: keeping ${prev_coles} (not a public special)")
             coles_match = None  # carry-forward previous price
         else:
             print(f"    [FIX] Coles drop allowed through to validation: ${coles_match.get('price')} (public special or unknown)")
+
+    # History is decided HERE, after every rule above that can clear a flag.
+    # It used to be decided before them, on the raw flags: a new price outside
+    # the receipt range (Sour Cream at $3.10 vs receipts of $3.30-$3.40) was
+    # withheld on day one, and from day two "unchanged since last scrape" cleared
+    # the flag - so it left the Validate queue but was still withheld, on every
+    # run, forever. The price was live on the page and never recorded, and the
+    # user was never asked. 68 store-items were stuck that way.
+    # Invariant: a price stays out of history only while it is actually waiting
+    # in Validate (see _history_held), or when it was a member price we refused.
+    if _history_held(ww_reasons, ww_price, _item_approved.get("ww")) or _ww_suppressed:
+        new_ww_hist = existing_ww_hist
+    elif ww_add:
+        new_ww_hist = existing_ww_hist + [_hist_entry(ww_price, ww_match)]
+    else:
+        new_ww_hist = existing_ww_hist
+    if _history_held(coles_reasons, coles_price, _item_approved.get("coles")) or _co_suppressed:
+        new_co_hist = existing_co_hist
+    elif co_add:
+        new_co_hist = existing_co_hist + [_hist_entry(coles_price, coles_match)]
+    else:
+        new_co_hist = existing_co_hist
 
     # If a store returned no result this run (and _carry also found nothing), preserve
     # whatever was in the previous latest.json rather than overwriting with None.
