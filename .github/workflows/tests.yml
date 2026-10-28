@@ -94,6 +94,7 @@ jobs:
           python third_stores_selfcheck.py
           python third_changes_selfcheck.py
           python pending_validation_prune_selfcheck.py
+          python keep_validation_decisions_selfcheck.py
           # Opens the workbook the node xlsx_selfcheck step just wrote, using
           # Python's own zipfile/XML - an independent parser, so a bug in our
           # hand-rolled ZIP can't hide behind a matching bug in our reader.

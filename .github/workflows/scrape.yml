@@ -93,6 +93,7 @@ jobs:
           git add docs/data/
           git diff --cached --quiet || git commit -m "chore: update prices"
           git pull --no-rebase -X ours origin main
+          "%PYTHON%" scripts\keep_validation_decisions.py
           git push
 
       - name: Clear stalled scrape_progress
@@ -107,6 +108,7 @@ jobs:
           git add docs/data
           git diff --cached --quiet || git commit -m "chore: clear stalled scrape_progress"
           git pull --no-rebase -X ours origin main
+          "%PYTHON%" scripts\keep_validation_decisions.py
           git push
 
   scrape-archived:
@@ -165,6 +167,7 @@ jobs:
           git add docs/data
           git diff --cached --quiet || git commit -m "chore: update archived prices"
           git pull --no-rebase -X ours origin main
+          "%PYTHON%" scripts\keep_validation_decisions.py
           git push
         continue-on-error: true
 
@@ -185,6 +188,7 @@ jobs:
           git add docs/data
           git diff --cached --quiet || git commit -m "chore: refresh third-store prices"
           git pull --no-rebase -X ours origin main
+          "%PYTHON%" scripts\keep_validation_decisions.py
           git push
         continue-on-error: true
 
@@ -199,5 +203,6 @@ jobs:
           git add docs/data
           git diff --cached --quiet || git commit -m "chore: scrape pipeline finished"
           git pull --no-rebase -X ours origin main
+          "%PYTHON%" scripts\keep_validation_decisions.py
           git push
         continue-on-error: true
