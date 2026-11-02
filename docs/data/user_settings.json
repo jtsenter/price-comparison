@@ -84,7 +84,9 @@
     "Coles Mushrooms Cup 200g": "weekly",
     "Coles Cup Mushrooms 500g": "weekly",
     "Coles Sliced Mushrooms 200g": "weekly",
-    "Coles Mushrooms Sliced 500g": "weekly"
+    "Coles Mushrooms Sliced 500g": "weekly",
+    "__group_eggs": "weekly",
+    "__group_probiotic_drinks": "rare"
   },
   "units": {
     "Truss Tomatoes": 4,
@@ -714,6 +716,63 @@
       ],
       "quote": 100,
       "gramQuote": 100
+    },
+    "eggs": {
+      "v": 2,
+      "created": true,
+      "label": "Eggs",
+      "category": "Dairy & Eggs",
+      "sticker": true,
+      "perPack": true,
+      "quote": 10,
+      "gramQuote": 1000,
+      "add": [
+        "Woolworths 12 Extra Large Free Range Eggs",
+        "Woolworths 12 Extra Large Cage Free Eggs",
+        "Woolworths 18 Large Cage Free Eggs",
+        "Manning Valley 12 Extra Large Free Range Eggs",
+        "Coles Free Range Eggs 12 Pack 700g"
+      ],
+      "remove": [],
+      "ww_order": [
+        "Woolworths 12 Extra Large Free Range Eggs",
+        "Woolworths 12 Extra Large Cage Free Eggs",
+        "Woolworths 18 Large Cage Free Eggs",
+        "Manning Valley 12 Extra Large Free Range Eggs"
+      ],
+      "coles_order": [
+        "Woolworths 12 Extra Large Free Range Eggs",
+        "Woolworths 12 Extra Large Cage Free Eggs",
+        "Woolworths 18 Large Cage Free Eggs",
+        "Manning Valley 12 Extra Large Free Range Eggs",
+        "Coles Free Range Eggs 12 Pack 700g"
+      ]
+    },
+    "probiotic_drinks": {
+      "v": 2,
+      "created": true,
+      "label": "Probiotic Drinks",
+      "category": "Dairy & Eggs",
+      "sticker": true,
+      "perPack": true,
+      "quote": 1,
+      "gramQuote": 1000,
+      "add": [
+        "Probiotic Drink 5 Pack",
+        "Yakult Probiotic Drink 10 Pack",
+        "Pro Live Probiotic Drink Original 10 Pack",
+        "Blueberry Probiotic Drink 5x61ml"
+      ],
+      "remove": [],
+      "ww_order": [
+        "Probiotic Drink 5 Pack",
+        "Yakult Probiotic Drink 10 Pack",
+        "Pro Live Probiotic Drink Original 10 Pack"
+      ],
+      "coles_order": [
+        "Probiotic Drink 5 Pack",
+        "Blueberry Probiotic Drink 5x61ml"
+      ]
     }
   },
   "lists": {
@@ -762,7 +821,10 @@
         "Grape Tomatoes 200g",
         "Baby Cucumbers 250g",
         "Carrot Loose",
-        "Vitasoy Soy Milky Regular Chilled 1L"
+        "Vitasoy Soy Milky Regular Chilled 1L",
+        "Yakult Probiotic Drink 10 Pack",
+        "Pro Live Probiotic Drink Original 10 Pack",
+        "Coles Free Range Eggs 12 Pack 700g"
       ]
     }
   }

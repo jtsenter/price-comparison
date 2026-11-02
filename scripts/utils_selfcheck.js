@@ -1062,6 +1062,9 @@ check('groupMetric null result', groupMetric({ sticker: true }, null), null);
   check('packCountOf reads "pack" spelled out',   packCountOf('Huggies 30 pack'), 30);
   check('packCountOf reads "pk"',                 packCountOf('40pk'), 40);
   check('packCountOf: no count -> null',          packCountOf('no count here'), null);
+  check('packCountOf reads "5x61ml"',             packCountOf('Blueberry Probiotic Drink 5x61ml'), 5);
+  check('packCountOf prefers the pack over the ml', packCountOf('63mL x 10 pack'), 10);
+  check('packCountOf: "85cm X 70cm" is not a count', packCountOf('Bags 85cm X 70cm'), null);
   // A weight token must not be mistaken for a pack count.
   check('perPack ignores a kg token, not a count', groupMetric(g, { price: 10, name: '2kg' }, 'x'), null);
 }

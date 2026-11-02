@@ -226,7 +226,7 @@ function metricRound(n) {
 // come in 26-60, and quoting a 100-nappy price invents a pack nobody sells -
 // 50 is the honest unit there. Editable per category (Compare prices by ->
 // Per piece), which is why the seeds below carry `quote`.
-const PIECE_QUOTES = [1, 10, 50, 100];
+const PIECE_QUOTES = [1, 10, 12, 50, 100];   // 12 = eggs by the dozen; only offered on the eggs category
 const PER_PIECE_QUOTE = 100;      // fallback when a perPack category names none
 
 // Pieces this category quotes its per-piece price for. 1 = plain "each".
@@ -1474,10 +1474,10 @@ function perPackQuotes() {
 // group builders makes the whole per-kg pipeline - sort, trend, history, hot
 // deals, basket - work in "sticker space" for sticker groups (history ratio
 // becomes price/price = 1, i.e. raw prices) with no other changes.
-// Pack count out of a name: "... 40pk" or "... 40 pack" -> 40.
+// Pack count out of a name: "... 40pk", "... 40 pack" or "... 5x61ml" -> 40 / 5.
 function packCountOf(name) {
-  const m = String(name || '').match(/(\d+)\s*(?:pk|pack)\b/i);
-  return m ? +m[1] : null;
+  const m = String(name || '').match(/(\d+)\s*(?:pk|pack)\b|\b(\d+)\s*x\s*\d/i);
+  return m ? +(m[1] || m[2]) : null;
 }
 
 function groupMetric(g, res, itemName) {

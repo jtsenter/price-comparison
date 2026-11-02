@@ -5382,8 +5382,10 @@ function openCategoryEditModal(groupKey, opts) {
       ${thirdCol}
     </div>`;
 
-  catEditApplyMetric(catMetricOf(cat));
+  // Quotes first: ApplyMetric renders the select from them, so the other order
+  // showed the PREVIOUSLY opened category's quote.
   catEditApplyQuotes(pieceQuoteOf(cat), weightQuoteOf(cat));
+  catEditApplyMetric(catMetricOf(cat));
   bindCategoryEditBody();
   document.body.style.overflow = 'hidden';
   $('categoryEditModal').classList.add('open');
@@ -5435,7 +5437,11 @@ function catEditRenderQuote(metric) {
   const sel = $('catEditQuote');
   if (!sel) return;
   const m = QUOTE_OPTIONS[metric] ? metric : 'kg';
-  sel.innerHTML = QUOTE_OPTIONS[m]
+  // ponytail: "per 12" is offered on the eggs category only, keyed by its fixed key.
+  const opts = m === 'piece' && _catEditKey === 'eggs'
+    ? [...QUOTE_OPTIONS.piece.slice(0, 2), [12, 'per 12'], ...QUOTE_OPTIONS.piece.slice(2)]
+    : QUOTE_OPTIONS[m];
+  sel.innerHTML = opts
     .map(([v, label]) => `<option value="${v}">${label}</option>`).join('');
   sel.disabled = m === 'pack';
   sel.title = QUOTE_TITLES[m];
