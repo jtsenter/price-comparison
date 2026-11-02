@@ -26,7 +26,9 @@ const path = require('path');
 const assert = require('assert');
 
 const utilsSrc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'utils.js'), 'utf8');
-const appSrc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'app.js'), 'utf8');
+// CRLF normalised: the repo checks out with Windows line endings, and some
+// checks below find a function's end by its "\n}\n".
+const appSrc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'app.js'), 'utf8').replace(/\r\n/g, '\n');
 const listsSrc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'lists.html'), 'utf8');
 
 function extract(src, name, where) {
@@ -266,6 +268,47 @@ check('the toggle flips relative to the CURRENT state, not a hardcoded true', ()
 check('deleting a list clears its visibility flag on the page too', () => {
   assert.ok(/forgetListVisibility\(key\)/.test(listsSrc),
     'the flag outlives the list otherwise, and listKeyFor reuses freed slugs');
+});
+
+// ── The selected view: Monthly by default, remembered per device ─────────────
+const htmlSrc = fs.readFileSync(path.join(__dirname, '..', 'docs', 'index.html'), 'utf8');
+check('a device with no saved view opens on Monthly', () => {
+  assert.ok(/let _activePriority = 'monthly';/.test(appSrc));
+  assert.ok(/freq-pill active" data-priority="monthly"/.test(htmlSrc), 'the lit pill must agree');
+  assert.ok(/<option value="monthly" selected>/.test(htmlSrc), 'the phone dropdown must agree');
+});
+check('every view change is saved on the device', () => {
+  const fn = appSrc.slice(appSrc.indexOf('function applyPriorityFilter'));
+  assert.ok(/_activePriority = p;\s*saveView\(p\);/.test(fn.slice(0, 2500)));
+});
+check('the view is NOT synced - another phone keeps its own', () => {
+  const fn = appSrc.slice(appSrc.indexOf('async function persistUserSettingsToRepo'));
+  const body = fn.slice(0, fn.indexOf('\n}\n'));
+  assert.ok(!/VIEW_KEY|pw_view_v1|_activePriority/.test(body));
+});
+check('the saved view is restored after the lists arrive from the repo', () => {
+  const i = appSrc.indexOf('restoreSavedView(); }');
+  const sync = appSrc.indexOf('initUserSettings(), mergeArchivedFromRepo()');
+  assert.ok(i > sync && sync > 0, 'restoring before initUserSettings misses lists on a new phone');
+});
+check('a saved list that no longer exists falls back instead of showing nothing', () => {
+  assert.ok(/loadLists\(\)\[k\] && listShownOnMain\(k\) \? v : null/.test(appSrc));
+});
+
+// ── Phone: store links behind ▸, never on the tap-to-add surface ────────────
+check('every plain product card has the ▸ and a store-link panel', () => {
+  assert.ok(/class="vgm-chevron-btn mc-expand-btn"/.test(appSrc));
+  assert.ok(/\$\{isOpen \? mobileStoreLinksHTML\(item\) : ''\}/.test(appSrc));
+});
+check('a tap in the link panel never adds to the basket', () => {
+  const h = appSrc.indexOf("if (e.target.closest('.mc-links')) return;");
+  const add = appSrc.indexOf('persistBasketStore(); // tap = add/remove');
+  assert.ok(h > 0 && h < add);
+});
+check('store links prefer a pinned URL and open safely', () => {
+  const fn = appSrc.slice(appSrc.indexOf('function mobileStoreLinksHTML'), appSrc.indexOf('function mobileStoreLinksHTML') + 2500);
+  assert.ok(/pinnedUrlFor\(item\.list_item, store\) \|\| r\.url/.test(fn));
+  assert.ok(/target="_blank" rel="noopener"/.test(fn));
 });
 
 console.log(`\nlist_visibility_selfcheck: all ${n} assertions passed.`);

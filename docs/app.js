@@ -931,7 +931,32 @@ function groupThirdEntries(group) {
 // intersecting it with "Weekly" would hide products you explicitly put in it and
 // read as the list being wrong. Selecting one shows exactly its members, the way
 // the watchlist filter already behaves.
-let _activePriority = 'weekly';
+let _activePriority = 'monthly';
+
+// The last view chosen ON THIS DEVICE, so the app reopens where you left it -
+// Birthdays stays Birthdays. Deliberately NOT in persistUserSettingsToRepo's
+// whitelist: that file is shared by everyone, and one person switching view
+// must not move anyone else's. Each phone keeps its own.
+const VIEW_KEY = 'pw_view_v1';
+const DEFAULT_VIEW = 'monthly';
+function saveView(v) { try { localStorage.setItem(VIEW_KEY, v); } catch {} }
+// Only a view that can still be shown. A list that was since deleted, or hidden
+// from the main page, falls back to the default instead of an empty filter.
+function restorableView() {
+  let v = null;
+  try { v = localStorage.getItem(VIEW_KEY); } catch {}
+  if (!v) return null;
+  if (['all', 'weekly', 'monthly', 'rare', 'archive', 'watchlist'].includes(v)) return v;
+  if (v.startsWith(LIST_FILTER_PREFIX)) {
+    const k = v.slice(LIST_FILTER_PREFIX.length);
+    return loadLists()[k] && listShownOnMain(k) ? v : null;
+  }
+  return null;
+}
+function restoreSavedView() {
+  const v = restorableView();
+  if (v && v !== _activePriority) applyPriorityFilter(v);
+}
 
 const LIST_FILTER_PREFIX = 'list:';
 function activeListKey() {
@@ -993,6 +1018,40 @@ function savePerKgExclusions(set) {
   localStorage.setItem('pw_perkg_excl_v1', JSON.stringify([...set]));
 }
 let _expandedGroups = new Set();
+// Plain products opened on the phone (the ▸ on the card). Same idea as
+// _expandedGroups: the card is tap-to-add, so the store links live behind an
+// explicit button instead of competing with the tap.
+let _expandedItems = new Set();
+
+// The expanded face of a plain product card: one full-width row per store that
+// sells it, each a link to that exact product. Shows the STORE's own product
+// name, because that is what is printed on the shelf you are looking at - our
+// list name ("Sour Cream") is not. A pinned URL wins over the scraped one, the
+// same precedence the desktop table uses.
+function mobileStoreLinksHTML(item) {
+  const row = (chip, href, name, price) => {
+    const inner = `${chip}<span class="mc-link-name">${esc(name)}</span>`
+      + `<span class="mc-link-price">${price != null ? fmt(price) : ''}</span>`;
+    return href
+      ? `<a class="mc-link" href="${escAttr(href)}" target="_blank" rel="noopener">${inner}<span class="mc-link-go" aria-hidden="true">↗</span></a>`
+      : `<div class="mc-link mc-link-none">${inner}</div>`;
+  };
+  const rows = [];
+  for (const [store, key, chip, label] of [
+    ['ww', 'woolworths', '<span class="store-chip sm ww">W</span>', 'Woolworths'],
+    ['coles', 'coles', '<span class="store-chip sm coles">C</span>', 'Coles']]) {
+    const r = item[key];
+    if (!r) continue;
+    rows.push(row(chip, pinnedUrlFor(item.list_item, store) || r.url, r.name || label, r.price));
+  }
+  for (const e of thirdEntriesFor(item.list_item)) {
+    const meta = THIRD_STORES[e.store];
+    if (!meta) continue;
+    const chip = `<span class="store-chip third sm" style="${thirdChipStyle(e.store)}" title="${escAttr(meta.label)}">${esc(meta.letter)}</span>`;
+    rows.push(row(chip, e.url, e.name || meta.label, e.price));
+  }
+  return rows.length ? `<div class="mc-links">${rows.join('')}</div>` : '';
+}
 let _watchlist = new Set(); // loaded on boot from localStorage + watchlist.json
 let _selectedItems = new Set(); // session-only mobile card selection
 let _viewMode = localStorage.getItem('pw_view_mode') || 'table'; // 'table' | 'card'
@@ -2557,7 +2616,8 @@ function renderListPills() {
 const FREQ_FILTERS = ['all', 'weekly', 'monthly', 'rare'];
 // The frequency view to come back to when a toggleable filter is switched off.
 // Seeded with the app's default so the very first "off" click has somewhere to go.
-let _prevFreqFilter = 'weekly';
+let _prevFreqFilter = DEFAULT_VIEW;
+let _arrivedForWatchlist = false;
 
 // One place that applies a filter choice, so the frequency pills, the list pills
 // and the mobile dropdown can't drift in what "selected" means.
@@ -2569,11 +2629,12 @@ function applyPriorityFilter(p, btn) {
   // than a hardcoded "All", so turning Archived off while you were on Monthly
   // puts you back on Monthly.
   if (p === _activePriority && !FREQ_FILTERS.includes(p)) {
-    p = FREQ_FILTERS.includes(_prevFreqFilter) ? _prevFreqFilter : 'weekly';
+    p = FREQ_FILTERS.includes(_prevFreqFilter) ? _prevFreqFilter : DEFAULT_VIEW;
     btn = null;   // the pill to light up is the frequency one, not the one clicked
   }
   if (FREQ_FILTERS.includes(p)) _prevFreqFilter = p;
   _activePriority = p;
+  saveView(p);
   const container = $('priorityFilter');
   container?.querySelectorAll('.priority-pill').forEach(b => b.classList.remove('active'));
   // Quoted attribute selector, so a "list:birthdays" value needs no escaping.
@@ -2599,7 +2660,7 @@ function initPriorityFilter() {
   // Mobile frequency dropdown - drives the same logic by clicking the hidden pill.
   const freqSelect = $('freqSelect');
   if (freqSelect) {
-    freqSelect.value = ['all', 'weekly', 'monthly', 'rare', 'archive'].includes(_activePriority) ? _activePriority : 'weekly';
+    freqSelect.value = ['all', 'weekly', 'monthly', 'rare', 'archive'].includes(_activePriority) ? _activePriority : DEFAULT_VIEW;
     freqSelect.addEventListener('change', () => {
       container.querySelector(`.priority-pill[data-priority="${freqSelect.value}"]`)?.click();
     });
@@ -2631,6 +2692,7 @@ function initPriorityFilter() {
   // filter on arrival, then drop the hash so a plain refresh doesn't
   // re-trigger it.
   if (location.hash === '#watchlist') {
+    _arrivedForWatchlist = true;
     if (_activePriority !== 'watchlist') toggleWatchlistFilter();
     history.replaceState(null, '', location.pathname + location.search);
   }
@@ -6008,7 +6070,8 @@ function renderMobileCards(items, data) {
     const isSelected = _selectedItems.has(item.list_item);
     const card = document.createElement('div');
     const compact = _mcView === 'compact';
-    card.className = `mobile-card${borderCls}${isSelected ? ' mc-selected' : ''}${compact ? ' mobile-card-compact' : ''}`;
+    const isOpen = !compact && _expandedItems.has(item.list_item);
+    card.className = `mobile-card${borderCls}${isSelected ? ' mc-selected' : ''}${compact ? ' mobile-card-compact' : ''}${isOpen ? ' mc-open' : ''}`;
     card.dataset.item = item.list_item;
     // Keyboard/screen-reader access: the card is a tap-to-select toggle, so it
     // must be reachable by Tab and announce its pressed state. Enter/Space is
@@ -6064,10 +6127,23 @@ function renderMobileCards(items, data) {
           ${coUnit ? `<div class="mc-unit">${coUnit}</div>` : ''}
           ${multiBuyBadge(co)}
         </div>
-      </div>`;
+        <button class="vgm-chevron-btn mc-expand-btn" aria-expanded="${isOpen}" aria-label="${isOpen ? 'Hide store links' : 'Show store links'}" title="${isOpen ? 'Hide store links' : 'Show store links'}">${isOpen ? '▾' : '▸'}</button>
+      </div>
+      ${isOpen ? mobileStoreLinksHTML(item) : ''}`;
     }
 
     card.addEventListener('click', (e) => {
+      // ▸ opens the store links. Kept in _expandedItems so a re-render (adding
+      // something to the basket, a filter change) doesn't snap it shut.
+      if (e.target.closest('.mc-expand-btn')) {
+        const n = item.list_item;
+        if (_expandedItems.has(n)) _expandedItems.delete(n); else _expandedItems.add(n);
+        if (_lastData) renderPage(_lastData); // renderPage preserves scroll itself
+        return;
+      }
+      // The open link panel is not part of the tap-to-add surface - a near miss
+      // on a store link must not put the product in the basket.
+      if (e.target.closest('.mc-links')) return;
       if (e.target.closest('.mc-watch-btn')) {
         toggleWatchlist(e.target.closest('.mc-watch-btn').dataset.item);
         return;
@@ -7673,6 +7749,11 @@ async function boot() {
   // loadRemovedItems() runs alongside the rest so the deleted-name tombstones are
   // in REMOVED_ITEMS before the first sync/render - the sync filters read that set.
   await Promise.all([loadItemAnalysis(), initWatchlist(), initUserSettings(), mergeArchivedFromRepo(), loadRepoUrlOverrides(), loadRemovedItems(), initThirdStores()]);
+  // Reopen on the last view chosen on this device. Here, after the settings sync,
+  // and not in initPriorityFilter: on a fresh install the lists only arrive from
+  // the repo in initUserSettings, so a saved "Birthdays" isn't a known list yet
+  // any earlier. A #watchlist link from another page wins over the saved view.
+  if (!_arrivedForWatchlist) { renderListPills(); restoreSavedView(); }
   const data = await loadData();
 
   {
