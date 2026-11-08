@@ -311,4 +311,17 @@ check('store links prefer a pinned URL and open safely', () => {
   assert.ok(/target="_blank" rel="noopener"/.test(fn));
 });
 
+// Search looks through everything: the view checks (watchlist/list/priority/
+// archive) must come AFTER the search bypass, in the rows AND the totals.
+check('search ignores the view in applyFilters and the totals', () => {
+  const rows = appSrc.slice(appSrc.indexOf('function applyFilters('));
+  assert.ok(rows.indexOf('if (_searchQuery) return true;') < rows.indexOf("_activePriority === 'watchlist'"));
+  const tot = appSrc.slice(appSrc.indexOf('const baseFiltered = pool.filter'));
+  assert.ok(/if \(_searchQuery\) \{[^}]*\} else if \(_activePriority === 'watchlist'\)/.test(tot));
+});
+check('archived search hits are tagged, not hidden', () => {
+  assert.ok(/function archivedTagHTML\(item\)/.test(appSrc));
+  assert.ok((appSrc.match(/\$\{archivedTagHTML\(item\)\}/g) || []).length >= 4);
+});
+
 console.log(`\nlist_visibility_selfcheck: all ${n} assertions passed.`);

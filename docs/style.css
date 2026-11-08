@@ -1270,6 +1270,13 @@ td { padding: 5px 12px; vertical-align: middle; }
 tr:hover .item-edit-btn { opacity: 1; }
 .item-edit-btn:hover { color: var(--ww); }
 
+/* "Archived" on search hits outside the Archive view */
+.archived-tag {
+  display: inline-block; margin-left: 6px; padding: 1px 6px; vertical-align: middle;
+  font-size: 10px; font-weight: 700; line-height: 1.4; white-space: nowrap;
+  color: var(--text-soft); border: 1px solid var(--border-strong); border-radius: 999px;
+}
+
 /* Hot deal badge */
 .hot-badge {
   font-size: 13px;

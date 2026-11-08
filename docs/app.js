@@ -2510,7 +2510,7 @@ function maybeLogNoResults(q) {
   // a product the user doesn't track, while the row sat on screen matching it.
   // Same haystack the filter uses, so what the page shows and what this records
   // cannot disagree.
-  const anyMatch = _lastData.items.some(i => !i.archived && nameMatchesSearch(searchHaystack(i, ovr), terms))
+  const anyMatch = _lastData.items.some(i => nameMatchesSearch(searchHaystack(i, ovr), terms))
     || buildVariantGroups(new Map(_lastData.items.map(i => [i.list_item, i])))
          .some(g => nameMatchesSearch(searchHaystack(g, ovr), terms));
   if (anyMatch) return;
@@ -3095,7 +3095,7 @@ function computeBannerStats(items) {
   // the archive view, matching what the table draws - see the collapse block in
   // _renderPageInner.
   let pool = items;
-  if (_activePriority !== 'archive') {
+  if (_activePriority !== 'archive' || _searchQuery) {
     const groups = buildVariantGroups(new Map(items.map(i => [i.list_item, i]))).map(withGroupCounts);
     if (groups.length) pool = items.filter(i => !perkgMembers.has(i.list_item)).concat(groups);
   }
@@ -3110,7 +3110,9 @@ function computeBannerStats(items) {
     if (_storeFilter && rowCheaperStore(item) !== _storeFilter) return false;
     if (_perkgFilter === 'only' && !item._isGroup) return false;
     if (_perkgFilter === 'hidden' && item._isGroup) return false;
-    if (_activePriority === 'watchlist') {
+    if (_searchQuery) {
+      // Search ignores the view, same as applyFilters().
+    } else if (_activePriority === 'watchlist') {
       if (!isWatchedItem(item.list_item)) return false;
     } else if (activeListKey()) {
       if (!itemInActiveList(item)) return false;
@@ -3953,6 +3955,9 @@ function applyFilters(items, skipCol = null) {
     // Per-kg group visibility (⚙ /kg button): isolate the groups, or hide them entirely
     if (_perkgFilter === 'only') return !!item._isGroup;
     if (_perkgFilter === 'hidden' && item._isGroup) return false;
+    // A search looks through EVERYTHING - archived, unpriced, other frequencies,
+    // other lists. Archived hits carry an "Archived" tag (archivedTagHTML).
+    if (_searchQuery) return true;
     // Watchlist filter: show only watchlisted items; bypass archive/priority checks
     if (_activePriority === 'watchlist') return isWatchedItem(item.list_item);
     // A custom list is likewise its own view - membership is the whole filter.
@@ -3989,6 +3994,13 @@ function applyFilters(items, skipCol = null) {
 // do. Without this the cards summed the whole priority+category basket while the
 // table showed only the searched rows - a search for "avo" left the summary on
 // the full weekly total. One helper = the two can never drift again.
+// Shown only outside the Archive view, where every row is archived anyway -
+// i.e. on search hits that the normal view would have hidden.
+function archivedTagHTML(item) {
+  return _activePriority !== 'archive' && (item.archived || getPriority(item.list_item) === 'archive')
+    ? '<span class="archived-tag">Archived</span>' : '';
+}
+
 function applyValueFilters(list, skipCol = null) {
   let filtered = list;
   // Per-column value (checkbox) filters
@@ -4230,7 +4242,7 @@ function renderCards(items) {
         <input type="checkbox" class="row-check card-check" data-item="${safeKey}"${isChecked?' checked':''}>
         <div class="card-img-wrap">${imgHtml}</div>
         <div class="card-info">
-          <div class="card-name">${esc(displayName)}${hotDeal ? hotBadge : ''}</div>
+          <div class="card-name">${esc(displayName)}${archivedTagHTML(item)}${hotDeal ? hotBadge : ''}</div>
           <div class="card-cat">${esc(cat)}</div>
         </div>
         ${cardWatchHTML(item.list_item)}
@@ -6098,7 +6110,7 @@ function renderMobileCards(items, data) {
         ? `<button class="mc-unarchive-btn" data-item="${item.list_item.replace(/"/g,'&quot;')}" title="Unarchive">↩</button>` : '';
       card.innerHTML = `
         ${hotDeal ? '<span class="mc-hot" title="Hot Deal - meaningfully cheaper than its usual price right now">🔥</span>' : ''}
-        <span class="mcc-name">${esc(ov.displayName || shortName(item.list_item))}</span>
+        <span class="mcc-name">${esc(ov.displayName || shortName(item.list_item))}${archivedTagHTML(item)}</span>
         <span class="mcc-price"><span class="store-chip sm ww">W</span><span class="${wwCheaper ? 'mcc-bold' : ''}">${ww ? fmt(ww.price) : '-'}</span></span>
         <span class="mcc-price"><span class="store-chip sm coles">C</span><span class="${coCheaper ? 'mcc-bold' : ''}">${co ? fmt(co.price) : '-'}</span></span>
         ${unarch ? `<span class="mc-icons">${unarch}</span>` : ''}`;
@@ -6108,7 +6120,7 @@ function renderMobileCards(items, data) {
         ${imgHtml}
         <div class="mc-name-wrap">
           <div class="mc-name-row">
-            <div class="mc-name">${esc(displayName)}</div>
+            <div class="mc-name">${esc(displayName)}${archivedTagHTML(item)}</div>
             <span class="mc-icons">
               ${hotDeal ? '<span class="mc-hot" title="Hot Deal - meaningfully cheaper than its usual price right now">🔥</span>' : ''}
               ${watchBtn}
@@ -6554,7 +6566,7 @@ function _renderPageInner(data) {
       allDisplayItems = allDisplayItems.filter(i => !memberNames.has(i.list_item));
       // Group rows themselves are Weekly, so they belong in every view EXCEPT
       // the archive one (where a Weekly row would be out of place).
-      if (_activePriority !== 'archive') allDisplayItems.push(...groups);
+      if (_activePriority !== 'archive' || _searchQuery) allDisplayItems.push(...groups);
     }
   }
 
@@ -6670,7 +6682,7 @@ function _renderPageInner(data) {
       <div class="item-row">
         ${imgHtml}
         <div class="item-info">
-          <div class="item-title-row">${esc(displayName)}${editBtn}${thirdChipHTML(item.list_item, thirdEntriesFor(item.list_item), ww, co)}</div>
+          <div class="item-title-row">${esc(displayName)}${archivedTagHTML(item)}${editBtn}${thirdChipHTML(item.list_item, thirdEntriesFor(item.list_item), ww, co)}</div>
           ${altHintHTML(item)}
         </div>
       </div>`;
