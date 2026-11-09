@@ -1277,6 +1277,16 @@ tr:hover .item-edit-btn { opacity: 1; }
   color: var(--text-soft); border: 1px solid var(--border-strong); border-radius: 999px;
 }
 
+/* History chart: Woolworths / Both / Coles line switch (doubles as the legend) */
+.hist-segs { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--border); border-radius: 999px; }
+.hist-seg {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 4px 12px;
+  border: 0; border-radius: 999px; background: none; font: inherit; color: inherit; cursor: pointer;
+}
+.hist-seg:hover { color: var(--text); }
+.hist-seg.on { background: var(--bg-alt); color: var(--text); font-weight: 600; box-shadow: 0 0 0 1px var(--border-strong) inset; }
+.hist-seg:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
 /* Hot deal badge */
 .hot-badge {
   font-size: 13px;

@@ -135,6 +135,11 @@ function initPriceHistoryModal() {
 }
 
 
+// Which supermarket lines the chart draws: 'both' | 'ww' | 'coles'. A three-way
+// switch rather than two checkboxes, so "neither" cannot be picked. Kept for the
+// page's lifetime, so the next product opens the same way.
+let _histShow = 'both';
+
 function buildPriceHistChart(item, excludedPrices) {
   const wrap = document.getElementById('priceHistChartWrap');
   const canvas = document.getElementById('priceHistChart');
@@ -258,7 +263,13 @@ function buildPriceHistChart(item, excludedPrices) {
     }
   }
 
-  const allPrices = [...wwData, ...coData, ...thData].filter(p => p != null);
+  // The switch only appears when there are two lines to choose between; a
+  // one-store product always draws its one line.
+  const hasWW = wwData.some(v => v != null), hasCo = coData.some(v => v != null);
+  const pick = hasWW && hasCo ? _histShow : 'both';
+  const showWW = pick !== 'coles', showCo = pick !== 'ww';
+  // Y range from the VISIBLE lines only, so a hidden store can't flatten the other.
+  const allPrices = [...(showWW ? wwData : []), ...(showCo ? coData : []), ...thData].filter(p => p != null);
   if (!allPrices.length) {
     const el = document.getElementById('priceHistChartLegend'); if (el) el.remove();
     wrap.style.display = 'none'; return;
@@ -300,18 +311,27 @@ function buildPriceHistChart(item, excludedPrices) {
   const chartLegend = document.createElement('div');
   chartLegend.id = 'priceHistChartLegend';
   chartLegend.style.cssText = 'display:flex;align-items:center;gap:20px;margin-bottom:10px;font-size:12px;color:var(--color-text-secondary,#888);';
-  chartLegend.innerHTML =
-    '<span style="display:flex;align-items:center;gap:6px;">'
+  const swatch = c => `<span style="width:20px;height:3px;background:${c};display:inline-block;border-radius:2px;"></span>`;
+  const seg = (v, label) => `<button type="button" class="hist-seg${pick === v ? ' on' : ''}" data-show="${v}" aria-pressed="${pick === v}">${label}</button>`;
+  chartLegend.innerHTML = (hasWW && hasCo
+    ? `<span class="hist-segs" role="group" aria-label="Lines shown">${seg('ww', swatch('#16a34a') + 'Woolworths')}${seg('both', 'Both')}${seg('coles', swatch('#dc2626') + 'Coles')}</span>`
+    : '<span style="display:flex;align-items:center;gap:6px;">'
     + '<span style="width:20px;height:3px;background:#16a34a;display:inline-block;border-radius:2px;"></span>'
     + 'Woolworths</span>'
     + '<span style="display:flex;align-items:center;gap:6px;">'
     + '<span style="width:20px;height:3px;background:#dc2626;display:inline-block;border-radius:2px;"></span>'
-    + 'Coles</span>'
+    + 'Coles</span>')
     // Named, not "Other store": the whole point of the line is knowing WHICH
     // shop the price is from, and the chart has no chip to carry that.
     + (thBest ? '<span style="display:flex;align-items:center;gap:6px;">'
         + '<span style="width:20px;height:3px;background:#4338CA;display:inline-block;border-radius:2px;"></span>'
         + thLabel + '</span>' : '');
+  chartLegend.addEventListener('click', e => {
+    const b = e.target.closest('[data-show]');
+    if (!b || b.dataset.show === pick) return;
+    _histShow = b.dataset.show;
+    buildPriceHistChart(item, excludedPrices);   // rebuilt so the y axis refits
+  });
   wrap.parentNode.insertBefore(chartLegend, wrap);
   wrap.style.display = 'block';
 
@@ -320,9 +340,9 @@ function buildPriceHistChart(item, excludedPrices) {
     data: {
       labels,
       datasets: [
-        makeDataset('Woolworths', wwData, wwIsActual, '#22c55e'),
-        { ...makeDataset('Coles', coDataOffset, coIsActual, '#dc2626'),
-          borderWidth: 2.5 },
+        ...(showWW ? [makeDataset('Woolworths', wwData, wwIsActual, '#22c55e')] : []),
+        ...(showCo ? [{ ...makeDataset('Coles', coDataOffset, coIsActual, '#dc2626'),
+          borderWidth: 2.5 }] : []),
         // Dashed: an outside shop is a different kind of price - one you make a
         // separate trip for - and the dash says so without relying on colour.
         ...(thBest ? [{ ...makeDataset(thLabel, thData, thIsActual, '#4338CA'),

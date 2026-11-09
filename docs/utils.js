@@ -1323,7 +1323,6 @@ const DEFAULT_VARIANT_GROUPS = [
     'Woolworths Sunflower Seeds 200g',
     'Coles Sunflower Seeds 150g',
     'Wellness Road Sunflower Kernels 500g',
-    'Gaganis Premium Raw Sunflower Kernels 500g',
   ]},
   { key: 'chia_seeds', label: 'Chia seeds', category: 'Pantry', items: [
     'Macro Black Chia Seeds 350g',
