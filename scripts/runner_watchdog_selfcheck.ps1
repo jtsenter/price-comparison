@@ -69,6 +69,17 @@ $d = Get-WatchdogAction -Workers @( (W 7 22), (W 8 21) ) -Now $now -MaxAgeHours 
 Check 'recover targets both'      '7,8'     (($d.Stale | ForEach-Object { $_.ProcessId }) -join ',')
 Check 'recover with no live job'  'recover' $d.Action
 
+# --- GitHub says the job is gone (2026-11-11 wedge) ------------------------
+function ActGone {
+    param([object[]] $Workers, [double] $GoneMinutesAgo)
+    (Get-WatchdogAction -Workers $Workers -Now $now -MaxAgeHours 3 -JobGoneAt $now.AddMinutes(-$GoneMinutesAgo)).Action
+}
+Check 'gone 67 min ago, worker 2h' 'recover' (ActGone @( (W 1 2.25) ) 67)
+Check 'gone 5 min ago: grace'      'none'    (ActGone @( (W 1 2.25) ) 5)
+Check 'gone, but worker is newer'  'none'    (ActGone @( (W 1 0.1) ) 67)
+Check 'gone + new job running'     'wait'    (ActGone @( (W 1 2.25), (W 2 0.1) ) 67)
+Check 'no gone line, worker 2h'    'none'    (Act @( (W 1 2.25) ))
+
 if ($script:fails -gt 0) {
     Write-Host "`n$script:fails check(s) FAILED"
     exit 1
