@@ -32,23 +32,39 @@ param(
     # /actions/runs/<id>/jobs and recover the moment the job reads completed.
     [double] $MaxAgeHours = 3,
 
+    # Minutes to wait after GitHub has declared the job dead before clearing a
+    # worker that is still alive. Grace for a worker that is merely slow to exit.
+    [double] $GoneGraceMinutes = 10,
+
     [switch] $DryRun
 )
 
 # Decides what to do from a snapshot of worker processes. Pure - touches no
 # process, service or clock - so the self-check can drive it with fabricated
 # input and a fabricated $Now.
+#
+# Two ways a worker counts as stale:
+#  - older than MaxAgeHours (the original rule), or
+#  - GitHub has told the listener its job is gone ($JobGoneAt, read from the
+#    runner log) at least GoneGraceMinutes ago, and the worker predates that.
+#    2026-11-11: the laptop slept mid-scrape, GitHub failed the job at 10:25,
+#    the worker never exited, and the age rule alone would have waited until
+#    12:17 while every Update Prices queued behind it.
 function Get-WatchdogAction {
     param(
         [AllowEmptyCollection()]
         [object[]] $Workers,       # objects with .ProcessId and .CreationDate
         [datetime] $Now,
-        [double]   $MaxAgeHours
+        [double]   $MaxAgeHours,
+        $JobGoneAt = $null,        # [datetime] or $null
+        [double]   $GoneGraceMinutes = 10
     )
 
     $cutoff = $Now.AddHours(-$MaxAgeHours)
-    $stale  = @($Workers | Where-Object { $_.CreationDate -lt $cutoff })
-    $active = @($Workers | Where-Object { $_.CreationDate -ge $cutoff })
+    $gone = $JobGoneAt -and ([datetime]$JobGoneAt) -le $Now.AddMinutes(-$GoneGraceMinutes)
+    $isStale = { param($w) $w.CreationDate -lt $cutoff -or ($gone -and $w.CreationDate -lt [datetime]$JobGoneAt) }
+    $stale  = @($Workers | Where-Object { & $isStale $_ })
+    $active = @($Workers | Where-Object { -not (& $isStale $_) })
 
     if ($stale.Count -eq 0)  { return [pscustomobject]@{ Action = 'none'; Stale = @() } }
 
@@ -74,12 +90,24 @@ function Write-WatchdogLog {
     } catch { }
 }
 
+# When the listener last heard from GitHub that its job is gone, as local time,
+# from the newest runner log. $null when there is no such line.
+function Get-JobGoneAt {
+    $log = Get-ChildItem 'C:\actions-runner\_diag' -Filter 'Runner_*.log' -ErrorAction SilentlyContinue |
+           Sort-Object CreationTime -Descending | Select-Object -First 1
+    if (-not $log) { return $null }
+    $hit = Select-String -Path $log.FullName -Pattern 'job is no longer valid' | Select-Object -Last 1
+    if (-not $hit -or $hit.Line -notmatch '^\[(\d{4}-\d\d-\d\d \d\d:\d\d:\d\d)Z') { return $null }
+    return [datetime]::SpecifyKind([datetime]$Matches[1], 'Utc').ToLocalTime()
+}
+
 function Invoke-RunnerWatchdog {
-    param([double] $MaxAgeHours, [switch] $DryRun)
+    param([double] $MaxAgeHours, [double] $GoneGraceMinutes, [switch] $DryRun)
 
     $workers  = @(Get-CimInstance Win32_Process -Filter "Name='Runner.Worker.exe'" |
                   Select-Object ProcessId, CreationDate)
-    $decision = Get-WatchdogAction -Workers $workers -Now (Get-Date) -MaxAgeHours $MaxAgeHours
+    $decision = Get-WatchdogAction -Workers $workers -Now (Get-Date) -MaxAgeHours $MaxAgeHours `
+                  -JobGoneAt (Get-JobGoneAt) -GoneGraceMinutes $GoneGraceMinutes
 
     # Silent on the normal path - this runs every 30 minutes and almost always
     # has nothing to say.
@@ -92,16 +120,14 @@ function Invoke-RunnerWatchdog {
         return
     }
 
-    Write-WatchdogLog "WEDGED: worker(s) $ids older than $MaxAgeHours h with no live job - recovering"
+    Write-WatchdogLog "WEDGED: worker(s) $ids are stale (job gone at GitHub, or older than $MaxAgeHours h) - recovering"
     if ($DryRun) { Write-WatchdogLog 'dry run - no action taken'; return }
 
     foreach ($w in $decision.Stale) {
-        try {
-            Stop-Process -Id $w.ProcessId -Force -ErrorAction Stop
-            Write-WatchdogLog "killed worker $($w.ProcessId)"
-        } catch {
-            Write-WatchdogLog "could not kill worker $($w.ProcessId): $($_.Exception.Message)"
-        }
+        # /T takes the scraper's python and Chrome with it; Stop-Process left
+        # those running, holding the browser profile.
+        $r = taskkill /PID $w.ProcessId /T /F 2>&1
+        Write-WatchdogLog "taskkill $($w.ProcessId): $(($r | Select-Object -Last 1))"
     }
 
     # Restart even when the kill succeeded. On 2026-08-03 the hung worker
@@ -119,5 +145,5 @@ function Invoke-RunnerWatchdog {
 
 # Dot-sourced by the self-check, which wants the functions but not the actions.
 if ($MyInvocation.InvocationName -ne '.') {
-    Invoke-RunnerWatchdog -MaxAgeHours $MaxAgeHours -DryRun:$DryRun
+    Invoke-RunnerWatchdog -MaxAgeHours $MaxAgeHours -GoneGraceMinutes $GoneGraceMinutes -DryRun:$DryRun
 }
