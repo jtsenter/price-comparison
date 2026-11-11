@@ -324,4 +324,15 @@ check('archived search hits are tagged, not hidden', () => {
   assert.ok((appSrc.match(/\$\{archivedTagHTML\(item\)\}/g) || []).length >= 4);
 });
 
+// 2026-11-11: settings changed just before a refresh were reverted by the
+// lagging Pages copy. The owner must read the repo first, uncached.
+check('owner settings load reads the repo before the Pages copy', () => {
+  const fn = appSrc.slice(appSrc.indexOf('async function initUserSettings'), appSrc.indexOf('async function initUserSettings') + 1500);
+  const api = fn.indexOf("githubGetJson(s, 'docs/data/user_settings.json')"), pages = fn.indexOf('fetch(`data/user_settings.json');
+  assert.ok(api > 0 && pages > api);
+  const u = fs.readFileSync(path.join(__dirname, '..', 'docs', 'utils.js'), 'utf8');
+  const g = u.slice(u.indexOf('async function githubGetJson'), u.indexOf('async function githubPutJson'));
+  assert.ok(/cache: 'no-store'/.test(g));
+});
+
 console.log(`\nlist_visibility_selfcheck: all ${n} assertions passed.`);

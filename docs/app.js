@@ -322,9 +322,21 @@ async function persistUserSettingsToRepo() {
 async function initUserSettings() {
   _perkgSet = loadPerkgLocal();
   try {
-    const res = await fetch(`data/user_settings.json?t=${Date.now()}`);
-    if (res.ok) {
-      const remote = await res.json();
+    // The owner reads the repo itself. The Pages copy lags a push by a minute or
+    // more, and repo-wins on that stale copy reverted whatever was changed just
+    // before a refresh - then the sync below re-published the stale value. Seen
+    // 2026-11-11: eggs set to per 12 bounced back to per 10 on every reload.
+    const s = loadSettings();
+    let remote = null;
+    if (s?.token && s.user && s.repo) {
+      const r = await githubGetJson(s, 'docs/data/user_settings.json');
+      if (r && Object.keys(r).length) remote = r;
+    }
+    if (!remote) {
+      const res = await fetch(`data/user_settings.json?t=${Date.now()}`);
+      if (res.ok) remote = await res.json();
+    }
+    {
       if (remote && typeof remote === 'object') {
         // Merge so the repo and this device agree. Repo values win on conflict
         // (changes push immediately, so the repo is the freshest source); any

@@ -1047,7 +1047,9 @@ function _ghHeaders(s) {
   return { Authorization: `Bearer ${s.token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json' };
 }
 async function githubGetJson(s, repoPath) {
-  const res = await fetch(`https://api.github.com/repos/${s.user}/${s.repo}/contents/${repoPath}`, { headers: _ghHeaders(s) });
+  // no-store: the API answers with max-age=60, so a cached read could hand back
+  // the file as it was before our own last write.
+  const res = await fetch(`https://api.github.com/repos/${s.user}/${s.repo}/contents/${repoPath}`, { headers: _ghHeaders(s), cache: 'no-store' });
   if (!res.ok) return {};
   const meta = await res.json();
   if (!meta.content) return {};
@@ -1058,7 +1060,7 @@ async function githubPutJson(s, repoPath, data, message) {
   const headers = _ghHeaders(s);
   const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2) + '\n')));
   const doPut = async () => {
-    const getRes = await fetch(apiPath, { headers });
+    const getRes = await fetch(apiPath, { headers, cache: 'no-store' });
     const meta = getRes.ok ? await getRes.json() : {};
     // Skip the write when the repo already holds byte-identical content. GitHub's
     // contents API commits even for an unchanged blob, so the UI's on-boot syncs
